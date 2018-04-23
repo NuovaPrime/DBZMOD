@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Tiles"
+    "\\Buffs"
   ],
+  "SelectedNode": "\\Buffs\\KaiokenBuff.cs",
   "PreviewInSolutionExplorer": false
 }

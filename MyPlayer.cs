@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics;
 using Microsoft.Xna.Framework;
 using DBZMOD.Projectiles;
+using Terraria.ModLoader.IO;
 
 namespace DBZMOD
 {
@@ -16,7 +17,7 @@ namespace DBZMOD
     {
         public float KiDamage;
         public float KiKbAddition;
-        public int KiMax;
+        public int KiMax = 1000;
         public int KiCurrent;
         public float KiRegen;
         public bool ZoneCustomBiome = false;
@@ -35,6 +36,7 @@ namespace DBZMOD
         public static ModHotKey KaiokenKey;
         public static ModHotKey EnergyCharge;
         public static ModHotKey Transform;
+        private double ChargingTime;
 
 
         public static MyPlayer ModPlayer(Player player)
@@ -105,7 +107,8 @@ namespace DBZMOD
 
             if (EnergyCharge.Current && (KiCurrent < KiMax))
             {
-                KiCurrent++;
+                KiCurrent += 1 + (int) ChargingTime;
+                ChargingTime += 0.01;
                 player.velocity = new Vector2(0,player.velocity.Y);
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
@@ -134,7 +137,7 @@ namespace DBZMOD
         {
             KiDamage = 1f;
             KiKbAddition = 0f;
-            KiMax = 1000;
+            //KiMax = 1000;
             KiRegen = 2f;
             scouterT2 = false;
             scouterT3 = false;
@@ -142,6 +145,8 @@ namespace DBZMOD
             scouterT5 = false;
             scouterT6 = false;
             spiritualEmblem = false;
+            player.statDefense += KiMax / 500;
+            if (KiMax > 50000) KiMax = 50000;
         }
 	
         public override void SetupStartInventory(IList<Item> items)
@@ -154,5 +159,25 @@ namespace DBZMOD
         //public override void UpdateBiomes()
 
         //ZoneCustomBiome = (DBZMODWorld.customBiome > 0);  
+
+        public override TagCompound Save()
+        {
+            TagCompound savedData = new TagCompound();
+            savedData.Add("maxKiLevel", KiMax);
+            savedData.Add("kiLevel", KiCurrent);
+            return savedData;
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            KiMax = tag.Get<int>("maxKiLevel");
+            KiCurrent = tag.Get<int>("kiLevel");
+        }
+
+        public override bool Shoot(Item item, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            ChargingTime = 0;
+            return true;
+        }
     }
 }

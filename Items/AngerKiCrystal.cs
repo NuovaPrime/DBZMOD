@@ -6,6 +6,8 @@ namespace DBZMOD.Items
 {
     public class AngerKiCrystal : ModItem
     {
+        public int kiValue = 4;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Angerful Ki Crystal");
@@ -17,8 +19,21 @@ namespace DBZMOD.Items
             item.width = 22;
             item.height = 22;
             item.maxStack = 9999;
-            item.value = 800;
-            item.rare = 4;
+            item.value = 100;
+            item.rare = 1;
+            item.useTurn = true;
+            item.autoReuse = true;
+            item.useAnimation = 15;
+            item.useTime = 10;
+            item.useStyle = 2;
+            item.UseSound = SoundID.Item3;
+            item.consumable = true;
+        }
+
+        public override bool UseItem(Player player)
+        {
+            MyPlayer.ModPlayer(player).KiMax += kiValue;
+            return true;
         }
     }
 }
