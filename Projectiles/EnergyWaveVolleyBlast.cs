@@ -135,6 +135,7 @@ namespace DBZMOD.Projectiles
 				projectile.velocity *= 1f;
                 Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("EnergyWaveVolleyTrail"), projectile.damage, 4f, projectile.owner, 0, projectile.rotation);
                 projectile.ai[1] = 0;
+                projectile.netUpdate = true;
             }
         }
 	}

@@ -41,6 +41,7 @@ namespace DBZMOD.Projectiles
             projectile.rotation = projectile.ai[1];
             projectile.localAI[0] += 1f;
             projectile.alpha = (int)projectile.localAI[0] * 2;
+            projectile.netUpdate = true;
 
             if (projectile.localAI[0] > 130f)
             {

@@ -119,6 +119,7 @@ namespace DBZMOD.Projectiles
             {
                 if (Vector2.Distance(projectile.position, Main.MouseWorld) > 0.1)
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 13;
+                projectile.netUpdate = true;
             }
         	
         }

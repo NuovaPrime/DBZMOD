@@ -15,6 +15,109 @@ namespace DBZMOD
             }
         }
         private Player player;
+        public override void SetDefaults(NPC npc)
+        {
+            if (npc.boss && DBZWorld.RealismMode)
+            {
+                if (npc.type == NPCID.EyeofCthulhu)
+                {
+                    npc.lifeMax = npc.lifeMax * 2;
+                }
+                else if (npc.type == NPCID.EaterofWorldsHead)
+                {
+                    npc.lifeMax = npc.lifeMax * 3;
+                }
+                else if (npc.type == NPCID.EaterofWorldsBody)
+                {
+                    npc.lifeMax = npc.lifeMax * 3;
+                }
+                else if (npc.type == NPCID.EaterofWorldsTail)
+                {
+                    npc.lifeMax = npc.lifeMax * 3;
+                }
+                else if (npc.type == NPCID.BrainofCthulhu)
+                {
+                    npc.lifeMax = npc.lifeMax * 3;
+                }
+                else if (npc.type == NPCID.QueenBee)
+                {
+                    npc.lifeMax = npc.lifeMax * 4;
+                }
+                else if (npc.type == NPCID.SkeletronHead)
+                {
+                    npc.lifeMax = npc.lifeMax * 5;
+                }
+                else if (npc.type == NPCID.SkeletronHand)
+                {
+                    npc.lifeMax = npc.lifeMax * 5;
+                }
+                else if (npc.type == NPCID.WallofFlesh)
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == NPCID.WallofFleshEye)
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == NPCID.Spazmatism)
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == NPCID.Retinazer)
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == NPCID.SkeletronPrime)
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == NPCID.TheDestroyer)
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == NPCID.Plantera)
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == NPCID.Golem)
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == NPCID.GolemHead)
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == NPCID.GolemFistLeft)
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == NPCID.GolemFistRight)
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == NPCID.DukeFishron)
+                {
+                    npc.lifeMax = npc.lifeMax * 10;
+                }
+                else if (npc.type == NPCID.CultistBoss)
+                {
+                    npc.lifeMax = npc.lifeMax * 11;
+                }
+                else if (npc.type == NPCID.MoonLordCore)
+                {
+                    npc.lifeMax = npc.lifeMax * 12;
+                }
+                else if (npc.type == NPCID.MoonLordHand)
+                {
+                    npc.lifeMax = npc.lifeMax * 12;
+                }
+                else if (npc.type == NPCID.MoonLordHead)
+                {
+                    npc.lifeMax = npc.lifeMax * 12;
+                }
+            }
+            base.SetDefaults(npc);
+        }
         public override void NPCLoot(NPC npc)
         {    
 
@@ -100,60 +203,62 @@ namespace DBZMOD
 
             //}
             //THIS IS AN EXAMPLE OF HOW TO MAKE ITEMS DROP FROM VANILA NPCs
+            if (!Main.expertMode)
+            {
+                if (npc.boss)   //this is where you choose the npc you want
+                {
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SenzuBean"), Main.rand.Next(1, 3)); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
+                    }
+                }
+                if (npc.type == NPCID.EyeofCthulhu)   //this is where you choose the npc you want
+                {
+                    if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
+                    }
 
-            if (npc.boss)   //this is where you choose the npc you want
-            {
-                if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                }
+
+                if (npc.type == NPCID.SkeletronHead)   //this is where you choose the npc you want
                 {
+                    if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SenzuBean"), Main.rand.Next(1, 3)); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
                     }
                 }
-            }
-            if (npc.type == NPCID.EyeofCthulhu)   //this is where you choose the npc you want
-            {
-                if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                if (npc.type == NPCID.Spazmatism)   //this is where you choose the npc you want
                 {
+                    if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
                     }
                 }
- 
-            }
-            
-            if (npc.type == NPCID.SkeletronHead)   //this is where you choose the npc you want
-            {
-                if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                if (npc.type == NPCID.Plantera)   //this is where you choose the npc you want
                 {
+                    if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
                     }
                 }
-            }
-            if (npc.type == NPCID.Spazmatism)   //this is where you choose the npc you want
-            {
-                if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                if (npc.type == NPCID.CultistBoss)   //this is where you choose the npc you want
                 {
+                    if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
-                    }
-                }
-            }
-            if (npc.type == NPCID.Plantera)   //this is where you choose the npc you want
-            {
-                if ((Main.rand.Next(3) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
-                {
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
-                    }
-                }
-            }
-            if (npc.type == NPCID.CultistBoss)   //this is where you choose the npc you want
-            {
-                if ((Main.rand.Next(4) == 0)) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
-                {
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
+                        }
                     }
                 }
             }
@@ -161,7 +266,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.EyeofCthulhu)   //this is where you choose the npc you want
                 {
-                    if (Main.rand.Next(4) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragmentFirst"), 1);
 
@@ -173,7 +278,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.SkeletronHead)   //this is where you choose the npc you want
                 {
-                    if (Main.rand.Next(4) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment1"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
@@ -185,7 +290,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.SkeletronPrime)   //this is where you choose the npc you want
                 {
-                    if (Main.rand.Next(4) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment2"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
@@ -197,7 +302,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.Golem)   //this is where you choose the npc you want
                 {
-                    if (Main.rand.Next(4) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment3"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount
@@ -209,7 +314,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.MoonLordCore)   //this is where you choose the npc you want
                 {
-                    if (Main.rand.Next(4) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
+                    if (Main.rand.Next(3) == 0) //this is the item rarity, so 4 is 1 in 5 chance that the npc will drop the item.
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment4"), 1); //this is where you set what item to drop, mod.ItemType("CustomSword") is an example of how to add your custom item. and 1 is the amount

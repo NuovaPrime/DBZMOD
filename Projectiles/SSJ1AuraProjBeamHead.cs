@@ -29,7 +29,6 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
-            projectile.netUpdate = true;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
@@ -46,6 +45,7 @@ namespace DBZMOD.Projectiles
             {
                 Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("SSJ1AuraProjBeam"), 0, 0f, projectile.owner, 0, projectile.rotation);
                 projectile.ai[1] = 0;
+                projectile.netUpdate = true;
             }
         }
     }

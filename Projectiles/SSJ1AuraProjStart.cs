@@ -26,7 +26,6 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            projectile.netUpdate = true;
             SizeTimer = 0f;
         }
         public override void AI()
@@ -35,6 +34,7 @@ namespace DBZMOD.Projectiles
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(0, -25);
+            projectile.netUpdate = true;
 
             if (!MyPlayer.ModPlayer(player).IsTransforming)
             {

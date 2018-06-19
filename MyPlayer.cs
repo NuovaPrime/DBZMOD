@@ -10,6 +10,7 @@ using Terraria.Graphics;
 using Microsoft.Xna.Framework;
 using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
+using Terraria.ID;
 
 namespace DBZMOD
 {
@@ -18,6 +19,10 @@ namespace DBZMOD
         #region Variables
         public float KiDamage;
         public float KiKbAddition;
+        public float KiSpeedAddition;
+        public int KiCrit;
+        public int KiRegenTimer;
+        public bool CobaltBonus;
         public int KiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
@@ -40,10 +45,12 @@ namespace DBZMOD
         public bool KaioFragment2;
         public bool KaioFragment3;
         public bool KaioFragment4;
+        public bool ChlorophyteHeadPieceActive;
         public bool KaioAchieved;
         public bool KiEssence1;
         public bool KiEssence2;
         public bool KiEssence3;
+        public bool turtleShell;
         public bool KiEssence4;
         public bool spiritualEmblem;
         public int SSJAuraBeamTimer;
@@ -55,6 +62,11 @@ namespace DBZMOD
         public float KiDrainMulti;
         public int ChargeSoundTimer;
         public int TransformCooldown;
+        public bool diamondRing;
+        public bool emeraldRing;
+        public bool sapphireRing;
+        public bool topazRing;
+        public bool rubyRing;
         public static ModHotKey KaiokenKey;
         public static ModHotKey EnergyCharge;
         public static ModHotKey Transform;
@@ -84,7 +96,7 @@ namespace DBZMOD
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
             }
-            if (!kiLantern && player.HasBuff(mod.BuffType("KiLanternBuff")))
+            if (!kiLantern)
             {
                 player.ClearBuff(mod.BuffType("KiLanternBuff"));
             }
@@ -101,7 +113,10 @@ namespace DBZMOD
             {
                 KiCurrent = 0;
             }
-
+            if(CobaltBonus)
+            {
+                KiKbAddition += 15;
+            }
         }
 
         public bool SSJ1Check()
@@ -334,7 +349,17 @@ namespace DBZMOD
             scouterT5 = false;
             scouterT6 = false;
             spiritualEmblem = false;
+            turtleShell = false;
             KiDrainMulti = 1f;
+            KiSpeedAddition = 1f;
+            KiCrit = 5;
+            ChlorophyteHeadPieceActive = false;
+            CobaltBonus = false;
+            diamondRing = false;
+            emeraldRing = false;
+            rubyRing = false;
+            sapphireRing = false;
+            topazRing = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
@@ -364,6 +389,11 @@ namespace DBZMOD
             {
                 return false;
             }
+            if(ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
+            {
+                player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
+                return true;
+            }
             return true;
         }
 
@@ -389,6 +419,11 @@ namespace DBZMOD
             item9.SetDefaults(mod.ItemType("KiAggravationStone"));
             item9.stack = 1;
             items.Add(item9);
+
+            Item item8 = new Item();
+            item8.SetDefaults(mod.ItemType("EmptyRing"));
+            item8.stack = 1;
+            items.Add(item8);
         }
         //public override void UpdateBiomes()
 

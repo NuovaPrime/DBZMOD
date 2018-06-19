@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A Piece of equipment used for scanning powerlevels."
-               + "\nGives Increased Ki Damage, Spelunker and Hunter effects."
+               + "\nGives Increased Ki Damage and Hunter effects."
                + "\n-Tier 6-");
             DisplayName.SetDefault("Wide-Lens Scouter");
         }
