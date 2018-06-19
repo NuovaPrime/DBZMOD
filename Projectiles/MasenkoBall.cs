@@ -53,7 +53,7 @@ namespace DBZMOD.Projectiles
             {
                 ChargeTimer++;
                 KiDrainTimer++;
-                player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y / 3);
+                player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
             }
             if(ChargeTimer > 120)
             {

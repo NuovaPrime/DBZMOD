@@ -55,6 +55,7 @@ namespace DBZMOD.Projectiles
             {
                 Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("MasenkoTrail"), projectile.damage / 2, 4f, projectile.owner, 0, projectile.rotation);
                 projectile.ai[1] = 0;
+                projectile.netUpdate = true;
             }
         }
 	}

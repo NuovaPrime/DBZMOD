@@ -94,6 +94,7 @@ namespace DBZMOD
         public bool MoodlordDowned;
         public override void PostUpdate()
         {
+            GetAttackSpeed(player);
             if(NPC.downedBoss1)
             {
                 EyeDowned = true;
@@ -147,6 +148,15 @@ namespace DBZMOD
         public override void GetWeaponDamage(Player player, ref int damage)
         {   
             damage = (int)(damage * MyPlayer.ModPlayer(player).KiDamage);
+        }
+        public override void GetWeaponCrit(Player player, ref int crit)
+        {
+            crit = crit + MyPlayer.ModPlayer(player).KiCrit;
+        }
+        public void GetAttackSpeed(Player player)
+        {
+            item.useTime = (int)(item.useTime / MyPlayer.ModPlayer(player).KiSpeedAddition);
+            item.useAnimation = (int)(item.useAnimation / MyPlayer.ModPlayer(player).KiSpeedAddition);
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {

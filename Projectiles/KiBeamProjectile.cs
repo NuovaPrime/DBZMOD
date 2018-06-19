@@ -37,7 +37,7 @@ namespace DBZMOD.Projectiles
 
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
-            projectile.damage -= 5;
+            projectile.damage -= 2;
         }
 
 

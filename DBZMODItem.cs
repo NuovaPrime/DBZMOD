@@ -8,7 +8,7 @@ namespace DBZMOD
     {
         public override void OpenVanillaBag(string context, Player player, int arg)
         {
-            if (Main.rand.Next(4) == 0)
+            if (Main.rand.Next(3) == 0)
             {
                 if (context == "bossBag" && arg == ItemID.EyeOfCthulhuBossBag)
                 {
@@ -44,11 +44,12 @@ namespace DBZMOD
                 }
                 if (context == "bossBag" && arg == ItemID.GolemBossBag)
                 {
-                    player.QuickSpawnItem(mod.ItemType("KaioFragment4"));
+                    player.QuickSpawnItem(mod.ItemType("KiFragment4"));
                 }
-            }
-            if (Main.rand.Next(3) == 0)
-            {
+                if (context == "bossBag" && arg == ItemID.MoonLordBossBag)
+                {
+                    player.QuickSpawnItem(mod.ItemType("KiFragment5"));
+                }
                 if (context == "bossBag" && arg == ItemID.WallOfFleshBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("SpiritualEmblem"));

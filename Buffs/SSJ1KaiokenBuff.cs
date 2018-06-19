@@ -23,7 +23,7 @@ namespace DBZMOD.Buffs
             {
                 DamageMulti = 10;
                 SpeedMulti = 10;
-                HealthDrainRate = 200;
+                HealthDrainRate = 68;
                 KiDrainRate = 4;
                 KiDrainBuffMulti = 1f;
             }
@@ -31,7 +31,7 @@ namespace DBZMOD.Buffs
             {
                 DamageMulti = 4f;
                 SpeedMulti = 4f;
-                HealthDrainRate = 240;
+                HealthDrainRate = 68;
                 KiDrainRate = 8;
                 KiDrainBuffMulti = 4f;
             }

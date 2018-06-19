@@ -29,13 +29,13 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = -1;
             projectile.damage = 0;
             BaseAuraTimer = 5;
-            projectile.netUpdate = true;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
+            projectile.netUpdate = true;
             projectile.Center = player.Center + new Vector2(0, -30);
 
             if (!player.HasBuff(mod.BuffType("SSJ1Buff")))
