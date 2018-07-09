@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Weapons
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-");
+		Tooltip.SetDefault("-Tier 3-");
 		DisplayName.SetDefault("Hellzone Grenade");
 		}
 
