@@ -73,6 +73,7 @@ namespace DBZMOD
         public static ModHotKey PowerDown;
         public static ModHotKey SpeedToggle;
         public static ModHotKey QuickKi;
+        public static ModHotKey TransMenu;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -184,7 +185,7 @@ namespace DBZMOD
         {
             if (Transform.JustPressed)
             {
-                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && !IsTransforming)
+                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
                 {
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
@@ -199,7 +200,7 @@ namespace DBZMOD
             {
             }
                 
-            if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && KaioAchieved && !player.channel)
+            if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && KaioAchieved && !player.channel)
             {
                 player.AddBuff(mod.BuffType("KaiokenBuff"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
@@ -243,6 +244,15 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
+            else if (Transform.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                player.ClearBuff(mod.BuffType("KaiokenBuff"));
+                player.ClearBuff(mod.BuffType("SSJ1Buff"));
+                player.AddBuff(mod.BuffType("SSJ1KaiokenBuff"), 1800);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
+            }
 
             if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel)
             {
@@ -267,13 +277,14 @@ namespace DBZMOD
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
             }
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")) || player.HasBuff(mod.BuffType("SSJ1KaiokenBuff"))))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+                player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
                 player.AddBuff(mod.BuffType("TiredDebuff"), 3600);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
             }
