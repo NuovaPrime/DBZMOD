@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Logan\.Rider2018.1\System\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_DBZMOD.48494770.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD" t="IncludeRecursive">
+      <e p="Auras" t="Include">
+        <e p="KaiokenAura.png" t="Include" />
+        <e p="TransformObjects" t="Include">
+          <e p="New Text Document.txt" t="Include" />
+        </e>
+      </e>
+      <e p="Backgrounds" t="Include">
+        <e p="New Text Document.txt" t="Include" />
+      </e>
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="Buffs" t="Include">
+        <e p="KaiokenBuff.cs" t="Include" />
+        <e p="KaiokenBuffX10.cs" t="Include" />
+        <e p="KaiokenBuffX100.cs" t="Include" />
+        <e p="KaiokenBuffX20.cs" t="Include" />
+        <e p="KaiokenBuffX3.cs" t="Include" />
+        <e p="KiLanternBuff.cs" t="Include" />
+        <e p="NimbusBuff.cs" t="Include" />
+        <e p="SenzuCooldown.cs" t="Include" />
+        <e p="SSJ1Buff.cs" t="Include" />
+        <e p="SSJ1KaiokenBuff.cs" t="Include" />
+        <e p="TiredDebuff.cs" t="Include" />
+      </e>
+      <e p="build.txt" t="Include" />
+      <e p="DBZMOD.cs" t="Include" />
+      <e p="DBZMOD.csproj" t="IncludeRecursive" />
+      <e p="DBZMOD.sln" t="IncludeFlat" />
+      <e p="DBZMODItem.cs" t="Include" />
+      <e p="DBZMODNpc.cs" t="Include" />
+      <e p="description.txt" t="Include" />
+      <e p="Destruction" t="Include">
+        <e p="DirtBlockDestruction.cs" t="Include" />
+        <e p="StoneBlockDestruction.cs" t="Include" />
+      </e>
+      <e p="Dusts" t="Include">
+        <e p="MetalDust.cs" t="Include" />
+        <e p="MetalDust.png" t="Include" />
+        <e p="New Text Document.txt" t="Include" />
+      </e>
+      <e p="Extra Sprites" t="Include">
+        <e p="New Piskel (44).png" t="Include" />
+        <e p="ScouterBlueSheet.png" t="Include" />
+        <e p="ScouterGreenSheet.png" t="Include" />
+        <e p="ScouterPurpleSheet.png" t="Include" />
+        <e p="ScouterRedSheet.png" t="Include" />
+        <e p="TrapShooterProjectile.png" t="Include" />
+        <e p="TrunksSword.png" t="Include" />
+        <e p="zzzswrd.png" t="Include" />
+      </e>
+      <e p="GFX.cs" t="Include" />
+      <e p="Gores" t="Include">
+        <e p="New Text Document.txt" t="Include" />
+      </e>
+      <e p="Hairs" t="Include">
+        <e p="SSJ" t="Include">
+          <e p="SSJ1Hair.png" t="Include" />
+          <e p="SSJ2Hair.png" t="Include" />
+        </e>
+      </e>
+      <e p="Items" t="Include">
+        <e p="Accessories" t="Include">
+          <e p="DiamondRing.cs" t="Include" />
+          <e p="EmeraldRing.cs" t="Include" />
+          <e p="RubyRing.cs" t="Include" />
+          <e p="SapphireRing.cs" t="Include" />
+          <e p="ScouterT2.cs" t="Include" />
+          <e p="ScouterT3.cs" t="Include" />
+          <e p="ScouterT4.cs" t="Include" />
+          <e p="ScouterT5.cs" t="Include" />
+          <e p="ScouterT6.cs" t="Include" />
+          <e p="SpiritualEmblem.cs" t="Include" />
+          <e p="TopazRing.cs" t="Include" />
+          <e p="TurtleShell.cs" t="Include" />
+        </e>
+        <e p="AngerKiCrystal.cs" t="Include" />
+        <e p="Armor" t="Include">
+          <e p="ChlorophyteHeadpiece.cs" t="Include" />
+          <e p="CobaltSharpCap.cs" t="Include" />
+          <e p="PalladiumHeadDress.cs" t="Include" />
+          <e p="PalladiumHeadDress.png" t="Include" />
+          <e p="PalladiumHeadDress_Head.png" t="Include" />
+        </e>
+        <e p="CalmKiCrystal.cs" t="Include" />
+        <e p="Consumables" t="Include">
+          <e p="KaioFragment1.cs" t="Include" />
+          <e p="KaioFragment2.cs" t="Include" />
+          <e p="KaioFragment3.cs" t="Include" />
+          <e p="KaioFragment4.cs" t="Include" />
+          <e p="KaioFragmentFirst.cs" t="Include" />
+          <e p="KiAggravationStone.cs" t="Include" />
+          <e p="KiCalmingStone.cs" t="Include" />
+          <e p="KiEssence1.cs" t="Include" />
+          <e p="KiEssence2.cs" t="Include" />
+          <e p="KiEssence3.cs" t="Include" />
+          <e p="KiEssence4.cs" t="Include" />
+          <e p="KiFragment1.cs" t="Include" />
+          <e p="KiFragment1.png" t="Include" />
+          <e p="KiFragment2.cs" t="Include" />
+          <e p="KiFragment2.png" t="Include" />
+          <e p="KiFragment3.cs" t="Include" />
+          <e p="KiFragment4.cs" t="Include" />
+          <e p="KiFragment5.cs" t="Include" />
+          <e p="Potions" t="Include">
+            <e p="KiPotion1.cs" t="Include" />
+            <e p="KiPotion1.png" t="Include" />
+            <e p="KiPotion2.cs" t="Include" />
+            <e p="KiPotion3.cs" t="Include" />
+            <e p="KiPotion4.cs" t="Include" />
+          </e>
+          <e p="SenzuBean.cs" t="Include" />
+        </e>
+        <e p="EmptyRing.cs" t="Include" />
+        <e p="HonorKiCrystal.cs" t="Include" />
+        <e p="KiLanternItem.cs" t="Include" />
+        <e p="KiManipulatorItem.cs" t="Include" />
+        <e p="KiOrb.cs" t="Include" />
+        <e p="NimbusWhistle.cs" t="Include" />
+        <e p="PridefulKiCrystal.cs" t="Include" />
+        <e p="ScrapMetal.cs" t="Include" />
+        <e p="StableKiCrystal.cs" t="Include" />
+        <e p="Weapons" t="Include">
+          <e p="BigBangAttack.cs" t="Include" />
+          <e p="DestructoDisk.cs" t="Include" />
+          <e p="DoubleSunday.cs" t="Include" />
+          <e p="EnergyBlastBarrage.cs" t="Include" />
+          <e p="EnergyWave.cs" t="Include" />
+          <e p="EnergyWaveVolley.cs" t="Include" />
+          <e p="GalickGun.cs" t="Include" />
+          <e p="HellzoneGrenade.cs" t="Include" />
+          <e p="Kamehameha.cs" t="Include" />
+          <e p="KiBeam.cs" t="Include" />
+          <e p="KiBlast.cs" t="Include" />
+          <e p="KiFist1.cs" t="Include" />
+          <e p="Masenko.cs" t="Include" />
+          <e p="MemeWeapons" t="Include">
+            <e p="GalickGunMeme.cs" t="Include" />
+            <e p="GatlingSpiritBomb.cs" t="Include" />
+            <e p="Rock.cs" t="Include" />
+          </e>
+          <e p="SpiritBall.cs" t="Include" />
+          <e p="SpiritBomb.cs" t="Include" />
+          <e p="SuperKamehameha.cs" t="Include" />
+          <e p="TrapShooter.cs" t="Include" />
+          <e p="TrunksSword.cs" t="Include" />
+          <e p="YajirobesKatana.cs" t="Include" />
+        </e>
+      </e>
+      <e p="KiItem.cs" t="Include" />
+      <e p="ModWorld.cs" t="Include" />
+      <e p="Mounts" t="Include">
+        <e p="NimbusMount.cs" t="Include" />
+      </e>
+      <e p="MyPlayer.cs" t="Include" />
+      <e p="Namek" t="Include">
+        <e p="Namekbg.cs" t="Include" />
+        <e p="Namekbg.png" t="Include" />
+        <e p="NamekDirt.cs" t="Include" />
+        <e p="NamekDirt.png" t="Include" />
+        <e p="NamekDirtTile.cs" t="Include" />
+        <e p="NamekDirtTile.png" t="Include" />
+        <e p="NamekGrassTile.cs" t="Include" />
+        <e p="NamekGrassTile.png" t="Include" />
+        <e p="NamekTree.cs" t="Include" />
+        <e p="NamekTree.png" t="Include" />
+        <e p="NamekTreeTops.png" t="Include" />
+        <e p="NamekWaterDroplet.cs" t="Include" />
+        <e p="NamekWaterDroplet.png" t="Include" />
+        <e p="NamekWaterSplash.cs" t="Include" />
+        <e p="NamekWaterSplash.png" t="Include" />
+        <e p="NamekWood.cs" t="Include" />
+        <e p="NamekWood.png" t="Include" />
+      </e>
+      <e p="Npcs" t="Include">
+        <e p="Boss" t="Include">
+          <e p="FriezaShip.png" t="Include" />
+          <e p="FriezaShip_Head_Boss.png" t="Include" />
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" t="Include" />
+          <e p="TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" t="Include" />
+          <e p="TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" t="Include" />
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Projectiles" t="Include">
+        <e p="BaseAuraProj.cs" t="Include" />
+        <e p="BigBangAttackProjectile.cs" t="Include" />
+        <e p="BigBangAttackProjectile2.cs" t="Include" />
+        <e p="DestructoDiskProjectile.cs" t="Include" />
+        <e p="DoubleSundayBlast.cs" t="Include" />
+        <e p="DoubleSundayTrail.cs" t="Include" />
+        <e p="EnergyBlastBarrageProjectile.cs" t="Include" />
+        <e p="EnergyWaveBall.cs" t="Include" />
+        <e p="EnergyWaveBlast.cs" t="Include" />
+        <e p="EnergyWaveTrail.cs" t="Include" />
+        <e p="EnergyWaveVolleyBlast.cs" t="Include" />
+        <e p="EnergyWaveVolleyTrail.cs" t="Include" />
+        <e p="Fists" t="Include">
+          <e p="KiFistProj.cs" t="Include" />
+          <e p="KiFistProj.png" t="Include" />
+        </e>
+        <e p="GalickGunBall.cs" t="Include" />
+        <e p="GalickGunBlast.cs" t="Include" />
+        <e p="GalickGunTrail.cs" t="Include" />
+        <e p="HellzoneGrenadeProjectile.cs" t="Include" />
+        <e p="HellzoneGrenadeProjectile2.cs" t="Include" />
+        <e p="KaiokenAuraProj.cs" t="Include" />
+        <e p="KaiokenAuraProjx10.cs" t="Include" />
+        <e p="KaiokenAuraProjx100.cs" t="Include" />
+        <e p="KaiokenAuraProjx20.cs" t="Include" />
+        <e p="KaiokenAuraProjx3.cs" t="Include" />
+        <e p="KamehamehaBall.cs" t="Include" />
+        <e p="KamehamehaBlast.cs" t="Include" />
+        <e p="KamehamehaTrail.cs" t="Include" />
+        <e p="KiBeamProjectile.cs" t="Include" />
+        <e p="KiBlastProjectile.cs" t="Include" />
+        <e p="MasenkoBall.cs" t="Include" />
+        <e p="MasenkoBlast.cs" t="Include" />
+        <e p="MasenkoTrail.cs" t="Include" />
+        <e p="RockProjectile.cs" t="Include" />
+        <e p="SpiritBallProjectile.cs" t="Include" />
+        <e p="SpiritBombProjectile.cs" t="Include" />
+        <e p="SSJ1AuraProj.cs" t="Include" />
+        <e p="SSJ1AuraProjBeam.cs" t="Include" />
+        <e p="SSJ1AuraProjBeamHead.cs" t="Include" />
+        <e p="SSJ1AuraProjStart.cs" t="Include" />
+        <e p="SuperKamehamehaBall.cs" t="Include" />
+        <e p="SuperKamehamehaBlast.cs" t="Include" />
+        <e p="SuperKamehamehaTrail.cs" t="Include" />
+        <e p="TrapShooterExplosion.cs" t="Include" />
+        <e p="TrapShooterProjectile.cs" t="Include" />
+      </e>
+      <e p="Sounds" t="Include">
+        <e p="DiskFire.wav" t="Include" />
+        <e p="EnergyCharge.wav" t="Include" />
+        <e p="EnergyChargeStart.wav" t="Include" />
+        <e p="Explosion.wav" t="Include" />
+        <e p="KaioAuraStart.wav" t="Include" />
+        <e p="KamehamehaFire.wav" t="Include" />
+        <e p="Kiblast.wav" t="Include" />
+        <e p="LaserBlast.wav" t="Include" />
+        <e p="Music" t="Include">
+          <e p="DBZMODTheme1.mp3" t="Include" />
+        </e>
+        <e p="PowerDown.wav" t="Include" />
+        <e p="SwordSlash.wav" t="Include" />
+      </e>
+      <e p="Tiles" t="Include">
+        <e p="KiLantern.cs" t="Include" />
+        <e p="KiManipulator.cs" t="Include" />
+      </e>
+      <e p="TransHandler.cs" t="Include" />
+      <e p="UI" t="Include">
+        <e p="KiBar.cs" t="Include" />
+        <e p="KiResource.cs" t="Include" />
+        <e p="ResourceBar.cs" t="Include" />
+      </e>
+      <e p="Waters" t="Include">
+        <e p="NamekWater.cs" t="Include" />
+        <e p="NamekWaterfall.cs" t="Include" />
+      </e>
+    </e>
+  </component>
+</project>

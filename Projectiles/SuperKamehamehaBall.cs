@@ -44,7 +44,6 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X - 20;
             projectile.position.Y = player.Center.Y - 3;
-
             if (!player.channel && ChargeLevel < 1)
             {
                 projectile.Kill();

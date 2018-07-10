@@ -32,6 +32,7 @@ namespace DBZMOD
             else
             {
                 RealismModeOn = false;
+                KiDrainAdd(player);
             }
             if(IsKaioken)
             {
