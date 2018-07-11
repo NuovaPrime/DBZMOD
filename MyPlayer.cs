@@ -454,7 +454,7 @@ namespace DBZMOD
     }
     public class SSJHairDraw : ModPlayer
     {
-        public static Texture2D Hair;
+        public Texture2D Hair;
         public static SSJHairDraw ModPlayer(Player player)
         {
             return player.GetModPlayer<SSJHairDraw>();
