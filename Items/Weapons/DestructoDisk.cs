@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons
         public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("DestructoDiskProjectile");
-			item.shootSpeed = 40f;
+			item.shootSpeed = 20f;
 			item.damage = 50;
 			item.knockBack = 5f;
 			item.useStyle = 1;
