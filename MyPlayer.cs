@@ -29,6 +29,7 @@ namespace DBZMOD
         public bool ZoneCustomBiome = false;
         public int drawX;
         public int drawY;
+        public int MenuSelection = 0;
         public bool SSJ1Achieved;
         public bool scouterT2;
         public bool scouterT3;
@@ -296,6 +297,7 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
                 player.AddBuff(mod.BuffType("TiredDebuff"), 3600);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                IsTransformed = false;
             }
             if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))))
             {
@@ -396,6 +398,7 @@ namespace DBZMOD
                         SSJ1Achieved = true;
                         IsTransforming = true;
                         SSJTransformation();
+                        MenuSelection = 1;
                         return false;
                     }
                 }
@@ -461,10 +464,12 @@ namespace DBZMOD
             if (player.HasBuff(mod.BuffType("SSJ1Buff")))
             {
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
+                player.eyeColor = Color.Turquoise;
             }
             else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
+                player.eyeColor = Color.Turquoise;
             }
             else
             {

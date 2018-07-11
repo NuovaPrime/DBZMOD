@@ -11,7 +11,8 @@ namespace DBZMOD
         private UserInterface KiBarInterface;
         private KiBar kibar;
         private UIFlatPanel UIFlatPanel;
-        internal TransMenu TransMenu;
+        internal TransMenu transMenu;
+        private UserInterface TransMenuInterface;
         private DBZMOD mod;
         public bool thoriumLoaded;
         public bool tremorLoaded;
@@ -53,8 +54,10 @@ namespace DBZMOD
             if(!Main.dedServ)
             {
                 KiBar.visible = true;
-                TransMenu = new  TransMenu();
-                TransMenu.Activate();
+                transMenu = new  TransMenu();
+                transMenu.Activate();
+                TransMenuInterface = new UserInterface();
+                TransMenuInterface.SetState(transMenu);
                 GFX.LoadGFX(this);
                 kibar = new KiBar();
                 kibar.Activate();
@@ -87,6 +90,19 @@ namespace DBZMOD
                         {
                             KiBarInterface.Update(Main._drawInterfaceGameTime);
                             kibar.Draw(Main.spriteBatch);
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+                layers.Insert(index, new LegacyGameInterfaceLayer(
+                    "DBZMOD: Trans Menu",
+                    delegate
+                    {
+                        if (UI.TransMenu.menuvisible)
+                        {
+                            TransMenuInterface.Update(Main._drawInterfaceGameTime);
+                            transMenu.Draw(Main.spriteBatch);
                         }
                         return true;
                     },

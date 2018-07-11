@@ -1,8 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
+using DBZMOD.Buffs;
+using DBZMOD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -10,8 +14,9 @@ namespace DBZMOD.UI
 {
     internal class TransMenu : UIState
     {
+        private Player player;
         public UIPanel _backPanel;
-        //public UIImage ki
+        private UIText ssjbuttontext;
         public static bool menuvisible = false;
         private UIImageButton ssjButtonTexture;
         private const float padding = 5f;
@@ -33,9 +38,21 @@ namespace DBZMOD.UI
             ssjButtonTexture.Height.Set(ssjbuttontexture.Height, 0f);
             ssjButtonTexture.Left.Set(padding, 0f);
             ssjButtonTexture.Top.Set(padding, 0f);
-            //ssjButtonTexture.OnClick += TrySealingSlottedItem;
+            ssjButtonTexture.OnClick += TrySelectingSSJ1;
             _backPanel.Append(ssjButtonTexture);
+            
+            ssjbuttontext = new UIText("Super Saiyan");
+            ssjbuttontext.Width.Set(ssjbuttontexture.Width, 0f);
+            ssjbuttontext.Height.Set(ssjbuttontexture.Height, 0f);
+            ssjbuttontext.Left.Set(padding, 0f);
+            ssjbuttontext.Top.Set(padding, 0f);
+            ssjbuttontext.Append(ssjButtonTexture);
+        }
 
+        private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
+        {
+            MyPlayer.ModPlayer(player).MenuSelection = 1;
+            Main.PlaySound(SoundID.MenuTick);
         }
     }
 }
