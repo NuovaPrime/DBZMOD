@@ -20,7 +20,7 @@ namespace DBZMOD.Projectiles
         {
             projectile.width = 62;
             projectile.height = 62;
-			projectile.aiStyle = 52;
+			projectile.aiStyle = 1;
 			projectile.light = 1f;
             projectile.friendly = true;
             projectile.ignoreWater = true;
