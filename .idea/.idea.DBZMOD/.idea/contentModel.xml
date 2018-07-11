@@ -261,6 +261,7 @@
         <e p="KiBar.cs" t="Include" />
         <e p="KiResource.cs" t="Include" />
         <e p="ResourceBar.cs" t="Include" />
+        <e p="TransMenu.cs" t="Include" />
       </e>
       <e p="Waters" t="Include">
         <e p="NamekWater.cs" t="Include" />

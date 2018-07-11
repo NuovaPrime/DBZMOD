@@ -11,6 +11,7 @@ namespace DBZMOD
         private UserInterface KiBarInterface;
         private KiBar kibar;
         private UIFlatPanel UIFlatPanel;
+        internal TransMenu TransMenu;
         private DBZMOD mod;
         public bool thoriumLoaded;
         public bool tremorLoaded;
@@ -33,6 +34,7 @@ namespace DBZMOD
             KiBar.visible = false;
             SSJHairDraw.Hair = null;
             instance = null;
+            TransMenu.menuvisible = false;
         }
         public override void Load()
         {
@@ -47,9 +49,12 @@ namespace DBZMOD
             MyPlayer.PowerDown = RegisterHotKey("Power Down", "V");
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
             MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
+            MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             if(!Main.dedServ)
             {
                 KiBar.visible = true;
+                TransMenu = new  TransMenu();
+                TransMenu.Activate();
                 GFX.LoadGFX(this);
                 kibar = new KiBar();
                 kibar.Activate();
