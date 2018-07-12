@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Weapons
         }
         public override bool CanRightClick()
         {
-            if(KiDrain <= MyPlayer.ModPlayer(player).KiCurrent && !player.HasBuff(mod.BuffType("HeavyPunchCooldown")))
+            if(KiDrain <= MyPlayer.ModPlayer(player).KiCurrent && !player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && CanUseHeavyHit)
             {
                 return true;
             }
@@ -284,7 +284,7 @@ namespace DBZMOD.Items.Weapons
                 }
                 #endregion
             }
-            return base.CanUseItem(player);
+	return true;
         }
     }
 }

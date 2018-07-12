@@ -42,16 +42,6 @@
         <e p="MetalDust.png" t="Include" />
         <e p="New Text Document.txt" t="Include" />
       </e>
-      <e p="Extra Sprites" t="Include">
-        <e p="New Piskel (44).png" t="Include" />
-        <e p="ScouterBlueSheet.png" t="Include" />
-        <e p="ScouterGreenSheet.png" t="Include" />
-        <e p="ScouterPurpleSheet.png" t="Include" />
-        <e p="ScouterRedSheet.png" t="Include" />
-        <e p="TrapShooterProjectile.png" t="Include" />
-        <e p="TrunksSword.png" t="Include" />
-        <e p="zzzswrd.png" t="Include" />
-      </e>
       <e p="GFX.cs" t="Include" />
       <e p="Gores" t="Include">
         <e p="New Text Document.txt" t="Include" />
@@ -231,6 +221,7 @@
         <e p="SSJ1AuraProjBeam.cs" t="Include" />
         <e p="SSJ1AuraProjBeamHead.cs" t="Include" />
         <e p="SSJ1AuraProjStart.cs" t="Include" />
+        <e p="SSJRockProjStart.cs" t="Include" />
         <e p="SuperKamehamehaBall.cs" t="Include" />
         <e p="SuperKamehamehaBlast.cs" t="Include" />
         <e p="SuperKamehamehaTrail.cs" t="Include" />

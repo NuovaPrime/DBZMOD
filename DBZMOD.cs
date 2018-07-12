@@ -19,6 +19,7 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public static DBZMOD instance;
+        private Player player;
 
         public DBZMOD()
         {
@@ -33,7 +34,6 @@ namespace DBZMOD
         {
             GFX.UnloadGFX();
             KiBar.visible = false;
-            SSJHairDraw.Hair = null;
             instance = null;
             TransMenu.menuvisible = false;
         }

@@ -174,6 +174,7 @@
     <Compile Include="Projectiles\SSJ1AuraProjBeam.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjBeamHead.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjStart.cs" />
+    <Compile Include="Projectiles\SSJRockProjStart.cs" />
     <Compile Include="Projectiles\SuperKamehamehaBall.cs" />
     <Compile Include="Projectiles\SuperKamehamehaBlast.cs" />
     <Compile Include="Projectiles\SuperKamehamehaTrail.cs" />
@@ -222,14 +223,6 @@
     <Content Include="description.txt" />
     <Content Include="Dusts\MetalDust.png" />
     <Content Include="Dusts\New Text Document.txt" />
-    <Content Include="Extra Sprites\New Piskel %2844%29.png" />
-    <Content Include="Extra Sprites\ScouterBlueSheet.png" />
-    <Content Include="Extra Sprites\ScouterGreenSheet.png" />
-    <Content Include="Extra Sprites\ScouterPurpleSheet.png" />
-    <Content Include="Extra Sprites\ScouterRedSheet.png" />
-    <Content Include="Extra Sprites\TrapShooterProjectile.png" />
-    <Content Include="Extra Sprites\TrunksSword.png" />
-    <Content Include="Extra Sprites\zzzswrd.png" />
     <Content Include="Gores\New Text Document.txt" />
     <Content Include="Hairs\SSJ\SSJ1Hair.png" />
     <Content Include="Hairs\SSJ\SSJ2Hair.png" />
