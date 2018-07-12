@@ -21,6 +21,7 @@ namespace DBZMOD.Projectiles
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 120;
+			projectile.light = 1f;
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
