@@ -14,13 +14,13 @@ namespace DBZMOD.Items.Weapons
         public override void SetDefaults()
         {
             item.shoot = mod.ProjectileType("SuperEnergyBarrageProj");
-            item.shootSpeed = 40f;
+            item.shootSpeed = 36f;
             item.damage = 98;
             item.knockBack = 5f;
             item.useStyle = 1;
             item.UseSound = SoundID.Item1;
             item.useAnimation = 15;
-            item.useTime = 10;
+            item.useTime = 13;
             item.width = 50;
             item.noUseGraphic = true;
             item.height = 50;
