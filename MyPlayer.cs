@@ -259,7 +259,7 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
                 player.AddBuff(mod.BuffType("SSJ1KaiokenBuff"), 1800);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx3"), 0, 0, player.whoAmI);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
@@ -468,7 +468,7 @@ namespace DBZMOD
             }
 			if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
-                Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
+                Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                 player.eyeColor = Color.Turquoise;
             }
             else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
