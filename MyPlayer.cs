@@ -466,6 +466,11 @@ namespace DBZMOD
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                 player.eyeColor = Color.Turquoise;
             }
+			if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
+                player.eyeColor = Color.Turquoise;
+            }
             else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
