@@ -54,7 +54,7 @@ namespace DBZMOD
                     MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate;
                     KiDrainTimer = 0;
                 }
-                Lighting.AddLight(player.Center, 255f, 255f, 0f);
+                Lighting.AddLight(player.Center, 3f, 3f, 0f);
             }
             if (MyPlayer.ModPlayer(player).speedToggled)
             {
