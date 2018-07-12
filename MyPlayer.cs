@@ -186,7 +186,7 @@ namespace DBZMOD
         {
             if (Transform.JustPressed)
             {
-                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
@@ -469,7 +469,7 @@ namespace DBZMOD
 			if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
-                player.eyeColor = Color.Turquoise;
+                player.eyeColor = Color.Red;
             }
             else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
