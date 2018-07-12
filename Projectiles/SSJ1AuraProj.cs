@@ -38,7 +38,7 @@ namespace DBZMOD.Projectiles
             projectile.netUpdate = true;
             projectile.Center = player.Center + new Vector2(0, -30);
 
-            if (!player.HasBuff(mod.BuffType("SSJ1Buff")) || !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 projectile.Kill();
             }
