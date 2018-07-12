@@ -245,7 +245,7 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
 
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
@@ -254,7 +254,7 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
-            else if (Transform.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            else if (Transform.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
