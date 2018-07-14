@@ -11,7 +11,7 @@ namespace DBZMOD
         private UserInterface KiBarInterface;
         private KiBar kibar;
         private UIFlatPanel UIFlatPanel;
-        internal TransMenu transMenu;
+        private TransMenu transMenu;
         private UserInterface TransMenuInterface;
         private DBZMOD mod;
         public bool thoriumLoaded;
@@ -95,11 +95,15 @@ namespace DBZMOD
                     },
                     InterfaceScaleType.UI)
                 );
+            }
+            int index2 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
+            if (index2 != -1)
+            {
                 layers.Insert(index, new LegacyGameInterfaceLayer(
                     "DBZMOD: Trans Menu",
                     delegate
                     {
-                        if (UI.TransMenu.menuvisible)
+                        if (TransMenu.menuvisible)
                         {
                             TransMenuInterface.Update(Main._drawInterfaceGameTime);
                             transMenu.Draw(Main.spriteBatch);

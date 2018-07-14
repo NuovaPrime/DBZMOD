@@ -244,16 +244,6 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx100"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
-
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                player.AddBuff(mod.BuffType("SSJ1KaiokenBuff"), 1800);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
-            }
             else if (Transform.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
@@ -296,6 +286,13 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
                 player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
                 player.AddBuff(mod.BuffType("TiredDebuff"), 3600);
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                IsTransformed = false;
+            }
+            if (PowerDown.JustPressed && player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
+                player.AddBuff(mod.BuffType("TiredDebuff"), 10800);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
