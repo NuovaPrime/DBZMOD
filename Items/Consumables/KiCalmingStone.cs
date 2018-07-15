@@ -33,7 +33,6 @@ namespace DBZMOD.Items.Consumables
         + "\nTransformations get drastically lower multipliers."
         + "\nTransformations increase ki usage."
         + "\nGod level transformations are locked.");
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 4));
         }
 
 

@@ -34,7 +34,6 @@ namespace DBZMOD.Items.Consumables
         + "\nBosses get massive health boosts and damage boosts to compensate."
         + "\nTransformations don't increase ki usage."
         + "\nUnlocks god level transformations.");
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(12, 4));
         }
 
 

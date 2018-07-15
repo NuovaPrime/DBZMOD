@@ -11,6 +11,7 @@ namespace DBZMOD.Projectiles
     public class SSJ1AuraProjStart : ModProjectile
     {
         private float SizeTimer;
+        private float BeamTimer;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -59,6 +60,16 @@ namespace DBZMOD.Projectiles
             {
                 projectile.frame = 0;
             }   
+            if(projectile.active)
+            {
+                BeamTimer++;
+                if(BeamTimer > 30)
+                {
+                    MyPlayer.ModPlayer(player).SSJTransformationBeams();
+                    BeamTimer = 0;
+                }
+                
+            }
         }
         public override void Kill(int timeLeft)
         {
