@@ -107,7 +107,7 @@ namespace DBZMOD.Projectiles
             int num = projectile.timeLeft;
             projectile.timeLeft = 0;
 
-            Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 14);
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Explosion"));
 
             projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
             projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);

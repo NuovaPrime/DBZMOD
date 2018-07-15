@@ -26,6 +26,10 @@ namespace DBZMOD.Items.Weapons
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
+			if(!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
+            }
 			item.value = Item.sellPrice(0, 0, 5, 0);
 			item.rare = 4;
             item.channel = true;

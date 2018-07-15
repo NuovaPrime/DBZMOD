@@ -18,12 +18,15 @@ namespace DBZMOD.Items.Weapons
 			item.damage = 15;
 			item.knockBack = 5f;
 			item.useStyle = 1;
-			item.UseSound = SoundID.Item1;
 			item.useAnimation = 25;
 			item.useTime = 16;
 			item.width = 20;
 			item.noUseGraphic = true;
 			item.height = 20;
+			if(!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
+            }
 			item.autoReuse = false;
 			item.value = Item.sellPrice(0, 0, 5, 0);
 			item.rare = 1;
