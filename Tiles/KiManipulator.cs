@@ -20,9 +20,9 @@ namespace DBZMOD.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.Width = 3;
-            TileObjectData.newTile.Height = 1;
-            TileObjectData.newTile.CoordinateHeights = new int[] { 18 };
+            TileObjectData.newTile.Width = 2;
+            TileObjectData.newTile.Height = 2;
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
             TileObjectData.newTile.Origin = new Point16(1, 0);
             TileObjectData.newTile.CoordinatePadding = 2;
             ModTranslation name = CreateMapEntryName();
