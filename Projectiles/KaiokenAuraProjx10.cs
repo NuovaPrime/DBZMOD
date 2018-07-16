@@ -16,8 +16,8 @@ namespace DBZMOD.Projectiles
         }
         public override void SetDefaults()
         {
-            projectile.width = 95;
-            projectile.height = 89;
+            projectile.width = 97;
+            projectile.height = 102;
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 10;
@@ -60,7 +60,7 @@ namespace DBZMOD.Projectiles
             }
             else
             {
-                projectile.scale = 2.5f;
+                projectile.scale = 2.3f;
             }
         }
     }

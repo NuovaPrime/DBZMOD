@@ -8,14 +8,14 @@ namespace DBZMOD.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ki Manipulator");
+            DisplayName.SetDefault("Z Table");
             Tooltip.SetDefault("Looks like it could bend the essence of ki itself.");
         }
 
         public override void SetDefaults()
         {
-            item.width = 48;
-            item.height = 20;
+            item.width = 24;
+            item.height = 26;
             item.maxStack = 99;
             item.useTurn = true;
             item.autoReuse = true;

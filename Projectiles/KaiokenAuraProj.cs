@@ -12,11 +12,11 @@ namespace DBZMOD.Projectiles
         public float KaioAuraTimer;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 4;
         }
         public override void SetDefaults()
         {
-            projectile.width = 90;
+            projectile.width = 97;
             projectile.height = 102;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
@@ -59,7 +59,7 @@ namespace DBZMOD.Projectiles
             }
             else
             {
-                projectile.scale = 1f;
+                projectile.scale = 1.3f;
             }
         }
     }
