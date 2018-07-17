@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons
 		{
 			item.shoot = mod.ProjectileType("SpiritBombProjectile");
 			item.shootSpeed = 6f;
-			item.damage = 300;
+			item.damage = 360;
 			item.knockBack = 12f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
