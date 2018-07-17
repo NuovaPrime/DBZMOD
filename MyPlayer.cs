@@ -385,7 +385,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer)
+                if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
                     if ((Main.rand.Next(9) == 0))
                     {
