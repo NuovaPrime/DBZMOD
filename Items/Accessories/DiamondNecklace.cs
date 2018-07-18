@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.meleeDamage += 0.09f;
                 player.meleeSpeed += 0.09f;
-                player.GetModPlayer<MyPlayer>(mod).diamondRing = true;
+                player.GetModPlayer<MyPlayer>(mod).diamondNecklace = true;
             }
         }
         public override void AddRecipes()

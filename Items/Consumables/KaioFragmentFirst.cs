@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kaioken 2x");
+            DisplayName.SetDefault("Kaioken");
             Tooltip.SetDefault("Unlocks an ancient technique.");
         }
 

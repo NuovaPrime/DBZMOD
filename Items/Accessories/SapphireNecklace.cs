@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.09f;
                 player.GetModPlayer<MyPlayer>(mod).KiMax += 100;
-                player.GetModPlayer<MyPlayer>(mod).sapphireRing = true;
+                player.GetModPlayer<MyPlayer>(mod).sapphireNecklace = true;
             }
         }
         public override void AddRecipes()

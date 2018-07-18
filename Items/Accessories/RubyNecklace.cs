@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.magicDamage += 0.09f;
                 player.magicCrit += 9;
-                player.GetModPlayer<MyPlayer>(mod).rubyRing = true;
+                player.GetModPlayer<MyPlayer>(mod).rubyNecklace = true;
             }
         }
         public override void AddRecipes()

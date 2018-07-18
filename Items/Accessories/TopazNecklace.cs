@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.minionDamage += 0.09f;
                 player.maxMinions += 1;
-                player.GetModPlayer<MyPlayer>(mod).topazRing = true;
+                player.GetModPlayer<MyPlayer>(mod).topazNecklace = true;
             }
         }
         public override void AddRecipes()

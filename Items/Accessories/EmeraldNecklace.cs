@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.rangedDamage += 0.09f;
                 player.rangedCrit += 9;
-                player.GetModPlayer<MyPlayer>(mod).emeraldRing = true;
+                player.GetModPlayer<MyPlayer>(mod).emeraldNecklace = true;
             }
         }
         public override void AddRecipes()

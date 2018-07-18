@@ -378,7 +378,7 @@ namespace DBZMOD
             emeraldNecklace = false;
             rubyNecklace = false;
             sapphireNecklace = false;
-            topazRing = false;
+            topazNecklace = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
