@@ -10,8 +10,8 @@ namespace DBZMOD.Items.Consumables
 	{
 		public override void SetDefaults()
 		{
-			item.width = 24;
-			item.height = 24;
+			item.width = 16;
+			item.height = 20;
 			item.healLife = 9001;
             item.healMana = 9001;
 			item.consumable = true;

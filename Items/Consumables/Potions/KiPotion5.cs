@@ -6,12 +6,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.Potions
 {
-    public class KiPotion1 : KiPotion
+    public class KiPotion5 : KiPotion
     {
         public override void SetDefaults()
         {
-            item.width = 16;
-            item.height = 24;
+            item.width = 20;
+            item.height = 38;
             item.consumable = true;
             item.maxStack = 30;
             item.UseSound = SoundID.Item3;
@@ -19,17 +19,17 @@ namespace DBZMOD.Items.Consumables.Potions
             item.useTurn = true;
             item.useAnimation = 12;
             item.useTime = 12;
-            item.value = 200;
-            item.rare = 3;
+            item.value = 300;
+            item.rare = 4;
             item.potion = false;
             IsKiPotion = true;
-            KiHeal = 100;
+            KiHeal = 2000;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lesser Ki Potion");
-            Tooltip.SetDefault("Restores 100 Ki.");
+            DisplayName.SetDefault("Gigantic Ki Potion");
+            Tooltip.SetDefault("Restores 2000 Ki.");
         }
     }
 }

@@ -29,6 +29,7 @@ namespace DBZMOD.Items.Weapons
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
+				
             }
 			item.value = Item.sellPrice(0, 0, 5, 0);
 			item.rare = 4;

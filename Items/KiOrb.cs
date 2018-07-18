@@ -13,14 +13,14 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ki Orb");
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 4));
+            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 3));
             Lighting.AddLight(item.Center, 0.1f, 0.3f, 0.9f);
         }
 
         public override void SetDefaults()
         {
-            item.width = 16;
-            item.height = 16;
+            item.width = 20;
+            item.height = 68;
         }
 
         public override bool ItemSpace(Player player)

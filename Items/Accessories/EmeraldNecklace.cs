@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    public class EmeraldRing : ModItem
+    public class EmeraldNecklace : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,8 +14,8 @@ namespace DBZMOD.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 26;
+            item.width = 22;
+            item.height = 32;
             item.value = 30000;
             item.rare = 3;
             item.accessory = true;
@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "EmptyRing");
+            recipe.AddIngredient(null, "EmptyNecklace");
             recipe.AddIngredient(ItemID.Emerald, 5);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

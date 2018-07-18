@@ -4,12 +4,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    public class RubyRing : ModItem
+    public class TopazNecklace : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased magic damage and crit chance.");
-            DisplayName.SetDefault("Ruby Ring");
+            Tooltip.SetDefault("9% Increased minion damage and +1 max minions.");
+            DisplayName.SetDefault("Topaz Necklace");
         }
 
         public override void SetDefaults()
@@ -25,16 +25,16 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.magicDamage += 0.09f;
-                player.magicCrit += 9;
-                player.GetModPlayer<MyPlayer>(mod).rubyRing = true;
+                player.minionDamage += 0.09f;
+                player.maxMinions += 1;
+                player.GetModPlayer<MyPlayer>(mod).topazRing = true;
             }
         }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "EmptyRing");
-            recipe.AddIngredient(ItemID.Ruby, 5);
+            recipe.AddIngredient(null, "EmptyNecklace");
+            recipe.AddIngredient(ItemID.Topaz, 5);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

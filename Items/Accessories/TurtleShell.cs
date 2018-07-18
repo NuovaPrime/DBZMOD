@@ -16,8 +16,8 @@ namespace DBZMOD.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 15;
-            item.height = 33;
+            item.width = 20;
+            item.height = 30;
             item.value = 70000;
             item.rare = 4;
             item.accessory = true;

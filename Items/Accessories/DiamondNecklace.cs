@@ -4,18 +4,18 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    public class DiamondRing : ModItem
+    public class DiamondNecklace : ModItem
     {
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("9% Increased melee damage and speed.");
-            DisplayName.SetDefault("Diamond Ring");
+            DisplayName.SetDefault("Diamond Necklace");
         }
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 26;
+            item.width = 22;
+            item.height = 30;
             item.value = 30000;
             item.rare = 3;
             item.accessory = true;
@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "EmptyRing");
+            recipe.AddIngredient(null, "EmptyNecklace");
             recipe.AddIngredient(ItemID.Diamond, 5);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

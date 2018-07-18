@@ -4,18 +4,18 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items
 {
-    public class EmptyRing : ModItem
+    public class EmptyNecklace : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An empty ring.");
-            DisplayName.SetDefault("Empty Ring");
+            Tooltip.SetDefault("It seems you can attach a gem to it.");
+            DisplayName.SetDefault("Empty Necklace");
         }
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 26;
+            item.width = 22;
+            item.height = 24;
             item.value = 0;
             item.rare = 2;
         }

@@ -11,7 +11,7 @@ namespace DBZMOD.Items.Consumables.Potions
         public override void SetDefaults()
         {
             item.width = 20;
-            item.height = 26;
+            item.height = 34;
             item.consumable = true;
             item.maxStack = 30;
             item.UseSound = SoundID.Item3;

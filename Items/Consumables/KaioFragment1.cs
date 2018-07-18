@@ -10,8 +10,8 @@ namespace DBZMOD.Items.Consumables
     {
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
+            item.width = 40;
+            item.height = 40;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Novice Kaio Fragment");
+            DisplayName.SetDefault("Kaioken 3x");
             Tooltip.SetDefault("Unlocks the next level of kaioken.");
         }
 
