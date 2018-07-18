@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("9% Increased ranged damage and crit chance.");
-            DisplayName.SetDefault("Emerald Ring");
+            DisplayName.SetDefault("Emerald Necklace");
         }
 
         public override void SetDefaults()

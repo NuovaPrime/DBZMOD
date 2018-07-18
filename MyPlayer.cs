@@ -63,11 +63,11 @@ namespace DBZMOD
         public float KiDrainMulti;
         public int ChargeSoundTimer;
         public int TransformCooldown;
-        public bool diamondRing;
-        public bool emeraldRing;
-        public bool sapphireRing;
-        public bool topazRing;
-        public bool rubyRing;
+        public bool diamondNecklace;
+        public bool emeraldNecklace;
+        public bool sapphireNecklace;
+        public bool topazNecklace;
+        public bool rubyNecklace;
         public static ModHotKey KaiokenKey;
         public static ModHotKey EnergyCharge;
         public static ModHotKey Transform;
@@ -374,10 +374,10 @@ namespace DBZMOD
             KiCrit = 5;
             ChlorophyteHeadPieceActive = false;
             CobaltBonus = false;
-            diamondRing = false;
-            emeraldRing = false;
-            rubyRing = false;
-            sapphireRing = false;
+            diamondNecklace = false;
+            emeraldNecklace = false;
+            rubyNecklace = false;
+            sapphireNecklace = false;
             topazRing = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
@@ -441,7 +441,7 @@ namespace DBZMOD
             items.Add(item9);
 
             Item item8 = new Item();
-            item8.SetDefaults(mod.ItemType("EmptyRing"));
+            item8.SetDefaults(mod.ItemType("EmptyNecklace"));
             item8.stack = 1;
             items.Add(item8);
         }
