@@ -35,7 +35,7 @@ namespace DBZMOD.Items.Consumables.Potions
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "StableKiCrystal");
-            recipe.AddIngredient(ItemID.Diamond, 5);
+            recipe.AddIngredient(null, "ScrapMetal");
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
