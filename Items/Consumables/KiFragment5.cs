@@ -10,8 +10,8 @@ namespace DBZMOD.Items.Consumables
     {
         public override void SetDefaults()
         {
-            item.width = 18;
-            item.height = 18;
+            item.width = 28;
+            item.height = 32;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
