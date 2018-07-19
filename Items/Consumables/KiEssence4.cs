@@ -10,8 +10,8 @@ namespace DBZMOD.Items.Consumables
     {
         public override void SetDefaults()
         {
-            item.width = 18;
-            item.height = 18;
+            item.width = 48;
+            item.height = 48;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Radiant Ki Essence");
+            DisplayName.SetDefault("Raging Ki Scroll");
             Tooltip.SetDefault("Increases your ki charge rate.");
         }
 
