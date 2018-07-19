@@ -31,5 +31,14 @@ namespace DBZMOD.Items.Consumables.Potions
             DisplayName.SetDefault("Lesser Ki Potion");
             Tooltip.SetDefault("Restores 100 Ki.");
         }
+		 public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(null, "StableKiCrystal");
+            recipe.AddIngredient(ItemID.Diamond, 5);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }

@@ -14,8 +14,8 @@ namespace DBZMOD.Items
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 20;
+            item.width = 24;
+            item.height = 24;
             item.maxStack = 9999;
             item.value = 500;
             item.rare = 2;

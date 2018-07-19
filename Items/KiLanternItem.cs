@@ -8,15 +8,15 @@ namespace DBZMOD.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ki Lantern");
+            DisplayName.SetDefault("Ki Diffuser");
             Tooltip.SetDefault("It radiates with the glow of ki energy."
         + "\nGives slight ki regen when placed.");
         }
 
         public override void SetDefaults()
         {
-            item.width = 48;
-            item.height = 20;
+            item.width = 22;
+            item.height = 30;
             item.maxStack = 99;
             item.useTurn = true;
             item.autoReuse = true;
