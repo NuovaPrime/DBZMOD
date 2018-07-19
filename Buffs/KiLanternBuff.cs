@@ -10,7 +10,7 @@ namespace DBZMOD.Buffs
         private int LanternTimer;
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Ki Lantern");
+            DisplayName.SetDefault("Ki Diffuser");
             Description.SetDefault("Gives some slight ki regen.");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
