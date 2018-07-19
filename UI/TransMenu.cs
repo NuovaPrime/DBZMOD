@@ -15,7 +15,7 @@ namespace DBZMOD.UI
     internal class TransMenu : UIState
     {
         private Player player;
-        public UIPanel _backPanel;
+        public UIPanel backPanel;
         private UIText ssjbuttontext;
         public static bool menuvisible = false;
         private UIImageButton ssjButtonTexture;
@@ -23,36 +23,70 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
-            _backPanel = new UIPanel();
-            _backPanel.Width.Set(135f, 0f);
-            _backPanel.Height.Set(70f, 0f);
-            _backPanel.Left.Set(Main.screenWidth / 2f - _backPanel.Width.Pixels / 2f, 0f);
-            _backPanel.Top.Set(Main.screenHeight / 2f - _backPanel.Height.Pixels / 2f, 0f);
-            _backPanel.BackgroundColor = new Color(73, 94, 171);
-            base.Append(_backPanel);
+            backPanel = new UIPanel();
+            backPanel.Width.Set(360f, 0f);
+            backPanel.Height.Set(240f, 0f);
+            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
+            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
+            backPanel.BackgroundColor = new Color(73, 94, 171);
+            backPanel.OnMouseDown += new MouseEvent(DragStart);
+            backPanel.OnMouseUp += new MouseEvent(DragEnd);
+            base.Append(backPanel);
             base.OnInitialize();
-            
-            var ssjbuttontexture = DBZMOD.instance.GetTexture("Buffs/SSJ1Buff");
-            ssjButtonTexture = new UIImageButton(ssjbuttontexture);
-            ssjButtonTexture.Width.Set(ssjbuttontexture.Width, 0f);
-            ssjButtonTexture.Height.Set(ssjbuttontexture.Height, 0f);
+
+            var SSJ1Button = GFX.SSJ1ButtonImage;
+            ssjButtonTexture = new UIImageButton(SSJ1Button);
+            ssjButtonTexture.Width.Set(SSJ1Button.Width, 0f);
+            ssjButtonTexture.Height.Set(SSJ1Button.Width, 0f);
             ssjButtonTexture.Left.Set(padding, 0f);
             ssjButtonTexture.Top.Set(padding, 0f);
             ssjButtonTexture.OnClick += TrySelectingSSJ1;
-            _backPanel.Append(ssjButtonTexture);
+            backPanel.Append(ssjButtonTexture);
             
             ssjbuttontext = new UIText("Super Saiyan");
-            ssjbuttontext.Width.Set(ssjbuttontexture.Width, 0f);
-            ssjbuttontext.Height.Set(ssjbuttontexture.Height, 0f);
-            ssjbuttontext.Left.Set(padding, 0f);
-            ssjbuttontext.Top.Set(padding, 0f);
-            ssjbuttontext.Append(ssjButtonTexture);
+            ssjbuttontext.Width.Set(32f, 0f);
+            ssjbuttontext.Height.Set(32f, 0f);
+            ssjbuttontext.Left.Set(padding - 4f, 0f);
+            ssjbuttontext.Top.Set(padding + 25f, 0f);
+            ssjButtonTexture.Append(ssjbuttontext);
         }
 
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer.ModPlayer(player).MenuSelection = 1;
             Main.PlaySound(SoundID.MenuTick);
+        }
+        Vector2 offset;
+        public bool dragging = false;
+        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        {
+            offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
+            dragging = true;
+        }
+
+        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Vector2 end = evt.MousePosition;
+            dragging = false;
+
+            backPanel.Left.Set(end.X - offset.X, 0f);
+            backPanel.Top.Set(end.Y - offset.Y, 0f);
+
+            Recalculate();
+        }
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
+            if (backPanel.ContainsPoint(MousePosition))
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+            if (dragging)
+            {
+                backPanel.Left.Set(MousePosition.X - offset.X, 0f);
+                backPanel.Top.Set(MousePosition.Y - offset.Y, 0f);
+                Recalculate();
+            }
         }
     }
 }

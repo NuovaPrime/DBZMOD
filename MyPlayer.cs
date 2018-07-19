@@ -201,13 +201,9 @@ namespace DBZMOD
             {
             }
 
-            if (TransMenu.JustPressed && !UI.TransMenu.menuvisible)
+            if (TransMenu.JustPressed)
             {
-                UI.TransMenu.menuvisible = true;
-            }
-            if (TransMenu.JustPressed && UI.TransMenu.menuvisible)
-            {
-                UI.TransMenu.menuvisible = false;
+                UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
             }
                 
             if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && KaioAchieved && !player.channel)

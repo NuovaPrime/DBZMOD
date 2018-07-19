@@ -1,4 +1,5 @@
 using DBZMOD.UI;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -53,12 +54,11 @@ namespace DBZMOD
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             if(!Main.dedServ)
             {
+                GFX.LoadGFX(this);
                 KiBar.visible = true;
                 transMenu = new  TransMenu();
                 transMenu.Activate();
                 TransMenuInterface = new UserInterface();
-                TransMenuInterface.SetState(transMenu);
-                GFX.LoadGFX(this);
                 kibar = new KiBar();
                 kibar.Activate();
                 KiBarInterface = new UserInterface();
@@ -99,7 +99,7 @@ namespace DBZMOD
             int index2 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
             if (index2 != -1)
             {
-                layers.Insert(index, new LegacyGameInterfaceLayer(
+                layers.Insert(index2, new LegacyGameInterfaceLayer(
                     "DBZMOD: Trans Menu",
                     delegate
                     {
