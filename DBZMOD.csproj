@@ -44,7 +44,9 @@
     <Compile Include="Buffs\NimbusBuff.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJ1Buff.cs" />
+    <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
+    <Compile Include="Buffs\USSJBuff.cs" />
     <Compile Include="DBZMOD.cs" />
     <Compile Include="DBZMODItem.cs" />
     <Compile Include="DBZMODNpc.cs" />
@@ -255,6 +257,27 @@
     <Content Include="Sounds\Music\DBZMODTheme1.mp3" />
     <Content Include="Sounds\PowerDown.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
+    <Content Include="WIP\AmberNecklace.png" />
+    <Content Include="WIP\AmethystNecklace.png" />
+    <Content Include="WIP\ASSJ Hair.png" />
+    <Content Include="WIP\ASSJHair2.png" />
+    <Content Include="WIP\bad rock.png" />
+    <Content Include="WIP\Final Flash.png" />
+    <Content Include="WIP\NecklaceRainbow.png" />
+    <Content Include="WIP\New Piskel %2895%29.png" />
+    <Content Include="WIP\New Piskel %2899%29 - Copy.png" />
+    <Content Include="WIP\Spirit Bomb.png" />
+    <Content Include="WIP\SSJ1Hair.png" />
+    <Content Include="WIP\SSJ2Buff.png" />
+    <Content Include="WIP\SSJ2HairSheet.png" />
+    <Content Include="WIP\SSJ2Sprite.png" />
+    <Content Include="WIP\SSJ3HairSheet.png" />
+    <Content Include="WIP\SSJB.png" />
+    <Content Include="WIP\Stable Ki Crystal.png" />
+    <Content Include="WIP\Super energy wave.png" />
+    <Content Include="WIP\SuperEnergyBarrage.png" />
+    <Content Include="WIP\USSJ.png" />
+    <Content Include="WIP\USSJHair1.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
