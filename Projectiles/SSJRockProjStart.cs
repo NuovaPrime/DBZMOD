@@ -41,7 +41,7 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).IsTransformingSSJ1)
             {
                 projectile.Kill();
             }

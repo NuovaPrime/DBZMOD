@@ -59,6 +59,7 @@ namespace DBZMOD
                 transMenu = new  TransMenu();
                 transMenu.Activate();
                 TransMenuInterface = new UserInterface();
+                TransMenuInterface.SetState(transMenu);
                 kibar = new KiBar();
                 kibar.Activate();
                 KiBarInterface = new UserInterface();
@@ -76,6 +77,11 @@ namespace DBZMOD
             ItemType("KiFragment5")
             });
             RecipeGroup.RegisterGroup("DBZMOD:KiFragment", group);
+        }
+        public override void UpdateUI(GameTime gameTime)
+        {
+            if (TransMenuInterface != null && TransMenu.menuvisible)
+                TransMenuInterface.Update(gameTime);
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -105,8 +111,7 @@ namespace DBZMOD
                     {
                         if (TransMenu.menuvisible)
                         {
-                            TransMenuInterface.Update(Main._drawInterfaceGameTime);
-                            transMenu.Draw(Main.spriteBatch);
+                            TransMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
                         return true;
                     },

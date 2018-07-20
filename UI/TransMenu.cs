@@ -17,9 +17,12 @@ namespace DBZMOD.UI
         private Player player;
         public UIPanel backPanel;
         private UIText ssjbuttontext;
+        private UIText ssj2buttontext;
         public static bool menuvisible = false;
         private UIImageButton ssjButtonTexture;
+        private UIImageButton ssj2ButtonTexture;
         private const float padding = 5f;
+        public static int MenuSelection = 0;
 
         public override void OnInitialize()
         {
@@ -49,11 +52,32 @@ namespace DBZMOD.UI
             ssjbuttontext.Left.Set(padding - 4f, 0f);
             ssjbuttontext.Top.Set(padding + 25f, 0f);
             ssjButtonTexture.Append(ssjbuttontext);
+
+            var SSJ2Button = GFX.SSJ2ButtonImage;
+            ssj2ButtonTexture = new UIImageButton(SSJ2Button);
+            ssj2ButtonTexture.Width.Set(SSJ2Button.Width, 0f);
+            ssj2ButtonTexture.Height.Set(SSJ2Button.Width, 0f);
+            ssj2ButtonTexture.Left.Set(padding + SSJ1Button.Width, 0f);
+            ssj2ButtonTexture.Top.Set(padding, 0f);
+            ssj2ButtonTexture.OnClick += TrySelectingSSJ2;
+            backPanel.Append(ssj2ButtonTexture);
+
+            ssj2buttontext = new UIText("Super Saiyan 2");
+            ssj2buttontext.Width.Set(32f, 0f);
+            ssj2buttontext.Height.Set(32f, 0f);
+            ssj2buttontext.Left.Set(padding - 4f, 0f);
+            ssj2buttontext.Top.Set(padding + 25f, 0f);
+            ssj2ButtonTexture.Append(ssj2buttontext);
         }
 
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
-            MyPlayer.ModPlayer(player).MenuSelection = 1;
+            MenuSelection = 1;
+            Main.PlaySound(SoundID.MenuTick);
+        }
+        private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
+        {
+            MenuSelection = 2;
             Main.PlaySound(SoundID.MenuTick);
         }
         Vector2 offset;

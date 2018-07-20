@@ -37,7 +37,7 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).IsTransformingSSJ1)
             {
                 projectile.Kill();
             }
@@ -76,7 +76,7 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             player.AddBuff(mod.BuffType("SSJ1Buff"), 3600);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
-            MyPlayer.ModPlayer(player).IsTransforming = false;
+            MyPlayer.ModPlayer(player).IsTransformingSSJ1 = false;
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
         }
     }
