@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Accessories
                 player.rangedCrit += 9;
 				player.lifeRegen += 1;
 				player.minionDamage += 0.09f;
-                player.maxMinions += 2
+                player.maxMinions += 2;
                 player.GetModPlayer<MyPlayer>(mod).dragongemNecklace = true;
             }
         }
@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Accessories
 			recipe.AddIngredient(null, "EmeraldNecklace");
 			recipe.AddIngredient(null, "RubyNecklace");
 			recipe.AddIngredient(null, "DiamondNecklace");
-            recipe.AddTile(TileID.KiManipulator);
+            recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
