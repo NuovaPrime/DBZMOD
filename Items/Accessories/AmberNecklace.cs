@@ -13,7 +13,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased life regen and +3 defense.");
+            Tooltip.SetDefault("10% Increased life regen");
             DisplayName.SetDefault("Amber Necklace");
         }
 
@@ -24,14 +24,13 @@ namespace DBZMOD.Items.Accessories
             item.value = 30000;
             item.rare = 3;
             item.accessory = true;
-            item.defense = 0;
+            item.defense = 1;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.lifeRegen += 2;
-			    player.statLife = 10;
+                player.lifeRegen += 1;
                 player.GetModPlayer<MyPlayer>(mod).amberNecklace = true;
             }
         }
