@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using DBZMOD.Items;
+using DBZMOD.Items.Accessories;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.lifeRegen += 2;
-			    player.statLifeMax += 10f;
+			    player.statLife = 10;
                 player.GetModPlayer<MyPlayer>(mod).amberNecklace = true;
             }
         }
