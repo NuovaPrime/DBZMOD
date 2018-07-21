@@ -67,6 +67,7 @@ namespace DBZMOD
         public bool emeraldNecklace;
         public bool sapphireNecklace;
         public bool topazNecklace;
+		public bool amberNecklace;
         public bool rubyNecklace;
         public static ModHotKey KaiokenKey;
         public static ModHotKey EnergyCharge;
@@ -410,6 +411,7 @@ namespace DBZMOD
             rubyNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
+			amberNecklace = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
