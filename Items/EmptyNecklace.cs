@@ -19,5 +19,15 @@ namespace DBZMOD.Items
             item.value = 0;
             item.rare = 2;
         }
+		
+		 public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(null, "ScrapMetal", 3);
+            recipe.AddIngredient(ItemID.IronBar, 5);
+            recipe.AddTile(null, "KiManipulator");
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }
