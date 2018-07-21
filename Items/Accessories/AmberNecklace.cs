@@ -24,7 +24,7 @@ namespace DBZMOD.Items.Accessories
             item.value = 30000;
             item.rare = 3;
             item.accessory = true;
-            item.defense = 2;
+            item.defense = 0;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
