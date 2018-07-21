@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Consumables.Potions
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Massive Ki Potion");
-            Tooltip.SetDefault("Restores 1000 Ki.");
+            Tooltip.SetDefault("Restores 1500 Ki.");
         }
 		 public override void AddRecipes()
         {
