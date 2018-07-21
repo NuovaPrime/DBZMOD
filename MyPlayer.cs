@@ -70,6 +70,7 @@ namespace DBZMOD
 		public bool amberNecklace;
 		public bool amethystNecklace;
         public bool rubyNecklace;
+		public bool dragongemNecklace;
         public static ModHotKey KaiokenKey;
         public static ModHotKey EnergyCharge;
         public static ModHotKey Transform;
@@ -410,6 +411,7 @@ namespace DBZMOD
             diamondNecklace = false;
             emeraldNecklace = false;
             rubyNecklace = false;
+			dragongemNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
 			amberNecklace = false;
