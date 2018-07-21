@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.lifeRegen += 2;
-			    player.statDefense += 1;
+			    player.statLifeMax += 10f;
                 player.GetModPlayer<MyPlayer>(mod).amberNecklace = true;
             }
         }
