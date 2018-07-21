@@ -33,7 +33,7 @@ namespace DBZMOD.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddRecipeGroup("DBZMOD:KiFragment");
             recipe.AddIngredient(null, "ScrapMetal", 10);
-            recipe.AddTile(TileID.Anvils);
+            recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
