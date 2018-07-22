@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor
 {
     [AutoloadEquip(EquipType.Head)]
-    public class PalladiumHeadDress : ModItem
+    public class CobaltCrown : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -15,8 +15,8 @@ namespace DBZMOD.Items.Armor
 
         public override void SetDefaults()
         {
-            item.width = 29;
-            item.height = 13;
+            item.width = 16;
+            item.height = 20;
             item.value = 8000;
             item.rare = 4;
             item.defense = 5;
@@ -24,21 +24,21 @@ namespace DBZMOD.Items.Armor
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == ItemID.PalladiumBreastplate && legs.type == ItemID.PalladiumLeggings;
+            return body.type == ItemID.CobaltBreastplate && legs.type == ItemID.CobaltLeggings;
         }
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "ArmorSetBonus.Palladium";
+            player.setBonus = "15% increased ki knockback";
             MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).KiCrit += 6;
-            player.palladiumRegen = true;
+            MyPlayer.ModPlayer(player).CobaltBonus = true;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.PalladiumBar, 10);
+            recipe.AddIngredient(ItemID.CobaltBar, 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
