@@ -16,7 +16,7 @@ namespace DBZMOD.Projectiles
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 4;
         }
         public override void SetDefaults()
         {
@@ -70,7 +70,7 @@ namespace DBZMOD.Projectiles
             }
             else
             {
-                projectile.scale = 1f;
+                projectile.scale = 1.4f;
             }
         }
     }

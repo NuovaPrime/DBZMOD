@@ -11,7 +11,7 @@ namespace DBZMOD.Dusts
         {
             dust.noLight = true;
             dust.color = new Color(0, 220, 230);
-            dust.scale = 1f;
+            dust.scale = 1.3f;
             dust.noGravity = true;
             //dust.velocity /= 2f;
             dust.alpha = 0;
