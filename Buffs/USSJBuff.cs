@@ -21,14 +21,14 @@ namespace DBZMOD.Buffs
             if (DBZWorld.RealismMode)
             {
                 DamageMulti = 7f;
-                SpeedMulti = 2f;
+                SpeedMulti = 1.7f;
                 KiDrainRate = 6;
                 KiDrainBuffMulti = 1f;
             }
             else if (!DBZWorld.RealismMode)
             {
                 DamageMulti = 2.7f;
-                SpeedMulti = 2f;
+                SpeedMulti = 1.5f;
                 KiDrainRate = 7;
                 KiDrainBuffMulti = 1f;
             }
