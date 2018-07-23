@@ -8,10 +8,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJ1AuraProj : ModProjectile
+    public class SSJ2AuraProj : ModProjectile
     {
         public int BaseAuraTimer;
         private int ChargeSoundTimer;
+        private int LightningTimer = 0;
 
         public override void SetStaticDefaults()
         {
@@ -38,7 +39,7 @@ namespace DBZMOD.Projectiles
             projectile.netUpdate = true;
             projectile.Center = player.Center + new Vector2(0, -30);
 
-            if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")))
+            if (!player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 projectile.Kill();
             }
@@ -56,34 +57,15 @@ namespace DBZMOD.Projectiles
             {
                 projectile.frame = 0;
             }
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")))
+            if (BaseAuraTimer > 0)
             {
-                if (BaseAuraTimer > 0)
-                {
-                    projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
-                    BaseAuraTimer--;
-                }
-            }
-            else if (player.HasBuff(mod.BuffType("ASSJBuff")))
-            {
-                if (BaseAuraTimer > 0)
-                {
-                    projectile.scale = 2f - 0.7f * (BaseAuraTimer / 5f);
-                    BaseAuraTimer--;
-                }
-            }
-            else if (player.HasBuff(mod.BuffType("USSJBuff")))
-            {
-                if (BaseAuraTimer > 0)
-                {
-                    projectile.scale = 3f - 0.7f * (BaseAuraTimer / 5f);
-                    BaseAuraTimer--;
-                }
+                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
+                BaseAuraTimer--;
             }
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 22 && player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.7f).WithPitchVariance(.2f));
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
             else

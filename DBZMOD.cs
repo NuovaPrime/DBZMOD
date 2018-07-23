@@ -37,6 +37,9 @@ namespace DBZMOD
             KiBar.visible = false;
             instance = null;
             TransMenu.menuvisible = false;
+            TransMenu.SSJ1On = false;
+            TransMenu.SSJ2On = false;
+            UIFlatPanel._backgroundTexture = null;
         }
         public override void Load()
         {

@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuffX10.cs" />
@@ -52,25 +53,30 @@
     <Compile Include="DBZMODNpc.cs" />
     <Compile Include="Destruction\DirtBlockDestruction.cs" />
     <Compile Include="Destruction\StoneBlockDestruction.cs" />
+    <Compile Include="Dusts\LightningBlue.cs" />
     <Compile Include="Dusts\MetalDust.cs" />
     <Compile Include="GFX.cs" />
-    <Compile Include="Items\Accessories\DiamondRing.cs" />
-    <Compile Include="Items\Accessories\EmeraldRing.cs" />
-    <Compile Include="Items\Accessories\RubyRing.cs" />
-    <Compile Include="Items\Accessories\SapphireRing.cs" />
+    <Compile Include="Items\Accessories\AmberNecklace.cs" />
+    <Compile Include="Items\Accessories\AmethystNecklace.cs" />
+    <Compile Include="Items\Accessories\DiamondNecklace.cs" />
+    <Compile Include="Items\Accessories\DragonGemNecklace.cs" />
+    <Compile Include="Items\Accessories\EmeraldNecklace.cs" />
+    <Compile Include="Items\Accessories\RubyNecklace.cs" />
+    <Compile Include="Items\Accessories\SapphireNecklace.cs" />
     <Compile Include="Items\Accessories\ScouterT2.cs" />
     <Compile Include="Items\Accessories\ScouterT3.cs" />
     <Compile Include="Items\Accessories\ScouterT4.cs" />
     <Compile Include="Items\Accessories\ScouterT5.cs" />
     <Compile Include="Items\Accessories\ScouterT6.cs" />
     <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
-    <Compile Include="Items\Accessories\TopazRing.cs" />
+    <Compile Include="Items\Accessories\TopazNecklace.cs" />
     <Compile Include="Items\Accessories\TurtleShell.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
-    <Compile Include="Items\Armor\CobaltSharpCap.cs" />
-    <Compile Include="Items\Armor\PalladiumHeadDress.cs" />
+    <Compile Include="Items\Armor\CobaltCrown.cs" />
+    <Compile Include="Items\Armor\PaladiumBlindfoldCrown.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
+    <Compile Include="Items\Consumables\ASSJItem.cs" />
     <Compile Include="Items\Consumables\KaioFragment1.cs" />
     <Compile Include="Items\Consumables\KaioFragment2.cs" />
     <Compile Include="Items\Consumables\KaioFragment3.cs" />
@@ -92,7 +98,8 @@
     <Compile Include="Items\Consumables\Potions\KiPotion3.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion4.cs" />
     <Compile Include="Items\Consumables\SenzuBean.cs" />
-    <Compile Include="Items\EmptyRing.cs" />
+    <Compile Include="Items\Consumables\USSJItem.cs" />
+    <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\HonorKiCrystal.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
     <Compile Include="Items\KiManipulatorItem.cs" />
@@ -177,6 +184,7 @@
     <Compile Include="Projectiles\SSJ1AuraProjBeamHead.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjStart.cs" />
     <Compile Include="Projectiles\SSJ1KaiokenAuraProj.cs" />
+    <Compile Include="Projectiles\SSJ2AuraProj.cs" />
     <Compile Include="Projectiles\SSJRockProjStart.cs" />
     <Compile Include="Projectiles\SuperKamehamehaBall.cs" />
     <Compile Include="Projectiles\SuperKamehamehaBlast.cs" />
@@ -229,8 +237,33 @@
     <Content Include="Gores\New Text Document.txt" />
     <Content Include="Hairs\SSJ\SSJ1Hair.png" />
     <Content Include="Hairs\SSJ\SSJ2Hair.png" />
-    <Content Include="Items\Armor\PalladiumHeadDress.png" />
-    <Content Include="Items\Armor\PalladiumHeadDress_Head.png" />
+    <Content Include="Items\Accessories\AmberNecklace.png" />
+    <Content Include="Items\Accessories\AmethystNecklace.png" />
+    <Content Include="Items\Accessories\DiamondNecklace.png" />
+    <Content Include="Items\Accessories\DragonGemNecklace.png" />
+    <Content Include="Items\Accessories\EmeraldNecklace.png" />
+    <Content Include="Items\Accessories\RubyNecklace.png" />
+    <Content Include="Items\Accessories\SapphireNecklace.png" />
+    <Content Include="Items\Accessories\ScouterT2.png" />
+    <Content Include="Items\Accessories\ScouterT2_Face.png" />
+    <Content Include="Items\Accessories\ScouterT3.png" />
+    <Content Include="Items\Accessories\ScouterT3_Face.png" />
+    <Content Include="Items\Accessories\ScouterT4.png" />
+    <Content Include="Items\Accessories\ScouterT4_Face.png" />
+    <Content Include="Items\Accessories\ScouterT5.png" />
+    <Content Include="Items\Accessories\ScouterT5_Face.png" />
+    <Content Include="Items\Accessories\ScouterT6.png" />
+    <Content Include="Items\Accessories\ScouterT6_Face.png" />
+    <Content Include="Items\Accessories\SpiritualEmblem.png" />
+    <Content Include="Items\Accessories\TopazNecklace.png" />
+    <Content Include="Items\Accessories\TurtleShell.png" />
+    <Content Include="Items\Accessories\TurtleShell_Back.png" />
+    <Content Include="Items\Armor\ChlorophyteHeadpiece.png" />
+    <Content Include="Items\Armor\ChlorophyteHeadpiece_Head.png" />
+    <Content Include="Items\Armor\CobaltCrown.png" />
+    <Content Include="Items\Armor\CobaltCrown_Head.png" />
+    <Content Include="Items\Armor\PaladiumBlindfoldCrown.png" />
+    <Content Include="Items\Armor\PaladiumBlindfoldCrown_Head.png" />
     <Content Include="Items\Consumables\KiFragment1.png" />
     <Content Include="Items\Consumables\KiFragment2.png" />
     <Content Include="Items\Consumables\Potions\KiPotion1.png" />
@@ -279,7 +312,9 @@
     <Content Include="WIP\USSJ.png" />
     <Content Include="WIP\USSJHair1.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Items\Accessories\Thumbs.db" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"E:\Steam\steamapps\common\Terraria\Terraria.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"

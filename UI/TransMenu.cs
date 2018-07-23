@@ -23,6 +23,8 @@ namespace DBZMOD.UI
         private UIImageButton ssj2ButtonTexture;
         private const float padding = 5f;
         public static int MenuSelection = 0;
+        public static bool SSJ1On;
+        public static bool SSJ2On;
 
         public override void OnInitialize()
         {
@@ -72,13 +74,27 @@ namespace DBZMOD.UI
 
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
-            MenuSelection = 1;
-            Main.PlaySound(SoundID.MenuTick);
+            if(SSJ1On)
+            {
+                MenuSelection = 1;
+                Main.PlaySound(SoundID.MenuTick);
+            }
+            if (!SSJ1On)
+            {
+                Main.PlaySound(SoundID.MenuClose);
+            }
         }
         private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
         {
-            MenuSelection = 2;
-            Main.PlaySound(SoundID.MenuTick);
+            if (SSJ2On)
+            {
+                MenuSelection = 2;
+                Main.PlaySound(SoundID.MenuTick);
+            }
+            if (!SSJ2On)
+            {
+                Main.PlaySound(SoundID.MenuClose);
+            }
         }
         Vector2 offset;
         public bool dragging = false;

@@ -4,11 +4,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
 {
-    public class USSJBuff : TransBuff
+    public class ASSJBuff : TransBuff
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Ultra Super Saiyan");
+            DisplayName.SetDefault("Ascended Super Saiyan");
             Main.buffNoTimeDisplay[Type] = false;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
@@ -20,16 +20,16 @@ namespace DBZMOD.Buffs
         {
             if (DBZWorld.RealismMode)
             {
-                DamageMulti = 7f;
-                SpeedMulti = 2f;
-                KiDrainRate = 6;
+                DamageMulti = 6f;
+                SpeedMulti = 6f;
+                KiDrainRate = 3;
                 KiDrainBuffMulti = 1f;
             }
             else if (!DBZWorld.RealismMode)
             {
-                DamageMulti = 2.7f;
+                DamageMulti = 2.3f;
                 SpeedMulti = 2f;
-                KiDrainRate = 7;
+                KiDrainRate = 4;
                 KiDrainBuffMulti = 1f;
             }
             base.Update(player, ref buffIndex);
@@ -38,11 +38,11 @@ namespace DBZMOD.Buffs
         {
             if (RealismModeOn)
             {
-                tip = string.Format(tip, "7");
+                tip = string.Format(tip, "6");
             }
             else
             {
-                tip = string.Format(tip, "2.7");
+                tip = string.Format(tip, "2.3");
             }
 
         }

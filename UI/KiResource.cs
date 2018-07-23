@@ -8,7 +8,7 @@ using Terraria.UI;
 
 namespace DBZMOD.UI
 {
-    class UIFlatPanel : UIElement
+    public class UIFlatPanel : UIElement
     {
         public Color backgroundColor = Color.Gray;
         public static Texture2D _backgroundTexture;
