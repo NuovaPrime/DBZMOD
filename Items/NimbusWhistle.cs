@@ -10,10 +10,8 @@ namespace DBZMOD.Items
 	{
 		public override void SetDefaults()
 		{
-
 			item.width = 24;
 			item.height = 30;
-
 			item.useTime = 20;
 			item.useAnimation = 20;
 			item.useStyle = 1;
@@ -34,7 +32,7 @@ namespace DBZMOD.Items
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Cloud, 20);
-            recipe.AddIngredient(null, "HonorKiCrystal", 5);
+            recipe.AddIngredient(null, "CalmKiCrystal", 5);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();
