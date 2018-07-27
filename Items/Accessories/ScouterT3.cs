@@ -41,7 +41,7 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "HonorKiCrystal", 20);
+            recipe.AddIngredient(null, "PridefulKiCrystal", 20);
             recipe.AddIngredient(null, "ScouterT2");
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

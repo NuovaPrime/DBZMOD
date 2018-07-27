@@ -34,7 +34,7 @@ namespace DBZMOD.Items.Consumables.Potions
 		 public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "PridefulKiCrystal", 2);
+            recipe.AddIngredient(null, "AngerKiCrystal", 2);
             recipe.AddIngredient(null, "KiPotion3", 1);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
