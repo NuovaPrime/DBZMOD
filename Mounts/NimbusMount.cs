@@ -11,15 +11,15 @@ namespace DBZMOD.Mounts
         public override void SetDefaults()
         {
             mountData.buff = mod.BuffType("NimbusBuff");
-            mountData.heightBoost = 10;          //how high is the mount from the ground
+            mountData.heightBoost = 6;          //how high is the mount from the ground
             mountData.fallDamage = 0f;
-            mountData.runSpeed = 11f;
-            mountData.dashSpeed = 11f;
-            mountData.flightTimeMax = 100000;
+            mountData.runSpeed = 7f;
+            mountData.dashSpeed = 7f;
+            mountData.flightTimeMax = 420;
             mountData.fatigueMax = 0;
-            mountData.jumpHeight = 7;
+            mountData.jumpHeight = 5;
             mountData.acceleration = 0.35f;
-            mountData.jumpSpeed = 7f;
+            mountData.jumpSpeed = 8f;
             mountData.blockExtraJumps = false;
             mountData.totalFrames = 1;            //mount frame/animation
             mountData.constantJump = true;
