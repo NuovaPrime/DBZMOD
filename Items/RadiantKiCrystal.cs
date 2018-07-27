@@ -4,12 +4,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items
 {
-	public class HonorKiCrystal : ModItem
+	public class RadiantKiCrystal : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Honour Ki Crystal");
-			Tooltip.SetDefault("-Tier 2.5 Material-");
+			DisplayName.SetDefault("Radiant Ki Crystal");
+			Tooltip.SetDefault("-Tier 5 Material-");
 		}
 
 		public override void SetDefaults()

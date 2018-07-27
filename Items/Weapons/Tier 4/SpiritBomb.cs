@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_4
 {
 	public class SpiritBomb : KiItem
 	{
@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Weapons
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
 				
             }
-			item.value = Item.sellPrice(0, 0, 5, 0);
+			item.value = 0;
 			item.rare = 4;
             KiDrain = 500;
 	    }

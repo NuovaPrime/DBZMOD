@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_4
 {
 	public class Scattershot : KiItem
 	{
@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("ScattershotBlast");
 			item.shootSpeed = 17f;
-			item.damage = 64;
+			item.damage = 54;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Weapons
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
             }
-			item.value = Item.sellPrice(0, 0, 5, 0);
+			item.value = 0;
 			item.rare = 4;
             item.channel = true;
             KiDrain = 150;
@@ -66,9 +66,7 @@ namespace DBZMOD.Items.Weapons
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "HonorKiCrystal", 30);
-            recipe.AddIngredient(null, "CalmKiCrystal", 30);
-            recipe.AddIngredient(null, "Masenko");
+	        recipe.AddIngredient(null, "AngerKiCrystal", 30);
 			recipe.AddIngredient(null, "HellzoneGrenade");
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

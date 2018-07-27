@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_3
 {
 	public class Kamehameha : KiItem
 	{
@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons
 		{
 			item.shoot = mod.ProjectileType("KamehamehaBall");
 			item.shootSpeed = 0f;
-			item.damage = 70;
+			item.damage = 40;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Weapons
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
-			item.value = Item.sellPrice(0, 0, 5, 0);
+			item.value = 0;
 			item.rare = 3;
             KiDrain = 120;
 	    }

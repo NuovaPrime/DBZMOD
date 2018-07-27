@@ -20,13 +20,13 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 3;
+            item.rare = 4;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Radiant Ki Scroll");
+            DisplayName.SetDefault("Prideful Ki Scroll");
             Tooltip.SetDefault("Increases your ki charge rate.");
         }
 
@@ -52,8 +52,8 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "AngerKiCrystal", 30);
-            recipe.AddIngredient(null, "PridefulKiCrystal", 20);
+            recipe.AddIngredient(null, "AngerKiCrystal", 20);
+            recipe.AddIngredient(null, "PridefulKiCrystal", 30);
             recipe.AddIngredient(ItemID.SpiderFang, 5);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

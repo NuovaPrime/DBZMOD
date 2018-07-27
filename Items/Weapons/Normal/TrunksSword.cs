@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Normal
 {
     public class TrunksSword : ModItem
     {
@@ -45,8 +45,7 @@ namespace DBZMOD.Items.Weapons
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.HallowedBar, 20);
-            recipe.AddIngredient(null, "HonorKiCrystal", 15);
-            recipe.AddIngredient(null, "PridefulKiCrystal", 20);
+            recipe.AddIngredient(null, "AngerKiCrystal", 30);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -7,16 +7,16 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_4
 {
 	public class BigBangAttack : KiItem
 	{
 		public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("BigBangAttackProjectile");
-			item.damage = 89;
+			item.damage = 62;
 			item.shootSpeed = 25f;
-			item.knockBack = 5f;
+			item.knockBack = 6f;
 			item.useStyle = 3;
 			item.UseSound = SoundID.Item1;
 			item.useAnimation = 100;
@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
-			item.value = Item.sellPrice(0, 4, 5, 0);
+			item.value = 0;
 			item.rare = 4;
             KiDrain = 100;
 	    }
@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Weapons
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "PridefulKiCrystal", 40);
+	        recipe.AddIngredient(null, "PridefulKiCrystal", 30);
 		    recipe.AddIngredient(null, "AngerKiCrystal", 40);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

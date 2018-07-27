@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_2
 {
 	public class SpiritBall : KiItem
 	{
@@ -28,8 +28,8 @@ namespace DBZMOD.Items.Weapons
 			item.height = 40;
 			item.autoReuse = false;
 			item.channel = true;
-			item.value = Item.sellPrice(0, 0, 5, 0);
-			item.rare = 1;
+			item.value = 0;
+			item.rare = 2;
             KiDrain = 60;
 	    }
 	    public override void SetStaticDefaults()

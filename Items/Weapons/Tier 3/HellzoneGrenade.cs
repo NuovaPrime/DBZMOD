@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_3
 {
 	public class HellzoneGrenade : KiItem
 	{
@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons
 		{
 			item.shoot = mod.ProjectileType("HellzoneGrenadeProjectile");
 			item.shootSpeed = 17f;
-			item.damage = 62;
+			item.damage = 39;
 			item.knockBack = 6f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
@@ -25,8 +25,8 @@ namespace DBZMOD.Items.Weapons
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = true;
-			item.value = Item.sellPrice(0, 0, 5, 0);
-			item.rare = 4;
+			item.value = 0;
+			item.rare = 3;
             KiDrain = 70;
 	    }
 	    public override void SetStaticDefaults()
@@ -47,7 +47,6 @@ namespace DBZMOD.Items.Weapons
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 40);
-		    recipe.AddIngredient(null, "AngerKiCrystal", 40);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

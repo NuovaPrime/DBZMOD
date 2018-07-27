@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Normal
 {
 	public class YajirobesKatana : ModItem
 	{
@@ -23,7 +23,7 @@ namespace DBZMOD.Items.Weapons
 			item.useStyle = 1;
 			item.melee = true; //so the item's animation doesn't do damage
 			item.knockBack = 6;
-			item.value = 10000;
+			item.value = 3000;
 			item.rare = 2;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;

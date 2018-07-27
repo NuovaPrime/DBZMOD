@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_1
 {
 	public class KiFist1 : KiItem
 	{
@@ -29,8 +29,8 @@ namespace DBZMOD.Items.Weapons
 			item.height = 12;
 			item.autoReuse = false;
             item.channel = true;
-			item.value = Item.sellPrice(0, 0, 5, 0);
-			item.rare = 2;
+			item.value = 0;
+			item.rare = 1;
 	    }
 	    public override void SetStaticDefaults()
 		{

@@ -20,7 +20,7 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 3;
+            item.rare = 2;
             item.potion = false;
         }
 
@@ -52,8 +52,8 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "CalmKiCrystal", 30);
-            recipe.AddIngredient(null, "StableKiCrystal", 20);
+            recipe.AddIngredient(null, "CalmKiCrystal", 20);
+            recipe.AddIngredient(null, "StableKiCrystal", 30);
             recipe.AddIngredient(ItemID.Sunflower, 5);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

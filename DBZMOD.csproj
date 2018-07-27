@@ -124,8 +124,10 @@
     <Compile Include="Items\Weapons\MemeWeapons\GalickGunMeme.cs" />
     <Compile Include="Items\Weapons\MemeWeapons\GatlingSpiritBomb.cs" />
     <Compile Include="Items\Weapons\MemeWeapons\Rock.cs" />
+    <Compile Include="Items\Weapons\Scattershot.cs" />
     <Compile Include="Items\Weapons\SpiritBall.cs" />
     <Compile Include="Items\Weapons\SpiritBomb.cs" />
+    <Compile Include="Items\Weapons\SuperEnergyBarrage.cs" />
     <Compile Include="Items\Weapons\SuperKamehameha.cs" />
     <Compile Include="Items\Weapons\TrapShooter.cs" />
     <Compile Include="Items\Weapons\TrunksSword.cs" />

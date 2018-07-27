@@ -20,7 +20,7 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 3;
+            item.rare = 7;
             item.potion = false;
         }
 

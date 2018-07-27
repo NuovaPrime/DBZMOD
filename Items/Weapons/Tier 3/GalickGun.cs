@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_3
 {
     public class GalickGun : KiItem
     {
@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons
         {
             item.shoot = mod.ProjectileType("GalickGunBall");
             item.shootSpeed = 0f;
-            item.damage = 67;
+            item.damage = 42;
             item.knockBack = 2f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item12;
@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Weapons
             item.noUseGraphic = true;
             item.height = 40;
             item.autoReuse = false;
-            item.value = Item.sellPrice(0, 0, 5, 0);
+            item.value = 0;
             item.rare = 3;
             KiDrain = 80;
             item.channel = true;
@@ -51,7 +51,6 @@ namespace DBZMOD.Items.Weapons
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 45);
-            recipe.AddIngredient(null, "HonorKiCrystal", 10);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();

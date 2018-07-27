@@ -53,6 +53,7 @@ namespace DBZMOD
         public bool KiEssence3;
         public bool turtleShell;
         public bool KiEssence4;
+        public bool KiEssence5;
         public bool spiritualEmblem;
         public int SSJAuraBeamTimer;
         public bool hasKaioken;
@@ -179,6 +180,7 @@ namespace DBZMOD
             tag.Add("KiEssence2", KiEssence2);
             tag.Add("KiEssence3", KiEssence3);
             tag.Add("KiEssence4", KiEssence4);
+            tag.Add("KiEssence5", KiEssence5);
             tag.Add("MenuSelection", UI.TransMenu.MenuSelection);
 
             return tag;
@@ -206,6 +208,7 @@ namespace DBZMOD
             KiEssence2 = tag.Get<bool>("KiEssence2");
             KiEssence3 = tag.Get<bool>("KiEssence3");
             KiEssence4 = tag.Get<bool>("KiEssence4");
+            KiEssence5 = tag.Get<bool>("KiEssence5");
             UI.TransMenu.MenuSelection = tag.Get<int>("MenuSelection");
         }
 
@@ -391,7 +394,7 @@ namespace DBZMOD
                     }
                 }
             }
-           else if (!Fragment1 && !Fragment2 && !Fragment3 && !Fragment4 && !Fragment5)
+           else
             {
                 KiMax = 1000;
             }
@@ -410,11 +413,16 @@ namespace DBZMOD
                         if (KiEssence4)
                         {
                             KiRegenRate = 7;
+
+                            if(KiEssence5)
+                            {
+                                KiRegenRate = 10;
+                            }
                         }
                     }
                 }
             }
-            if (!KiEssence1 && !KiEssence2 && !KiEssence3 && !KiEssence4)
+            if (!KiEssence1 && !KiEssence2 && !KiEssence3 && !KiEssence4 && !KiEssence5)
             {
                 KiRegenRate = 1;
             }
@@ -462,7 +470,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
                     if ((Main.rand.Next(4) == 0))
                     {

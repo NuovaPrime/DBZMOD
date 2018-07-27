@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_5
 {
     public class SuperEnergyBarrage : KiItem
     {
@@ -15,8 +15,8 @@ namespace DBZMOD.Items.Weapons
         {
             item.shoot = mod.ProjectileType("SuperEnergyBarrageProj");
             item.shootSpeed = 36f;
-            item.damage = 98;
-            item.knockBack = 5f;
+            item.damage = 88;
+            item.knockBack = 3f;
             item.useStyle = 1;
             item.UseSound = SoundID.Item1;
             item.useAnimation = 15;
@@ -29,8 +29,8 @@ namespace DBZMOD.Items.Weapons
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast2").WithPitchVariance(.2f);
             }
             item.autoReuse = true;
-            item.value = Item.sellPrice(0, 5, 5, 0);
-            item.rare = 5;
+            item.value = 0;
+            item.rare = 7;
             KiDrain = 125;
         }
         public override void SetStaticDefaults()
@@ -50,7 +50,7 @@ namespace DBZMOD.Items.Weapons
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "AngerKiCrystal", 45);
+            recipe.AddIngredient(null, "RadiantKiCrystal", 45);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();

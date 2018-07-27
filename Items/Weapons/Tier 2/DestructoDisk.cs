@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons
+namespace DBZMOD.Items.Weapons.Tier_2
 {
 	public class DestructoDisk : KiItem
 	{
@@ -17,7 +17,7 @@ namespace DBZMOD.Items.Weapons
 		{
 			item.shoot = mod.ProjectileType("DestructoDiskProjectile");
 			item.shootSpeed = 20f;
-			item.damage = 50;
+			item.damage = 40;
 			item.knockBack = 5f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
@@ -27,21 +27,21 @@ namespace DBZMOD.Items.Weapons
 			item.noUseGraphic = true;
 			item.height = 20;
 			item.autoReuse = false;
-			item.value = Item.sellPrice(0, 0, 5, 0);
-			item.rare = 1;
+			item.value = 0;
+			item.rare = 2;
             KiDrain = 70;
 	    }
 	    public override void SetStaticDefaults()
 		{
 		Tooltip.SetDefault("Its a frizbee I swear." 
-		+ "\n-Tier 2.5-");
+		+ "\n-Tier 2-");
 		DisplayName.SetDefault("Destructo Disk");
 		}
 
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "HonorKiCrystal", 40);
+	        recipe.AddIngredient(null, "CalmKiCrystal", 40);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

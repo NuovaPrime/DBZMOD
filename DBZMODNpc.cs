@@ -17,6 +17,9 @@ namespace DBZMOD
         private Player player;
         public override void SetDefaults(NPC npc)
         {
+            Mod thoriummod = ModLoader.GetMod("ThoriumMod");
+            Mod calamitymod = ModLoader.GetMod("CalamityMod");
+
             if (npc.boss && DBZWorld.RealismMode)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
@@ -115,24 +118,26 @@ namespace DBZMOD
                 {
                     npc.lifeMax = npc.lifeMax * 12;
                 }
+                else if(npc.type == thoriummod.NPCType(""))
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
             }
             base.SetDefaults(npc);
         }
         public override void NPCLoot(NPC npc)
         {    
 
-            if (!Main.hardMode)
+            if (!Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneBeach && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDungeon && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneOldOneArmy && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSandstorm && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSnow && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerNebula && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerSolar && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerStardust && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerVortex && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUndergroundDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)        //this is where you choose what biome you whant the item to drop. ZoneCorrupt is in Corruption
             {
-                if (!Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneBeach && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDungeon && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneOldOneArmy && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSandstorm && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSnow && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerNebula && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerSolar && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerStardust && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerVortex && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUndergroundDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)        //this is where you choose what biome you whant the item to drop. ZoneCorrupt is in Corruption
+                if (Main.rand.Next(2) == 0)      
                 {
-                    if (Main.rand.Next(2) == 0)      
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(1, 5));
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(1, 5));
 
-                    }
                 }
             }
-            if (NPC.downedBoss1)
+
+            if (NPC.downedBoss2)
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle)
                 {
@@ -144,16 +149,6 @@ namespace DBZMOD
             }
             if (NPC.downedBoss3)
             {
-                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)
-                {
-                    if (Main.rand.Next(2) == 0)
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("HonorKiCrystal"), Main.rand.Next(1, 5));
-                    }
-                }
-            }
-            if (Main.hardMode)
-            {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly)
                 {
                     if (Main.rand.Next(2) == 0)
@@ -162,7 +157,7 @@ namespace DBZMOD
                     }
                 }
             }
-            if (Main.hardMode && NPC.downedMechBossAny)
+            if (Main.hardMode)
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson)
                 {
@@ -172,13 +167,23 @@ namespace DBZMOD
                     }
                 }
             }
-            if (Main.hardMode && NPC.downedMechBossAny)
+            if (Main.hardMode)
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt)
                 {
                     if (Main.rand.Next(2) == 0)
                     {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(1, 5));
+                    }
+                }
+            }
+            if (Main.hardMode && NPC.downedPlantBoss)
+            {
+                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom)
+                {
+                    if (Main.rand.Next(2) == 0)
+                    {
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("RadiantKiCrystal"), Main.rand.Next(1, 7));
                     }
                 }
             }
@@ -195,7 +200,7 @@ namespace DBZMOD
                 }
                 if (npc.type == NPCID.EyeofCthulhu)  
                 {
-                    if ((Main.rand.Next(3) == 0)) 
+                    if (Main.rand.Next(3) == 0) 
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1); 
@@ -206,7 +211,7 @@ namespace DBZMOD
 
                 if (npc.type == NPCID.SkeletronHead)  
                 {
-                    if ((Main.rand.Next(3) == 0)) 
+                    if (Main.rand.Next(3) == 0)
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1); 
@@ -215,7 +220,7 @@ namespace DBZMOD
                 }
                 if (npc.type == NPCID.Spazmatism)
                 {
-                    if ((Main.rand.Next(3) == 0))
+                    if (Main.rand.Next(3) == 0)
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1); 
@@ -224,7 +229,7 @@ namespace DBZMOD
                 }
                 if (npc.type == NPCID.Plantera)  
                 {
-                    if ((Main.rand.Next(3) == 0))
+                    if (Main.rand.Next(3) == 0)
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1); 
@@ -233,7 +238,7 @@ namespace DBZMOD
                 }
                 if (npc.type == NPCID.CultistBoss)  
                 {
-                    if ((Main.rand.Next(3) == 0)) 
+                    if (Main.rand.Next(3) == 0) 
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1); 
@@ -297,6 +302,30 @@ namespace DBZMOD
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment4"), 1);
+                        }
+                    }
+                }
+            }
+            if (!Main.expertMode)
+            {
+                if (npc.type == NPCID.WallofFlesh)
+                {
+                    if (Main.rand.Next(7) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("ASSJItem"), 1);
+                        }
+                    }
+                }
+            }
+            if (!Main.expertMode)
+            {
+                if (npc.type == NPCID.TheDestroyer)
+                {
+                    if (Main.rand.Next(7) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("USSJItem"), 1);
                         }
                     }
                 }
