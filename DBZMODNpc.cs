@@ -218,7 +218,7 @@ namespace DBZMOD
                         }
                     }
                 }
-                if (npc.type == NPCID.Spazmatism)
+                if (npc.type == NPCID.SkeletronPrime)
                 {
                     if (Main.rand.Next(3) == 0)
                     {
