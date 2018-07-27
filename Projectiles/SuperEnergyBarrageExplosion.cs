@@ -49,7 +49,7 @@ namespace DBZMOD.Projectiles
             }
             else
             {
-                projectile.scale = 1f;
+                projectile.scale = 0.5f;
             }
         }
     }
