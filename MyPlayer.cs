@@ -134,14 +134,14 @@ namespace DBZMOD
             {
                 UI.TransMenu.SSJ2On = true;
             }
-            if(player.HasBuff(mod.BuffType("SSJ2Buff")))
+            /*if(player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 LightningFrameTimer++;
             }
             if(LightningFrameTimer >= 15)
             {
                 LightningFrameTimer = 0;
-            }
+            }*/
         }
 
         public bool SSJ1Check()
@@ -547,8 +547,8 @@ namespace DBZMOD
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("DBZMOD");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = 0;
-            if(modPlayer.LightningFrameTimer == 0)
+            int frame = modPlayer.LightningFrameTimer / 5;
+            /*if(modPlayer.LightningFrameTimer == 0)
             {
                 frame = 0;
             }
@@ -559,7 +559,7 @@ namespace DBZMOD
             else if (modPlayer.LightningFrameTimer == 10)
             {
                 frame = 2;
-            }
+            }*/
             if (drawInfo.shadow != 0f)
             {
                 return;
@@ -577,7 +577,7 @@ namespace DBZMOD
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             LightningEffects.visible = true;
-            layers.Insert(0, LightningEffects);
+            layers.Add(LightningEffects);
         }
     }
     public class SSJHairDraw : ModPlayer
