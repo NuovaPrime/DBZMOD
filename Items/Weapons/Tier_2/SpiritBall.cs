@@ -22,7 +22,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
 			item.useAnimation = 110;
-			item.useTime = 200;
+			item.useTime = 180;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
