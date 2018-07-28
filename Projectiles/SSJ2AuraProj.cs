@@ -11,12 +11,12 @@ namespace DBZMOD.Projectiles
     public class SSJ2AuraProj : ModProjectile
     {
         public int BaseAuraTimer;
-        private int ChargeSoundTimer;
+        private int ChargeSoundTimer = 480;
         private int LightningTimer = 0;
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[projectile.type] = 3;
         }
         public override void SetDefaults()
         {
@@ -37,8 +37,7 @@ namespace DBZMOD.Projectiles
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.netUpdate = true;
-            projectile.Center = player.Center + new Vector2(0, -30);
-
+            projectile.Center = player.Center + new Vector2(0, -50);
             if (!player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 projectile.Kill();
@@ -63,9 +62,9 @@ namespace DBZMOD.Projectiles
                 BaseAuraTimer--;
             }
             ChargeSoundTimer++;
-            if (ChargeSoundTimer > 22 && player.whoAmI == Main.myPlayer)
+            if (ChargeSoundTimer > 480 && player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.7f).WithPitchVariance(.1f));
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ2").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
             else

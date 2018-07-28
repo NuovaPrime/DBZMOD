@@ -95,6 +95,10 @@ namespace DBZMOD
                 if(MyPlayer.ModPlayer(player).KiCurrent <= 0)
                 {
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
+                    player.ClearBuff(mod.BuffType("ASSJBuff"));
+                    player.ClearBuff(mod.BuffType("USSJBuff"));
+                    player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
+                    player.ClearBuff(mod.BuffType("SSJ2Buff"));
                 }
             }
 

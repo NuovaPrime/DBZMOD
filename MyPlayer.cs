@@ -134,14 +134,14 @@ namespace DBZMOD
             {
                 UI.TransMenu.SSJ2On = true;
             }
-            /*if(player.HasBuff(mod.BuffType("SSJ2Buff")))
+            if(player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 LightningFrameTimer++;
             }
             if(LightningFrameTimer >= 15)
             {
                 LightningFrameTimer = 0;
-            }*/
+            }
         }
 
         public bool SSJ1Check()
