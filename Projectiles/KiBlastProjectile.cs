@@ -18,17 +18,18 @@ namespace DBZMOD.Projectiles
     	
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 40;
+            projectile.width = 20;
+            projectile.height = 30;
 			projectile.aiStyle = 1;
-			projectile.light = 0.9f;
+			projectile.light = 0.7f;
             projectile.friendly = true;
             projectile.ignoreWater = true;
             projectile.netUpdate = true;
             projectile.tileCollide = false;
             projectile.penetrate = 1;
+			aiType = 14;
             projectile.timeLeft = 120;
-			ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
+			ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
@@ -44,25 +45,16 @@ namespace DBZMOD.Projectiles
 			return true;
 		}
 		
-        public override void Kill(int timeLeft)
+		public override Color? GetAlpha(Color lightColor)
         {
-        	Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 122);
-        	int num251 = 4;
-        	if (projectile.owner == Main.myPlayer)
-        	{
-				for (int num252 = 0; num252 < num251; num252++)
-				{
-					Vector2 value15 = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
-					while (value15.X == 0f && value15.Y == 0f)
-					{
-						value15 = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
-					}
-					value15.Normalize();
-					value15 *= (float)Main.rand.Next(70, 101) * 0.1f;
-					Projectile.NewProjectile(projectile.oldPosition.X + (float)(projectile.width / 2), projectile.oldPosition.Y + (float)(projectile.height / 2), value15.X, value15.Y, mod.ProjectileType("WhiteFlame2"), (int)((double)projectile.damage), 0f, projectile.owner, 0f, 0f);
-			    }
-        	}
+			if (projectile.timeLeft < 85) 
+			{
+				byte b2 = (byte)(projectile.timeLeft * 3);
+				byte a2 = (byte)(100f * ((float)b2 / 255f));
+				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			}
+			return new Color(255, 255, 250, 400);
         }
-    }
+	}
 }
 		

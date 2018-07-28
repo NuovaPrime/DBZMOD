@@ -11,7 +11,7 @@ namespace DBZMOD.Projectiles
 {
 	public class ScattershotBlast : KiProjectile
 	{
-		public override void SetDefaults()
+	    public override void SetDefaults()
         {
             projectile.CloneDefaults(ProjectileID.SwordBeam);
             projectile.hostile = false;
@@ -19,7 +19,7 @@ namespace DBZMOD.Projectiles
 			projectile.tileCollide = true;
             projectile.width = 20;
             projectile.height = 20;
-			projectile.aiStyle = 1;
+			projectile.aiStyle = 0;
 			projectile.light = 1f;
 			projectile.timeLeft = 250;
 			projectile.damage = 55;
@@ -31,6 +31,17 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
+		public override Color? GetAlpha(Color lightColor)
+        {
+			if (projectile.timeLeft < 85) 
+			{
+				byte b2 = (byte)(projectile.timeLeft * 3);
+				byte a2 = (byte)(100f * ((float)b2 / 255f));
+				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			}
+			return new Color(255, 255, 255, 100);
+        }
+		
 		public override void AI()
         {
         	projectile.ai[0] += 1f;
@@ -46,7 +57,9 @@ namespace DBZMOD.Projectiles
 			}
 			if (projectile.velocity.Y > 16f)
 			{
-				projectile.velocity.Y = 16f;
+				projectile.position.X = projectile.velocity.X + Main.rand.Next(1,5);
+				projectile.position.Y = projectile.velocity.X + Main.rand.Next(1,5);
+				projectile.velocity.Y = 3f;
 			}
         	float num472 = projectile.Center.X;
 			float num473 = projectile.Center.Y;

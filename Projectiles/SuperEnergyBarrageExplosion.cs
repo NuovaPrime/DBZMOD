@@ -29,6 +29,18 @@ namespace DBZMOD.Projectiles
             projectile.damage = 60;
             SizeTimer = 120;
         }
+		
+        public override Color? GetAlpha(Color lightColor)
+        {
+			if (projectile.timeLeft < 85) 
+			{
+				byte b2 = (byte)(projectile.timeLeft * 3);
+				byte a2 = (byte)(100f * ((float)b2 / 255f));
+				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			}
+			return new Color(255, 255, 255, 100);
+        }
+		
         public override void AI()
         {
             Player player = Main.player[projectile.owner];

@@ -13,7 +13,14 @@ namespace DBZMOD.Projectiles
     {
         public override Color? GetAlpha(Color lightColor)
         {
-    return Color.AliceBlue;
+		if (projectile.timeLeft < 85) 
+			{
+				byte b2 = (byte)(projectile.timeLeft * 3);
+				byte a2 = (byte)(100f * ((float)b2 / 255f));
+				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			}
+			return new Color(100, 100, 100, 100);	
+            return Color.AliceBlue;
         }
 		
 		public int localtimer = 0;
@@ -29,7 +36,7 @@ namespace DBZMOD.Projectiles
 		{
 			DisplayName.SetDefault("Spirit Bomb Projectile");
 		}
-    	
+		
         public override void SetDefaults()
         {
             projectile.width = 400;

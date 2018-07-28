@@ -11,26 +11,31 @@ namespace DBZMOD.Projectiles
 {
     public class SuperEnergyBarrageProj : KiProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("SuperEnergyBarrageProj");
-        }
-
         public override void SetDefaults()
         {
             projectile.width = 30;
             projectile.height = 20;
-            projectile.aiStyle = 17;
             projectile.light = 1f;
             projectile.friendly = true;
             projectile.ignoreWater = true;
             projectile.penetrate = 1;
-            projectile.timeLeft = 120;
+            projectile.timeLeft = 60;
             projectile.aiStyle = 1;
             aiType = 14;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 8;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
+        }
+		
+		public override Color? GetAlpha(Color lightColor)
+        {
+			if (projectile.timeLeft < 85) 
+			{
+				byte b2 = (byte)(projectile.timeLeft * 3);
+				byte a2 = (byte)(100f * ((float)b2 / 255f));
+				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			}
+			return new Color(255, 255, 255, 100);
         }
 		
         public override void Kill(int timeLeft)
