@@ -33,7 +33,7 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
-            projectile.Center = player.Center + new Vector2(0, -45);
+            projectile.Center = player.Center + new Vector2(0, -70);
             projectile.netUpdate = true;
             if (!player.HasBuff(mod.BuffType("KaiokenBuffX10")))
             {

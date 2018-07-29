@@ -28,9 +28,9 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X + 200;
-            projectile.position.Y = player.Center.Y + 100;
-            projectile.Center = player.Center;
+            projectile.position.X = player.Center.X;
+            projectile.position.Y = player.Center.Y;
+            projectile.Center = player.Center + new Vector2(-50, -300);
             projectile.netUpdate = true;
 
             if (!MyPlayer.ModPlayer(player).IsTransformingSSJ3)

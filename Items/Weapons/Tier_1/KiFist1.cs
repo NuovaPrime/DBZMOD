@@ -37,14 +37,14 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		DisplayName.SetDefault("Fist");
 		}
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "StableKiCrystal", 20);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
-		}
+		}*/
         public override bool AltFunctionUse(Player player)
         {
             return true;
