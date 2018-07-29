@@ -30,6 +30,10 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.value = 0;
 			item.rare = 2;
             KiDrain = 70;
+			if(!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
+            }
 	    }
 	    public override void SetStaticDefaults()
 		{

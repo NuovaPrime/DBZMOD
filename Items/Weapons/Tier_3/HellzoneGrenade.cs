@@ -28,6 +28,10 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.value = 0;
 			item.rare = 3;
             KiDrain = 70;
+			if(!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Scatterbeam").WithPitchVariance(.2f);
+            }
 	    }
 	    public override void SetStaticDefaults()
 		{
