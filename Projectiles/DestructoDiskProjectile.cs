@@ -96,7 +96,11 @@ namespace DBZMOD.Projectiles
 			}
             if (Main.rand.Next(6) == 0)
             {
-            	Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 158, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+            	Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);
+				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);
+				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);
+				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);
+				
             }
         }
         
@@ -108,6 +112,7 @@ namespace DBZMOD.Projectiles
 				Main.dust[num304].noGravity = true;
 				Main.dust[num304].velocity *= 1.2f;
 				Main.dust[num304].velocity -= projectile.oldVelocity * 0.3f;
+		       	Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 34, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
 			}
         }
 		
