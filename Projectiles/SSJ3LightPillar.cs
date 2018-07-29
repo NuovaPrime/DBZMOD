@@ -8,14 +8,10 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJAuraBall : ModProjectile
+    public class SSJ3LightPillar : ModProjectile
     {
         private float SizeTimer;
         private float BlastTimer;
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 4;
-        }
         public override void SetDefaults()
         {
             projectile.width = 120;
@@ -32,12 +28,12 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X;
-            projectile.position.Y = player.Center.Y;
-            projectile.Center = player.Center + new Vector2(0, -25);
+            projectile.position.X = player.Center.X + 200;
+            projectile.position.Y = player.Center.Y + 100;
+            projectile.Center = player.Center;
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransformingSSJ2)
+            if (!MyPlayer.ModPlayer(player).IsTransformingSSJ3)
             {
                 projectile.Kill();
             }
@@ -60,24 +56,17 @@ namespace DBZMOD.Projectiles
             {
                 projectile.frame = 0;
             }   
-            if(projectile.active)
-            {
-                BlastTimer++;
-                if(BlastTimer > 1)
-                {
-                    Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 30;
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("SSJEnergyBarrageProj"), 0, 0, player.whoAmI);
-                    BlastTimer = 0;
-                }
-                
-            }
+            projectile.ai[1]++;
+            if (projectile.ai[1] % 7 == 0)
+            Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
+            Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
         }
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.AddBuff(mod.BuffType("SSJ2Buff"), 3600);
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-            MyPlayer.ModPlayer(player).IsTransformingSSJ2 = false;
+            player.AddBuff(mod.BuffType("SSJ3Buff"), 3600);
+            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
+            MyPlayer.ModPlayer(player).IsTransformingSSJ3 = false;
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
         }
     }
