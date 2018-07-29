@@ -16,8 +16,8 @@ namespace DBZMOD.Items.Armor
 
         public override void SetDefaults()
         {
-            item.width = 29;
-            item.height = 13;
+            item.width = 24;
+            item.height = 16;
             item.value = 60000;
             item.rare = 7;
             item.defense = 11;

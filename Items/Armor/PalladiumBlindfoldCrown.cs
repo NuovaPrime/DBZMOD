@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor
 {
     [AutoloadEquip(EquipType.Head)]
-    public class PaladiumBlindfoldCrown : ModItem
+    public class PalladiumBlindfoldCrown : ModItem
     {
         public override void SetStaticDefaults()
         {
