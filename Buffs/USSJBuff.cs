@@ -14,7 +14,7 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("{0}x Damage, {0}x Speed, Drains Ki.");
+            Description.SetDefault("{0}x Damage, Drastically Lower Speed, Drains Ki.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
