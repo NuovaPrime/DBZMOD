@@ -38,14 +38,14 @@ namespace DBZMOD
             {
                 MyPlayer.ModPlayer(player).hasKaioken = true;
                 Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                player.lifeRegenTime = 0;
-                player.lifeRegen -= HealthDrainRate;
             }
-            if(IsSSJ)
+            if (player.lifeRegen > 0)
+            {
+                player.lifeRegen = 0;
+            }
+            player.lifeRegenTime = 0;
+            player.lifeRegen -= HealthDrainRate;
+            if (IsSSJ)
             {
                 MyPlayer.ModPlayer(player).IsTransformed = true;
                 KiDrainTimer++;
@@ -99,6 +99,8 @@ namespace DBZMOD
                     player.ClearBuff(mod.BuffType("USSJBuff"));
                     player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
                     player.ClearBuff(mod.BuffType("SSJ2Buff"));
+                    player.ClearBuff(mod.BuffType("SSJ3Buff"));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 }
             }
 

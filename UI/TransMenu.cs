@@ -18,13 +18,16 @@ namespace DBZMOD.UI
         public UIPanel backPanel;
         private UIText ssjbuttontext;
         private UIText ssj2buttontext;
+        private UIText ssj3buttontext;
         public static bool menuvisible = false;
         private UIImageButton ssjButtonTexture;
         private UIImageButton ssj2ButtonTexture;
+        private UIImageButton ssj3ButtonTexture;
         private const float padding = 5f;
         public static int MenuSelection = 0;
         public static bool SSJ1On;
         public static bool SSJ2On;
+        public static bool SSJ3On;
 
         public override void OnInitialize()
         {
@@ -70,6 +73,22 @@ namespace DBZMOD.UI
             ssj2buttontext.Left.Set(padding - 4f, 0f);
             ssj2buttontext.Top.Set(padding + 25f, 0f);
             ssj2ButtonTexture.Append(ssj2buttontext);
+
+            var SSJ3Button = GFX.SSJ3ButtonImage;
+            ssj3ButtonTexture = new UIImageButton(SSJ3Button);
+            ssj3ButtonTexture.Width.Set(SSJ3Button.Width, 0f);
+            ssj3ButtonTexture.Height.Set(SSJ3Button.Width, 0f);
+            ssj3ButtonTexture.Left.Set(padding + SSJ2Button.Width * 2, 0f);
+            ssj3ButtonTexture.Top.Set(padding, 0f);
+            ssj3ButtonTexture.OnClick += TrySelectingSSJ3;
+            backPanel.Append(ssj3ButtonTexture);
+
+            ssj3buttontext = new UIText("Super Saiyan 3");
+            ssj3buttontext.Width.Set(32f, 0f);
+            ssj3buttontext.Height.Set(32f, 0f);
+            ssj3buttontext.Left.Set(padding - 4f, 0f);
+            ssj3buttontext.Top.Set(padding + 25f, 0f);
+            ssj3ButtonTexture.Append(ssj3buttontext);
         }
 
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
@@ -92,6 +111,18 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuTick);
             }
             if (!SSJ2On)
+            {
+                Main.PlaySound(SoundID.MenuClose);
+            }
+        }
+        private void TrySelectingSSJ3(UIMouseEvent evt, UIElement listeningelement)
+        {
+            if (SSJ3On)
+            {
+                MenuSelection = 3;
+                Main.PlaySound(SoundID.MenuTick);
+            }
+            if (!SSJ3On)
             {
                 Main.PlaySound(SoundID.MenuClose);
             }

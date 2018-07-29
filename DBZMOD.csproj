@@ -46,6 +46,7 @@
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJ1Buff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
+    <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Buffs\USSJBuff.cs" />
     <Compile Include="DBZMOD.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Projectiles\MasenkoBlast.cs" />
     <Compile Include="Projectiles\MasenkoTrail.cs" />
     <Compile Include="Projectiles\RockProjectile.cs" />
+    <Compile Include="Projectiles\ScattershotBlast.cs" />
     <Compile Include="Projectiles\SpiritBallProjectile.cs" />
     <Compile Include="Projectiles\SpiritBombProjectile.cs" />
     <Compile Include="Projectiles\SSJ1AuraProj.cs" />
@@ -186,6 +188,9 @@
     <Compile Include="Projectiles\SSJ1AuraProjStart.cs" />
     <Compile Include="Projectiles\SSJ1KaiokenAuraProj.cs" />
     <Compile Include="Projectiles\SSJ2AuraProj.cs" />
+    <Compile Include="Projectiles\SSJ3AuraProj.cs" />
+    <Compile Include="Projectiles\SSJAuraBall.cs" />
+    <Compile Include="Projectiles\SSJEnergyBarrageProj.cs" />
     <Compile Include="Projectiles\SSJRockProjStart.cs" />
     <Compile Include="Projectiles\SuperEnergyBarrageExplosion.cs" />
     <Compile Include="Projectiles\SuperEnergyBarrageProj.cs" />
@@ -315,6 +320,7 @@
     <Content Include="Sounds\Music\DBZMODTheme1.mp3" />
     <Content Include="Sounds\PowerDown.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
+    <Content Include="WIkiChangelog.txt" />
     <Content Include="WIP\AmberNecklace.png" />
     <Content Include="WIP\AmethystNecklace.png" />
     <Content Include="WIP\ASSJ Hair.png" />

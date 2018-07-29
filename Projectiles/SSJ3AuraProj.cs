@@ -8,10 +8,10 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJ2AuraProj : ModProjectile
+    public class SSJ3AuraProj : ModProjectile
     {
         public int BaseAuraTimer;
-        private int ChargeSoundTimer = 480;
+        private int ChargeSoundTimer = 240;
         private int LightningTimer = 0;
 
         public override void SetStaticDefaults()
@@ -38,8 +38,8 @@ namespace DBZMOD.Projectiles
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.netUpdate = true;
-            projectile.Center = player.Center + new Vector2(0, -50);
-            if (!player.HasBuff(mod.BuffType("SSJ2Buff")))
+            projectile.Center = player.Center + new Vector2(0, -60);
+            if (!player.HasBuff(mod.BuffType("SSJ3Buff")))
             {
                 projectile.Kill();
             }
@@ -59,18 +59,18 @@ namespace DBZMOD.Projectiles
             }
             if (BaseAuraTimer > 0)
             {
-                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
+                projectile.scale = 1.5f - 0.7f * (BaseAuraTimer / 5f);
                 BaseAuraTimer--;
             }
             ChargeSoundTimer++;
-            if (ChargeSoundTimer > 480 && player.whoAmI == Main.myPlayer)
+            if (ChargeSoundTimer > 240 && player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ2").WithVolume(.7f).WithPitchVariance(.1f));
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ3").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
             else
             {
-                projectile.scale = 1.3f;
+                projectile.scale = 1.5f;
             }
         }
     }
