@@ -19,7 +19,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.knockBack = 5f;
 			item.useStyle = 5;
 			item.useAnimation = 25;
-			item.useTime = 50;
+			item.useTime = 40;
 			item.width = 20;
 			item.noUseGraphic = true;
 			item.height = 20;
