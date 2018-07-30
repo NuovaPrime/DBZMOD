@@ -14,12 +14,12 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("KiBlastProjectile");
-			item.shootSpeed = 20f;
+			item.shootSpeed = 15f;
 			item.damage = 15;
 			item.knockBack = 5f;
-			item.useStyle = 1;
+			item.useStyle = 5;
 			item.useAnimation = 25;
-			item.useTime = 20;
+			item.useTime = 50;
 			item.width = 20;
 			item.noUseGraphic = true;
 			item.height = 20;
