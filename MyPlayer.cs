@@ -58,6 +58,7 @@ namespace DBZMOD
         public bool spiritualEmblem;
         public int SSJAuraBeamTimer;
         public bool hasKaioken;
+        public float KaiokenTimer  = 0.0f;
         public bool hasSSJ1;
         public bool kiLantern;
         public bool speedToggled = true;
@@ -151,6 +152,10 @@ namespace DBZMOD
             if (LightningFrameTimer >= 15)
             {
                 LightningFrameTimer = 0;
+            }
+            if(KaiokenCheck())
+            {
+                KaiokenTimer += 2.5f;
             }
         }
 
@@ -361,14 +366,16 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-                player.AddBuff(mod.BuffType("TiredDebuff"), 3600);
+                player.AddBuff(mod.BuffType("TiredDebuff"), (int)KaiokenTimer);
+                KaiokenTimer = 0.0f;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
             if (PowerDown.JustPressed && player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
-                player.AddBuff(mod.BuffType("TiredDebuff"), 10800);
+                player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer*2));
+                KaiokenTimer = 0.0f;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
