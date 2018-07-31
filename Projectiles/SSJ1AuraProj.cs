@@ -80,6 +80,11 @@ namespace DBZMOD.Projectiles
                     BaseAuraTimer--;
                 }
             }
+
+            if (MyPlayer.ModPlayer(player).IsCharging)
+            {
+                projectile.scale *= 1.5f;
+            }
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 22 && player.whoAmI == Main.myPlayer)
             {

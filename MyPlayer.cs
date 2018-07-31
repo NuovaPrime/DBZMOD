@@ -85,6 +85,7 @@ namespace DBZMOD
         public bool USSJAchieved;
         public bool SSJ2Achieved;
         public bool SSJ3Achieved;
+        public bool IsCharging;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -341,6 +342,7 @@ namespace DBZMOD
                 KiCurrent += KiRegenRate;
                 player.velocity = new Vector2(0,player.velocity.Y);
                 ChargeSoundTimer++;
+                IsCharging = true;
                 if (ChargeSoundTimer > 22)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
@@ -474,6 +476,7 @@ namespace DBZMOD
             topazNecklace = false;
 			amberNecklace = false;
 			amethystNecklace = false;
+            IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {

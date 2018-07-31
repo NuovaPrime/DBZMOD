@@ -14,6 +14,7 @@
       </e>
       <e p="bin" t="ExcludeRecursive" />
       <e p="Buffs" t="Include">
+        <e p="ASSJBuff.cs" t="Include" />
         <e p="KaiokenBuff.cs" t="Include" />
         <e p="KaiokenBuffX10.cs" t="Include" />
         <e p="KaiokenBuffX100.cs" t="Include" />
@@ -24,7 +25,10 @@
         <e p="SenzuCooldown.cs" t="Include" />
         <e p="SSJ1Buff.cs" t="Include" />
         <e p="SSJ1KaiokenBuff.cs" t="Include" />
+        <e p="SSJ2Buff.cs" t="Include" />
+        <e p="SSJ3Buff.cs" t="Include" />
         <e p="TiredDebuff.cs" t="Include" />
+        <e p="USSJBuff.cs" t="Include" />
       </e>
       <e p="build.txt" t="Include" />
       <e p="DBZMOD.cs" t="Include" />
@@ -38,6 +42,7 @@
         <e p="StoneBlockDestruction.cs" t="Include" />
       </e>
       <e p="Dusts" t="Include">
+        <e p="LightningBlue.cs" t="Include" />
         <e p="MetalDust.cs" t="Include" />
         <e p="MetalDust.png" t="Include" />
         <e p="New Text Document.txt" t="Include" />
@@ -54,29 +59,57 @@
       </e>
       <e p="Items" t="Include">
         <e p="Accessories" t="Include">
-          <e p="DiamondRing.cs" t="Include" />
-          <e p="EmeraldRing.cs" t="Include" />
-          <e p="RubyRing.cs" t="Include" />
-          <e p="SapphireRing.cs" t="Include" />
+          <e p="AmberNecklace.cs" t="Include" />
+          <e p="AmberNecklace.png" t="Include" />
+          <e p="AmethystNecklace.cs" t="Include" />
+          <e p="AmethystNecklace.png" t="Include" />
+          <e p="DiamondNecklace.cs" t="Include" />
+          <e p="DiamondNecklace.png" t="Include" />
+          <e p="DragonGemNecklace.cs" t="Include" />
+          <e p="DragonGemNecklace.png" t="Include" />
+          <e p="EmeraldNecklace.cs" t="Include" />
+          <e p="EmeraldNecklace.png" t="Include" />
+          <e p="RubyNecklace.cs" t="Include" />
+          <e p="RubyNecklace.png" t="Include" />
+          <e p="SapphireNecklace.cs" t="Include" />
+          <e p="SapphireNecklace.png" t="Include" />
           <e p="ScouterT2.cs" t="Include" />
+          <e p="ScouterT2.png" t="Include" />
+          <e p="ScouterT2_Face.png" t="Include" />
           <e p="ScouterT3.cs" t="Include" />
+          <e p="ScouterT3.png" t="Include" />
+          <e p="ScouterT3_Face.png" t="Include" />
           <e p="ScouterT4.cs" t="Include" />
+          <e p="ScouterT4.png" t="Include" />
+          <e p="ScouterT4_Face.png" t="Include" />
           <e p="ScouterT5.cs" t="Include" />
+          <e p="ScouterT5.png" t="Include" />
+          <e p="ScouterT5_Face.png" t="Include" />
           <e p="ScouterT6.cs" t="Include" />
+          <e p="ScouterT6.png" t="Include" />
+          <e p="ScouterT6_Face.png" t="Include" />
           <e p="SpiritualEmblem.cs" t="Include" />
-          <e p="TopazRing.cs" t="Include" />
+          <e p="SpiritualEmblem.png" t="Include" />
+          <e p="Thumbs.db" t="Include" />
+          <e p="TopazNecklace.cs" t="Include" />
+          <e p="TopazNecklace.png" t="Include" />
           <e p="TurtleShell.cs" t="Include" />
+          <e p="TurtleShell.png" t="Include" />
+          <e p="TurtleShell_Back.png" t="Include" />
         </e>
         <e p="AngerKiCrystal.cs" t="Include" />
         <e p="Armor" t="Include">
           <e p="ChlorophyteHeadpiece.cs" t="Include" />
-          <e p="CobaltSharpCap.cs" t="Include" />
-          <e p="PalladiumHeadDress.cs" t="Include" />
-          <e p="PalladiumHeadDress.png" t="Include" />
-          <e p="PalladiumHeadDress_Head.png" t="Include" />
+          <e p="ChlorophyteHeadpiece.png" t="Include" />
+          <e p="ChlorophyteHeadpiece_Head.png" t="Include" />
+          <e p="CobaltCrown.cs" t="Include" />
+          <e p="CobaltCrown.png" t="Include" />
+          <e p="CobaltCrown_Head.png" t="Include" />
+          <e p="PalladiumBlindfoldCrown.cs" t="Include" />
         </e>
         <e p="CalmKiCrystal.cs" t="Include" />
         <e p="Consumables" t="Include">
+          <e p="ASSJItem.cs" t="Include" />
           <e p="KaioFragment1.cs" t="Include" />
           <e p="KaioFragment2.cs" t="Include" />
           <e p="KaioFragment3.cs" t="Include" />
@@ -88,6 +121,7 @@
           <e p="KiEssence2.cs" t="Include" />
           <e p="KiEssence3.cs" t="Include" />
           <e p="KiEssence4.cs" t="Include" />
+          <e p="KiEssence5.cs" t="Include" />
           <e p="KiFragment1.cs" t="Include" />
           <e p="KiFragment1.png" t="Include" />
           <e p="KiFragment2.cs" t="Include" />
@@ -101,43 +135,81 @@
             <e p="KiPotion2.cs" t="Include" />
             <e p="KiPotion3.cs" t="Include" />
             <e p="KiPotion4.cs" t="Include" />
+            <e p="KiPotion5.cs" t="Include" />
           </e>
           <e p="SenzuBean.cs" t="Include" />
+          <e p="TestItems" t="Include">
+            <e p="SSJ2TestItem.cs" t="Include" />
+            <e p="SSJ3TestItem.cs" t="Include" />
+            <e p="SSJTestItem.cs" t="Include" />
+          </e>
+          <e p="USSJItem.cs" t="Include" />
         </e>
-        <e p="EmptyRing.cs" t="Include" />
-        <e p="HonorKiCrystal.cs" t="Include" />
+        <e p="EmptyNecklace.cs" t="Include" />
         <e p="KiLanternItem.cs" t="Include" />
         <e p="KiManipulatorItem.cs" t="Include" />
         <e p="KiOrb.cs" t="Include" />
         <e p="NimbusWhistle.cs" t="Include" />
         <e p="PridefulKiCrystal.cs" t="Include" />
+        <e p="RadiantKiCrystal.cs" t="Include" />
         <e p="ScrapMetal.cs" t="Include" />
         <e p="StableKiCrystal.cs" t="Include" />
         <e p="Weapons" t="Include">
-          <e p="BigBangAttack.cs" t="Include" />
-          <e p="DestructoDisk.cs" t="Include" />
-          <e p="DoubleSunday.cs" t="Include" />
-          <e p="EnergyBlastBarrage.cs" t="Include" />
-          <e p="EnergyWave.cs" t="Include" />
-          <e p="EnergyWaveVolley.cs" t="Include" />
-          <e p="GalickGun.cs" t="Include" />
-          <e p="HellzoneGrenade.cs" t="Include" />
-          <e p="Kamehameha.cs" t="Include" />
-          <e p="KiBeam.cs" t="Include" />
-          <e p="KiBlast.cs" t="Include" />
-          <e p="KiFist1.cs" t="Include" />
-          <e p="Masenko.cs" t="Include" />
-          <e p="MemeWeapons" t="Include">
-            <e p="GalickGunMeme.cs" t="Include" />
-            <e p="GatlingSpiritBomb.cs" t="Include" />
-            <e p="Rock.cs" t="Include" />
+          <e p="Normal" t="Include">
+            <e p="TrunksSword.cs" t="Include" />
+            <e p="TrunksSword.png" t="Include" />
+            <e p="YajirobesKatana.cs" t="Include" />
+            <e p="YajirobesKatana.png" t="Include" />
+            <e p="ZSword.png" t="Include" />
           </e>
-          <e p="SpiritBall.cs" t="Include" />
-          <e p="SpiritBomb.cs" t="Include" />
-          <e p="SuperKamehameha.cs" t="Include" />
-          <e p="TrapShooter.cs" t="Include" />
-          <e p="TrunksSword.cs" t="Include" />
-          <e p="YajirobesKatana.cs" t="Include" />
+          <e p="Tier_1" t="Include">
+            <e p="EnergyWave.cs" t="Include" />
+            <e p="EnergyWave.png" t="Include" />
+            <e p="KiBeam.cs" t="Include" />
+            <e p="KiBeam.png" t="Include" />
+            <e p="KiBlast.cs" t="Include" />
+            <e p="KiBlast.png" t="Include" />
+            <e p="KiFist1.cs" t="Include" />
+            <e p="KiFist1.png" t="Include" />
+          </e>
+          <e p="Tier_2" t="Include">
+            <e p="DestructoDisk.cs" t="Include" />
+            <e p="DestructoDisk.png" t="Include" />
+            <e p="DoubleSunday.cs" t="Include" />
+            <e p="DoubleSunday.png" t="Include" />
+            <e p="EnergyBlastBarrage.cs" t="Include" />
+            <e p="EnergyBlastBarrage.png" t="Include" />
+            <e p="Masenko.cs" t="Include" />
+            <e p="Masenko.png" t="Include" />
+            <e p="SpiritBall.cs" t="Include" />
+            <e p="SpiritBall.png" t="Include" />
+          </e>
+          <e p="Tier_3" t="Include">
+            <e p="EnergyWaveVolley.cs" t="Include" />
+            <e p="EnergyWaveVolley.png" t="Include" />
+            <e p="GalickGun.cs" t="Include" />
+            <e p="GalickGun.png" t="Include" />
+            <e p="HellzoneGrenade.cs" t="Include" />
+            <e p="HellzoneGrenade.png" t="Include" />
+            <e p="Kamehameha.cs" t="Include" />
+            <e p="Kamehameha.png" t="Include" />
+          </e>
+          <e p="Tier_4" t="Include">
+            <e p="BigBangAttack.cs" t="Include" />
+            <e p="BigBangAttack.png" t="Include" />
+            <e p="Scattershot.cs" t="Include" />
+            <e p="Scattershot.png" t="Include" />
+            <e p="SpiritBomb.cs" t="Include" />
+            <e p="SpiritBomb.png" t="Include" />
+            <e p="SuperKamehameha.cs" t="Include" />
+            <e p="SuperKamehameha.png" t="Include" />
+            <e p="TrapShooter.cs" t="Include" />
+            <e p="TrapShooter.png" t="Include" />
+          </e>
+          <e p="Tier_5" t="Include">
+            <e p="SuperEnergyBarrage.cs" t="Include" />
+            <e p="SuperEnergyBarrage.png" t="Include" />
+          </e>
         </e>
       </e>
       <e p="KiItem.cs" t="Include" />
@@ -215,13 +287,22 @@
         <e p="MasenkoBlast.cs" t="Include" />
         <e p="MasenkoTrail.cs" t="Include" />
         <e p="RockProjectile.cs" t="Include" />
+        <e p="ScattershotBlast.cs" t="Include" />
         <e p="SpiritBallProjectile.cs" t="Include" />
         <e p="SpiritBombProjectile.cs" t="Include" />
         <e p="SSJ1AuraProj.cs" t="Include" />
         <e p="SSJ1AuraProjBeam.cs" t="Include" />
         <e p="SSJ1AuraProjBeamHead.cs" t="Include" />
         <e p="SSJ1AuraProjStart.cs" t="Include" />
+        <e p="SSJ1KaiokenAuraProj.cs" t="Include" />
+        <e p="SSJ2AuraProj.cs" t="Include" />
+        <e p="SSJ3AuraProj.cs" t="Include" />
+        <e p="SSJ3LightPillar.cs" t="Include" />
+        <e p="SSJAuraBall.cs" t="Include" />
+        <e p="SSJEnergyBarrageProj.cs" t="Include" />
         <e p="SSJRockProjStart.cs" t="Include" />
+        <e p="SuperEnergyBarrageExplosion.cs" t="Include" />
+        <e p="SuperEnergyBarrageProj.cs" t="Include" />
         <e p="SuperKamehamehaBall.cs" t="Include" />
         <e p="SuperKamehamehaBlast.cs" t="Include" />
         <e p="SuperKamehamehaTrail.cs" t="Include" />
@@ -257,6 +338,30 @@
       <e p="Waters" t="Include">
         <e p="NamekWater.cs" t="Include" />
         <e p="NamekWaterfall.cs" t="Include" />
+      </e>
+      <e p="WIkiChangelog.txt" t="Include" />
+      <e p="WIP" t="Include">
+        <e p="AmberNecklace.png" t="Include" />
+        <e p="AmethystNecklace.png" t="Include" />
+        <e p="ASSJ Hair.png" t="Include" />
+        <e p="ASSJHair2.png" t="Include" />
+        <e p="bad rock.png" t="Include" />
+        <e p="Final Flash.png" t="Include" />
+        <e p="NecklaceRainbow.png" t="Include" />
+        <e p="New Piskel (95).png" t="Include" />
+        <e p="New Piskel (99) - Copy.png" t="Include" />
+        <e p="Spirit Bomb.png" t="Include" />
+        <e p="SSJ1Hair.png" t="Include" />
+        <e p="SSJ2Buff.png" t="Include" />
+        <e p="SSJ2HairSheet.png" t="Include" />
+        <e p="SSJ2Sprite.png" t="Include" />
+        <e p="SSJ3HairSheet.png" t="Include" />
+        <e p="SSJB.png" t="Include" />
+        <e p="Stable Ki Crystal.png" t="Include" />
+        <e p="Super energy wave.png" t="Include" />
+        <e p="SuperEnergyBarrage.png" t="Include" />
+        <e p="USSJ.png" t="Include" />
+        <e p="USSJHair1.png" t="Include" />
       </e>
     </e>
   </component>

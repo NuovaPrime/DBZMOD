@@ -72,6 +72,10 @@ namespace DBZMOD.Projectiles
             {
                 projectile.scale = 1.5f;
             }
+            if (MyPlayer.ModPlayer(player).IsCharging)
+            {
+                projectile.scale *= 1.5f;
+            }
         }
     }
 }
