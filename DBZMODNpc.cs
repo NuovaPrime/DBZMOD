@@ -118,9 +118,85 @@ namespace DBZMOD
                 {
                     npc.lifeMax = npc.lifeMax * 12;
                 }
-                else if(npc.type == thoriummod.NPCType(""))
+                else if (npc.type == thoriummod.NPCType("TheGrandThunderBirdv2"))
+                {
+                    npc.lifeMax = npc.lifeMax * 2;
+                }
+                else if (npc.type == thoriummod.NPCType("QueenJelly"))
+                {
+                    npc.lifeMax = npc.lifeMax * 3;
+                }
+                else if (npc.type == thoriummod.NPCType("Viscount"))
+                {
+                    npc.lifeMax = npc.lifeMax * 4;
+                }
+                else if (npc.type == thoriummod.NPCType("TheBuriedWarrior"))
+                {
+                    npc.lifeMax = npc.lifeMax * 5;
+                }
+                else if (npc.type == thoriummod.NPCType("GraniteEnergyStorm"))
+                {
+                    npc.lifeMax = npc.lifeMax * 5;
+                }
+                else if (npc.type == thoriummod.NPCType("ThePrimeScouter"))
+                {
+                    npc.lifeMax = npc.lifeMax * 6;
+                }
+                else if (npc.type == thoriummod.NPCType("BoreanStrider"))
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == thoriummod.NPCType("BoreanStriderPopped"))
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == thoriummod.NPCType("FallenDeathBeholder"))
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == thoriummod.NPCType("FallenDeathBeholder2"))
+                {
+                    npc.lifeMax = npc.lifeMax * 7;
+                }
+                else if (npc.type == thoriummod.NPCType("Lich"))
                 {
                     npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == thoriummod.NPCType("LichHeadless"))
+                {
+                    npc.lifeMax = npc.lifeMax * 8;
+                }
+                else if (npc.type == thoriummod.NPCType("Abyssion"))
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == thoriummod.NPCType("AbyssionCracked"))
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == thoriummod.NPCType("AbyssionReleased"))
+                {
+                    npc.lifeMax = npc.lifeMax * 9;
+                }
+                else if (npc.type == thoriummod.NPCType("Aquaius"))
+                {
+                    npc.lifeMax = npc.lifeMax * 13;
+                }
+                else if (npc.type == thoriummod.NPCType("Aquaius2"))
+                {
+                    npc.lifeMax = npc.lifeMax * 13;
+                }
+                else if (npc.type == thoriummod.NPCType("Omnicide"))
+                {
+                    npc.lifeMax = npc.lifeMax * 13;
+                }
+                else if (npc.type == thoriummod.NPCType("SlagFury"))
+                {
+                    npc.lifeMax = npc.lifeMax * 13;
+                }
+                else if (npc.type == thoriummod.NPCType("RealityBreaker"))
+                {
+                    npc.lifeMax = npc.lifeMax * 13;
                 }
             }
             base.SetDefaults(npc);

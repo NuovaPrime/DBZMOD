@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>E:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
-    <StartWorkingDirectory>E:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartProgram>F:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>F:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

@@ -22,16 +22,16 @@ namespace DBZMOD.Buffs
             player.minionDamage *= 0.8f;
             player.thrownDamage *= 0.8f;
             MyPlayer.ModPlayer(player).KiDamage *= 0.8f;
-            if (DBZMOD.instance.thoriumLoaded)
+            /*if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
             if (DBZMOD.instance.tremorLoaded)
             {
                 TremorEffects(player);
-            }
+            }*/
         }
-        public void ThoriumEffects(Player player)
+       /* public void ThoriumEffects(Player player)
         {
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= 0.8f;
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= 0.8f;
@@ -47,6 +47,6 @@ namespace DBZMOD.Buffs
         public void BattleRodEffects(Player player)
         {
             player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= 0.8f;
-        }
+        }*/
     }
 }

@@ -75,7 +75,7 @@
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
-    <Compile Include="Items\Armor\PaladiumBlindfoldCrown.cs" />
+    <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
     <Compile Include="Items\Consumables\ASSJItem.cs" />
     <Compile Include="Items\Consumables\KaioFragment1.cs" />
@@ -274,8 +274,6 @@
     <Content Include="Items\Armor\ChlorophyteHeadpiece_Head.png" />
     <Content Include="Items\Armor\CobaltCrown.png" />
     <Content Include="Items\Armor\CobaltCrown_Head.png" />
-    <Content Include="Items\Armor\PaladiumBlindfoldCrown.png" />
-    <Content Include="Items\Armor\PaladiumBlindfoldCrown_Head.png" />
     <Content Include="Items\Consumables\KiFragment1.png" />
     <Content Include="Items\Consumables\KiFragment2.png" />
     <Content Include="Items\Consumables\Potions\KiPotion1.png" />
@@ -352,7 +350,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"E:\Steam\steamapps\common\Terraria\Terraria.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
-"E:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\"</PostBuildEvent>
+    <PostBuildEvent>"F:\Steam\steamapps\common\Terraria\Terraria.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
+"F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
