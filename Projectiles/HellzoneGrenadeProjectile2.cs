@@ -151,10 +151,10 @@ namespace DBZMOD.Projectiles
             }
             for (int num619 = 0; num619 < 2; num619++)
             {
-                float scaleFactor9 = 3f;
+                float scaleFactor9 = 1f;
                 if (num619 == 1)
                 {
-                    scaleFactor9 = 3f;
+                    scaleFactor9 = 1f;
                 }
                 int num620 = Gore.NewGore(new Vector2(projectile.position.X, projectile.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
                 Main.gore[num620].velocity *= scaleFactor9;
