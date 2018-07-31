@@ -21,7 +21,7 @@ namespace DBZMOD.Projectiles
             projectile.height = 20;
 			projectile.aiStyle = 0;
 			projectile.light = 1f;
-			projectile.timeLeft = 250;
+			projectile.timeLeft = 160;
 			projectile.damage = 55;
 			aiType = 14;
             projectile.ignoreWater = true;
@@ -31,6 +31,24 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
+		public int collisionTimer = 5;
+		public bool alphaTicking = false;
+		public Vector2 originalVelocity = default(Vector2);
+
+        bool init = false;
+		public void Initialize()
+		{
+			if (projectile.position == default(Vector2)) return;
+			originalVelocity = projectile.velocity;
+            init = true;
+		}
+		
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			alphaTicking = true;
+			return false;
+		}
+		
 		public override Color? GetAlpha(Color lightColor)
         {
 			if (projectile.timeLeft < 85) 
@@ -44,6 +62,20 @@ namespace DBZMOD.Projectiles
 		
 		public override void AI()
         {
+			
+			if (!init) Initialize();
+			if (alphaTicking)
+			{
+				if(projectile.tileCollide) projectile.velocity = originalVelocity;
+				projectile.velocity *= 0.9f;
+				projectile.alpha = Math.Min(255, projectile.alpha + 10);
+				if (Main.myPlayer == projectile.owner && projectile.alpha >= 255) projectile.Kill();
+			}else
+			if (projectile.alpha > 0) { projectile.alpha = Math.Max(0, projectile.alpha - 10); }
+			collisionTimer = Math.Max(0, collisionTimer - 1);
+			projectile.tileCollide = !alphaTicking && collisionTimer == 0;
+			if (Main.netMode != 2)
+			
         	projectile.ai[0] += 1f;
 			if (projectile.ai[0] >= 240f)
 			{
