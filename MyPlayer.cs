@@ -240,7 +240,7 @@ namespace DBZMOD
                 {
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/AuraStart").WithVolume(.7f));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
             if (Transform.JustPressed)
@@ -249,7 +249,7 @@ namespace DBZMOD
                 {
                     player.AddBuff(mod.BuffType("ASSJBuff"), 1800);
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/AuraStart").WithVolume(.7f));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(1.0f));
                 }
             }
             if (Transform.JustPressed)
@@ -258,7 +258,7 @@ namespace DBZMOD
                 {
                     player.AddBuff(mod.BuffType("USSJBuff"), 1800);
                     player.ClearBuff(mod.BuffType("ASSJBuff"));
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/AuraStart").WithVolume(.7f));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
             if (Transform.JustPressed)
@@ -267,7 +267,7 @@ namespace DBZMOD
                 {
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/AuraStart").WithVolume(.7f));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
             if (Transform.JustPressed)
@@ -276,7 +276,7 @@ namespace DBZMOD
                 {
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 900);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/AuraStart").WithVolume(.7f));
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
             if (SpeedToggle.JustPressed)
