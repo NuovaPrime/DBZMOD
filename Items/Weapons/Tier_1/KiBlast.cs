@@ -19,7 +19,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.knockBack = 5f;
 			item.useStyle = 5;
 			item.useAnimation = 25;
-			item.useTime = 40;
+			item.useTime = 36;
 			item.width = 20;
 			item.noUseGraphic = true;
 			item.height = 20;
@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(15));
+			Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
 			speedX = perturbedSpeed.X;
 			speedY = perturbedSpeed.Y;
 			return true;

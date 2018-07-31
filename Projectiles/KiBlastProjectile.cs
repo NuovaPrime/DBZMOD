@@ -28,11 +28,47 @@ namespace DBZMOD.Projectiles
             projectile.tileCollide = false;
             projectile.penetrate = 1;
 			aiType = 14;
-            projectile.timeLeft = 120;
+            projectile.timeLeft = 80;
 			ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
+		public int collisionTimer = 5;
+		public bool alphaTicking = false;
+		public Vector2 originalVelocity = default(Vector2);
+
+        bool init = false;
+		public void Initialize()
+		{
+			if (projectile.position == default(Vector2)) return;
+			originalVelocity = projectile.velocity;
+            init = true;
+		}
+
+		public override void AI()
+		{
+            if (!init) Initialize();
+			if (alphaTicking)
+			{
+				if(projectile.tileCollide) projectile.velocity = originalVelocity;
+				projectile.velocity *= 0.9f;
+				projectile.alpha = Math.Min(255, projectile.alpha + 10);
+				if (Main.myPlayer == projectile.owner && projectile.alpha >= 255) projectile.Kill();
+			}else
+			if (projectile.alpha > 0) { projectile.alpha = Math.Max(0, projectile.alpha - 10); }
+			collisionTimer = Math.Max(0, collisionTimer - 1);
+			projectile.tileCollide = !alphaTicking && collisionTimer == 0;
+			if (Main.netMode != 2)
+			{
+		}
+	}
+		
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			alphaTicking = true;
+			return false;
+		}
+		
 		public override void Kill(int timeLeft)
 		{
 			int dust = Dust.NewDust(projectile.Center, 0, 0, mod.DustType("StarMuzzleFlash"));
