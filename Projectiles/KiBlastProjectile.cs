@@ -33,6 +33,13 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }
 
+		public override void Kill(int timeLeft)
+		{
+			int dust = Dust.NewDust(projectile.Center, 0, 0, mod.DustType("StarMuzzleFlash"));
+			Main.dust[dust].scale = 2;
+			Main.dust[dust].position = projectile.Center - Main.dust[dust].scale * new Vector2(4, 4);
+		}
+		
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
