@@ -86,6 +86,16 @@ namespace DBZMOD
         public bool SSJ2Achieved;
         public bool SSJ3Achieved;
         public bool IsCharging;
+        public float MasteryLevel1 = 0;
+        public float MasteryMax1 = 1;
+        public float MasteryLevel2 = 0;
+        public float MasteryMax2 = 1;
+        public float MasteryLevel3 = 0;
+        public float MasteryMax3 = 1;
+        public float MasteryLevelGod = 0;
+        public float MasteryMaxGod = 1;
+        public float MasteryLevelBlue = 0;
+        public float MasteryMaxBlue = 1;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -199,7 +209,11 @@ namespace DBZMOD
             tag.Add("KiEssence4", KiEssence4);
             tag.Add("KiEssence5", KiEssence5);
             tag.Add("MenuSelection", UI.TransMenu.MenuSelection);
-
+            tag.Add("MasteryLevel1", MasteryLevel1);
+            tag.Add("MasteryLevel2", MasteryLevel2);
+            tag.Add("MasteryLevel3", MasteryLevel3);
+            tag.Add("MasteryLevelGod", MasteryLevelGod);
+            tag.Add("MasteryLevelBlue", MasteryLevelBlue);
             return tag;
         }
 
@@ -228,6 +242,11 @@ namespace DBZMOD
             KiEssence4 = tag.Get<bool>("KiEssence4");
             KiEssence5 = tag.Get<bool>("KiEssence5");
             UI.TransMenu.MenuSelection = tag.Get<int>("MenuSelection");
+            MasteryLevel1 = tag.Get<float>("MasteryLevel1");
+            MasteryLevel2 = tag.Get<float>("MasteryLevel2");
+            MasteryLevel3 = tag.Get<float>("MasteryLevel3");
+            MasteryLevelGod = tag.Get<float>("MasteryLevelGod");
+            MasteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
         }
 
 
