@@ -94,6 +94,7 @@ namespace DBZMOD
             {
                 if(MyPlayer.ModPlayer(player).KiCurrent <= 0)
                 {
+                    MyPlayer.ModPlayer(player).IsTransformed = false;
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
                     player.ClearBuff(mod.BuffType("ASSJBuff"));
                     player.ClearBuff(mod.BuffType("USSJBuff"));
