@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -202,7 +202,42 @@ namespace DBZMOD
             base.SetDefaults(npc);
         }
         public override void NPCLoot(NPC npc)
-        {    
+        {
+            if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
+            {
+                if (!NPC.downedBoss2)
+                {
+                    Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                }
+            }
+            if (npc.type == NPCID.BrainofCthulhu)
+            {
+                if (!NPC.downedBoss2)
+                {
+                    Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                }
+            }
+            if (npc.type == NPCID.SkeletronHead)
+            {
+                if (!NPC.downedBoss3)
+                {
+                    Main.NewText("The underworld's flames radiate with energy.", 201, 10, 10);
+                }
+            }
+            if (npc.type == NPCID.WallofFlesh)
+            {
+                if (!Main.hardMode)
+                {
+                    Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
+                }
+            }
+            if (npc.type == NPCID.Plantera)
+            {
+                if (!NPC.downedPlantBoss)
+                {
+                    Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
+                }
+            }
 
             if (!Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneBeach && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDungeon && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneOldOneArmy && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSandstorm && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSnow && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerNebula && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerSolar && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerStardust && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerVortex && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUndergroundDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)        //this is where you choose what biome you whant the item to drop. ZoneCorrupt is in Corruption
             {
@@ -225,7 +260,7 @@ namespace DBZMOD
             }
             if (NPC.downedBoss3)
             {
-                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly)
+                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)
                 {
                     if (Main.rand.Next(2) == 0)
                     {

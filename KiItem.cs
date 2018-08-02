@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -77,6 +77,66 @@ namespace DBZMOD
                 }
             }
         }
+    }
+
+    public abstract class AuraProjectile : ModProjectile
+    {
+        public bool IsSSJAura;
+        public bool IsKaioAura;
+        public bool IsGodAura;
+        public bool AuraActive;
+        public int AuraOffset;
+        public override bool CloneNewInstances
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void AI()
+        {
+            Player player = Main.player[projectile.owner];
+            projectile.position.X = player.Center.X;
+            projectile.position.Y = player.Center.Y;
+            projectile.Center = player.Center + new Vector2(0, AuraOffset);
+            
+            if (projectile.timeLeft < 2 && projectile.active)
+            {
+                projectile.timeLeft = 10;
+            }
+
+            if (IsSSJAura)
+            {
+                projectile.frameCounter++;
+                if (projectile.frameCounter > 5)
+                {
+                    projectile.frame++;
+                    projectile.frameCounter = 0;
+                }
+                if (projectile.frame >= 3)
+                {
+                    projectile.frame = 0;
+                }
+            }
+
+            else if (IsKaioAura)
+            {
+                projectile.frameCounter++;
+                if (projectile.frameCounter > 5)
+                {
+                    projectile.frame++;
+                    projectile.frameCounter = 0;
+                }
+                if (projectile.frame >= 4)
+                {
+                    projectile.frame = 0;
+                }
+            }
+        }
+        
+
+
     }
 
     public abstract class KiItem : ModItem

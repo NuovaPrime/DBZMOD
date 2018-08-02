@@ -168,6 +168,58 @@ namespace DBZMOD
             {
                 KaiokenTimer += 2.5f;
             }
+
+            if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+            {
+                ASSJAchieved = true;
+                Main.NewText("Your SSJ1 Mastery has been upgraded.", 232, 242, 50);
+            }
+            else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
+            {
+                USSJAchieved = true;
+                Main.NewText("Your SSJ1 Mastery has been upgraded.", 232, 242, 50);
+            }
+            else if (MasteryLevel1 >= 1f)
+            {
+                Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
+            }
+            else if (MasteryLevel2 >= 1f)
+            {
+                Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
+            }
+            else if (MasteryLevel3 >= 1f)
+            {
+                Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
+            }
+            else if (MasteryLevelGod >= 1f)
+            {
+                Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
+            }
+            else if (MasteryLevelBlue >= 1f)
+            {
+                Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+            }
+            if (MasteryLevel1 > MasteryMax1)
+            {
+                MasteryLevel1 = MasteryMax1;
+            }
+            else if (MasteryLevel2 > MasteryMax2)
+            {
+                MasteryLevel2 = MasteryMax2;
+            }
+            else if (MasteryLevel3 > MasteryMax3)
+            {
+                MasteryLevel3 = MasteryMax3;
+            }
+            else if (MasteryLevelGod > MasteryMaxGod)
+            {
+                MasteryLevelGod = MasteryMaxGod;
+            }
+            else if (MasteryLevelBlue > MasteryMaxBlue)
+            {
+                MasteryLevelBlue = MasteryMaxBlue;
+            }
+            
         }
 
         public bool SSJ1Check()

@@ -139,8 +139,11 @@
           </e>
           <e p="SenzuBean.cs" t="Include" />
           <e p="TestItems" t="Include">
+            <e p="SSJ2MasteryTestItem.cs" t="Include" />
             <e p="SSJ2TestItem.cs" t="Include" />
+            <e p="SSJ3MasteryTestItem.cs" t="Include" />
             <e p="SSJ3TestItem.cs" t="Include" />
+            <e p="SSJMasteryTestItem.cs" t="Include" />
             <e p="SSJTestItem.cs" t="Include" />
           </e>
           <e p="USSJItem.cs" t="Include" />
@@ -294,7 +297,6 @@
         <e p="SSJ1AuraProjBeam.cs" t="Include" />
         <e p="SSJ1AuraProjBeamHead.cs" t="Include" />
         <e p="SSJ1AuraProjStart.cs" t="Include" />
-        <e p="SSJ1KaiokenAuraProj.cs" t="Include" />
         <e p="SSJ2AuraProj.cs" t="Include" />
         <e p="SSJ3AuraProj.cs" t="Include" />
         <e p="SSJ3LightPillar.cs" t="Include" />

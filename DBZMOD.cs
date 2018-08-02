@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using System;
 
 namespace DBZMOD
 {
@@ -20,7 +21,6 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public static DBZMOD instance;
-        private Player player;
 
         public DBZMOD()
         {
@@ -59,7 +59,7 @@ namespace DBZMOD
             {
                 GFX.LoadGFX(this);
                 KiBar.visible = true;
-                transMenu = new  TransMenu();
+                transMenu = new TransMenu();
                 transMenu.Activate();
                 TransMenuInterface = new UserInterface();
                 TransMenuInterface.SetState(transMenu);

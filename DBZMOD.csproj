@@ -101,8 +101,11 @@
     <Compile Include="Items\Consumables\Potions\KiPotion4.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion5.cs" />
     <Compile Include="Items\Consumables\SenzuBean.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ2MasteryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ3MasteryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ3TestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ2TestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJMasteryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\USSJItem.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
@@ -189,7 +192,6 @@
     <Compile Include="Projectiles\SSJ1AuraProjBeam.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjBeamHead.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjStart.cs" />
-    <Compile Include="Projectiles\SSJ1KaiokenAuraProj.cs" />
     <Compile Include="Projectiles\SSJ2AuraProj.cs" />
     <Compile Include="Projectiles\SSJ3AuraProj.cs" />
     <Compile Include="Projectiles\SSJ3LightPillar.cs" />

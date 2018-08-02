@@ -1,4 +1,4 @@
-﻿using Terraria.ModLoader;
+﻿﻿using Terraria.ModLoader;
 using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Generation;
@@ -23,8 +23,10 @@ namespace DBZMOD
         public int KiDrainRate;
         private int KiDrainTimer;
         public bool RealismModeOn;
+        public int MasteryTimer;
         public override void Update(Player player, ref int buffIndex)
         {
+            MyPlayer buffplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if(DBZWorld.RealismMode)
             {
                 RealismModeOn = true;

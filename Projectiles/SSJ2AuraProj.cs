@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJ2AuraProj : ModProjectile
+    public class SSJ2AuraProj : AuraProjectile
     {
         public int BaseAuraTimer;
         private int ChargeSoundTimer = 480;
@@ -31,31 +31,15 @@ namespace DBZMOD.Projectiles
             projectile.damage = 0;
             projectile.alpha = 50;
             BaseAuraTimer = 5;
+            AuraOffset = -50;
+            IsSSJAura = true;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X;
-            projectile.position.Y = player.Center.Y;
-            projectile.netUpdate = true;
-            projectile.Center = player.Center + new Vector2(0, -50);
             if (!player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 projectile.Kill();
-            }
-            if (projectile.timeLeft < 2)
-            {
-                projectile.timeLeft = 10;
-            }
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 5)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 3)
-            {
-                projectile.frame = 0;
             }
             if (BaseAuraTimer > 0)
             {

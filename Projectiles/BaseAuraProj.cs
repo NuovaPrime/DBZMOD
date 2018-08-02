@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class BaseAuraProj : ModProjectile
+    public class BaseAuraProj : AuraProjectile
     {
         public int BaseAuraTimer;
         public override void SetStaticDefaults()
@@ -29,21 +29,14 @@ namespace DBZMOD.Projectiles
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
+            AuraOffset = -25;
         }
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X;
-            projectile.position.Y = player.Center.Y;
-            projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
             if (MyPlayer.EnergyCharge.JustReleased)
             {
                 projectile.Kill();
-            }
-            if (projectile.timeLeft < 2)
-            {
-                projectile.timeLeft = 10;
             }
             projectile.frameCounter++;
             if (projectile.frameCounter > 5)

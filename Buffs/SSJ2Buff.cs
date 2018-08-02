@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -22,15 +22,35 @@ namespace DBZMOD.Buffs
             {
                 DamageMulti = 10f;
                 SpeedMulti = 10f;
-                KiDrainRate = 4;
+                if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
+                {
+                    KiDrainRate = 1;
+                }
+                else
+                {
+                    KiDrainRate = 4;
+                }
                 KiDrainBuffMulti = 1f;
             }
             else if (!DBZWorld.RealismMode)
             {
                 DamageMulti = 3.5f;
                 SpeedMulti = 3.5f;
-                KiDrainRate = 4;
+                if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
+                {
+                    KiDrainRate = 2;
+                }
+                else
+                {
+                    KiDrainRate = 4;
+                }
                 KiDrainBuffMulti = 3f;
+            }
+            MasteryTimer++;
+            if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax2 <= 1)
+            {
+                MyPlayer.ModPlayer(player).MasteryLevel2 += 0.01f;
+                MasteryTimer = 0;
             }
             base.Update(player, ref buffIndex);
         }
