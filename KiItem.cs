@@ -85,7 +85,7 @@ namespace DBZMOD
         public bool IsKaioAura;
         public bool IsGodAura;
         public bool AuraActive;
-        public int AuraOffset;
+        public Vector2 AuraOffset = new Vector2(0,0);
         public override bool CloneNewInstances
         {
             get
@@ -99,7 +99,7 @@ namespace DBZMOD
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
-            projectile.Center = player.Center + new Vector2(0, AuraOffset);
+            projectile.Center = player.Center + AuraOffset;
             
             if (projectile.timeLeft < 2 && projectile.active)
             {
