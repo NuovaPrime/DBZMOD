@@ -27,7 +27,7 @@ namespace DBZMOD.UI
         public static bool SSJ1On;
         public static bool SSJ2On;
         public static bool SSJ3On;
-        MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+        //MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();;
 
         public override void OnInitialize()
         {
@@ -97,7 +97,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = 1;
                 Main.PlaySound(SoundID.MenuTick);
-                Main.NewText("SSJ1 Mastery =" + player.MasteryLevel1 + "/" + player.MasteryMax1);
+                //Main.NewText("SSJ1 Mastery =" + player.MasteryLevel1 + "/" + player.MasteryMax1);
             }
             if (!SSJ1On)
             {
@@ -110,7 +110,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = 2;
                 Main.PlaySound(SoundID.MenuTick);
-                Main.NewText("SSJ2 Mastery =" + player.MasteryLevel2 + "/" + player.MasteryMax2);
+                //Main.NewText("SSJ2 Mastery =" + player.MasteryLevel2 + "/" + player.MasteryMax2);
             }
             if (!SSJ2On)
             {
@@ -123,7 +123,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = 3;
                 Main.PlaySound(SoundID.MenuTick);
-                Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + " / " + player.MasteryMax3);
+                //Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + " / " + player.MasteryMax3);
             }
             if (!SSJ3On)
             {
