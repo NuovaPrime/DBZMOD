@@ -27,7 +27,7 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = -1;
             projectile.damage = 0;
             KaioAuraTimer = 240;
-            AuraOffset = new Vector2(0,-130);
+            AuraOffset = -130;
             IsKaioAura = true;
         }
         public override void AI()
