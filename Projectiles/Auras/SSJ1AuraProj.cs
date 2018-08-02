@@ -6,7 +6,7 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.Auras
 {
     public class SSJ1AuraProj : AuraProjectile
     {
@@ -78,6 +78,7 @@ namespace DBZMOD.Projectiles
             {
                 projectile.scale = 1f;
             }
+            base.AI();
         }
     }
 }

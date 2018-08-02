@@ -101,9 +101,13 @@ namespace DBZMOD
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(0, AuraOffset);
             
-            if (projectile.timeLeft < 2 && projectile.active)
+            if (projectile.timeLeft < 2)
             {
                 projectile.timeLeft = 10;
+            }
+            if(player.channel)
+            {
+                player.velocity = new Vector2(0, player.velocity.Y);
             }
 
             if (IsSSJAura)

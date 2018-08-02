@@ -88,14 +88,19 @@ namespace DBZMOD
         public bool IsCharging;
         public float MasteryLevel1 = 0;
         public float MasteryMax1 = 1;
+        public bool MasteredMessage1 = false;
         public float MasteryLevel2 = 0;
         public float MasteryMax2 = 1;
+        public bool MasteredMessage2 = false;
         public float MasteryLevel3 = 0;
         public float MasteryMax3 = 1;
+        public bool MasteredMessage3 = false;
         public float MasteryLevelGod = 0;
         public float MasteryMaxGod = 1;
+        public bool MasteredMessageGod = false;
         public float MasteryLevelBlue = 0;
         public float MasteryMaxBlue = 1;
+        public bool MasteredMessageBlue = false;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -179,24 +184,29 @@ namespace DBZMOD
                 USSJAchieved = true;
                 Main.NewText("Your SSJ1 Mastery has been upgraded.", 232, 242, 50);
             }
-            else if (MasteryLevel1 >= 1f)
+            else if (MasteryLevel1 >= 1f && !MasteredMessage1)
             {
+                MasteredMessage1 = true;
                 Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
             }
-            else if (MasteryLevel2 >= 1f)
+            else if (MasteryLevel2 >= 1f && !MasteredMessage2)
             {
+                MasteredMessage2 = true;
                 Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
             }
-            else if (MasteryLevel3 >= 1f)
+            else if (MasteryLevel3 >= 1f && !MasteredMessage3)
             {
+                MasteredMessage3 = true;
                 Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
             }
-            else if (MasteryLevelGod >= 1f)
+            else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
             {
+                MasteredMessageGod = true;
                 Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
             }
-            else if (MasteryLevelBlue >= 1f)
+            else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
             {
+                MasteredMessageBlue = true;
                 Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
             }
             if (MasteryLevel1 > MasteryMax1)
@@ -266,6 +276,11 @@ namespace DBZMOD
             tag.Add("MasteryLevel3", MasteryLevel3);
             tag.Add("MasteryLevelGod", MasteryLevelGod);
             tag.Add("MasteryLevelBlue", MasteryLevelBlue);
+            tag.Add("MasteredMessage1", MasteredMessage1);
+            tag.Add("MasteredMessage2", MasteredMessage2);
+            tag.Add("MasteredMessage3", MasteredMessage3);
+            tag.Add("MasteredMessageGod", MasteredMessageGod);
+            tag.Add("MasteredMessageBlue", MasteredMessageBlue);
             return tag;
         }
 
@@ -299,6 +314,11 @@ namespace DBZMOD
             MasteryLevel3 = tag.Get<float>("MasteryLevel3");
             MasteryLevelGod = tag.Get<float>("MasteryLevelGod");
             MasteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
+            MasteredMessage1 = tag.Get<bool>("MasteredMessage1");
+            MasteredMessage2 = tag.Get<bool>("MasteredMessage2");
+            MasteredMessage3 = tag.Get<bool>("MasteredMessage3");
+            MasteredMessageGod = tag.Get<bool>("MasteredMessageGod");
+            MasteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
         }
 
 

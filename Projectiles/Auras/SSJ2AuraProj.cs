@@ -6,12 +6,12 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.Auras
 {
-    public class SSJ3AuraProj : AuraProjectile
+    public class SSJ2AuraProj : AuraProjectile
     {
         public int BaseAuraTimer;
-        private int ChargeSoundTimer = 240;
+        private int ChargeSoundTimer = 480;
         private int LightningTimer = 0;
 
         public override void SetStaticDefaults()
@@ -31,35 +31,35 @@ namespace DBZMOD.Projectiles
             projectile.damage = 0;
             projectile.alpha = 50;
             BaseAuraTimer = 5;
-            AuraOffset = -60;
+            AuraOffset = -50;
             IsSSJAura = true;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(mod.BuffType("SSJ3Buff")))
+            if (!player.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 projectile.Kill();
             }
             if (BaseAuraTimer > 0)
             {
-                projectile.scale = 1.5f - 0.7f * (BaseAuraTimer / 5f);
+                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
                 BaseAuraTimer--;
             }
             ChargeSoundTimer++;
-            if (ChargeSoundTimer > 240 && player.whoAmI == Main.myPlayer)
+            if (ChargeSoundTimer > 480 && player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ3").WithVolume(.7f).WithPitchVariance(.1f));
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ2").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
             else
             {
-                projectile.scale = 1.5f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
+                projectile.scale = 1.3f;
+            }            if (MyPlayer.ModPlayer(player).IsCharging)
             {
                 projectile.scale *= 1.5f;
             }
+            base.AI();
         }
     }
 }

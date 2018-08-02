@@ -417,30 +417,6 @@ namespace DBZMOD
                     }
                 }
             }
-            if (!Main.expertMode)
-            {
-                if (npc.type == NPCID.WallofFlesh)
-                {
-                    if (Main.rand.Next(7) == 0)
-                    {
-                        {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("ASSJItem"), 1);
-                        }
-                    }
-                }
-            }
-            if (!Main.expertMode)
-            {
-                if (npc.type == NPCID.TheDestroyer)
-                {
-                    if (Main.rand.Next(7) == 0)
-                    {
-                        {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("USSJItem"), 1);
-                        }
-                    }
-                }
-            }
         }
 
 

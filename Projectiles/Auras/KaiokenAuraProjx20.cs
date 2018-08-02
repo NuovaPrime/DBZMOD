@@ -2,15 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.Auras
 {
-    public class BaseAuraProj : AuraProjectile
+    public class KaiokenAuraProjx20 : AuraProjectile
     {
-        public int BaseAuraTimer;
+        public float KaioAuraTimer;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -18,7 +17,7 @@ namespace DBZMOD.Projectiles
         public override void SetDefaults()
         {
             projectile.width = 97;
-            projectile.height = 89;
+            projectile.height = 102;
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 10;
@@ -27,36 +26,32 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            BaseAuraTimer = 5;
-            projectile.netUpdate = true;
-            AuraOffset = -25;
+            KaioAuraTimer = 240;
+            AuraOffset = -130;
+            IsKaioAura = true;
         }
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (MyPlayer.EnergyCharge.JustReleased)
+            if (!player.HasBuff(mod.BuffType("KaiokenBuffX20")))
             {
                 projectile.Kill();
             }
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 5)
+            if (KaioAuraTimer > 0)
             {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
-            }
-            if (BaseAuraTimer > 0)
-            {
-                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
-                BaseAuraTimer--;
+                projectile.scale = 4f + 4f * (KaioAuraTimer / 240f);
+                KaioAuraTimer--;
             }
             else
             {
-                projectile.scale = 1f;
+                projectile.scale = 3.9f;
             }
+            if (MyPlayer.ModPlayer(player).IsCharging)
+            {
+                projectile.scale *= 1.5f;
+            }
+            base.AI();
         }
     }
 }

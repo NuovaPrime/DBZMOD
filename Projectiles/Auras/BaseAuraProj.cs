@@ -2,14 +2,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.Auras
 {
-    public class KaiokenAuraProj : AuraProjectile
+    public class BaseAuraProj : AuraProjectile
     {
-        public float KaioAuraTimer;
+        public int BaseAuraTimer;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -17,39 +18,46 @@ namespace DBZMOD.Projectiles
         public override void SetDefaults()
         {
             projectile.width = 97;
-            projectile.height = 102;
+            projectile.height = 89;
             projectile.aiStyle = 0;
+            projectile.alpha = 70;
             projectile.timeLeft = 10;
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            KaioAuraTimer = 240;
-            IsKaioAura = true;
+            BaseAuraTimer = 5;
+            projectile.netUpdate = true;
             AuraOffset = -25;
         }
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            if (MyPlayer.EnergyCharge.JustReleased)
             {
                 projectile.Kill();
             }
-            if (KaioAuraTimer > 0)
+            projectile.frameCounter++;
+            if (projectile.frameCounter > 5)
             {
-                projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
-                KaioAuraTimer--;
+                projectile.frame++;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= 4)
+            {
+                projectile.frame = 0;
+            }
+            if (BaseAuraTimer > 0)
+            {
+                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
+                BaseAuraTimer--;
             }
             else
             {
-                projectile.scale = 1.3f;
+                projectile.scale = 1f;
             }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
-            }
+            base.AI();
         }
     }
 }

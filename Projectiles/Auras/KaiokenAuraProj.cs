@@ -5,9 +5,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.Auras
 {
-    public class KaiokenAuraProjx20 : AuraProjectile
+    public class KaiokenAuraProj : AuraProjectile
     {
         public float KaioAuraTimer;
         public override void SetStaticDefaults()
@@ -19,7 +19,6 @@ namespace DBZMOD.Projectiles
             projectile.width = 97;
             projectile.height = 102;
             projectile.aiStyle = 0;
-            projectile.alpha = 70;
             projectile.timeLeft = 10;
             projectile.friendly = true;
             projectile.tileCollide = false;
@@ -27,30 +26,31 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = -1;
             projectile.damage = 0;
             KaioAuraTimer = 240;
-            AuraOffset = -130;
             IsKaioAura = true;
+            AuraOffset = -25;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(mod.BuffType("KaiokenBuffX20")))
+            if (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 projectile.Kill();
             }
             if (KaioAuraTimer > 0)
             {
-                projectile.scale = 4f + 4f * (KaioAuraTimer / 240f);
+                projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
             }
             else
             {
-                projectile.scale = 3.9f;
+                projectile.scale = 1.3f;
             }
             if (MyPlayer.ModPlayer(player).IsCharging)
             {
                 projectile.scale *= 1.5f;
             }
+            base.AI();
         }
     }
 }
