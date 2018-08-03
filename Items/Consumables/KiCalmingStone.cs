@@ -38,13 +38,13 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            DBZWorld.RealismMode = false;
+            MyPlayer.RealismMode = false;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (DBZWorld.RealismMode)
+            if (MyPlayer.RealismMode)
             {
                 return true;
             }

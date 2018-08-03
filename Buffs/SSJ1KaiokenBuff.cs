@@ -19,7 +19,7 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (DBZWorld.RealismMode)
+            if (MyPlayer.RealismMode)
             {
                 DamageMulti = 10;
                 SpeedMulti = 10;
@@ -27,7 +27,7 @@ namespace DBZMOD.Buffs
                 KiDrainRate = 4;
                 KiDrainBuffMulti = 1f;
             }
-            else if (!DBZWorld.RealismMode)
+            else if (!MyPlayer.RealismMode)
             {
                 DamageMulti = 4f;
                 SpeedMulti = 4f;

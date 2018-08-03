@@ -20,7 +20,7 @@ namespace DBZMOD
             Mod thoriummod = ModLoader.GetMod("ThoriumMod");
             Mod calamitymod = ModLoader.GetMod("CalamityMod");
 
-            if (npc.boss && DBZWorld.RealismMode)
+            if (npc.boss && MyPlayer.RealismMode)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
                 {

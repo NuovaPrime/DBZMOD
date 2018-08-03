@@ -26,8 +26,7 @@ namespace DBZMOD
         public int MasteryTimer;
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer buffplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(DBZWorld.RealismMode)
+            if(MyPlayer.RealismMode)
             {
                 RealismModeOn = true;
             }
@@ -76,7 +75,7 @@ namespace DBZMOD
             player.minionDamage += DamageMulti;
             player.thrownDamage += DamageMulti;
             MyPlayer.ModPlayer(player).KiDamage += DamageMulti;
-            /*if (DBZMOD.instance.thoriumLoaded)
+            if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
@@ -91,7 +90,7 @@ namespace DBZMOD
             if (DBZMOD.instance.battlerodsLoaded)
             {
                 BattleRodEffects(player);
-            }*/
+            }
             if(IsSSJ)
             {
                 if(MyPlayer.ModPlayer(player).KiCurrent <= 0)
@@ -109,7 +108,7 @@ namespace DBZMOD
 
 
         }
-        /*public void ThoriumEffects(Player player)
+        public void ThoriumEffects(Player player)
         {
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += DamageMulti;
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += DamageMulti;
@@ -125,10 +124,10 @@ namespace DBZMOD
         public void BattleRodEffects(Player player)
         {
             player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti;
-        }*/
+        }
         private void KiDrainAdd(Player player)
         {
-            if(!DBZWorld.RealismMode)
+            if(!MyPlayer.RealismMode)
             {
                 MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
             }

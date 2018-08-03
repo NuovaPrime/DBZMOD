@@ -109,6 +109,11 @@ namespace DBZMOD
             {
                 player.velocity = new Vector2(0, player.velocity.Y);
             }
+            if(MyPlayer.ModPlayer(player).IsCharging)
+            {
+                projectile.scale = projectile.scale * 2;
+            }
+            
 
             if (IsSSJAura)
             {
