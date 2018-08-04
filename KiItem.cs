@@ -86,6 +86,7 @@ namespace DBZMOD
         public bool IsGodAura;
         public bool AuraActive;
         public int AuraOffset;
+        public float ScaleExtra;
         public override bool CloneNewInstances
         {
             get
@@ -99,7 +100,6 @@ namespace DBZMOD
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
-            projectile.Center = player.Center + new Vector2(0, AuraOffset);
             
             if (projectile.timeLeft < 2)
             {
@@ -108,12 +108,7 @@ namespace DBZMOD
             if(player.channel)
             {
                 player.velocity = new Vector2(0, player.velocity.Y);
-            }
-            if(MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale = projectile.scale * 2;
-            }
-            
+            }            
 
             if (IsSSJAura)
             {
@@ -142,9 +137,26 @@ namespace DBZMOD
                     projectile.frame = 0;
                 }
             }
-        }
-        
 
+            float chargingScale = 0.0f;
+            float chargingAuraOffset = 0.0f;
+            if (IsSSJAura || IsKaioAura)
+            {
+                if (MyPlayer.ModPlayer(player).IsCharging)
+                {
+                    chargingScale = 0.3f;
+                    chargingAuraOffset = -18;
+                }
+                else
+                {
+                    chargingScale = 0.0f;
+                    chargingAuraOffset = 0;
+                }
+            }
+
+            projectile.scale = 1.0f + ScaleExtra + chargingScale;
+            projectile.Center = player.Center + new Vector2(0, (AuraOffset + chargingAuraOffset));
+        }
 
     }
 

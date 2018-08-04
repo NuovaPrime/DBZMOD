@@ -172,7 +172,7 @@ namespace DBZMOD
             }
             if(KaiokenCheck())
             {
-                KaiokenTimer += 2.5f;
+                KaiokenTimer += 1.5f;
             }
 
             if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
@@ -425,7 +425,6 @@ namespace DBZMOD
                 KiCurrent += KiRegenRate;
                 player.velocity = new Vector2(0,player.velocity.Y);
                 ChargeSoundTimer++;
-                IsCharging = true;
                 if (ChargeSoundTimer > 22)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
@@ -443,7 +442,14 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
+                IsCharging = true;
             }
+            if (EnergyCharge.JustReleased)
+            {
+                IsCharging = false;
+            }
+
+
             if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
@@ -559,7 +565,7 @@ namespace DBZMOD
             topazNecklace = false;
 			amberNecklace = false;
 			amethystNecklace = false;
-            IsCharging = false;
+            //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {

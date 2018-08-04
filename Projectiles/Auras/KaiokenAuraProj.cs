@@ -27,7 +27,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             KaioAuraTimer = 240;
             IsKaioAura = true;
-            AuraOffset = -25;
+            AuraOffset = -20;
         }
         public override void AI()
         {
@@ -39,16 +39,17 @@ namespace DBZMOD.Projectiles.Auras
             }
             if (KaioAuraTimer > 0)
             {
-                projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
+                //projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
+            }
+            if(player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                ScaleExtra = 0.5f;
+                AuraOffset = -40;
             }
             else
             {
-                projectile.scale = 1.3f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
+                AuraOffset = -20;
             }
             base.AI();
         }

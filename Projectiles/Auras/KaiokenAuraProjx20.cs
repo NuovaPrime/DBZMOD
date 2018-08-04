@@ -29,6 +29,7 @@ namespace DBZMOD.Projectiles.Auras
             KaioAuraTimer = 240;
             AuraOffset = -130;
             IsKaioAura = true;
+            ScaleExtra = 2.8f;
         }
         public override void AI()
         {
@@ -40,16 +41,8 @@ namespace DBZMOD.Projectiles.Auras
             }
             if (KaioAuraTimer > 0)
             {
-                projectile.scale = 4f + 4f * (KaioAuraTimer / 240f);
+                //projectile.scale = 4f + 4f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
-            }
-            else
-            {
-                projectile.scale = 3.9f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
             }
             base.AI();
         }

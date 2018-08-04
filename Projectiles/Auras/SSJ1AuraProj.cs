@@ -43,7 +43,7 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (BaseAuraTimer > 0)
                 {
-                    projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
+                    //projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
                     BaseAuraTimer--;
                 }
             }
@@ -51,7 +51,7 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (BaseAuraTimer > 0)
                 {
-                    projectile.scale = 2f - 0.7f * (BaseAuraTimer / 5f);
+                    //projectile.scale = 2f - 0.7f * (BaseAuraTimer / 5f);
                     BaseAuraTimer--;
                 }
             }
@@ -59,25 +59,18 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (BaseAuraTimer > 0)
                 {
-                    projectile.scale = 3f - 0.7f * (BaseAuraTimer / 5f);
+                    //projectile.scale = 3f - 0.7f * (BaseAuraTimer / 5f);
                     BaseAuraTimer--;
                 }
             }
 
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
-            }
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 22 && player.whoAmI == Main.myPlayer)
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.7f).WithPitchVariance(.2f));
                 ChargeSoundTimer = 0;
             }
-            else
-            {
-                projectile.scale = 1f;
-            }
+
             base.AI();
         }
     }

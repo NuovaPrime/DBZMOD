@@ -26,9 +26,10 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            KaioAuraTimer = 240;
-            AuraOffset = -70;
+            KaioAuraTimer = 250;
+            AuraOffset = -80;
             IsKaioAura = true;
+            ScaleExtra = 1.5f;
         }
         public override void AI()
         {
@@ -40,16 +41,8 @@ namespace DBZMOD.Projectiles.Auras
             }
             if (KaioAuraTimer > 0)
             {
-                projectile.scale = 2.5f + 3f * (KaioAuraTimer / 240f);
+                //projectile.scale = 2.5f + 3f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
-            }
-            else
-            {
-                projectile.scale = 2.3f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
             }
             base.AI();
         }
