@@ -103,6 +103,7 @@ namespace DBZMOD
                     player.ClearBuff(mod.BuffType("SSJ2Buff"));
                     player.ClearBuff(mod.BuffType("SSJ3Buff"));
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                    MyPlayer.ModPlayer(player).IsTransformed = false;
                 }
             }
 
