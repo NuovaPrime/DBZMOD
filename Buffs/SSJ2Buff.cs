@@ -14,38 +14,21 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("{0}x Damage, {0}x Speed, Quickly Drains Ki.");
+            Description.SetDefault("3.5x Damage, 3.5x Speed, Quickly Drains Ki.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (MyPlayer.RealismMode)
+            DamageMulti = 3.5f;
+            SpeedMulti = 3.5f;
+            if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
             {
-                DamageMulti = 10f;
-                SpeedMulti = 10f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
-                {
-                    KiDrainRate = 1;
-                }
-                else
-                {
-                    KiDrainRate = 4;
-                }
-                KiDrainBuffMulti = 1f;
+                KiDrainRate = 2;
             }
-            else if (!MyPlayer.RealismMode)
+            else
             {
-                DamageMulti = 3.5f;
-                SpeedMulti = 3.5f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
-                {
-                    KiDrainRate = 2;
-                }
-                else
-                {
-                    KiDrainRate = 4;
-                }
-                KiDrainBuffMulti = 3f;
+                KiDrainRate = 4;
             }
+            KiDrainBuffMulti = 3f;
             MasteryTimer++;
             if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax2 <= 1)
             {
@@ -53,18 +36,6 @@ namespace DBZMOD.Buffs
                 MasteryTimer = 0;
             }
             base.Update(player, ref buffIndex);
-        }
-        public override void ModifyBuffTip(ref string tip, ref int rare)
-        {
-            if (RealismModeOn)
-            {
-                tip = string.Format(tip, "10");
-            }
-            else
-            {
-                tip = string.Format(tip, "3.5");
-            }
-
         }
     }
 }

@@ -14,38 +14,21 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("{0}x Damage, {0}x Speed, Drains Ki.");
+            Description.SetDefault("2x Damage, 2x Speed, Drains Ki.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (MyPlayer.RealismMode)
+            DamageMulti = 2f;
+            SpeedMulti = 2f;
+            if (MyPlayer.ModPlayer(player).MasteryLevel1 >= 1)
             {
-                DamageMulti = 5f;
-                SpeedMulti = 5f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel1 >= 1)
-                {
-                    KiDrainRate = 0;
-                }
-                else
-                {
-                    KiDrainRate = 2;
-                }
-                KiDrainBuffMulti = 1f;
+                KiDrainRate = 1;
             }
-            else if (!MyPlayer.RealismMode)
+            else
             {
-                DamageMulti = 2f;
-                SpeedMulti = 2f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel1 >= 1)
-                {
-                    KiDrainRate = 1;
-                }
-                else
-                {
-                    KiDrainRate = 3;
-                }
-                KiDrainBuffMulti = 2f;
+                KiDrainRate = 3;
             }
+            KiDrainBuffMulti = 2f;
 
             MasteryTimer++;
             if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)
@@ -54,18 +37,6 @@ namespace DBZMOD.Buffs
                 MasteryTimer = 0;
             }
             base.Update(player, ref buffIndex);
-        }
-        public override void ModifyBuffTip(ref string tip, ref int rare)
-        {
-            if (RealismModeOn)
-            {
-                tip = string.Format(tip, "5");
-            }
-            else
-            {
-                tip = string.Format(tip, "2");
-            }
-
         }
     }
 }

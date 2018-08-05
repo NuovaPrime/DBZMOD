@@ -14,42 +14,23 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("{0}x Damage, {0}x Speed, Rapidly Drains Ki and slightly drains life.");
+            Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki and slightly drains life.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (MyPlayer.RealismMode)
+            DamageMulti = 4f;
+            SpeedMulti = 4f;
+            if (MyPlayer.ModPlayer(player).MasteryLevel3 >= 1)
             {
-                DamageMulti = 20f;
-                SpeedMulti = 20f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel1 >= 1)
-                {
-                    KiDrainRate = 3;
-                    HealthDrainRate = 5;
-                }
-                else
-                {
-                    KiDrainRate = 6;
-                    HealthDrainRate = 10;
-                }
-                KiDrainBuffMulti = 1f;
+                KiDrainRate = 4;
+                HealthDrainRate = 10;
             }
-            else if (!MyPlayer.RealismMode)
+            else
             {
-                DamageMulti = 4f;
-                SpeedMulti = 4f;
-                if (MyPlayer.ModPlayer(player).MasteryLevel3 >= 1)
-                {
-                    KiDrainRate = 4;
-                    HealthDrainRate = 10;
-                }
-                else
-                {
-                    KiDrainRate = 6;
-                    HealthDrainRate = 20;
-                }
-                KiDrainBuffMulti = 2f;
+                KiDrainRate = 6;
+                HealthDrainRate = 20;
             }
+            KiDrainBuffMulti = 2f;
             MasteryTimer++;
             if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)
             {
@@ -57,18 +38,6 @@ namespace DBZMOD.Buffs
                 MasteryTimer = 0;
             }
             base.Update(player, ref buffIndex);
-        }
-        public override void ModifyBuffTip(ref string tip, ref int rare)
-        {
-            if (RealismModeOn)
-            {
-                tip = string.Format(tip, "20");
-            }
-            else
-            {
-                tip = string.Format(tip, "4");
-            }
-
         }
     }
 }

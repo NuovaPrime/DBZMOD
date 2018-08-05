@@ -14,37 +14,15 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("{0}x Damage, Drastically Lower Speed, Drains Ki.");
+            Description.SetDefault("2.7x Damage, Drastically Lower Speed, Drains Ki.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (MyPlayer.RealismMode)
-            {
-                DamageMulti = 7f;
-                SpeedMulti = 1.7f;
-                KiDrainRate = 6;
-                KiDrainBuffMulti = 1f;
-            }
-            else if (!MyPlayer.RealismMode)
-            {
-                DamageMulti = 2.7f;
-                SpeedMulti = 1.5f;
-                KiDrainRate = 7;
-                KiDrainBuffMulti = 1f;
-            }
+            DamageMulti = 2.7f;
+            SpeedMulti = 1.5f;
+            KiDrainRate = 7;
+            KiDrainBuffMulti = 1f;
             base.Update(player, ref buffIndex);
-        }
-        public override void ModifyBuffTip(ref string tip, ref int rare)
-        {
-            if (RealismModeOn)
-            {
-                tip = string.Format(tip, "7");
-            }
-            else
-            {
-                tip = string.Format(tip, "2.7");
-            }
-
         }
     }
 }
