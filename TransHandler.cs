@@ -26,15 +26,7 @@ namespace DBZMOD
         public int MasteryTimer;
         public override void Update(Player player, ref int buffIndex)
         {
-            if(MyPlayer.RealismMode)
-            {
-                RealismModeOn = true;
-            }
-            else
-            {
-                RealismModeOn = false;
-                KiDrainAdd(player);
-            }
+            KiDrainAdd(player);
             if(IsKaioken)
             {
                 MyPlayer.ModPlayer(player).hasKaioken = true;
@@ -128,10 +120,7 @@ namespace DBZMOD
         }
         private void KiDrainAdd(Player player)
         {
-            if(!MyPlayer.RealismMode)
-            {
-                MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
-            }
+            MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
         }
     }
 }

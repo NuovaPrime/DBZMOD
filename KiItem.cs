@@ -37,6 +37,7 @@ namespace DBZMOD
 
         public override void PostAI()
         {
+            Player player = Main.player[projectile.owner];
             if (!ChargeBall)
             {
                 projectile.scale = projectile.scale + ChargeLevel;
@@ -46,6 +47,10 @@ namespace DBZMOD
                 SizeTimer = 120;
                 SizeTimer--;
                 projectile.scale = (projectile.scale * SizeTimer / 120f);
+            }
+            if (ChargeBall && MyPlayer.ModPlayer(player).KiCurrent <= 0)
+            {
+                projectile.active = false;
             }
         }
 
@@ -162,6 +167,7 @@ namespace DBZMOD
 
     public abstract class KiItem : ModItem
     {
+        private int RealKiDrain;
         private Player player;
         private NPC npc;
         public bool IsFistWeapon;
@@ -239,11 +245,21 @@ namespace DBZMOD
             item.useTime = (int)(item.useTime / MyPlayer.ModPlayer(player).KiSpeedAddition);
             item.useAnimation = (int)(item.useAnimation / MyPlayer.ModPlayer(player).KiSpeedAddition);
         }
+        public override bool CanUseItem(Player player)
+        {
+            RealKiDrain = (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
+            if (RealKiDrain <= MyPlayer.ModPlayer(player).KiCurrent)
+            {
+                MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain;
+                return true;
+            }
+            return false;
+        }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine Indicate = new TooltipLine(mod, "", "");
             string[] Text = Indicate.text.Split(' ');
-            Indicate.text = " Consumes " + KiDrain + " Ki ";
+            Indicate.text = " Consumes " + RealKiDrain + " Ki ";
             tooltips.Add(Indicate);
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
             if (tt != null)
@@ -264,18 +280,6 @@ namespace DBZMOD
                 }
             }
         }
-        public override bool CanUseItem(Player player)
-        {
-            int RealKiDrain = (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
-            if (RealKiDrain <= MyPlayer.ModPlayer(player).KiCurrent)
-            {
-                MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain;
-                return true;
-            }
-            return false;
-        }
-
-
     }
     public abstract class KiPotion : ModItem
     {

@@ -19,33 +19,11 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (MyPlayer.RealismMode)
-            {
-                DamageMulti = 3;
-                SpeedMulti = 3;
-                HealthDrainRate = 30;
-                KiDrainBuffMulti = 1f;
-            }
-            else if (!MyPlayer.RealismMode)
-            {
-                DamageMulti = 2.5f;
-                SpeedMulti = 2.5f;
-                HealthDrainRate = 36;
-                KiDrainBuffMulti = 1.5f;
-            }
+            DamageMulti = 2.5f;
+            SpeedMulti = 2.5f;
+            HealthDrainRate = 36;
+            KiDrainBuffMulti = 1.5f;
             base.Update(player, ref buffIndex);
-        }
-        public override void ModifyBuffTip(ref string tip, ref int rare)
-        {
-            if (RealismModeOn)
-            {
-                tip = string.Format(tip, "3");
-            }
-            else
-            {
-                tip = string.Format(tip, "2.5");
-            }
-
         }
     }
 }

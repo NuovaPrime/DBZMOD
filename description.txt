@@ -1,17 +1,26 @@
 Dragon Ball Z Mod For Terraria!
 
-(SMALL TUTORIAL)
-You start with a basic fist type attack on character creation, and your first material is found in the souls of the forest biome.
+Current Content:
+- 73 Items
+- A whole new class that utilizes a new energy, "Ki".
+- 10 Transformations
+- Full Multiplayer Compatibility
+- Cross-mod compatibility
+- 2 New Placeables
+- Content up to Plantera, with more coming soon.
 
 Please List any bugs you find on my forum page or on my discord!
 
 Discord Link :  https://discord.gg/hc6Jdws
 
 (Credit)
--Credit To JFC_263, Peppermint Bark, Earth and some other amazing spriters for their hard work!
+-Credit To Earth, Blockaroz, Alphi and some other amazing spriters for their hard work!
 -Credit To GabeHasWon's, Divermansam and the whole TModLoader Discord For Help with code and such.
 -Credit To Akira Toriyama For Creating Dragon Ball Z!
 -Credit To Bluemagic and everyone else for creating TModloader.
 -Credit To My Discord Moderators and everyone else for giving me motivation.
 -Credit To Relogic for making an incredible game.
--Credit To MyPicts for the aura sprites.
+-Credit To MyPicts for a few aura sprites.
+
+I do not own Dragon Ball, Dragon Ball Z, Dragon Ball GT, and Dragon Ball Super; all credit goes to Akira Toriyama,Toei animation, Fuji TV, and FuniMation.
+All content used is for Fair Use and Private Entertainment, please support the official release.

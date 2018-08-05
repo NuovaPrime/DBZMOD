@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD
 {
-    class DBZMODNPC : GlobalNPC
+    public class DBZMODNPC : GlobalNPC
     {
         public override bool InstancePerEntity
         {
@@ -15,12 +15,12 @@ namespace DBZMOD
             }
         }
         private Player player;
-        public override void SetDefaults(NPC npc)
+        /*public override void SetDefaults(NPC npc)
         {
             Mod thoriummod = ModLoader.GetMod("ThoriumMod");
             Mod calamitymod = ModLoader.GetMod("CalamityMod");
 
-            if (npc.boss && MyPlayer.RealismMode)
+            if (MyPlayer.RealismMode)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
                 {
@@ -200,7 +200,7 @@ namespace DBZMOD
                 }
             }
             base.SetDefaults(npc);
-        }
+        }*/
         public override void NPCLoot(NPC npc)
         {
             if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
@@ -221,7 +221,7 @@ namespace DBZMOD
             {
                 if (!NPC.downedBoss3)
                 {
-                    Main.NewText("The underworld's flames radiate with energy.", 201, 10, 10);
+                    Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
                 }
             }
             if (npc.type == NPCID.WallofFlesh)
