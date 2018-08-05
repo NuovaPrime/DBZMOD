@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 2;
-            KiDrain = 85;
+            KiDrain = 55;
 	    }
 	    public override void SetStaticDefaults()
 		{

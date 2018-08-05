@@ -17,7 +17,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			item.shoot = mod.ProjectileType("DestructoDiskProjectile");
 			item.shootSpeed = 20f;
-			item.damage = 40;
+			item.damage = 34;
 			item.knockBack = 5f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 2;
-            KiDrain = 70;
+            KiDrain = 40;
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);

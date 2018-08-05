@@ -15,11 +15,11 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		{
 			item.shoot = mod.ProjectileType("KiBlastProjectile");
 			item.shootSpeed = 15f;
-			item.damage = 15;
+			item.damage = 19;
 			item.knockBack = 5f;
 			item.useStyle = 5;
-			item.useAnimation = 25;
-			item.useTime = 36;
+			item.useAnimation = 22;
+			item.useTime = 22;
 			item.width = 20;
 			item.noUseGraphic = true;
 			item.height = 20;
@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 1;
-            KiDrain = 20;
+            KiDrain = 15;
 	    }
 	    public override void SetStaticDefaults()
 		{

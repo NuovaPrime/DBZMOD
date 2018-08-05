@@ -66,7 +66,7 @@ namespace DBZMOD.Projectiles
                 KiDrainTimer++;
                 player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
             }
-            if(ChargeTimer > 120)
+            if(ChargeTimer > 90)
             {
                 ChargeLevel += 1;
                 ChargeTimer = 0;
@@ -78,7 +78,7 @@ namespace DBZMOD.Projectiles
             if(!player.channel && ChargeLevel >= 1)
             {
                 float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, (float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10)), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 40), projectile.knockBack, projectile.owner, (projectile.scale = projectile.scale * ChargeLevel));
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, (float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10)), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner, (projectile.scale = projectile.scale * ChargeLevel));
                 ChargeLevel = 0;
 
             }
