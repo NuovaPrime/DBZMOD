@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = 12;
             projectile.timeLeft = 200;
 			projectile.tileCollide = false;
-			ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
+			ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
             projectile.ranged = true;
@@ -196,6 +196,15 @@ namespace DBZMOD.Projectiles
 		
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
+			if (projectile.alpha <= 100);
+			Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
+			for (int k = 0; k < projectile.oldPos.Length; k++)
+			{
+				Vector2 drawPos = projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
+				Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
+				spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
+			}
+			return true;
             //Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
             //for (int k = 0; k < projectile.oldPos.Length; k++)
             //{
