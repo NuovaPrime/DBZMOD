@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("EnergyWaveVolleyBlast");
 			item.shootSpeed = 90f;
-			item.damage = 44;
+			item.damage = 51;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;

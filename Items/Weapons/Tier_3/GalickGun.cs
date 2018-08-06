@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
         {
             item.shoot = mod.ProjectileType("GalickGunBall");
             item.shootSpeed = 0f;
-            item.damage = 42;
+            item.damage = 61;
             item.knockBack = 2f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item12;
@@ -51,6 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 45);
+            recipe.AddIngredient(null, "SkeletalEssence", 35);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("MasenkoBall");
 			item.shootSpeed = 0f;
-			item.damage = 32;
+			item.damage = 45;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -51,6 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "CalmKiCrystal", 30);
+            recipe.AddIngredient(null, "AstralEssentia", 25);
             recipe.AddIngredient(null, "EnergyWave");
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

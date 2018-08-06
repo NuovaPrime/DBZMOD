@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         {
             item.shoot = mod.ProjectileType("TrapShooterProjectile");
             item.shootSpeed = 35f;
-            item.damage = 48;
+            item.damage = 70;
             item.knockBack = 3f;
             item.useStyle = 1;
             item.UseSound = SoundID.Item1;
@@ -47,6 +47,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "AngerKiCrystal", 45);
+            recipe.AddIngredient(null, "SoulofEntity", 25);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("ScattershotBlast");
 			item.shootSpeed = 17f;
-			item.damage = 54;
+			item.damage = 72;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -68,6 +68,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "AngerKiCrystal", 30);
 			recipe.AddIngredient(null, "HellzoneGrenade");
+            recipe.AddIngredient(null, "SoulofEntity", 20);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

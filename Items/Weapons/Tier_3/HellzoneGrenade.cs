@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 		{
 			item.shoot = mod.ProjectileType("HellzoneGrenadeProjectile");
 			item.shootSpeed = 17f;
-			item.damage = 39;
+			item.damage = 57;
 			item.knockBack = 6f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
@@ -51,6 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 40);
+            recipe.AddIngredient(null, "SkeletalEssence", 30);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

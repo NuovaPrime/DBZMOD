@@ -417,6 +417,54 @@ namespace DBZMOD
                     }
                 }
             }
+            if (NPC.downedQueenBee)
+            {
+                if (npc.type == NPCID.Harpy)
+                {
+                    if (Main.rand.Next(2) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AstralEssentia"), 1);
+                        }
+                    }
+                }
+            }
+            if (NPC.downedBoss3)
+            {
+                if (npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle || npc.type == NPCID.DarkCaster)
+                {
+                    if (Main.rand.Next(4) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SkeletalEssence"), Main.rand.Next(1, 3));
+                        }
+                    }
+                }
+            }
+            if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3)
+            {
+                if (npc.type == NPCID.CrimsonAxe || npc.type == NPCID.PossessedArmor || npc.type == NPCID.EnchantedSword || npc.type == NPCID.CursedHammer)
+                {
+                    if (Main.rand.Next(3) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SoulofEntity"), Main.rand.Next(1, 2));
+                        }
+                    }
+                }
+            }
+            if (NPC.downedGolemBoss)
+            {
+                if (npc.type == NPCID.RedDevil)
+                {
+                    if (Main.rand.Next(2) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DemonicSoul"), 1);
+                        }
+                    }
+                }
+            }
         }
 
 

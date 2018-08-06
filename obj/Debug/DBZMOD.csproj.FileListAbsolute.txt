@@ -32,3 +32,4 @@ C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\
 C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.csproj.CopyComplete
 C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.dll
 C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.pdb
+C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.csprojAssemblyReference.cache

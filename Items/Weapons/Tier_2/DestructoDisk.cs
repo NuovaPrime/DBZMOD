@@ -17,7 +17,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			item.shoot = mod.ProjectileType("DestructoDiskProjectile");
 			item.shootSpeed = 20f;
-			item.damage = 34;
+			item.damage = 42;
 			item.knockBack = 5f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
@@ -46,6 +46,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "CalmKiCrystal", 40);
+            recipe.AddIngredient(null, "AstralEssentia", 20);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

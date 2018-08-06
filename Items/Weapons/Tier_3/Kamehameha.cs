@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 		{
 			item.shoot = mod.ProjectileType("KamehamehaBall");
 			item.shootSpeed = 0f;
-			item.damage = 40;
+			item.damage = 53;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
