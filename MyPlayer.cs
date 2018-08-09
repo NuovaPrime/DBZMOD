@@ -102,6 +102,10 @@ namespace DBZMOD
         public float MasteryMaxBlue = 1;
         public bool MasteredMessageBlue = false;
         //public static bool RealismMode = false;
+        public bool JungleMessage = false;
+        public bool HellMessage = false;
+        public bool EvilMessage = false;
+        public bool MushroomMessage = false;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -282,6 +286,10 @@ namespace DBZMOD
             tag.Add("MasteredMessage3", MasteredMessage3);
             tag.Add("MasteredMessageGod", MasteredMessageGod);
             tag.Add("MasteredMessageBlue", MasteredMessageBlue);
+            tag.Add("JungleMessage", JungleMessage);
+            tag.Add("HellMessage", HellMessage);
+            tag.Add("EvilMessage", EvilMessage);
+            tag.Add("MushroomMessage", MushroomMessage);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -321,6 +329,10 @@ namespace DBZMOD
             MasteredMessage3 = tag.Get<bool>("MasteredMessage3");
             MasteredMessageGod = tag.Get<bool>("MasteredMessageGod");
             MasteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
+            JungleMessage = tag.Get<bool>("JungleMessage");
+            HellMessage = tag.Get<bool>("HellMessage");
+            EvilMessage = tag.Get<bool>("EvilMessage");
+            MushroomMessage = tag.Get<bool>("MushroomMessage");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 

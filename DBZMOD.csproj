@@ -76,6 +76,7 @@
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
     <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
+    <Compile Include="Items\AstralEssentia.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
     <Compile Include="Items\Consumables\ASSJItem.cs" />
     <Compile Include="Items\Consumables\KaioFragment1.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Items\Consumables\TestItems\SSJMasteryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\USSJItem.cs" />
+    <Compile Include="Items\DemonicSoul.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\RadiantKiCrystal.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="Items\NimbusWhistle.cs" />
     <Compile Include="Items\PridefulKiCrystal.cs" />
     <Compile Include="Items\ScrapMetal.cs" />
+    <Compile Include="Items\SkeletalEssence.cs" />
+    <Compile Include="Items\SoulofEntity.cs" />
     <Compile Include="Items\StableKiCrystal.cs" />
     <Compile Include="Items\Weapons\Normal\TrunksSword.cs" />
     <Compile Include="Items\Weapons\Normal\YajirobesKatana.cs" />
@@ -133,7 +137,6 @@
     <Compile Include="Items\Weapons\Tier_4\BigBangAttack.cs" />
     <Compile Include="Items\Weapons\Tier_4\Scattershot.cs" />
     <Compile Include="Items\Weapons\Tier_4\SpiritBomb.cs" />
-    <Compile Include="Items\Weapons\Tier_4\SpiritBomb2.cs" />
     <Compile Include="Items\Weapons\Tier_4\SuperKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
@@ -233,8 +236,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Auras\KaiokenAura.png" />
-    <Content Include="Auras\TransformObjects\New Text Document.txt" />
     <Content Include="Backgrounds\New Text Document.txt" />
     <Content Include="build.txt" />
     <Content Include="description.txt" />
@@ -290,12 +291,11 @@
     <Content Include="Items\Weapons\Tier_4\BigBangAttack.png" />
     <Content Include="Items\Weapons\Tier_4\Scattershot.png" />
     <Content Include="Items\Weapons\Tier_4\SpiritBomb.png" />
-    <Content Include="Items\Weapons\Tier_4\SpiritBomb2.png" />
     <Content Include="Items\Weapons\Tier_4\SuperKamehameha.png" />
     <Content Include="Items\Weapons\Tier_4\TrapShooter.png" />
     <Content Include="Items\Weapons\Tier_5\SuperEnergyBarrage.png" />
-    <Content Include="Npcs\Boss\FriezaShip.png" />
-    <Content Include="Npcs\Boss\FriezaShip_Head_Boss.png" />
+    <Content Include="Npcs\Bosses\FriezaShip.png" />
+    <Content Include="Npcs\Bosses\FriezaShip_Head_Boss.png" />
     <Content Include="Projectiles\Auras\BaseAuraProj.png" />
     <Content Include="Projectiles\Auras\KaiokenAuraProj.png" />
     <Content Include="Projectiles\Auras\KaiokenAuraProjx10.png" />

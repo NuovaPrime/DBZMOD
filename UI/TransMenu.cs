@@ -51,11 +51,11 @@ namespace DBZMOD.UI
             ssjButtonTexture.OnClick += TrySelectingSSJ1;
             backPanel.Append(ssjButtonTexture);
             
-            ssjbuttontext = new UIText("Super Saiyan");
+            ssjbuttontext = new UIText("SSJ1");
             ssjbuttontext.Width.Set(32f, 0f);
             ssjbuttontext.Height.Set(32f, 0f);
             ssjbuttontext.Left.Set(padding - 4f, 0f);
-            ssjbuttontext.Top.Set(padding + 25f, 0f);
+            ssjbuttontext.Top.Set(padding + 77f, 0f);
             ssjButtonTexture.Append(ssjbuttontext);
 
             var SSJ2Button = GFX.SSJ2ButtonImage;
@@ -67,11 +67,11 @@ namespace DBZMOD.UI
             ssj2ButtonTexture.OnClick += TrySelectingSSJ2;
             backPanel.Append(ssj2ButtonTexture);
 
-            ssj2buttontext = new UIText("Super Saiyan 2");
+            ssj2buttontext = new UIText("SSJ2");
             ssj2buttontext.Width.Set(32f, 0f);
             ssj2buttontext.Height.Set(32f, 0f);
             ssj2buttontext.Left.Set(padding - 4f, 0f);
-            ssj2buttontext.Top.Set(padding + 25f, 0f);
+            ssj2buttontext.Top.Set(padding + 77f, 0f);
             ssj2ButtonTexture.Append(ssj2buttontext);
 
             var SSJ3Button = GFX.SSJ3ButtonImage;
@@ -83,11 +83,11 @@ namespace DBZMOD.UI
             ssj3ButtonTexture.OnClick += TrySelectingSSJ3;
             backPanel.Append(ssj3ButtonTexture);
 
-            ssj3buttontext = new UIText("Super Saiyan 3");
+            ssj3buttontext = new UIText("SSJ3");
             ssj3buttontext.Width.Set(32f, 0f);
             ssj3buttontext.Height.Set(32f, 0f);
             ssj3buttontext.Left.Set(padding - 4f, 0f);
-            ssj3buttontext.Top.Set(padding + 25f, 0f);
+            ssj3buttontext.Top.Set(padding + 77f, 0f);
             ssj3ButtonTexture.Append(ssj3buttontext);
         }
 

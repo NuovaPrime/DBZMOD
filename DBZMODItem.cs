@@ -55,17 +55,6 @@ namespace DBZMOD
                     player.QuickSpawnItem(mod.ItemType("SpiritualEmblem"));
                 }
             }
-            if (Main.rand.Next(7) == 0)
-            {
-                if (context == "bossBag" && arg == ItemID.WallOfFleshBossBag)
-                {
-                    player.QuickSpawnItem(mod.ItemType("ASSJItem"));
-                }
-                if (context == "bossBag" && arg == ItemID.DestroyerBossBag)
-                {
-                    player.QuickSpawnItem(mod.ItemType("USSJItem"));
-                }
-            }
         }
     }
 }
