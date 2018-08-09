@@ -51,9 +51,9 @@ namespace DBZMOD
             }
             if (MyPlayer.ModPlayer(player).speedToggled)
             {
-                player.moveSpeed += SpeedMulti;
-                player.maxRunSpeed += SpeedMulti;
-                player.runAcceleration += SpeedMulti;
+                player.moveSpeed += SpeedMulti - 1f;
+                player.maxRunSpeed += SpeedMulti - 1f;
+                player.runAcceleration += SpeedMulti - 1f;
             }
             else if (!MyPlayer.ModPlayer(player).speedToggled)
             {
@@ -61,12 +61,12 @@ namespace DBZMOD
                 player.maxRunSpeed += 2f;
                 player.runAcceleration += 2f;
             }
-            player.meleeDamage += DamageMulti;
-            player.rangedDamage += DamageMulti;
-            player.magicDamage += DamageMulti;
-            player.minionDamage += DamageMulti;
-            player.thrownDamage += DamageMulti;
-            MyPlayer.ModPlayer(player).KiDamage += DamageMulti;
+            player.meleeDamage += DamageMulti - 1;
+            player.rangedDamage += DamageMulti - 1;
+            player.magicDamage += DamageMulti - 1;
+            player.minionDamage += DamageMulti - 1;
+            player.thrownDamage += DamageMulti - 1;
+            MyPlayer.ModPlayer(player).KiDamage += DamageMulti - 1;
             if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
@@ -103,20 +103,20 @@ namespace DBZMOD
         }
         public void ThoriumEffects(Player player)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += DamageMulti;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += DamageMulti;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += DamageMulti - 1;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += DamageMulti - 1;
         }
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage += DamageMulti;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage += DamageMulti - 1;
         }
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage += DamageMulti;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage += DamageMulti - 1;
         }
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti - 1;
         }
         private void KiDrainAdd(Player player)
         {
