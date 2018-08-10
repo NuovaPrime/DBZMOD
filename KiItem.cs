@@ -71,13 +71,19 @@ namespace DBZMOD
         }
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
+            Player player = Main.player[projectile.owner];
+            int item = 0;
             if(KiWeapon)
             {
                 if(npc.life < 0)
                 {
-                    if(Main.rand.Next(3) == 0)
+                    if(Main.rand.Next(MyPlayer.ModPlayer(player).KiOrbDropChance) == 0)
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
+                        item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
+                    }
+                    if (Main.netMode == 1 && item >= 0)
+                    {
+                        NetMessage.SendData(Terraria.ID.MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
                     }
                 }
             }
@@ -105,6 +111,8 @@ namespace DBZMOD
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
+            projectile.netUpdate = true;
+            projectile.netUpdate2 = true;
             
             if (projectile.timeLeft < 2)
             {

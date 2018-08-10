@@ -19,15 +19,15 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.knockBack = 6f;
 			item.useStyle = 3;
 			item.UseSound = SoundID.Item1;
-			item.useAnimation = 100;
-			item.useTime = 100;
+			item.useAnimation = 150;
+			item.useTime = 150;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 4;
-            KiDrain = 100;
+            KiDrain = 120;
 	    }
 	    public override void SetStaticDefaults()
 		{

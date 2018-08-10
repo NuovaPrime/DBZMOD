@@ -102,10 +102,11 @@ namespace DBZMOD
         public float MasteryMaxBlue = 1;
         public bool MasteredMessageBlue = false;
         //public static bool RealismMode = false;
-        public bool JungleMessage = false;
-        public bool HellMessage = false;
-        public bool EvilMessage = false;
-        public bool MushroomMessage = false;
+        public static bool JungleMessage = false;
+        public static bool HellMessage = false;
+        public static bool EvilMessage = false;
+        public static bool MushroomMessage = false;
+        public int KiOrbDropChance;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -577,6 +578,7 @@ namespace DBZMOD
             topazNecklace = false;
 			amberNecklace = false;
 			amethystNecklace = false;
+            KiOrbDropChance = 3;
             //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

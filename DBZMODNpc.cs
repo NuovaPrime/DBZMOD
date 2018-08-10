@@ -205,42 +205,42 @@ namespace DBZMOD
         {
             if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
             {
-                if (!MyPlayer.ModPlayer(player).JungleMessage)
+                if (!MyPlayer.JungleMessage)
                 {
                     Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
-                    MyPlayer.ModPlayer(player).JungleMessage = true;
+                    MyPlayer.JungleMessage = true;
                 }
             }
             if (npc.type == NPCID.BrainofCthulhu)
             {
-                if (!MyPlayer.ModPlayer(player).JungleMessage)
+                if (!MyPlayer.JungleMessage)
                 {
                     Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
-                    MyPlayer.ModPlayer(player).JungleMessage = true;
+                    MyPlayer.JungleMessage = true;
                 }
             }
             if (npc.type == NPCID.SkeletronHead)
             {
-                if (!MyPlayer.ModPlayer(player).HellMessage)
+                if (!MyPlayer.HellMessage)
                 {
                     Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
-                    MyPlayer.ModPlayer(player).HellMessage = true;
+                    MyPlayer.HellMessage = true;
                 }
             }
             if (npc.type == NPCID.WallofFlesh)
             {
-                if (!MyPlayer.ModPlayer(player).EvilMessage)
+                if (!MyPlayer.EvilMessage)
                 {
                     Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
-                    MyPlayer.ModPlayer(player).EvilMessage = true;
+                    MyPlayer.EvilMessage = true;
                 }
             }
             if (npc.type == NPCID.Plantera)
             {
-                if (!MyPlayer.ModPlayer(player).MushroomMessage)
+                if (!MyPlayer.MushroomMessage)
                 {
                     Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
-                    MyPlayer.ModPlayer(player).MushroomMessage = true;
+                    MyPlayer.MushroomMessage = true;
                 }
             }
 
