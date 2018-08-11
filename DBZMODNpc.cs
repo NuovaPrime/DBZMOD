@@ -1,6 +1,8 @@
-﻿﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace DBZMOD
@@ -207,32 +209,64 @@ namespace DBZMOD
             {
                 if (!MyPlayer.JungleMessage)
                 {
-                    Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
                     MyPlayer.JungleMessage = true;
+                    if (Main.netMode != 2)
+                    {
+                        Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                    }
+                    else
+                    {
+                        NetworkText text2 = NetworkText.FromKey("You feel a calm radiance of ki from the jungle.");
+                        NetMessage.BroadcastChatMessage(text2, new Color(13, 201, 10));
+                    }
                 }
             }
             if (npc.type == NPCID.BrainofCthulhu)
             {
                 if (!MyPlayer.JungleMessage)
                 {
-                    Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
                     MyPlayer.JungleMessage = true;
+                    if (Main.netMode != 2)
+                    {
+                        Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                    }
+                    else
+                    {
+                        NetworkText text2 = NetworkText.FromKey("You feel a calm radiance of ki from the jungle.");
+                        NetMessage.BroadcastChatMessage(text2, new Color(13, 201, 10));
+                    }
                 }
             }
             if (npc.type == NPCID.SkeletronHead)
             {
                 if (!MyPlayer.HellMessage)
                 {
-                    Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
                     MyPlayer.HellMessage = true;
+                    if (Main.netMode != 2)
+                    {
+                        Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
+                    }
+                    else
+                    {
+                        NetworkText text2 = NetworkText.FromKey("The underworld's flames shimmer with energy.");
+                        NetMessage.BroadcastChatMessage(text2, new Color(201, 10, 10));
+                    }
                 }
             }
             if (npc.type == NPCID.WallofFlesh)
             {
                 if (!MyPlayer.EvilMessage)
                 {
-                    Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
                     MyPlayer.EvilMessage = true;
+                    if (Main.netMode != 2)
+                    {
+                        Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
+                    }
+                    else
+                    {
+                        NetworkText text2 = NetworkText.FromKey("The world's evil erupts with destructive energy.");
+                        NetMessage.BroadcastChatMessage(text2, new Color(152, 36, 173));
+                    }
                 }
             }
             if (npc.type == NPCID.Plantera)
@@ -241,6 +275,15 @@ namespace DBZMOD
                 {
                     Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
                     MyPlayer.MushroomMessage = true;
+                    if (Main.netMode != 2)
+                    {
+                        Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
+                    }
+                    else
+                    {
+                        NetworkText text2 = NetworkText.FromKey("The glowing mushrooms of the caverns explode with radiance.");
+                        NetMessage.BroadcastChatMessage(text2, new Color(232, 242, 50));
+                    }
                 }
             }
 

@@ -19,7 +19,6 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.damage = 51;
 			item.knockBack = 2f;
 			item.useStyle = 5;
-			item.UseSound = SoundID.Item12;
 			item.useAnimation = 25;
 			item.useTime = 13;
 			item.width = 40;
@@ -29,7 +28,11 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.value = 0;
 			item.rare = 3;
             KiDrain = 110;
-	    }
+            if (!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KiBlast3").WithPitchVariance(.1f);
+            }
+        }
 	    public override void SetStaticDefaults()
 		{
 		Tooltip.SetDefault("-Tier 3-");

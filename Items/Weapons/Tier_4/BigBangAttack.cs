@@ -18,7 +18,6 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.shootSpeed = 25f;
 			item.knockBack = 6f;
 			item.useStyle = 3;
-			item.UseSound = SoundID.Item1;
 			item.useAnimation = 150;
 			item.useTime = 150;
 			item.width = 40;
@@ -28,7 +27,11 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.value = 0;
 			item.rare = 4;
             KiDrain = 120;
-	    }
+            if (!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KiBlastFast").WithPitchVariance(.1f);
+            }
+        }
 	    public override void SetStaticDefaults()
 		{
 		Tooltip.SetDefault("-Tier 4-");
