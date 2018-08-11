@@ -12,6 +12,8 @@ namespace DBZMOD.Projectiles
 	public class EnergyWaveBall : KiProjectile
 	{
         private Player player;
+        public bool startingCharge = false;
+
 		public override void SetDefaults()
         {
             projectile.hostile = false;
@@ -32,15 +34,15 @@ namespace DBZMOD.Projectiles
 
 		 public override Color? GetAlpha(Color lightColor)
         {
-			if (projectile.timeLeft < 85) 
-			{
-				byte b2 = (byte)(projectile.timeLeft * 3);
-				byte a2 = (byte)(100f * ((float)b2 / 255f));
-				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
-			}
+			//if (projectile.timeLeft < 85) 
+			//{
+			//	byte b2 = (byte)(projectile.timeLeft * 3);
+			//	byte a2 = (byte)(100f * ((float)b2 / 255f));
+			//	return new Color((int)b2, (int)b2, (int)b2, (int)a2);
+			//}
 			return new Color(255, 255, 255, 100);
         }
-		
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Energy Wave Ball");
@@ -53,7 +55,7 @@ namespace DBZMOD.Projectiles
                 projectile.timeLeft = 10;
             }
             Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X - 20;
+            projectile.position.X = player.Center.X + (player.direction * 20) - 5;
             projectile.position.Y = player.Center.Y - 3;
 
             if (!player.channel && ChargeLevel < 1)
@@ -70,17 +72,31 @@ namespace DBZMOD.Projectiles
             {
                 ChargeLevel += 1;
                 ChargeTimer = 0;
-                for (int d = 0; d < 70; d++)
+                projectile.scale += 0.2f;
+                //for (int d = 0; d < 70; d++)
+                //{
+                //    Dust.NewDust(projectile.position, projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 1.5f);
+                //}
+                for (int d = 0; d < 25; d++)
                 {
-                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 1.5f);
+                    float angle = Main.rand.NextFloat(360);
+                    float angleRad = MathHelper.ToRadians(angle);
+                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    tDust.noGravity = true;
                 }
+
+
             }
             if(!player.channel && ChargeLevel >= 1)
             {
                 float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, (float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10)), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner, (projectile.scale = projectile.scale * ChargeLevel));
+                Projectile shotProjectile = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10))), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner);
+                //shotProjectile.scale = projectile.scale;
                 ChargeLevel = 0;
-
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KamehamehaFire").WithVolume(.7f));
             }
 
             if (KiDrainTimer > 1 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
@@ -88,6 +104,13 @@ namespace DBZMOD.Projectiles
                 MyPlayer.ModPlayer(player).KiCurrent -= 1;
                 KiDrainTimer = 0;
             }
+
+            if(!startingCharge)
+            {
+                startingCharge = true;
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge").WithVolume(.7f));
+            }
+
         }
 
 	}
