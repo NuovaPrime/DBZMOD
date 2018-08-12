@@ -60,26 +60,33 @@ namespace DBZMOD.Projectiles
                 projectile.scale += 0.4f;
             }
 
-            if ((!player.channel || ChargeLevel >= ChargeLimit) && ChargeLevel >= 1)
+            if(!player.channel || (ChargeLevel >= ChargeLimit))
             {
-                float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
-                Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10))), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner);
-                //shotProjectile.scale = projectile.scale;
-                ChargeLevel = 0;
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire").WithVolume(2.0f));
-                chargeSound.Stop();
-                projectile.Kill();
-
-                for(int i = 0; i < 100; i++)
+                if (ChargeLevel >= 1)
                 {
-                    float angle = Main.rand.NextFloat(360);
-                    float angleRad = MathHelper.ToRadians(angle);
-                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
-                    tDust.velocity = -0.5f * Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
-                    tDust.noGravity = true;
+                    float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
+                    Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10))), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner);
+
+                    //ChargeLevel = 0;
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire").WithVolume(2.0f));
+
+                    projectile.Kill();
+
+                    for (int i = 0; i < 100; i++)
+                    {
+                        float angle = Main.rand.NextFloat(360);
+                        float angleRad = MathHelper.ToRadians(angle);
+                        Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                        tDust.velocity = -0.5f * Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                        tDust.noGravity = true;
+                    }
                 }
 
+                if (chargeSound != null)
+                {
+                    chargeSound.Stop();
+                }
             }
 
             if(!startingCharge)
