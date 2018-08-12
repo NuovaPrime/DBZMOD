@@ -19,6 +19,7 @@ namespace DBZMOD
     {
         public int ChargeLevel;
         public int ChargeTimer;
+        public int ChargeLimit;
         public int KiDrainTimer;
         public int SizeTimer;
         public int originalWidth;
@@ -26,6 +27,7 @@ namespace DBZMOD
         public bool ChargeBall;
         public bool KiWeapon = true;
         public bool BeamTrail;
+
 
         public override bool CloneNewInstances
         {
