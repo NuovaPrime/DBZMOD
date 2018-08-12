@@ -12,7 +12,6 @@ namespace DBZMOD.Projectiles
 {
 	public class EnergyWaveBall : KiProjectile
 	{
-        private Player player;
         public bool startingCharge = false;
         SoundEffectInstance chargeSound;
 
@@ -54,7 +53,7 @@ namespace DBZMOD.Projectiles
    
         public override void AI()
         {
-            if(ChargeTimer > 90)
+            if (ChargeTimer > 90)
             {
                 ChargeLevel += 1;
                 ChargeTimer = 0;

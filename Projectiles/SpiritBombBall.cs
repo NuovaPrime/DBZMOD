@@ -46,13 +46,6 @@ namespace DBZMOD.Projectiles
 				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
 			}
 			return new Color(255, 255, 255, 100);
-            //if (projectile.timeLeft < 85) 
-            //{
-            //	byte b2 = (byte)(projectile.timeLeft * 3);
-            //	byte a2 = (byte)(100f * ((float)b2 / 255f));
-            //	return new Color((int)b2, (int)b2, (int)b2, (int)a2);
-            //}
-            return new Color(255, 255, 255, 255);
         }
 
         public override void Kill(int timeLeft)
@@ -61,76 +54,12 @@ namespace DBZMOD.Projectiles
             {
                 return;
             }
-            projectile.tileCollide = false;
-            projectile.ai[1] = 0f;
-            projectile.alpha = 255;
 
-            projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
-            projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);
-            projectile.width = 22;
-            projectile.height = 22;
-            projectile.position.X = projectile.position.X - (float)(projectile.width / 2);
-            projectile.position.Y = projectile.position.Y - (float)(projectile.height / 2);
-            projectile.knockBack = 8f;
-            projectile.Damage();
+            Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("SpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
+            //proj.Hitbox.Inflate(1000, 1000);
+            proj.width *= (int)projectile.scale;
+            proj.height *= (int)projectile.scale;
 
-            Main.projectileIdentity[projectile.owner, projectile.identity] = -1;
-            int num = projectile.timeLeft;
-            projectile.timeLeft = 0;
-
-            Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 14);
-
-            projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
-            projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);
-            projectile.width = 22;
-            projectile.height = 22;
-            projectile.position.X = projectile.position.X - (float)(projectile.width / 2);
-            projectile.position.Y = projectile.position.Y - (float)(projectile.height / 2);
-            for (int num615 = 0; num615 < 30; num615++)
-            {
-                int num616 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
-                Main.dust[num616].velocity *= 1.4f;
-            }
-            for (int num617 = 0; num617 < 20; num617++)
-            {
-                int num618 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 6, 0f, 0f, 100, default(Color), 3.5f);
-                Main.dust[num618].noGravity = true;
-                Main.dust[num618].velocity *= 7f;
-                num618 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 6, 0f, 0f, 100, default(Color), 1.5f);
-                Main.dust[num618].velocity *= 3f;
-            }
-            for (int num619 = 0; num619 < 2; num619++)
-            {
-                float scaleFactor9 = 3f;
-                if (num619 == 1)
-                {
-                    scaleFactor9 = 3f;
-                }
-                int num620 = Gore.NewGore(new Vector2(projectile.position.X, projectile.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
-                Main.gore[num620].velocity *= scaleFactor9;
-                Gore gore97 = Main.gore[num620];
-                gore97.velocity.X = gore97.velocity.X + 1f;
-                Gore gore98 = Main.gore[num620];
-                gore98.velocity.Y = gore98.velocity.Y + 1f;
-                num620 = Gore.NewGore(new Vector2(projectile.position.X, projectile.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
-                Main.gore[num620].velocity *= scaleFactor9;
-                Gore gore99 = Main.gore[num620];
-                gore99.velocity.X = gore99.velocity.X - 1f;
-                Gore gore100 = Main.gore[num620];
-                gore100.velocity.Y = gore100.velocity.Y + 1f;
-                num620 = Gore.NewGore(new Vector2(projectile.position.X, projectile.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
-                Main.gore[num620].velocity *= scaleFactor9;
-                Gore gore101 = Main.gore[num620];
-                gore101.velocity.X = gore101.velocity.X + 1f;
-                Gore gore102 = Main.gore[num620];
-                gore102.velocity.Y = gore102.velocity.Y - 1f;
-                num620 = Gore.NewGore(new Vector2(projectile.position.X, projectile.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
-                Main.gore[num620].velocity *= scaleFactor9;
-                Gore gore103 = Main.gore[num620];
-                gore103.velocity.X = gore103.velocity.X - 1f;
-                Gore gore104 = Main.gore[num620];
-                gore104.velocity.Y = gore104.velocity.Y - 1f;
-            }
             projectile.active = false;
         }
 
@@ -145,6 +74,8 @@ namespace DBZMOD.Projectiles
                 if (!Released)
                 {
                     projectile.scale += 0.03f;
+                    //projectile.width += 1;
+                    //projectile.height += 1;
 
                     projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 
@@ -159,15 +90,19 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
 
-                    MyPlayer.ModPlayer(player).KiCurrent -= 10;
+                    //MyPlayer.ModPlayer(player).KiCurrent -= 10;
+
+                    //Rock effect
+                    projectile.ai[1]++;
+                    if (projectile.ai[1] % 7 == 0)
+                        Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                }
+                else
+                {
+
 
                 }
-
-                //Rock effect
-                projectile.ai[1]++;
-                if (projectile.ai[1] % 7 == 0)
-                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
 
                 projectile.netUpdate = true;
             }

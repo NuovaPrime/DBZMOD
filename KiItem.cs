@@ -30,6 +30,8 @@ namespace DBZMOD
         public bool BeamTrail;
         public int KiDrainRate;
         public Color color;
+        public Player player;
+        public MyPlayer myPlayer;
 
 
         public override bool CloneNewInstances
@@ -40,9 +42,19 @@ namespace DBZMOD
             }
         }
 
+        public override bool PreAI()
+        {
+            if(player == null)
+                player = Main.player[projectile.owner];
+
+            if(myPlayer == null && player != null)
+                myPlayer = MyPlayer.ModPlayer(player);
+
+            return base.PreAI();
+        }
+
         public override void PostAI()
         {
-            Player player = Main.player[projectile.owner];
             if (!ChargeBall)
             {
                 projectile.scale = projectile.scale + ChargeLevel;
