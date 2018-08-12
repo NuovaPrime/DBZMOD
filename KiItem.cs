@@ -12,6 +12,7 @@ using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using DBZMOD;
+using System;
 
 namespace DBZMOD
 {
@@ -19,7 +20,7 @@ namespace DBZMOD
     {
         public int ChargeLevel;
         public int ChargeTimer;
-        public int ChargeLimit;
+        public int ChargeLimit = 4;
         public int KiDrainTimer;
         public int SizeTimer;
         public int originalWidth;
@@ -27,6 +28,8 @@ namespace DBZMOD
         public bool ChargeBall;
         public bool KiWeapon = true;
         public bool BeamTrail;
+        public int KiDrainRate;
+        public Color color;
 
 
         public override bool CloneNewInstances
@@ -44,15 +47,53 @@ namespace DBZMOD
             {
                 projectile.scale = projectile.scale + ChargeLevel;
             }
+
             if (BeamTrail && projectile.scale > 0 && SizeTimer > 0)
             {
                 SizeTimer = 120;
                 SizeTimer--;
                 projectile.scale = (projectile.scale * SizeTimer / 120f);
             }
-            if (ChargeBall && MyPlayer.ModPlayer(player).KiCurrent <= 0)
+            if (ChargeBall)
             {
-                projectile.active = false;
+                if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                {
+                    projectile.active = false;
+                }
+
+                if (projectile.timeLeft < 4)
+                {
+                    projectile.timeLeft = 10;
+                }
+
+                projectile.position.X = player.Center.X + (player.direction * 20) - 5;
+                projectile.position.Y = player.Center.Y - 3;
+
+                if (!player.channel && ChargeLevel < 1)
+                {
+                    projectile.Kill();
+                }
+                if (player.channel && projectile.active)
+                {
+                    ChargeTimer++;
+                    KiDrainTimer++;
+                    player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+                }
+                if (KiDrainTimer > 1 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
+                {
+                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate;
+                    KiDrainTimer = 0;
+                }
+                for (int d = 0; d < 4; d++)
+                {
+                    float angle = Main.rand.NextFloat(360);
+                    float angleRad = MathHelper.ToRadians(angle);
+                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, color, 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    tDust.noGravity = true;
+                }
             }
         }
 
@@ -85,7 +126,7 @@ namespace DBZMOD
                     }
                     if (Main.netMode == 1 && item >= 0)
                     {
-                        NetMessage.SendData(Terraria.ID.MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
                     }
                 }
             }
@@ -252,8 +293,8 @@ namespace DBZMOD
         }
         public void GetAttackSpeed(Player player)
         {
-            item.useTime = (int)(item.useTime / MyPlayer.ModPlayer(player).KiSpeedAddition);
-            item.useAnimation = (int)(item.useAnimation / MyPlayer.ModPlayer(player).KiSpeedAddition);
+            item.useTime = (item.useTime - MyPlayer.ModPlayer(player).KiSpeedAddition);
+            item.useAnimation = (item.useAnimation - MyPlayer.ModPlayer(player).KiSpeedAddition);
         }
         public override bool CanUseItem(Player player)
         {
@@ -264,6 +305,11 @@ namespace DBZMOD
                 return true;
             }
             return false;
+        }
+        public override void HoldItem(Player player)
+        {
+            MyPlayer.ModPlayer(player).IsHoldingKiWeapon = true;
+            base.HoldItem(player);
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {

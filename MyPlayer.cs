@@ -19,14 +19,13 @@ namespace DBZMOD
         #region Variables
         public float KiDamage;
         public float KiKbAddition;
-        public float KiSpeedAddition;
+        public int KiSpeedAddition;
         public int KiCrit;
         public int KiRegenTimer;
         public bool CobaltBonus;
         public int KiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
-        public bool ZoneCustomBiome = false;
         public int drawX;
         public int drawY;
         public bool SSJ1Achieved;
@@ -107,6 +106,7 @@ namespace DBZMOD
         public static bool EvilMessage = false;
         public static bool MushroomMessage = false;
         public int KiOrbDropChance;
+        public bool IsHoldingKiWeapon;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -124,7 +124,7 @@ namespace DBZMOD
                 return hasKaioken = false;
             }
         }
-        public override void PreUpdate()
+        public override void PostUpdate()
         {
             if(kiLantern)
             {
@@ -234,6 +234,18 @@ namespace DBZMOD
             else if (MasteryLevelBlue > MasteryMaxBlue)
             {
                 MasteryLevelBlue = MasteryMaxBlue;
+            }
+            if(IsHoldingKiWeapon)
+            {
+                KiBar.visible = true;
+            }
+            if(IsTransformed)
+            {
+                KiBar.visible = true;
+            }
+            else
+            {
+                KiBar.visible = false;
             }
             
         }
@@ -566,7 +578,7 @@ namespace DBZMOD
             spiritualEmblem = false;
             turtleShell = false;
             KiDrainMulti = 1f;
-            KiSpeedAddition = 1f;
+            KiSpeedAddition = 0;
             KiCrit = 5;
             ChlorophyteHeadPieceActive = false;
             CobaltBonus = false;
@@ -579,6 +591,7 @@ namespace DBZMOD
 			amberNecklace = false;
 			amethystNecklace = false;
             KiOrbDropChance = 3;
+            IsHoldingKiWeapon = false;
             //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
