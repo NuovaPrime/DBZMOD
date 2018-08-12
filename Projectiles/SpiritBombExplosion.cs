@@ -20,7 +20,7 @@ namespace DBZMOD.Projectiles
             projectile.width = 28;
             projectile.height = 28;
 			projectile.aiStyle = 1;
-			projectile.light = 1f;
+			projectile.light = 0.0f;
 			projectile.timeLeft = 10;
 			projectile.damage = 0;
 			aiType = 14;
@@ -29,6 +29,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             projectile.netUpdate = true;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
+            projectile.hide = true;
         }
 
         public override void SetStaticDefaults()

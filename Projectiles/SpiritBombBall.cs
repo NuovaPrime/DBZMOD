@@ -34,7 +34,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
             projectile.ranged = true;
-
+            KiDrainRate = 10;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -69,13 +69,9 @@ namespace DBZMOD.Projectiles
 
             if (Main.myPlayer == projectile.owner)
             {
-                //Main.NewText("Projectile Size: " +  projectile.Size);
-
                 if (!Released)
                 {
-                    projectile.scale += 0.03f;
-                    //projectile.width += 1;
-                    //projectile.height += 1;
+                    projectile.scale += 0.04f;
 
                     projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 
@@ -90,18 +86,14 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
 
-                    //MyPlayer.ModPlayer(player).KiCurrent -= 10;
+                    MyPlayer.ModPlayer(player).KiCurrent -= 2;
+                    player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
 
                     //Rock effect
                     projectile.ai[1]++;
                     if (projectile.ai[1] % 7 == 0)
                         Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                }
-                else
-                {
-
-
                 }
 
                 projectile.netUpdate = true;
@@ -126,7 +118,6 @@ namespace DBZMOD.Projectiles
                     projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
                     projectile.tileCollide = true;
                     projectile.damage *= (int)projectile.scale;
-
                 }
 
                 //Projectile p = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y) - (projectile.velocity * 5), new Vector2(0, 0), mod.ProjectileType("EnergyWaveTrail"), projectile.damage / 3, 4f, projectile.owner, 0, projectile.rotation);
