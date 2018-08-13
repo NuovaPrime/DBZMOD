@@ -235,19 +235,10 @@ namespace DBZMOD
             {
                 MasteryLevelBlue = MasteryMaxBlue;
             }
-            if(IsHoldingKiWeapon)
-            {
-                KiBar.visible = true;
-            }
-            if(IsTransformed)
-            {
-                KiBar.visible = true;
-            }
-            else
-            {
-                KiBar.visible = false;
-            }
-            
+
+
+            KiBar.visible = IsHoldingKiWeapon || IsTransformed;
+
         }
 
         public bool SSJ1Check()
