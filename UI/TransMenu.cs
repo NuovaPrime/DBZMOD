@@ -12,83 +12,35 @@ using Terraria.UI;
 
 namespace DBZMOD.UI
 {
-    internal class TransMenu : UIState
+    internal class TransMenu : EasyMenu
     {
-        public UIPanel backPanel;
+        public static bool menuvisible = false;
         private UIText ssjbuttontext;
         private UIText ssj2buttontext;
         private UIText ssj3buttontext;
-        public static bool menuvisible = false;
         private UIImageButton ssjButtonTexture;
         private UIImageButton ssj2ButtonTexture;
         private UIImageButton ssj3ButtonTexture;
-        private const float padding = 5f;
         public static int MenuSelection = 0;
         public static bool SSJ1On;
         public static bool SSJ2On;
         public static bool SSJ3On;
         private Player player;
+        public const float PADDING = 5f;
 
         public override void OnInitialize()
         {
-            backPanel = new UIPanel();
-            backPanel.Width.Set(360f, 0f);
-            backPanel.Height.Set(240f, 0f);
-            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
-            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanel.BackgroundColor = new Color(73, 94, 171);
-            backPanel.OnMouseDown += new MouseEvent(DragStart);
-            backPanel.OnMouseUp += new MouseEvent(DragEnd);
-            base.Append(backPanel);
             base.OnInitialize();
+            backPanel.BackgroundColor = new Color(100, 100, 100);
 
-            var SSJ1Button = GFX.SSJ1ButtonImage;
-            ssjButtonTexture = new UIImageButton(SSJ1Button);
-            ssjButtonTexture.Width.Set(SSJ1Button.Width, 0f);
-            ssjButtonTexture.Height.Set(SSJ1Button.Width, 0f);
-            ssjButtonTexture.Left.Set(padding, 0f);
-            ssjButtonTexture.Top.Set(padding, 0f);
-            ssjButtonTexture.OnClick += TrySelectingSSJ1;
-            backPanel.Append(ssjButtonTexture);
-            
-            ssjbuttontext = new UIText("SSJ1");
-            ssjbuttontext.Width.Set(32f, 0f);
-            ssjbuttontext.Height.Set(32f, 0f);
-            ssjbuttontext.Left.Set(padding - 4f, 0f);
-            ssjbuttontext.Top.Set(padding + 77f, 0f);
-            ssjButtonTexture.Append(ssjbuttontext);
+            InitButton(ref ssjButtonTexture, GFX.SSJ1ButtonImage, new MouseEvent(TrySelectingSSJ1));
+            InitText(ref ssjbuttontext, "SSJ1", -4.0f, 77.0f, Color.White, ssjButtonTexture);
 
-            var SSJ2Button = GFX.SSJ2ButtonImage;
-            ssj2ButtonTexture = new UIImageButton(SSJ2Button);
-            ssj2ButtonTexture.Width.Set(SSJ2Button.Width, 0f);
-            ssj2ButtonTexture.Height.Set(SSJ2Button.Width, 0f);
-            ssj2ButtonTexture.Left.Set(padding + SSJ1Button.Width, 0f);
-            ssj2ButtonTexture.Top.Set(padding, 0f);
-            ssj2ButtonTexture.OnClick += TrySelectingSSJ2;
-            backPanel.Append(ssj2ButtonTexture);
+            InitButton(ref ssj2ButtonTexture, GFX.SSJ2ButtonImage, new MouseEvent(TrySelectingSSJ2), PADDING + GFX.SSJ1ButtonImage.Width);
+            InitText(ref ssj2buttontext, "SSJ2", -4.0f , 77.0f, Color.White, ssj2ButtonTexture);
 
-            ssj2buttontext = new UIText("SSJ2");
-            ssj2buttontext.Width.Set(32f, 0f);
-            ssj2buttontext.Height.Set(32f, 0f);
-            ssj2buttontext.Left.Set(padding - 4f, 0f);
-            ssj2buttontext.Top.Set(padding + 77f, 0f);
-            ssj2ButtonTexture.Append(ssj2buttontext);
-
-            var SSJ3Button = GFX.SSJ3ButtonImage;
-            ssj3ButtonTexture = new UIImageButton(SSJ3Button);
-            ssj3ButtonTexture.Width.Set(SSJ3Button.Width, 0f);
-            ssj3ButtonTexture.Height.Set(SSJ3Button.Width, 0f);
-            ssj3ButtonTexture.Left.Set(padding + SSJ2Button.Width * 2, 0f);
-            ssj3ButtonTexture.Top.Set(padding, 0f);
-            ssj3ButtonTexture.OnClick += TrySelectingSSJ3;
-            backPanel.Append(ssj3ButtonTexture);
-
-            ssj3buttontext = new UIText("SSJ3");
-            ssj3buttontext.Width.Set(32f, 0f);
-            ssj3buttontext.Height.Set(32f, 0f);
-            ssj3buttontext.Left.Set(padding - 4f, 0f);
-            ssj3buttontext.Top.Set(padding + 77f, 0f);
-            ssj3ButtonTexture.Append(ssj3buttontext);
+            InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3), PADDING + GFX.SSJ2ButtonImage.Width * 2);
+            InitText(ref ssj3buttontext, "SSJ3", -4.0f, 77.0f, Color.White, ssj3ButtonTexture);
         }
 
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
@@ -133,38 +85,6 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuClose);
             }
         }
-        Vector2 offset;
-        public bool dragging = false;
-
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
-        {
-            offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
-            dragging = true;
-        }
-
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
-        {
-            Vector2 end = evt.MousePosition;
-            dragging = false;
-
-            backPanel.Left.Set(end.X - offset.X, 0f);
-            backPanel.Top.Set(end.Y - offset.Y, 0f);
-
-            Recalculate();
-        }
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
-            if (backPanel.ContainsPoint(MousePosition))
-            {
-                Main.LocalPlayer.mouseInterface = true;
-            }
-            if (dragging)
-            {
-                backPanel.Left.Set(MousePosition.X - offset.X, 0f);
-                backPanel.Top.Set(MousePosition.Y - offset.Y, 0f);
-                Recalculate();
-            }
-        }
+ 
     }
 }
