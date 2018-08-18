@@ -29,13 +29,20 @@ namespace DBZMOD.Items.Consumables
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Senzu Bean");
-            Tooltip.SetDefault("Restores your body and Ki!");
+            Tooltip.SetDefault("Restores your body and Ki");
         }
         
 
         public override bool UseItem(Player player)
         {
-            player.AddBuff(mod.BuffType("SenzuCooldown"), 18000);
+            if(MyPlayer.ModPlayer(player).senzuBag)
+            {
+                player.AddBuff(mod.BuffType("SenzuCooldown"), 14400);
+            }
+            else
+            {
+                player.AddBuff(mod.BuffType("SenzuCooldown"), 18000);
+            }
             MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).KiMax;
             return true;
             

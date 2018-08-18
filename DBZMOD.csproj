@@ -69,9 +69,11 @@
     <Compile Include="Items\Accessories\ScouterT4.cs" />
     <Compile Include="Items\Accessories\ScouterT5.cs" />
     <Compile Include="Items\Accessories\ScouterT6.cs" />
+    <Compile Include="Items\Accessories\SenzuBag.cs" />
     <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
     <Compile Include="Items\Accessories\TopazNecklace.cs" />
     <Compile Include="Items\Accessories\TurtleShell.cs" />
+    <Compile Include="Items\Accessories\VegetaGloves.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
