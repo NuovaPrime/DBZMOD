@@ -30,11 +30,11 @@ namespace DBZMOD.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Test";
+            player.setBonus = "Briefly become invulnerable after striking an enemy";
             MyPlayer.ModPlayer(player).KiDamage += 0.15f;
             MyPlayer.ModPlayer(player).KiCrit += 9;
-            MyPlayer.ModPlayer(player).ChlorophyteHeadPieceActive = true;
             MyPlayer.ModPlayer(player).KiMax += 250;
+            player.onHitDodge = true;
         }
 
         public override void AddRecipes()

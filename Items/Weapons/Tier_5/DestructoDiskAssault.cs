@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.height = 20;
 			item.autoReuse = false;
 			item.value = 0;
-			item.rare = 2;
+			item.rare = 7;
             KiDrain = 140;
 			if(!Main.dedServ)
             {
@@ -45,7 +45,6 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "RadiantKiCrystal", 40);
-            recipe.AddIngredient(null, "DemonicSoul", 15);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
