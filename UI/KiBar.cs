@@ -8,33 +8,23 @@ using Terraria.UI;
 
 namespace DBZMOD.UI
 {
-    internal class KiBar: UIState
-    {
-        public UIPanel Kibar;
-        public UIImage ki;
-        public static bool visible = false;
+	internal class KiBar : UIState
+	{
+		public UIPanel Kibar;
+		public UIImage ki;
+		public static bool visible = false;
 
-        public override void OnInitialize()
-        {
-            ResourceBar Bar = new ResourceBar(ResourceBarMode.KI, 6, 86);
-            Bar.Left.Set(500f, 0f); //175
-            Bar.Top.Set(40f, 0f);
+		public override void OnInitialize()
+		{
+			ResourceBar Bar = new ResourceBar(ResourceBarMode.KI, 6, 86);
+			Bar.Left.Set(500f, 0f); //175
+			Bar.Top.Set(40f, 0f);
+			Append(Bar);
 
-            var BarTexture = GFX.KiBar;
-            UIImage ki = new UIImage(BarTexture);
-            ki.Left.Set(-20, 0f);
-            ki.Top.Set(-8, 0f);
-            ki.Width.Set(80, 0f);
-            ki.Height.Set(18, 0f);
-            Bar.Append(ki);
-            //ki.OnMouseDown += new UIElement.MouseEvent(DragStart);
-            //ki.OnMouseUp += new UIElement.MouseEvent(DragEnd);
-
-
-
-            base.Append(Bar);
-        }
-        /*Vector2 offset;
+			//ki.OnMouseDown += new UIElement.MouseEvent(DragStart);
+			//ki.OnMouseUp += new UIElement.MouseEvent(DragEnd);
+		}
+		/*Vector2 offset;
         public bool dragging = false;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
@@ -66,5 +56,5 @@ namespace DBZMOD.UI
                 Recalculate();
             }
         }*/
-    }
+	}
 }
