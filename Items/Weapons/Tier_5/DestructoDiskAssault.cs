@@ -1,0 +1,54 @@
+﻿﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace DBZMOD.Items.Weapons.Tier_5
+{
+	public class DestructoDiskAssault : KiItem
+	{
+        private Player player;
+
+        public override void SetDefaults()
+		{
+			item.shoot = mod.ProjectileType("DestructoDiskAssaultProj");
+			item.shootSpeed = 20f;
+			item.damage = 90;
+			item.knockBack = 5f;
+			item.useStyle = 1;
+			item.UseSound = SoundID.Item1;
+			item.useAnimation = 96;
+			item.useTime = 96;
+			item.width = 20;
+			item.noUseGraphic = true;
+			item.height = 20;
+			item.autoReuse = false;
+			item.value = 0;
+			item.rare = 2;
+            KiDrain = 140;
+			if(!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
+            }
+	    }
+	    public override void SetStaticDefaults()
+		{
+		Tooltip.SetDefault("\n-Tier 5-");
+		DisplayName.SetDefault("Destructo Disk Assault");
+		}
+
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+	        recipe.AddIngredient(null, "RadiantKiCrystal", 40);
+            recipe.AddIngredient(null, "DemonicSoul", 15);
+            recipe.AddTile(null, "KiManipulator");
+            recipe.SetResult(this);
+	        recipe.AddRecipe();
+		}
+	}
+}

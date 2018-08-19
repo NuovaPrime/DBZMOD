@@ -143,6 +143,7 @@
     <Compile Include="Items\Weapons\Tier_4\SpiritBomb.cs" />
     <Compile Include="Items\Weapons\Tier_4\SuperKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
+    <Compile Include="Items\Weapons\Tier_5\DestructoDiskAssault.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="ModWorld.cs" />
@@ -162,7 +163,10 @@
     <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
+    <Compile Include="Projectiles\DestructoDiskAssaultMini.cs" />
+    <Compile Include="Projectiles\DestructoDiskAssaultProj.cs" />
     <Compile Include="Projectiles\DestructoDiskProjectile.cs" />
+    <Compile Include="Projectiles\DirtyFireworksProjectile.cs" />
     <Compile Include="Projectiles\DoubleSundayBlast.cs" />
     <Compile Include="Projectiles\DoubleSundayTrail.cs" />
     <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
