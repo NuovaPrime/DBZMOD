@@ -39,8 +39,8 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-					gradientA = new Color(0, 255, 255); //blue
-					gradientB = Color.Red;
+					gradientA = new Color(0, 208, 255); //light blue
+					gradientB = new Color(0, 80, 255); // dark blue
 					break;
 				default:
 					break;
@@ -50,7 +50,7 @@ namespace DBZMOD.UI
 			text.Width.Set(width, 0f);
 			text.Height.Set(height, 0f);
 			text.Top.Set(height / 2 + 10, 0f); //center the UIText
-			text.Left.Set(width - 45, 0f);
+			text.Left.Set(width - 60, 0f);
 
 			var BarTexture = GFX.KiBar;
 			UIImage ki = new UIImage(BarTexture);

@@ -239,7 +239,7 @@ namespace DBZMOD
             }
 
 
-            KiBar.visible = IsHoldingKiWeapon || IsTransformed;
+            KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;
 
         }
 
