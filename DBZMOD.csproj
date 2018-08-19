@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Buffs\ASSJBuff.cs" />
+    <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuffX10.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
     <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
+    <Compile Include="Items\Armor\TitaniumCap.cs" />
     <Compile Include="Items\AstralEssentia.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
     <Compile Include="Items\Consumables\ASSJItem.cs" />

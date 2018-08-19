@@ -109,6 +109,7 @@ namespace DBZMOD
         public bool IsHoldingKiWeapon;
         public bool vegetaGloves;
         public bool senzuBag;
+        public bool palladiumBonus;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -587,6 +588,7 @@ namespace DBZMOD
             IsHoldingKiWeapon = false;
             vegetaGloves = false;
             senzuBag = false;
+            palladiumBonus = false;
             //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

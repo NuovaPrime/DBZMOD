@@ -142,6 +142,20 @@ namespace DBZMOD
                     }
                 }
             }
+            if (KiWeapon)
+            {
+                if (MyPlayer.ModPlayer(player).palladiumBonus)
+                {
+                    if (Main.rand.Next(2) == 0)
+                    {
+                        item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
+                    }
+                    if (Main.netMode == 1 && item >= 0)
+                    {
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
+                    }
+                }
+            }
         }
     }
 
