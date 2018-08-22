@@ -239,6 +239,21 @@ namespace DBZMOD
                 MasteryLevelBlue = MasteryMaxBlue;
             }
 
+            if (player.HasBuff(mod.BuffType("SSJ1Buff")) && (player.HasBuff(mod.BuffType("KaiokenBuffX3")) ||
+                                                             player.HasBuff(mod.BuffType("KaiokenBuffX10")) ||
+                                                             player.HasBuff(mod.BuffType("KaiokenBuffX20")) ||
+                                                             player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            {
+                player.ClearBuff(mod.BuffType("SSJ1Buff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            }
+            
+                
+
 
             KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;
 
