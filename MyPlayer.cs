@@ -110,6 +110,7 @@ namespace DBZMOD
         public bool vegetaGloves;
         public bool senzuBag;
         public bool palladiumBonus;
+        public bool adamantiteBonus;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -249,10 +250,15 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+                IsTransformed = false;
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
             }
-            
-                
+            if (adamantiteBonus)
+            {
+                KiDamage += 7;
+            }
+
+
 
 
             KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;
@@ -604,6 +610,7 @@ namespace DBZMOD
             vegetaGloves = false;
             senzuBag = false;
             palladiumBonus = false;
+            adamantiteBonus = false;
             //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
