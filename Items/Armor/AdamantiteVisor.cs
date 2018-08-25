@@ -12,6 +12,7 @@ namespace DBZMOD.Items.Armor
             Tooltip.SetDefault("12% Increased Ki Damage"
                 + "\n10% Increased Ki Crit Chance" +
                 "\nMaximum Ki increased by 250.");
+            DisplayName.SetDefault("Adamantite Visor");
         }
 
         public override void SetDefaults()

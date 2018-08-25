@@ -21,7 +21,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.knockBack = 8f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
-			item.useAnimation = 110;
+			item.useAnimation = 180;
 			item.useTime = 180;
 			item.width = 40;
 			item.noUseGraphic = true;

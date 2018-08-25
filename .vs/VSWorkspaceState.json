@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Items",
+    "\\Items\\Armor"
   ],
+  "SelectedNode": "\\Items\\Armor\\CobaltCrown.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -76,8 +76,10 @@
     <Compile Include="Items\Accessories\TurtleShell.cs" />
     <Compile Include="Items\Accessories\VegetaGloves.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
+    <Compile Include="Items\Armor\AdamantiteVisor.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
+    <Compile Include="Items\Armor\OrichalcumHat.cs" />
     <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
     <Compile Include="Items\Armor\TitaniumCap.cs" />
     <Compile Include="Items\AstralEssentia.cs" />

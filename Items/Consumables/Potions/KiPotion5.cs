@@ -19,7 +19,7 @@ namespace DBZMOD.Items.Consumables.Potions
             item.useTurn = true;
             item.useAnimation = 12;
             item.useTime = 12;
-            item.value = 300;
+            item.value = 1200;
             item.rare = 4;
             item.potion = false;
             IsKiPotion = true;

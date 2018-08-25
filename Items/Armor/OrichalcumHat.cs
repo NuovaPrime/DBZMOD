@@ -12,6 +12,7 @@ namespace DBZMOD.Items.Armor
             Tooltip.SetDefault("9% Increased Ki Damage"
                 + "\n6% Increased Ki Crit Chance" +
                 "\nMaximum Ki increased by 100.");
+            DisplayName.SetDefault("Orichalcum Hat");
         }
 
         public override void SetDefaults()
