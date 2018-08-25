@@ -28,6 +28,12 @@ namespace DBZMOD.Items.Armor
             return body.type == ItemID.CobaltBreastplate && legs.type == ItemID.CobaltLeggings;
         }
 
+        public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+        {
+            drawHair = true;
+            drawAltHair = true;
+        }
+
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "15% increased ki knockback";

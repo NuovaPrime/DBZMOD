@@ -28,6 +28,12 @@ namespace DBZMOD.Items.Armor
             return body.type == ItemID.PalladiumBreastplate && legs.type == ItemID.PalladiumLeggings;
         }
 
+        public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+        {
+            drawHair = true;
+            drawAltHair = true;
+        }
+
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Hitting an enemy has a chance to drop ki orbs";
