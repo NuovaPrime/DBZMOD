@@ -19,7 +19,7 @@ namespace DBZMOD.Items.Armor
         {
             item.width = 28;
             item.height = 18;
-            item.value = 45000;
+            item.value = 11000;
             item.rare = 4;
             item.defense = 8;
         }

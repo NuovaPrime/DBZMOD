@@ -111,6 +111,9 @@ namespace DBZMOD
         public bool senzuBag;
         public bool palladiumBonus;
         public bool adamantiteBonus;
+        public bool traitChecked = false;
+        public bool hasLegendary = false;
+        public bool LSSJAchieved = false;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -258,6 +261,17 @@ namespace DBZMOD
                 KiDamage += 7;
             }
 
+            if (!traitChecked)
+            {
+                if (Main.rand.Next(19) == 0)
+                {
+                    hasLegendary = true;
+                    Main.NewText("Your body seems to be special.");
+                }
+
+                traitChecked = true;
+            }
+
 
 
 
@@ -318,6 +332,9 @@ namespace DBZMOD
             tag.Add("HellMessage", HellMessage);
             tag.Add("EvilMessage", EvilMessage);
             tag.Add("MushroomMessage", MushroomMessage);
+            tag.Add("traitChecked", traitChecked);
+            tag.Add("hasLegendary", hasLegendary);
+            tag.Add("LSSJAchieved", LSSJAchieved);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -361,6 +378,9 @@ namespace DBZMOD
             HellMessage = tag.Get<bool>("HellMessage");
             EvilMessage = tag.Get<bool>("EvilMessage");
             MushroomMessage = tag.Get<bool>("MushroomMessage");
+            traitChecked = tag.Get<bool>("traitChecked");
+            hasLegendary = tag.Get<bool>("hasLegendary");
+            LSSJAchieved = tag.Get<bool>("LSSJAchieved");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
@@ -636,7 +656,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !hasLegendary && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
                     if ((Main.rand.Next(4) == 0))
                     {
@@ -654,7 +674,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.type == NPCID.CultistBoss && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
+                if (culprit.type == NPCID.CultistBoss && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
                     if ((Main.rand.Next(2) == 0))
                     {
