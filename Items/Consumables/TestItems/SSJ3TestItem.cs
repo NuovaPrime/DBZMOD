@@ -22,6 +22,7 @@ namespace DBZMOD.Items.Consumables.TestItems
             item.value = 0;
             item.expert = true;
             item.potion = false;
+            item.noUseGraphic = true;
         }
 
         public override void SetStaticDefaults()

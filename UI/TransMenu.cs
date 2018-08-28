@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using DBZMOD.Buffs;
 using DBZMOD;
@@ -37,7 +37,7 @@ namespace DBZMOD.UI
             InitText(ref ssjbuttontext, "SSJ1", -4.0f, 77.0f, Color.White, ssjButtonTexture);
 
             InitButton(ref ssj2ButtonTexture, GFX.SSJ2ButtonImage, new MouseEvent(TrySelectingSSJ2), PADDING + GFX.SSJ1ButtonImage.Width);
-            InitText(ref ssj2buttontext, "SSJ2", -4.0f , 77.0f, Color.White, ssj2ButtonTexture);
+            InitText(ref ssj2buttontext, "SSJ2", -4.0f, 77.0f, Color.White, ssj2ButtonTexture);
 
             InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3), PADDING + GFX.SSJ2ButtonImage.Width * 2);
             InitText(ref ssj3buttontext, "SSJ3", -4.0f, 77.0f, Color.White, ssj3ButtonTexture);
@@ -85,6 +85,6 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuClose);
             }
         }
- 
+
     }
 }

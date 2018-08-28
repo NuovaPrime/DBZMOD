@@ -29,7 +29,6 @@ namespace DBZMOD
         public static Texture2D SSJ3ButtonImage;
         // public static Texture2D SSJ1Hair;
         //public static Texture2D SSJ2Hair;
-
         public static void LoadGFX(Mod mod)
         {
             KiBar = mod.GetTexture(KIBAR);

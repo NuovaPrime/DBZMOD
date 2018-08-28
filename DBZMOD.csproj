@@ -37,6 +37,7 @@
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Buffs\LSSJ1Buff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuffX10.cs" />
     <Compile Include="Buffs\KaiokenBuffX100.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Tiles\KiLantern.cs" />
     <Compile Include="Tiles\KiManipulator.cs" />
     <Compile Include="TransHandler.cs" />
+    <Compile Include="UI\EasyMenu.cs" />
     <Compile Include="UI\KiBar.cs" />
     <Compile Include="UI\KiResource.cs" />
     <Compile Include="UI\ResourceBar.cs" />

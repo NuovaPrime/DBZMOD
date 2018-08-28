@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Items",
-    "\\Items\\Armor"
+    "\\Items\\Armor",
+    "\\UI"
   ],
-  "SelectedNode": "\\Items\\Armor\\CobaltCrown.cs",
+  "SelectedNode": "\\UI\\EasyMenu.cs",
   "PreviewInSolutionExplorer": false
 }

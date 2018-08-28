@@ -14,7 +14,7 @@ namespace DBZMOD.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Increased ki cast speed" +
-                "6% Increased ki damage");
+                "\n6% Increased ki damage");
             DisplayName.SetDefault("Vegeta's Gloves");
         }
 
