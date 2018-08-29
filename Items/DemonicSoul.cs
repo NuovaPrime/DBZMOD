@@ -21,9 +21,7 @@ namespace DBZMOD.Items
             item.value = 800;
             item.rare = 7;
         }
-    }
-	
-	public override Color? GetAlpha(Color lightColor)
+	    public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
         }
