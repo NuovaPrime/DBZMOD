@@ -20,7 +20,7 @@ namespace DBZMOD.Items
         public override void SetDefaults()
         {
             item.width = 20;
-            item.height = 68;
+            item.height = 66;
         }
 
         public override bool ItemSpace(Player player)
@@ -32,7 +32,7 @@ namespace DBZMOD.Items
         {
             return true;
         }
-
+		
         public override bool OnPickup(Player player)
         {
             Main.PlaySound(SoundID.NPCDeath7, player.position);
@@ -44,5 +44,9 @@ namespace DBZMOD.Items
             //(1) is the displayed text
             return false;
         }
+			public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
     }
-}
+ }
