@@ -37,9 +37,13 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Hitting an enemy has a chance to drop ki orbs";
+            MyPlayer.ModPlayer(player).palladiumBonus = true;
+        }
+
+        public override void UpdateEquip(Player player)
+        {
             MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).KiCrit += 6;
-            MyPlayer.ModPlayer(player).palladiumBonus = true;
         }
 
         public override void AddRecipes()

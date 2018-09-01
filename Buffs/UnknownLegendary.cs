@@ -1,0 +1,24 @@
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ModLoader;
+
+namespace DBZMOD.Buffs
+{
+    public class UnknownLegendary : TransBuff
+    {
+        public override void SetDefaults()
+        {
+            DisplayName.SetDefault("???");
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.debuff[Type] = true;
+            Description.SetDefault("Your body seems a bit special.");
+        }
+        public override void Update(Player player, ref int buffIndex)
+        {
+            MyPlayer.ModPlayer(player).KiMax *= 2;
+            base.Update(player, ref buffIndex);
+        }
+    }
+}
+

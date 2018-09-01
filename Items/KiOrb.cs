@@ -32,13 +32,18 @@ namespace DBZMOD.Items
         {
             return true;
         }
-		
+
+        public override void GrabRange(Player player, ref int grabRange)
+        {
+            grabRange *= MyPlayer.ModPlayer(player).OrbGrabRange;
+        }
+
         public override bool OnPickup(Player player)
         {
             Main.PlaySound(SoundID.NPCDeath7, player.position);
             //Mine makes a sound
             //modplayer resource increase goes here++
-            MyPlayer.ModPlayer(player).KiCurrent += 50;
+            MyPlayer.ModPlayer(player).KiCurrent += MyPlayer.ModPlayer(player).OrbHealAmount;
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), 50, false, false);
             //(165, 255, 185) is the color of the text
             //(1) is the displayed text

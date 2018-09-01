@@ -37,9 +37,12 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "15% increased ki knockback";
-            MyPlayer.ModPlayer(player).KiDamage += 0.09f; 
+            MyPlayer.ModPlayer(player).KiKbAddition += 15;
+        }
+        public override void UpdateEquip(Player player)
+        {
+            MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).KiCrit += 6;
-            MyPlayer.ModPlayer(player).CobaltBonus = true;
         }
 
         public override void AddRecipes()

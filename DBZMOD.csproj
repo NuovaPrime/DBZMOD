@@ -37,6 +37,7 @@
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Buffs\LegendaryTrait.cs" />
     <Compile Include="Buffs\LSSJ1Buff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuffX10.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
+    <Compile Include="Buffs\UnknownLegendary.cs" />
     <Compile Include="Buffs\USSJBuff.cs" />
     <Compile Include="DBZMOD.cs" />
     <Compile Include="DBZMODItem.cs" />
@@ -78,8 +80,12 @@
     <Compile Include="Items\Accessories\VegetaGloves.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
+    <Compile Include="Items\Armor\HallowedFedora.cs" />
+    <Compile Include="Items\Armor\MythrilGlasses.cs" />
     <Compile Include="Items\Armor\OrichalcumHat.cs" />
     <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
     <Compile Include="Items\Armor\TitaniumCap.cs" />
@@ -277,6 +283,10 @@
     <Content Include="Items\Accessories\TopazNecklace.png" />
     <Content Include="Items\Accessories\TurtleShell.png" />
     <Content Include="Items\Accessories\TurtleShell_Back.png" />
+    <Content Include="Items\Armor\ArmorSets\SaiyanBreastplate_Arms.png" />
+    <Content Include="Items\Armor\ArmorSets\SaiyanBreastplate_Body.png" />
+    <Content Include="Items\Armor\ArmorSets\SaiyanBreastplate_FemaleBody.png" />
+    <Content Include="Items\Armor\ArmorSets\SaiyanLeggings_Legs.png" />
     <Content Include="Items\Armor\ChlorophyteHeadpiece.png" />
     <Content Include="Items\Armor\ChlorophyteHeadpiece_Head.png" />
     <Content Include="Items\Armor\CobaltCrown.png" />
@@ -354,6 +364,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Items\Accessories\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Items\Armor\Vanity\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

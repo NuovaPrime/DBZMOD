@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-Armor Sets",
+      "appliesTo": "Items/Armor/Armor Sets/",
+      "type": "launch"
+    }
+  ]
+}

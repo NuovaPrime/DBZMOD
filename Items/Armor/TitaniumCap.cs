@@ -32,10 +32,14 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Briefly become invulnerable after striking an enemy";
+            player.onHitDodge = true;
+        }
+
+        public override void UpdateEquip(Player player)
+        {
             MyPlayer.ModPlayer(player).KiDamage += 0.15f;
             MyPlayer.ModPlayer(player).KiCrit += 9;
             MyPlayer.ModPlayer(player).KiMax += 250;
-            player.onHitDodge = true;
         }
 
         public override void AddRecipes()

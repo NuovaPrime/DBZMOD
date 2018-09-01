@@ -22,7 +22,6 @@ namespace DBZMOD
         public int KiSpeedAddition;
         public int KiCrit;
         public int KiRegenTimer;
-        public bool CobaltBonus;
         public int KiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
@@ -114,6 +113,8 @@ namespace DBZMOD
         public bool traitChecked = false;
         public bool hasLegendary = false;
         public bool LSSJAchieved = false;
+        public int OrbGrabRange;
+        public int OrbHealAmount;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -153,10 +154,6 @@ namespace DBZMOD
             if(KiCurrent < 0)
             {
                 KiCurrent = 0;
-            }
-            if(CobaltBonus)
-            {
-                KiKbAddition += 15;
             }
             if(SSJ1Achieved)
             {
@@ -270,6 +267,19 @@ namespace DBZMOD
                 }
 
                 traitChecked = true;
+            }
+            if(LSSJAchieved)
+            {
+                UI.TransMenu.LSSJOn = true;
+            }
+            if(hasLegendary && !LSSJAchieved)
+            {
+                player.AddBuff(mod.BuffType("UnknownLegendary"), 999999);
+            }
+            else if(hasLegendary && LSSJAchieved)
+            {
+                player.AddBuff(mod.BuffType("LegendaryTrait"), 999999);
+                player.ClearBuff(mod.BuffType("UnknownLegendary"));
             }
 
 
@@ -630,7 +640,6 @@ namespace DBZMOD
             KiSpeedAddition = 0;
             KiCrit = 5;
             ChlorophyteHeadPieceActive = false;
-            CobaltBonus = false;
             diamondNecklace = false;
             emeraldNecklace = false;
             rubyNecklace = false;
@@ -645,6 +654,8 @@ namespace DBZMOD
             senzuBag = false;
             palladiumBonus = false;
             adamantiteBonus = false;
+            OrbGrabRange = 2;
+            OrbHealAmount = 50;
             //IsCharging = false;
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

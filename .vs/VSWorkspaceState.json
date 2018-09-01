@@ -3,8 +3,8 @@
     "",
     "\\Items",
     "\\Items\\Armor",
-    "\\UI"
+    "\\Items\\Armor\\Armor Sets"
   ],
-  "SelectedNode": "\\UI\\EasyMenu.cs",
+  "SelectedNode": "\\Items\\Armor\\Vanity",
   "PreviewInSolutionExplorer": false
 }

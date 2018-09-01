@@ -5,47 +5,46 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor
 {
     [AutoloadEquip(EquipType.Head)]
-    public class AdamantiteVisor : ModItem
+    public class MythrilGlasses : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("12% Increased Ki Damage"
-                + "\n10% Increased Ki Crit Chance" +
-                "\nMaximum Ki increased by 250.");
-            DisplayName.SetDefault("Adamantite Visor");
+            Tooltip.SetDefault("11% Increased Ki Damage"
+                + "\n6% Increased Ki Crit Chance" +
+                "\nMaximum Ki increased by 100.");
+            DisplayName.SetDefault("Mythril Glasses");
         }
 
         public override void SetDefaults()
         {
             item.width = 20;
             item.height = 16;
-            item.value = 11000;
+            item.value = 9000;
             item.rare = 4;
-            item.defense = 9;
+            item.defense = 5;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == ItemID.AdamantiteBreastplate && legs.type == ItemID.AdamantiteLeggings;
+            return body.type == ItemID.MythrilChainmail && legs.type == ItemID.MythrilGreaves;
         }
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "7% Increased Ki Damage";
-            MyPlayer.ModPlayer(player).KiDamage += 0.7f;
+            player.setBonus = "Ki orbs regenerate twice as much ki.";
+            MyPlayer.ModPlayer(player).OrbHealAmount *= 2;
         }
-
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.12f;
-            MyPlayer.ModPlayer(player).KiCrit += 10;
-            MyPlayer.ModPlayer(player).KiMax += 250;
+            MyPlayer.ModPlayer(player).KiDamage += 0.11f;
+            MyPlayer.ModPlayer(player).KiCrit += 6;
+            MyPlayer.ModPlayer(player).KiMax += 100;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 12);
+            recipe.AddIngredient(ItemID.MythrilBar, 10);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

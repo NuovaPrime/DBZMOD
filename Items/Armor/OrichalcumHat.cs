@@ -32,10 +32,13 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Flower petals will fall on your target for extra damage";
+            player.onHitPetal = true;
+        }
+        public override void UpdateEquip(Player player)
+        {
             MyPlayer.ModPlayer(player).KiDamage += 0.10f;
             MyPlayer.ModPlayer(player).KiCrit += 7;
             MyPlayer.ModPlayer(player).KiMax += 100;
-            player.onHitPetal = true;
         }
 
         public override void AddRecipes()
