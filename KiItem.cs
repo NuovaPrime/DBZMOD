@@ -32,6 +32,9 @@ namespace DBZMOD
         public Color color;
         public Player player;
         public MyPlayer myPlayer;
+        public int yoffset;
+        public int xoffset;
+        public float ballscale = 1f;
 
 
         public override bool CloneNewInstances
@@ -78,8 +81,8 @@ namespace DBZMOD
                     projectile.timeLeft = 10;
                 }
 
-                projectile.position.X = player.Center.X + (player.direction * 20) - 5;
-                projectile.position.Y = player.Center.Y - 3;
+                projectile.position.X = player.Center.X + (player.direction * 20 + xoffset) - 5;
+                projectile.position.Y = player.Center.Y - 3 + yoffset;
 
                 if (!player.channel && ChargeLevel < 1)
                 {
@@ -102,7 +105,7 @@ namespace DBZMOD
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, color, 1.0f);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, color, ballscale);
                     tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }

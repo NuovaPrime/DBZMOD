@@ -202,6 +202,7 @@
     <Compile Include="Projectiles\ScattershotBlast.cs" />
     <Compile Include="Projectiles\SpiritBallProjectile.cs" />
     <Compile Include="Projectiles\SpiritBombBall.cs" />
+    <Compile Include="Projectiles\SpiritBombExplosion.cs" />
     <Compile Include="Projectiles\SpiritBombProjectile.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjBeam.cs" />
     <Compile Include="Projectiles\SSJ1AuraProjBeamHead.cs" />
@@ -328,16 +329,33 @@
     <Content Include="Projectiles\Auras\SSJ2AuraProj.png" />
     <Content Include="Projectiles\Auras\SSJ3AuraProj.png" />
     <Content Include="Projectiles\Fists\KiFistProj.png" />
-    <Content Include="Sounds\DiskFire.wav" />
+    <Content Include="Sounds\Awakening.wav" />
+    <Content Include="Sounds\BasicBeamFire.mp3" />
+    <Content Include="Sounds\DiscFire.wav" />
     <Content Include="Sounds\EnergyCharge.wav" />
     <Content Include="Sounds\EnergyChargeStart.wav" />
+    <Content Include="Sounds\EnergyWaveCharge.wav" />
     <Content Include="Sounds\Explosion.wav" />
+    <Content Include="Sounds\EyeBeam.wav" />
+    <Content Include="Sounds\GroundRumble.wav" />
+    <Content Include="Sounds\KaioAuraAscend.wav" />
     <Content Include="Sounds\KaioAuraStart.wav" />
-    <Content Include="Sounds\KamehamehaFire.wav" />
-    <Content Include="Sounds\Kiblast.wav" />
-    <Content Include="Sounds\LaserBlast.wav" />
-    <Content Include="Sounds\Music\DBZMODTheme1.mp3" />
+    <Content Include="Sounds\Kiblast1.wav" />
+    <Content Include="Sounds\Kiblast2.wav" />
+    <Content Include="Sounds\KiBlast3.wav" />
+    <Content Include="Sounds\KiBlastFast.wav" />
+    <Content Include="Sounds\Kiplosion.wav" />
     <Content Include="Sounds\PowerDown.wav" />
+    <Content Include="Sounds\Scatterbeam.wav" />
+    <Content Include="Sounds\Shotgun.mp3" />
+    <Content Include="Sounds\SpiritBombFire.wav" />
+    <Content Include="Sounds\SSB.mp3" />
+    <Content Include="Sounds\SSBKK.mp3" />
+    <Content Include="Sounds\SSG.mp3" />
+    <Content Include="Sounds\SSJ2.mp3" />
+    <Content Include="Sounds\SSJ3.mp3" />
+    <Content Include="Sounds\SSJAscension.wav" />
+    <Content Include="Sounds\SSJAura.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
     <Content Include="WIkiChangelog.txt" />
     <Content Include="WIP\AmberNecklace.png" />
@@ -367,6 +385,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Items\Armor\Vanity\" />
+    <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
