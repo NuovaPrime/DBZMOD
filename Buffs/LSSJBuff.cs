@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
 {
-    public class LSSJ1Buff : TransBuff
+    public class LSSJBuff : TransBuff
     {
         public override void SetDefaults()
         {
@@ -21,6 +21,7 @@ namespace DBZMOD.Buffs
             DamageMulti = 3.7f;
             SpeedMulti = 3.7f;
             KiDrainBuffMulti = 3f;
+            KiDrainRate = 5;
             base.Update(player, ref buffIndex);
         }
     }

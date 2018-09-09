@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
+using DBZMOD;
 
 namespace DBZMOD
 {
@@ -36,6 +37,7 @@ namespace DBZMOD
         public bool IsTransformingSSJ1;
         public bool IsTransformingSSJ2;
         public bool IsTransformingSSJ3;
+        public bool IsTransformingLSSJ;
         public bool Fragment1;
         public bool Fragment2;
         public bool Fragment3;
@@ -115,6 +117,7 @@ namespace DBZMOD
         public bool LSSJAchieved = false;
         public int OrbGrabRange;
         public int OrbHealAmount;
+        private KiItem kiitem;
         #endregion
 
         public static MyPlayer ModPlayer(Player player)
@@ -172,6 +175,10 @@ namespace DBZMOD
                 LightningFrameTimer++;
             }
             if (player.HasBuff(mod.BuffType("SSJ3Buff")))
+            {
+                LightningFrameTimer++;
+            }
+            if (player.HasBuff(mod.BuffType("LSSJBuff")))
             {
                 LightningFrameTimer++;
             }
@@ -263,7 +270,6 @@ namespace DBZMOD
                 if (Main.rand.Next(19) == 0)
                 {
                     hasLegendary = true;
-                    Main.NewText("Your body seems to be special.");
                 }
 
                 traitChecked = true;
@@ -272,7 +278,7 @@ namespace DBZMOD
             {
                 UI.TransMenu.LSSJOn = true;
             }
-            if(hasLegendary && !LSSJAchieved)
+            if(hasLegendary && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 999999);
             }
@@ -282,11 +288,7 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
             }
 
-
-
-
             KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;
-
         }
 
         public bool SSJ1Check()
@@ -425,6 +427,12 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
+                else if (!player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                {
+                    player.AddBuff(mod.BuffType("LSSJBuff"), 1800);
+                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                }
                 else if (!player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 900);
@@ -460,7 +468,7 @@ namespace DBZMOD
                 UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
             }
                 
-            if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && KaioAchieved && !player.channel)
+            if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && KaioAchieved && !player.channel)
             {
                 player.AddBuff(mod.BuffType("KaiokenBuff"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
@@ -554,13 +562,14 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff"))))
+            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff"))))
             {
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
                 player.ClearBuff(mod.BuffType("ASSJBuff"));
                 player.ClearBuff(mod.BuffType("USSJBuff"));
                 player.ClearBuff(mod.BuffType("SSJ3Buff"));
+                player.ClearBuff(mod.BuffType("LSSJBuff"));
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
@@ -658,8 +667,11 @@ namespace DBZMOD
             OrbHealAmount = 50;
             //IsCharging = false;
         }
+
+        private TransMenu transMenu;
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
+
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
@@ -699,6 +711,24 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                {
+                    if ((Main.rand.Next(4) == 0))
+                    {
+                        Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
+                        player.statLife = 1;
+                        player.HealEffect(1);
+                        LSSJAchieved = true;
+                        IsTransformingLSSJ = true;
+                        LSSJTransformation();
+                        UI.TransMenu.MenuSelection = 4;
+                        return false;
+                    }
+                }
+            }
+            if (damageSource.SourceNPCIndex > -1)
+            {
+                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.type == NPCID.CultistBoss && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
                     if ((Main.rand.Next(2) == 0))
@@ -731,6 +761,11 @@ namespace DBZMOD
             {
                 return false;
             }
+
+            if (IsTransformingLSSJ)
+            {
+                return false;
+            }
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
                 player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
@@ -742,17 +777,22 @@ namespace DBZMOD
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(2f));
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
         }
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(2f));
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(2f));
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+        }
+        public void LSSJTransformation()
+        {
+            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
 
         public void SSJTransformationBeams()
@@ -805,6 +845,15 @@ namespace DBZMOD
             if (drawPlayer.HasBuff(mod.BuffType("SSJ2Buff")))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningBlue");
+                int frameSize = texture.Height / 3;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                Main.playerDrawData.Add(data);
+            }
+            if (drawPlayer.HasBuff(mod.BuffType("LSSJBuff")))
+            {
+                Texture2D texture = mod.GetTexture("Dusts/LightningGreen");
                 int frameSize = texture.Height / 3;
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
@@ -867,9 +916,9 @@ namespace DBZMOD
                 Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                 player.eyeColor = Color.Turquoise;
             }
-            else if (player.HasBuff(mod.BuffType("LSSJ1Buff")))
+            else if (player.HasBuff(mod.BuffType("LSSJBuff")))
             {
-                Hair = mod.GetTexture("Hairs/SSJ/LSSJHair");
+                Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                 player.eyeColor = Color.Turquoise;
             }
             else

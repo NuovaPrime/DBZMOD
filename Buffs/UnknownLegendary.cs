@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
 {
-    public class UnknownLegendary : TransBuff
+    public class UnknownLegendary : ModBuff
     {
         public override void SetDefaults()
         {
@@ -17,7 +17,6 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer.ModPlayer(player).KiMax *= 2;
-            base.Update(player, ref buffIndex);
         }
     }
 }

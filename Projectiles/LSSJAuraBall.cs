@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJAuraBall : ModProjectile
+    public class LSSJAuraBall : ModProjectile
     {
         private float SizeTimer;
         private float BlastTimer;
@@ -27,7 +27,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            SizeTimer = 0f;
+            SizeTimer = 200f;
         }
         public override void AI()
         {
@@ -44,49 +44,19 @@ namespace DBZMOD.Projectiles
                     projectile.Kill();
                 }
 
-                if (SizeTimer < 200)
+                if (SizeTimer <= 200)
                 {
                     projectile.scale = SizeTimer / 50f * 4;
-                    SizeTimer++;
+                    SizeTimer--;
                 }
+
                 projectile.frameCounter++;
                 if (projectile.frameCounter > 8)
                 {
                     projectile.frame++;
                     projectile.frameCounter = 0;
                 }
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 0;
-                }
 
-            }
-            else if(!MyPlayer.ModPlayer(player).hasLegendary)
-            {
-                projectile.position.X = player.Center.X;
-                projectile.position.Y = player.Center.Y;
-                projectile.Center = player.Center + new Vector2(0, -25);
-                projectile.netUpdate = true;
-
-                if (!MyPlayer.ModPlayer(player).IsTransformingSSJ2)
-                {
-                    projectile.Kill();
-                }
-                if (SizeTimer < 300)
-                {
-                    projectile.scale = SizeTimer / 300f * 4;
-                    SizeTimer++;
-                }
-                else
-                {
-                    projectile.scale = 1f;
-                }
-                projectile.frameCounter++;
-                if (projectile.frameCounter > 8)
-                {
-                    projectile.frame++;
-                    projectile.frameCounter = 0;
-                }
                 if (projectile.frame >= 4)
                 {
                     projectile.frame = 0;
@@ -97,7 +67,7 @@ namespace DBZMOD.Projectiles
                     if (BlastTimer > 1)
                     {
                         Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 30;
-                        Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("SSJEnergyBarrageProj"), 0, 0, player.whoAmI);
+                        Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJAuraLaser"), 0, 0, player.whoAmI);
                         BlastTimer = 0;
                     }
 
@@ -108,18 +78,10 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!MyPlayer.ModPlayer(player).hasLegendary)
-            {
-                player.AddBuff(mod.BuffType("SSJ2Buff"), 3600);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                MyPlayer.ModPlayer(player).IsTransformingSSJ2 = false;
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
-            }
-            if (MyPlayer.ModPlayer(player).hasLegendary)
-            {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
-            }
+            player.AddBuff(mod.BuffType("LSSJBuff"), 3600);
+            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
+            MyPlayer.ModPlayer(player).IsTransformingLSSJ = false;
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
         }
     }
 }

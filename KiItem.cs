@@ -327,7 +327,15 @@ namespace DBZMOD
         }
         public override bool CanUseItem(Player player)
         {
-            RealKiDrain = (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
+            if (MyPlayer.ModPlayer(player).KiDrainMulti > 0)
+            {
+                RealKiDrain = (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
+            }
+            else
+            {
+                RealKiDrain = (int)KiDrain;
+            }
+            
             if (RealKiDrain <= MyPlayer.ModPlayer(player).KiCurrent)
             {
                 MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain;
@@ -344,7 +352,15 @@ namespace DBZMOD
         {
             TooltipLine Indicate = new TooltipLine(mod, "", "");
             string[] Text = Indicate.text.Split(' ');
-            Indicate.text = " Consumes " + RealKiDrain + " Ki ";
+            if (RealKiDrain > KiDrain)
+            {
+                Indicate.text = " Consumes " + RealKiDrain + " Ki ";
+            }
+            else
+            {
+                Indicate.text = " Consumes " + KiDrain + " Ki ";
+            }
+
             tooltips.Add(Indicate);
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
             if (tt != null)

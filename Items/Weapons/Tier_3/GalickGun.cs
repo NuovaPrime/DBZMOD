@@ -33,7 +33,8 @@ namespace DBZMOD.Items.Weapons.Tier_3
         }
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("-Tier 3-");
+            Tooltip.SetDefault("-Tier 3-" +
+                               "\nMaximum Charges = 7");
             DisplayName.SetDefault("Galick Gun");
         }
 

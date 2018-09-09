@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             ChargeBall = true;
-            ChargeLimit = 7;
+            ChargeLimit = 8;
             KiDrainRate = 3;
             yoffset = 25;
             xoffset = 5;

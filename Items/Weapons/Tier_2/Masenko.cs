@@ -33,7 +33,8 @@ namespace DBZMOD.Items.Weapons.Tier_2
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 2-");
+		Tooltip.SetDefault("-Tier 2-" +
+		                   "\nMaximum Charges = 5");
 		DisplayName.SetDefault("Masenko");
 		}
 

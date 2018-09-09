@@ -53,7 +53,7 @@ namespace DBZMOD.Projectiles
    
         public override void AI()
         {
-            if (ChargeTimer > 90)
+            if (ChargeTimer > 60)
             {
                 ChargeLevel += 1;
                 ChargeTimer = 0;

@@ -33,7 +33,8 @@ namespace DBZMOD.Items.Weapons.Tier_4
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-");
+		Tooltip.SetDefault("-Tier 4-" +
+		                   "\nMaximum Charges = 8");
 		DisplayName.SetDefault("Super Kamehameha");
 		}
 
