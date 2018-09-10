@@ -247,7 +247,6 @@ namespace DBZMOD
 
     public abstract class KiItem : ModItem
     {
-        private int RealKiDrain;
         private Player player;
         private NPC npc;
         public bool IsFistWeapon;
@@ -325,20 +324,15 @@ namespace DBZMOD
             item.useTime = (item.useTime - MyPlayer.ModPlayer(player).KiSpeedAddition);
             item.useAnimation = (item.useAnimation - MyPlayer.ModPlayer(player).KiSpeedAddition);
         }
-        public override bool CanUseItem(Player player)
+        public int RealKiDrain(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KiDrainMulti > 0)
+            return (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
+        }
+        public override bool CanUseItem(Player player)
+        {          
+            if (RealKiDrain(Main.LocalPlayer) <= MyPlayer.ModPlayer(player).KiCurrent)
             {
-                RealKiDrain = (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
-            }
-            else
-            {
-                RealKiDrain = (int)KiDrain;
-            }
-            
-            if (RealKiDrain <= MyPlayer.ModPlayer(player).KiCurrent)
-            {
-                MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain;
+                MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain(Main.LocalPlayer);
                 return true;
             }
             return false;
@@ -352,14 +346,7 @@ namespace DBZMOD
         {
             TooltipLine Indicate = new TooltipLine(mod, "", "");
             string[] Text = Indicate.text.Split(' ');
-            if (RealKiDrain > KiDrain)
-            {
-                Indicate.text = " Consumes " + RealKiDrain + " Ki ";
-            }
-            else
-            {
-                Indicate.text = " Consumes " + KiDrain + " Ki ";
-            }
+            Indicate.text = " Consumes " + RealKiDrain(Main.LocalPlayer) + " Ki ";
 
             tooltips.Add(Indicate);
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
