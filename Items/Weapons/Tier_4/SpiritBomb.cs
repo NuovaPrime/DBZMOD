@@ -61,5 +61,13 @@ namespace DBZMOD.Items.Weapons.Tier_4
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
+        public override bool CanUseItem(Player player)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("SpiritBombBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             LanternTimer++;
-            if (LanternTimer > 6 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
+            if (LanternTimer > 5 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
             {
                 MyPlayer.ModPlayer(player).KiCurrent += 1;
                 LanternTimer = 0;

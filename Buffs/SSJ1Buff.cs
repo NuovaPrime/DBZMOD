@@ -28,7 +28,7 @@ namespace DBZMOD.Buffs
             {
                 KiDrainRate = 3;
             }
-            KiDrainBuffMulti = 2f;
+            KiDrainBuffMulti = 1.3f;
 
             MasteryTimer++;
             if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)

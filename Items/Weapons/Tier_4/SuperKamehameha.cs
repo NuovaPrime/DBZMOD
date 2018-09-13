@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.value = 0;
 			item.rare = 4;
             item.channel = true;
-            KiDrain = 200;
+            KiDrain = 150;
 	    }
 	    public override void SetStaticDefaults()
 		{
@@ -57,5 +57,13 @@ namespace DBZMOD.Items.Weapons.Tier_4
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-	}
+        public override bool CanUseItem(Player player)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("SuperKamehamehaBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
+    }
 }

@@ -41,6 +41,7 @@ namespace DBZMOD.Projectiles
 				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 30, projectile.owner, 0f, 1f);
 				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 30, projectile.owner, 0f, 1f); 
 				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 20, projectile.owner, 0f, 1f);
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 20, projectile.owner, 0f, 1f);
             }
         }
 		

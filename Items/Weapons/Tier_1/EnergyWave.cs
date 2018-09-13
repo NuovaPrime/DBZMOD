@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 1;
-            KiDrain = 50;
+            KiDrain = 40;
             item.channel = true;
 	    }
 	    public override void SetStaticDefaults()
@@ -56,5 +56,13 @@ namespace DBZMOD.Items.Weapons.Tier_1
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-	}
+        public override bool CanUseItem(Player player)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("EnergyWaveBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
+    }
 }

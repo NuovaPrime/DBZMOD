@@ -64,7 +64,7 @@ namespace DBZMOD.Mounts
             if (Math.Abs(player.velocity.X) > 4f)
             {
                 Rectangle rect = player.getRect();
-                Dust.NewDust(new Vector2(rect.X, rect.Y), rect.Width, rect.Height, 10);
+                Dust.NewDust(new Vector2(rect.X, rect.Y), rect.Width, rect.Height, 55);
             }
         }
     }

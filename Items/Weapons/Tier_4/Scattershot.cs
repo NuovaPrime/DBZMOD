@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.value = 0;
 			item.rare = 4;
             item.channel = true;
-            KiDrain = 150;
+            KiDrain = 110;
 	    }
 	    public override void SetStaticDefaults()
 		{

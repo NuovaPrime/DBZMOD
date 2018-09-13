@@ -34,18 +34,18 @@ namespace DBZMOD.Items.Weapons.Tier_2
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("FreezyPuff!."
+		Tooltip.SetDefault("Freezy Puff!."
 		+ "\n-Tier 3-");
-		DisplayName.SetDefault("DirtyFireworks");
+		DisplayName.SetDefault("Dirty Fireworks");
 		}
 
-		public override void AddRecipes()
+		/*public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "CalmKiCrystal", 30);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
-		}
+		}*/
 	}
 }

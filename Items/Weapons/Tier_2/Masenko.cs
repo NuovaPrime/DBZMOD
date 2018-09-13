@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.value = 0;
 			item.rare = 2;
             item.channel = true;
-            KiDrain = 80;
+            KiDrain = 60;
 	    }
 	    public override void SetStaticDefaults()
 		{
@@ -58,5 +58,13 @@ namespace DBZMOD.Items.Weapons.Tier_2
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-	}
+        public override bool CanUseItem(Player player)
+        {
+            if(player.ownedProjectileCounts[mod.ProjectileType("MasenkoBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
+    }
 }

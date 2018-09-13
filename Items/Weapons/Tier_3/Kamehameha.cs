@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.autoReuse = false;
 			item.value = 0;
 			item.rare = 3;
-            KiDrain = 120;
+            KiDrain = 80;
 	    }
 	    public override void SetStaticDefaults()
 		{
@@ -56,5 +56,13 @@ namespace DBZMOD.Items.Weapons.Tier_3
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-	}
+        public override bool CanUseItem(Player player)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("KamehamehaBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
+    }
 }

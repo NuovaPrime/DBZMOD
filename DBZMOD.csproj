@@ -37,6 +37,8 @@
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Buffs\KiPotionSickness.cs" />
+    <Compile Include="Buffs\KiStimulantBuff.cs" />
     <Compile Include="Buffs\LegendaryTrait.cs" />
     <Compile Include="Buffs\LSSJBuff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Items\Consumables\Potions\KiPotion3.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion4.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion5.cs" />
+    <Compile Include="Items\Consumables\Potions\KiStimulant.cs" />
     <Compile Include="Items\Consumables\SenzuBean.cs" />
     <Compile Include="Items\Consumables\TestItems\LegendaryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\LSSJTestItem.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Items\Weapons\Tier_1\KiBlast.cs" />
     <Compile Include="Items\Weapons\Tier_1\KiFist1.cs" />
     <Compile Include="Items\Weapons\Tier_2\DestructoDisk.cs" />
+    <Compile Include="Items\Weapons\Tier_2\DirtyFireworks.cs" />
     <Compile Include="Items\Weapons\Tier_2\DoubleSunday.cs" />
     <Compile Include="Items\Weapons\Tier_2\EnergyBlastBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_2\Masenko.cs" />

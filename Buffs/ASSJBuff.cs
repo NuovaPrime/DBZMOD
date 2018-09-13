@@ -21,7 +21,7 @@ namespace DBZMOD.Buffs
             DamageMulti = 2.3f;
             SpeedMulti = 2f;
             KiDrainRate = 4;
-            KiDrainBuffMulti = 1f;
+            KiDrainBuffMulti = 1.4f;
             base.Update(player, ref buffIndex);
         }
     }

@@ -141,7 +141,7 @@ namespace DBZMOD
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
             }
-            if (!kiLantern)
+            else
             {
                 player.ClearBuff(mod.BuffType("KiLanternBuff"));
             }
@@ -149,7 +149,7 @@ namespace DBZMOD
             {
                 SSJAuraBeamTimer++;
             }
-            if (SSJAuraBeamTimer > 10 && IsTransformingSSJ1)
+            if (SSJAuraBeamTimer > 20 && IsTransformingSSJ1)
             {
                 SSJTransformationBeams();
                 SSJAuraBeamTimer = 0;

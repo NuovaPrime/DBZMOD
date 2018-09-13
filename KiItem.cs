@@ -149,7 +149,7 @@ namespace DBZMOD
             {
                 if (MyPlayer.ModPlayer(player).palladiumBonus)
                 {
-                    if (Main.rand.Next(2) == 0)
+                    if (Main.rand.Next(9) == 0)
                     {
                         item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
                     }
@@ -285,6 +285,10 @@ namespace DBZMOD
             {
                 MoodlordDowned = true;
             }
+            if(item.channel)
+            {
+                item.autoReuse = false;
+            }
         }
         #endregion
         #region FistAdditions 
@@ -372,6 +376,7 @@ namespace DBZMOD
     public abstract class KiPotion : ModItem
     {
         public int KiHeal;
+        public int potioncooldown = 3600;
         public bool IsKiPotion;
         public override bool CloneNewInstances
         {
@@ -379,15 +384,15 @@ namespace DBZMOD
         }
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).KiCurrent + KiHeal;
-            player.AddBuff(mod.BuffType("KiPotionCooldown"), 300);
+            MyPlayer.ModPlayer(player).KiCurrent += KiHeal;
+            player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), KiHeal, false, false);
             return true;
         }
 
         public override bool CanUseItem(Player player)
         {
-            if(player.HasBuff(mod.BuffType("KiPotionCooldown")))
+            if(player.HasBuff(mod.BuffType("KiPotionSickness")))
             {
                 return false;
             }

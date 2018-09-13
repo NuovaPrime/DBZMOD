@@ -20,8 +20,8 @@ namespace DBZMOD.Projectiles
             projectile.hostile = false;
             projectile.friendly = false;
             projectile.tileCollide = false;
-            projectile.width = 40;
-            projectile.height = 40;
+            projectile.width = 20;
+            projectile.height = 20;
             projectile.aiStyle = 1;
             projectile.light = 1f;
             projectile.timeLeft = 10;
@@ -33,8 +33,6 @@ namespace DBZMOD.Projectiles
             ChargeBall = true;
             ChargeLimit = 8;
             KiDrainRate = 3;
-            yoffset = 25;
-            xoffset = 5;
             ballscale = 3;
         }
 
@@ -56,7 +54,7 @@ namespace DBZMOD.Projectiles
 
         public override void AI()
         {
-            if (ChargeTimer > 120)
+            if (ChargeTimer > 90)
             {
                 ChargeLevel += 1;
                 ChargeTimer = 0;

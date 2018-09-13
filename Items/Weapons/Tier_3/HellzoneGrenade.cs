@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.autoReuse = true;
 			item.value = 0;
 			item.rare = 3;
-            KiDrain = 70;
+            KiDrain = 75;
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Scatterbeam").WithPitchVariance(.2f);

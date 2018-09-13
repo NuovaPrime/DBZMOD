@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
             }
 			item.value = 0;
 			item.rare = 2;
-            KiDrain = 90;
+            KiDrain = 50;
 	    }
 		public override void SetStaticDefaults()
 		{
