@@ -23,6 +23,7 @@ namespace DBZMOD
         public int KiSpeedAddition;
         public int KiCrit;
         public int KiRegenTimer;
+        public int KiRegen;
         public int KiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
@@ -66,6 +67,7 @@ namespace DBZMOD
         public float KiDrainMulti;
         public int ChargeSoundTimer;
         public int TransformCooldown;
+        public int ChargeLimitAdd;
         public bool diamondNecklace;
         public bool emeraldNecklace;
         public bool sapphireNecklace;
@@ -286,6 +288,16 @@ namespace DBZMOD
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 999999);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
+            }
+
+            if(KiRegen >= 1)
+            {
+                KiRegenTimer++;
+            }
+            if(KiRegenTimer > 1)
+            {
+                KiCurrent += KiRegen;
+                KiRegenTimer = 0;
             }
 
             KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;

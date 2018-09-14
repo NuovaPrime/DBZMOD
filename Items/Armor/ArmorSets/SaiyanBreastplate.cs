@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Drastically increased pickup range for ki orbs.";
-            MyPlayer.ModPlayer(player).OrbGrabRange += 3;
+            MyPlayer.ModPlayer(player).OrbGrabRange += 9;
         }
         public override void UpdateEquip(Player player)
         {

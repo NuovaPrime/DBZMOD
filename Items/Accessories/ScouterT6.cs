@@ -1,4 +1,5 @@
 ﻿﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -40,7 +41,8 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "PridefulKiCrystal", 20);
+            recipe.AddIngredient(null, "RadiantKiCrystal", 20);
+            recipe.AddIngredient(ItemID.FragmentNebula, 10);
             recipe.AddIngredient(null, "ScouterT5");
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

@@ -11,7 +11,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("???");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
             Description.SetDefault("Your body seems a bit special.");
         }
         public override void Update(Player player, ref int buffIndex)

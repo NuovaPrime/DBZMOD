@@ -15,7 +15,7 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = true;
             KaioLightValue = 7f;
-            Description.SetDefault("2.5x Damage, 2.5x Speed, Drains Life.");
+            Description.SetDefault("2x Damage, 2x Speed, Drains Life.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
