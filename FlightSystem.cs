@@ -27,46 +27,46 @@ namespace DBZMOD
             m_FlightMode = !m_FlightMode;
         }
        
-        public void Update(TriggersSet triggersSet, Player m_player)
+        public void Update(TriggersSet triggersSet, Player player)
         {
-            if (m_FlightMode)
+            if (m_FlightMode && MyPlayer.ModPlayer(player).KiCurrent > 0)
             {
                 if (triggersSet.Up)
                 {
                     currentVel.Y -= FLIGHT_SPEED;
-                    m_player.fullRotation = MathHelper.ToRadians(0);
+                    player.fullRotation = MathHelper.ToRadians(0);
                 }
                 if (triggersSet.Down)
                 {
                     currentVel.Y += FLIGHT_SPEED;
-                    m_player.fullRotation = MathHelper.ToRadians(180);
+                    player.fullRotation = MathHelper.ToRadians(180);
                 }
                 if (triggersSet.Right)
                 {
                     currentVel.X += FLIGHT_SPEED;
-                    m_player.fullRotation = MathHelper.ToRadians(90);
+                    player.fullRotation = MathHelper.ToRadians(90);
                 }
                 if (triggersSet.Left)
                 {
                     currentVel.X -= FLIGHT_SPEED;
-                    m_player.fullRotation = MathHelper.ToRadians(270);
+                    player.fullRotation = MathHelper.ToRadians(270);
                 }
 
                 if (currentVel.Length() > 0.5f)
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        Dust tDust = Dust.NewDustDirect(m_player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX*1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
+                        Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX*1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
                         tDust.noGravity = true;
                     }
                 }
 
-                m_player.velocity = currentVel - (Vector2.UnitY * 0.4f);
+                player.velocity = currentVel - (Vector2.UnitY * 0.4f);
 
                 currentVel.X = MathHelper.Lerp(currentVel.X, 0, 0.1f);
                 currentVel.Y = MathHelper.Lerp(currentVel.Y, 0, 0.1f);
 
-                MyPlayer.ModPlayer(m_player).KiCurrent -= (int)FLIGHT_KI_DRAIN;
+                MyPlayer.ModPlayer(player).KiCurrent -= (int)FLIGHT_KI_DRAIN;
             }
         }
 
