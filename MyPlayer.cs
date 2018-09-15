@@ -122,6 +122,12 @@ namespace DBZMOD
         private KiItem kiitem;
         #endregion
 
+        #region Classes
+        FlightSystem m_flightSystem = new FlightSystem();
+        #endregion
+
+        
+
         public static MyPlayer ModPlayer(Player player)
         {
             return player.GetModPlayer<MyPlayer>();
@@ -137,8 +143,11 @@ namespace DBZMOD
                 return hasKaioken = false;
             }
         }
+
+
+
         public override void PostUpdate()
-        {
+        {        
             if(kiLantern)
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
@@ -413,6 +422,13 @@ namespace DBZMOD
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
+            m_flightSystem.Update(triggersSet, player);
+
+            if (SpeedToggle.JustPressed)
+            {
+                m_flightSystem.ToggleFlight();
+            }
+
             if (Transform.JustPressed)
             {
                 if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff"))))
@@ -585,7 +601,6 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
-
         }        
         public MyPlayer() : base()
 		{
