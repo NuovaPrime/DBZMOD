@@ -56,6 +56,7 @@ namespace DBZMOD
         public bool turtleShell;
         public bool KiEssence4;
         public bool KiEssence5;
+        private bool DemonBonusActive;
         public bool spiritualEmblem;
         public int SSJAuraBeamTimer;
         public bool hasKaioken;
@@ -83,6 +84,8 @@ namespace DBZMOD
         public static ModHotKey SpeedToggle;
         public static ModHotKey QuickKi;
         public static ModHotKey TransMenu;
+        public static ModHotKey FlyToggle;
+        public static ModHotKey ArmorBonus;
         public bool ASSJAchieved;
         public bool USSJAchieved;
         public bool SSJ2Achieved;
@@ -103,6 +106,8 @@ namespace DBZMOD
         public float MasteryLevelBlue = 0;
         public float MasteryMaxBlue = 1;
         public bool MasteredMessageBlue = false;
+        public float MasteryMaxFlight = 1;
+        public float MasteryLevelFlight = 0;
         //public static bool RealismMode = false;
         public static bool JungleMessage = false;
         public static bool HellMessage = false;
@@ -117,8 +122,10 @@ namespace DBZMOD
         public bool traitChecked = false;
         public bool hasLegendary = false;
         public bool LSSJAchieved = false;
+        public bool DemonBonus;
         public int OrbGrabRange;
         public int OrbHealAmount;
+        public bool IsFlying;
         private KiItem kiitem;
         #endregion
 
@@ -181,15 +188,7 @@ namespace DBZMOD
             {
                 UI.TransMenu.SSJ3On = true;
             }
-            if (player.HasBuff(mod.BuffType("SSJ2Buff")))
-            {
-                LightningFrameTimer++;
-            }
-            if (player.HasBuff(mod.BuffType("SSJ3Buff")))
-            {
-                LightningFrameTimer++;
-            }
-            if (player.HasBuff(mod.BuffType("LSSJBuff")))
+            if (IsTransformed || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
             {
                 LightningFrameTimer++;
             }
@@ -424,9 +423,17 @@ namespace DBZMOD
         {
             m_flightSystem.Update(triggersSet, player);
 
-            if (SpeedToggle.JustPressed)
+            if (FlyToggle.JustPressed)
             {
                 m_flightSystem.ToggleFlight();
+            }
+
+            if (ArmorBonus.JustPressed && DemonBonus && !DemonBonusActive)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
+                }
             }
 
             if (Transform.JustPressed)
@@ -487,9 +494,6 @@ namespace DBZMOD
             {
                 speedToggled = !speedToggled;
             }
-            if(QuickKi.JustPressed)
-            {
-            }
 
             if (TransMenu.JustPressed)
             {
@@ -540,10 +544,19 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
 
-            if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel)
+            if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
             {
                 KiCurrent += KiRegenRate;
                 player.velocity = new Vector2(0,player.velocity.Y);
+                ChargeSoundTimer++;
+                if (ChargeSoundTimer > 22)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
+                    ChargeSoundTimer = 0;
+                }
+            }
+            if (EnergyCharge.Current && IsFlying)
+            {
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
@@ -692,6 +705,8 @@ namespace DBZMOD
             adamantiteBonus = false;
             OrbGrabRange = 2;
             OrbHealAmount = 50;
+            DemonBonus = false;
+            ChargeLimitAdd = 0;
             //IsCharging = false;
         }
 
@@ -834,11 +849,6 @@ namespace DBZMOD
             item1.stack = 1;
             items.Add(item1);*/
 
-            Item item9 = new Item();
-            item9.SetDefaults(mod.ItemType("KiAggravationStone"));
-            item9.stack = 1;
-            items.Add(item9);
-
             Item item8 = new Item();
             item8.SetDefaults(mod.ItemType("EmptyNecklace"));
             item8.stack = 1;
@@ -890,6 +900,15 @@ namespace DBZMOD
             if (drawPlayer.HasBuff(mod.BuffType("SSJ3Buff")))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningYellow");
+                int frameSize = texture.Height / 3;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                Main.playerDrawData.Add(data);
+            }
+            if (drawPlayer.HasBuff(mod.BuffType("KaiokenBuffX100")) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            {
+                Texture2D texture = mod.GetTexture("Dusts/LightningRed");
                 int frameSize = texture.Height / 3;
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
@@ -973,9 +992,14 @@ namespace DBZMOD
                        Main.playerDrawData.Add(data);
                    });
             }
+
             if (Hair != null)
             {
                 PlayerLayer.Head.visible = false;
+                PlayerLayer.Hair.visible = false;
+                PlayerLayer.HairBack.visible = false;
+                PlayerHeadLayer.Hair.visible = false;
+                PlayerHeadLayer.Head.visible = false;
             }
         }
     }

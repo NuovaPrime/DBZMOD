@@ -14,7 +14,7 @@ namespace DBZMOD.Tiles
         {
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
-            TileObjectData.newTile.Origin = new Point16(1, 0);
+            TileObjectData.newTile.Origin = new Point16(0, 0);
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.addTile(Type);
             AddMapEntry(new Color(75, 139, 166));
