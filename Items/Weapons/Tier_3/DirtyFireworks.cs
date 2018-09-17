@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons.Tier_2
+namespace DBZMOD.Items.Weapons.Tier_3
 {
 	public class DirtyFireworks : KiItem
 	{
@@ -21,16 +21,16 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.knockBack = 1f;
 			item.useStyle = 1;
 			item.UseSound = SoundID.Item1;
-			item.useAnimation = 110;
-			item.useTime = 180;
+			item.useAnimation = 600;
+			item.useTime = 600;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
 			item.channel = true;
 			item.value = 0;
-			item.rare = 2;
-            KiDrain = 115;
+			item.rare = 3;
+            KiDrain = 110;
 	    }
 	    public override void SetStaticDefaults()
 		{
@@ -39,13 +39,13 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		DisplayName.SetDefault("Dirty Fireworks");
 		}
 
-		/*public override void AddRecipes()
+		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "CalmKiCrystal", 30);
+	        recipe.AddIngredient(null, "PridefulKiCrystal", 30);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
-		}*/
+		}
 	}
 }

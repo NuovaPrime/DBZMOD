@@ -9,13 +9,13 @@ using DBZMOD.Items.Accessories;
 
 namespace DBZMOD.Items.Accessories
 {
-    public class VegetaGloves : ModItem
+    public class WornGloves : ModItem
     {
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Increased ki cast speed" +
                 "\n6% Increased ki damage");
-            DisplayName.SetDefault("Vegeta's Gloves");
+            DisplayName.SetDefault("Worn Gloves");
         }
 
         public override void SetDefaults()
@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
                 player.GetModPlayer<MyPlayer>(mod).KiSpeedAddition += 2;
-                player.GetModPlayer<MyPlayer>(mod).vegetaGloves = true;
+                player.GetModPlayer<MyPlayer>(mod).wornGloves = true;
             }
         }
         public override void AddRecipes()

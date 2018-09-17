@@ -80,7 +80,7 @@
     <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
     <Compile Include="Items\Accessories\TopazNecklace.cs" />
     <Compile Include="Items\Accessories\TurtleShell.cs" />
-    <Compile Include="Items\Accessories\VegetaGloves.cs" />
+    <Compile Include="Items\Accessories\WornGloves.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
@@ -147,11 +147,11 @@
     <Compile Include="Items\Weapons\Tier_1\KiBlast.cs" />
     <Compile Include="Items\Weapons\Tier_1\KiFist1.cs" />
     <Compile Include="Items\Weapons\Tier_2\DestructoDisk.cs" />
-    <Compile Include="Items\Weapons\Tier_2\DirtyFireworks.cs" />
     <Compile Include="Items\Weapons\Tier_2\DoubleSunday.cs" />
     <Compile Include="Items\Weapons\Tier_2\EnergyBlastBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_2\Masenko.cs" />
     <Compile Include="Items\Weapons\Tier_2\SpiritBall.cs" />
+    <Compile Include="Items\Weapons\Tier_3\DirtyFireworks.cs" />
     <Compile Include="Items\Weapons\Tier_3\EnergyWaveVolley.cs" />
     <Compile Include="Items\Weapons\Tier_3\GalickGun.cs" />
     <Compile Include="Items\Weapons\Tier_3\HellzoneGrenade.cs" />
@@ -319,6 +319,7 @@
     <Content Include="Items\Weapons\Tier_2\EnergyBlastBarrage.png" />
     <Content Include="Items\Weapons\Tier_2\Masenko.png" />
     <Content Include="Items\Weapons\Tier_2\SpiritBall.png" />
+    <Content Include="Items\Weapons\Tier_3\DirtyFireworks.png" />
     <Content Include="Items\Weapons\Tier_3\EnergyWaveVolley.png" />
     <Content Include="Items\Weapons\Tier_3\GalickGun.png" />
     <Content Include="Items\Weapons\Tier_3\HellzoneGrenade.png" />

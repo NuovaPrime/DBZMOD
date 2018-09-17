@@ -115,7 +115,7 @@ namespace DBZMOD
         public static bool MushroomMessage = false;
         public int KiOrbDropChance;
         public bool IsHoldingKiWeapon;
-        public bool vegetaGloves;
+        public bool wornGloves;
         public bool senzuBag;
         public bool palladiumBonus;
         public bool adamantiteBonus;
@@ -699,7 +699,7 @@ namespace DBZMOD
 			amethystNecklace = false;
             KiOrbDropChance = 3;
             IsHoldingKiWeapon = false;
-            vegetaGloves = false;
+            wornGloves = false;
             senzuBag = false;
             palladiumBonus = false;
             adamantiteBonus = false;

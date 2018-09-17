@@ -21,7 +21,7 @@ namespace DBZMOD.Buffs
         {
             DamageMulti = 5f;
             SpeedMulti = 5f;
-            HealthDrainRate = 520;
+            HealthDrainRate = 380;
             KiDrainBuffMulti = 4f;
             base.Update(player, ref buffIndex);
         }
