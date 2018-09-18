@@ -33,7 +33,6 @@ namespace DBZMOD
        
         public void Update(TriggersSet triggersSet, Player player)
         {
-
             if (m_FlightMode)
             {
                 //check for ki
@@ -47,6 +46,8 @@ namespace DBZMOD
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
                 MyPlayer.ModPlayer(player).IsFlying = true;
+                Vector2 m_rotationDir = Vector2.Zero;
+
                 //m_targetRotation = 0;
 
                 //Input checks
@@ -56,28 +57,23 @@ namespace DBZMOD
                 if (triggersSet.Up)
                 {
                     m_currentVel.Y -= totalFlightSpeed;
-                    //m_targetRotation = MathHelper.ToRadians(0);
+                    m_rotationDir = Vector2.UnitY;
                 }
                 else if (triggersSet.Down)
                 {
                     m_currentVel.Y += totalFlightSpeed;
-                    //m_targetRotation = MathHelper.ToRadians(180);
+                    m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (triggersSet.Right)
                 {
                     m_currentVel.X += totalFlightSpeed;
-                    //m_targetRotation = MathHelper.ToRadians(90);
+                    m_rotationDir += Vector2.UnitX;
                 }
                 else if (triggersSet.Left)
                 {
                     m_currentVel.X -= totalFlightSpeed;
-                    //m_targetRotation = MathHelper.ToRadians(270);
-                }
-
-                if (!triggersSet.Left && !triggersSet.Right && !triggersSet.Down && !triggersSet.Up)
-                {
-                    //m_targetRotation = MathHelper.ToRadians(0);
+                    m_rotationDir -= Vector2.UnitX;
                 }
 
                 if (m_currentVel.Length() > 0.5f)
@@ -106,18 +102,30 @@ namespace DBZMOD
                 m_currentVel.X = MathHelper.Lerp(m_currentVel.X, 0, 0.1f);
                 m_currentVel.Y = MathHelper.Lerp(m_currentVel.Y, 0, 0.1f);
 
-                float radRot = (float)-Math.Atan((m_currentVel.X / m_currentVel.Y));
-
-                if(triggersSet.Down) //goin down
-                {
-                    radRot *= -1;
-                }
-
                 //calculate rotation
-                if (m_currentVel.Y != 0 && m_currentVel.Length() > 0.1f)
-                    player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
-                else
-                    player.fullRotation = MathHelper.Lerp(player.fullRotation, MathHelper.ToRadians(0) , 0.1f);
+                float radRot = 0;
+                if (m_rotationDir != Vector2.Zero)
+                {
+                    m_rotationDir.Normalize();
+                    radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
+
+                    if (m_rotationDir.Y < 0)
+                    {
+                        if (m_rotationDir.X > 0)
+                            radRot += MathHelper.ToRadians(180);
+                        else if (m_rotationDir.X < 0)
+                            radRot -= MathHelper.ToRadians(180);
+                        else
+                        {
+                            if (m_currentVel.X > 0)
+                                radRot = MathHelper.ToRadians(180);
+                            else if (m_currentVel.X < 0)
+                                radRot = MathHelper.ToRadians(-180);
+                        }
+
+                    }
+                }
+                player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
 
                 //drain ki
                 MyPlayer.ModPlayer(player).KiCurrent -= FLIGHT_KI_DRAIN + (FLIGHT_KI_DRAIN * (int)boostSpeed);
