@@ -56,6 +56,7 @@ namespace DBZMOD
             //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
+            MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
             if(!Main.dedServ)
             {
                 GFX.LoadGFX(this);

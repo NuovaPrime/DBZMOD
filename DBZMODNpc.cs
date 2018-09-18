@@ -515,6 +515,16 @@ namespace DBZMOD
                     }
                 }
             }
+            if(NPC.downedBoss2)
+            {
+                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneRockLayerHeight)
+                {
+                    if (Main.rand.Next(9) == 0)
+                    {
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("EarthenShard"), Main.rand.Next(1, 2));
+                    }
+                }
+            }
         }
 
 

@@ -20,7 +20,7 @@ namespace DBZMOD
         //constants
         const int FLIGHT_KI_DRAIN = 6;
         public const float BURST_SPEED = 0.5f;
-        const float FLIGHT_SPEED = 0.5f;
+        const float FLIGHT_SPEED = 0.3f;
 
         bool m_FlightMode = false;
         Vector2 m_currentVel = new Vector2(0, 0);
@@ -52,7 +52,8 @@ namespace DBZMOD
 
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (MyPlayer.EnergyCharge.Current? 1 : 0);
-                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed;
+                float totalFlightUsage = FLIGHT_KI_DRAIN - MyPlayer.ModPlayer(player).FlightUsageAdd;
+                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + MyPlayer.ModPlayer(player).FlightSpeedAdd;
 
                 if (triggersSet.Up)
                 {
@@ -82,15 +83,15 @@ namespace DBZMOD
                     {
                         for (int i = 0; i < 1; i++)
                         {
-                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 2.0f);
+                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 1f);
                             tDust.noGravity = true;
                         }
                     }
                     else
                     {
-                        for (int i = 0; i < 7; i++)
+                        for (int i = 0; i < 6; i++)
                         {
-                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 2.0f);
+                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 1f);
                             tDust.noGravity = true;
                         }
                     }

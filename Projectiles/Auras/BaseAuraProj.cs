@@ -33,10 +33,15 @@ namespace DBZMOD.Projectiles.Auras
         }
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
             if (MyPlayer.EnergyCharge.JustReleased)
             {
                 projectile.Kill();
+            }
+            else
+            {
+                projectile.rotation = 0;
             }
             projectile.frameCounter++;
             if (projectile.frameCounter > 5)

@@ -21,7 +21,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.width = 28;
             item.height = 18;
             item.value = 64000;
-            item.rare = 10;
+            item.rare = 9;
             item.defense = 11;
         }
 
@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Pressing `Armor Bonus` grants you infinite ki for a limited time.";
+            player.setBonus = "Pressing `Armor Bonus` grants you Demonic Overdrive, granting infinite ki for a limited time.";
             MyPlayer.ModPlayer(player).DemonBonus = true;
         }
         public override void UpdateEquip(Player player)

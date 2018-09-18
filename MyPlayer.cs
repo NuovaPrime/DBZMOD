@@ -127,6 +127,10 @@ namespace DBZMOD
         public int OrbHealAmount;
         public bool IsFlying;
         private KiItem kiitem;
+        public float FlightUsageAdd;
+        public float FlightSpeedAdd;
+        public bool earthenSigil;
+        public bool nebulaTotem;
         #endregion
 
         #region Classes
@@ -204,12 +208,14 @@ namespace DBZMOD
             if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
             {
                 ASSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded.", 232, 242, 50);
+                Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                    "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
             }
             else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
             {
                 USSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded.", 232, 242, 50);
+                Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                    "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
             }
             else if (MasteryLevel1 >= 1f && !MasteredMessage1)
             {
@@ -302,7 +308,7 @@ namespace DBZMOD
             {
                 KiRegenTimer++;
             }
-            if(KiRegenTimer > 1)
+            if(KiRegenTimer > 2)
             {
                 KiCurrent += KiRegen;
                 KiRegenTimer = 0;
@@ -428,13 +434,17 @@ namespace DBZMOD
                 m_flightSystem.ToggleFlight();
             }
 
-            /*if (ArmorBonus.JustPressed && DemonBonus && !DemonBonusActive)
+            if (ArmorBonus.JustPressed)
             {
-                for (int i = 0; i < 3; i++)
+                if (DemonBonus && !DemonBonusActive)
                 {
-                    Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
+                    player.AddBuff(mod.BuffType("DemonBonus"), 300);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
+                    }
                 }
-            }*/
+            }
 
             if (Transform.JustPressed)
             {
@@ -692,6 +702,8 @@ namespace DBZMOD
             diamondNecklace = false;
             emeraldNecklace = false;
             rubyNecklace = false;
+            earthenSigil = false;
+            nebulaTotem = false;
 			dragongemNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
@@ -707,6 +719,9 @@ namespace DBZMOD
             OrbHealAmount = 50;
             DemonBonus = false;
             ChargeLimitAdd = 0;
+            FlightSpeedAdd = 0;
+            FlightUsageAdd = 0;
+            KiRegen = 0;
             //IsCharging = false;
         }
 
@@ -1000,6 +1015,10 @@ namespace DBZMOD
                 PlayerLayer.HairBack.visible = false;
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
+            }
+            if (layers[hair] != null)
+            {
+                layers[hair].visible = false;
             }
         }
     }

@@ -225,7 +225,14 @@ namespace DBZMOD
                     projectile.frame = 0;
                 }
             }
-
+            if (MyPlayer.ModPlayer(player).IsFlying)
+            {
+                projectile.alpha = 255;
+            }
+            else
+            {
+                projectile.alpha = 50;
+            }
             float chargingScale = 0.0f;
             float chargingAuraOffset = 0.0f;
             if (IsSSJAura || IsKaioAura)

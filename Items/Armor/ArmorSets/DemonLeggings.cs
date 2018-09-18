@@ -21,7 +21,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.width = 28;
             item.height = 18;
             item.value = 11000;
-            item.rare = 4;
+            item.rare = 9;
             item.defense = 7;
         }
         public override void UpdateEquip(Player player)
