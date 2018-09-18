@@ -19,7 +19,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             StimulantTimer++;
-            if (StimulantTimer > 3 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
+            if (StimulantTimer > 2 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
             {
                 MyPlayer.ModPlayer(player).KiCurrent += 1;
                 StimulantTimer = 0;

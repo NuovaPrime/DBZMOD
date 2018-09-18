@@ -33,40 +33,42 @@ namespace DBZMOD
             if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
             {
                 m_FlightMode = false;
-               // player.fullRotation = MathHelper.ToRadians(0);
+                player.fullRotation = MathHelper.ToRadians(0);
             }
             if (!m_FlightMode)
             {
-               // player.fullRotation = MathHelper.ToRadians(0);
+                player.fullRotation = MathHelper.ToRadians(0);
                 MyPlayer.ModPlayer(player).IsFlying = false;
             }
             if (m_FlightMode && MyPlayer.ModPlayer(player).KiCurrent > 0)
             {
+                player.fullRotationOrigin = new Vector2(11, 22);
                 MyPlayer.ModPlayer(player).IsFlying = true;
                 if (triggersSet.Up)
                 {
                     currentVel.Y -= FLIGHT_SPEED;
-                    //player.fullRotation = MathHelper.ToRadians(0);
+                    player.fullRotation = MathHelper.ToRadians(0);
                 }
                 if (triggersSet.Down)
                 {
                     currentVel.Y += FLIGHT_SPEED;
-                   // player.fullRotation = MathHelper.ToRadians(180);
+                    player.fullRotation = MathHelper.ToRadians(180);
                 }
                 if (triggersSet.Right)
                 {
                     currentVel.X += FLIGHT_SPEED;
-                    //player.fullRotation = MathHelper.ToRadians(90);
+                    player.fullRotation = MathHelper.ToRadians(90);
                 }
                 if (triggersSet.Left)
                 {
                     currentVel.X -= FLIGHT_SPEED;
-                    //player.fullRotation = MathHelper.ToRadians(270);
+                    player.fullRotation = MathHelper.ToRadians(270);
                 }
                 else
                 {
-                   // player.fullRotation = MathHelper.ToRadians(0);
+                    player.fullRotation = MathHelper.ToRadians(0);
                 }
+                Main.NewText(player.fullRotation);
 
                 if (MyPlayer.EnergyCharge.Current && triggersSet.Right)
                 {

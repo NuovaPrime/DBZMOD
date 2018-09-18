@@ -58,6 +58,7 @@ namespace DBZMOD
 
         public override void PostAI()
         {
+            projectile.netUpdate = true;
             player = Main.player[projectile.owner];
             ChargeLimit += MyPlayer.ModPlayer(player).ChargeLimitAdd;
             if (!ChargeBall)

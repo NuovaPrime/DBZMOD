@@ -308,7 +308,7 @@ namespace DBZMOD
                 KiRegenTimer = 0;
             }
 
-            KiBar.visible = IsHoldingKiWeapon || IsTransformed || IsCharging;
+            KiBar.visible = true;
         }
 
         public bool SSJ1Check()
@@ -428,13 +428,13 @@ namespace DBZMOD
                 m_flightSystem.ToggleFlight();
             }
 
-            if (ArmorBonus.JustPressed && DemonBonus && !DemonBonusActive)
+            /*if (ArmorBonus.JustPressed && DemonBonus && !DemonBonusActive)
             {
                 for (int i = 0; i < 3; i++)
                 {
                     Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
                 }
-            }
+            }*/
 
             if (Transform.JustPressed)
             {
