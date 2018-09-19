@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
-                player.GetModPlayer<MyPlayer>(mod).KiRegen += 2;
+                player.GetModPlayer<MyPlayer>(mod).KiRegen += 1;
                 player.GetModPlayer<MyPlayer>(mod).FlightUsageAdd += 1;
                 player.GetModPlayer<MyPlayer>(mod).ChargeLimitAdd += 1;
                 player.GetModPlayer<MyPlayer>(mod).earthenSigil = true;

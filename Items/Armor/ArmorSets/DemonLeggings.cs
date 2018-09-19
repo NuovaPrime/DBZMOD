@@ -11,8 +11,8 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             Tooltip.SetDefault("20% Increased Ki Damage"
                 + "\n16% Increased Ki Crit Chance" +
-                               "+500 Max Ki" +
-                               "Increased Ki Regen");
+                               "\n+500 Max Ki" +
+                               "\nIncreased Ki Regen");
             DisplayName.SetDefault("Demon Leggings");
         }
 

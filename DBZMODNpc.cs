@@ -525,6 +525,21 @@ namespace DBZMOD
                     }
                 }
             }
+            if(Main.hardMode)
+            {
+                if(npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
+                {
+                    int stacks = Main.rand.Next(6, 12) / 2;
+                    if (Main.expertMode)
+                    {
+                        stacks = (int)(stacks * 1.5f);
+                    }
+                    for (int i = 0; i < stacks; i++)
+                    {
+                        Item.NewItem((int)npc.position.X + Main.rand.Next(npc.width), (int)npc.position.Y + Main.rand.Next(npc.height), 2, 2, mod.ItemType("RadiantFragment"), Main.rand.Next(1, 4));
+                    }
+                }
+            }
         }
 
 
