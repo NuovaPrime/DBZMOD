@@ -130,7 +130,11 @@ namespace DBZMOD
         public float FlightUsageAdd;
         public float FlightSpeedAdd;
         public bool earthenSigil;
-        public bool nebulaTotem;
+        public bool earthenScarab;
+        public bool radiantTotem;
+        private int ScarabChargeRateAdd;
+        private int ScarabChargeTimer;
+        public bool flightUnlocked = false;
         #endregion
 
         #region Classes
@@ -377,6 +381,7 @@ namespace DBZMOD
             tag.Add("traitChecked", traitChecked);
             tag.Add("hasLegendary", hasLegendary);
             tag.Add("LSSJAchieved", LSSJAchieved);
+            tag.Add("flightUnlocked", flightUnlocked);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -423,6 +428,7 @@ namespace DBZMOD
             traitChecked = tag.Get<bool>("traitChecked");
             hasLegendary = tag.Get<bool>("hasLegendary");
             LSSJAchieved = tag.Get<bool>("LSSJAchieved");
+            flightUnlocked = tag.Get<bool>("flightUnlocked");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
@@ -435,7 +441,10 @@ namespace DBZMOD
 
             if (FlyToggle.JustPressed)
             {
-                m_flightSystem.ToggleFlight();
+                if(flightUnlocked)
+                {
+                    m_flightSystem.ToggleFlight();
+                }
             }
 
             if (ArmorBonus.JustPressed)
@@ -560,13 +569,30 @@ namespace DBZMOD
 
             if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
             {
-                KiCurrent += KiRegenRate;
+                KiCurrent += KiRegenRate + ScarabChargeRateAdd;
                 player.velocity = new Vector2(0,player.velocity.Y);
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
                     ChargeSoundTimer = 0;
+                }
+                if(earthenScarab)
+                {
+                    ScarabChargeTimer++;
+                    if(ScarabChargeTimer > 60)
+                    {
+                        ScarabChargeRateAdd += 1;
+                        ScarabChargeTimer = 0;
+                    }
+                }
+                else if (!EnergyCharge.Current)
+                {
+                    if(!earthenScarab)
+                    {
+                        ScarabChargeTimer = 0;
+                        ScarabChargeRateAdd = 0;
+                    }
                 }
             }
             if (EnergyCharge.Current && IsFlying)
@@ -707,7 +733,7 @@ namespace DBZMOD
             emeraldNecklace = false;
             rubyNecklace = false;
             earthenSigil = false;
-            nebulaTotem = false;
+            radiantTotem = false;
 			dragongemNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
@@ -726,6 +752,7 @@ namespace DBZMOD
             FlightSpeedAdd = 0;
             FlightUsageAdd = 0;
             KiRegen = 0;
+            earthenScarab = false;
             //IsCharging = false;
         }
 

@@ -4,16 +4,16 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    public class NebulaTotem : ModItem
+    public class RadiantTotem : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("It Explodes with nebula energy." +
+            Tooltip.SetDefault("It explodes with radiant energy." +
                 "\n12% Increased Ki damage" +
                 "\nIncreased flight speed" +
                 "\n+500 Max Ki" +
                 "\nDrastically increased ki regen");
-            DisplayName.SetDefault("Nebula Totem");
+            DisplayName.SetDefault("Radiant Totem");
         }
 
         public override void SetDefaults()
@@ -32,13 +32,13 @@ namespace DBZMOD.Items.Accessories
                 player.GetModPlayer<MyPlayer>(mod).KiMax += 500;
                 player.GetModPlayer<MyPlayer>(mod).FlightSpeedAdd += 0.5f;
                 player.GetModPlayer<MyPlayer>(mod).KiRegen += 2;
-                player.GetModPlayer<MyPlayer>(mod).nebulaTotem = true;
+                player.GetModPlayer<MyPlayer>(mod).radiantTotem = true;
             }
         }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.FragmentNebula, 10);
+            recipe.AddIngredient(null, "RadiantFragment", 10);
 			recipe.AddIngredient(null, "DemonicSoul", 5);
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);
