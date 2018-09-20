@@ -46,8 +46,8 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.HellstoneBar, 20);
-            recipe.AddIngredient(null, "SkeletalEssence", 15);
+            recipe.AddIngredient(ItemID.SpectreBar, 20);
+            recipe.AddIngredient(null, "SatanicCloth", 18);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

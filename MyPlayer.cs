@@ -272,6 +272,7 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
                 player.ClearBuff(mod.BuffType("SSJ3Buff"));
                 player.ClearBuff(mod.BuffType("LSSJBuff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX20"));

@@ -18,7 +18,7 @@ namespace DBZMOD
     public class FlightSystem
     {
         //constants
-        const int FLIGHT_KI_DRAIN = 6;
+        const int FLIGHT_KI_DRAIN = 4;
         public const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
