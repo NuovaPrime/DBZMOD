@@ -14,10 +14,6 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = false;
             Description.SetDefault("Your body seems a bit special.");
         }
-        public override void Update(Player player, ref int buffIndex)
-        {
-            MyPlayer.ModPlayer(player).KiMax *= 2;
-        }
     }
 }
 

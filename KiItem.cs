@@ -86,6 +86,7 @@ namespace DBZMOD
 
                 projectile.position.X = player.Center.X + (player.direction * 20 + xoffset) - 5;
                 projectile.position.Y = player.Center.Y - 3 + yoffset;
+                projectile.netUpdate2 = true;
 
                 if (!player.channel && ChargeLevel < 1)
                 {
@@ -188,6 +189,7 @@ namespace DBZMOD
             projectile.position.Y = player.Center.Y;
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;
+            projectile.netImportant = true;
             
             if (projectile.timeLeft < 2)
             {

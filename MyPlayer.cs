@@ -135,6 +135,7 @@ namespace DBZMOD
         private int ScarabChargeRateAdd;
         private int ScarabChargeTimer;
         public bool flightUnlocked = false;
+        private int DemonBonusTimer;
         #endregion
 
         #region Classes
@@ -321,6 +322,15 @@ namespace DBZMOD
                 KiCurrent += KiRegen;
                 KiRegenTimer = 0;
             }
+            if (DemonBonusActive)
+            {
+                DemonBonusTimer++;
+                if(DemonBonusTimer > 300)
+                {
+                    DemonBonusActive = false;
+                    player.AddBuff(mod.BuffType("ArmorCooldown"), 1800);
+                }
+            }
 
             KiBar.visible = true;
         }
@@ -449,9 +459,10 @@ namespace DBZMOD
 
             if (ArmorBonus.JustPressed)
             {
-                if (DemonBonus && !DemonBonusActive)
+                if (DemonBonus && !player.HasBuff(mod.BuffType("ArmorCooldown")))
                 {
                     player.AddBuff(mod.BuffType("DemonBonus"), 300);
+                    DemonBonusActive = true;
                     for (int i = 0; i < 3; i++)
                     {
                         Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
@@ -586,14 +597,12 @@ namespace DBZMOD
                         ScarabChargeTimer = 0;
                     }
                 }
-                else if (!EnergyCharge.Current)
-                {
-                    if(!earthenScarab)
-                    {
-                        ScarabChargeTimer = 0;
-                        ScarabChargeRateAdd = 0;
-                    }
-                }
+
+            }
+            else if (!EnergyCharge.Current)
+            {
+                ScarabChargeTimer = 0;
+                ScarabChargeRateAdd = 0;
             }
             if (EnergyCharge.Current && IsFlying)
             {
@@ -665,22 +674,38 @@ namespace DBZMOD
             if(Fragment1)
             {
                 KiMax = 2000;
-
+                if(Fragment1 && hasLegendary && NPC.downedBoss1)
+                {
+                    KiMax = 4000;
+                }
                 if (Fragment2)
                 {
                     KiMax = 4000;
-
+                    if (Fragment2 && hasLegendary && NPC.downedBoss1)
+                    {
+                        KiMax = 8000;
+                    }
                     if (Fragment3)
                     {
                         KiMax = 6000;
-
+                        if (Fragment3 && hasLegendary && NPC.downedBoss1)
+                        {
+                            KiMax = 12000;
+                        }
                         if (Fragment4)
                         {
                             KiMax = 8000;
-
+                            if (Fragment4 && hasLegendary && NPC.downedBoss1)
+                            {
+                                KiMax = 16000;
+                            }
                             if (Fragment5)
                             {
                                 KiMax = 10000;
+                                if (Fragment5 && hasLegendary && NPC.downedBoss1)
+                                {
+                                    KiMax = 20000;
+                                }
                             }
                         }
                     }

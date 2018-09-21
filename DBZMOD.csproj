@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Buffs\ArmorCooldown.cs" />
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\DemonBonus.cs" />
@@ -63,16 +64,18 @@
     <Compile Include="Destruction\StoneBlockDestruction.cs" />
     <Compile Include="Dusts\LightningBlue.cs" />
     <Compile Include="Dusts\MetalDust.cs" />
+    <Compile Include="EMMModifiers\KiDamagePlus.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
     <Compile Include="Items\Accessories\AmberNecklace.cs" />
     <Compile Include="Items\Accessories\AmethystNecklace.cs" />
     <Compile Include="Items\Accessories\DiamondNecklace.cs" />
     <Compile Include="Items\Accessories\DragonGemNecklace.cs" />
+    <Compile Include="Items\Accessories\EarthenScarab.cs" />
     <Compile Include="Items\Accessories\EarthenSigil.cs" />
     <Compile Include="Items\Accessories\EmeraldNecklace.cs" />
     <Compile Include="Items\Accessories\LargeTurtleShell.cs" />
-    <Compile Include="Items\Accessories\NebulaTotem.cs" />
+    <Compile Include="Items\Accessories\RadiantTotem.cs" />
     <Compile Include="Items\Accessories\RubyNecklace.cs" />
     <Compile Include="Items\Accessories\SapphireNecklace.cs" />
     <Compile Include="Items\Accessories\ScouterT2.cs" />
@@ -248,6 +251,9 @@
     <Compile Include="Waters\NamekWaterfall.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Loot">
+      <HintPath>lib\Loot.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
@@ -396,9 +402,6 @@
     <Content Include="WIP\SuperEnergyBarrage.png" />
     <Content Include="WIP\USSJ.png" />
     <Content Include="WIP\USSJHair1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Items\Accessories\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Items\Armor\Vanity\" />

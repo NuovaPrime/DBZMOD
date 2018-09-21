@@ -38,7 +38,7 @@ namespace DBZMOD
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment2"));
                 }
-                if (context == "bossBag" && arg == ItemID.TwinsBossBag)
+                if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment3"));
                 }

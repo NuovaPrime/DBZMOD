@@ -43,6 +43,8 @@ namespace DBZMOD
         }
         public override void Load()
         {
+            Loot.EMMLoader.RegisterMod(this);
+            Loot.EMMLoader.SetupContent(this);
             instance = this;
             tremorLoaded = ModLoader.GetMod("Tremor") != null;
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;

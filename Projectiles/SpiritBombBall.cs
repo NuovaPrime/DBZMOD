@@ -28,12 +28,11 @@ namespace DBZMOD.Projectiles
             projectile.extraUpdates = 0;
             projectile.ignoreWater = true;
             projectile.penetrate = 12;
-            projectile.timeLeft = 200;
+            projectile.timeLeft = 400;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
-            projectile.ranged = true;
             KiDrainRate = 10;
         }
 
@@ -86,6 +85,15 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
 
+                    if (projectile.timeLeft < 399)
+                    {
+                        projectile.timeLeft = 400;
+                    }
+                    if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                    {
+                        projectile.Kill();
+                    }
+
                     MyPlayer.ModPlayer(player).KiCurrent -= 2;
                     player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
 
@@ -98,15 +106,6 @@ namespace DBZMOD.Projectiles
 
                 projectile.netUpdate = true;
             }
-            if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
-            {
-                projectile.Kill();
-            }
-
-            if (projectile.timeLeft < 10)
-            {
-                projectile.timeLeft = 200;
-            }
 
             //if button let go
             if (!player.channel)
@@ -116,7 +115,7 @@ namespace DBZMOD.Projectiles
                 {
                     Released = true;
                     projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
-                    projectile.tileCollide = true;
+                    projectile.tileCollide = false;
                     projectile.damage *= (int)projectile.scale;
                 }
 

@@ -1,13 +1,14 @@
 Dragon Ball Z Mod For Terraria!
 
 Current Content:
-- 73 Items
+- 105 Items
+- 2 New Armor sets with ki based helmets for existing armors.
 - A whole new class that utilizes a new energy, "Ki".
-- 10 Transformations
+- 10 Unique and Iconic Transformations
 - Full Multiplayer Compatibility
 - Cross-mod compatibility
 - 2 New Placeables
-- Content up to Plantera, with more coming soon.
+- Content up to Moon Lord, with more coming soon.
 
 Please List any bugs you find on my forum page or on my discord!
 

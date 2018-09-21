@@ -14,10 +14,6 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = false;
             Description.SetDefault("You are the saiyan of legend.");
         }
-        public override void Update(Player player, ref int buffIndex)
-        {
-            MyPlayer.ModPlayer(player).KiMax *= 2;
-        }
     }
 }
 

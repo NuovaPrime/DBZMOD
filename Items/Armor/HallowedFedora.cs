@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Armor
         {
             player.setBonus = "9% Increased Ki Damage" +
                 "\n+200 Max Ki";
-            MyPlayer.ModPlayer(player).KiDamage += 0.9f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).KiMax += 200;
         }
 
