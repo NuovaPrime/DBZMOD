@@ -268,10 +268,13 @@ namespace DBZMOD
                 MasteryLevelBlue = MasteryMaxBlue;
             }
 
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) && (player.HasBuff(mod.BuffType("KaiokenBuffX3")) ||
-                                                             player.HasBuff(mod.BuffType("KaiokenBuffX10")) ||
-                                                             player.HasBuff(mod.BuffType("KaiokenBuffX20")) ||
-                                                             player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            //noobva stahp fun killing :P
+            if ((player.HasBuff(mod.BuffType("SSJ1Buff")) 
+                || player.HasBuff(mod.BuffType("SSJ2Buff")) 
+                || player.HasBuff(mod.BuffType("SSJ3Buff")) 
+                || player.HasBuff(mod.BuffType("LSSJBuff"))) 
+                && 
+                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
             {
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
