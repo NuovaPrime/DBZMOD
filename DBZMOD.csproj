@@ -91,6 +91,8 @@
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonShirt.cs" />
+    <Compile Include="Items\Armor\ArmorSets\HermitGi.cs" />
+    <Compile Include="Items\Armor\ArmorSets\HermitPants.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
@@ -100,9 +102,11 @@
     <Compile Include="Items\Armor\OrichalcumHat.cs" />
     <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
     <Compile Include="Items\Armor\TitaniumCap.cs" />
+    <Compile Include="Items\Armor\Vanity\LegendaryBlockHead.cs" />
     <Compile Include="Items\AstralEssentia.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
     <Compile Include="Items\Consumables\ASSJItem.cs" />
+    <Compile Include="Items\Consumables\BukuujutsuGuide.cs" />
     <Compile Include="Items\Consumables\KaioFragment1.cs" />
     <Compile Include="Items\Consumables\KaioFragment2.cs" />
     <Compile Include="Items\Consumables\KaioFragment3.cs" />
@@ -137,6 +141,7 @@
     <Compile Include="Items\DemonicSoul.cs" />
     <Compile Include="Items\EarthenShard.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
+    <Compile Include="Items\KiOrb2.cs" />
     <Compile Include="Items\RadiantFragment.cs" />
     <Compile Include="Items\RadiantKiCrystal.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
@@ -404,7 +409,6 @@
     <Content Include="WIP\USSJHair1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Items\Armor\Vanity\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

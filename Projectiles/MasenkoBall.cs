@@ -35,6 +35,7 @@ namespace DBZMOD.Projectiles
             KiDrainRate = 2;
             ballscale = 2f;
             color = Color.Orange;
+            ChargeTimerMax = 40f;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -55,12 +56,6 @@ namespace DBZMOD.Projectiles
 
         public override void AI()
         {
-            if (ChargeTimer > 40)
-            {
-                ChargeLevel += 1;
-                ChargeTimer = 0;
-                projectile.scale += 0.4f;
-            }
 
             if (!player.channel || (ChargeLevel >= ChargeLimit))
             {

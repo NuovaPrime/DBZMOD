@@ -20,6 +20,7 @@ namespace DBZMOD
     {
         public int ChargeLevel;
         public int ChargeTimer;
+        public float ChargeTimerMax;
         public int ChargeLimit = 4;
         public int KiDrainTimer;
         public int SizeTimer;
@@ -97,6 +98,14 @@ namespace DBZMOD
                     ChargeTimer++;
                     KiDrainTimer++;
                     player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+                }
+
+                //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;
+
+                if (ChargeTimer > ChargeTimerMax && ChargeLevel < ChargeLimit)
+                {
+                    ChargeLevel += 1;
+                    ChargeTimer = 0;
                 }
                 if (KiDrainTimer > 1 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
                 {

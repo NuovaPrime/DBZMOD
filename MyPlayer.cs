@@ -136,6 +136,8 @@ namespace DBZMOD
         private int ScarabChargeTimer;
         public bool flightUnlocked = false;
         private int DemonBonusTimer;
+        public bool hermitBonus;
+        public float chargeTimerMaxAdd;
         #endregion
 
         #region Classes
@@ -778,6 +780,8 @@ namespace DBZMOD
             FlightUsageAdd = 0;
             KiRegen = 0;
             earthenScarab = false;
+            hermitBonus = false;
+            chargeTimerMaxAdd = 0;
             //IsCharging = false;
         }
 
@@ -1071,10 +1075,6 @@ namespace DBZMOD
                 PlayerLayer.HairBack.visible = false;
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
-            }
-            if (layers[hair] != null)
-            {
-                layers[hair].visible = false;
             }
         }
     }
