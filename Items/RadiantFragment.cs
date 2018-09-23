@@ -9,7 +9,6 @@ namespace DBZMOD.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Radiant Fragment");
-			Tooltip.SetDefault("-Tier 6 Material-");
 		}
 
 		public override void SetDefaults()
