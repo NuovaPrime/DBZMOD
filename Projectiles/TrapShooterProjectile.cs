@@ -18,8 +18,8 @@ namespace DBZMOD.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 20;
+            projectile.width = 16;
+            projectile.height = 16;
             projectile.aiStyle = 17;
             projectile.light = 1f;
             projectile.friendly = true;

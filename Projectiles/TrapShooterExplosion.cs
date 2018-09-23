@@ -12,12 +12,12 @@ namespace DBZMOD.Projectiles
         private float SizeTimer;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[projectile.type] = 1;
         }
         public override void SetDefaults()
         {
-            projectile.width = 120;
-            projectile.height = 120;
+            projectile.width = 62;
+            projectile.height = 62;
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 120;
@@ -44,12 +44,12 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
             projectile.frameCounter++;
-            if (projectile.frameCounter > 3)
+            if (projectile.frameCounter > 1)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
             }
-            if (projectile.frame >= 4)
+            if (projectile.frame >= 1)
             {
                 projectile.frame = 0;
             }
