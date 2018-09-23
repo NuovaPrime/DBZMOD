@@ -800,8 +800,8 @@ namespace DBZMOD
                     if ((Main.rand.Next(9) == 0))
                     {
                         Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
-                        player.statLife = 1;
-                        player.HealEffect(1);
+                        player.statLife = player.statLifeMax2 / 2;
+                        player.HealEffect(player.statLifeMax2 / 2);
                         SSJ1Achieved = true;
                         IsTransformingSSJ1 = true;
                         SSJTransformation();
@@ -818,8 +818,8 @@ namespace DBZMOD
                     if ((Main.rand.Next(4) == 0))
                     {
                         Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
-                        player.statLife = 1;
-                        player.HealEffect(1);
+                        player.statLife = player.statLifeMax2 / 2;
+                        player.HealEffect(player.statLifeMax2 / 2);
                         SSJ2Achieved = true;
                         IsTransformingSSJ2 = true;
                         SSJ2Transformation();
@@ -836,8 +836,8 @@ namespace DBZMOD
                     if ((Main.rand.Next(4) == 0))
                     {
                         Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                        player.statLife = 1;
-                        player.HealEffect(1);
+                        player.statLife = player.statLifeMax2 / 2;
+                        player.HealEffect(player.statLifeMax2 / 2);
                         LSSJAchieved = true;
                         IsTransformingLSSJ = true;
                         LSSJTransformation();
@@ -846,16 +846,16 @@ namespace DBZMOD
                     }
                 }
             }
-            if (damageSource.SourceNPCIndex > -1)
+            if (damageSource.SourceProjectileIndex > -1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.type == NPCID.CultistBoss && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
+                Projectile culprit = Main.projectile[damageSource.SourceProjectileIndex];
+                if ((culprit.type == ProjectileID.CultistBossIceMist) || (culprit.type == ProjectileID.CultistBossFireBall) || (culprit.type == ProjectileID.CultistBossFireBallClone) || (culprit.type == ProjectileID.CultistBossLightningOrb) || (culprit.type == ProjectileID.CultistBossLightningOrbArc) || (culprit.type == ProjectileID.CultistBossParticle) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
                     if ((Main.rand.Next(2) == 0))
                     {
                         Main.NewText("The ancient power of the cultist seeps into you, causing your power to go haywire.", Color.Blue);
-                        player.statLife = 1;
-                        player.HealEffect(1);
+                        player.statLife = player.statLifeMax2 / 2;
+                        player.HealEffect(player.statLifeMax2 / 2);
                         SSJ3Achieved = true;
                         IsTransformingSSJ3 = true;
                         SSJ3Transformation();
