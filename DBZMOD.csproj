@@ -75,6 +75,7 @@
     <Compile Include="Items\Accessories\EarthenSigil.cs" />
     <Compile Include="Items\Accessories\EmeraldNecklace.cs" />
     <Compile Include="Items\Accessories\LargeTurtleShell.cs" />
+    <Compile Include="Items\Accessories\RadiantGlider.cs" />
     <Compile Include="Items\Accessories\RadiantTotem.cs" />
     <Compile Include="Items\Accessories\RubyNecklace.cs" />
     <Compile Include="Items\Accessories\SapphireNecklace.cs" />
