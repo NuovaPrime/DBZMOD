@@ -357,6 +357,19 @@ namespace DBZMOD
             }
         }
 
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if(radiantBonus && KiCurrent < KiMax)
+            {
+                KiCurrent += Main.rand.Next(1, 6);
+                if (Main.rand.Next(2) == 0)
+                {
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
+                }
+            }
+            base.OnHitNPC(item, target, damage, knockback, crit);
+        }
+
         public override TagCompound Save()
         {
             TagCompound tag = new TagCompound();
