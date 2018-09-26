@@ -15,7 +15,7 @@ namespace DBZMOD.Projectiles.Auras
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 4;
         }
         public override void SetDefaults()
         {

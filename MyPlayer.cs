@@ -137,6 +137,10 @@ namespace DBZMOD
         public bool flightUnlocked = false;
         private int DemonBonusTimer;
         public bool hermitBonus;
+        public bool spiritCharm;
+        public bool armCannon;
+        public bool battleKit;
+        public bool radiantBonus;
         public float chargeTimerMaxAdd;
         #endregion
 
@@ -333,7 +337,8 @@ namespace DBZMOD
                 if(DemonBonusTimer > 300)
                 {
                     DemonBonusActive = false;
-                    player.AddBuff(mod.BuffType("ArmorCooldown"), 1800);
+                    DemonBonusTimer = 0;
+                    player.AddBuff(mod.BuffType("ArmorCooldown"), 3600);
                 }
             }
 
@@ -785,6 +790,10 @@ namespace DBZMOD
             earthenScarab = false;
             hermitBonus = false;
             chargeTimerMaxAdd = 0;
+            spiritCharm = false;
+            battleKit = false;
+            armCannon = false;
+            radiantBonus = false;
             //IsCharging = false;
         }
 

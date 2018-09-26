@@ -1,6 +1,7 @@
 author = NuovaPrime
 version = 1.0.0
 displayName = Dragon Ball Terraria
+homepage = https://forums.terraria.org/index.php?threads/dragon-ball-terraria.49804/
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .git\*, *.db
 includePDB = true
 weakReferences = ThoriumMod@1.4.0.0, Tremor@1.3.2.4, Laugicality@0.9.5, UnuBattleRods@1.2.0.4
