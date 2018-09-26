@@ -542,7 +542,6 @@ namespace DBZMOD
             }
         }
 
-
             public override void SetupShop(int type, Chest shop, ref int nextSlot)
             {
                 if (type == NPCID.Merchant)
@@ -550,6 +549,17 @@ namespace DBZMOD
                     shop.item[nextSlot].SetDefaults(mod.ItemType<Items.ScrapMetal>());
                     nextSlot++;
                 }
+                if (type == NPCID.TravellingMerchant)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.ArmCannon>());
+                    nextSlot++;
+                }
+                if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
+                    nextSlot++;
+                }
+
             }
     }
 

@@ -85,11 +85,15 @@
     <Compile Include="Items\Accessories\ScouterT5.cs" />
     <Compile Include="Items\Accessories\ScouterT6.cs" />
     <Compile Include="Items\Accessories\SenzuBag.cs" />
+    <Compile Include="Items\Accessories\SpiritCharm.cs" />
     <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
     <Compile Include="Items\Accessories\TopazNecklace.cs" />
     <Compile Include="Items\Accessories\WornGloves.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantScalepiece.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantGreaves.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonShirt.cs" />
     <Compile Include="Items\Armor\ArmorSets\HermitGi.cs" />
