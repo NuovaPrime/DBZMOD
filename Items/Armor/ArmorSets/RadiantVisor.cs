@@ -33,6 +33,11 @@ namespace DBZMOD.Items.Armor.ArmorSets
             MyPlayer.ModPlayer(player).FlightSpeedAdd += 1f;
 
         }
+        public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+        {
+            drawHair = true;
+            drawAltHair = true;
+        }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
