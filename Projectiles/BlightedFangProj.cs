@@ -69,10 +69,12 @@ namespace DBZMOD.Projectiles
 			return false;
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
-            projectile.vampireHeal(5, target.Center);
-            base.OnHitNPC(target, damage, knockback, crit);
+            player.statLife += 5;
+            player.HealEffect(5);
+            projectile.Kill();
+            base.OnHitNPC(npc, damage, knockback, crit);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)

@@ -17,8 +17,8 @@ namespace DBZMOD.Projectiles
             projectile.hostile = false;
             projectile.friendly = true;
 			projectile.tileCollide = false;
-            projectile.width = 120;
-            projectile.height = 120;
+            projectile.width = 88;
+            projectile.height = 90;
 			projectile.aiStyle = 1;
 			projectile.light = 1f;
 			projectile.timeLeft = 150;

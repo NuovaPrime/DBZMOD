@@ -64,11 +64,14 @@
     <Compile Include="Destruction\StoneBlockDestruction.cs" />
     <Compile Include="Dusts\LightningBlue.cs" />
     <Compile Include="Dusts\MetalDust.cs" />
+    <Compile Include="Dusts\RadiantDust.cs" />
+    <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="EMMModifiers\KiDamagePlus.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
     <Compile Include="Items\Accessories\AmberNecklace.cs" />
     <Compile Include="Items\Accessories\AmethystNecklace.cs" />
+    <Compile Include="Items\Accessories\ArmCannon.cs" />
     <Compile Include="Items\Accessories\DiamondNecklace.cs" />
     <Compile Include="Items\Accessories\DragonGemNecklace.cs" />
     <Compile Include="Items\Accessories\EarthenScarab.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="Items\Accessories\EmeraldNecklace.cs" />
     <Compile Include="Items\Accessories\LargeTurtleShell.cs" />
     <Compile Include="Items\Accessories\RadiantGlider.cs" />
+    <Compile Include="Items\Accessories\BattleKit.cs" />
     <Compile Include="Items\Accessories\RadiantTotem.cs" />
     <Compile Include="Items\Accessories\RubyNecklace.cs" />
     <Compile Include="Items\Accessories\SapphireNecklace.cs" />
@@ -179,6 +183,7 @@
     <Compile Include="Items\Weapons\Tier_4\Scattershot.cs" />
     <Compile Include="Items\Weapons\Tier_4\SpiritBomb.cs" />
     <Compile Include="Items\Weapons\Tier_4\SuperKamehameha.cs" />
+    <Compile Include="Items\Weapons\Tier_4\BlightedFang.cs" />
     <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
     <Compile Include="Items\Weapons\Tier_5\DestructoDiskAssault.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
@@ -201,6 +206,7 @@
     <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
+    <Compile Include="Projectiles\BlightedFangProj.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultMini.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultProj.cs" />
     <Compile Include="Projectiles\DestructoDiskProjectile.cs" />
@@ -229,6 +235,7 @@
     <Compile Include="Projectiles\MasenkoBall.cs" />
     <Compile Include="Projectiles\MasenkoBlast.cs" />
     <Compile Include="Projectiles\MasenkoTrail.cs" />
+    <Compile Include="Projectiles\RadiantSpark.cs" />
     <Compile Include="Projectiles\RockProjectile.cs" />
     <Compile Include="Projectiles\ScattershotBlast.cs" />
     <Compile Include="Projectiles\SpiritBallProjectile.cs" />
@@ -350,6 +357,11 @@
     <Content Include="Items\Weapons\Tier_4\SuperKamehameha.png" />
     <Content Include="Items\Weapons\Tier_4\TrapShooter.png" />
     <Content Include="Items\Weapons\Tier_5\SuperEnergyBarrage.png" />
+    <Content Include="Items\Weapons\Tier_6\BigBangKamehameha.png" />
+    <Content Include="Items\Weapons\Tier_6\CandyLaser.png" />
+    <Content Include="Items\Weapons\Tier_6\FinalShine.png" />
+    <Content Include="Items\Weapons\Tier_6\HolyWrath.png" />
+    <Content Include="Items\Weapons\Tier_6\SuperSpiritBomb.png" />
     <Content Include="Npcs\Bosses\FriezaShip.png" />
     <Content Include="Npcs\Bosses\FriezaShip_Head_Boss.png" />
     <Content Include="Projectiles\Auras\BaseAuraProj.png" />

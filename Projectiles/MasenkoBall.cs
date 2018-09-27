@@ -62,7 +62,7 @@ namespace DBZMOD.Projectiles
                 if (ChargeLevel >= 1)
                 {
                     float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
-                    Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10))), mod.ProjectileType("MasenkoBlast"), projectile.damage + (ChargeLevel * 20), projectile.knockBack, projectile.owner);
+                    Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 12)), (float)((Math.Sin(rot) * 12))), mod.ProjectileType("MasenkoBlast"), projectile.damage + (ChargeLevel * 20), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));

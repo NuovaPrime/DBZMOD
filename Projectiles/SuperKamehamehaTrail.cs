@@ -13,7 +13,7 @@ namespace DBZMOD.Projectiles
     {
     	public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("SuperKamehamehaTrail");
+			DisplayName.SetDefault("Super Kamehameha");
 		}
     	
         public override void SetDefaults()
@@ -22,8 +22,8 @@ namespace DBZMOD.Projectiles
             projectile.hostile = false;
             projectile.friendly = true;
 			projectile.tileCollide = false;
-            projectile.width = 54;
-            projectile.height = 60;
+            projectile.width = 56;
+            projectile.height = 76;
 			projectile.aiStyle = 1;
 			projectile.light = 1f;
             projectile.netUpdate = true;
