@@ -51,6 +51,25 @@ namespace DBZMOD.UI
             }
         }
 
+        public void InitImage(ref UIImage imageToInitialise, Texture2D imageTexture, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
+        {
+            imageToInitialise = new UIImage(imageTexture);
+
+            imageToInitialise.Width.Set(imageTexture.Width, 0.0f);
+            imageToInitialise.Height.Set(imageTexture.Height, 0.0f);
+            imageToInitialise.Left.Set(offsetX, 0f);
+            imageToInitialise.Top.Set(offsetY, 0f);
+
+            if (parentElement == null)
+            {
+                backPanel.Append(imageToInitialise);
+            }
+            else
+            {
+                parentElement.Append(imageToInitialise);
+            }
+        }
+
         public void InitText(ref UIText TextToInitialise, string text, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
         {
             TextToInitialise = new UIText(text);
