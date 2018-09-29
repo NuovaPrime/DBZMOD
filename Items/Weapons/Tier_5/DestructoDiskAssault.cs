@@ -45,7 +45,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "RadiantKiCrystal", 40);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

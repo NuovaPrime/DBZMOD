@@ -43,7 +43,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "CalmKiCrystal", 30);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

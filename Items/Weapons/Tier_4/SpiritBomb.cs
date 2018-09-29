@@ -57,7 +57,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 50);
             recipe.AddIngredient(null, "AngerKiCrystal", 50);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

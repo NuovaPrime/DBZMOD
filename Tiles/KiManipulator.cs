@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles
 {
-    public class KiManipulator : ModTile
+    public class ZTable : ModTile
     {
         public override void SetDefaults()
         {
@@ -26,7 +26,7 @@ namespace DBZMOD.Tiles
             TileObjectData.newTile.Origin = new Point16(1, 0);
             TileObjectData.newTile.CoordinatePadding = 2;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Ki Manipulator");
+            name.SetDefault("ZTable");
             AddMapEntry(new Color(223, 245, 255), name);
             dustType = mod.DustType("MetalDust");
             disableSmartCursor = true;
@@ -40,7 +40,7 @@ namespace DBZMOD.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("KiManipulatorItem"));
+            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("ZTable"));
         }
     }
 }
