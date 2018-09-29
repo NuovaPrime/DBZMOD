@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "RadiantKiCrystal", 20);
+            recipe.AddIngredient(null, "PureKiCrystal", 20);
             recipe.AddIngredient(null, "ScouterT4");
             recipe.AddTile(null, "KiManipulator");
             recipe.SetResult(this);

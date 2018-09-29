@@ -163,6 +163,7 @@
     <Compile Include="Items\SkeletalEssence.cs" />
     <Compile Include="Items\SoulofEntity.cs" />
     <Compile Include="Items\StableKiCrystal.cs" />
+    <Compile Include="Items\Weapons\Normal\FarmerShotgun.cs" />
     <Compile Include="Items\Weapons\Normal\TrunksSword.cs" />
     <Compile Include="Items\Weapons\Normal\YajirobesKatana.cs" />
     <Compile Include="Items\Weapons\Tier_1\EnergyWave.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Items\Weapons\Tier_4\BlightedFang.cs" />
     <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
     <Compile Include="Items\Weapons\Tier_5\DestructoDiskAssault.cs" />
+    <Compile Include="Items\Weapons\Tier_5\FinalFlash.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="ModWorld.cs" />
@@ -303,6 +305,7 @@
     <Content Include="Dusts\MetalDust.png" />
     <Content Include="Dusts\New Text Document.txt" />
     <Content Include="Gores\New Text Document.txt" />
+    <Content Include="Hairs\LSSJ\LSSJHair.png" />
     <Content Include="Hairs\SSJ\SSJ1Hair.png" />
     <Content Include="Hairs\SSJ\SSJ2Hair.png" />
     <Content Include="Items\Accessories\AmberNecklace.png" />
@@ -335,6 +338,10 @@
     <Content Include="Items\Consumables\KiFragment1.png" />
     <Content Include="Items\Consumables\KiFragment2.png" />
     <Content Include="Items\Consumables\Potions\KiPotion1.png" />
+    <Content Include="Items\Misc\Choco1.png" />
+    <Content Include="Items\Misc\Choco2.png" />
+    <Content Include="Items\Misc\Choco3.png" />
+    <Content Include="Items\Misc\CoffeeCandy.png" />
     <Content Include="Items\Weapons\Normal\TrunksSword.png" />
     <Content Include="Items\Weapons\Normal\YajirobesKatana.png" />
     <Content Include="Items\Weapons\Normal\ZSword.png" />
@@ -427,6 +434,7 @@
     <Content Include="WIP\USSJHair1.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Hairs\God\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
