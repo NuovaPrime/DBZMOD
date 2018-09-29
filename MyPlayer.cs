@@ -1084,6 +1084,11 @@ namespace DBZMOD
                 Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                 player.eyeColor = Color.Turquoise;
             }
+            else if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            {
+                Hair = mod.GetTexture("Hairs/God/SSJGHair");
+                player.eyeColor = Color.Red;
+            }
             else
             {
                 Hair = null;
