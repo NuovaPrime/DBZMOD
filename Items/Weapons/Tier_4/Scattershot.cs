@@ -69,7 +69,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 	        recipe.AddIngredient(null, "AngerKiCrystal", 30);
 			recipe.AddIngredient(null, "HellzoneGrenade");
             recipe.AddIngredient(null, "SoulofEntity", 20);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

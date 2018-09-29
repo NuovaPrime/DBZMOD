@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Weapons.Normal
 			recipe.AddRecipeGroup("IronBar", 5);
 			recipe.AddIngredient(null, "CalmKiCrystal", 10);
             recipe.AddIngredient(null, "StableKiCrystal", 10);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
 		}
