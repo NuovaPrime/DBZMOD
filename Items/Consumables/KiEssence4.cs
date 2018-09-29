@@ -52,7 +52,7 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "RadiantKiCrystal", 30);
+            recipe.AddIngredient(null, "PureKiCrystal", 30);
             recipe.AddIngredient(null, "AngerKiCrystal", 20);
             recipe.AddIngredient(ItemID.LihzahrdPowerCell);
             recipe.AddTile(TileID.LunarCraftingStation);

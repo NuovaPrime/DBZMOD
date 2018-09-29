@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items
 {
-    public class KiManipulatorItem : ModItem
+    public class ZTableItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -25,7 +25,7 @@ namespace DBZMOD.Items
             item.consumable = true;
             item.rare = 2;
             item.value = 3000;
-            item.createTile = mod.TileType("KiManipulator");
+            item.createTile = mod.TileType("ZTable");
         }
         public override void AddRecipes()
         {

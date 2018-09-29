@@ -54,7 +54,7 @@ namespace DBZMOD.Items.Consumables
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "StableKiCrystal", 100);
             recipe.AddIngredient(ItemID.ManaCrystal, 3);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

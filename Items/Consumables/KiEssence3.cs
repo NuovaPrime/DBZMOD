@@ -55,7 +55,7 @@ namespace DBZMOD.Items.Consumables
             recipe.AddIngredient(null, "AngerKiCrystal", 20);
             recipe.AddIngredient(null, "PridefulKiCrystal", 30);
             recipe.AddIngredient(ItemID.SpiderFang, 5);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

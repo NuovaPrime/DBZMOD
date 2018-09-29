@@ -53,7 +53,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 45);
             recipe.AddIngredient(null, "SkeletalEssence", 35);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

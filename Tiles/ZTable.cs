@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles
 {
-    public class KiManipulator : ModTile
+    public class ZTable : ModTile
     {
         public override void SetDefaults()
         {
@@ -40,7 +40,7 @@ namespace DBZMOD.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("KiManipulatorItem"));
+            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("ZTable"));
         }
     }
 }

@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Accessories
             recipe.AddIngredient(ItemID.StoneBlock, 100);
             recipe.AddIngredient(null, "EarthenShard", 20);
 			recipe.AddIngredient(null, "AstralEssentia", 10);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

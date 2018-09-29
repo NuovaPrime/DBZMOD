@@ -25,7 +25,7 @@ namespace DBZMOD.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "DemonicSoul", 3);
             recipe.AddIngredient(ItemID.Silk, 1);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

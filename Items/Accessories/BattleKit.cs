@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Accessories
             recipe.AddIngredient(null, "ScouterT2");
 			recipe.AddIngredient(null, "WornGloves");
             recipe.AddIngredient(null, "ArmCannon");
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

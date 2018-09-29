@@ -46,7 +46,7 @@ namespace DBZMOD.Items.Weapons.Normal
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.HallowedBar, 20);
             recipe.AddIngredient(null, "AngerKiCrystal", 30);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

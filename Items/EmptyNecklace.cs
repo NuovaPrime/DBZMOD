@@ -25,7 +25,7 @@ namespace DBZMOD.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "ScrapMetal", 3);
             recipe.AddRecipeGroup("IronBar", 5);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
