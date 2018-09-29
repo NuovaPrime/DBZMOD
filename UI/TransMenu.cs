@@ -28,6 +28,11 @@ namespace DBZMOD.UI
         private UIImage lineSSJ1toSSJ2;
         private UIImage lineSSJ2toSSJ3;
         private UIImage lineSSJ1toLSSJ;
+        private UIImage lockedImage1;
+        private UIImage lockedImage2;
+        private UIImage lockedImage3;
+        private UIImage lockedImageL1;
+
 
         public static int MenuSelection = 0;
         public static bool SSJ1On;
@@ -52,6 +57,10 @@ namespace DBZMOD.UI
                 Row1_OffsetX, 
                 PADDINGY);
 
+            InitImage(ref lockedImage1, GFX.LockedImage,
+                Row1_OffsetX + 2,
+                PADDINGY + 5);
+
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
             InitImage(ref lineSSJ1toSSJ2, GFX.LineHorizontalImage,
                 Row1_OffsetX,
@@ -62,6 +71,11 @@ namespace DBZMOD.UI
                 Row1_OffsetX, 
                 PADDINGY);
 
+            Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
+            InitImage(ref lockedImage2, GFX.LockedImage,
+                Row1_OffsetX + 20,
+                PADDINGY + 5);
+
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width * 2 + GFX.LineHorizontalImage.Width;
             InitImage(ref lineSSJ2toSSJ3, GFX.LineHorizontalImage,
                 Row1_OffsetX,
@@ -71,6 +85,11 @@ namespace DBZMOD.UI
             InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3),
                 Row1_OffsetX, 
                 PADDINGY);
+
+            Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
+            InitImage(ref lockedImage3, GFX.LockedImage,
+                Row1_OffsetX + 35,
+                PADDINGY + 5);
 
             Row1_OffsetX = PADDINGX;
             InitImage(ref lineSSJ1toLSSJ, GFX.LineLImage,
@@ -89,19 +108,22 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
             //SSJ1
-            ssjButtonTexture.SetVisibility(player.SSJ1Achieved ? 1.0f : 0.0f, player.SSJ1Achieved ? 0.5f : 0.0f);
+            //ssjButtonTexture.SetVisibility(player.SSJ1Achieved ? 1.0f : 0.0f, player.SSJ1Achieved ? 0.5f : 0.0f);
+            lockedImage1.ImageScale = !player.SSJ1Achieved ? 1.0f : 0.0f;
 
             //SSJ2
-            ssj2ButtonTexture.SetVisibility(player.SSJ2Achieved && !player.hasLegendary ? 1.0f : 0.0f, player.SSJ2Achieved && !player.hasLegendary ? 0.5f : 0.0f);
-            lineSSJ1toSSJ2.ImageScale = player.SSJ2Achieved && !player.hasLegendary ? 1.0f : 0.0f;
+            ssj2ButtonTexture.SetVisibility(player.hasLegendary ? 0.0f : 1.0f, player.hasLegendary ? 0.0f : 1.0f);
+            lineSSJ1toSSJ2.ImageScale = player.hasLegendary ? 0.0f : 1.0f;
+            lockedImage2.ImageScale = !player.SSJ2Achieved && !player.hasLegendary ? 1.0f : 0.0f;
 
             //SSJ3
-            ssj3ButtonTexture.SetVisibility(player.SSJ3Achieved && !player.hasLegendary ? 1.0f : 0.0f, player.SSJ3Achieved && !player.hasLegendary ? 0.5f : 0.0f);
-            lineSSJ2toSSJ3.ImageScale = player.SSJ3Achieved && !player.hasLegendary ? 1.0f : 0.0f;
+            ssj3ButtonTexture.SetVisibility(player.hasLegendary ? 0.0f : 1.0f, player.hasLegendary ? 0.0f : 1.0f);
+            lineSSJ2toSSJ3.ImageScale = player.hasLegendary ? 0.0f : 1.0f;
+            lockedImage3.ImageScale = !player.SSJ3Achieved && !player.hasLegendary ? 1.0f : 0.0f;
 
             //LSSJ
-            lssjButtonTexture.SetVisibility(player.LSSJAchieved ? 1.0f : 0.0f, player.LSSJAchieved ? 0.5f : 0.0f);
-            lineSSJ1toLSSJ.ImageScale = player.LSSJAchieved ? 1.0f : 0.0f;
+            lssjButtonTexture.SetVisibility(player.hasLegendary ? 1.0f : 0.0f, player.LSSJAchieved ? 1.0f : 0.0f);
+            lineSSJ1toLSSJ.ImageScale = player.hasLegendary ? 1.0f : 0.0f;
 
         }
 
@@ -114,6 +136,11 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ1 Mastery = " + player.MasteryLevel1 + "/" + player.MasteryMax1);
             }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("Only through failure with a powerful foe will true power awaken.");
+            }
         }
 
         private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
@@ -125,6 +152,11 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ2 Mastery = " + player.MasteryLevel2 + "/" + player.MasteryMax2);
             }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("One may awaken their true power through extreme pressure while ascended.");
+            }
         }
         private void TrySelectingSSJ3(UIMouseEvent evt, UIElement listeningelement)
         {
@@ -135,6 +167,11 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + " / " + player.MasteryMax3);
             }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
+            }
         }
 
         private void TrySelectingLSSJ(UIMouseEvent evt, UIElement listeningelement)
@@ -144,6 +181,11 @@ namespace DBZMOD.UI
             {
                 MenuSelection = 4;
                 Main.PlaySound(SoundID.MenuTick);
+            }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("The rarest saiyan's may be able to achieve a unique form rather than ascending.");
             }
         }
 

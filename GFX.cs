@@ -21,6 +21,7 @@ namespace DBZMOD
         private const string LINEHORIZONTAL = UI_DIRECTORY + "LineHorizontal";
         private const string LINEL = UI_DIRECTORY + "LineL";
         private const string BG = UI_DIRECTORY + "Bg";
+        private const string LOCKED = UI_DIRECTORY + "LockedImage";
         private const string HAIR_DIRECTORY = "HAIR/";
         //private const string SSJ1HAIR = HAIR_DIRECTORY + "SSJ1Hair";
         //private const string SSJ2HAIR = HAIR_DIRECTORY + "SSJ2Hair";
@@ -33,6 +34,7 @@ namespace DBZMOD
         public static Texture2D LSSJButtonImage;
         public static Texture2D LineHorizontalImage;
         public static Texture2D LineLImage;
+        public static Texture2D LockedImage;
         // public static Texture2D SSJ1Hair;
         //public static Texture2D SSJ2Hair;
         public static void LoadGFX(Mod mod)
@@ -45,7 +47,7 @@ namespace DBZMOD
             LSSJButtonImage = mod.GetTexture(LSSJBUTTON);
             LineHorizontalImage = mod.GetTexture(LINEHORIZONTAL);
             LineLImage = mod.GetTexture(LINEL);
-
+            LockedImage = mod.GetTexture(LOCKED);
             //SSJ1Hair = mod.GetTexture(SSJ1HAIR);
             //SSJ2Hair = mod.GetTexture(SSJ2HAIR);
 
@@ -59,6 +61,9 @@ namespace DBZMOD
             SSJ2ButtonImage = null;
             SSJ3ButtonImage = null;
             LSSJButtonImage = null;
+            LockedImage = null;
+            LineHorizontalImage = null;
+            LineLImage = null;
             //SSJ1Hair = null;
             //SSJ2Hair = null;
             //SSJHairDraw.Hair = null;
