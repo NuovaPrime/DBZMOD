@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Accessories
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PureKiCrystal", 20);
             recipe.AddIngredient(null, "ScouterT4");
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

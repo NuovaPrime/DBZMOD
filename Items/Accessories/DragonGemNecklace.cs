@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Accessories
 			recipe.AddIngredient(null, "EmeraldNecklace");
 			recipe.AddIngredient(null, "RubyNecklace");
 			recipe.AddIngredient(null, "DiamondNecklace");
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

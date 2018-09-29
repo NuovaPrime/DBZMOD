@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Accessories
             recipe.AddIngredient(ItemID.StoneBlock, 50);
             recipe.AddIngredient(null, "EarthenShard", 10);
 			recipe.AddIngredient(null, "PridefulKiCrystal", 25);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Accessories
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "RadiantFragment", 10);
 			recipe.AddIngredient(null, "DemonicSoul", 5);
-            recipe.AddTile(null, "KiManipulator");
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
