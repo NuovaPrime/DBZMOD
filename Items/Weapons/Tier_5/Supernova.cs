@@ -13,8 +13,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	{
 		public override void SetDefaults()
 		{
-			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
-			item.shoot = mod.ProjectileType("Supernova");
+			item.shoot = mod.ProjectileType("SupernovaBall");
             item.shootSpeed = 4f;
             item.damage = 140;
             item.knockBack = 12f;
@@ -30,27 +29,16 @@ namespace DBZMOD.Items.Weapons.Tier_5
             if (!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
-
             }
             item.value = 0;
             item.rare = 7;
-            KiDrain = 300;
+            KiDrain = 350;
         }
 	    public override void SetStaticDefaults()
 		{
 		Tooltip.SetDefault("-Tier 5-");
 		DisplayName.SetDefault("Supernova");
 		}
-
-        //public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        //{
-        //	//Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-        //	//if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-        //	//{
-        //	//	position += muzzleOffset;
-        //	//}
-        //	return true;
-        //}
 
         public override void AddRecipes()
         {
