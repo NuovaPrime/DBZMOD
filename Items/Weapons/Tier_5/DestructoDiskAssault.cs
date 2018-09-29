@@ -44,7 +44,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "RadiantKiCrystal", 40);
+	        recipe.AddIngredient(null, "PureKiCrystal", 40);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
