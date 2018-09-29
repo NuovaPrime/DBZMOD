@@ -4,7 +4,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items
 {
+<<<<<<< HEAD:Items/ZTable.cs
     public class ZTableItem : ModItem
+=======
+    public class ZTable : ModItem
+>>>>>>> 9f35e623efdf789f4bc11e88c7afb96f6721882c:Items/KiManipulatorItem.cs
     {
         public override void SetStaticDefaults()
         {

@@ -26,7 +26,7 @@ namespace DBZMOD.Tiles
             TileObjectData.newTile.Origin = new Point16(1, 0);
             TileObjectData.newTile.CoordinatePadding = 2;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Ki Manipulator");
+            name.SetDefault("ZTable");
             AddMapEntry(new Color(223, 245, 255), name);
             dustType = mod.DustType("MetalDust");
             disableSmartCursor = true;
