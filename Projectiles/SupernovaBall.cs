@@ -14,7 +14,8 @@ namespace DBZMOD.Projectiles
         public bool Released = false;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SupernovaBall");
+            DisplayName.SetDefault("Supernova Ball");
+            Main.projFrames[projectile.type] = 3;
         }
 
         public override void SetDefaults()
@@ -33,7 +34,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
-            KiDrainRate = 10;
+            KiDrainRate = 12;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -64,13 +65,23 @@ namespace DBZMOD.Projectiles
 
         public override void AI()
         {
+            projectile.frameCounter++;
+            if (projectile.frameCounter > 4)
+            {
+                projectile.frame++;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= 3)
+            {
+                projectile.frame = 0;
+            }
             Player player = Main.player[projectile.owner];
 
             if (Main.myPlayer == projectile.owner)
             {
                 if (!Released)
                 {
-                    projectile.scale += 0.04f;
+                    projectile.scale += 0.06f;
 
                     projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 

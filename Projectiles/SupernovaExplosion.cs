@@ -14,6 +14,7 @@ namespace DBZMOD.Projectiles
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 3;
+            DisplayName.SetDefault("Supernova Explosion");
         }
         public override void SetDefaults()
         {
@@ -35,11 +36,6 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.hide = true;
         }
-
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("SupernovaExplosion");
-        }
 		
 		public override void Kill(int timeLeft)
         {
@@ -58,6 +54,16 @@ namespace DBZMOD.Projectiles
 		
         public override void AI()
         {
+            projectile.frameCounter++;
+            if (projectile.frameCounter > 4)
+            {
+                projectile.frame++;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= 3)
+            {
+                projectile.frame = 0;
+            }
             projectile.netUpdate = true;
         }
 	}

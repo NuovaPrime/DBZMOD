@@ -54,6 +54,7 @@
     <Compile Include="Buffs\SSJ1Buff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
+    <Compile Include="Buffs\SSJGBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Buffs\UnknownLegendary.cs" />
     <Compile Include="Buffs\USSJBuff.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\KiOrb2.cs" />
     <Compile Include="Items\RadiantFragment.cs" />
-    <Compile Include="Items\RadiantKiCrystal.cs" />
+    <Compile Include="Items\PureKiCrystal.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
     <Compile Include="Items\KiManipulatorItem.cs" />
     <Compile Include="Items\KiOrb.cs" />
@@ -188,7 +189,11 @@
     <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
     <Compile Include="Items\Weapons\Tier_5\DestructoDiskAssault.cs" />
     <Compile Include="Items\Weapons\Tier_5\FinalFlash.cs" />
+    <Compile Include="Items\Weapons\Tier_5\Kamehamehax10.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
+    <Compile Include="Items\Weapons\Tier_5\Supernova.cs" />
+    <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
+    <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="ModWorld.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
@@ -222,6 +227,12 @@
     <Compile Include="Projectiles\EnergyWaveTrail.cs" />
     <Compile Include="Projectiles\EnergyWaveVolleyBlast.cs" />
     <Compile Include="Projectiles\EnergyWaveVolleyTrail.cs" />
+    <Compile Include="Projectiles\FinalFlashBall.cs" />
+    <Compile Include="Projectiles\FinalFlashBlast.cs" />
+    <Compile Include="Projectiles\FinalFlashTrail.cs" />
+    <Compile Include="Projectiles\FinalShineBall.cs" />
+    <Compile Include="Projectiles\FinalShineBlast.cs" />
+    <Compile Include="Projectiles\FinalShineTrail.cs" />
     <Compile Include="Projectiles\Fists\KiFistProj.cs" />
     <Compile Include="Projectiles\GalickGunBall.cs" />
     <Compile Include="Projectiles\GalickGunBlast.cs" />
@@ -231,6 +242,9 @@
     <Compile Include="Projectiles\KamehamehaBall.cs" />
     <Compile Include="Projectiles\KamehamehaBlast.cs" />
     <Compile Include="Projectiles\KamehamehaTrail.cs" />
+    <Compile Include="Projectiles\Kamehamehax10Ball.cs" />
+    <Compile Include="Projectiles\Kamehamehax10Blast.cs" />
+    <Compile Include="Projectiles\Kamehamehax10Trail.cs" />
     <Compile Include="Projectiles\KiBeamProjectile.cs" />
     <Compile Include="Projectiles\KiBlastProjectile.cs" />
     <Compile Include="Projectiles\LSSJAuraBall.cs" />
@@ -257,10 +271,12 @@
     <Compile Include="Projectiles\SuperKamehamehaBall.cs" />
     <Compile Include="Projectiles\SuperKamehamehaBlast.cs" />
     <Compile Include="Projectiles\SuperKamehamehaTrail.cs" />
+    <Compile Include="Projectiles\SupernovaBall.cs" />
+    <Compile Include="Projectiles\SupernovaExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
     <Compile Include="Tiles\KiLantern.cs" />
-    <Compile Include="Tiles\KiManipulator.cs" />
+    <Compile Include="Tiles\ZTable.cs" />
     <Compile Include="TransHandler.cs" />
     <Compile Include="UI\EasyMenu.cs" />
     <Compile Include="UI\KiBar.cs" />
