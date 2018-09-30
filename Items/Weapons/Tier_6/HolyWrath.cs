@@ -9,12 +9,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_6
 {
-	public class SuperSpiritBomb : KiItem
+	public class HolyWrath : KiItem
 	{
 		public override void SetDefaults()
 		{
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
-			item.shoot = mod.ProjectileType("SuperSpiritBombBall");
+			item.shoot = mod.ProjectileType("HolyWrathBall");
             item.shootSpeed = 6f;
             item.damage = 200;
             item.knockBack = 12f;
@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 	    public override void SetStaticDefaults()
 		{
 		Tooltip.SetDefault("-Tier 6-");
-		DisplayName.SetDefault("Super Spirit Bomb");
+		DisplayName.SetDefault("Holy Wrath");
 		}
 
         //public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -56,14 +56,14 @@ namespace DBZMOD.Items.Weapons.Tier_6
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "RadiantFragment", 50);
-            recipe.AddIngredient(null, "SpiritBomb", 1);
+            recipe.AddIngredient(null, "Supernova", 1);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SuperSpiritBombBall")] > 1)
+            if (player.ownedProjectileCounts[mod.ProjectileType("HolyWrathBall")] > 1)
             {
                 return false;
             }
