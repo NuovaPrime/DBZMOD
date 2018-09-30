@@ -276,16 +276,33 @@ namespace DBZMOD
 
             //noobva stahp fun killing :P
             if ((player.HasBuff(mod.BuffType("SSJ1Buff")) 
-                || player.HasBuff(mod.BuffType("SSJ2Buff")) 
-                || player.HasBuff(mod.BuffType("SSJ3Buff")) 
-                || player.HasBuff(mod.BuffType("LSSJBuff"))) 
                 && 
-                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
             {
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+                IsTransformed = false;
+                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            }
+            if ((player.HasBuff(mod.BuffType("SSJ2Buff"))
+                || player.HasBuff(mod.BuffType("SSJ3Buff"))
+                || player.HasBuff(mod.BuffType("ASSJBuff"))
+                || player.HasBuff(mod.BuffType("USSJBuff"))
+                || player.HasBuff(mod.BuffType("LSSJBuff"))
+                || player.HasBuff(mod.BuffType("SSJGBuff")))
+                &&
+                (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            {
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
                 player.ClearBuff(mod.BuffType("SSJ3Buff"));
+                player.ClearBuff(mod.BuffType("ASSJBuff"));
+                player.ClearBuff(mod.BuffType("USSJBuff"));
                 player.ClearBuff(mod.BuffType("LSSJBuff"));
+                player.ClearBuff(mod.BuffType("SSJGBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
@@ -692,7 +709,7 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff"))))
+            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff"))))
             {
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
@@ -700,6 +717,7 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("USSJBuff"));
                 player.ClearBuff(mod.BuffType("SSJ3Buff"));
                 player.ClearBuff(mod.BuffType("LSSJBuff"));
+                player.ClearBuff(mod.BuffType("SSJGBuff"));
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }

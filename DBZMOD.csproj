@@ -212,6 +212,7 @@
     <Compile Include="Projectiles\Auras\SSJ1AuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJ2AuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
+    <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
