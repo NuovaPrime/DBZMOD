@@ -143,6 +143,7 @@
     <Compile Include="Items\Consumables\TestItems\LSSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ2MasteryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ3MasteryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJGTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ3TestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ2TestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJMasteryTestItem.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Items\EarthenShard.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\KiOrb2.cs" />
+    <Compile Include="Items\Misc\CoffeeCandy.cs" />
     <Compile Include="Items\Misc\Choco3.cs" />
     <Compile Include="Items\Misc\Choco2.cs" />
     <Compile Include="Items\Misc\Choco1.cs" />

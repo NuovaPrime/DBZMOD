@@ -14,7 +14,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("CandyLaserBlast");
-			item.shootSpeed = 20f;
+			item.shootSpeed = 14f;
 			item.damage = 142;
 			item.knockBack = 4f;
 			item.useStyle = 5;

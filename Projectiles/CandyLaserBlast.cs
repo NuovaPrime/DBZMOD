@@ -52,7 +52,7 @@ namespace DBZMOD.Projectiles
             projectile.ai[1]++;
             if (projectile.ai[1] == 2)
             {
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("CandyLaserTrail"), projectile.damage / 2, 4f, projectile.owner, 0, projectile.rotation);
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("CandyLaserTrail"), projectile.damage / 3, 4f, projectile.owner, 0, projectile.rotation);
                 projectile.ai[1] = 0;
                 projectile.netUpdate = true;
             }
