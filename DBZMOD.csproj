@@ -152,6 +152,9 @@
     <Compile Include="Items\EarthenShard.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\KiOrb2.cs" />
+    <Compile Include="Items\Misc\Choco3.cs" />
+    <Compile Include="Items\Misc\Choco2.cs" />
+    <Compile Include="Items\Misc\Choco1.cs" />
     <Compile Include="Items\RadiantFragment.cs" />
     <Compile Include="Items\PureKiCrystal.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
@@ -192,6 +195,7 @@
     <Compile Include="Items\Weapons\Tier_5\Kamehamehax10.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_5\Supernova.cs" />
+    <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
     <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
@@ -216,10 +220,12 @@
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
+    <Compile Include="Projectiles\CandyLaserTrail.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultMini.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultProj.cs" />
     <Compile Include="Projectiles\DestructoDiskProjectile.cs" />
     <Compile Include="Projectiles\DirtyFireworksProjectile.cs" />
+    <Compile Include="Projectiles\CandyLaserBlast.cs" />
     <Compile Include="Projectiles\DoubleSundayBlast.cs" />
     <Compile Include="Projectiles\DoubleSundayTrail.cs" />
     <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
