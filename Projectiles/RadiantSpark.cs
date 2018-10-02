@@ -64,7 +64,7 @@ namespace DBZMOD.Projectiles
 				projectile.velocity = (10 * projectile.velocity + move) / 11f;
 				AdjustMagnitude(ref projectile.velocity);
 			}
-			if (projectile.alpha <= 100)
+			if (projectile.alpha <= 255)
 			{
 				int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, mod.DustType("RadiantDust"));
 				Main.dust[dust].velocity /= 2f;

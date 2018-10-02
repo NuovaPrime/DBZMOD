@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "RadiantFragment", 40);
+	        recipe.AddIngredient(null, "RadiantFragment", 15);
 			recipe.AddIngredient(null, "Kamehamehax10");
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
