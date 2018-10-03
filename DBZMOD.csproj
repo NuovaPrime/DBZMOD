@@ -197,8 +197,12 @@
     <Compile Include="Items\Weapons\Tier_5\Kamehamehax10.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_5\Supernova.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BigBangKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
     <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
+    <Compile Include="Items\Weapons\Tier_6\HolyWrath.cs" />
+    <Compile Include="Items\Weapons\Tier_6\RadialJavelin.cs" />
+    <Compile Include="Items\Weapons\Tier_6\SuperSpiritBomb.cs" />
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="ModWorld.cs" />
@@ -261,6 +265,7 @@
     <Compile Include="Projectiles\MasenkoBall.cs" />
     <Compile Include="Projectiles\MasenkoBlast.cs" />
     <Compile Include="Projectiles\MasenkoTrail.cs" />
+    <Compile Include="Projectiles\RadialJavelinProj.cs" />
     <Compile Include="Projectiles\RadiantSpark.cs" />
     <Compile Include="Projectiles\RockProjectile.cs" />
     <Compile Include="Projectiles\ScattershotBlast.cs" />
