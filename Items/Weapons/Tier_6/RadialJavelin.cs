@@ -20,7 +20,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.useStyle = 5;
 			item.useAnimation = 32;
 			item.useTime = 32;
-			item.shootSpeed = 32f;
+			item.shootSpeed = 92f;
 			item.knockBack = 4.2f;
 			item.width = 56;
 			item.height = 56;

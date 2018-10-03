@@ -24,7 +24,6 @@ namespace DBZMOD.Projectiles
 			projectile.height = 76;
 			projectile.aiStyle = -1;
 			projectile.friendly = true;
-			projectile.melee = true;
 			projectile.penetrate = -1;
 			projectile.timeLeft = 300;
 		}
@@ -106,7 +105,7 @@ namespace DBZMOD.Projectiles
 		
 		// Added these 2 constant to showcase how you could make AI code cleaner by doing this
 		// Change this number if you want to alter how long the javelin can travel at a constant speed
-		private const float maxTicks = 200f;
+		private const float maxTicks = 300f;
 		// Change this number if you want to alter how the alpha changes
 		private const int alphaReduction = 25;
 
@@ -137,7 +136,7 @@ namespace DBZMOD.Projectiles
             if (target)
             {
                 AdjustMagnitude(ref move);
-                projectile.velocity = (10 * projectile.velocity + move) / 11f;
+                projectile.velocity = (10 * projectile.velocity + move) / 9f;
                 AdjustMagnitude(ref projectile.velocity);
             }
             // Slowly remove alpha as it is present
@@ -158,7 +157,7 @@ namespace DBZMOD.Projectiles
 				if (projectile.ai[1] >= maxTicks)
 				{
 					// Change these multiplication factors to alter the javelin's movement change after reaching maxTicks
-					float velXmult = 0.98f; // x velocity factor, every AI update the x velocity will be 98% of the original speed
+					float velXmult = 0.99f; // x velocity factor, every AI update the x velocity will be 98% of the original speed
 					float velYmult = 0.35f; // y velocity factor, every AI update the y velocity will be be 0.35f bigger of the original speed, causing the javelin to drop to the ground
 					projectile.ai[1] = maxTicks; // set ai1 to maxTicks continuously
 					projectile.velocity.X = projectile.velocity.X * velXmult;

@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-
+                player.detectCreature = true;
                 player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.20f;
                 player.GetModPlayer<MyPlayer>(mod).scouterT6 = true;
             }

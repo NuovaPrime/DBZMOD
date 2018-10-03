@@ -35,6 +35,8 @@ namespace DBZMOD.Projectiles
             KiDrainRate = 2;
             ballscale = 2f;
             ChargeTimerMax = 50f;
+            color = Color.Blue;
+            dusttype = 15;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -73,7 +75,7 @@ namespace DBZMOD.Projectiles
                         float angle = Main.rand.NextFloat(360);
                         float angleRad = MathHelper.ToRadians(angle);
                         Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 3.0f);
+                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, dusttype, 0f, 0f, 213, default(Color), 3.0f);
                         tDust.velocity = -0.5f * Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                         tDust.noGravity = true;
                     }

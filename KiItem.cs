@@ -36,6 +36,7 @@ namespace DBZMOD
         public int yoffset;
         public int xoffset;
         public float ballscale = 1f;
+        public int dusttype;
 
 
         public override bool CloneNewInstances
@@ -79,6 +80,7 @@ namespace DBZMOD
                 {
                     projectile.active = false;
                 }
+                projectile.hide = true;
 
                 if (projectile.timeLeft < 4)
                 {
@@ -118,7 +120,7 @@ namespace DBZMOD
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, color, ballscale);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, dusttype, 0f, 0f, 213, default(Color), ballscale);
                     tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
