@@ -36,7 +36,7 @@ namespace DBZMOD.Projectiles
             ballscale = 2f;
             color = Color.Yellow;
             ChargeTimerMax = 80f;
-            dusttype = 200;
+            dusttype = 169;
         }
 
         public override Color? GetAlpha(Color lightColor)

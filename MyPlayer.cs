@@ -217,43 +217,45 @@ namespace DBZMOD
             {
                 KaiokenTimer += 1.5f;
             }
-
-            if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+            if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                ASSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                    "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
-            }
-            else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
-            {
-                USSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                    "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
-            }
-            else if (MasteryLevel1 >= 1f && !MasteredMessage1)
-            {
-                MasteredMessage1 = true;
-                Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevel2 >= 1f && !MasteredMessage2)
-            {
-                MasteredMessage2 = true;
-                Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevel3 >= 1f && !MasteredMessage3)
-            {
-                MasteredMessage3 = true;
-                Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
-            {
-                MasteredMessageGod = true;
-                Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
-            {
-                MasteredMessageBlue = true;
-                Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+                if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+                {
+                    ASSJAchieved = true;
+                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                        "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
+                }
+                else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
+                {
+                    USSJAchieved = true;
+                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                        "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
+                }
+                else if (MasteryLevel1 >= 1f && !MasteredMessage1)
+                {
+                    MasteredMessage1 = true;
+                    Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevel2 >= 1f && !MasteredMessage2)
+                {
+                    MasteredMessage2 = true;
+                    Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevel3 >= 1f && !MasteredMessage3)
+                {
+                    MasteredMessage3 = true;
+                    Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
+                {
+                    MasteredMessageGod = true;
+                    Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
+                {
+                    MasteredMessageBlue = true;
+                    Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+                }
             }
             if (MasteryLevel1 > MasteryMax1)
             {
@@ -362,6 +364,13 @@ namespace DBZMOD
             }
 
             KiBar.visible = true;
+        }
+        public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
+        {
+            if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            {
+                drawInfo.hairColor = new Color(183, 25, 46);
+            }
         }
 
         public bool SSJ1Check()
@@ -586,7 +595,7 @@ namespace DBZMOD
                 if (!player.HasBuff(mod.BuffType("SSJGBuff")) && ssjgAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJGBuff"), 1800);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGAuraProj"), 0, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
@@ -1126,11 +1135,11 @@ namespace DBZMOD
                 Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                 player.eyeColor = Color.Turquoise;
             }
-            else if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            /*else if (player.HasBuff(mod.BuffType("SSJGBuff")))
             {
                 Hair = mod.GetTexture("Hairs/God/SSJGHair");
                 player.eyeColor = Color.Red;
-            }
+            }*/
             else
             {
                 Hair = null;

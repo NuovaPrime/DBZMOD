@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Buffs\TransExhaustionBuff.cs" />
     <Compile Include="Buffs\ArmorCooldown.cs" />
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
@@ -225,6 +226,9 @@
     <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaBall.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaBlast.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaTrail.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
     <Compile Include="Projectiles\CandyLaserTrail.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultMini.cs" />
@@ -252,6 +256,8 @@
     <Compile Include="Projectiles\GalickGunTrail.cs" />
     <Compile Include="Projectiles\HellzoneGrenadeProjectile.cs" />
     <Compile Include="Projectiles\HellzoneGrenadeProjectile2.cs" />
+    <Compile Include="Projectiles\HolyWrathBall.cs" />
+    <Compile Include="Projectiles\HolyWrathExplosion.cs" />
     <Compile Include="Projectiles\KamehamehaBall.cs" />
     <Compile Include="Projectiles\KamehamehaBlast.cs" />
     <Compile Include="Projectiles\KamehamehaTrail.cs" />

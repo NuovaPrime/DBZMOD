@@ -37,6 +37,15 @@ namespace DBZMOD.Projectiles.Auras
         }
         public override void AI()
         {
+            if (Main.rand.NextFloat() < 0.7236842f)
+            {
+                Dust dust;
+                Vector2 position = projectile.Center + new Vector2(-30, 0);
+                dust = Main.dust[Dust.NewDust(position, 84, 105, 187, 0f, -3.421053f, 213, new Color(255, 0, 0), 1.1f)];
+                dust.noGravity = true;
+                dust.noLight = true;
+            }
+
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(mod.BuffType("SSJGBuff")))
             {
