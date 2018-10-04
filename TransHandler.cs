@@ -87,16 +87,7 @@ namespace DBZMOD
             {
                 if(MyPlayer.ModPlayer(player).KiCurrent <= 0)
                 {
-                    MyPlayer.ModPlayer(player).IsTransformed = false;
-                    player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                    player.ClearBuff(mod.BuffType("ASSJBuff"));
-                    player.ClearBuff(mod.BuffType("USSJBuff"));
-                    player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
-                    player.ClearBuff(mod.BuffType("SSJ2Buff"));
-                    player.ClearBuff(mod.BuffType("SSJ3Buff"));
-                    player.ClearBuff(mod.BuffType("LSSJBuff"));
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-                    MyPlayer.ModPlayer(player).IsTransformed = false;
+                    MyPlayer.ModPlayer(player).EndTransformations();
                 }
             }
 
@@ -123,6 +114,8 @@ namespace DBZMOD
         {
             MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
         }
+
+
     }
 }
 

@@ -721,16 +721,7 @@ namespace DBZMOD
             }
             if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff"))))
             {
-                player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                player.ClearBuff(mod.BuffType("SSJ2Buff"));
-                player.ClearBuff(mod.BuffType("ASSJBuff"));
-                player.ClearBuff(mod.BuffType("USSJBuff"));
-                player.ClearBuff(mod.BuffType("SSJ3Buff"));
-                player.ClearBuff(mod.BuffType("LSSJBuff"));
-                player.ClearBuff(mod.BuffType("SSJGBuff"));
-                player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-                IsTransformed = false;
+                EndTransformations();
             }
         }        
         public MyPlayer() : base()
@@ -1067,12 +1058,30 @@ namespace DBZMOD
             }
 
         });
+
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             LightningEffects.visible = true;
             layers.Add(LightningEffects);
         }
+
+        public void EndTransformations()
+        {
+            player.ClearBuff(mod.BuffType("SSJ1Buff"));
+            player.ClearBuff(mod.BuffType("SSJ2Buff"));
+            player.ClearBuff(mod.BuffType("ASSJBuff"));
+            player.ClearBuff(mod.BuffType("USSJBuff"));
+            player.ClearBuff(mod.BuffType("SSJ3Buff"));
+            player.ClearBuff(mod.BuffType("LSSJBuff"));
+            player.ClearBuff(mod.BuffType("SSJGBuff"));
+            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800);
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+            IsTransformed = false;
+        }
+
     }
+
+
     public class SSJHairDraw : ModPlayer
     {
         public Texture2D Hair;
@@ -1158,4 +1167,5 @@ namespace DBZMOD
             }
         }
     }
+
 }
