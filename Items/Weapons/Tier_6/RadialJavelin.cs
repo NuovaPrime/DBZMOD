@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "RadiantFragment", 18);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
