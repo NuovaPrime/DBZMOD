@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 		    recipe.AddIngredient(null, "FinalFlash", 1);
-		    recipe.AddIngredient(ItemID.VortexFragment, 18);
+		    recipe.AddIngredient(ItemID.FragmentVortex, 18);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

@@ -55,10 +55,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SolarFragment, 4);
-            recipe.AddIngredient(ItemID.VortexFragment, 4);
-            recipe.AddIngredient(ItemID.NebulaFragment, 4);
-            recipe.AddIngredient(ItemID.StardustFragment, 4);
+            recipe.AddIngredient(ItemID.FragmentSolar, 4);
+            recipe.AddIngredient(ItemID.FragmentVortex, 4);
+            recipe.AddIngredient(ItemID.FragmentNebula, 4);
+            recipe.AddIngredient(ItemID.FragmentStardust, 4);
             recipe.AddIngredient(null, "SpiritBomb", 1);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
