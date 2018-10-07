@@ -13,9 +13,10 @@ namespace DBZMOD.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Radiant Fragment");
-			ToolTip.SetDefault("'The endurance of the cosmos crackles around this fragment'")
+			ToolTip.SetDefault("'The endurance of the cosmos crackles around this fragment'");
 		    ItemID.Sets.ItemNoGravity[item.type] = true;
 		}
+
 		public override void SetDefaults()
 		{
 			item.width = 20;
@@ -25,8 +26,8 @@ namespace DBZMOD.Items
 			item.rare = 9;
 		}
 		public override Color? GetAlpha(Color lightColor)
-   		{
-            		return Color.White;
+        {
+            return Color.White;
 		}
 	}
 }
