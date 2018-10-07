@@ -15,6 +15,8 @@ namespace DBZMOD.Items
 			DisplayName.SetDefault("Radiant Fragment");
 			Tooltip.SetDefault("'The endurance of the cosmos crackles around this fragment'");
 		    ItemID.Sets.ItemNoGravity[item.type] = true;
+		    ItemID.Sets.AnimatesAsSoul[item.type] = true;
+            ItemID.Sets.ItemIconPulse[item.type] = true;
 		}
 
 		public override void SetDefaults()
