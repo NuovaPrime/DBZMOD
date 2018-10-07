@@ -18,6 +18,7 @@ namespace DBZMOD.Items
             item.height = 28;
             item.value = 0;
             item.rare = 8;
+            item.maxStack = 999;
         }
 		
 		 public override void AddRecipes()

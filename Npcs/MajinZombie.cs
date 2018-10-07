@@ -31,13 +31,20 @@ namespace DBZMOD.Npcs
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			return SpawnCondition.OverworldNightMonster.Chance * 0.05f;
+		    if (NPC.downedAncientCultist)
+		    {
+		        return SpawnCondition.OverworldNightMonster.Chance * 0.05f;
+		    }
+		    else
+		    {
+                return SpawnCondition.OverworldNightMonster.Chance * 0f;
+            }
 		}
 
         public override void AI()
         {
             majinRegentimer++;
-            if(majinRegentimer > 12)
+            if(majinRegentimer > 12 && npc.life <= npc.lifeMax)
             {
                 npc.life += 1;
                 majinRegentimer = 0;

@@ -39,6 +39,7 @@ namespace DBZMOD
         public bool IsTransformingSSJ2;
         public bool IsTransformingSSJ3;
         public bool IsTransformingLSSJ;
+        public bool IsTransformingSSJG;
         public bool Fragment1;
         public bool Fragment2;
         public bool Fragment3;
@@ -142,6 +143,7 @@ namespace DBZMOD
         public bool battleKit;
         public bool radiantBonus;
         public float chargeTimerMaxAdd;
+        public bool ssjgAchieved = false;
         #endregion
 
         #region Classes
@@ -215,43 +217,45 @@ namespace DBZMOD
             {
                 KaiokenTimer += 1.5f;
             }
-
-            if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+            if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                ASSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                    "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
-            }
-            else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
-            {
-                USSJAchieved = true;
-                Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                    "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
-            }
-            else if (MasteryLevel1 >= 1f && !MasteredMessage1)
-            {
-                MasteredMessage1 = true;
-                Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevel2 >= 1f && !MasteredMessage2)
-            {
-                MasteredMessage2 = true;
-                Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevel3 >= 1f && !MasteredMessage3)
-            {
-                MasteredMessage3 = true;
-                Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
-            {
-                MasteredMessageGod = true;
-                Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
-            }
-            else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
-            {
-                MasteredMessageBlue = true;
-                Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+                if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+                {
+                    ASSJAchieved = true;
+                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                        "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
+                }
+                else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
+                {
+                    USSJAchieved = true;
+                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
+                        "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
+                }
+                else if (MasteryLevel1 >= 1f && !MasteredMessage1)
+                {
+                    MasteredMessage1 = true;
+                    Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevel2 >= 1f && !MasteredMessage2)
+                {
+                    MasteredMessage2 = true;
+                    Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevel3 >= 1f && !MasteredMessage3)
+                {
+                    MasteredMessage3 = true;
+                    Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
+                {
+                    MasteredMessageGod = true;
+                    Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
+                }
+                else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
+                {
+                    MasteredMessageBlue = true;
+                    Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+                }
             }
             if (MasteryLevel1 > MasteryMax1)
             {
@@ -276,16 +280,33 @@ namespace DBZMOD
 
             //noobva stahp fun killing :P
             if ((player.HasBuff(mod.BuffType("SSJ1Buff")) 
-                || player.HasBuff(mod.BuffType("SSJ2Buff")) 
-                || player.HasBuff(mod.BuffType("SSJ3Buff")) 
-                || player.HasBuff(mod.BuffType("LSSJBuff"))) 
                 && 
-                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
             {
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuff"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
+                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+                IsTransformed = false;
+                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            }
+            if ((player.HasBuff(mod.BuffType("SSJ2Buff"))
+                || player.HasBuff(mod.BuffType("SSJ3Buff"))
+                || player.HasBuff(mod.BuffType("ASSJBuff"))
+                || player.HasBuff(mod.BuffType("USSJBuff"))
+                || player.HasBuff(mod.BuffType("LSSJBuff"))
+                || player.HasBuff(mod.BuffType("SSJGBuff")))
+                &&
+                (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            {
                 player.ClearBuff(mod.BuffType("SSJ2Buff"));
                 player.ClearBuff(mod.BuffType("SSJ3Buff"));
+                player.ClearBuff(mod.BuffType("ASSJBuff"));
+                player.ClearBuff(mod.BuffType("USSJBuff"));
                 player.ClearBuff(mod.BuffType("LSSJBuff"));
+                player.ClearBuff(mod.BuffType("SSJGBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
@@ -343,6 +364,13 @@ namespace DBZMOD
             }
 
             KiBar.visible = true;
+        }
+        public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
+        {
+            if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            {
+                drawInfo.hairColor = new Color(183, 25, 46);
+            }
         }
 
         public bool SSJ1Check()
@@ -432,6 +460,7 @@ namespace DBZMOD
             tag.Add("hasLegendary", hasLegendary);
             tag.Add("LSSJAchieved", LSSJAchieved);
             tag.Add("flightUnlocked", flightUnlocked);
+            tag.Add("ssjgAchieved", ssjgAchieved);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -479,6 +508,7 @@ namespace DBZMOD
             hasLegendary = tag.Get<bool>("hasLegendary");
             LSSJAchieved = tag.Get<bool>("LSSJAchieved");
             flightUnlocked = tag.Get<bool>("flightUnlocked");
+            ssjgAchieved = tag.Get<bool>("ssjgAchieved");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
@@ -512,7 +542,7 @@ namespace DBZMOD
 
             if (Transform.JustPressed)
             {
-                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff"))))
+                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))))
                 {
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
@@ -530,36 +560,42 @@ namespace DBZMOD
                     player.ClearBuff(mod.BuffType("ASSJBuff"));
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
-                else if (!player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                else if (!player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
-                else if (!player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                else if (!player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("LSSJBuff"), 1800);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
-                else if (!player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                else if (!player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 900);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
-                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsCharging && SSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsCharging && SSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 1800);
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
-                else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsCharging && SSJ3Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff"))))
+                else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsCharging && SSJ3Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
                 {
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 900);
                     player.ClearBuff(mod.BuffType("SSJ2Buff"));
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                }
+                if (!player.HasBuff(mod.BuffType("SSJGBuff")) && ssjgAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                {
+                    player.AddBuff(mod.BuffType("SSJGBuff"), 1800);
+                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                 }
             }
@@ -687,21 +723,14 @@ namespace DBZMOD
             if (PowerDown.JustPressed && player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
-                player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer*2));
+                player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
                 KaiokenTimer = 0.0f;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff"))))
+            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff"))))
             {
-                player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                player.ClearBuff(mod.BuffType("SSJ2Buff"));
-                player.ClearBuff(mod.BuffType("ASSJBuff"));
-                player.ClearBuff(mod.BuffType("USSJBuff"));
-                player.ClearBuff(mod.BuffType("SSJ3Buff"));
-                player.ClearBuff(mod.BuffType("LSSJBuff"));
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-                IsTransformed = false;
+                EndTransformations();
             }
         }        
         public MyPlayer() : base()
@@ -925,6 +954,10 @@ namespace DBZMOD
             {
                 return false;
             }
+            if(IsTransformingSSJG)
+            {
+                return false;
+            }
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
                 player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
@@ -1034,12 +1067,30 @@ namespace DBZMOD
             }
 
         });
+
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             LightningEffects.visible = true;
             layers.Add(LightningEffects);
         }
+
+        public void EndTransformations()
+        {
+            player.ClearBuff(mod.BuffType("SSJ1Buff"));
+            player.ClearBuff(mod.BuffType("SSJ2Buff"));
+            player.ClearBuff(mod.BuffType("ASSJBuff"));
+            player.ClearBuff(mod.BuffType("USSJBuff"));
+            player.ClearBuff(mod.BuffType("SSJ3Buff"));
+            player.ClearBuff(mod.BuffType("LSSJBuff"));
+            player.ClearBuff(mod.BuffType("SSJGBuff"));
+            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800);
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+            IsTransformed = false;
+        }
+
     }
+
+
     public class SSJHairDraw : ModPlayer
     {
         public Texture2D Hair;
@@ -1084,11 +1135,11 @@ namespace DBZMOD
                 Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                 player.eyeColor = Color.Turquoise;
             }
-            else if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            /*else if (player.HasBuff(mod.BuffType("SSJGBuff")))
             {
                 Hair = mod.GetTexture("Hairs/God/SSJGHair");
                 player.eyeColor = Color.Red;
-            }
+            }*/
             else
             {
                 Hair = null;
@@ -1125,4 +1176,5 @@ namespace DBZMOD
             }
         }
     }
+
 }
