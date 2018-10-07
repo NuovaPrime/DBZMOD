@@ -9,10 +9,9 @@ namespace DBZMOD.Dusts
 		public override void OnSpawn(Dust dust)
 		{
 			dust.noLight = false;
-			dust.color = new Color(0, 230, 0);
 			dust.scale = 1.2f;
 			dust.noGravity = true;
-			dust.velocity /= 2f;
+			dust.velocity /= 1.5f;
 			dust.alpha = 100;
 		}
 
