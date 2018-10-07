@@ -13,7 +13,7 @@ namespace DBZMOD.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Radiant Fragment");
-			ToolTip.SetDefault("'The endurance of the cosmos crackles around this fragment'");
+			Tooltip.SetDefault("'The endurance of the cosmos crackles around this fragment'");
 		    ItemID.Sets.ItemNoGravity[item.type] = true;
 		}
 
