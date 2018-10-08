@@ -17,22 +17,24 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		public override void SetDefaults()
 		{
 			item.damage = 142;
-			item.useStyle = 5;
+			item.useStyle = 1;
 			item.useAnimation = 32;
-			item.useTime = 32;
-			item.shootSpeed = 92f;
+            item.useTime = 32;
+			item.shootSpeed = 172f;
 			item.knockBack = 4.2f;
 			item.width = 56;
 			item.height = 56;
 			item.scale = 1f;
-			item.rare = 9;
+            item.rare = 10;
 			item.UseSound = SoundID.Item1;
 			item.shoot = mod.ProjectileType("RadialJavelinProj");
 			item.value = 150000;
 			item.noMelee = true; 
 			item.noUseGraphic = true; 
 			item.autoReuse = true;
-		}
+            KiDrain = 90;
+            item.UseSound = SoundID.Item68;
+        }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
@@ -43,8 +45,8 @@ namespace DBZMOD.Items.Weapons.Tier_6
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			float numberProjectiles = 3 + Main.rand.Next(4);
-			float rotation = MathHelper.ToRadians(15);
+			float numberProjectiles = 3 + Main.rand.Next(2);
+			float rotation = MathHelper.ToRadians(10);
 			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
 			for (int i = 0; i < numberProjectiles; i++)
 			{
