@@ -23,7 +23,6 @@ namespace DBZMOD.Projectiles
 			projectile.width = 26;
 			projectile.height = 76;
 			projectile.aiStyle = -1;
-			projectile.light = 0.2; 
 			projectile.friendly = true;
 			projectile.penetrate = -1;
 			projectile.timeLeft = 300;
