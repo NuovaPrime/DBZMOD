@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.noMelee = true; 
 			item.noUseGraphic = true; 
 			item.autoReuse = true;
-            KiDrain = 215;
+            KiDrain = 90;
             item.UseSound = SoundID.Item68;
         }
         public override void AddRecipes()
