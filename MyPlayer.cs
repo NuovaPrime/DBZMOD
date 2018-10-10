@@ -1100,46 +1100,53 @@ namespace DBZMOD
         }
         public override void PreUpdate()
         {
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")))
+            if (player.GetModPlayer<MyPlayer>().IsTransformed)
             {
-                Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
-                player.eyeColor = Color.Turquoise;
+                //If no head armor or vanity
+                if (player.armor[0].headSlot == -1 && !player.armor[10].vanity && player.armor[10].headSlot == -1)
+                {
+                    if (player.HasBuff(mod.BuffType("SSJ1Buff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    else if (player.HasBuff(mod.BuffType("ASSJBuff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    else if (player.HasBuff(mod.BuffType("USSJBuff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    else if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
+                        player.eyeColor = Color.Red;
+                    }
+                    else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    else if (player.HasBuff(mod.BuffType("SSJ3Buff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    else if (player.HasBuff(mod.BuffType("LSSJBuff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
+                        player.eyeColor = Color.Turquoise;
+                    }
+                    /*else if (player.HasBuff(mod.BuffType("SSJGBuff")))
+                    {
+                        Hair = mod.GetTexture("Hairs/God/SSJGHair");
+                        player.eyeColor = Color.Red;
+                    }*/
+                }
             }
-            else if (player.HasBuff(mod.BuffType("ASSJBuff")))
-            {
-                Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
-                player.eyeColor = Color.Turquoise;
-            }
-            else if (player.HasBuff(mod.BuffType("USSJBuff")))
-            {
-                Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
-                player.eyeColor = Color.Turquoise;
-            }
-            else if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
-            {
-                Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
-                player.eyeColor = Color.Red;
-            }
-            else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
-            {
-                Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
-                player.eyeColor = Color.Turquoise;
-            }
-            else if (player.HasBuff(mod.BuffType("SSJ3Buff")))
-            {
-                Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
-                player.eyeColor = Color.Turquoise;
-            }
-            else if (player.HasBuff(mod.BuffType("LSSJBuff")))
-            {
-                Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
-                player.eyeColor = Color.Turquoise;
-            }
-            /*else if (player.HasBuff(mod.BuffType("SSJGBuff")))
-            {
-                Hair = mod.GetTexture("Hairs/God/SSJGHair");
-                player.eyeColor = Color.Red;
-            }*/
             else
             {
                 Hair = null;
