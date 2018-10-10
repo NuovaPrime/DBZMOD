@@ -20,8 +20,8 @@ namespace DBZMOD.UI
         public override void OnInitialize()
         {
             backPanel = new UIPanel();
-            backPanel.Width.Set(360f, 0f);
-            backPanel.Height.Set(240f, 0f);
+            backPanel.Width.Set(306f, 0f);
+            backPanel.Height.Set(128f, 0f);
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0);
@@ -29,7 +29,13 @@ namespace DBZMOD.UI
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
             base.Append(backPanel);
             base.OnInitialize();
+
+
         }
+        /*public override void Update(GameTime gametime)
+        {
+            backPanel.SetVisibility(0.0f);
+        }*/
 
         public void InitButton(ref UIImageButton buttonToInitialise, Texture2D buttonTexture, MouseEvent buttonOnClick, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {

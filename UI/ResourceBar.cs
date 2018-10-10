@@ -17,7 +17,7 @@ namespace DBZMOD.UI
 		private ResourceBarMode stat;
 		private float width;
 		private float height;
-
+		private int FrameTimer;
 		public ResourceBar(ResourceBarMode stat, int height, int width)
 		{
 			this.stat = stat;
@@ -52,12 +52,12 @@ namespace DBZMOD.UI
 			text.Top.Set(height / 2 + 10, 0f); //center the UIText
 			text.Left.Set(width - 60, 0f);
 
-			var BarTexture = GFX.KiBar;
+			/* var BarTexture = GFX.KiBar;
 			UIImage ki = new UIImage(BarTexture);
 			ki.Top.Set(-8, 0f);
 			ki.Width.Set(80, 0f);
 			ki.Height.Set(18, 0f);
-			Append(ki);
+			Append(ki);*/
 
 			Append(text);
 
@@ -66,7 +66,7 @@ namespace DBZMOD.UI
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
-			base.DrawSelf(spriteBatch); // draws nothing since this inherits from UIElement
+			base.DrawSelf(spriteBatch);
 
 			MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 			float quotient = 1f;
@@ -96,6 +96,16 @@ namespace DBZMOD.UI
 				float percent = (float)i / (right - left);
 				spriteBatch.Draw(Main.magicPixel, new Rectangle(left + i, hitbox.Y, 1, hitbox.Height), Color.Lerp(gradientA, gradientB, percent));
 			}
+			FrameTimer++;
+			if (FrameTimer >= 20)
+            {
+                FrameTimer = 0;
+            }
+			Vector2 drawPosition = new Vector2(500, 40);
+			int FrameHeight = GFX.KiBar.Height / 4;
+			int frame = FrameTimer / 5;
+			Rectangle sourceRectangle = new Rectangle(0, FrameHeight * frame, GFX.KiBar.Width, FrameHeight);
+			spriteBatch.Draw(GFX.KiBar, drawPosition, sourceRectangle, Color.White);
 		}
 
 		public override void Update(GameTime gameTime)

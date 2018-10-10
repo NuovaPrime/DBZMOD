@@ -16,6 +16,7 @@ namespace DBZMOD.UI
     {
         public static bool menuvisible = false;
         private UIText titleText;
+        public UIImage backPanelImage;
         private UIText ssjbuttontext;
         private UIText ssj2buttontext;
         private UIText ssj3buttontext;
@@ -24,10 +25,6 @@ namespace DBZMOD.UI
         private UIImageButton ssj2ButtonTexture;
         private UIImageButton ssj3ButtonTexture;
         private UIImageButton lssjButtonTexture;
-
-        private UIImage lineSSJ1toSSJ2;
-        private UIImage lineSSJ2toSSJ3;
-        private UIImage lineSSJ1toLSSJ;
         private UIImage lockedImage1;
         private UIImage lockedImage2;
         private UIImage lockedImage3;
@@ -46,8 +43,14 @@ namespace DBZMOD.UI
         public override void OnInitialize()
         {
             base.OnInitialize();
-            backPanel.BackgroundColor = new Color(100, 100, 100);
-
+            //backPanel.BackgroundColor = new Color(100, 100, 100);
+            
+            backPanelImage = new UIImage(GFX.BackPanel);
+            backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
+            backPanelImage.Height.Set(GFX.BackPanel.Height, 0f);
+            backPanelImage.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
+            backPanelImage.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
+            backPanelImage.Append(backPanel);
             float Row1_OffsetX = 0.0f;
 
             InitText(ref titleText, "Transformation Tree", 75, 0.0f, Color.White);
@@ -62,11 +65,6 @@ namespace DBZMOD.UI
                 PADDINGY + 5);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
-            InitImage(ref lineSSJ1toSSJ2, GFX.LineHorizontalImage,
-                Row1_OffsetX,
-                PADDINGY + GFX.SSJ1ButtonImage.Height / 2);
-
-            Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width + GFX.LineHorizontalImage.Width;
             InitButton(ref ssj2ButtonTexture, GFX.SSJ2ButtonImage, new MouseEvent(TrySelectingSSJ2),
                 Row1_OffsetX, 
                 PADDINGY);
@@ -76,12 +74,7 @@ namespace DBZMOD.UI
                 Row1_OffsetX + 20,
                 PADDINGY + 5);
 
-            Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width * 2 + GFX.LineHorizontalImage.Width;
-            InitImage(ref lineSSJ2toSSJ3, GFX.LineHorizontalImage,
-                Row1_OffsetX,
-                PADDINGY + GFX.SSJ1ButtonImage.Height / 2);
-
-            Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2 + GFX.LineHorizontalImage.Width * 2;
+            Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
             InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3),
                 Row1_OffsetX, 
                 PADDINGY);
@@ -91,13 +84,8 @@ namespace DBZMOD.UI
                 Row1_OffsetX + 35,
                 PADDINGY + 5);
 
-            Row1_OffsetX = PADDINGX;
-            InitImage(ref lineSSJ1toLSSJ, GFX.LineLImage,
-                Row1_OffsetX,
-                PADDINGY + GFX.SSJ1ButtonImage.Height);
-
             InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
-                PADDINGX + GFX.SSJ1ButtonImage.Width + GFX.LineHorizontalImage.Width, 
+                PADDINGX + GFX.SSJ1ButtonImage.Width, 
                 GFX.SSJ1ButtonImage.Height + PADDINGY);
         }
 
@@ -107,23 +95,11 @@ namespace DBZMOD.UI
 
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            //SSJ1
-            //ssjButtonTexture.SetVisibility(player.SSJ1Achieved ? 1.0f : 0.0f, player.SSJ1Achieved ? 0.5f : 0.0f);
             lockedImage1.ImageScale = !player.SSJ1Achieved ? 1.0f : 0.0f;
 
-            //SSJ2
-            ssj2ButtonTexture.SetVisibility(player.hasLegendary ? 0.0f : 1.0f, player.hasLegendary ? 0.0f : 1.0f);
-            lineSSJ1toSSJ2.ImageScale = player.hasLegendary ? 0.0f : 1.0f;
             lockedImage2.ImageScale = !player.SSJ2Achieved && !player.hasLegendary ? 1.0f : 0.0f;
 
-            //SSJ3
-            ssj3ButtonTexture.SetVisibility(player.hasLegendary ? 0.0f : 1.0f, player.hasLegendary ? 0.0f : 1.0f);
-            lineSSJ2toSSJ3.ImageScale = player.hasLegendary ? 0.0f : 1.0f;
             lockedImage3.ImageScale = !player.SSJ3Achieved && !player.hasLegendary ? 1.0f : 0.0f;
-
-            //LSSJ
-            lssjButtonTexture.SetVisibility(player.hasLegendary ? 1.0f : 0.0f, player.LSSJAchieved ? 1.0f : 0.0f);
-            lineSSJ1toLSSJ.ImageScale = player.hasLegendary ? 1.0f : 0.0f;
 
         }
 

@@ -16,9 +16,9 @@ namespace DBZMOD.UI
 
 		public override void OnInitialize()
 		{
-			ResourceBar Bar = new ResourceBar(ResourceBarMode.KI, 6, 86);
-			Bar.Left.Set(500f, 0f); //175
-			Bar.Top.Set(40f, 0f);
+			ResourceBar Bar = new ResourceBar(ResourceBarMode.KI, 7, 92);
+			Bar.Left.Set(515f, 0f); //175
+			Bar.Top.Set(49f, 0f);
 			Append(Bar);
 
 			//ki.OnMouseDown += new UIElement.MouseEvent(DragStart);
