@@ -43,7 +43,7 @@ namespace DBZMOD.UI
         public override void OnInitialize()
         {
             base.OnInitialize();
-            //backPanel.BackgroundColor = new Color(100, 100, 100);
+            backPanel.BackgroundColor = new Color(100, 100, 100);
             
             backPanelImage = new UIImage(GFX.BackPanel);
             backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);

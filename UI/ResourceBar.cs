@@ -101,7 +101,7 @@ namespace DBZMOD.UI
             {
                 FrameTimer = 0;
             }
-			Vector2 drawPosition = new Vector2(500, 40);
+			Vector2 drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 9);
 			int FrameHeight = GFX.KiBar.Height / 4;
 			int frame = FrameTimer / 5;
 			Rectangle sourceRectangle = new Rectangle(0, FrameHeight * frame, GFX.KiBar.Width, FrameHeight);
