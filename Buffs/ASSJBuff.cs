@@ -9,7 +9,7 @@ namespace DBZMOD.Buffs
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Ascended Super Saiyan");
-            Main.buffNoTimeDisplay[Type] = false;
+            Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
             IsKaioken = false;

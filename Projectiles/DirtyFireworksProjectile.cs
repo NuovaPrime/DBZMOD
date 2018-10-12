@@ -15,7 +15,7 @@ namespace DBZMOD.Projectiles
 
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("SpiritBallProjectile");
+			DisplayName.SetDefault("Dirty Fireworks");
 		}
     	
         public override void SetDefaults()
