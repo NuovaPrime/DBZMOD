@@ -45,12 +45,12 @@ namespace DBZMOD.UI
             base.OnInitialize();
             backPanel.BackgroundColor = new Color(100, 100, 100);
             
-            backPanelImage = new UIImage(GFX.BackPanel);
+            /*backPanelImage = new UIImage(GFX.BackPanel);
             backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
             backPanelImage.Height.Set(GFX.BackPanel.Height, 0f);
             backPanelImage.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanelImage.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanelImage.Append(backPanel);
+            backPanelImage.Append(backPanel);*/
             float Row1_OffsetX = 0.0f;
 
             InitText(ref titleText, "Transformation Tree", 75, 0.0f, Color.White);

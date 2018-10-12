@@ -18,6 +18,7 @@ namespace DBZMOD.UI
 		private float width;
 		private float height;
 		private int FrameTimer;
+		private int FrameTimer2;
 		public ResourceBar(ResourceBarMode stat, int height, int width)
 		{
 			this.stat = stat;
@@ -106,6 +107,21 @@ namespace DBZMOD.UI
 			int frame = FrameTimer / 5;
 			Rectangle sourceRectangle = new Rectangle(0, FrameHeight * frame, GFX.KiBar.Width, FrameHeight);
 			spriteBatch.Draw(GFX.KiBar, drawPosition, sourceRectangle, Color.White);
+
+			FrameTimer2 += 3;
+			if (FrameTimer2 >= 15)
+            {
+                FrameTimer2 = 0;
+            }
+			if(player.IsTransformed)
+			{
+				Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
+				int FrameHeight2 = GFX.KiBarLightning.Height / 3;
+				int frame2 = FrameTimer / 5;
+				Rectangle sourceRectangle2 = new Rectangle(0, FrameHeight2 * frame2, GFX.KiBarLightning.Width, FrameHeight2);
+				spriteBatch.Draw(GFX.KiBarLightning, drawPosition2, sourceRectangle2, Color.White);
+			}
+			
 		}
 
 		public override void Update(GameTime gameTime)
