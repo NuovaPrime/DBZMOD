@@ -12,6 +12,7 @@ using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
+using Terraria.Graphics.Shaders;
 
 namespace DBZMOD
 {
@@ -370,7 +371,14 @@ namespace DBZMOD
             if (player.HasBuff(mod.BuffType("SSJGBuff")))
             {
                 drawInfo.hairColor = new Color(183, 25, 46);
+                drawInfo.hairShader = 1;
             }
+            if (player.HasBuff(mod.BuffType("UIOmenBuff")))
+            {
+                //drawInfo.hairColor = new Color(183, 25, 46);
+                drawInfo.hairShader = 20;
+            }
+
         }
 
         public bool SSJ1Check()

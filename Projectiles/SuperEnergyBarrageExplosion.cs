@@ -10,10 +10,6 @@ namespace DBZMOD.Projectiles
     public class SuperEnergyBarrageExplosion : ModProjectile
     {
         private float SizeTimer;
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 4;
-        }
         public override void SetDefaults()
         {
             projectile.width = 120;
@@ -44,16 +40,6 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 3)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
-            }
             if (SizeTimer > 0)
             {
                 projectile.scale = (SizeTimer / 120f) * 2;
