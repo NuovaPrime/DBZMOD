@@ -63,12 +63,12 @@ namespace DBZMOD.Projectiles
             if(projectile.active)
             {
                 BeamTimer++;
-                if(BeamTimer > 30)
+                if(BeamTimer > 90)
                 {
-                    MyPlayer.ModPlayer(player).SSJTransformationBeams();
                     BeamTimer = 0;
-                }
-                
+                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y - 1000, 0, -50, ProjectileID.VortexVortexLightning, 0, 0, player.whoAmI);
+
+                }     
             }
         }
         public override void Kill(int timeLeft)

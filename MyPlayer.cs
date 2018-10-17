@@ -21,7 +21,7 @@ namespace DBZMOD
         #region Variables
         public float KiDamage;
         public float KiKbAddition;
-        public int KiSpeedAddition;
+        public float KiSpeedAddition;
         public int KiCrit;
         public int KiRegenTimer;
         public int KiRegen;
@@ -184,11 +184,6 @@ namespace DBZMOD
             if(IsTransformingSSJ1)
             {
                 SSJAuraBeamTimer++;
-            }
-            if (SSJAuraBeamTimer > 20 && IsTransformingSSJ1)
-            {
-                SSJTransformationBeams();
-                SSJAuraBeamTimer = 0;
             }
             if(KiCurrent < 0)
             {
@@ -548,7 +543,7 @@ namespace DBZMOD
                 }
             }
 
-            if (Transform.JustPressed)
+            if (Transform.JustPressed)//Needs to be reworked, something method based
             {
                 if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))))
                 {
@@ -836,7 +831,7 @@ namespace DBZMOD
             spiritualEmblem = false;
             turtleShell = false;
             KiDrainMulti = 1f;
-            KiSpeedAddition = 0;
+            KiSpeedAddition = 1f;
             KiCrit = 5;
             ChlorophyteHeadPieceActive = false;
             diamondNecklace = false;

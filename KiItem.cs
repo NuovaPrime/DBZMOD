@@ -283,7 +283,6 @@ namespace DBZMOD
         public bool MoodlordDowned;
         public override void PostUpdate()
         {
-            GetAttackSpeed(player);
             if(NPC.downedBoss1)
             {
                 EyeDowned = true;
@@ -346,11 +345,11 @@ namespace DBZMOD
         {
             crit = crit + MyPlayer.ModPlayer(player).KiCrit;
         }
-        public void GetAttackSpeed(Player player)
+        public override float UseTimeMultiplier(Player player)
         {
-            item.useTime = (item.useTime - MyPlayer.ModPlayer(player).KiSpeedAddition);
-            item.useAnimation = (item.useAnimation - MyPlayer.ModPlayer(player).KiSpeedAddition);
+            return MyPlayer.ModPlayer(player).KiSpeedAddition;
         }
+        
         public int RealKiDrain(Player player)
         {
             return (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);

@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Accessories
                 "\n6% Increased Ki damage" +
                 "\n10% Reduced Ki usage" +
                 "\nHunter effect + Increased charge speed" +
-                "\nIncreased ki cast speed");
+                "\n15% Increased ki cast speed");
             DisplayName.SetDefault("Battle Kit");
         }
 
@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Accessories
                 player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.10f;
                 player.GetModPlayer<MyPlayer>(mod).KiRegenRate += 1;
                 player.detectCreature = true;
-                player.GetModPlayer<MyPlayer>(mod).KiSpeedAddition += 2;
+                player.GetModPlayer<MyPlayer>(mod).KiSpeedAddition += 0.15f;
                 player.GetModPlayer<MyPlayer>(mod).battleKit = true;
             }
         }
