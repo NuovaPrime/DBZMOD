@@ -172,7 +172,7 @@ namespace DBZMOD
 
 
         public override void PostUpdate()
-        {        
+        {     
             if(kiLantern)
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);

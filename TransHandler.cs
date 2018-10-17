@@ -55,6 +55,7 @@ namespace DBZMOD
                     KiDrainAddition += 1;
                     KiDrainAddTimer = 0;
                 }
+                Main.NewText("Ki Drain Addition is " + KiDrainAddition);
                 KiDrainRate += KiDrainAddition;
                 Lighting.AddLight(player.Center, 1f, 1f, 0f);
             }
