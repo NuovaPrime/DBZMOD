@@ -25,6 +25,7 @@ namespace DBZMOD.UI
         private UIImageButton ssj2ButtonTexture;
         private UIImageButton ssj3ButtonTexture;
         private UIImageButton lssjButtonTexture;
+        private UIImageButton ssjgButtonTexture;
         private UIImage lockedImage1;
         private UIImage lockedImage2;
         private UIImage lockedImage3;
@@ -43,50 +44,63 @@ namespace DBZMOD.UI
         public override void OnInitialize()
         {
             base.OnInitialize();
-            backPanel.BackgroundColor = new Color(100, 100, 100);
+            //backPanel.BackgroundColor = new Color(100, 100, 100);
             
-            /*backPanelImage = new UIImage(GFX.BackPanel);
+            backPanelImage = new UIImage(GFX.BackPanel);
             backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
             backPanelImage.Height.Set(GFX.BackPanel.Height, 0f);
-            backPanelImage.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
-            backPanelImage.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanelImage.Append(backPanel);*/
+            backPanelImage.Left.Set(-12, 0f);
+            backPanelImage.Top.Set(-12, 0f);
+            backPanel.Append(backPanelImage);
             float Row1_OffsetX = 0.0f;
 
-            InitText(ref titleText, "Transformation Tree", 75, 0.0f, Color.White);
+            InitText(ref titleText, "Transformation Tree", 55, -32, Color.White);
 
             Row1_OffsetX = PADDINGX;
             InitButton(ref ssjButtonTexture, GFX.SSJ1ButtonImage, new MouseEvent(TrySelectingSSJ1),
-                Row1_OffsetX, 
-                PADDINGY);
+                Row1_OffsetX - 2, 
+                PADDINGY - 20,
+                backPanelImage);
 
             InitImage(ref lockedImage1, GFX.LockedImage,
                 Row1_OffsetX + 2,
-                PADDINGY + 5);
+                PADDINGY - 13,
+                ssjButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
             InitButton(ref ssj2ButtonTexture, GFX.SSJ2ButtonImage, new MouseEvent(TrySelectingSSJ2),
-                Row1_OffsetX, 
-                PADDINGY);
+                Row1_OffsetX + 14, 
+                PADDINGY - 20,
+                backPanelImage);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
             InitImage(ref lockedImage2, GFX.LockedImage,
                 Row1_OffsetX + 20,
-                PADDINGY + 5);
+                PADDINGY - 13,
+                ssj2ButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
             InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3),
-                Row1_OffsetX, 
-                PADDINGY);
+                Row1_OffsetX + 22, 
+                PADDINGY - 20,
+                backPanelImage);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
             InitImage(ref lockedImage3, GFX.LockedImage,
                 Row1_OffsetX + 35,
-                PADDINGY + 5);
+                PADDINGY - 13,
+                ssj3ButtonTexture);
 
             InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
-                PADDINGX + GFX.SSJ1ButtonImage.Width, 
-                GFX.SSJ1ButtonImage.Height + PADDINGY);
+                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width, 
+                GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
+                backPanelImage);
+
+            Row1_OffsetX = PADDINGX + GFX.SSJ3ButtonImage.Width * 3;
+            InitButton(ref ssjgButtonTexture, GFX.SSJGButtonImage, new MouseEvent(TrySelectingSSJG),
+                Row1_OffsetX + 30, 
+                PADDINGY - 20,
+                backPanelImage);
         }
 
         public override void Update(GameTime gameTime)
@@ -149,7 +163,6 @@ namespace DBZMOD.UI
                 Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
             }
         }
-
         private void TrySelectingLSSJ(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -161,7 +174,21 @@ namespace DBZMOD.UI
             else
             {
                 Main.PlaySound(SoundID.MenuClose);
-                Main.NewText("The rarest saiyan's may be able to achieve a unique form rather than ascending.");
+                Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
+            }
+        }
+        private void TrySelectingSSJG(UIMouseEvent evt, UIElement listeningelement)
+        {
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if(player.SSJGAchieved && !player.hasLegendary)
+            {
+                MenuSelection = 5;
+                Main.PlaySound(SoundID.MenuTick);
+            }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
             }
         }
 

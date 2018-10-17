@@ -24,7 +24,7 @@ namespace DBZMOD.UI
             backPanel.Height.Set(128f, 0f);
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanel.BackgroundColor = new Color(0, 0, 0);
+            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
             backPanel.OnMouseDown += new MouseEvent(DragStart);
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
             base.Append(backPanel);
