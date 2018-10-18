@@ -46,7 +46,7 @@ namespace DBZMOD
                 KiDrainTimer++;
                 if(KiDrainTimer > 1)
                 {
-                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate;
+                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate + KiDrainAddition;
                     KiDrainTimer = 0;
                 }
                 KiDrainAddTimer++;
@@ -55,8 +55,6 @@ namespace DBZMOD
                     KiDrainAddition += 1;
                     KiDrainAddTimer = 0;
                 }
-                Main.NewText("Ki Drain Addition is " + KiDrainAddition);
-                KiDrainRate += KiDrainAddition;
                 Lighting.AddLight(player.Center, 1f, 1f, 0f);
             }
             if (MyPlayer.ModPlayer(player).speedToggled)
