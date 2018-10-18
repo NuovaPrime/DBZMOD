@@ -92,7 +92,7 @@ namespace DBZMOD.UI
                 ssj3ButtonTexture);
 
             InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
-                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width, 
+                PADDINGX + 15 + GFX.SSJ1ButtonImage.Width, 
                 GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
                 backPanelImage);
 
