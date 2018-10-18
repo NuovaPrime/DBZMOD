@@ -29,7 +29,12 @@ namespace DBZMOD.UI
         private UIImage lockedImage1;
         private UIImage lockedImage2;
         private UIImage lockedImage3;
+        private UIImage lockedImageG;
         private UIImage lockedImageL1;
+        private UIImage unknownImage2;
+        private UIImage unknownImage3;
+        private UIImage unknownImageG;
+        private UIImage unknownImageL1;
 
 
         public static int MenuSelection = 0;
@@ -63,8 +68,8 @@ namespace DBZMOD.UI
                 backPanelImage);
 
             InitImage(ref lockedImage1, GFX.LockedImage,
-                Row1_OffsetX + 2,
-                PADDINGY - 13,
+                0,
+                0,
                 ssjButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
@@ -73,10 +78,14 @@ namespace DBZMOD.UI
                 PADDINGY - 20,
                 backPanelImage);
 
-            Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
             InitImage(ref lockedImage2, GFX.LockedImage,
-                Row1_OffsetX + 20,
-                PADDINGY - 13,
+                0,
+                0,
+                ssj2ButtonTexture);
+
+            InitImage(ref unknownImage2, GFX.UnknownImage,
+                0,
+                0,
                 ssj2ButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
@@ -85,22 +94,46 @@ namespace DBZMOD.UI
                 PADDINGY - 20,
                 backPanelImage);
 
-            Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
             InitImage(ref lockedImage3, GFX.LockedImage,
-                Row1_OffsetX + 35,
-                PADDINGY - 13,
+                0,
+                0,
+                ssj3ButtonTexture);
+
+            InitImage(ref unknownImage3, GFX.UnknownImage,
+                0,
+                0,
                 ssj3ButtonTexture);
 
             InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
                 PADDINGX + 15 + GFX.SSJ1ButtonImage.Width, 
                 GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
                 backPanelImage);
+            
+            InitImage(ref lockedImageL1, GFX.LockedImage,
+                0, 
+                0,
+                lssjButtonTexture);
+
+            InitImage(ref unknownImageL1, GFX.UnknownImage,
+                0, 
+                0,
+                lssjButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ3ButtonImage.Width * 3;
             InitButton(ref ssjgButtonTexture, GFX.SSJGButtonImage, new MouseEvent(TrySelectingSSJG),
                 Row1_OffsetX + 30, 
                 PADDINGY - 20,
                 backPanelImage);
+                            
+            InitImage(ref lockedImageG, GFX.LockedImage,
+                0,
+                0,
+                ssjgButtonTexture);
+
+            InitImage(ref unknownImageG, GFX.UnknownImage,
+                0,
+                0,
+                ssjgButtonTexture);
         }
 
         public override void Update(GameTime gameTime)
@@ -111,9 +144,38 @@ namespace DBZMOD.UI
 
             lockedImage1.ImageScale = !player.SSJ1Achieved ? 1.0f : 0.0f;
 
-            lockedImage2.ImageScale = !player.SSJ2Achieved && !player.hasLegendary ? 1.0f : 0.0f;
+            if(player.hasLegendary)
+            {
+                lockedImageL1.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
 
-            lockedImage3.ImageScale = !player.SSJ3Achieved && !player.hasLegendary ? 1.0f : 0.0f;
+                lockedImage2.ImageScale = 1.0f;
+
+                unknownImage2.ImageScale = 0.0f;
+
+                lockedImage3.ImageScale = 0.0f;
+
+                unknownImage3.ImageScale = 1.0f;
+
+                lockedImageG.ImageScale = 0.0f;
+
+                unknownImageG.ImageScale = 1.0f;
+
+                unknownImageL1.ImageScale = 0.0f;
+            }
+            else
+            {
+                unknownImageL1.ImageScale = 0.0f;
+                unknownImage2.ImageScale = 0.0f;
+                unknownImage3.ImageScale = 0.0f;
+                unknownImageG.ImageScale = .0f;
+                lockedImage2.ImageScale = !player.SSJ2Achieved ? 1.0f : 0.0f;
+
+                lockedImage3.ImageScale = !player.SSJ3Achieved ? 1.0f : 0.0f;
+
+                lockedImageG.ImageScale = !player.SSJGAchieved ? 1.0f : 0.0f;
+
+                lockedImageL1.ImageScale = 1.0f;
+            }
 
         }
 
@@ -142,7 +204,7 @@ namespace DBZMOD.UI
                 Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ2 Mastery = " + player.MasteryLevel2 + "/" + player.MasteryMax2);
             }
-            else
+            else if (!player.LSSJAchieved)
             {
                 Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("One may awaken their true power through extreme pressure while ascended.");
@@ -155,9 +217,9 @@ namespace DBZMOD.UI
             {
                 MenuSelection = 3;
                 Main.PlaySound(SoundID.MenuTick);
-                Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + " / " + player.MasteryMax3);
+                Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + "/" + player.MasteryMax3);
             }
-            else
+            else if (!player.LSSJAchieved)
             {
                 Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
@@ -171,7 +233,7 @@ namespace DBZMOD.UI
                 MenuSelection = 4;
                 Main.PlaySound(SoundID.MenuTick);
             }
-            else
+            else if (!player.SSJ2Achieved)
             {
                 Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
@@ -185,7 +247,7 @@ namespace DBZMOD.UI
                 MenuSelection = 5;
                 Main.PlaySound(SoundID.MenuTick);
             }
-            else
+            else if (!player.LSSJAchieved)
             {
                 Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
