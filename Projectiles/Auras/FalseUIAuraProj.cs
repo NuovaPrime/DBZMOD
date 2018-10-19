@@ -24,6 +24,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
+            projectile.alpha = 150;
             AuraOffset = -5;
             ScaleExtra = 0.5f;
 
