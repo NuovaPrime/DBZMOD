@@ -24,6 +24,7 @@ namespace DBZMOD
         private const string LSSJBUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
         private const string BG = UI_DIRECTORY + "Bg";
         private const string LOCKED = UI_DIRECTORY + "LockedImage";
+        private const string UNKNOWN = UI_DIRECTORY + "UnknownImage";
         private const string HAIR_DIRECTORY = "HAIR/";
 
         public static Texture2D KiBar;
@@ -36,6 +37,7 @@ namespace DBZMOD
         public static Texture2D SSJGButtonImage;
         public static Texture2D LSSJButtonImage;
         public static Texture2D LockedImage;
+        public static Texture2D UnknownImage;
         public static void LoadGFX(Mod mod)
         {
             KiBar = mod.GetTexture(KIBAR);
@@ -48,6 +50,7 @@ namespace DBZMOD
             SSJGButtonImage = mod.GetTexture(SSJGBUTTON);
             LSSJButtonImage = mod.GetTexture(LSSJBUTTON);
             LockedImage = mod.GetTexture(LOCKED);
+            UnknownImage = mod.GetTexture(UNKNOWN);
 
         }
 
@@ -63,6 +66,7 @@ namespace DBZMOD
             SSJGButtonImage = null;
             LockedImage = null;
             BackPanel = null;
+            UnknownImage = null;
         }
     }
 }
