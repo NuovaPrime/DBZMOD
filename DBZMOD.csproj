@@ -56,6 +56,15 @@
     <Reference Include="Terraria">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\terraria\Terraria.exe</HintPath>
     </Reference>
+    <Reference Include="Tremor">
+      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\Tremor.dll</HintPath>
+    </Reference>
+    <Reference Include="Laugicality">
+      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\Laugicality.dll</HintPath>
+    </Reference>
+    <Reference Include="UnuBattleRods">
+      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\UnuBattleRods.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
