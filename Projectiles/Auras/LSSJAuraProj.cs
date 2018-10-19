@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             projectile.alpha = 50;
             BaseAuraTimer = 5;
-            AuraOffset = -70;
+            AuraOffset.Y = -70;
             ScaleExtra = 0.7f;
             IsSSJAura = true;
         }

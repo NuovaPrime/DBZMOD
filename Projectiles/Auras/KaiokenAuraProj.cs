@@ -27,7 +27,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             KaioAuraTimer = 240;
             IsKaioAura = true;
-            AuraOffset = -20;
+            AuraOffset.Y = -20;
         }
         public override void AI()
         {
@@ -45,11 +45,11 @@ namespace DBZMOD.Projectiles.Auras
             if(player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 ScaleExtra = 0.5f;
-                AuraOffset = -40;
+                AuraOffset.Y = -40;
             }
             else
             {
-                AuraOffset = -20;
+                AuraOffset.Y = -20;
             }
             base.AI();
         }

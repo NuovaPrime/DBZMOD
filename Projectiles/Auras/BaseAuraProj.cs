@@ -29,7 +29,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
-            AuraOffset = -25;
+            AuraOffset.Y = -25;
         }
         public override void AI()
         {

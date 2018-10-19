@@ -183,7 +183,7 @@ namespace DBZMOD
         public bool IsKaioAura;
         public bool IsGodAura;
         public bool AuraActive;
-        public int AuraOffset;
+        public Vector2 AuraOffset;
         public float ScaleExtra;
         public override bool CloneNewInstances
         {
@@ -263,7 +263,7 @@ namespace DBZMOD
             }
 
             projectile.scale = 1.0f + ScaleExtra + chargingScale;
-            projectile.Center = player.Center + new Vector2(0, (AuraOffset + chargingAuraOffset));
+            projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y + chargingAuraOffset));
         }
 
     }

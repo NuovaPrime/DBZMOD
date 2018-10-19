@@ -27,7 +27,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.penetrate = -1;
             projectile.damage = 0;
             KaioAuraTimer = 240;
-            AuraOffset = -40;
+            AuraOffset.Y = -40;
             IsKaioAura = true;
             ScaleExtra = 0.5f;
         }
