@@ -52,7 +52,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 
 
 			int dust = Dust.NewDust(position, 0, 0, mod.DustType("StarMuzzleFlash"));
-			Main.dust[dust].scale = 2;
+			Main.dust[dust].scale = 0.8;
 			Main.dust[dust].position = position - Main.dust[dust].scale * new Vector2(4, 4);
 
 			return false;

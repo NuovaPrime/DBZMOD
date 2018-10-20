@@ -11,7 +11,7 @@ namespace DBZMOD.Dusts
 		{
 			dust.noGravity = true;
 			dust.noLight = true;
-			dust.frame = new Rectangle(0, 0, 16, 16);
+			dust.frame = new Rectangle(0, 0, 18, 18);
 			dust.alpha = 0;
 		}
 
@@ -20,15 +20,15 @@ namespace DBZMOD.Dusts
 			dust.alpha += 1;
 			if (dust.alpha == 5)
 			{
-				dust.frame = new Rectangle(0, 26, 26, 26);
+				dust.frame = new Rectangle(0, 52, 50, 50);
 			}
 			if (dust.alpha == 10)
 			{
-				dust.frame = new Rectangle(0, 52, 26, 26);
+				dust.frame = new Rectangle(0, 104, 50, 50);
 			}
 			if (dust.alpha == 15)
 			{
-				dust.frame = new Rectangle(0, 104, 16, 16);
+				dust.frame = new Rectangle(0, 156, 50, 50);
 			}
 			if (dust.alpha > 20)
 			{

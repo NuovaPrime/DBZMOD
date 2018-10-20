@@ -18,8 +18,8 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		{
 			item.damage = 142;
 			item.useStyle = 1;
-			item.useAnimation = 32;
-            item.useTime = 32;
+			item.useAnimation = 64;
+            item.useTime = 64;
 			item.shootSpeed = 172f;
 			item.knockBack = 4.2f;
 			item.width = 56;

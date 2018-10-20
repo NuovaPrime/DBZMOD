@@ -19,9 +19,9 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.shootSpeed = 35f;
 			item.damage = 1;
 			item.knockBack = 1f;
-			item.useStyle = 1;
+			item.useStyle = 5;
 			item.UseSound = SoundID.Item1;
-			item.useAnimation = 600;
+			item.useAnimation = 30;
 			item.useTime = 600;
 			item.width = 40;
 			item.noUseGraphic = true;
