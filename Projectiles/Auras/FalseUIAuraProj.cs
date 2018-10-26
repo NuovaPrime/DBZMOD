@@ -27,6 +27,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.alpha = 150;
             AuraOffset.Y = -5;
             ScaleExtra = 0.5f;
+            FrameAmount = 15;
 
         }
         public override void AI()

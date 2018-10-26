@@ -8,7 +8,7 @@ namespace DBZMOD
     {
         public override void OpenVanillaBag(string context, Player player, int arg)
         {
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.Next(4) == 0)
             {
                 if (context == "bossBag" && arg == ItemID.EyeOfCthulhuBossBag)
                 {

@@ -65,6 +65,9 @@
     <Reference Include="UnuBattleRods">
       <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\UnuBattleRods.dll</HintPath>
     </Reference>
+    <Reference Include="ThoriumMod">
+      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\ThoriumMod.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

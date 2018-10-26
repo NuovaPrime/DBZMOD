@@ -92,7 +92,7 @@ namespace DBZMOD.Projectiles
 				projectile.velocity.Y = (projectile.velocity.Y * 20f + num485) / 21f;
 				return;
 			}
-            if (Main.rand.Next(6) == 0)
+            if (Main.rand.Next(7) == 0)
             {
             	Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);
 				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 159, projectile.velocity.X * 0.6f, projectile.velocity.Y * 0.6f);

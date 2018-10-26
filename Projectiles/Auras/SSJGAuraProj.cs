@@ -16,7 +16,7 @@ namespace DBZMOD.Projectiles.Auras
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 6;
         }
         public override void SetDefaults()
         {
@@ -33,6 +33,7 @@ namespace DBZMOD.Projectiles.Auras
             BaseAuraTimer = 5;
             AuraOffset.Y = -65;
             ScaleExtra = 0.5f;
+            FrameAmount = 6;
             IsSSJAura = true;
         }
         public override void AI()

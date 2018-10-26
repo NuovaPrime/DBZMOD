@@ -164,7 +164,7 @@ namespace DBZMOD
             {
                 if (MyPlayer.ModPlayer(player).palladiumBonus)
                 {
-                    if (Main.rand.Next(9) == 0)
+                    if (Main.rand.Next(10) == 0)
                     {
                         item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
                     }
@@ -185,6 +185,7 @@ namespace DBZMOD
         public bool AuraActive;
         public Vector2 AuraOffset;
         public float ScaleExtra;
+        public int FrameAmount = 3;
         public override bool CloneNewInstances
         {
             get
@@ -219,7 +220,7 @@ namespace DBZMOD
                     projectile.frame++;
                     projectile.frameCounter = 0;
                 }
-                if (projectile.frame >= 3)
+                if (projectile.frame >= FrameAmount)
                 {
                     projectile.frame = 0;
                 }

@@ -32,7 +32,7 @@ namespace DBZMOD.Projectiles
 
 		public override void AI()
         {
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.Next(4) == 0)
             {
             	projectile.velocity *= 0.9f;
             }

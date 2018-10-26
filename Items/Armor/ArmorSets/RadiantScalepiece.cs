@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("14% Increased Ki Damage"
+            Tooltip.SetDefault("24% Increased Ki Damage"
                 + "\n16% Increased Ki knockback" +
                                "\n+1000 Max Ki" +
                                "\n+4 Maximum Charges" +
@@ -38,7 +38,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.14f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).KiKbAddition += 16;
             MyPlayer.ModPlayer(player).KiMax += 1000;
             MyPlayer.ModPlayer(player).ChargeLimitAdd += 4;

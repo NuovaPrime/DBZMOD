@@ -12,10 +12,7 @@ namespace DBZMOD.Projectiles
     {
         private float SizeTimer;
         private float BlastTimer;
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 4;
-        }
+
         public override void SetDefaults()
         {
             projectile.width = 120;
@@ -48,18 +45,6 @@ namespace DBZMOD.Projectiles
                 {
                     projectile.scale = SizeTimer / 50f * 4;
                     SizeTimer--;
-                }
-
-                projectile.frameCounter++;
-                if (projectile.frameCounter > 8)
-                {
-                    projectile.frame++;
-                    projectile.frameCounter = 0;
-                }
-
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 0;
                 }
                 if (projectile.active)
                 {

@@ -19,9 +19,9 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             item.width = 28;
             item.height = 18;
-            item.value = 11000;
+            item.value = 22000;
             item.rare = 4;
-            item.defense = 11;
+            item.defense = 14;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)

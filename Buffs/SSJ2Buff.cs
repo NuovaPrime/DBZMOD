@@ -14,12 +14,12 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("3.2x Damage, 3.2x Speed, Quickly Drains Ki.");
+            Description.SetDefault("2.5x Damage, 2.5x Speed, Quickly Drains Ki.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            DamageMulti = 3.2f;
-            SpeedMulti = 3.2f;
+            DamageMulti = 2.5f;
+            SpeedMulti = 2.5f;
             if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
             {
                 KiDrainRate = 2;

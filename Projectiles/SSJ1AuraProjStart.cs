@@ -12,14 +12,10 @@ namespace DBZMOD.Projectiles
     {
         private float SizeTimer;
         private float BeamTimer;
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 4;
-        }
         public override void SetDefaults()
         {
-            projectile.width = 400;
-            projectile.height = 400;
+            projectile.width = 176;
+            projectile.height = 177;
             projectile.aiStyle = 0;
             projectile.timeLeft = 300;
             projectile.friendly = true;
@@ -50,16 +46,7 @@ namespace DBZMOD.Projectiles
             {
                 projectile.scale = 1f;
             }
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 8)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
-            }   
+            projectile.frameCounter++; 
             if(projectile.active)
             {
                 BeamTimer++;

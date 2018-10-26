@@ -17,24 +17,23 @@ namespace DBZMOD.UI
         public static bool menuvisible = false;
         private UIText titleText;
         public UIImage backPanelImage;
-        private UIText ssjbuttontext;
-        private UIText ssj2buttontext;
-        private UIText ssj3buttontext;
-        private UIText lssjbuttontext;
         private UIImageButton ssjButtonTexture;
         private UIImageButton ssj2ButtonTexture;
         private UIImageButton ssj3ButtonTexture;
         private UIImageButton lssjButtonTexture;
+        private UIImageButton lssj2ButtonTexture;
         private UIImageButton ssjgButtonTexture;
         private UIImage lockedImage1;
         private UIImage lockedImage2;
         private UIImage lockedImage3;
         private UIImage lockedImageG;
         private UIImage lockedImageL1;
+        private UIImage lockedImageL2;
         private UIImage unknownImage2;
         private UIImage unknownImage3;
         private UIImage unknownImageG;
         private UIImage unknownImageL1;
+        private UIImage unknownImageL2;
 
 
         public static int MenuSelection = 0;
@@ -105,7 +104,7 @@ namespace DBZMOD.UI
                 ssj3ButtonTexture);
 
             InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
-                PADDINGX + 15 + GFX.SSJ1ButtonImage.Width, 
+                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width, 
                 GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
                 backPanelImage);
             
@@ -134,6 +133,21 @@ namespace DBZMOD.UI
                 0,
                 0,
                 ssjgButtonTexture);
+            
+            InitButton(ref lssj2ButtonTexture, GFX.LSSJ2ButtonImage, new MouseEvent(TrySelectingLSSJ2), 
+                PADDINGX + 22 + GFX.SSJ1ButtonImage.Width * 2, 
+                GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
+                backPanelImage);
+
+            InitImage(ref lockedImageL2, GFX.LockedImage,
+                0, 
+                0,
+                lssj2ButtonTexture);
+
+            InitImage(ref unknownImageL2, GFX.UnknownImage,
+                0, 
+                0,
+                lssj2ButtonTexture);
         }
 
         public override void Update(GameTime gameTime)
@@ -148,6 +162,8 @@ namespace DBZMOD.UI
             {
                 lockedImageL1.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
 
+                lockedImageL2.ImageScale = !player.LSSJ2Achieved ? 1.0f : 0.0f;
+
                 lockedImage2.ImageScale = 1.0f;
 
                 unknownImage2.ImageScale = 0.0f;
@@ -161,13 +177,16 @@ namespace DBZMOD.UI
                 unknownImageG.ImageScale = 1.0f;
 
                 unknownImageL1.ImageScale = 0.0f;
+
+                unknownImageL2.ImageScale = 0.0f;
             }
             else
             {
                 unknownImageL1.ImageScale = 0.0f;
+                unknownImageL2.ImageScale = 1.0f;
                 unknownImage2.ImageScale = 0.0f;
                 unknownImage3.ImageScale = 0.0f;
-                unknownImageG.ImageScale = .0f;
+                unknownImageG.ImageScale = 0.0f;
                 lockedImage2.ImageScale = !player.SSJ2Achieved ? 1.0f : 0.0f;
 
                 lockedImage3.ImageScale = !player.SSJ3Achieved ? 1.0f : 0.0f;
@@ -175,10 +194,23 @@ namespace DBZMOD.UI
                 lockedImageG.ImageScale = !player.SSJGAchieved ? 1.0f : 0.0f;
 
                 lockedImageL1.ImageScale = 1.0f;
+                lockedImageL2.ImageScale = 0.0f;
             }
 
         }
 
+        /*
+            Menu Selection ID's
+            1 = SSJ1
+            2 = SSJ2
+            3 = SSJ3
+            4 = LSSJ1
+            5 = SSJG
+            6 = LSSJ2
+            7 = SSJB/SSJBE
+            8 = LSSJG
+            9 = UI/MUI
+         */
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -237,6 +269,21 @@ namespace DBZMOD.UI
             {
                 Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
+            }
+        }
+
+        private void TrySelectingLSSJ2(UIMouseEvent evt, UIElement listeningelement)
+        {
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if (player.LSSJ2Achieved)
+            {
+                MenuSelection = 6;
+                Main.PlaySound(SoundID.MenuTick);
+            }
+            else if (!player.LSSJ2Achieved)
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                Main.NewText("A legendary saiyan sometimes may lose complete control upon being pushed into a critical state.");
             }
         }
         private void TrySelectingSSJG(UIMouseEvent evt, UIElement listeningelement)

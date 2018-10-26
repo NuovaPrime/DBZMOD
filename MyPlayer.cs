@@ -145,6 +145,8 @@ namespace DBZMOD
         public bool radiantBonus;
         public float chargeTimerMaxAdd;
         public bool SSJGAchieved = false;
+        private int lssj2timer;
+        public bool LSSJ2Achieved = false;
         #endregion
 
         #region Classes
@@ -172,7 +174,26 @@ namespace DBZMOD
 
 
         public override void PostUpdate()
-        {     
+        {
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            {
+                lssj2timer++;
+                if ((Main.rand.Next(10) == 0) && lssj2timer >= 90)
+                {
+                    Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
+                    player.statLife = player.statLifeMax2 / 2;
+                    player.HealEffect(player.statLifeMax2 / 2);
+                    LSSJAchieved = true;
+                    IsTransformingLSSJ = true;
+                    LSSJTransformation();
+                    UI.TransMenu.MenuSelection = 6;
+                    lssj2timer = 0;
+                }
+                else if(lssj2timer >= 90)
+                {
+                    lssj2timer = 0;
+                }
+            }     
             if(kiLantern)
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
@@ -318,7 +339,7 @@ namespace DBZMOD
 
             if (!traitChecked)
             {
-                if (Main.rand.Next(19) == 0)
+                if (Main.rand.Next(20) == 0)
                 {
                     hasLegendary = true;
                 }
@@ -410,7 +431,7 @@ namespace DBZMOD
                 int i = Main.rand.Next(1, 6);
                 KiCurrent += i;
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
-                if (Main.rand.Next(2) == 0)
+                if (Main.rand.Next(3) == 0)
                 {
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
@@ -464,6 +485,7 @@ namespace DBZMOD
             tag.Add("LSSJAchieved", LSSJAchieved);
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("ssjgAchieved", SSJGAchieved);
+            tag.Add("lssj2Achieved", LSSJ2Achieved);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -512,6 +534,7 @@ namespace DBZMOD
             LSSJAchieved = tag.Get<bool>("LSSJAchieved");
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             SSJGAchieved = tag.Get<bool>("ssjgAchieved");
+            LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
@@ -876,7 +899,7 @@ namespace DBZMOD
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
-                    if ((Main.rand.Next(9) == 0))
+                    if ((Main.rand.Next(10) == 0))
                     {
                         Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                         player.statLife = player.statLifeMax2 / 2;
@@ -892,9 +915,9 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !hasLegendary && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !hasLegendary && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
-                    if ((Main.rand.Next(4) == 0))
+                    if ((Main.rand.Next(5) == 0))
                     {
                         Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                         player.statLife = player.statLifeMax2 / 2;
@@ -910,9 +933,9 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedPlantBoss && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
-                    if ((Main.rand.Next(4) == 0))
+                    if ((Main.rand.Next(5) == 0))
                     {
                         Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                         player.statLife = player.statLifeMax2 / 2;
@@ -930,7 +953,7 @@ namespace DBZMOD
                 Projectile culprit = Main.projectile[damageSource.SourceProjectileIndex];
                 if ((culprit.type == ProjectileID.CultistBossIceMist) || (culprit.type == ProjectileID.CultistBossFireBall) || (culprit.type == ProjectileID.CultistBossFireBallClone) || (culprit.type == ProjectileID.CultistBossLightningOrb) || (culprit.type == ProjectileID.CultistBossLightningOrbArc) || (culprit.type == ProjectileID.CultistBossParticle) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
-                    if ((Main.rand.Next(2) == 0))
+                    if ((Main.rand.Next(3) == 0))
                     {
                         Main.NewText("The ancient power of the cultist seeps into you, causing your power to go haywire.", Color.Blue);
                         player.statLife = player.statLifeMax2 / 2;

@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
         private float BlastTimer;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 6;
+            Main.projFrames[projectile.type] = 7;
         }
         public override void SetDefaults()
         {
@@ -32,27 +32,24 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if(!MyPlayer.ModPlayer(player).hasLegendary)
-            {
-                projectile.position.X = player.Center.X;
-                projectile.position.Y = player.Center.Y;
-                projectile.Center = player.Center + new Vector2(0, -25);
-                projectile.netUpdate = true;
+            projectile.position.X = player.Center.X;
+            projectile.position.Y = player.Center.Y;
+            projectile.Center = player.Center + new Vector2(0, -25);
+            projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransformingSSJG)
-                {
-                    projectile.Kill();
-                }
-                projectile.frameCounter++;
-                if (projectile.frameCounter > 4)
-                {
-                    projectile.frame++;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 6)
-                {
-                    projectile.frame = 0;
-                }
+            if (!MyPlayer.ModPlayer(player).IsTransformingSSJG)
+            {
+                projectile.Kill();
+            }
+            projectile.frameCounter++;
+            if (projectile.frameCounter > 4)
+            {
+                projectile.frame++;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= 7)
+            {
+                projectile.frame = 0;
             }
 
         }
@@ -63,7 +60,7 @@ namespace DBZMOD.Projectiles
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGAuraProj"), 0, 0, player.whoAmI);
             MyPlayer.ModPlayer(player).IsTransformingSSJG = false;
             MyPlayer.ModPlayer(player).IsTransformed = true;
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));  
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
         }
     }
 }
