@@ -29,11 +29,11 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.rare = 6;
             item.channel = true;
             KiDrain = 220;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-" +
-		                   "\nMaximum Charges = 6");
+		Tooltip.SetDefault("Maximum Charges = 6");
 		DisplayName.SetDefault("Special Beam Cannon");
 		}
 

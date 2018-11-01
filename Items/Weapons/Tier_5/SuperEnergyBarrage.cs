@@ -32,10 +32,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
             item.value = 0;
             item.rare = 7;
             KiDrain = 125;
+            WeaponType = "Barrage";
         }
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("-Tier 5-");
             DisplayName.SetDefault("Super Energy Barrage");
         }
 

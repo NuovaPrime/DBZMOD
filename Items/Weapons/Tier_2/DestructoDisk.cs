@@ -30,6 +30,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.value = 0;
 			item.rare = 2;
             KiDrain = 40;
+			WeaponType = "Disk";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
@@ -37,8 +38,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Its a frizbee I swear." 
-		+ "\n-Tier 2-");
+		Tooltip.SetDefault("Its a frizbee I swear.");
 		DisplayName.SetDefault("Destructo Disk");
 		}
 

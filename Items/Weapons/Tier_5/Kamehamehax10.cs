@@ -29,11 +29,11 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.value = 0;
 			item.rare = 7;
             KiDrain = 120;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 5-" +
-		                   "\nMaximum Charges = 8");
+		Tooltip.SetDefault("Maximum Charges = 8");
 		DisplayName.SetDefault("Kamehameha x10");
 		}
 

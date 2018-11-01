@@ -27,6 +27,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.value = 0;
 			item.rare = 4;
             KiDrain = 100;
+			WeaponType = "Massive Blast";
             if (!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KiBlastFast").WithPitchVariance(.1f);
@@ -34,7 +35,6 @@ namespace DBZMOD.Items.Weapons.Tier_4
         }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-");
 		DisplayName.SetDefault("Big Bang Attack");
 		}
 

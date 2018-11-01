@@ -29,6 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.value = 0;
 			item.rare = 1;
             KiDrain = 30;
+			WeaponType = "Laser";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EyeBeam").WithPitchVariance(.3f);
@@ -36,7 +37,6 @@ namespace DBZMOD.Items.Weapons.Tier_1
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 1-");
 		DisplayName.SetDefault("Ki Beam");
 		}
 

@@ -30,11 +30,11 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.rare = 1;
             KiDrain = 40;
             item.channel = true;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 1-" +
-            "\nMaximum Charges = 4");
+		Tooltip.SetDefault("Maximum Charges = 4");
 		DisplayName.SetDefault("Energy Wave");
 		}
 

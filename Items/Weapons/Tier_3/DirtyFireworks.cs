@@ -31,11 +31,11 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.value = 0;
 			item.rare = 3;
             KiDrain = 110;
+			WeaponType = "Unique";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Freezy Puff!."
-		+ "\n-Tier 3-");
+		Tooltip.SetDefault("Freezy Puff!.");
 		DisplayName.SetDefault("Dirty Fireworks");
 		}
 

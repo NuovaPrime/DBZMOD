@@ -34,10 +34,10 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.rare = 4;
             item.channel = true;
             KiDrain = 110;
+			WeaponType = "Blast";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-");
 		DisplayName.SetDefault("Scatter Shot");
 		}
 

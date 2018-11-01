@@ -28,6 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.value = 0;
 			item.rare = 3;
             KiDrain = 70;
+			WeaponType = "Barrage";
             if (!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KiBlast3").WithPitchVariance(.1f);
@@ -35,8 +36,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
         }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 3-");
-		DisplayName.SetDefault("EnergyWaveVolley");
+		DisplayName.SetDefault("Energy Wave Volley");
 		}
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

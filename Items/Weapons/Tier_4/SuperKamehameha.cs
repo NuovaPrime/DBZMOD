@@ -30,11 +30,11 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.rare = 4;
             item.channel = true;
             KiDrain = 150;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-" +
-		                   "\nMaximum Charges = 8");
+		Tooltip.SetDefault("Maximum Charges = 8");
 		DisplayName.SetDefault("Super Kamehameha");
 		}
 

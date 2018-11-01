@@ -28,10 +28,10 @@ namespace DBZMOD.Items.Weapons.Tier_4
             item.value = 0;
             item.rare = 4;
             KiDrain = 115;
+            WeaponType = "Blast";
         }
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("-Tier 4-");
             DisplayName.SetDefault("Trap Shooter");
         }
 

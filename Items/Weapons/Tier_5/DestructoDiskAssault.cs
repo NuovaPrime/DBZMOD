@@ -30,6 +30,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.value = 0;
 			item.rare = 7;
             KiDrain = 140;
+			WeaponType = "Unique";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
@@ -37,7 +38,6 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("\n-Tier 5-");
 		DisplayName.SetDefault("Destructo Disk Assault");
 		}
 

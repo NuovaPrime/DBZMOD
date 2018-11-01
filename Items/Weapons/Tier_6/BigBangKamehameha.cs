@@ -29,11 +29,11 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.value = 0;
 			item.rare = 8;
             KiDrain = 150;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 6-" +
-		                   "\nMaximum Charges = 10");
+		Tooltip.SetDefault("Maximum Charges = 10");
 		DisplayName.SetDefault("Big Bang Kamehameha");
 		}
 

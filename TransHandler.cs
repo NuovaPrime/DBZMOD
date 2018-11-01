@@ -23,7 +23,6 @@ namespace DBZMOD
         public int KiDrainRate;
         private int KiDrainTimer;
         private int KiDrainAddTimer;
-        private int KiDrainAddition;
         public bool RealismModeOn;
         public int MasteryTimer;
         public override void Update(Player player, ref int buffIndex)
@@ -46,13 +45,13 @@ namespace DBZMOD
                 KiDrainTimer++;
                 if(KiDrainTimer > 1)
                 {
-                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate + KiDrainAddition;
+                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate + MyPlayer.ModPlayer(player).KiDrainAddition;
                     KiDrainTimer = 0;
                 }
                 KiDrainAddTimer++;
                 if(KiDrainAddTimer > 600)
                 {
-                    KiDrainAddition += 1;
+                    MyPlayer.ModPlayer(player).KiDrainAddition += 1;
                     KiDrainAddTimer = 0;
                 }
                 Lighting.AddLight(player.Center, 1f, 1f, 0f);
@@ -100,7 +99,7 @@ namespace DBZMOD
             }
             if(!IsSSJ)
             {
-                KiDrainAddition = 0;
+                MyPlayer.ModPlayer(player).KiDrainAddition = 0;
             }
 
 

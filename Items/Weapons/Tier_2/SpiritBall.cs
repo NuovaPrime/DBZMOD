@@ -31,11 +31,11 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.value = 0;
 			item.rare = 2;
             KiDrain = 60;
+			WeaponType = "Unique";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Yamcha!." 
-		+ "\n-Tier 2-");
+		Tooltip.SetDefault("Yamcha!.");
 		DisplayName.SetDefault("Spirit Ball");
 		}
 

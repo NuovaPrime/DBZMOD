@@ -30,11 +30,11 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.rare = 2;
             item.channel = true;
             KiDrain = 60;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 2-" +
-		                   "\nMaximum Charges = 5");
+		Tooltip.SetDefault("Maximum Charges = 5");
 		DisplayName.SetDefault("Masenko");
 		}
 

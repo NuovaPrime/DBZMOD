@@ -31,10 +31,10 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.value = 0;
 			item.rare = 1;
             KiDrain = 15;
+			WeaponType = "Blast";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 1-");
 		DisplayName.SetDefault("Ki Blast");
 		}
 

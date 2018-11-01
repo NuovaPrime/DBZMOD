@@ -34,6 +34,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.autoReuse = true;
             KiDrain = 90;
             item.UseSound = SoundID.Item68;
+			WeaponType = "Unique";
         }
         public override void AddRecipes()
         {

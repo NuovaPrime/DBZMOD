@@ -33,10 +33,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
             item.value = 0;
             item.rare = 7;
             KiDrain = 350;
+            WeaponType = "Massive Blast";
         }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 5-");
 		DisplayName.SetDefault("Supernova");
 		}
 

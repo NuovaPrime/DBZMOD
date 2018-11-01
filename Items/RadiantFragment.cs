@@ -24,7 +24,7 @@ namespace DBZMOD.Items
 			item.width = 20;
 			item.height = 20;
 			item.maxStack = 999;
-			item.value = 6000;
+			item.value = 10000;
 			item.rare = 9;
 		}
 		public override Color? GetAlpha(Color lightColor)

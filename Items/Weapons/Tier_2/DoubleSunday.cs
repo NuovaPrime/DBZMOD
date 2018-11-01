@@ -29,10 +29,10 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.value = 0;
 			item.rare = 2;
             KiDrain = 55;
+			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 2-");
 		DisplayName.SetDefault("Double Sunday");
 		}
 

@@ -29,11 +29,11 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.rare = 9;
             item.channel = false;
             KiDrain = 300;
+			WeaponType = "Unique";
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 6-" +
-		                   "\nTurns your foes to chocolate, does not work on bosses.");
+		Tooltip.SetDefault("Turns your foes to chocolate, does not work on bosses.");
 		DisplayName.SetDefault("Candy Laser");
 		}
 

@@ -28,6 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.value = 0;
 			item.rare = 3;
             KiDrain = 75;
+			WeaponType = "Barrage";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Scatterbeam").WithPitchVariance(.2f);
@@ -35,7 +36,6 @@ namespace DBZMOD.Items.Weapons.Tier_3
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 3-");
 		DisplayName.SetDefault("Hellzone Grenade");
 		}
 

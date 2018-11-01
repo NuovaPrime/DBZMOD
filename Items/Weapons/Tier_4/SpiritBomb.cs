@@ -35,10 +35,10 @@ namespace DBZMOD.Items.Weapons.Tier_4
             item.value = 0;
             item.rare = 4;
             KiDrain = 200;
+            WeaponType = "Massive Blast";
         }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("-Tier 4-");
 		DisplayName.SetDefault("Spirit Bomb");
 		}
 

@@ -348,34 +348,34 @@ namespace DBZMOD
                     }
                 }
             }
-            if (npc.boss)  
+            if (npc.boss)
             {
                 if (Main.rand.Next(4) == 0)
                 {
                     {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SenzuBean"), Main.rand.Next(1, 3)); 
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SenzuBean"), Main.rand.Next(1, 3));
                     }
                 }
             }
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.EyeofCthulhu)  
+                if (npc.type == NPCID.EyeofCthulhu)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1);
                         }
                     }
 
                 }
 
-                if (npc.type == NPCID.SkeletronHead)  
+                if (npc.type == NPCID.SkeletronHead)
                 {
                     if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1);
                         }
                     }
                 }
@@ -384,34 +384,34 @@ namespace DBZMOD
                     if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1);
                         }
                     }
                 }
-                if (npc.type == NPCID.Plantera)  
+                if (npc.type == NPCID.Plantera)
                 {
                     if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1);
                         }
                     }
                 }
-                if (npc.type == NPCID.CultistBoss)  
+                if (npc.type == NPCID.CultistBoss)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1);
                         }
                     }
                 }
             }
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.EyeofCthulhu) 
+                if (npc.type == NPCID.EyeofCthulhu)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragmentFirst"), 1);
 
@@ -421,12 +421,12 @@ namespace DBZMOD
             }
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.SkeletronHead) 
+                if (npc.type == NPCID.SkeletronHead)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         {
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment1"), 1); 
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment1"), 1);
                         }
                     }
                 }
@@ -445,9 +445,9 @@ namespace DBZMOD
             }
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.Golem) 
+                if (npc.type == NPCID.Golem)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment3"), 1);
@@ -457,9 +457,9 @@ namespace DBZMOD
             }
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.MoonLordCore) 
+                if (npc.type == NPCID.MoonLordCore)
                 {
-                    if (Main.rand.Next(4) == 0) 
+                    if (Main.rand.Next(4) == 0)
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment4"), 1);
@@ -515,7 +515,7 @@ namespace DBZMOD
                     }
                 }
             }
-            if(NPC.downedBoss2)
+            if (NPC.downedBoss2)
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneRockLayerHeight)
                 {
@@ -525,9 +525,9 @@ namespace DBZMOD
                     }
                 }
             }
-            if(Main.hardMode)
+            if (Main.hardMode)
             {
-                if(npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
+                if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
                 {
                     int stacks = Main.rand.Next(6, 12) / 2;
                     if (Main.expertMode)
@@ -540,27 +540,48 @@ namespace DBZMOD
                     }
                 }
             }
+            if (Main.hardMode)
+            {
+                if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
+                {
+                    if (Main.rand.Next(10) == 0)
+                    {
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SSJGUnlockSpirit"));
+                    }
+                }
+            }
         }
 
-            public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        {
+            if (type == NPCID.Merchant)
             {
-                if (type == NPCID.Merchant)
-                {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.ScrapMetal>());
-                    nextSlot++;
-                }
-                if (type == NPCID.TravellingMerchant)
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.ScrapMetal>());
+                nextSlot++;
+            }
+            if (type == NPCID.TravellingMerchant)
+            {
+                if (Main.rand.Next(5) == 0)
                 {
                     shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.ArmCannon>());
                     nextSlot++;
                 }
-                if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
+            }
+            if (type == NPCID.SkeletonMerchant)
+            {
+                if (Main.rand.Next(3) == 0)
                 {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
+                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Consumables.DisgustingGoop>());
                     nextSlot++;
                 }
-
             }
+            if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
+                nextSlot++;
+            }
+
+        }
     }
 
 }

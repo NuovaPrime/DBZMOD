@@ -30,11 +30,11 @@ namespace DBZMOD.Items.Weapons.Tier_3
             item.rare = 3;
             KiDrain = 80;
             item.channel = true;
+            WeaponType = "Beam";
         }
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("-Tier 3-" +
-                               "\nMaximum Charges = 7");
+            Tooltip.SetDefault("Maximum Charges = 7");
             DisplayName.SetDefault("Galick Gun");
         }
 
