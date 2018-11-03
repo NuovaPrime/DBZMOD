@@ -8,20 +8,15 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class SSJGTransformStart : ModProjectile
+    public class SSJGDustStart : ModProjectile
     {
         private float SizeTimer;
-        private float BlastTimer;
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 7;
-        }
         public override void SetDefaults()
         {
-            projectile.width = 120;
-            projectile.height = 120;
+            projectile.width = 2;
+            projectile.height = 2;
             projectile.aiStyle = 0;
-            projectile.timeLeft = 24;
+            projectile.timeLeft = 600;
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
@@ -31,32 +26,36 @@ namespace DBZMOD.Projectiles
         }
         public override void AI()
         {
+            projectile.ai[1]++;
+            if(projectile.ai[1] % 7 == 0)
+            {
+	            Dust dust;
+	            // You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
+	            Vector2 position = Main.LocalPlayer.Center;
+	            dust = Main.dust[Terraria.Dust.NewDust(position, 1300, 236, 90, 0f, -10f, 0, new Color(255,255,255), 1.447368f)];
+	            dust.noGravity = true;
+	            dust.fadeIn = 0.9473684f;
+            }
+
             Player player = Main.player[projectile.owner];
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
+            if(projectile.timeLeft <= 300)
+            {
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGDustExplosion"), 0, 0, player.whoAmI);
+            }
             if (!MyPlayer.ModPlayer(player).IsTransformingSSJG)
             {
                 projectile.Kill();
             }
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 4)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 7)
-            {
-                projectile.frame = 0;
-            }
-
         }
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.AddBuff(mod.BuffType("SSJGBuff"), 360000);
+            player.AddBuff(mod.BuffType("SSJGBuff"), 3600000);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGAuraProj"), 0, 0, player.whoAmI);
             MyPlayer.ModPlayer(player).IsTransformingSSJG = false;
             MyPlayer.ModPlayer(player).IsTransformed = true;

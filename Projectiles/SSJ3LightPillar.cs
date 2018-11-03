@@ -64,7 +64,7 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.AddBuff(mod.BuffType("SSJ3Buff"), 3600);
+            player.AddBuff(mod.BuffType("SSJ3Buff"), 360000);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
             MyPlayer.ModPlayer(player).IsTransformingSSJ3 = false;
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));

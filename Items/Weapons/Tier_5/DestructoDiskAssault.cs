@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.value = 0;
 			item.rare = 7;
             KiDrain = 140;
-			WeaponType = "Unique";
+			WeaponType = "Disk";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
@@ -45,6 +45,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "PureKiCrystal", 40);
+			recipe.AddIngredient(null, "DestructoDisk", 1);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

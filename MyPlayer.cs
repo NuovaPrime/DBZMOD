@@ -1069,7 +1069,7 @@ namespace DBZMOD
         }
         public void SSJGTransformation()
         {
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
+            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
 
@@ -1196,7 +1196,7 @@ namespace DBZMOD
             if (player.GetModPlayer<MyPlayer>().IsTransformed)
             {
                 //If no head armor or vanity
-                if (player.armor[0].headSlot == -1 && !player.armor[10].vanity && player.armor[10].headSlot == -1)
+                if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
                     if (player.HasBuff(mod.BuffType("SSJ1Buff")))
                     {

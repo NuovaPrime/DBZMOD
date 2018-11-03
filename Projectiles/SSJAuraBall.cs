@@ -96,7 +96,7 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             if (!MyPlayer.ModPlayer(player).hasLegendary)
             {
-                player.AddBuff(mod.BuffType("SSJ2Buff"), 3600);
+                player.AddBuff(mod.BuffType("SSJ2Buff"), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransformingSSJ2 = false;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));

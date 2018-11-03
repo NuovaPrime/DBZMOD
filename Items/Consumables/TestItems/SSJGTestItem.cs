@@ -34,10 +34,10 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            //MyPlayer.ModPlayer(player).SSJ3Transformation();
+            MyPlayer.ModPlayer(player).SSJGTransformation();
             UI.TransMenu.MenuSelection = 5;
             MyPlayer.ModPlayer(player).SSJGAchieved = true;
-            //MyPlayer.ModPlayer(player).IsTransformingSSJG = true;
+            MyPlayer.ModPlayer(player).IsTransformingSSJG = true;
             return true;
 
         }
