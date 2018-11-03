@@ -50,7 +50,7 @@ namespace DBZMOD.Projectiles.Auras
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 480 && player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ2").WithVolume(.7f).WithPitchVariance(.1f));
+                player.GetModPlayer<MyPlayer>().transformationSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJ2").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
             else

@@ -13,6 +13,7 @@ using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
 using Terraria.Graphics.Shaders;
+using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD
 {
@@ -148,6 +149,7 @@ namespace DBZMOD
         private int lssj2timer;
         public bool LSSJ2Achieved = false;
         public int KiDrainAddition;
+        public SoundEffectInstance transformationSound;
         #endregion
 
         #region Classes
@@ -573,6 +575,13 @@ namespace DBZMOD
 
             if (Transform.JustPressed)//Needs to be reworked, something method based
             {
+
+                if (transformationSound != null)
+                {
+                    transformationSound.Stop();
+                    transformationSound = null;
+                }
+
                 if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))))
                 {
                     SSJDustAura();
@@ -1160,8 +1169,15 @@ namespace DBZMOD
             player.ClearBuff(mod.BuffType("SSJ3Buff"));
             player.ClearBuff(mod.BuffType("LSSJBuff"));
             player.ClearBuff(mod.BuffType("SSJGBuff"));
-            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800);
+            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800); //Why u du dis noobva
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+
+            if(transformationSound != null)
+            {
+                transformationSound.Stop();
+                transformationSound = null;
+            }
+
             IsTransformed = false;
         }
 
