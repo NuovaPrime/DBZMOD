@@ -41,7 +41,7 @@ namespace DBZMOD.Projectiles.Auras
             if (Main.rand.NextFloat() < 0.7236842f)
             {
                 Dust dust;
-                Vector2 position = projectile.Center + new Vector2(-30, 0);
+                Vector2 position = projectile.Center + new Vector2(-40, -5);
                 dust = Main.dust[Dust.NewDust(position, 84, 105, 187, 0f, -3.421053f, 213, new Color(255, 0, 0), 1.1f)];
                 dust.noGravity = true;
                 dust.noLight = true;

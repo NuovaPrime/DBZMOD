@@ -14,7 +14,7 @@ namespace DBZMOD.Items.Misc
         {
             DisplayName.SetDefault("Godly Spirit");
             ItemID.Sets.ItemNoGravity[item.type] = true;
-	        Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(3, 1));
+	        Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(5, 3));
         }
 
         public override void SetDefaults()

@@ -26,15 +26,21 @@ namespace DBZMOD.Projectiles
         }
         public override void AI()
         {
-            projectile.ai[1]++;
-            if(projectile.ai[1] % 7 == 0)
+            projectile.ai[1] += 3;
+            if(projectile.ai[1] % 1 == 0)
             {
 	            Dust dust;
-	            // You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
-	            Vector2 position = Main.LocalPlayer.Center;
-	            dust = Main.dust[Terraria.Dust.NewDust(position, 1300, 236, 90, 0f, -10f, 0, new Color(255,255,255), 1.447368f)];
-	            dust.noGravity = true;
+                Vector2 position = projectile.Center + new Vector2(-600, 0);
+	            dust = Main.dust[Terraria.Dust.NewDust(position, 1300, 236, 200, 0f, -20f, 0, new Color(255,255,255), 1.447368f)];
 	            dust.fadeIn = 0.9473684f;
+
+                Dust dust2;
+                dust2 = Main.dust[Terraria.Dust.NewDust(position, 1300, 236, 182, 0f, -20f, 0, new Color(255, 255, 255), 1.447368f)];
+                dust2.fadeIn = 0.9473684f;
+
+                Dust dust3;
+                dust3 = Main.dust[Terraria.Dust.NewDust(position, 1300, 236, 115, 0f, -20f, 0, new Color(255, 255, 255), 1.447368f)];
+                dust3.fadeIn = 0.9473684f;
             }
 
             Player player = Main.player[projectile.owner];
@@ -43,9 +49,9 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
-            if(projectile.timeLeft <= 300)
+            if(projectile.timeLeft == 300)
             {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGDustExplosion"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGDustCenter"), 0, 0, player.whoAmI);
             }
             if (!MyPlayer.ModPlayer(player).IsTransformingSSJG)
             {

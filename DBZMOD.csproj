@@ -40,6 +40,7 @@
     <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
     <Compile Include="Items\Weapons\Tier_6\MajinExtinctionAttack.cs" />
     <Compile Include="Projectiles\BlindingBladeProj.cs" />
+    <Compile Include="Projectiles\SSJGDustCenter.cs" />
     <Compile Include="Tiles\RadiantFragmentBlock.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,51 @@
     <Reference Include="ThoriumMod">
       <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\ThoriumMod.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Hairs\God\SSJBEHair.png" />
+    <Content Include="Hairs\God\SSJBHair.png" />
+    <Content Include="Hairs\God\SSJGHair.png" />
+    <Content Include="Hairs\God\SSJRHair.png" />
+    <Content Include="Hairs\LSSJ\LSSJ2Hair.png" />
+    <Content Include="Hairs\LSSJ\LSSJHair.png" />
+    <Content Include="Hairs\SSJ\ASSJHair.png" />
+    <Content Include="Hairs\SSJ\SSJ1Hair.png" />
+    <Content Include="Hairs\SSJ\SSJ1KaiokenHair.png" />
+    <Content Include="Hairs\SSJ\SSJ2Hair.png" />
+    <Content Include="Hairs\SSJ\SSJ3Hair.png" />
+    <Content Include="Hairs\SSJ\USSJHair.png" />
+    <Content Include="Sounds\Awakening.wav" />
+    <Content Include="Sounds\BasicBeamFire.mp3" />
+    <Content Include="Sounds\DiscFire.wav" />
+    <Content Include="Sounds\EnergyCharge.wav" />
+    <Content Include="Sounds\EnergyChargeStart.wav" />
+    <Content Include="Sounds\EnergyWaveCharge.wav" />
+    <Content Include="Sounds\Explosion.wav" />
+    <Content Include="Sounds\EyeBeam.wav" />
+    <Content Include="Sounds\GroundRumble.wav" />
+    <Content Include="Sounds\KaioAuraAscend.wav" />
+    <Content Include="Sounds\KaioAuraStart.wav" />
+    <Content Include="Sounds\Kiblast1.wav" />
+    <Content Include="Sounds\Kiblast2.wav" />
+    <Content Include="Sounds\KiBlast3.wav" />
+    <Content Include="Sounds\KiBlastFast.wav" />
+    <Content Include="Sounds\Kiplosion.wav" />
+    <Content Include="Sounds\PowerDown.wav" />
+    <Content Include="Sounds\Scatterbeam.wav" />
+    <Content Include="Sounds\Shotgun.mp3" />
+    <Content Include="Sounds\SpiritBombFire.wav" />
+    <Content Include="Sounds\SSB.mp3" />
+    <Content Include="Sounds\SSBKK.mp3" />
+    <Content Include="Sounds\SSG.mp3" />
+    <Content Include="Sounds\SSJ2.mp3" />
+    <Content Include="Sounds\SSJ3.mp3" />
+    <Content Include="Sounds\SSJAscension.wav" />
+    <Content Include="Sounds\SSJAura.wav" />
+    <Content Include="Sounds\SwordSlash.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

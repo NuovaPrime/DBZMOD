@@ -816,50 +816,50 @@ namespace DBZMOD
         {
             KiDamage = 1f;
             KiKbAddition = 0f;
-            //if(Fragment1)
-            //{
-            //    KiMax = 2000;
-            //    if(Fragment1 && hasLegendary && NPC.downedBoss1)
-            //    {
-            //        KiMax = 4000;
-            //    }
-            //    if (Fragment2)
-            //    {
-            //        KiMax = 4000;
-            //        if (Fragment2 && hasLegendary && NPC.downedBoss1)
-            //        {
-            //            KiMax = 8000;
-            //        }
-            //        if (Fragment3)
-            //        {
-            //            KiMax = 6000;
-            //            if (Fragment3 && hasLegendary && NPC.downedBoss1)
-            //            {
-            //                KiMax = 12000;
-            //            }
-            //            if (Fragment4)
-            //            {
-            //                KiMax = 8000;
-            //                if (Fragment4 && hasLegendary && NPC.downedBoss1)
-            //                {
-            //                    KiMax = 16000;
-            //                }
-            //                if (Fragment5)
-            //                {
-            //                    KiMax = 10000;
-            //                    if (Fragment5 && hasLegendary && NPC.downedBoss1)
-            //                    {
-            //                        KiMax = 20000;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    KiMax = 1000;
-            //}
+            if(Fragment1)
+            {
+                KiMax = 2000;
+                if(Fragment1 && hasLegendary && NPC.downedBoss1)
+                {
+                    KiMax = 4000;
+                }
+                if (Fragment2)
+                {
+                    KiMax = 4000;
+                    if (Fragment2 && hasLegendary && NPC.downedBoss1)
+                    {
+                        KiMax = 8000;
+                    }
+                    if (Fragment3)
+                    {
+                        KiMax = 6000;
+                        if (Fragment3 && hasLegendary && NPC.downedBoss1)
+                        {
+                            KiMax = 12000;
+                        }
+                        if (Fragment4)
+                        {
+                            KiMax = 8000;
+                            if (Fragment4 && hasLegendary && NPC.downedBoss1)
+                            {
+                                KiMax = 16000;
+                            }
+                            if (Fragment5)
+                            {
+                                KiMax = 10000;
+                                if (Fragment5 && hasLegendary && NPC.downedBoss1)
+                                {
+                                    KiMax = 20000;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                KiMax = 1000;
+            }
             if (KiEssence1)
             {
                 KiRegenRate = 2;
