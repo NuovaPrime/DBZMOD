@@ -1,6 +1,10 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DBZMOD.Items.Armor.ArmorSets
 {
@@ -44,6 +48,10 @@ namespace DBZMOD.Items.Armor.ArmorSets
             MyPlayer.ModPlayer(player).ChargeLimitAdd += 4;
             MyPlayer.ModPlayer(player).FlightUsageAdd += 1;
 
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
         }
         public override void AddRecipes()
         {

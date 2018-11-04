@@ -42,7 +42,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
                 item.UseSound = SoundID.Item71;
             }
         }
-
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

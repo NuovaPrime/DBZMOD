@@ -48,6 +48,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			float numberProjectiles = 2 + Main.rand.Next(2);

@@ -1,6 +1,10 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DBZMOD.Items.Armor.ArmorSets
 {
@@ -37,6 +41,10 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             drawHair = true;
             drawAltHair = false;
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
         }
         public override void AddRecipes()
         {
