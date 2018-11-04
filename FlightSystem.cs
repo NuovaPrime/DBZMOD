@@ -81,18 +81,19 @@ namespace DBZMOD
                 {
                     if(boostSpeed == 0) //not boosting?
                     {
-                        for (int i = 0; i < 1; i++)
+                        for (int i = 0; i < 2; i++)
                         {
-                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 1f);
-                            tDust.noGravity = true;
+                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, 261, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                            tdust.noGravity = true;
                         }
+
                     }
                     else
                     {
-                        for (int i = 0; i < 6; i++)
+                        for (int i = 0; i < 10; i++)
                         {
-                            Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 50, 50, 15, 0f, 0f, 0, new Color(0, 0, 0, 0.1f), 1f);
-                            tDust.noGravity = true;
+                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, 261, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                            tdust.noGravity = true;
                         }
                     }
 
