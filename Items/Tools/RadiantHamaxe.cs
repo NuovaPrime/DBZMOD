@@ -23,7 +23,7 @@ namespace DBZMOD.Items.Tools
             item.width = 48;
             item.height = 46;
             item.rare = 10;
-            item.useTime = 27;
+            item.useTime = 9;
             item.useAnimation = 27;
             item.damage = 60;
             item.melee = true;
