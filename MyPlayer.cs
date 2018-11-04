@@ -20,6 +20,7 @@ namespace DBZMOD
     public class MyPlayer : ModPlayer
     {
         #region Variables
+        //Player vars
         public float KiDamage;
         public float KiKbAddition;
         public float KiSpeedAddition;
@@ -29,6 +30,57 @@ namespace DBZMOD
         public int KiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
+
+        //Transformation vars
+        public bool IsTransformingSSJ1;
+        public bool IsTransformingSSJ2;
+        public bool IsTransformingSSJ3;
+        public bool IsTransformingLSSJ;
+        public bool IsTransformingSSJG;
+        public int SSJAuraBeamTimer;
+        public bool IsTransformed;
+        public bool hasSSJ1;
+        public int TransformCooldown;
+        public bool ASSJAchieved;
+        public bool USSJAchieved;
+        public bool SSJ2Achieved;
+        public bool SSJ3Achieved;
+        public bool LSSJAchieved = false;
+        public bool SSJGAchieved = false;
+        private int lssj2timer;
+        public bool LSSJ2Achieved = false;
+
+        //Input vars
+        public static ModHotKey KaiokenKey;
+        public static ModHotKey EnergyCharge;
+        public static ModHotKey Transform;
+        public static ModHotKey PowerDown;
+        public static ModHotKey SpeedToggle;
+        public static ModHotKey QuickKi;
+        public static ModHotKey TransMenu;
+        public static ModHotKey FlyToggle;
+        public static ModHotKey ArmorBonus;
+
+        //mastery vars
+        public float MasteryLevel1 = 0;
+        public float MasteryMax1 = 1;
+        public bool MasteredMessage1 = false;
+        public float MasteryLevel2 = 0;
+        public float MasteryMax2 = 1;
+        public bool MasteredMessage2 = false;
+        public float MasteryLevel3 = 0;
+        public float MasteryMax3 = 1;
+        public bool MasteredMessage3 = false;
+        public float MasteryLevelGod = 0;
+        public float MasteryMaxGod = 1;
+        public bool MasteredMessageGod = false;
+        public float MasteryLevelBlue = 0;
+        public float MasteryMaxBlue = 1;
+        public bool MasteredMessageBlue = false;
+        public float MasteryMaxFlight = 1;
+        public float MasteryLevelFlight = 0;
+
+        //unsorted vars
         public int drawX;
         public int drawY;
         public bool SSJ1Achieved;
@@ -37,11 +89,6 @@ namespace DBZMOD
         public bool scouterT4;
         public bool scouterT5;
         public bool scouterT6;
-        public bool IsTransformingSSJ1;
-        public bool IsTransformingSSJ2;
-        public bool IsTransformingSSJ3;
-        public bool IsTransformingLSSJ;
-        public bool IsTransformingSSJG;
         public bool Fragment1;
         public bool Fragment2;
         public bool Fragment3;
@@ -61,17 +108,11 @@ namespace DBZMOD
         public bool KiEssence5;
         private bool DemonBonusActive;
         public bool spiritualEmblem;
-        public int SSJAuraBeamTimer;
         public bool hasKaioken;
         public float KaiokenTimer  = 0.0f;
-        public bool hasSSJ1;
         public bool kiLantern;
         public bool speedToggled = true;
-        public bool IsTransformed;
         public float KiDrainMulti;
-        public int ChargeSoundTimer;
-        public int TransformCooldown;
-        public int ChargeLimitAdd;
         public bool diamondNecklace;
         public bool emeraldNecklace;
         public bool sapphireNecklace;
@@ -80,37 +121,9 @@ namespace DBZMOD
 		public bool amethystNecklace;
         public bool rubyNecklace;
 		public bool dragongemNecklace;
-        public static ModHotKey KaiokenKey;
-        public static ModHotKey EnergyCharge;
-        public static ModHotKey Transform;
-        public static ModHotKey PowerDown;
-        public static ModHotKey SpeedToggle;
-        public static ModHotKey QuickKi;
-        public static ModHotKey TransMenu;
-        public static ModHotKey FlyToggle;
-        public static ModHotKey ArmorBonus;
-        public bool ASSJAchieved;
-        public bool USSJAchieved;
-        public bool SSJ2Achieved;
-        public bool SSJ3Achieved;
         public bool IsCharging;
-        public float MasteryLevel1 = 0;
-        public float MasteryMax1 = 1;
-        public bool MasteredMessage1 = false;
-        public float MasteryLevel2 = 0;
-        public float MasteryMax2 = 1;
-        public bool MasteredMessage2 = false;
-        public float MasteryLevel3 = 0;
-        public float MasteryMax3 = 1;
-        public bool MasteredMessage3 = false;
-        public float MasteryLevelGod = 0;
-        public float MasteryMaxGod = 1;
-        public bool MasteredMessageGod = false;
-        public float MasteryLevelBlue = 0;
-        public float MasteryMaxBlue = 1;
-        public bool MasteredMessageBlue = false;
-        public float MasteryMaxFlight = 1;
-        public float MasteryLevelFlight = 0;
+        public int ChargeSoundTimer;
+        public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public static bool JungleMessage = false;
         public static bool HellMessage = false;
@@ -124,7 +137,6 @@ namespace DBZMOD
         public bool adamantiteBonus;
         public bool traitChecked = false;
         public bool hasLegendary = false;
-        public bool LSSJAchieved = false;
         public bool DemonBonus;
         public int OrbGrabRange;
         public int OrbHealAmount;
@@ -145,18 +157,16 @@ namespace DBZMOD
         public bool battleKit;
         public bool radiantBonus;
         public float chargeTimerMaxAdd;
-        public bool SSJGAchieved = false;
-        private int lssj2timer;
-        public bool LSSJ2Achieved = false;
         public int KiDrainAddition;
         public SoundEffectInstance transformationSound;
         #endregion
 
         #region Classes
         FlightSystem m_flightSystem = new FlightSystem();
+        ProgressionSystem m_progressionSystem = new ProgressionSystem();
         #endregion
 
-        
+
 
         public static MyPlayer ModPlayer(Player player)
         {
@@ -192,11 +202,11 @@ namespace DBZMOD
                     UI.TransMenu.MenuSelection = 6;
                     lssj2timer = 0;
                 }
-                else if(lssj2timer >= 90)
+                else if (lssj2timer >= 90)
                 {
                     lssj2timer = 0;
                 }
-            }     
+            }
             if(kiLantern)
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
@@ -551,6 +561,7 @@ namespace DBZMOD
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             m_flightSystem.Update(triggersSet, player);
+            m_progressionSystem.Update(triggersSet, player);
 
             if (FlyToggle.JustPressed)
             {
