@@ -13,8 +13,13 @@ namespace DBZMOD
         private UserInterface KiBarInterface;
         private KiBar kibar;
         private UIFlatPanel UIFlatPanel;
+
         private TransMenu transMenu;
         private UserInterface TransMenuInterface;
+
+        private ProgressionMenu progressionMenu;
+        private UserInterface ProgressionMenuInterface;
+
         private DBZMOD mod;
         public bool thoriumLoaded;
         public bool tremorLoaded;
@@ -37,6 +42,7 @@ namespace DBZMOD
             KiBar.visible = false;
             instance = null;
             TransMenu.menuvisible = false;
+            ProgressionMenu.menuvisible = false;
             TransMenu.SSJ1On = false;
             TransMenu.SSJ2On = false;
             UIFlatPanel._backgroundTexture = null;
@@ -57,16 +63,24 @@ namespace DBZMOD
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
             //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
+            MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
             MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
             if(!Main.dedServ)
             {
                 GFX.LoadGFX(this);
                 KiBar.visible = true;
+
                 transMenu = new TransMenu();
                 transMenu.Activate();
                 TransMenuInterface = new UserInterface();
                 TransMenuInterface.SetState(transMenu);
+
+                progressionMenu = new ProgressionMenu();
+                progressionMenu.Activate();
+                ProgressionMenuInterface = new UserInterface();
+                ProgressionMenuInterface.SetState(progressionMenu);
+
                 kibar = new KiBar();
                 kibar.Activate();
                 KiBarInterface = new UserInterface();
@@ -88,7 +102,15 @@ namespace DBZMOD
         public override void UpdateUI(GameTime gameTime)
         {
             if (TransMenuInterface != null && TransMenu.menuvisible)
+            {
                 TransMenuInterface.Update(gameTime);
+            }
+
+            if(ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
+            {
+                progressionMenu.Update(gameTime);
+            }
+
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -120,6 +142,12 @@ namespace DBZMOD
                         {
                             TransMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
+
+                        if(ProgressionMenu.menuvisible)
+                        {
+                            ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                        }
+
                         return true;
                     },
                     InterfaceScaleType.UI)

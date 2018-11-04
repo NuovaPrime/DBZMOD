@@ -27,7 +27,7 @@ namespace DBZMOD
         public int KiCrit;
         public int KiRegenTimer;
         public int KiRegen;
-        public int KiMax;
+        public int KiMax = 1000;
         public int KiCurrent;
         public int KiRegenRate = 1;
 
@@ -58,6 +58,7 @@ namespace DBZMOD
         public static ModHotKey SpeedToggle;
         public static ModHotKey QuickKi;
         public static ModHotKey TransMenu;
+        public static ModHotKey ProgressionMenuKey;
         public static ModHotKey FlyToggle;
         public static ModHotKey ArmorBonus;
 
@@ -183,8 +184,6 @@ namespace DBZMOD
                 return hasKaioken = false;
             }
         }
-
-
 
         public override void PostUpdate()
         {
@@ -503,6 +502,7 @@ namespace DBZMOD
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("lssj2Achieved", LSSJ2Achieved);
+            tag.Add("KiMax", KiMax);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -552,10 +552,14 @@ namespace DBZMOD
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             SSJGAchieved = tag.Get<bool>("ssjgAchieved");
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
+            KiMax = tag.Get<int>("KiMax");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
-
+        public ProgressionSystem GetProgressionSystem()
+        {
+            return m_progressionSystem;
+        }
 
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -586,7 +590,6 @@ namespace DBZMOD
 
             if (Transform.JustPressed)//Needs to be reworked, something method based
             {
-
                 if (transformationSound != null)
                 {
                     transformationSound.Stop();
@@ -677,7 +680,12 @@ namespace DBZMOD
             {
                 UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
             }
-                
+
+            if (ProgressionMenuKey.JustPressed)
+            {
+                ProgressionMenu.ToggleVisibility();
+            }
+
             if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && KaioAchieved && !player.channel)
             {
                 player.AddBuff(mod.BuffType("KaiokenBuff"), 18000);
@@ -808,50 +816,50 @@ namespace DBZMOD
         {
             KiDamage = 1f;
             KiKbAddition = 0f;
-            if(Fragment1)
-            {
-                KiMax = 2000;
-                if(Fragment1 && hasLegendary && NPC.downedBoss1)
-                {
-                    KiMax = 4000;
-                }
-                if (Fragment2)
-                {
-                    KiMax = 4000;
-                    if (Fragment2 && hasLegendary && NPC.downedBoss1)
-                    {
-                        KiMax = 8000;
-                    }
-                    if (Fragment3)
-                    {
-                        KiMax = 6000;
-                        if (Fragment3 && hasLegendary && NPC.downedBoss1)
-                        {
-                            KiMax = 12000;
-                        }
-                        if (Fragment4)
-                        {
-                            KiMax = 8000;
-                            if (Fragment4 && hasLegendary && NPC.downedBoss1)
-                            {
-                                KiMax = 16000;
-                            }
-                            if (Fragment5)
-                            {
-                                KiMax = 10000;
-                                if (Fragment5 && hasLegendary && NPC.downedBoss1)
-                                {
-                                    KiMax = 20000;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-           else
-            {
-                KiMax = 1000;
-            }
+            //if(Fragment1)
+            //{
+            //    KiMax = 2000;
+            //    if(Fragment1 && hasLegendary && NPC.downedBoss1)
+            //    {
+            //        KiMax = 4000;
+            //    }
+            //    if (Fragment2)
+            //    {
+            //        KiMax = 4000;
+            //        if (Fragment2 && hasLegendary && NPC.downedBoss1)
+            //        {
+            //            KiMax = 8000;
+            //        }
+            //        if (Fragment3)
+            //        {
+            //            KiMax = 6000;
+            //            if (Fragment3 && hasLegendary && NPC.downedBoss1)
+            //            {
+            //                KiMax = 12000;
+            //            }
+            //            if (Fragment4)
+            //            {
+            //                KiMax = 8000;
+            //                if (Fragment4 && hasLegendary && NPC.downedBoss1)
+            //                {
+            //                    KiMax = 16000;
+            //                }
+            //                if (Fragment5)
+            //                {
+            //                    KiMax = 10000;
+            //                    if (Fragment5 && hasLegendary && NPC.downedBoss1)
+            //                    {
+            //                        KiMax = 20000;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    KiMax = 1000;
+            //}
             if (KiEssence1)
             {
                 KiRegenRate = 2;
@@ -924,7 +932,6 @@ namespace DBZMOD
             //IsCharging = false;
         }
 
-        private TransMenu transMenu;
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
 
@@ -1169,6 +1176,16 @@ namespace DBZMOD
         {
             LightningEffects.visible = true;
             layers.Add(LightningEffects);
+        }
+
+        public override void OnHitAnything(float x, float y, Entity victim)
+        {
+            if(victim != player)
+            {
+                m_progressionSystem.AddKiExperience(10);
+            }
+            
+            base.OnHitAnything(x, y, victim);
         }
 
         public void EndTransformations()
