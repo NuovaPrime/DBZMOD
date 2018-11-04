@@ -30,13 +30,13 @@ namespace DBZMOD.Items.Armor.ArmorSets
             MyPlayer.ModPlayer(player).KiDamage += 0.18f;
             MyPlayer.ModPlayer(player).KiCrit += 10;
             MyPlayer.ModPlayer(player).KiMax += 500;
-            MyPlayer.ModPlayer(player).FlightSpeedAdd += 1f;
+            MyPlayer.ModPlayer(player).FlightSpeedAdd += 0.3f;
 
         }
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = true;
-            drawAltHair = true;
+            drawAltHair = false;
         }
         public override void AddRecipes()
         {

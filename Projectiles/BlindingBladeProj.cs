@@ -8,19 +8,19 @@ using System;
 
 namespace DBZMOD.Projectiles
 {
-    public class DestructoDiskProjectile : ModProjectile
+    public class BlindingBladeProj : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kienzan");
+            DisplayName.SetDefault("Blinding Blade");
         }
         public override void SetDefaults()
         {
             projectile.width = 54;
             projectile.height = 54;
-            projectile.timeLeft = 100;
-            projectile.penetrate = 200;
-            projectile.tileCollide = false;
+            projectile.timeLeft = 280;
+            projectile.penetrate = 16;
+            projectile.tileCollide = true;
             projectile.ignoreWater = false;
             projectile.friendly = true;
             projectile.hostile = false;
@@ -43,13 +43,25 @@ namespace DBZMOD.Projectiles
             }
             return true;
         }
+        public override bool OnTileCollide(Vector2 velocityChange)
+        {
+            if (projectile.velocity.X != velocityChange.X)
+            {
+                projectile.velocity.X = -velocityChange.X;
+            }
+            if (projectile.velocity.Y != velocityChange.Y)
+            {
+                projectile.velocity.Y = -velocityChange.Y;
+            }
+            return false;
+        }
         public override void PostAI()
         {
             for (int d = 0; d < 1; d++)
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, 222, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, mod.DustType("RadiantDust"), 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
                     dust.noGravity = true;
                 }
 

@@ -18,8 +18,8 @@ namespace DBZMOD.Dusts
 		public override bool Update(Dust dust)
 		{
 			Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), 0f, 0.20f, 0f);
-			dust.scale -= 0.03f;
-			if (dust.scale < 0.5f)
+			dust.scale -= 0.04f;
+			if (dust.scale < 0.1f)
 			{
 				dust.active = false;
 			}
