@@ -12,6 +12,7 @@ namespace DBZMOD.Projectiles
     public class DirtyFireworksProjectile : KiProjectile
     {
         NPC targetNPC = null;
+        Player targetPlayer = null;
 
         public override void SetStaticDefaults()
 		{
@@ -55,6 +56,12 @@ namespace DBZMOD.Projectiles
 
                 ExplodeEffect();
             }
+            if(targetPlayer != null)
+            {
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, mod.ProjectileType("BigBangAttackProjectile2"), 100, 30, projectile.owner, 0f, 1f);
+
+                ExplodeEffect();
+            }
 
             projectile.active = false;
 			}
@@ -63,7 +70,7 @@ namespace DBZMOD.Projectiles
         {
             if(Main.myPlayer == projectile.owner)
             {
-                if (targetNPC == null)
+                if (targetNPC == null && targetPlayer == null)
                 {
                     if (Vector2.Distance(projectile.position, Main.MouseWorld) > 0.1)
                     {
@@ -94,6 +101,22 @@ namespace DBZMOD.Projectiles
                     projectile.position = targetNPC.position;
                 }
             }
+            if(targetPlayer != null)
+            {
+                if(targetPlayer.statLife <= 0)
+                {
+                    Kill(0);
+                }
+                else
+                {
+                    //targetNPC.position = Main.MouseWorld;
+                    targetPlayer.velocity.Y = -2.5f;
+                    targetPlayer.velocity.X = 0;
+                    targetPlayer.lifeRegen -= 4;
+
+                    projectile.position = targetPlayer.position;
+                }
+            }
 
 
             //for(int i = 0; i < 10; i++)
@@ -118,6 +141,16 @@ namespace DBZMOD.Projectiles
             }
 
             //Main.NewText("NPC HIT", Color.White);
+        }
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            if(targetPlayer == null)
+            {
+                targetPlayer = target;
+                projectile.damage = 0;
+                projectile.hide = true;
+                projectile.timeLeft = 100;
+            }
         }
 
         public void ExplodeEffect()

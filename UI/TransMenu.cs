@@ -178,7 +178,7 @@ namespace DBZMOD.UI
 
                 unknownImageL1.ImageScale = 0.0f;
 
-                unknownImageL2.ImageScale = 0.0f;
+                unknownImageL2.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
             }
             else
             {

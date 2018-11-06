@@ -69,6 +69,13 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            target.statLife = 0;
+            Item.NewItem((int)target.position.X, (int)target.position.Y, target.width, target.height, ChocoSelect(), 1);
+            projectile.Kill();
+        }
+
         private int ChocoSelect()
         {
             switch (Main.rand.Next((4)))
