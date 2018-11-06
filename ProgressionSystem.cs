@@ -18,19 +18,19 @@ namespace DBZMOD
     public class ProgressionSystem
     {
         //vars
-        private int m_kiExperience = 0;
+        private float m_kiExperience = 0;
 
         //methods
 
         
         //Getters
-        public int GetKiExperience()
+        public float GetKiExperience()
         {
             return m_kiExperience;
         }
 
         //setters
-        public void SetKiExperience(int value)
+        public void SetKiExperience(float value)
         {
             m_kiExperience = value;
 
@@ -41,7 +41,7 @@ namespace DBZMOD
         }
 
         //adders
-        public void AddKiExperience(int value)
+        public void AddKiExperience(float value)
         {
             SetKiExperience(GetKiExperience() + value);
         }
@@ -55,16 +55,16 @@ namespace DBZMOD
         {
             if (modplayer.IsTransformed)
             {
-                AddKiExperience(2);
+                AddKiExperience(0.2f);
             }
 
             if(modplayer.IsFlying)
             {
-                AddKiExperience(1);
+                AddKiExperience(0.1f);
             }
         }
 
-        bool ProcessCost(int cost)
+        public bool ProcessCost(float cost)
         {
             if (GetKiExperience() >= cost)
             {
@@ -79,7 +79,7 @@ namespace DBZMOD
         }
 
 
-        void UpgradeKiMax(int kiamount, Player player)
+        public void UpgradeKiMax(int kiamount, Player player)
         {
             int EXPCOST = kiamount * 100;
 

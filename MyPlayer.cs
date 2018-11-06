@@ -396,6 +396,12 @@ namespace DBZMOD
                 }
             }
 
+            //just incase it didnt get reset
+            if(KiMax == 0)
+            {
+                KiMax = 1000;
+            }
+
             KiBar.visible = true;
         }
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
@@ -1182,7 +1188,15 @@ namespace DBZMOD
         {
             if(victim != player)
             {
-                m_progressionSystem.AddKiExperience(10);
+                float expierenceToAdd = 10.0f;
+                float experienceMult = 1.0f;
+
+                if(IsTransformed)
+                {
+                    experienceMult = 2.0f;
+                }
+
+                m_progressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
             
             base.OnHitAnything(x, y, victim);
@@ -1197,7 +1211,7 @@ namespace DBZMOD
             player.ClearBuff(mod.BuffType("SSJ3Buff"));
             player.ClearBuff(mod.BuffType("LSSJBuff"));
             player.ClearBuff(mod.BuffType("SSJGBuff"));
-            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800); //Why u du dis noobva
+            //player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800); //Why u du dis noobva
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
 
             if(transformationSound != null)
