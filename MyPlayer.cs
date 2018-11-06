@@ -399,12 +399,6 @@ namespace DBZMOD
                 }
             }
 
-            //just incase it didnt get reset
-            if(KiMax == 0)
-            {
-                KiMax = 1000;
-            }
-
             KiBar.visible = true;
         }
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
@@ -1215,7 +1209,7 @@ namespace DBZMOD
 
         public override void OnHitAnything(float x, float y, Entity victim)
         {
-            if (victim != player)
+            if (victim != player && victim.whoAmI != NPCID.TargetDummy)
             {
                 float expierenceToAdd = 10.0f;
                 float experienceMult = 1.0f;
@@ -1241,7 +1235,7 @@ namespace DBZMOD
             player.ClearBuff(mod.BuffType("LSSJBuff"));
             player.ClearBuff(mod.BuffType("LSSJ2Buff"));
             player.ClearBuff(mod.BuffType("SSJGBuff"));
-            //player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800); //Why u du dis noobva
+            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800); //Why u du dis noobva
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
 
             if (transformationSound != null)
