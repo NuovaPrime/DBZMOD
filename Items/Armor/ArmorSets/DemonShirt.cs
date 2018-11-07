@@ -24,6 +24,11 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.rare = 9;
             item.defense = 22;
         }
+		public override void DrawHands(ref bool drawHands, ref bool drawArms)
+        {
+            drawArms = true;
+            drawHands = true;
+        }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {

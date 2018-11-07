@@ -31,8 +31,8 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             projectile.alpha = 50;
             BaseAuraTimer = 5;
-            AuraOffset.Y = -60;
-            ScaleExtra = 0.5f;
+            AuraOffset.Y = -52;
+            ScaleExtra = 0.3f;
             IsSSJAura = true;
         }
         public override void AI()
@@ -56,10 +56,11 @@ namespace DBZMOD.Projectiles.Auras
             else
             {
                 projectile.scale = 1.3f;
-            }            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.5f;
-            }
+            }            
+			if (MyPlayer.ModPlayer(player).IsCharging)
+			{
+				projectile.scale *= 1.2f;
+			}
             base.AI();
         }
     }

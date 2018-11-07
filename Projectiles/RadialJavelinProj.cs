@@ -19,7 +19,7 @@ namespace DBZMOD.Projectiles
             projectile.width = 1;
             projectile.height = 82;
             projectile.timeLeft = 280;
-            projectile.penetrate = 5;
+            projectile.penetrate = 1;
             projectile.tileCollide = false;
             projectile.ignoreWater = false;
             projectile.friendly = true;

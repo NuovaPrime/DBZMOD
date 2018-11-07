@@ -24,10 +24,10 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            projectile.alpha = 150;
+            projectile.alpha = 255;
 			ScaleExtra = 0.15f;
 			AuraOffset.X = -1;
-			AuraOffset.Y = -5;
+			AuraOffset.Y = -10;
             FrameAmount = 15;
 
         }

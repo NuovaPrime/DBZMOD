@@ -18,7 +18,7 @@ namespace DBZMOD.Projectiles.Auras
         public override void SetDefaults()
         {
             projectile.width = 97;
-            projectile.height = 89;
+            projectile.height = 102;
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 10;
@@ -29,7 +29,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
-            AuraOffset.Y = -25;
+            AuraOffset.Y = -20;
         }
         public override void AI()
         {
