@@ -1,11 +1,24 @@
-﻿﻿using Terraria;
-using Terraria.ID;
+﻿﻿using Terraria.ID;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.IO;
+using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.Utilities;
 
 namespace DBZMOD
 {
     public class DBZMODItem : GlobalItem
     {
+        public override int ChoosePrefix(Item item, UnifiedRandom rand)
+        {
+            if ((item.modItem is KiItem && item.damage > 0) && item.maxStack == 1 && rand.NextBool(30))
+            {
+                return mod.PrefixType("CondensedPrefix");
+            }
+            return 0;
+        }
         public override void OpenVanillaBag(string context, Player player, int arg)
         {
             if (Main.rand.Next(4) == 0)

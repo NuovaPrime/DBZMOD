@@ -49,10 +49,10 @@ namespace DBZMOD
 
         public override bool PreAI()
         {
-            if(player == null)
+            if (player == null)
                 player = Main.player[projectile.owner];
 
-            if(myPlayer == null && player != null)
+            if (myPlayer == null && player != null)
                 myPlayer = MyPlayer.ModPlayer(player);
 
             return base.PreAI();
@@ -141,16 +141,24 @@ namespace DBZMOD
                 owner = Main.player[projectile.owner];
             else if (projectile.owner == 255)
                 owner = Main.LocalPlayer;
+
+            if (Main.expertMode)
+            {
+                if ((target.type >= NPCID.EaterofWorldsHead && target.type <= NPCID.EaterofWorldsTail) || (target.type >= NPCID.TheDestroyer && target.type <= NPCID.TheDestroyerTail))
+                {
+                    damage /= 2;
+                }
+            }
         }
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
             Player player = Main.player[projectile.owner];
             int item = 0;
-            if(KiWeapon)
+            if (KiWeapon)
             {
-                if(npc.life < 0)
+                if (npc.life < 0)
                 {
-                    if(Main.rand.Next(MyPlayer.ModPlayer(player).KiOrbDropChance) == 0)
+                    if (Main.rand.Next(MyPlayer.ModPlayer(player).KiOrbDropChance) == 0)
                     {
                         item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
                     }
@@ -202,15 +210,15 @@ namespace DBZMOD
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;
             projectile.netImportant = true;
-            
+
             if (projectile.timeLeft < 2)
             {
                 projectile.timeLeft = 10;
             }
-            if(player.channel)
+            if (player.channel)
             {
                 player.velocity = new Vector2(0, player.velocity.Y);
-            }            
+            }
 
             if (IsSSJAura)
             {
@@ -284,31 +292,31 @@ namespace DBZMOD
         public bool MoodlordDowned;
         public override void PostUpdate()
         {
-            if(NPC.downedBoss1)
+            if (NPC.downedBoss1)
             {
                 EyeDowned = true;
             }
-            if(NPC.downedQueenBee)
+            if (NPC.downedQueenBee)
             {
                 BeeDowned = true;
             }
-            if(Main.hardMode)
+            if (Main.hardMode)
             {
                 WallDowned = true;
             }
-            if(NPC.downedPlantBoss)
+            if (NPC.downedPlantBoss)
             {
                 PlantDowned = true;
             }
-            if(NPC.downedFishron)
+            if (NPC.downedFishron)
             {
                 DukeDowned = true;
             }
-            if(NPC.downedMoonlord)
+            if (NPC.downedMoonlord)
             {
                 MoodlordDowned = true;
             }
-            if(item.channel)
+            if (item.channel)
             {
                 item.autoReuse = false;
             }
@@ -340,7 +348,7 @@ namespace DBZMOD
             knockback = knockback + MyPlayer.ModPlayer(player).KiKbAddition;
         }
         public override void GetWeaponDamage(Player player, ref int damage)
-        {   
+        {
             damage = (int)(damage * MyPlayer.ModPlayer(player).KiDamage);
         }
         public override void GetWeaponCrit(Player player, ref int crit)
@@ -351,13 +359,13 @@ namespace DBZMOD
         {
             return MyPlayer.ModPlayer(player).KiSpeedAddition;
         }
-        
+
         public int RealKiDrain(Player player)
         {
             return (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
         }
         public override bool CanUseItem(Player player)
-        {          
+        {
             if (RealKiDrain(Main.LocalPlayer) <= MyPlayer.ModPlayer(player).KiCurrent)
             {
                 MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain(Main.LocalPlayer);
@@ -421,7 +429,7 @@ namespace DBZMOD
 
         public override bool CanUseItem(Player player)
         {
-            if(player.HasBuff(mod.BuffType("KiPotionSickness")))
+            if (player.HasBuff(mod.BuffType("KiPotionSickness")))
             {
                 return false;
             }
