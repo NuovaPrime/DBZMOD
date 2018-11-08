@@ -4,15 +4,15 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class CondensedPrefix : ModPrefix
+    public class MystifyingPrefix : ModPrefix
     {
+        public override void SetDefaults()
+	    {
+		  DisplayName.SetDefault("Mystifying");  
+	    }
         public override float RollChance(Item item)
         {
             return 3f;
-        }
-        public override void SetDefaults()
-        {
-            DisplayName.SetDefault("Condensed");
         }
         public override bool CanRoll(Item item)
         {
@@ -27,8 +27,7 @@ namespace DBZMOD.Prefixes
         public override void Apply(Item item)
         {
             //((KiItem)item.modItem)
-            item.damage = (int)(item.damage * 1.10f);
-            item.shootSpeed *= 0.85f;
+            item.damage = (int)(item.damage * 1.07f);
         }
     }
 }

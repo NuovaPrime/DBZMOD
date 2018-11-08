@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Generation;
@@ -342,6 +343,71 @@ namespace DBZMOD
             {
                 return true;
             }
+        }
+        public override int ChoosePrefix(Terraria.Utilities.UnifiedRandom rand)
+        {
+            var PrefixChooser = new WeightedRandom<int>();
+            PrefixChooser.Add(mod.PrefixType("BalancedPrefix"), 3); // 3 times as likely
+            PrefixChooser.Add(mod.PrefixType("CondensedPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("MystifyingPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("UnstablePrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("FlawedPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("BoostedPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("NegatedPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("OutrageousPrefix"), 3);
+            PrefixChooser.Add(mod.PrefixType("PoweredPrefix"), 2);
+            PrefixChooser.Add(mod.PrefixType("FlashyPrefix"), 2);
+            PrefixChooser.Add(mod.PrefixType("InfusedPrefix"), 2);
+            PrefixChooser.Add(mod.PrefixType("DistractingPrefix"), 2);
+            PrefixChooser.Add(mod.PrefixType("DestructivePrefix"), 2);
+            PrefixChooser.Add(mod.PrefixType("MasteredPrefix"), 1);
+            PrefixChooser.Add(mod.PrefixType("TranscendedPrefix"), 1);
+            int choice = PrefixChooser;
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("CondensedPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("MystifyingPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("UnstablePrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("BalancedPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(5))
+            {
+                return mod.PrefixType("MasteredPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(4))
+            {
+                return mod.PrefixType("PoweredPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("FlawedPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("InfusedPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("FlashyPrefix");
+            }
+            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            {
+                return mod.PrefixType("BoostedPrefix");
+            }
+            return -1;
+        }
+        public override bool ReforgePrice(ref int reforgePrice, ref bool canApplyDiscount)
+        {
+            return true;
         }
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
