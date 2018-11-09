@@ -363,45 +363,9 @@ namespace DBZMOD
             PrefixChooser.Add(mod.PrefixType("MasteredPrefix"), 1);
             PrefixChooser.Add(mod.PrefixType("TranscendedPrefix"), 1);
             int choice = PrefixChooser;
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
+            if ((item.damage > 0) && item.maxStack == 1)
             {
-                return mod.PrefixType("CondensedPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("MystifyingPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("UnstablePrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("BalancedPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(5))
-            {
-                return mod.PrefixType("MasteredPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(4))
-            {
-                return mod.PrefixType("PoweredPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("FlawedPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("InfusedPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("FlashyPrefix");
-            }
-            if ((item.damage > 0) && item.maxStack == 1 && rand.NextBool(3))
-            {
-                return mod.PrefixType("BoostedPrefix");
+                return choice;
             }
             return -1;
         }

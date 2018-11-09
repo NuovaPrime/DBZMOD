@@ -4,11 +4,11 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class PoweredPrefix : ModPrefix
+    public class FlashyPrefix : ModPrefix
     {
         public override void SetDefaults()
 	    {
-		  DisplayName.SetDefault("Powered");  
+		  DisplayName.SetDefault("Flashy");  
 	    }
         public override float RollChance(Item item)
         {
@@ -26,9 +26,10 @@ namespace DBZMOD.Prefixes
 
         public override void Apply(Item item)
         {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 20;
-            ((KiItem)item.modItem).KiDrain *= 1.16f;
-            item.damage = (int)(item.damage * 1.09f);
+            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 1;
+            ((KiItem)item.modItem).KiDrain *= 1.01f;
+            item.damage = (int)(item.damage * 1.12f);
+            item.shootSpeed *= 1.05f;
         }
     }
 }

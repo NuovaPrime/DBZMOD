@@ -29,7 +29,7 @@ namespace DBZMOD.Prefixes
             item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 10;
             ((KiItem)item.modItem).KiDrain *= 1.10f;
             item.damage = (int)(item.damage * 0.86f);
-            item.shootSpeed *= 1.04f;
+            item.shootSpeed *= 0.94f;
         }
     }
 }

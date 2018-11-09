@@ -34,6 +34,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**\*.*" />
+    <Compile Include="Prefixes\FlashyPrefix.cs" />
+    <Compile Include="Prefixes\BoostedPrefix.cs" />
+    <Compile Include="Prefixes\DistractedPrefix.cs" />
+    <Compile Include="Prefixes\DestructivePrefix.cs" />
+    <Compile Include="Prefixes\TranscendedPrefix.cs" />
+    <Compile Include="Prefixes\NegatedPrefix.cs" />
+    <Compile Include="Prefixes\OutrageousPrefix.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
