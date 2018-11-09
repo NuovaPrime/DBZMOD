@@ -24,7 +24,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            projectile.alpha = 255;
+            projectile.alpha = 250;
 			ScaleExtra = 0.15f;
 			AuraOffset.X = -1;
 			AuraOffset.Y = -10;
@@ -40,7 +40,7 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.Kill();
             }
             projectile.frameCounter++;
-            if (projectile.frameCounter > 3)
+            if (projectile.frameCounter > 4)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
