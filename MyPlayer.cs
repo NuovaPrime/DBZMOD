@@ -408,24 +408,7 @@ namespace DBZMOD
                 drawInfo.hairColor = new Color(183, 25, 46);
                 drawInfo.hairShader = 1;
             }
-            if (player.HasBuff(mod.BuffType("UIOmenBuff")))
-            {
-                //drawInfo.hairColor = new Color(183, 25, 46);
-                drawInfo.hairShader = 20;
-            }
 
-        }
-
-        public bool SSJ1Check()
-        {
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")))
-            {
-                return hasSSJ1 = true;
-            }
-            else
-            {
-                return hasSSJ1 = false;
-            }
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
