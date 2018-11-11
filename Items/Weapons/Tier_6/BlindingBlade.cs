@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
             item.scale = 1f;
             item.rare = 10;
             item.UseSound = SoundID.Item1;
-            item.value = 150000;
+            item.value = 40000;
             item.noMelee = true;
             item.noUseGraphic = true;
             item.autoReuse = true;

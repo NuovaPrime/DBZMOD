@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = true;
-			item.value = 0;
+			item.value = 9500;
 			item.rare = 3;
             KiDrain = 75;
 			WeaponType = "Barrage";

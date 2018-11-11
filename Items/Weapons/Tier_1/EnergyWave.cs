@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
-			item.value = 0;
+			item.value = 500;
 			item.rare = 1;
             KiDrain = 40;
             item.channel = true;

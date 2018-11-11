@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.height = 40;
 			item.autoReuse = false;
 			item.channel = true;
-			item.value = 0;
+			item.value = 2000;
 			item.rare = 2;
             KiDrain = 60;
 			WeaponType = "Unique";

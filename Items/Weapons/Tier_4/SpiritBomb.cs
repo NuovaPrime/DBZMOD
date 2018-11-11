@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
 
             }
-            item.value = 0;
+            item.value = 35000;
             item.rare = 4;
             KiDrain = 200;
             WeaponType = "Massive Blast";

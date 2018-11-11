@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
             }
-			item.value = 0;
+			item.value = 13000;
 			item.rare = 4;
             item.channel = true;
             KiDrain = 110;

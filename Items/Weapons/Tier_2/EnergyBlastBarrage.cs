@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
             }
-			item.value = 0;
+			item.value = 4000;
 			item.rare = 2;
             KiDrain = 50;
 			WeaponType = "Barrage";

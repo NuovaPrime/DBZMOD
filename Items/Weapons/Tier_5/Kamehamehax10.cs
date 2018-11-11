@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.noUseGraphic = true;
 			item.height = 36;
 			item.autoReuse = false;
-			item.value = 0;
+			item.value = 75000;
 			item.rare = 7;
             KiDrain = 120;
 			WeaponType = "Beam";

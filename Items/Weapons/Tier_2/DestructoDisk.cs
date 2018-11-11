@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.noUseGraphic = true;
 			item.height = 20;
 			item.autoReuse = false;
-			item.value = 0;
+			item.value = 4000;
 			item.rare = 2;
             KiDrain = 40;
 			WeaponType = "Disk";

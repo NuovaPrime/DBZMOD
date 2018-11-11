@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
-			item.value = 0;
+			item.value = 23000;
 			item.rare = 6;
             item.channel = true;
             KiDrain = 220;
@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 		    recipe.AddIngredient(null, "Masenko", 1);
-		    recipe.AddIngredient(null, "PureKiCrystal", 50);
+		    recipe.AddIngredient(null, "AngerKiCrystal", 35);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

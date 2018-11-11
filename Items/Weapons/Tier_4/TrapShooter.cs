@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
             item.noUseGraphic = true;
             item.height = 40;
             item.autoReuse = false;
-            item.value = 0;
+            item.value = 27000;
             item.rare = 4;
             KiDrain = 115;
             WeaponType = "Blast";

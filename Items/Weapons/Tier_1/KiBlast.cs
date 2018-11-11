@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiblast1").WithPitchVariance(.3f);
             }
 			item.autoReuse = false;
-			item.value = 0;
+			item.value = 500;
 			item.rare = 1;
             KiDrain = 15;
 			WeaponType = "Blast";
