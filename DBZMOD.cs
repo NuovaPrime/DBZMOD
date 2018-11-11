@@ -63,7 +63,7 @@ namespace DBZMOD
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
             //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
-            MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
+            //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
             MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
             if(!Main.dedServ)

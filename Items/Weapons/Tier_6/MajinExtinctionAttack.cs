@@ -62,11 +62,11 @@ namespace DBZMOD.Items.Weapons.Tier_6
 	    	return false;
 		}
 	
-	    public override void AddRecipes()
+	    /*public override void AddRecipes()
 	    {
 	        ModRecipe recipe = new ModRecipe(mod);
 	        recipe.SetResult(this);
 	        recipe.AddRecipe();
-	    }
+	    }*/
 	}
 }

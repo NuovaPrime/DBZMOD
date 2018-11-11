@@ -12,6 +12,8 @@ namespace DBZMOD.Projectiles
     {
         private float SizeTimer;
         private float BlastTimer;
+        private float yoffset;
+        private float xoffset;
 
         public override void SetDefaults()
         {
@@ -25,6 +27,8 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = -1;
             projectile.damage = 0;
             SizeTimer = 200f;
+            yoffset = -200f;
+            xoffset = 0f;
         }
         public override void AI()
         {
@@ -33,10 +37,10 @@ namespace DBZMOD.Projectiles
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
-                projectile.Center = player.Center + new Vector2(0, -25);
+                projectile.Center = player.Center + new Vector2(xoffset, yoffset);
                 projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransformingLSSJ)
+                if (!MyPlayer.ModPlayer(player).IsTransformingLSSJ && !MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
                 {
                     projectile.Kill();
                 }
@@ -45,8 +49,13 @@ namespace DBZMOD.Projectiles
                 {
                     projectile.scale = SizeTimer / 50f * 4;
                     SizeTimer--;
+                    yoffset++;
                 }
-                if (projectile.active)
+                if (SizeTimer <= 40)
+                {
+                    xoffset--;
+                }
+                if (projectile.active && !MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
                 {
                     BlastTimer++;
                     if (BlastTimer > 1)
@@ -57,16 +66,42 @@ namespace DBZMOD.Projectiles
                     }
 
                 }
+                else if (projectile.active && MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+                {
+                    BlastTimer++;
+                    if (BlastTimer > 1)
+                    {
+                        Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 40;
+                        Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJAuraLaserBlack"), 0, 0, player.whoAmI);
+                    }
+                    if (BlastTimer > 1)
+                    {
+                        Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 40;
+                        Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJBarrageProj"), 0, 0, player.whoAmI);
+                        BlastTimer = 0;
+                    }
+
+                }
             }
 
         }
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.AddBuff(mod.BuffType("LSSJBuff"), 360000);
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
-            MyPlayer.ModPlayer(player).IsTransformingLSSJ = false;
+            MyPlayer.ModPlayer(player).IsTransformed = true;
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
+            if (MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+            {
+                player.AddBuff(mod.BuffType("LSSJ2Buff"), 360000);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
+                MyPlayer.ModPlayer(player).IsTransformingLSSJ2 = false;
+            }
+            else
+            {
+                player.AddBuff(mod.BuffType("LSSJBuff"), 360000);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
+                MyPlayer.ModPlayer(player).IsTransformingLSSJ = false;
+            }
         }
     }
 }
