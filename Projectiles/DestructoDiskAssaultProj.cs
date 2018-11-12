@@ -26,9 +26,9 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = false;
             projectile.friendly = true;
             projectile.hostile = false;
-            projectile.aiStyle = 56; //perfect ai for gravless and rotation, useful for disks 
+            projectile.aiStyle = 56;
             projectile.light = 3f;
-            projectile.stepSpeed = 13; ;
+            projectile.stepSpeed = 13;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
