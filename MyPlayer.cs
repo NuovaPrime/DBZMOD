@@ -1210,7 +1210,7 @@ namespace DBZMOD
             player.ClearBuff(mod.BuffType("LSSJBuff"));
             player.ClearBuff(mod.BuffType("LSSJ2Buff"));
             player.ClearBuff(mod.BuffType("SSJGBuff"));
-            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 1800);
+            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 150);
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
 
             if (transformationSound != null)
