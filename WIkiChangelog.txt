@@ -1,0 +1,6 @@
+1.0.2 Update Changelog:
+
+== Fixes ==
+
+1. Fixed bug where all ssj hairs would stay on after dying.
+2. Fixed bug where [[Kaioken Transformation|Super Kaioken]] could be used before unlocking kaioken.

@@ -740,7 +740,7 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx100"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
+            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && KaioAchieved && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
@@ -1234,8 +1234,6 @@ namespace DBZMOD
         }
         public override void PreUpdate()
         {
-            if (player.GetModPlayer<MyPlayer>().IsTransformed)
-            {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
                     if (player.HasBuff(mod.BuffType("SSJ1Buff")))
@@ -1279,7 +1277,6 @@ namespace DBZMOD
                         player.eyeColor = Color.Turquoise;
                     }
                 }
-            }
             else
             {
                 Hair = null;
