@@ -4,3 +4,4 @@
 
 1. Fixed bug where all ssj hairs would stay on after dying.
 2. Fixed bug where [[Kaioken Transformation|Super Kaioken]] could be used before unlocking kaioken.
+3. Fixed bug where there was 2 [[Z-Table]]'s, although only one of them actually worked.
