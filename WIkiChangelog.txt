@@ -1,7 +1,17 @@
-1.0.2 Update Changelog:
+1.0.2 Update Changelog
 
 == Fixes ==
 
 1. Fixed bug where all ssj hairs would stay on after dying.
+
 2. Fixed bug where [[Kaioken Transformation|Super Kaioken]] could be used before unlocking kaioken.
+
 3. Fixed bug where there was 2 [[Z-Table]]'s, although only one of them actually worked.
+
+1.0.3 Update Changelog
+
+== Fixes ==
+
+1. Fixed bug where ssj hairs wouldn't disappear when powering down.
+
+2. Fixed bug where powering down from ssj kaioken wouldn't give the cooldown.

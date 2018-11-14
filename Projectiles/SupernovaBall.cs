@@ -15,7 +15,6 @@ namespace DBZMOD.Projectiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Supernova Ball");
-            Main.projFrames[projectile.type] = 3;
         }
 
         public override void SetDefaults()
@@ -65,16 +64,6 @@ namespace DBZMOD.Projectiles
 
         public override void AI()
         {
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 4)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 3)
-            {
-                projectile.frame = 0;
-            }
             Player player = Main.player[projectile.owner];
 
             if (Main.myPlayer == projectile.owner)

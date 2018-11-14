@@ -152,6 +152,8 @@ namespace DBZMOD
         private int ScarabChargeRateAdd;
         private int ScarabChargeTimer;
         public bool flightUnlocked = false;
+        public bool flightDampeningUnlocked = false;
+        public bool flightUpgraded = false;
         private int DemonBonusTimer;
         public bool hermitBonus;
         public bool spiritCharm;
@@ -243,7 +245,7 @@ namespace DBZMOD
             {
                 LightningFrameTimer++;
             }
-            if(player.HasBuff(mod.BuffType("LSSJ2Buff")))
+            if (player.HasBuff(mod.BuffType("LSSJ2Buff")))
             {
                 LightningFrameTimer += 2;
             }
@@ -320,7 +322,7 @@ namespace DBZMOD
                 MasteryLevelBlue = MasteryMaxBlue;
             }
 
-            
+
             if ((player.HasBuff(mod.BuffType("SSJ1Buff"))
                 &&
                 (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
@@ -398,6 +400,10 @@ namespace DBZMOD
                     DemonBonusTimer = 0;
                     player.AddBuff(mod.BuffType("ArmorCooldown"), 3600);
                 }
+            }
+            if (player.dead)
+            {
+                EndTransformations();
             }
 
             KiBar.visible = true;
@@ -505,6 +511,8 @@ namespace DBZMOD
             tag.Add("hasLegendary", hasLegendary);
             tag.Add("LSSJAchieved", LSSJAchieved);
             tag.Add("flightUnlocked", flightUnlocked);
+            tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
+            tag.Add("flightUpgraded", flightUpgraded);
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
             tag.Add("KiMax", KiMax);
@@ -555,6 +563,8 @@ namespace DBZMOD
             hasLegendary = tag.Get<bool>("hasLegendary");
             LSSJAchieved = tag.Get<bool>("LSSJAchieved");
             flightUnlocked = tag.Get<bool>("flightUnlocked");
+            flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");
+            flightUpgraded = tag.Get<bool>("flightUpgraded");
             SSJGAchieved = tag.Get<bool>("ssjgAchieved");
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             KiMax = tag.Get<int>("KiMax");
@@ -820,6 +830,7 @@ namespace DBZMOD
             {
                 player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
                 player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
+                player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
                 KaiokenTimer = 0.0f;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
@@ -1189,7 +1200,7 @@ namespace DBZMOD
                 float expierenceToAdd = 10.0f;
                 float experienceMult = 1.0f;
 
-                if(IsTransformed)
+                if (IsTransformed)
                 {
                     experienceMult = 2.0f;
                 }
@@ -1234,6 +1245,8 @@ namespace DBZMOD
         }
         public override void PreUpdate()
         {
+            if (player.GetModPlayer<MyPlayer>().IsTransformed)
+            {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
                     if (player.HasBuff(mod.BuffType("SSJ1Buff")))
@@ -1277,7 +1290,12 @@ namespace DBZMOD
                         player.eyeColor = Color.Turquoise;
                     }
                 }
+            }
             else
+            {
+                Hair = null;
+            }
+            if(player.dead)
             {
                 Hair = null;
             }

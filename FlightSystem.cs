@@ -19,6 +19,7 @@ namespace DBZMOD
     {
         //constants
         const int FLIGHT_KI_DRAIN = 4;
+        const int FLIGHT_KI_DRAIN_TIMER = 0;
         public const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
@@ -128,9 +129,13 @@ namespace DBZMOD
                     }
                 }
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
-
+                FLIGHT_KI_DRAIN_TIMER++;
                 //drain ki
-                MyPlayer.ModPlayer(player).KiCurrent -= FLIGHT_KI_DRAIN + (FLIGHT_KI_DRAIN * (int)boostSpeed);
+                if(FLIGHT_KI_DRAIN_TIMER >= 1)
+                {
+                    MyPlayer.ModPlayer(player).KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
+                    FLIGHT_KI_DRAIN_TIMER = 0;
+                }
             }
             else //no longer flying cuz of mode change or ki ran out
             {

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables
 {
-    public class BukuujutsuGuide : ModItem
+    public class BukuujutsuVole : ModItem
     {
         public override void SetDefaults()
         {
@@ -20,27 +20,31 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 4;
+            item.rare = 6;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bukuujutsu Guide");
-            Tooltip.SetDefault("It has an ancient technique inscribed in it, reading it may unlock something akin to flight.");
+            DisplayName.SetDefault("Bukuujutsu Guide Vol 3 - Lux Ruinam");
+            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes your feet feel softer.");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).flightUnlocked = true;
-            Main.NewText("You have unlocked flight.");
+            MyPlayer.ModPlayer(player).flightDampeningUnlocked = true;
+            if (player.whoAmI == Main.myPlayer)
+            {
+                Main.NewText("You now take no fall damage for 10 seconds after flying.");
+                return true;
+            }
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).flightUnlocked)
+            if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
             {
                 return false;
             }

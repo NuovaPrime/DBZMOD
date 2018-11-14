@@ -27,7 +27,8 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("UI Omen Test Item");
-            Tooltip.SetDefault("Activates Ultra Instinct -Sign-");
+            Tooltip.SetDefault("Activates Ultra Instinct -Sign-"
+            + "\nWIP, this is just to show the aura sprite.");
         }
 
 
