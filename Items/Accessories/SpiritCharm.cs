@@ -55,7 +55,7 @@ namespace DBZMOD.Items.Accessories
             recipe.AddIngredient(null, "SpiritualEmblem");
             recipe.AddIngredient(null, "DragonGemNecklace");
             recipe.AddIngredient(ItemID.Ectoplasm, 12);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

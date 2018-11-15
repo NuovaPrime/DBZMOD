@@ -60,7 +60,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
             recipe.AddIngredient(ItemID.FragmentNebula, 4);
             recipe.AddIngredient(ItemID.FragmentStardust, 4);
             recipe.AddIngredient(null, "SpiritBomb", 1);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

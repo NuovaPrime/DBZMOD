@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables
 {
-    public class BukuujutsuVole : ModItem
+    public class BukuujutsuVol3 : ModItem
     {
         public override void SetDefaults()
         {
@@ -26,17 +26,17 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bukuujutsu Guide Vol 3 - Lux Ruinam");
-            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes your feet feel softer.");
+            DisplayName.SetDefault("Bukuujutsu Guide Vol 3 - Fugam Arriperent");
+            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes your ki feel calmer.");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).flightDampeningUnlocked = true;
+            MyPlayer.ModPlayer(player).flightUpgraded = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You now take no fall damage for 10 seconds after flying.");
+                Main.NewText("Your flight now takes barely any ki.");
                 return true;
             }
             return true;
@@ -44,7 +44,7 @@ namespace DBZMOD.Items.Consumables
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
+            if (MyPlayer.ModPlayer(player).flightUpgraded)
             {
                 return false;
             }
@@ -56,9 +56,13 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "StableKiCrystal", 100);
-            recipe.AddIngredient(ItemID.ManaCrystal, 3);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddIngredient(null, "AngerKiCrystal", 250);
+            recipe.AddIngredient(ItemID.SoulofFright, 8);
+            recipe.AddIngredient(ItemID.SoulofSight, 8);
+            recipe.AddIngredient(ItemID.SoulofMight, 8);
+            recipe.AddIngredient(ItemID.Ectoplasm, 35);
+            recipe.AddIngredient(ItemID.Book, 3);
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

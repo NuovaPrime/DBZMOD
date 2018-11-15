@@ -57,7 +57,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.FragmentSolar, 24);
             recipe.AddIngredient(null, "Supernova", 1);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

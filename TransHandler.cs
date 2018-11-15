@@ -30,7 +30,7 @@ namespace DBZMOD
             KiDrainAdd(player);
             if(IsKaioken)
             {
-                MyPlayer.ModPlayer(player).hasKaioken = true;
+                MyPlayer.ModPlayer(player).IsKaioken = true;
                 Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
             }
             if (player.lifeRegen > 0)

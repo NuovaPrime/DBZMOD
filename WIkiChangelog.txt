@@ -15,3 +15,25 @@
 1. Fixed bug where ssj hairs wouldn't disappear when powering down.
 
 2. Fixed bug where powering down from ssj kaioken wouldn't give the cooldown.
+
+1.0.4 Update Changelog
+
+== Additions ==
+
+1. Added [[Bukuujutsu Guide Vol 2]]
+
+2. Added [[Bukuujutsu Guide Vol 3]]
+
+3. Added [[Kai Table]]
+
+== Changes ==
+
+1. Reduced the rate at which ki charge rate increases with the [[Earthen Scarab]]
+
+== Fixes ==
+
+1. Fixed a frame issue with [[Supernova]]
+
+2. Fixed a bug where [[Flight]] [[Ki]] usage reductions did nothing
+
+3. Fixed multiple cases where you could stack multiple forms

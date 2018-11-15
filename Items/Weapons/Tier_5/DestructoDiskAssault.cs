@@ -46,7 +46,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "PureKiCrystal", 40);
 			recipe.AddIngredient(null, "DestructoDisk", 1);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

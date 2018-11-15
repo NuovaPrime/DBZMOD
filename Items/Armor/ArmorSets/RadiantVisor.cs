@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = true;
-            drawAltHair = false;
+            drawAltHair = true;
         }
         public override Color? GetAlpha(Color lightColor)
         {

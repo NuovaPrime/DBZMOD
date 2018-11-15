@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Consumables.Potions
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PureKiCrystal", 2);
             recipe.AddIngredient(null, "KiPotion4", 1);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

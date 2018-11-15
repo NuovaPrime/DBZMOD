@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.FragmentStardust, 18);
             recipe.AddIngredient(null, "Kamehamehax10");
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

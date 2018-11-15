@@ -50,6 +50,9 @@ namespace DBZMOD
         public bool SSJGAchieved = false;
         private int lssj2timer;
         public bool LSSJ2Achieved = false;
+        public bool IsKaioken;
+        public bool IsSSJ;
+        public bool IsLSSJ;
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -110,7 +113,6 @@ namespace DBZMOD
         public bool KiEssence5;
         private bool DemonBonusActive;
         public bool spiritualEmblem;
-        public bool hasKaioken;
         public float KaiokenTimer = 0.0f;
         public bool kiLantern;
         public bool speedToggled = true;
@@ -144,7 +146,7 @@ namespace DBZMOD
         public int OrbHealAmount;
         public bool IsFlying;
         private KiItem kiitem;
-        public float FlightUsageAdd;
+        public int FlightUsageAdd;
         public float FlightSpeedAdd;
         public bool earthenSigil;
         public bool earthenScarab;
@@ -175,17 +177,6 @@ namespace DBZMOD
         public static MyPlayer ModPlayer(Player player)
         {
             return player.GetModPlayer<MyPlayer>();
-        }
-        public bool KaiokenCheck()
-        {
-            if (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
-            {
-                return hasKaioken = true;
-            }
-            else
-            {
-                return hasKaioken = false;
-            }
         }
 
         public override void PostUpdate()
@@ -257,7 +248,7 @@ namespace DBZMOD
             {
                 KiDrainAddition = 0;
             }
-            if (KaiokenCheck())
+            if (IsKaioken)
             {
                 KaiokenTimer += 1.5f;
             }
@@ -368,6 +359,53 @@ namespace DBZMOD
 
                 traitChecked = true;
             }
+            #region Transformational Checks
+            //kaioken
+            if (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
+            {
+                IsKaioken = true;
+            }
+            else
+            {
+                IsKaioken = false;
+            }
+            //SSJ1-3-G
+            if (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")))
+            {
+                IsSSJ = true;
+            }
+            else
+            {
+                IsSSJ = false;
+            }
+            if (player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("LSSJ2Buff")))
+            {
+                IsLSSJ = true;
+            }
+            else
+            {
+                IsLSSJ = false;
+            }
+            if (!player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                if (IsSSJ && IsKaioken)
+                {
+                    EndTransformations();
+                    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+                }
+            }
+            if(IsSSJ && IsLSSJ)
+            {
+                EndTransformations();
+                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            }
+            if(IsLSSJ && IsKaioken)
+            {
+                EndTransformations();
+                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            }
+            #endregion
+
             if (LSSJAchieved)
             {
                 UI.TransMenu.LSSJOn = true;
@@ -586,7 +624,7 @@ namespace DBZMOD
             {
                 if (flightUnlocked)
                 {
-                    m_flightSystem.ToggleFlight();
+                    m_flightSystem.ToggleFlight(player, mod);
                 }
             }
 
@@ -611,7 +649,7 @@ namespace DBZMOD
                     transformationSound = null;
                 }
 
-                if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))))
+                if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransformingSSJ1 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 666666, false);
@@ -635,7 +673,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Ultra Super Saiyan", false, false);
                 }
-                else if (!player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                else if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
@@ -643,7 +681,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
                 }
-                else if (!player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("LSSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                else if (!IsLSSJ && IsSSJ && IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("LSSJBuff"), 666666, false);
@@ -651,7 +689,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan", false, false);
                 }
-                else if (!player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                else if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
@@ -659,7 +697,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
                 }
-                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsCharging && SSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsLSSJ && !IsKaioken && !IsCharging && SSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
@@ -668,7 +706,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
                 }
-                else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsCharging && SSJ3Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsKaioken && !IsLSSJ && !IsCharging && SSJ3Achieved && !IsTransformingSSJ1 && !IsTransformingSSJ2 && !IsTransformingSSJ3 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
@@ -677,14 +715,14 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
                 }
-                if (!player.HasBuff(mod.BuffType("SSJGBuff")) && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                if (!IsSSJ && IsLSSJ && IsKaioken && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("SSJGBuff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(229, 20, 51), "Super Saiyan God", false, false);
                 }
-                if (!player.HasBuff(mod.BuffType("LSSJ2Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && LSSJ2Achieved && UI.TransMenu.MenuSelection == 6 && !IsTransformingSSJ1 && !IsTransformingLSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
+                if (!IsLSSJ && !IsKaioken && !IsSSJ && LSSJ2Achieved && UI.TransMenu.MenuSelection == 6 && !IsTransformingSSJ1 && !IsTransformingLSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("LSSJ2Buff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
@@ -773,7 +811,7 @@ namespace DBZMOD
                 if (earthenScarab)
                 {
                     ScarabChargeTimer++;
-                    if (ScarabChargeTimer > 60)
+                    if (ScarabChargeTimer > 180)
                     {
                         ScarabChargeRateAdd += 1;
                         ScarabChargeTimer = 0;

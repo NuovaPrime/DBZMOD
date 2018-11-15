@@ -55,7 +55,7 @@ namespace DBZMOD.Items.Consumables
             recipe.AddIngredient(null, "PureKiCrystal", 30);
             recipe.AddIngredient(null, "AngerKiCrystal", 20);
             recipe.AddIngredient(ItemID.LihzahrdPowerCell);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

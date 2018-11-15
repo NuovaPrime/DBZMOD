@@ -29,6 +29,12 @@ namespace DBZMOD.Items.Armor
             return body.type == ItemID.MythrilChainmail && legs.type == ItemID.MythrilGreaves;
         }
 
+        public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+        {
+            drawHair = true;
+            drawAltHair = true;
+        }
+
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Ki orbs regenerate twice as much ki.";

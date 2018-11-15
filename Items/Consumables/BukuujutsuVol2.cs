@@ -56,8 +56,9 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "StableKiCrystal", 100);
-            recipe.AddIngredient(ItemID.ManaCrystal, 3);
+            recipe.AddIngredient(null, "PridefulKiCrystal", 50);
+            recipe.AddIngredient(ItemID.SoulofFlight, 12);
+            recipe.AddIngredient(ItemID.Book, 2);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();

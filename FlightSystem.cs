@@ -19,17 +19,21 @@ namespace DBZMOD
     {
         //constants
         const int FLIGHT_KI_DRAIN = 4;
-        const int FLIGHT_KI_DRAIN_TIMER = 0;
         public const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
         bool m_FlightMode = false;
         Vector2 m_currentVel = new Vector2(0, 0);
+        private int FLIGHT_KI_DRAIN_TIMER = 0;
         //float m_targetRotation = 0.0f;
 
-        public void ToggleFlight()
+        public void ToggleFlight(Player player, Mod mod)
         {
             m_FlightMode = !m_FlightMode;
+            if(!m_FlightMode && MyPlayer.ModPlayer(player).flightDampeningUnlocked)
+            {
+                player.AddBuff(mod.BuffType("KatchinFeet"), 600);
+            }
         }
        
         public void Update(TriggersSet triggersSet, Player player)
@@ -53,7 +57,7 @@ namespace DBZMOD
 
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (MyPlayer.EnergyCharge.Current? 1 : 0);
-                float totalFlightUsage = FLIGHT_KI_DRAIN - MyPlayer.ModPlayer(player).FlightUsageAdd;
+                int totalFlightUsage = FLIGHT_KI_DRAIN - MyPlayer.ModPlayer(player).FlightUsageAdd;
                 float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + MyPlayer.ModPlayer(player).FlightSpeedAdd;
 
                 if (triggersSet.Up)
@@ -131,16 +135,36 @@ namespace DBZMOD
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
                 FLIGHT_KI_DRAIN_TIMER++;
                 //drain ki
-                if(FLIGHT_KI_DRAIN_TIMER >= 1)
+                if (!MyPlayer.ModPlayer(player).flightUpgraded)
                 {
-                    MyPlayer.ModPlayer(player).KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
-                    FLIGHT_KI_DRAIN_TIMER = 0;
+                    if (FLIGHT_KI_DRAIN_TIMER >= 1)
+                    {
+                        MyPlayer.ModPlayer(player).KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
+                        FLIGHT_KI_DRAIN_TIMER = 0;
+                    }
+                }
+                else if (MyPlayer.ModPlayer(player).flightUpgraded)
+                {
+                    if (FLIGHT_KI_DRAIN_TIMER >= 3)
+                    {
+                        MyPlayer.ModPlayer(player).KiCurrent -= 1;
+                        FLIGHT_KI_DRAIN_TIMER = 0;
+                    }
+                }
+                if (totalFlightUsage < 1)
+                {
+                    totalFlightUsage = 1;
                 }
             }
             else //no longer flying cuz of mode change or ki ran out
             {
+                Mod mod = ModLoader.GetMod("DBZMOD");
                 player.fullRotation = MathHelper.ToRadians(0);
                 MyPlayer.ModPlayer(player).IsFlying = false;
+                if (MyPlayer.ModPlayer(player).KiCurrent <= 0 && MyPlayer.ModPlayer(player).flightDampeningUnlocked)
+                {
+                    player.AddBuff(mod.BuffType("KatchinFeet"), 600);
+                }
             }
         }
 

@@ -52,7 +52,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			ModRecipe recipe = new ModRecipe(mod);
 		    recipe.AddIngredient(null, "FinalFlash", 1);
 		    recipe.AddIngredient(ItemID.FragmentVortex, 18);
-            recipe.AddTile(null, "ZTable");
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
