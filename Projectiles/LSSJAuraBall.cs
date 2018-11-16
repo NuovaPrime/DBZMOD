@@ -33,7 +33,7 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).hasLegendary)
+            if (MyPlayer.ModPlayer(player).playerTrait == "Legendary")
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;

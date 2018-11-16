@@ -157,8 +157,12 @@ namespace DBZMOD
             int item = 0;
             if (KiWeapon)
             {
-                if (npc.life < 0)
+                if (npc.life <= 0)
                 {
+                    if (npc.boss && MyPlayer.ModPlayer(player).RageCurrent >= 1)
+                    {
+                        MyPlayer.ModPlayer(player).RageCurrent -= 1;
+                    }
                     if (Main.rand.Next(MyPlayer.ModPlayer(player).KiOrbDropChance) == 0)
                     {
                         item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);

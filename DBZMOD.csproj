@@ -34,8 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**\*.*" />
-    <Compile Include="Items\KaiTableItem.cs" />
-    <Compile Include="Tiles\KaiTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">

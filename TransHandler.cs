@@ -43,7 +43,7 @@ namespace DBZMOD
             {
                 MyPlayer.ModPlayer(player).IsTransformed = true;
                 KiDrainTimer++;
-                if(KiDrainTimer > 1)
+                if(KiDrainTimer > 2)
                 {
                     MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate + MyPlayer.ModPlayer(player).KiDrainAddition;
                     KiDrainTimer = 0;

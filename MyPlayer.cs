@@ -14,6 +14,7 @@ using Terraria.ID;
 using DBZMOD;
 using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework.Audio;
+using Terraria.Utilities;
 
 namespace DBZMOD
 {
@@ -53,6 +54,10 @@ namespace DBZMOD
         public bool IsKaioken;
         public bool IsSSJ;
         public bool IsLSSJ;
+        public int RageCurrent = 0;
+        public int RageDecreaseTimer = 0;
+        public int FormUnlockChance;
+        public int OverallFormUnlockChance;
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -140,7 +145,7 @@ namespace DBZMOD
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
-        public bool hasLegendary = false;
+        public string playerTrait = null;
         public bool DemonBonus;
         public int OrbGrabRange;
         public int OrbHealAmount;
@@ -159,6 +164,14 @@ namespace DBZMOD
         private int DemonBonusTimer;
         public bool hermitBonus;
         public bool spiritCharm;
+        public bool zenkaiCharm;
+        public bool zenkaiCharmActive;
+        public bool majinNucleus;
+        public bool baldurEssentia;
+        public bool kiChip;
+        public bool earthenArcanium;
+        public bool legendNecklace;
+        public bool legendWaistcape;
         public bool armCannon;
         public bool battleKit;
         public bool radiantBonus;
@@ -181,7 +194,7 @@ namespace DBZMOD
 
         public override void PostUpdate()
         {
-            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2timer++;
                 if (lssj2timer >= 300)
@@ -258,13 +271,15 @@ namespace DBZMOD
                 {
                     ASSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in SSJ1 " +
+                        "\nto ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
                 {
                     USSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in ASSJ " +
+                        "\nto ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 1f && !MasteredMessage1)
                 {
@@ -352,9 +367,9 @@ namespace DBZMOD
 
             if (!traitChecked)
             {
-                if (Main.rand.Next(20) == 0)
+                if (playerTrait == null)
                 {
-                    hasLegendary = true;
+                    ChooseTrait();
                 }
 
                 traitChecked = true;
@@ -410,14 +425,18 @@ namespace DBZMOD
             {
                 UI.TransMenu.LSSJOn = true;
             }
-            if (hasLegendary && !LSSJAchieved && NPC.downedBoss1)
+            if (playerTrait == "Legendary" && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 999999);
             }
-            else if (hasLegendary && LSSJAchieved)
+            else if (playerTrait == "Legendary" && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 999999);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
+            }
+            if (playerTrait == "Prodigy" && NPC.downedBoss1)
+            {
+                player.AddBuff(mod.BuffType("ProdigyTrait"), 999999);
             }
 
             if (KiRegen >= 1)
@@ -443,6 +462,28 @@ namespace DBZMOD
             {
                 EndTransformations();
             }
+            if(RageCurrent > 5)
+            {
+                RageCurrent = 5;
+            }
+            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
+
+            //Main.NewText("Form unlock chance =" + OverallFormUnlockChance);
+
+            if(OverallFormUnlockChance < 2)
+            {
+                OverallFormUnlockChance = 2;
+            }
+            
+            if(IsCharging && !IsFlying)
+            {
+                player.velocity.X = 0;
+            }
+
+            if(!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
+            {
+                player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+            }
 
             KiBar.visible = true;
         }
@@ -454,6 +495,17 @@ namespace DBZMOD
                 drawInfo.hairShader = 1;
             }
 
+        }
+
+        public string ChooseTrait()
+        {
+            var TraitChooser = new WeightedRandom<string>();
+            TraitChooser.Add("Prodigy", 4);
+            TraitChooser.Add("Legendary", 1);
+            TraitChooser.Add(null, 15);
+
+            return playerTrait = TraitChooser;
+            
         }
 
         public object LSSJ2TextSelect()
@@ -546,7 +598,7 @@ namespace DBZMOD
             tag.Add("EvilMessage", EvilMessage);
             tag.Add("MushroomMessage", MushroomMessage);
             tag.Add("traitChecked", traitChecked);
-            tag.Add("hasLegendary", hasLegendary);
+            tag.Add("playerTrait", playerTrait);
             tag.Add("LSSJAchieved", LSSJAchieved);
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
@@ -598,7 +650,7 @@ namespace DBZMOD
             EvilMessage = tag.Get<bool>("EvilMessage");
             MushroomMessage = tag.Get<bool>("MushroomMessage");
             traitChecked = tag.Get<bool>("traitChecked");
-            hasLegendary = tag.Get<bool>("hasLegendary");
+            playerTrait = tag.Get<string>("playerTrait");
             LSSJAchieved = tag.Get<bool>("LSSJAchieved");
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");
@@ -683,7 +735,6 @@ namespace DBZMOD
                 }
                 else if (!IsLSSJ && IsSSJ && IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
-                    SSJDustAura();
                     player.AddBuff(mod.BuffType("LSSJBuff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
@@ -808,10 +859,10 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
                     ChargeSoundTimer = 0;
                 }
-                if (earthenScarab)
+                if (earthenScarab || earthenArcanium)
                 {
                     ScarabChargeTimer++;
-                    if (ScarabChargeTimer > 180)
+                    if (ScarabChargeTimer > 180 && ScarabChargeRateAdd <= 5)
                     {
                         ScarabChargeRateAdd += 1;
                         ScarabChargeTimer = 0;
@@ -888,35 +939,35 @@ namespace DBZMOD
             if (Fragment1)
             {
                 KiMax = 2000;
-                if (Fragment1 && hasLegendary && NPC.downedBoss1)
+                if (Fragment1 && playerTrait == "Legendary" && NPC.downedBoss1)
                 {
                     KiMax = 4000;
                 }
                 if (Fragment2)
                 {
                     KiMax = 4000;
-                    if (Fragment2 && hasLegendary && NPC.downedBoss1)
+                    if (Fragment2 && playerTrait == "Legendary" && NPC.downedBoss1)
                     {
                         KiMax = 8000;
                     }
                     if (Fragment3)
                     {
                         KiMax = 6000;
-                        if (Fragment3 && hasLegendary && NPC.downedBoss1)
+                        if (Fragment3 && playerTrait == "Legendary" && NPC.downedBoss1)
                         {
                             KiMax = 12000;
                         }
                         if (Fragment4)
                         {
                             KiMax = 8000;
-                            if (Fragment4 && hasLegendary && NPC.downedBoss1)
+                            if (Fragment4 && playerTrait == "Legendary" && NPC.downedBoss1)
                             {
                                 KiMax = 16000;
                             }
                             if (Fragment5)
                             {
                                 KiMax = 10000;
-                                if (Fragment5 && hasLegendary && NPC.downedBoss1)
+                                if (Fragment5 && playerTrait == "Legendary" && NPC.downedBoss1)
                                 {
                                     KiMax = 20000;
                                 }
@@ -973,6 +1024,13 @@ namespace DBZMOD
             rubyNecklace = false;
             earthenSigil = false;
             radiantTotem = false;
+            zenkaiCharm = false;
+            majinNucleus = false;
+            baldurEssentia = false;
+            earthenArcanium = false;
+            legendNecklace = false;
+            legendWaistcape = false;
+            kiChip = false;
             dragongemNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
@@ -993,6 +1051,7 @@ namespace DBZMOD
             KiRegen = 0;
             earthenScarab = false;
             hermitBonus = false;
+            zenkaiCharmActive = false;
             chargeTimerMaxAdd = 0;
             spiritCharm = false;
             battleKit = false;
@@ -1003,13 +1062,31 @@ namespace DBZMOD
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
+            if (damageSource.SourceNPCIndex > -1)
+            {
+                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
+                if (culprit.boss && player.whoAmI == Main.myPlayer)
+                {
+                    RageCurrent += 1;
+                    return true;
+                }
+            }
+
+            if(zenkaiCharm && !zenkaiCharmActive)
+            {
+                player.statLife = 50;
+                player.HealEffect(50);
+                player.AddBuff(mod.BuffType("ZenkaiBuff"), 300);
+                return false;
+            }
 
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
-                    if ((Main.rand.Next(10) == 0))
+                    FormUnlockChance = 10;
+                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
                         Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                         player.statLife = player.statLifeMax2 / 2;
@@ -1018,6 +1095,7 @@ namespace DBZMOD
                         IsTransformingSSJ1 = true;
                         SSJTransformation();
                         UI.TransMenu.MenuSelection = 1;
+                        RageCurrent = 0;
                         return false;
                     }
                 }
@@ -1025,9 +1103,10 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !hasLegendary && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !(playerTrait == "Legendary") && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
-                    if ((Main.rand.Next(5) == 0))
+                    FormUnlockChance = 5;
+                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
                         Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                         player.statLife = player.statLifeMax2 / 2;
@@ -1036,6 +1115,7 @@ namespace DBZMOD
                         IsTransformingSSJ2 = true;
                         SSJ2Transformation();
                         UI.TransMenu.MenuSelection = 2;
+                        RageCurrent = 0;
                         return false;
                     }
                 }
@@ -1043,9 +1123,10 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && hasLegendary && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
-                    if ((Main.rand.Next(5) == 0))
+                    FormUnlockChance = 5;
+                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
                         Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                         player.statLife = player.statLifeMax2 / 2;
@@ -1054,6 +1135,7 @@ namespace DBZMOD
                         IsTransformingLSSJ = true;
                         LSSJTransformation();
                         UI.TransMenu.MenuSelection = 4;
+                        RageCurrent = 0;
                         return false;
                     }
                 }
@@ -1061,9 +1143,10 @@ namespace DBZMOD
             if (damageSource.SourceProjectileIndex > -1)
             {
                 Projectile culprit = Main.projectile[damageSource.SourceProjectileIndex];
-                if ((culprit.type == ProjectileID.CultistBossIceMist) || (culprit.type == ProjectileID.CultistBossFireBall) || (culprit.type == ProjectileID.CultistBossFireBallClone) || (culprit.type == ProjectileID.CultistBossLightningOrb) || (culprit.type == ProjectileID.CultistBossLightningOrbArc) || (culprit.type == ProjectileID.CultistBossParticle) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !hasLegendary && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
+                if ((culprit.type == ProjectileID.CultistBossIceMist) || (culprit.type == ProjectileID.CultistBossFireBall) || (culprit.type == ProjectileID.CultistBossFireBallClone) || (culprit.type == ProjectileID.CultistBossLightningOrb) || (culprit.type == ProjectileID.CultistBossLightningOrbArc) || (culprit.type == ProjectileID.CultistBossParticle) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
-                    if ((Main.rand.Next(3) == 0))
+                    FormUnlockChance = 3;
+                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
                         Main.NewText("The ancient power of the cultist seeps into you, causing your power to go haywire.", Color.Blue);
                         player.statLife = player.statLifeMax2 / 2;
@@ -1072,6 +1155,7 @@ namespace DBZMOD
                         IsTransformingSSJ3 = true;
                         SSJ3Transformation();
                         UI.TransMenu.MenuSelection = 3;
+                        RageCurrent = 0;
                         return false;
                     }
                 }

@@ -27,13 +27,13 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Legendary Test Item");
-            Tooltip.SetDefault("GIves the legendary trait");
+            Tooltip.SetDefault("Gives the legendary trait");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).hasLegendary = true;
+            MyPlayer.ModPlayer(player).playerTrait = "Legendary";
             return true;
 
         }

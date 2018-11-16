@@ -28,7 +28,7 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).hasLegendary)
+            if (MyPlayer.ModPlayer(player).playerTrait == "Legendary")
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -47,7 +47,7 @@ namespace DBZMOD.Projectiles
                 }
 
             }
-            else if(!MyPlayer.ModPlayer(player).hasLegendary)
+            else if(!(MyPlayer.ModPlayer(player).playerTrait == "Legendary"))
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -94,14 +94,14 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!MyPlayer.ModPlayer(player).hasLegendary)
+            if (!(MyPlayer.ModPlayer(player).playerTrait == "Legendary"))
             {
                 player.AddBuff(mod.BuffType("SSJ2Buff"), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransformingSSJ2 = false;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             }
-            if (MyPlayer.ModPlayer(player).hasLegendary)
+            if (MyPlayer.ModPlayer(player).playerTrait == "Legendary")
             {
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));

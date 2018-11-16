@@ -20,15 +20,26 @@
 
 == Additions ==
 
-1. Added [[Bukuujutsu Guide Vol 2]]
+1. Added [[Bukuujutsu Guide Vol 2]] and [[Bukuujutsu Guide Vol 3]]
 
-2. Added [[Bukuujutsu Guide Vol 3]]
+2. Added [[Rage]]
 
 3. Added [[Kai Table]]
 
+4. Added [[Baldur Essentia]], [[Earthen Arcanium]], [[Ki Chip]], [[Zenkai Charm]] and [[Majin Nucleus]]
+
+5. Added [[Ancient Legend Necklace]] and [[Ancient Legend Waistcape]]
+
+6. Added [[Prodigy]] Trait
 == Changes ==
 
 1. Reduced the rate at which ki charge rate increases with the [[Earthen Scarab]]
+
+2. Halved the ki drain of all transformations
+
+3. Changed many recipes to use the new [[Kai Table]]
+
+4. New sprites for [[Earthen Shard]], [[Radiant Totem]], [[Earthen Scarab]], [[Earthen Sigil]] and all the [[Scouters]].
 
 == Fixes ==
 
@@ -37,3 +48,5 @@
 2. Fixed a bug where [[Flight]] [[Ki]] usage reductions did nothing
 
 3. Fixed multiple cases where you could stack multiple forms
+
+4. Fixed bug where your hair was hidden with the [[Mythril Glasses]]
