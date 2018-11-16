@@ -4,29 +4,29 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Npcs
 {
-	public class MajinZombie : ModNPC
+	public class MajinSlime : ModNPC
 	{
         private int majinRegentimer;
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Majin Zombie");
-			Main.npcFrameCount[npc.type] = 3;
+			DisplayName.SetDefault("Majin Slime");
+			Main.npcFrameCount[npc.type] = 2;
 		}
 
 		public override void SetDefaults()
 		{
-			npc.width = 18;
-			npc.height = 40;
-			npc.damage = 84;
-			npc.defense = 24;
-			npc.lifeMax = 600;
+			npc.width = 44;
+			npc.height = 33;
+			npc.damage = 62;
+			npc.defense = 22;
+			npc.lifeMax = 240;
 			npc.HitSound = SoundID.NPCHit1;
 			npc.DeathSound = SoundID.NPCDeath2;
-			npc.value = 60f;
-			npc.knockBackResist = 0.5f;
-			npc.aiStyle = 3;
-			aiType = NPCID.Zombie;
-			animationType = NPCID.Zombie;
+			npc.value = 800f;
+			npc.knockBackResist = 0.7f;
+			npc.aiStyle = 1;
+			aiType = NPCID.BlackSlime;
+			animationType = NPCID.BlackSlime;
 		}
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -44,7 +44,7 @@ namespace DBZMOD.Npcs
         public override void AI()
         {
             majinRegentimer++;
-            if(majinRegentimer > 12 && npc.life <= npc.lifeMax)
+            if(majinRegentimer > 14 && npc.life <= npc.lifeMax)
             {
                 npc.life += 1;
                 majinRegentimer = 0;
@@ -54,10 +54,10 @@ namespace DBZMOD.Npcs
 
         public override void NPCLoot()
         {
-            if (Main.rand.Next(10) == 0)
+            if (Main.rand.Next(20) == 0)
             {
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CandyLaser"));
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("MajinNucleus"));
                 }
             }
         }

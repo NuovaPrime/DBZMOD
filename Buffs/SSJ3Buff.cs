@@ -32,7 +32,12 @@ namespace DBZMOD.Buffs
             }
             KiDrainBuffMulti = 2.1f;
             MasteryTimer++;
-            if (MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)
+            if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)
+            {
+                MyPlayer.ModPlayer(player).MasteryLevel3 += 0.01f;
+                MasteryTimer = 0;
+            }
+            else if (MyPlayer.ModPlayer(player).playerTrait == "Prodigy" && MasteryTimer >= 150 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)
             {
                 MyPlayer.ModPlayer(player).MasteryLevel3 += 0.01f;
                 MasteryTimer = 0;
