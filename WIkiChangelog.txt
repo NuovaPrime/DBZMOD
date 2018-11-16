@@ -31,6 +31,8 @@
 5. Added [[Ancient Legend Necklace]] and [[Ancient Legend Waistcape]]
 
 6. Added [[Prodigy]] Trait
+
+7. Added the [[Majin Slime]]
 == Changes ==
 
 1. Reduced the rate at which ki charge rate increases with the [[Earthen Scarab]]

@@ -427,16 +427,16 @@ namespace DBZMOD
             }
             if (playerTrait == "Legendary" && !LSSJAchieved && NPC.downedBoss1)
             {
-                player.AddBuff(mod.BuffType("UnknownLegendary"), 999999);
+                player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
             else if (playerTrait == "Legendary" && LSSJAchieved)
             {
-                player.AddBuff(mod.BuffType("LegendaryTrait"), 999999);
+                player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
             }
             if (playerTrait == "Prodigy" && NPC.downedBoss1)
             {
-                player.AddBuff(mod.BuffType("ProdigyTrait"), 999999);
+                player.AddBuff(mod.BuffType("ProdigyTrait"), 3);
             }
 
             if (KiRegen >= 1)
@@ -468,7 +468,11 @@ namespace DBZMOD
             }
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 
-            //Main.NewText("Form unlock chance =" + OverallFormUnlockChance);
+            
+            /*if (!(playerTrait == null))
+            {
+                Main.NewText(playerTrait);
+            }*/
 
             if(OverallFormUnlockChance < 2)
             {
@@ -928,6 +932,11 @@ namespace DBZMOD
             {
                 EndTransformations();
             }
+            /*if(QuickKi.JustPressed && traitChecked)
+            {
+                traitChecked = false;
+                ChooseTrait();
+            }*/
         }
         public MyPlayer() : base()
         {
@@ -1062,16 +1071,6 @@ namespace DBZMOD
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            if (damageSource.SourceNPCIndex > -1)
-            {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && player.whoAmI == Main.myPlayer)
-                {
-                    RageCurrent += 1;
-                    return true;
-                }
-            }
-
             if(zenkaiCharm && !zenkaiCharmActive)
             {
                 player.statLife = 50;
@@ -1158,6 +1157,15 @@ namespace DBZMOD
                         RageCurrent = 0;
                         return false;
                     }
+                }
+            }
+            if (damageSource.SourceNPCIndex > -1)
+            {
+                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
+                if (culprit.boss && player.whoAmI == Main.myPlayer)
+                {
+                    RageCurrent += 1;
+                    return true;
                 }
             }
 

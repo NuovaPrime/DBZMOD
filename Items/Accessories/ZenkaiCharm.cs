@@ -32,5 +32,16 @@ namespace DBZMOD.Items.Accessories
                 player.GetModPlayer<MyPlayer>(mod).zenkaiCharm = true;
             }
         }
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(null, "AngerKiCrystal", 20);
+            recipe.AddIngredient(null, "SoulofEntity", 16);
+            recipe.AddIngredient(ItemID.GoldBar, 12);
+            recipe.AddIngredient(ItemID.Obsidian, 8);
+            recipe.AddTile(null, "ZTable");
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }

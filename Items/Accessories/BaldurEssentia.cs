@@ -9,7 +9,8 @@ namespace DBZMOD.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("The essence of strong defense." +
-                "\nCharging grants a protective barrier that reduces damage by 30%");
+                "\nCharging grants a protective barrier that reduces damage by 30%" +
+                "\nNot finished.");
             DisplayName.SetDefault("Baldur Essentia");
         }
 

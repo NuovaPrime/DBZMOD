@@ -61,7 +61,7 @@ namespace DBZMOD
             MyPlayer.Transform = RegisterHotKey("Transform", "X");
             MyPlayer.PowerDown = RegisterHotKey("Power Down", "V");
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
-            //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
+            MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
