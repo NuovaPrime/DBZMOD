@@ -88,20 +88,18 @@ namespace DBZMOD
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, 261, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                            tdust.noGravity = true;
+                            Dust tdust = Terraria.Dust.NewDustPerfect(Main.LocalPlayer.Center, 91, new Vector2(0f, 0f), 0, new Color(255,255,255), 1.75f);
+							tdust.noGravity = true;
                         }
-
                     }
                     else
                     {
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 8; i++)
                         {
-                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, 261, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                            tdust.noGravity = true;
+							Dust tdust = Terraria.Dust.NewDustPerfect(Main.LocalPlayer.Center, 91, new Vector2(0f, 0f), 0, new Color(255,255,255), 2.25f);
+							tdust.noGravity = true;
                         }
                     }
-
                 }
 
                 //caluclate velocity
