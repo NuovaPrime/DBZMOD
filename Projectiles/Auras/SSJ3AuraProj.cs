@@ -34,6 +34,7 @@ namespace DBZMOD.Projectiles.Auras
             AuraOffset.Y = -75;
             IsSSJAura = true;
             ScaleExtra = 0.7f;
+			projectile.light = 1f;
         }
         public override void AI()
         {

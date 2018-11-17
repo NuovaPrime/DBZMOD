@@ -35,6 +35,7 @@ namespace DBZMOD.Projectiles.Auras
             ScaleExtra = 0.2f;
             FrameAmount = 6;
             IsSSJAura = true;
+			projectile.light = 1f;
         }
         public override void AI()
         {

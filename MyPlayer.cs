@@ -271,15 +271,13 @@ namespace DBZMOD
                 {
                     ASSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in SSJ1 " +
-                        "\nto ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
                 {
                     USSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in ASSJ " +
-                        "\nto ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 1f && !MasteredMessage1)
                 {
