@@ -45,7 +45,7 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.rotation = 0;
             }
             projectile.frameCounter++;
-            if (projectile.frameCounter > 5)
+            if (projectile.frameCounter > 4)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
