@@ -30,6 +30,7 @@ namespace DBZMOD.Tiles
             AddMapEntry(new Color(223, 245, 255), name);
             dustType = mod.DustType("MetalDust");
             disableSmartCursor = true;
+            adjTiles = new int[mod.TileType("ZTable")];
             TileObjectData.addTile(Type);
         }
 

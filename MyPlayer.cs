@@ -407,7 +407,15 @@ namespace DBZMOD
                     Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
                 }
             }
-            if(IsSSJ && IsLSSJ)
+            if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                if (player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")) || IsLSSJ)
+                {
+                    EndTransformations();
+                    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+                }
+            }
+            if (IsSSJ && IsLSSJ)
             {
                 EndTransformations();
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
@@ -495,6 +503,15 @@ namespace DBZMOD
             {
                 drawInfo.hairColor = new Color(183, 25, 46);
                 drawInfo.hairShader = 1;
+                player.eyeColor = Color.Red;
+            }
+            if (IsSSJ || IsLSSJ)
+            {
+                player.eyeColor = Color.Turquoise;
+            }
+            if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            {
+                player.eyeColor = Color.Red;
             }
 
         }
@@ -735,7 +752,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
                 }
-                else if (!IsLSSJ && IsSSJ && IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
+                else if (!IsLSSJ && !IsSSJ && !IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransformingSSJ1 && !IsTransformingLSSJ && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("LSSJBuff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
@@ -768,7 +785,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
                 }
-                if (!IsSSJ && IsLSSJ && IsKaioken && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
+                if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransformingSSJG && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("SSJGBuff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
@@ -841,7 +858,7 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx100"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && KaioAchieved && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
+            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff"))) && !IsSSJ && !IsLSSJ && KaioAchieved && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.ClearBuff(mod.BuffType("SSJ1Buff"));
@@ -1380,42 +1397,34 @@ namespace DBZMOD
                     if (player.HasBuff(mod.BuffType("SSJ1Buff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("ASSJBuff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("USSJBuff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
-                        player.eyeColor = Color.Red;
                     }
                     else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("SSJ3Buff")))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("LSSJBuff")))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
-                        player.eyeColor = Color.Turquoise;
                     }
                     else if (player.HasBuff(mod.BuffType("LSSJ2Buff")))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
-                        player.eyeColor = Color.Turquoise;
                     }
                 }
             }
