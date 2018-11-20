@@ -30,6 +30,7 @@ namespace DBZMOD.Projectiles.Auras
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
             AuraOffset.Y = -20;
+			projectile.light = 1f;
         }
         public override void AI()
         {
@@ -44,7 +45,7 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.rotation = 0;
             }
             projectile.frameCounter++;
-            if (projectile.frameCounter > 5)
+            if (projectile.frameCounter > 4)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;

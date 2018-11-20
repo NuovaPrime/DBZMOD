@@ -5,12 +5,12 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor.Vanity
 {
     [AutoloadEquip(EquipType.Head)]
-    public class LegendaryBlockHead : ModItem
+    public class GreenGodHead : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The head of an extremely ancient god.");
-            DisplayName.SetDefault("Legendary Blockhead");
+            Tooltip.SetDefault("The head of the ancient god of balance");
+            DisplayName.SetDefault("Green God Head");
         }
 
         public override void SetDefaults()
@@ -18,7 +18,7 @@ namespace DBZMOD.Items.Armor.Vanity
             item.width = 24;
             item.height = 16;
             item.value = 30000;
-            item.rare = 9;
+            item.rare = 8;
             item.expert = true;
             item.vanity = true;
         }

@@ -53,6 +53,22 @@
 
 4. Fixed bug where your hair was hidden with the [[Mythril Glasses]]
 
+1.0.4.1 Update Changelog
+
+== Changes ==
+
+1. New Sprites for all the [[Test Items]]
+
+2. Slightly changed the look of the dust while [[Flight|Flying]]
+
+3. Recipes crafted at the [[Z-Table]] can now also be crafted at the [[Kai Table]]
+
+== Fixes ==
+
+1. Fixed bugs where [[Legendary Super Saiyan]] and [[Super Saiyan God]] couldn't be transformed into.
+
+2. Fixed bug where transforming would permanently change your eye color.
+
 1.0.4.2 Update Changelog
 
 == Changes ==
