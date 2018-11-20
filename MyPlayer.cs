@@ -409,12 +409,12 @@ namespace DBZMOD
                     Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
                 }
             }
-            if(IsSSJ && IsLSSJ)
+            if (IsSSJ && IsLSSJ)
             {
                 EndTransformations();
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
             }
-            if(IsLSSJ && IsKaioken)
+            if (IsLSSJ && IsKaioken)
             {
                 EndTransformations();
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
@@ -462,29 +462,29 @@ namespace DBZMOD
             {
                 EndTransformations();
             }
-            if(RageCurrent > 5)
+            if (RageCurrent > 5)
             {
                 RageCurrent = 5;
             }
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 
-            
+
             /*if (!(playerTrait == null))
             {
                 Main.NewText(playerTrait);
             }*/
 
-            if(OverallFormUnlockChance < 2)
+            if (OverallFormUnlockChance < 2)
             {
                 OverallFormUnlockChance = 2;
             }
-            
-            if(IsCharging && !IsFlying)
+
+            if (IsCharging && !IsFlying)
             {
                 player.velocity.X = 0;
             }
 
-            if(!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
+            if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
             {
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
             }
@@ -509,7 +509,7 @@ namespace DBZMOD
             TraitChooser.Add(null, 15);
 
             return playerTrait = TraitChooser;
-            
+
         }
 
         public object LSSJ2TextSelect()
@@ -1069,6 +1069,9 @@ namespace DBZMOD
             //IsCharging = false;
         }
 
+        private readonly int[] culprints = new int[] { ProjectileID.GolemFist };
+
+        private int Culprints;
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if(zenkaiCharm && !zenkaiCharmActive)
@@ -1078,11 +1081,17 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("ZenkaiBuff"), 300);
                 return false;
             }
+            Projectile culprit2 = Main.projectile[damageSource.SourceProjectileIndex];
+            NPC culprit = Main.npc[damageSource.SourceNPCIndex];
+
+            foreach(int i in culprints)
+            {
+                Culprints = i;
+            }
 
             if (damageSource.SourceNPCIndex > -1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+                if ((culprit.boss || culprit2.type == Culprints) && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
                     FormUnlockChance = 10;
                     if ((Main.rand.Next(OverallFormUnlockChance) == 0))
@@ -1101,7 +1110,6 @@ namespace DBZMOD
             }
             if (damageSource.SourceNPCIndex > -1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !(playerTrait == "Legendary") && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
                     FormUnlockChance = 5;
@@ -1121,7 +1129,6 @@ namespace DBZMOD
             }
             if (damageSource.SourceNPCIndex > -1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
                 {
                     FormUnlockChance = 5;
@@ -1139,15 +1146,14 @@ namespace DBZMOD
                     }
                 }
             }
-            if (damageSource.SourceProjectileIndex > -1)
+            if (damageSource.SourceProjectileIndex > -1 || damageSource.SourceNPCIndex > -1)
             {
-                Projectile culprit = Main.projectile[damageSource.SourceProjectileIndex];
-                if ((culprit.type == ProjectileID.CultistBossIceMist) || (culprit.type == ProjectileID.CultistBossFireBall) || (culprit.type == ProjectileID.CultistBossFireBallClone) || (culprit.type == ProjectileID.CultistBossLightningOrb) || (culprit.type == ProjectileID.CultistBossLightningOrbArc) || (culprit.type == ProjectileID.CultistBossParticle) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
+                if ((culprit2.type == ProjectileID.Fireball || culprit2.type == ProjectileID.GolemFist || culprit2.type == ProjectileID.EyeBeam || culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
                 {
                     FormUnlockChance = 3;
                     if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
-                        Main.NewText("The ancient power of the cultist seeps into you, causing your power to go haywire.", Color.Blue);
+                        Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Blue);
                         player.statLife = player.statLifeMax2 / 2;
                         player.HealEffect(player.statLifeMax2 / 2);
                         SSJ3Achieved = true;
@@ -1161,7 +1167,6 @@ namespace DBZMOD
             }
             if (damageSource.SourceNPCIndex > -1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && player.whoAmI == Main.myPlayer)
                 {
                     RageCurrent += 1;
@@ -1457,6 +1462,22 @@ namespace DBZMOD
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
                 PlayerLayer.Arms.visible = false;
+            }
+        }
+        public override void clientClone(ModPlayer clientClone)
+        {
+            SSJHairDraw clone = clientClone as SSJHairDraw;
+
+            clone.Hair = Hair;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            SSJHairDraw clone = clientPlayer as SSJHairDraw;
+            var packet = mod.GetPacket();
+            if (clone.Hair != Hair)
+            {
+                packet.Send();
             }
         }
     }

@@ -52,3 +52,23 @@
 3. Fixed multiple cases where you could stack multiple forms
 
 4. Fixed bug where your hair was hidden with the [[Mythril Glasses]]
+
+1.0.4.2 Update Changelog
+
+== Changes ==
+
+1. Changed [[Super Saiyan 3]] to be obtained at [[Golem]] instead of the [[Lunatic Cultist]].
+
+2. Buffed drop amount of [[Soul of Entity]], [[Demonic Soul]], [[Astral Essentia]], [[Pure Ki Crystal]]
+
+3. [[Stable Ki Crystal]] now drops in the [[Forest]], [[Desert]] and [[Snow]] biomes.
+
+4. Changed [[Ki Chip]]'s tooltip to properly say ki charge rate instead of ki regen.
+
+5. [[Super Saiyan 3]]'s health drain now only applies once you are below 30% health.
+
+== Fixes ==
+
+1. Fixed bug where Super Kaioken wouldn't work
+
+2. Fixed bug where [[Super Saiyan 3]] didn't require you to be in [[Super Saiyan 2]] to achieve.

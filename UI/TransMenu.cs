@@ -36,7 +36,7 @@ namespace DBZMOD.UI
         private UIImage unknownImageL2;
 
 
-        public static int MenuSelection = 0;
+        public static int MenuSelection;
         public static bool SSJ1On;
         public static bool SSJ2On;
         public static bool SSJ3On;

@@ -14,7 +14,8 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = true;
             IsKaioken = false;
             IsSSJ = true;
-            Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki and slightly drains life.");
+            Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki " +
+                "\nand slightly drains life when below 30% health.");
         }
         public override void Update(Player player, ref int buffIndex)
         {
@@ -23,12 +24,18 @@ namespace DBZMOD.Buffs
             if (MyPlayer.ModPlayer(player).MasteryLevel3 >= 1)
             {
                 KiDrainRate = 4;
-                HealthDrainRate = 10;
+                if(player.statLife < (player.statLifeMax2 * 0.30))
+                {
+                    HealthDrainRate = 10;
+                }
             }
             else
             {
                 KiDrainRate = 6;
-                HealthDrainRate = 20;
+                if (player.statLife < (player.statLifeMax2 * 0.30))
+                {
+                    HealthDrainRate = 20;
+                }
             }
             KiDrainBuffMulti = 2.1f;
             MasteryTimer++;

@@ -48,6 +48,7 @@ namespace DBZMOD.Npcs
             {
                 npc.life += 1;
                 majinRegentimer = 0;
+
             }
             base.AI();
         }

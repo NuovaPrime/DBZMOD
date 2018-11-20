@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Accessories
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A piece of a ki fragment." +
-                "\nIncreased ki regen");
+                "\nIncreased ki charge rate");
             DisplayName.SetDefault("Ki Chip");
         }
 
