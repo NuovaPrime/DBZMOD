@@ -88,3 +88,5 @@
 1. Fixed bug where Super Kaioken wouldn't work
 
 2. Fixed bug where [[Super Saiyan 3]] didn't require you to be in [[Super Saiyan 2]] to achieve.
+
+3. Fixed bug where your [[Transformation Menu]] selection wouldn't save.

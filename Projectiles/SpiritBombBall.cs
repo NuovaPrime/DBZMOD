@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
         public bool Released = false;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SpiritBombBall");
+            DisplayName.SetDefault("Spirit Bomb");
         }
 
         public override void SetDefaults()
@@ -25,14 +25,13 @@ namespace DBZMOD.Projectiles
             projectile.aiStyle = 1;
             aiType = 14;
             projectile.friendly = true;
-            projectile.extraUpdates = 0;
+            projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
             projectile.penetrate = 12;
             projectile.timeLeft = 400;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
-            projectile.netUpdate = true;
             KiDrainRate = 10;
         }
 
@@ -71,6 +70,7 @@ namespace DBZMOD.Projectiles
                 if (!Released)
                 {
                     projectile.scale += 0.04f;
+                    projectile.netUpdate = true;
 
                     projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 
@@ -103,8 +103,6 @@ namespace DBZMOD.Projectiles
                         Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 }
-
-                projectile.netUpdate = true;
             }
 
             //if button let go
@@ -135,14 +133,6 @@ namespace DBZMOD.Projectiles
 				Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
 				spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
 			}
-			return true;
-            //Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-            //for (int k = 0; k < projectile.oldPos.Length; k++)
-            //{
-            //Vector2 drawPos = projectile.oldPos[0] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
-            //Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-            //spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, Color.White, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
-			//}
 			return true;	
 		}   
     }

@@ -485,7 +485,7 @@ namespace DBZMOD
                 OverallFormUnlockChance = 2;
             }
 
-            if (IsCharging && !IsFlying)
+            if (IsCharging && !IsFlying && KiCurrent != KiMax)
             {
                 player.velocity.X = 0;
             }

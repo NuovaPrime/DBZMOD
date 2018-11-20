@@ -34,18 +34,6 @@ namespace DBZMOD.Projectiles
             projectile.netUpdate = true;
         }
 
-        public int collisionTimer = 5;
-        public bool alphaTicking = false;
-        public Vector2 originalVelocity = default(Vector2);
-
-        bool init = false;
-        public void Initialize()
-        {
-            if (projectile.position == default(Vector2)) return;
-            originalVelocity = projectile.velocity;
-            init = true;
-        }
-
         public override Color? GetAlpha(Color lightColor)
         {
             if (projectile.timeLeft < 85)
@@ -59,8 +47,6 @@ namespace DBZMOD.Projectiles
 
         public override void AI()
         {
-
-            if (!init) Initialize();
             if (projectile.ai[0] < 240f)
             {
                 projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.57f;
