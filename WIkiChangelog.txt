@@ -94,3 +94,15 @@
 4. Fixed bug where the [[Super Saiyan God]] spirit wouldn't drop.
 
 5. Fixed bug where the [[Z-Table]] and [[Kai Table]] wouldn't drop when broken.
+
+1.0.4.3 Update Changelog
+
+== Fixes ==
+
+1. Actually Fixed Super kaioken
+
+2. Fixed bug where [[Adamantite Visor]] gave more ki damage than intended.
+
+3. Fixed bug where you couldn't die.
+
+4. Fixed bug where the zenkai cooldown didn't effect anything.

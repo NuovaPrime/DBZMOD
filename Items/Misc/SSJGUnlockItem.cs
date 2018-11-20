@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Misc
         {
             Main.PlaySound(SoundID.NPCDeath7, player.position);
             MyPlayer.ModPlayer(player).SSJGTransformation();
-            MyPlayer.ModPlayer(player).IsTransformingSSJG = true;
+            MyPlayer.ModPlayer(player).IsTransforming = true;
             MyPlayer.ModPlayer(player).SSJGAchieved = true;
             return false;
         }

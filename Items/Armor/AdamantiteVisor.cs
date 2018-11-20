@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "7% Increased Ki Damage";
-            MyPlayer.ModPlayer(player).KiDamage += 0.7f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.07f;
         }
 
         public override void UpdateEquip(Player player)

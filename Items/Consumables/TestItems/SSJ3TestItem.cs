@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Consumables.TestItems
             MyPlayer.ModPlayer(player).SSJ3Transformation();
             UI.TransMenu.MenuSelection = 2;
             MyPlayer.ModPlayer(player).SSJ3Achieved = true;
-            MyPlayer.ModPlayer(player).IsTransformingSSJ3 = true;
+            MyPlayer.ModPlayer(player).IsTransforming = true;
             return true;
 
         }

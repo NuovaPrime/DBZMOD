@@ -40,7 +40,7 @@ namespace DBZMOD.Projectiles
                 projectile.Center = player.Center + new Vector2(xoffset, yoffset);
                 projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransformingLSSJ && !MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+                if (!MyPlayer.ModPlayer(player).IsTransforming && !MyPlayer.ModPlayer(player).IsTransforming)
                 {
                     projectile.Kill();
                 }
@@ -55,7 +55,7 @@ namespace DBZMOD.Projectiles
                 {
                     xoffset--;
                 }
-                if (projectile.active && !MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+                if (projectile.active && !MyPlayer.ModPlayer(player).IsTransforming)
                 {
                     BlastTimer++;
                     if (BlastTimer > 1)
@@ -66,7 +66,7 @@ namespace DBZMOD.Projectiles
                     }
 
                 }
-                else if (projectile.active && MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+                else if (projectile.active && MyPlayer.ModPlayer(player).IsTransforming)
                 {
                     BlastTimer++;
                     if (BlastTimer > 1)
@@ -90,17 +90,17 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             MyPlayer.ModPlayer(player).IsTransformed = true;
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
-            if (MyPlayer.ModPlayer(player).IsTransformingLSSJ2)
+            if (MyPlayer.ModPlayer(player).IsTransforming)
             {
                 player.AddBuff(mod.BuffType("LSSJ2Buff"), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
-                MyPlayer.ModPlayer(player).IsTransformingLSSJ2 = false;
+                MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
                 player.AddBuff(mod.BuffType("LSSJBuff"), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
-                MyPlayer.ModPlayer(player).IsTransformingLSSJ = false;
+                MyPlayer.ModPlayer(player).IsTransforming = false;
             }
         }
     }

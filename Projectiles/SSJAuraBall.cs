@@ -35,7 +35,7 @@ namespace DBZMOD.Projectiles
                 projectile.Center = player.Center + new Vector2(0, -25);
                 projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransformingLSSJ)
+                if (!MyPlayer.ModPlayer(player).IsTransforming)
                 {
                     projectile.Kill();
                 }
@@ -54,7 +54,7 @@ namespace DBZMOD.Projectiles
                 projectile.Center = player.Center + new Vector2(0, -25);
                 projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransformingSSJ2)
+                if (!MyPlayer.ModPlayer(player).IsTransforming)
                 {
                     projectile.Kill();
                 }
@@ -98,7 +98,7 @@ namespace DBZMOD.Projectiles
             {
                 player.AddBuff(mod.BuffType("SSJ2Buff"), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                MyPlayer.ModPlayer(player).IsTransformingSSJ2 = false;
+                MyPlayer.ModPlayer(player).IsTransforming = false;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             }
             if (MyPlayer.ModPlayer(player).playerTrait == "Legendary")
