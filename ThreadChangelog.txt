@@ -1,0 +1,56 @@
+1.0.2 Update Changelog
+
+== Fixes ==
+
+1. Fixed bug where all ssj hairs would stay on after dying.
+
+2. Fixed bug where Kaioken Transformation|Super Kaioken could be used before unlocking kaioken.
+
+3. Fixed bug where there was 2 Z-Table's, although only one of them actually worked.
+
+1.0.3 Update Changelog
+
+== Fixes ==
+
+1. Fixed bug where ssj hairs wouldn't disappear when powering down.
+
+2. Fixed bug where powering down from ssj kaioken wouldn't give the cooldown.
+
+1.0.4 Update Changelog
+
+1. Added Bukuujutsu Guide Vol 2 and Bukuujutsu Guide Vol 3
+2. Added Rage
+3. Added Kai Table
+4. Added Baldur Essentia, Earthen Arcanium, Ki Chip, Zenkai Charm and Majin Nucleus
+5. Added Ancient Legend Necklace and Ancient Legend Waistcape
+6. Added Prodigy Trait
+7. Added the Majin Slime
+8. Reduced the rate at which ki charge rate increases with the Earthen Scarab
+9. Halved the ki drain of all transformations
+10. Changed many recipes to use the new Kai Table
+11. New sprites for Earthen Shard, Radiant Totem, Earthen Scarab, Earthen Sigil and all the Scouters.
+12. Fixed a frame issue with Supernova
+13. Fixed a bug where Flight Ki usage reductions did nothing
+14. Fixed multiple cases where you could stack multiple forms
+15. Fixed bug where your hair was hidden with the Mythril Glasses
+
+1.0.4.1 Update Changelog
+
+1. New Sprites for all the Test Items
+2. Slightly changed the look of the dust while Flight|Flying
+3. Recipes crafted at the Z-Table can now also be crafted at the Kai Table
+4. Fixed bugs where Legendary Super Saiyan and Super Saiyan God couldn't be transformed into.
+5. Fixed bug where transforming would permanently change your eye color.
+
+1.0.4.2 Update Changelog
+
+1. Changed Super Saiyan 3 to be obtained at Golem instead of the Lunatic Cultist.
+2. Buffed drop amount of Soul of Entity, Demonic Soul, Astral Essentia and Pure Ki Crystal.
+3. Stable Ki Crystal now drops in the Forest, Desert and Snow biomes.
+4. Changed Ki Chip's tooltip to properly say ki charge rate instead of ki regen.
+5. Super Saiyan 3's health drain now only applies once you are below 30% health.
+6. Fixed bug where Super Kaioken wouldn't work
+7. Fixed bug where Super Saiyan 3 didn't require you to be in Super Saiyan 2 to achieve.
+8. Fixed bug where your Transformation Menu selection wouldn't save.
+9. Fixed bug where the Super Saiyan God spirit wouldn't drop.
+10. Fixed bug where the Z-Table and Kai Table wouldn't drop when broken.
