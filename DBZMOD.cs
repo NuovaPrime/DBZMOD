@@ -12,12 +12,15 @@ namespace DBZMOD
     {
         private UserInterface KiBarInterface;
         private KiBar kibar;
+	private OverloadBar overloadbar;
+        private UserInterface OverloadBarInterface;
         private UIFlatPanel UIFlatPanel;
 
         private TransMenu transMenu;
         private UserInterface TransMenuInterface;
 
         private ProgressionMenu progressionMenu;
+        private ResourceBar resourceBar;
         private UserInterface ProgressionMenuInterface;
 
         private DBZMOD mod;
@@ -40,6 +43,7 @@ namespace DBZMOD
         {
             GFX.UnloadGFX();
             KiBar.visible = false;
+            OverloadBar.visible = false;
             instance = null;
             TransMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
@@ -85,6 +89,11 @@ namespace DBZMOD
                 kibar.Activate();
                 KiBarInterface = new UserInterface();
                 KiBarInterface.SetState(kibar);
+
+                overloadbar = new OverloadBar();
+                overloadbar.Activate();
+                OverloadBarInterface = new UserInterface();
+                OverloadBarInterface.SetState(overloadbar);
             }
         }
         public override void AddRecipeGroups()
@@ -148,6 +157,23 @@ namespace DBZMOD
                             ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+            }
+            int index3 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
+            if (index3 != -1)
+            {
+                layers.Insert(index3, new LegacyGameInterfaceLayer(
+                    "DBZMOD: Overload Bar",
+                    delegate
+                    {
+                        if (OverloadBar.visible)
+                        {
+                            OverloadBarInterface.Update(Main._drawInterfaceGameTime);
+                            overloadbar.Draw(Main.spriteBatch);
+                        }
                         return true;
                     },
                     InterfaceScaleType.UI)

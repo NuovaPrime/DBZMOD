@@ -15,6 +15,7 @@ namespace DBZMOD
         private const string UI_DIRECTORY = "UI/";
         private const string BUTTON_DIRECTORY = "UI/Buttons/";
         private const string KIBAR = UI_DIRECTORY + "KiBar";
+        private const string OVERLOADBAR = UI_DIRECTORY + "OverloadBar";
         private const string KIBARLIGHTNING = UI_DIRECTORY + "KiBarLightning";
         private const string BACKPANEL = UI_DIRECTORY + "BackPanel";
         private const string SSJ1BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage";
@@ -29,6 +30,7 @@ namespace DBZMOD
         private const string HAIR_DIRECTORY = "HAIR/";
 
         public static Texture2D KiBar;
+        public static Texture2D OverloadBar;
         public static Texture2D KiBarLightning;
         public static Texture2D Bg;
         public static Texture2D BackPanel;
@@ -43,6 +45,7 @@ namespace DBZMOD
         public static void LoadGFX(Mod mod)
         {
             KiBar = mod.GetTexture(KIBAR);
+            OverloadBar = mod.GetTexture(OVERLOADBAR);
             KiBarLightning = mod.GetTexture(KIBARLIGHTNING);
             Bg = mod.GetTexture(BG);
             BackPanel = mod.GetTexture(BACKPANEL);
@@ -60,6 +63,7 @@ namespace DBZMOD
         public static void UnloadGFX()
         {
             KiBar = null;
+            OverloadBar = null;
             KiBarLightning = null;
             Bg = null;
             SSJ1ButtonImage = null;

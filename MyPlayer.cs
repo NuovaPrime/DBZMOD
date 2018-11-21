@@ -31,6 +31,8 @@ namespace DBZMOD
         public int KiMax = 1000;
         public int KiCurrent;
         public int KiRegenRate = 1;
+        public int OverloadMax = 100;
+        public int OverloadCurrent;
 
         //Transformation vars
         public bool IsTransforming;
@@ -53,6 +55,7 @@ namespace DBZMOD
         public int RageDecreaseTimer = 0;
         public int FormUnlockChance;
         public int OverallFormUnlockChance;
+        public bool IsOverloading;
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -227,6 +230,10 @@ namespace DBZMOD
             if (KiCurrent < 0)
             {
                 KiCurrent = 0;
+            }
+            if (OverloadCurrent < 0)
+            {
+                OverloadCurrent = 0;
             }
             if (SSJ1Achieved)
             {
@@ -469,6 +476,14 @@ namespace DBZMOD
             {
                 RageCurrent = 5;
             }
+            if (OverloadCurrent > OverloadMax)
+            {
+                OverloadCurrent = OverloadMax;
+            }
+            if(IsLSSJ)
+            {
+                OverloadCurrent++;
+            }
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 
 
@@ -490,6 +505,14 @@ namespace DBZMOD
             if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
             {
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+            }
+            if(LSSJAchieved)
+            {
+                OverloadBar.visible = true;
+            }
+            else
+            {
+                OverloadBar.visible = false;
             }
 
             KiBar.visible = true;

@@ -110,6 +110,18 @@
     <Content Include="Sounds\SSJAscension.wav" />
     <Content Include="Sounds\SSJAura.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
+    <Content Include="UI\Buttons\LSSJ2ButtonImage.png" />
+    <Content Include="UI\Buttons\LSSJButtonImage.png" />
+    <Content Include="UI\Buttons\LSSJGButtonImage.png" />
+    <Content Include="UI\Buttons\MUIButtonImage.png" />
+    <Content Include="UI\Buttons\SSJ1ButtonImage.png" />
+    <Content Include="UI\Buttons\SSJ2ButtonImage.png" />
+    <Content Include="UI\Buttons\SSJ3ButtonImage.png" />
+    <Content Include="UI\Buttons\SSJBButtonImage.png" />
+    <Content Include="UI\Buttons\SSJBEButtonImage.png" />
+    <Content Include="UI\Buttons\SSJGButtonImage.png" />
+    <Content Include="UI\Buttons\SSJRButtonImage.png" />
+    <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sounds\Music\" />

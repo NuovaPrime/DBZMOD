@@ -10,7 +10,8 @@ namespace DBZMOD.UI
 {
 	internal enum ResourceBarMode
 	{
-		KI
+		KI,
+        OVERLOAD
 	}
 	class ResourceBar : UIElement
 	{
@@ -30,8 +31,9 @@ namespace DBZMOD.UI
 		Rectangle barDestination;
 		private Color gradientA;
 		private Color gradientB;
+        public Texture2D texture;
 
-		public override void OnInitialize()
+        public override void OnInitialize()
 		{
 			Height.Set(height, 0f); //Set Height of element
 			Width.Set(width, 0f);   //Set Width of element
@@ -43,7 +45,12 @@ namespace DBZMOD.UI
 					gradientA = new Color(0, 208, 255); //light blue
 					gradientB = new Color(0, 80, 255); // dark blue
 					break;
-				default:
+                case ResourceBarMode.OVERLOAD:
+                    gradientA = new Color(1, 168, 1); //dark green
+                    gradientB = new Color(35, 237, 35); // light green
+                    break;
+
+                default:
 					break;
 			}
 
@@ -78,8 +85,12 @@ namespace DBZMOD.UI
 					quotient = (float)player.KiCurrent / (float)player.KiMax;
 					quotient = Utils.Clamp(quotient, 0, 1);
 					break;
+                case ResourceBarMode.OVERLOAD:
+                    quotient = (float)player.OverloadCurrent / (float)player.OverloadMax;
+                    quotient = Utils.Clamp(quotient, 0, 1);
+                    break;
 
-				default:
+                default:
 					break;
 			}
 
@@ -105,8 +116,20 @@ namespace DBZMOD.UI
 			Vector2 drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 9);
 			int FrameHeight = GFX.KiBar.Height / 4;
 			int frame = FrameTimer / 5;
-			Rectangle sourceRectangle = new Rectangle(0, FrameHeight * frame, GFX.KiBar.Width, FrameHeight);
-			spriteBatch.Draw(GFX.KiBar, drawPosition, sourceRectangle, Color.White);
+            switch (stat)
+            {
+                case ResourceBarMode.KI:
+                    texture = GFX.KiBar;
+                    break;
+                case ResourceBarMode.OVERLOAD:
+                    texture = GFX.OverloadBar;
+                    break;
+
+                default: texture = null;
+                    break;
+            }
+            Rectangle sourceRectangle = new Rectangle(0, FrameHeight * frame, GFX.KiBar.Width, FrameHeight);
+			spriteBatch.Draw(texture, drawPosition, sourceRectangle, Color.White);
 
 			FrameTimer2 += 3;
 			if (FrameTimer2 >= 15)
@@ -126,14 +149,18 @@ namespace DBZMOD.UI
 
 		public override void Update(GameTime gameTime)
 		{
-			MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>(); //Get Player
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-					text.SetText("Ki:" + player.KiCurrent + " / " + player.KiMax); //Set Life
+                    text.SetText("Ki:" + player.KiCurrent + " / " + player.KiMax);
 					break;
 
-				default:
+                case ResourceBarMode.OVERLOAD:
+                    text.SetText("Overload:" + player.OverloadCurrent + " / " + player.OverloadMax);
+                    break;
+
+                default:
 					break;
 			}
 			base.Update(gameTime);
