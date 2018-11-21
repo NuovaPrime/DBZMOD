@@ -29,7 +29,8 @@ namespace DBZMOD.UI
 		private UIText text;
 
 		Rectangle barDestination;
-		private Color gradientA;
+        Vector2 drawPosition;
+        private Color gradientA;
 		private Color gradientB;
         public Texture2D texture;
 
@@ -113,16 +114,17 @@ namespace DBZMOD.UI
             {
                 FrameTimer = 0;
             }
-			Vector2 drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 9);
 			int FrameHeight = GFX.KiBar.Height / 4;
 			int frame = FrameTimer / 5;
             switch (stat)
             {
                 case ResourceBarMode.KI:
                     texture = GFX.KiBar;
+                    drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 9);
                     break;
                 case ResourceBarMode.OVERLOAD:
                     texture = GFX.OverloadBar;
+                    drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 4);
                     break;
 
                 default: texture = null;

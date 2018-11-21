@@ -15,9 +15,9 @@ namespace DBZMOD.UI
 
 		public override void OnInitialize()
 		{
-			Overloadbar = new ResourceBar(ResourceBarMode.OVERLOAD, 7, 52);
+			Overloadbar = new ResourceBar(ResourceBarMode.OVERLOAD, 9, 64);
 			Overloadbar.Left.Set(725f, 0f);
-			Overloadbar.Top.Set(49f, 0f);
+			Overloadbar.Top.Set(46f, 0f);
             Overloadbar.OnMouseDown += new UIElement.MouseEvent(DragStart);
 			Overloadbar.OnMouseUp += new UIElement.MouseEvent(DragEnd);
 			Append(Overloadbar);
