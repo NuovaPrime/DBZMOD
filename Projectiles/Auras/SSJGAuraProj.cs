@@ -29,10 +29,10 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            projectile.alpha = 10;
+            projectile.alpha = 150;
             BaseAuraTimer = 5;
-            AuraOffset.Y = -45;
-            ScaleExtra = 0.2f;
+            AuraOffset.Y = -38;
+            ScaleExtra = 0.1f;
             FrameAmount = 6;
             IsSSJAura = true;
 			projectile.light = 1f;
@@ -70,7 +70,7 @@ namespace DBZMOD.Projectiles.Auras
             }
             if (MyPlayer.ModPlayer(player).IsCharging)
             {
-                projectile.scale *= 1.5f;
+                projectile.scale *= 1.2f;
             }
             base.AI();
         }
