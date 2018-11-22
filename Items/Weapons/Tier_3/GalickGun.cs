@@ -51,8 +51,8 @@ namespace DBZMOD.Items.Weapons.Tier_3
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "PridefulKiCrystal", 45);
-            recipe.AddIngredient(null, "SkeletalEssence", 35);
+            recipe.AddIngredient(null, "PridefulKiCrystal", 30);
+            recipe.AddIngredient(null, "SkeletalEssence", 15);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();

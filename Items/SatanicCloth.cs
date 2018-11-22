@@ -24,7 +24,7 @@ namespace DBZMOD.Items
 		 public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "DemonicSoul", 3);
+            recipe.AddIngredient(null, "DemonicSoul", 2);
             recipe.AddIngredient(ItemID.Silk, 1);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);

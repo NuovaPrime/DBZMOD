@@ -20,6 +20,7 @@ namespace DBZMOD
         public float SSJLightValue;
         public bool IsSSJ;
         public int HealthDrainRate;
+        public int OverallHealthDrainRate;
         public int KiDrainRate;
         private int KiDrainTimer;
         private int KiDrainAddTimer;
@@ -38,7 +39,8 @@ namespace DBZMOD
                 player.lifeRegen = 0;
             }
             player.lifeRegenTime = 0;
-            player.lifeRegen -= HealthDrainRate;
+            OverallHealthDrainRate = HealthDrainRate * (int)MyPlayer.ModPlayer(player).KaiokenDrainMulti;
+            player.lifeRegen -= OverallHealthDrainRate;
             if (IsSSJ)
             {
                 MyPlayer.ModPlayer(player).IsTransformed = true;

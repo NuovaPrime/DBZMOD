@@ -301,7 +301,7 @@ namespace DBZMOD
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle)
                     {
-                        if (Main.rand.Next(3) == 0)
+                        if (Main.rand.Next(2) == 0)
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(1, 3));
                         }
@@ -311,7 +311,7 @@ namespace DBZMOD
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)
                     {
-                        if (Main.rand.Next(3) == 0)
+                        if (Main.rand.Next(2) == 0)
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PridefulKiCrystal"), Main.rand.Next(1, 3));
                         }
@@ -321,7 +321,7 @@ namespace DBZMOD
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson)
                     {
-                        if (Main.rand.Next(3) == 0)
+                        if (Main.rand.Next(2) == 0)
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(1, 3));
                         }
@@ -331,7 +331,7 @@ namespace DBZMOD
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt)
                     {
-                        if (Main.rand.Next(3) == 0)
+                        if (Main.rand.Next(2) == 0)
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(1, 3));
                         }
@@ -341,7 +341,7 @@ namespace DBZMOD
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom)
                     {
-                        if (Main.rand.Next(3) == 0)
+                        if (Main.rand.Next(2) == 0)
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(1, 5));
                         }
@@ -505,7 +505,7 @@ namespace DBZMOD
             }
             if (NPC.downedGolemBoss)
             {
-                if (npc.type == NPCID.RedDevil)
+                if (npc.type == NPCID.RedDevil || npc.type == NPCID.Demon || npc.type == NPCID.VoodooDemon)
                 {
                     if (Main.rand.Next(3) == 0)
                     {
@@ -578,6 +578,21 @@ namespace DBZMOD
             if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
+                nextSlot++;
+            }
+            if (type == NPCID.Dryad && NPC.downedBoss1)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.SuspiciousLookingEye);
+                nextSlot++;
+            }
+            if (type == NPCID.Dryad && NPC.downedBoss3)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.ClothierVoodooDoll);
+                nextSlot++;
+            }
+            if (type == NPCID.Dryad && NPC.downedGolemBoss)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.LihzahrdPowerCell);
                 nextSlot++;
             }
 

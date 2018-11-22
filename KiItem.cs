@@ -63,7 +63,7 @@ namespace DBZMOD
         {
             projectile.netUpdate = true;
             player = Main.player[projectile.owner];
-            ChargeLimit += MyPlayer.ModPlayer(player).ChargeLimitAdd;
+            ChargeLimit = ChargeLimit + MyPlayer.ModPlayer(player).ChargeLimitAdd;
             if (!ChargeBall)
             {
                 projectile.scale = projectile.scale + ChargeLevel;
@@ -471,6 +471,21 @@ namespace DBZMOD
             {
                 return true;
             }
+        }
+    }
+    public abstract class PatreonItem : ModItem
+    {
+        public bool IsArmorPiece;
+        public bool IsItem;
+        public string PatreonName;
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            TooltipLine Indicate2 = new TooltipLine(mod, "", "");
+            string[] Text2 = Indicate2.text.Split(' ');
+            Indicate2.text = PatreonName + "'s Item";
+            Indicate2.overrideColor = new Color(232, 169, 34);
+            tooltips.Add(Indicate2);
         }
     }
 }

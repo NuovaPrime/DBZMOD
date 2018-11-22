@@ -45,6 +45,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "SpiritBomb", 1);
             recipe.AddIngredient(null, "PureKiCrystal", 50);
+            recipe.AddIngredient(null, "DemonicSoul", 20);
             recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -52,7 +52,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "CalmKiCrystal", 30);
-            recipe.AddIngredient(null, "AstralEssentia", 25);
+            recipe.AddIngredient(null, "AstralEssentia", 15);
             recipe.AddIngredient(null, "EnergyWave");
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);

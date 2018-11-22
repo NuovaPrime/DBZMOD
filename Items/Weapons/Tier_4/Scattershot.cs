@@ -68,7 +68,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			ModRecipe recipe = new ModRecipe(mod);
 	        recipe.AddIngredient(null, "AngerKiCrystal", 30);
 			recipe.AddIngredient(null, "HellzoneGrenade");
-            recipe.AddIngredient(null, "SoulofEntity", 20);
+            recipe.AddIngredient(null, "SoulofEntity", 10);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

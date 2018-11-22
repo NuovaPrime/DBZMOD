@@ -45,8 +45,8 @@ namespace DBZMOD.Items.Weapons.Tier_2
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "CalmKiCrystal", 40);
-            recipe.AddIngredient(null, "AstralEssentia", 20);
+	        recipe.AddIngredient(null, "CalmKiCrystal", 30);
+            recipe.AddIngredient(null, "AstralEssentia", 12);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

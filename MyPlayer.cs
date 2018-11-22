@@ -33,6 +33,7 @@ namespace DBZMOD
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
         public int OverloadCurrent;
+        public float chargeMoveSpeed;
 
         //Transformation vars
         public bool IsTransforming;
@@ -173,8 +174,13 @@ namespace DBZMOD
         public bool armCannon;
         public bool battleKit;
         public bool radiantBonus;
+        public bool crystalliteControl;
+        public bool crystalliteFlow;
+        public bool crystalliteAlleviate;
         public float chargeTimerMaxAdd;
         public int KiDrainAddition;
+        public float KaiokenDrainMulti;
+        public bool kaioCrystal;
         public SoundEffectInstance transformationSound;
         #endregion
 
@@ -273,13 +279,15 @@ namespace DBZMOD
                 {
                     ASSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in SSJ1 to ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in SSJ1 " +
+                        "\nto ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
                 {
                     USSJAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in ASSJ to ascend.", 232, 242, 50);
+                        "\nHold charge and transform while in ASSJ " +
+                        "\nto ascend.", 232, 242, 50);
                 }
                 else if (MasteryLevel1 >= 1f && !MasteredMessage1)
                 {
@@ -497,11 +505,6 @@ namespace DBZMOD
                 OverallFormUnlockChance = 2;
             }
 
-            if (IsCharging && !IsFlying && KiCurrent != KiMax)
-            {
-                player.velocity.X = 0;
-            }
-
             if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
             {
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
@@ -615,6 +618,7 @@ namespace DBZMOD
             tag.Add("USSJAchieved", USSJAchieved);
             tag.Add("SSJ3Achieved", SSJ3Achieved);
             tag.Add("KiCurrent", KiCurrent);
+            tag.Add("RageCurrent", RageCurrent);
             tag.Add("KiRegenRate", KiRegenRate);
             tag.Add("KiEssence1", KiEssence1);
             tag.Add("KiEssence2", KiEssence2);
@@ -667,6 +671,7 @@ namespace DBZMOD
             USSJAchieved = tag.Get<bool>("USSJAchieved");
             SSJ3Achieved = tag.Get<bool>("SSJ3Achieved");
             KiCurrent = tag.Get<int>("KiCurrent");
+            RageCurrent = tag.Get<int>("RageCurrent");
             KiRegenRate = tag.Get<int>("KiRegenRate");
             KiEssence1 = tag.Get<bool>("KiEssence1");
             KiEssence2 = tag.Get<bool>("KiEssence2");
@@ -891,7 +896,18 @@ namespace DBZMOD
             if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
-                player.velocity = new Vector2(0, player.velocity.Y);
+                if(player.direction == 0 && chargeMoveSpeed > 0)
+                {
+                    player.velocity = new Vector2(chargeMoveSpeed, player.velocity.Y);
+                }
+                if (player.direction == 1 && chargeMoveSpeed > 0)
+                {
+                    player.velocity = new Vector2((chargeMoveSpeed * -1), player.velocity.Y);
+                }
+                else
+                {
+                    player.velocity = new Vector2(0, player.velocity.Y);
+                }
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
@@ -1101,6 +1117,12 @@ namespace DBZMOD
             battleKit = false;
             armCannon = false;
             radiantBonus = false;
+            crystalliteControl = false;
+            crystalliteFlow = false;
+            crystalliteAlleviate = false;
+            chargeMoveSpeed = 0f;
+            KaiokenDrainMulti = 1f;
+            kaioCrystal = false;
             //IsCharging = false;
         }
 
@@ -1119,7 +1141,14 @@ namespace DBZMOD
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
-                    FormUnlockChance = 10;
+                    if(RageCurrent >= 3)
+                    {
+                        OverallFormUnlockChance = 1;
+                    }
+                    else
+                    {
+                        FormUnlockChance = 20;
+                    }
                     if ((Main.rand.Next(OverallFormUnlockChance) == 0))
                     {
                         Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
@@ -1137,61 +1166,49 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !(playerTrait == "Legendary") && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !(playerTrait == "Legendary") && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
                 {
-                    FormUnlockChance = 5;
-                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
-                    {
-                        Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
-                        player.statLife = player.statLifeMax2 / 2;
-                        player.HealEffect(player.statLifeMax2 / 2);
-                        SSJ2Achieved = true;
-                        IsTransforming = true;
-                        SSJ2Transformation();
-                        UI.TransMenu.MenuSelection = 2;
-                        RageCurrent = 0;
-                        return false;
-                    }
+                    Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
+                    player.statLife = player.statLifeMax2 / 2;
+                    player.HealEffect(player.statLifeMax2 / 2);
+                    SSJ2Achieved = true;
+                    IsTransforming = true;
+                    SSJ2Transformation();
+                    UI.TransMenu.MenuSelection = 2;
+                    RageCurrent = 0;
+                    return false;
                 }
             }
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")))
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
                 {
-                    FormUnlockChance = 5;
-                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
-                    {
-                        Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                        player.statLife = player.statLifeMax2 / 2;
-                        player.HealEffect(player.statLifeMax2 / 2);
-                        LSSJAchieved = true;
-                        IsTransforming = true;
-                        LSSJTransformation();
-                        UI.TransMenu.MenuSelection = 4;
-                        RageCurrent = 0;
-                        return false;
-                    }
+                    Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
+                    player.statLife = player.statLifeMax2 / 2;
+                    player.HealEffect(player.statLifeMax2 / 2);
+                    LSSJAchieved = true;
+                    IsTransforming = true;
+                    LSSJTransformation();
+                    UI.TransMenu.MenuSelection = 4;
+                    RageCurrent = 0;
+                    return false;
                 }
             }
-            if (damageSource.SourceProjectileIndex > -1)
+            if (damageSource.SourceNPCIndex > -1)
             {
-                Projectile culprit2 = Main.projectile[damageSource.SourceProjectileIndex];
-                if ((culprit2.type == ProjectileID.Fireball || culprit2.type == ProjectileID.GolemFist || culprit2.type == ProjectileID.EyeBeam) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")))
+                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
+                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")) && MasteryLevel2 >= 1)
                 {
-                    FormUnlockChance = 3;
-                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
-                    {
-                        Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Blue);
-                        player.statLife = player.statLifeMax2 / 2;
-                        player.HealEffect(player.statLifeMax2 / 2);
-                        SSJ3Achieved = true;
-                        IsTransforming = true;
-                        SSJ3Transformation();
-                        UI.TransMenu.MenuSelection = 3;
-                        RageCurrent = 0;
-                        return false;
-                    }
+                    Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
+                    player.statLife = player.statLifeMax2 / 2;
+                    player.HealEffect(player.statLifeMax2 / 2);
+                    SSJ3Achieved = true;
+                    IsTransforming = true;
+                    SSJ3Transformation();
+                    UI.TransMenu.MenuSelection = 3;
+                    RageCurrent = 0;
+                    return false;
                 }
             }
             if (damageSource.SourceNPCIndex > -1)

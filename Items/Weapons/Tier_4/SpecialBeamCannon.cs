@@ -51,7 +51,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 		    recipe.AddIngredient(null, "Masenko", 1);
-		    recipe.AddIngredient(null, "AngerKiCrystal", 35);
+		    recipe.AddIngredient(null, "AngerKiCrystal", 30);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 	        recipe.AddRecipe();

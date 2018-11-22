@@ -49,7 +49,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "CalmKiCrystal", 45);
+	        recipe.AddIngredient(null, "CalmKiCrystal", 30);
             recipe.AddIngredient(null, "KiBlast");
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);

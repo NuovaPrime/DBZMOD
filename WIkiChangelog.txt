@@ -106,3 +106,31 @@
 3. Fixed bug where you couldn't die.
 
 4. Fixed bug where the zenkai cooldown didn't effect anything.
+
+1.0.5 Update Changelog
+
+== Changes ==
+
+1. Completely changed the unlock conditions of [[Super Saiyan 1]], [[Super Saiyan 2]], [[Legendary Super Saiyan]] and [[Super Saiyan 3]].
+
+2. Increased the drop rates of [[Calm Ki Crystal]], [[Prideful Ki Crystal]], [[Angerful Ki Crystal]] and [[Pure Ki Crystal]].
+
+3. Increased the drop rates of [[Astral Essentia]] and [[Soul of Entity]].
+
+4. [[Demonic Soul]] now drops from [[Demons]].
+
+5. Lowered crafting prices of [[Destructo Disk]], [[Double Sunday]], [[Energy Blast Barrage]], [[Masenko]], [[Energy Wave Volley]], [[Galick Gun]], [[Hellzone Grenade]], [[Kamehameha]],
+[[Big Bang Attack]], [[Scattershot]], [[Special Beam Cannon]], [[Super Kamehameha]], [[Trap Shooter]], [[Destructo Disk Assault]], [[Final Flash]] and [[Super Energy Barrage]].
+
+6. [[Supernova]] and [[Kamehameha x10]] now use [[Demonic Souls]] to craft.
+
+7. Changed name of Wide-lens scouter to [[Yellow Scouter]].
+
+8. [[Satanic Cloth]] now takes 2 [[Demonic Soul]]'s instead of 3.
+
+== Fixes ==
+
+1. Fixed bug where you couldn't get [[Super Saiyan 3]]
+
+2. Fixed bug where any charge limit increasing items would max your max charges infinite.
+
