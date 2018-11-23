@@ -34,7 +34,7 @@ namespace DBZMOD.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "RadiantFragment", 15);
+			recipe.AddIngredient(null, "RadiantFragment", 5);
             recipe.AddIngredient(ItemID.FragmentVortex, 5);
             recipe.AddIngredient(ItemID.FragmentSolar, 5);
             recipe.AddIngredient(ItemID.FragmentStardust, 5);

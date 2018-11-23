@@ -509,15 +509,15 @@ namespace DBZMOD
             {
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
             }
-            if(LSSJAchieved)
+            /*if(LSSJAchieved)
             {
                 OverloadBar.visible = true;
             }
             else
             {
                 OverloadBar.visible = false;
-            }
-
+            }*/
+            OverloadBar.visible = false;
             KiBar.visible = true;
         }
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
@@ -896,14 +896,8 @@ namespace DBZMOD
             if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
-                if(player.direction == 0 && chargeMoveSpeed > 0)
-                {
-                    player.velocity = new Vector2(chargeMoveSpeed, player.velocity.Y);
-                }
-                if (player.direction == 1 && chargeMoveSpeed > 0)
-                {
-                    player.velocity = new Vector2((chargeMoveSpeed * -1), player.velocity.Y);
-                }
+                if (chargeMoveSpeed > 0)
+                    player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
                 else
                 {
                     player.velocity = new Vector2(0, player.velocity.Y);
@@ -922,6 +916,11 @@ namespace DBZMOD
                         ScarabChargeRateAdd += 1;
                         ScarabChargeTimer = 0;
                     }
+                }
+                if (baldurEssentia)
+                {
+                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
+                    player.statDefense = (int)(player.statDefense * 1.30f);
                 }
 
             }

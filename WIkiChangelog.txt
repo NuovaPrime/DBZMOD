@@ -109,6 +109,12 @@
 
 1.0.5 Update Changelog
 
+== Additions ==
+
+1. Added [[Imperium Crystallite]], [[Influunt Crystallite]] and [[Aspera Crystallite]].
+
+2. Added [[Kaio Crystal]] and [[Baldur Essentia]].
+
 == Changes ==
 
 1. Completely changed the unlock conditions of [[Super Saiyan 1]], [[Super Saiyan 2]], [[Legendary Super Saiyan]] and [[Super Saiyan 3]].

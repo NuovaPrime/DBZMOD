@@ -478,7 +478,13 @@ namespace DBZMOD
         public bool IsArmorPiece;
         public bool IsItem;
         public string PatreonName;
-
+        public override bool CloneNewInstances
+        {
+            get
+            {
+                return true;
+            }
+        }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine Indicate2 = new TooltipLine(mod, "", "");
