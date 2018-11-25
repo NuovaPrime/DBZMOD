@@ -181,6 +181,15 @@ namespace DBZMOD
         public int KiDrainAddition;
         public float KaiokenDrainMulti;
         public bool kaioCrystal;
+        public bool luminousSectum;
+        public bool infuserAmber;
+        public bool infuserAmethyst;
+        public bool infuserDiamond;
+        public bool infuserEmerald;
+        public bool infuserRainbow;
+        public bool infuserRuby;
+        public bool infuserSapphire;
+        public bool infuserTopaz;
         public SoundEffectInstance transformationSound;
         #endregion
 
@@ -375,13 +384,9 @@ namespace DBZMOD
 
             if (!traitChecked)
             {
-                if (playerTrait == null)
-                {
-                    ChooseTrait();
-                }
-
-                traitChecked = true;
+                ChooseTrait();
             }
+            
             #region Transformational Checks
             //kaioken
             if (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
@@ -545,7 +550,7 @@ namespace DBZMOD
             TraitChooser.Add("Prodigy", 4);
             TraitChooser.Add("Legendary", 1);
             TraitChooser.Add(null, 15);
-
+            traitChecked = true;
             return playerTrait = TraitChooser;
 
         }
@@ -580,6 +585,46 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
+
+            if (infuserSapphire)
+            {
+                target.AddBuff(BuffID.Frostburn, 180);
+            }
+            if (infuserRuby)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+            if (infuserEmerald)
+            {
+                target.AddBuff(BuffID.Poisoned, 180);
+            }
+            if (infuserDiamond)
+            {
+                target.AddBuff(BuffID.Confused, 180);
+            }
+            if (infuserAmethyst)
+            {
+                target.AddBuff(BuffID.ShadowFlame, 300);
+            }
+            if (infuserTopaz)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+            if (infuserAmber)
+            {
+                target.AddBuff(BuffID.Ichor, 300);
+            }
+            if (infuserRainbow)
+            {
+                target.AddBuff(BuffID.Ichor, 300);
+                target.AddBuff(BuffID.OnFire, 180);
+                target.AddBuff(BuffID.ShadowFlame, 300);
+                target.AddBuff(BuffID.Confused, 180);
+                target.AddBuff(BuffID.Poisoned, 180);
+                target.AddBuff(BuffID.Bleeding, 180);
+                target.AddBuff(BuffID.Frostburn, 180);
+
+            }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
 
@@ -594,6 +639,45 @@ namespace DBZMOD
                 {
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
+            }
+            if (infuserSapphire)
+            {
+                target.AddBuff(BuffID.Frostburn, 180);
+            }
+            if (infuserRuby)
+            {
+                target.AddBuff(BuffID.Bleeding, 180);
+            }
+            if (infuserEmerald)
+            {
+                target.AddBuff(BuffID.Poisoned, 180);
+            }
+            if (infuserDiamond)
+            {
+                target.AddBuff(BuffID.Confused, 180);
+            }
+            if (infuserAmethyst)
+            {
+                target.AddBuff(BuffID.ShadowFlame, 300);
+            }
+            if (infuserTopaz)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+            if (infuserAmber)
+            {
+                target.AddBuff(BuffID.Ichor, 300);
+            }
+            if (infuserRainbow)
+            {
+                target.AddBuff(BuffID.Ichor, 300);
+                target.AddBuff(BuffID.OnFire, 180);
+                target.AddBuff(BuffID.ShadowFlame, 300);
+                target.AddBuff(BuffID.Confused, 180);
+                target.AddBuff(BuffID.Poisoned, 180);
+                target.AddBuff(BuffID.Bleeding, 180);
+                target.AddBuff(BuffID.Frostburn, 180);
+
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
@@ -896,7 +980,7 @@ namespace DBZMOD
             if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
-                if (chargeMoveSpeed > 0)
+                if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
                     player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
                 else
                 {
@@ -986,6 +1070,7 @@ namespace DBZMOD
             {
                 traitChecked = false;
                 ChooseTrait();
+                Main.NewText(playerTrait);
             }*/
         }
         public MyPlayer() : base()
@@ -1122,6 +1207,15 @@ namespace DBZMOD
             chargeMoveSpeed = 0f;
             KaiokenDrainMulti = 1f;
             kaioCrystal = false;
+            luminousSectum = false;
+            infuserAmber = false;
+            infuserAmethyst = false;
+            infuserDiamond = false;
+            infuserEmerald = false;
+            infuserRainbow = false;
+            infuserRuby = false;
+            infuserSapphire = false;
+            infuserTopaz = false;
             //IsCharging = false;
         }
 

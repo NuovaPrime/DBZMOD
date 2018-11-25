@@ -21,7 +21,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.height = 18;
             item.value = 18000;
             item.rare = 3;
-            item.defense = 11;
+            item.defense = 8;
         }
 		public override void DrawHands(ref bool drawHands, ref bool drawArms)
         {

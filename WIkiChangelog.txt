@@ -8,6 +8,7 @@
 
 3. Fixed bug where there was 2 [[Z-Table]]'s, although only one of them actually worked.
 
+
 1.0.3 Update Changelog
 
 == Fixes ==
@@ -15,6 +16,7 @@
 1. Fixed bug where ssj hairs wouldn't disappear when powering down.
 
 2. Fixed bug where powering down from ssj kaioken wouldn't give the cooldown.
+
 
 1.0.4 Update Changelog
 
@@ -53,6 +55,7 @@
 
 4. Fixed bug where your hair was hidden with the [[Mythril Glasses]]
 
+
 1.0.4.1 Update Changelog
 
 == Changes ==
@@ -68,6 +71,7 @@
 1. Fixed bugs where [[Legendary Super Saiyan]] and [[Super Saiyan God]] couldn't be transformed into.
 
 2. Fixed bug where transforming would permanently change your eye color.
+
 
 1.0.4.2 Update Changelog
 
@@ -107,6 +111,7 @@
 
 4. Fixed bug where the zenkai cooldown didn't effect anything.
 
+
 1.0.5 Update Changelog
 
 == Additions ==
@@ -139,4 +144,43 @@
 1. Fixed bug where you couldn't get [[Super Saiyan 3]]
 
 2. Fixed bug where any charge limit increasing items would max your max charges infinite.
+
+
+1.0.6 Update Changelog
+
+== Additions ==
+
+1. Added [[Luminous Sectum]]
+
+2. Added [[Ki Infusers]]
+
+== Changes ==
+
+1. [[Super Saiyan 3]] now drains health when below 30% [[Ki]].
+
+2. Added flavor text to [[Super Saiyan God]].
+
+3. Lowered the defense of [[Saiyan Armor]] and [[Turtle Hermit Armor]]
+
+4. New sprite for [[Spiritual Emblem]]
+
+== Fixes == 
+
+1. Fixed bug where you would slowly move forward when using any of the Crystallites.
+
+2. Fixed bug where you couldn't get a trait.
+
+3. Fixed a few clipping issues on some projectiles.
+
+4. Fixed a bug where the spawned projectiles in the [[Radiant Armor]]'s set bonus did nothing.
+
+== Mod Support ==
+
+1. Added cross-mod support for Expanded Sentries.
+
+== Patreon Items ==
+
+1. Added [[Canadian Demon Armor]]
+
+2. Added [[MRE]]
 

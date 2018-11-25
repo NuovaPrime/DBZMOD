@@ -92,7 +92,11 @@ namespace DBZMOD
             {
                 BattleRodEffects(player);
             }
-            if(IsSSJ)
+            if (DBZMOD.instance.expandedSentriesLoaded)
+            {
+                ExpandedSentriesEffects(player);
+            }
+            if (IsSSJ)
             {
                 if(MyPlayer.ModPlayer(player).KiCurrent <= 0)
                 {
@@ -122,6 +126,10 @@ namespace DBZMOD
         public void BattleRodEffects(Player player)
         {
             player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti - 1;
+        }
+        public void ExpandedSentriesEffects(Player player)
+        {
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage += DamageMulti - 1;
         }
         private void KiDrainAdd(Player player)
         {

@@ -12,7 +12,7 @@ namespace DBZMOD
     {
         private UserInterface KiBarInterface;
         private KiBar kibar;
-	private OverloadBar overloadbar;
+	    private OverloadBar overloadbar;
         private UserInterface OverloadBarInterface;
         private UIFlatPanel UIFlatPanel;
 
@@ -28,6 +28,7 @@ namespace DBZMOD
         public bool tremorLoaded;
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
+        public bool expandedSentriesLoaded;
         public static DBZMOD instance;
 
         public DBZMOD()
@@ -60,6 +61,7 @@ namespace DBZMOD
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;
             battlerodsLoaded = ModLoader.GetMod("UnuBattleRods") != null;
+            expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;
             MyPlayer.KaiokenKey = RegisterHotKey("Kaioken", "J");
             MyPlayer.EnergyCharge = RegisterHotKey("Energy Charge", "C");
             MyPlayer.Transform = RegisterHotKey("Transform", "X");

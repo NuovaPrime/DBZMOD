@@ -39,6 +39,7 @@ namespace DBZMOD.Items.Misc
             MyPlayer.ModPlayer(player).SSJGTransformation();
             MyPlayer.ModPlayer(player).IsTransforming = true;
             MyPlayer.ModPlayer(player).SSJGAchieved = true;
+            Main.NewText("You feel enveloped in a divine energy.");
             return false;
         }
 			public override Color? GetAlpha(Color lightColor)

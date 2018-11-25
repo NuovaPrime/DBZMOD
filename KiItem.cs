@@ -187,6 +187,17 @@ namespace DBZMOD
                     }
                 }
             }
+            if (KiWeapon)
+            {
+                if (MyPlayer.ModPlayer(player).luminousSectum)
+                {
+                    if (Main.rand.Next(8) == 0)
+                    {
+                        Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("KiSpark"),
+                            damage / 2, 3, player.whoAmI);
+                    }
+                }
+            }
         }
     }
 

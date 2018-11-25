@@ -42,14 +42,15 @@ namespace DBZMOD.Projectiles.Auras
             }
             return true;
         }
-		
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);                                                                                                        //draw code here
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive); //draw code here
             spriteBatch.End();
             spriteBatch.Begin();
-		
+        }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];

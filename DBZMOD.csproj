@@ -36,6 +36,9 @@
     <Compile Include="**\*.cs" Exclude="obj\**\*.*" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ExpandedSentries">
+      <HintPath>Lib\ExpandedSentries.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
@@ -82,6 +85,14 @@
     <Content Include="Hairs\SSJ\SSJ2Hair.png" />
     <Content Include="Hairs\SSJ\SSJ3Hair.png" />
     <Content Include="Hairs\SSJ\USSJHair.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserAmber.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserAmethyst.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserDiamond.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserEmerald.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserRainbow.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserRuby.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserSapphire.png" />
+    <Content Include="Items\Accessories\Infusers\InfuserTopaz.png" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.mp3" />
     <Content Include="Sounds\DiscFire.wav" />

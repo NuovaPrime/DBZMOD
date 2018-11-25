@@ -576,6 +576,11 @@ namespace DBZMOD
                     shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.ArmCannon>());
                     nextSlot++;
                 }
+                if (Main.rand.Next(3) == 0)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Consumables.MRE>());
+                    nextSlot++;
+                }
             }
             if (type == NPCID.SkeletonMerchant)
             {
@@ -603,6 +608,12 @@ namespace DBZMOD
             if (type == NPCID.Dryad && NPC.downedGolemBoss)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.LihzahrdPowerCell);
+                nextSlot++;
+            }
+
+            if (type == NPCID.Steampunker)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.LuminousSectum>());
                 nextSlot++;
             }
 

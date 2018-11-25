@@ -7,20 +7,20 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class RadiantSpark : KiProjectile
+    public class KiSpark : KiProjectile
 	{
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.Homing[projectile.type] = true;
-            DisplayName.SetDefault("Radiant Spark");
+            DisplayName.SetDefault("Ki Spark");
         }	
 		public override void SetDefaults()
 		{
 			projectile.width = 8;
 			projectile.height = 8;
 			projectile.aiStyle = 0;
-            projectile.alpha = 140;
-			projectile.timeLeft = 150;
+            projectile.alpha = 120;
+			projectile.timeLeft = 220;
 			projectile.friendly = true;
 			projectile.tileCollide = false;
 			projectile.ignoreWater = true;    
@@ -66,7 +66,7 @@ namespace DBZMOD.Projectiles
 			}
 			if (projectile.alpha <= 255)
 			{
-				int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 107);
+				int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88);
 				Main.dust[dust].velocity /= 2f;
 			}
         }
