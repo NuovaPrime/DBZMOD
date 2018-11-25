@@ -29,6 +29,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiRegen += 6;
                 player.lifeRegen += 12;
+                player.GetModPlayer<MyPlayer>(mod).KiMax -= 1500;
                 player.GetModPlayer<MyPlayer>(mod).majinNucleus = true;
             }
         }

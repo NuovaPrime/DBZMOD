@@ -77,3 +77,20 @@ Big Bang Attack, Scattershot, Special Beam Cannon, Super Kamehameha, Trap Shoote
 10. Satanic Cloth now takes 2 Demonic Soul's instead of 3.
 11. Fixed bug where you couldn't get Super Saiyan 3
 12. Fixed bug where any charge limit increasing items would max your max charges infinite.
+
+1.0.6 Update Changelog
+
+1. Added Luminous Sectum
+2. Added Ki Infusers
+3. Super Saiyan 3 now drains health when below 30% Ki.
+4. Added flavor text to Super Saiyan God.
+5. Lowered the defense of Saiyan Armor and Turtle Hermit Armor
+6. New sprite for Spiritual Emblem
+7. Fixed bug where you would slowly move forward when using any of the Crystallites.
+8. Fixed bug where you couldn't get a trait.
+9. Fixed a few clipping issues on some projectiles.
+10. Fixed a bug where the spawned projectiles in the Radiant Armor's set bonus did nothing.
+11. Fixed bug where Majin Nucleus didn't actually reduce Ki max by 1500. 
+12. Added cross-mod support for Expanded Sentries.
+13. Added Canadian Demon Armor
+14. Added MRE
