@@ -17,7 +17,7 @@ namespace DBZMOD.Items.Accessories.Infusers
             item.width = 18;
             item.height = 30;
             item.value = 3200;
-            item.rare = 4;
+            item.rare = 5;
             item.accessory = true;
         }
 

@@ -5,6 +5,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using System;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace DBZMOD
 {
@@ -96,6 +98,8 @@ namespace DBZMOD
                 overloadbar.Activate();
                 OverloadBarInterface = new UserInterface();
                 OverloadBarInterface.SetState(overloadbar);
+
+                GameShaders.Misc["DBZMOD:CircleShader"] = new MiscShaderData(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
             }
         }
         public override void AddRecipeGroups()

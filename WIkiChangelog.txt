@@ -186,3 +186,18 @@
 
 2. Added [[MRE]]
 
+
+1.0.6.1 Update Changelog
+
+== Changes ==
+
+1. Adjusted rarities for [[Amber Infuser]] and [[Amethyst Infuser]]
+
+2. Slightly changed the look of the [[Ki]] bar.
+
+3. Added the +4 break range to [[Radiant Pickaxe]] and [[Radiant Hamaxe]]
+
+== Fixes ==
+
+1.
+

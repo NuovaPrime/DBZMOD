@@ -31,6 +31,7 @@ namespace DBZMOD.Items.Tools
             item.axe = 30;
             item.hammer = 100;
             item.knockBack = 7;
+            item.tileBoost = 4;
         }
         public override Color? GetAlpha(Color lightColor)
         {

@@ -120,7 +120,7 @@ namespace DBZMOD.UI
             {
                 case ResourceBarMode.KI:
                     texture = GFX.KiBar;
-                    drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 9);
+                    drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 12);
                     break;
                 case ResourceBarMode.OVERLOAD:
                     texture = GFX.OverloadBar;

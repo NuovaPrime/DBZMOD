@@ -32,3 +32,8 @@ C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\
 C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.dll
 C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.pdb
 C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\obj\Debug\DBZMOD.csprojAssemblyReference.cache
+C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\ExpandedSentries.dll
+C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\Laugicality.dll
+C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\ThoriumMod.dll
+C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\Tremor.dll
+C:\Users\Ron\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\bin\Debug\UnuBattleRods.dll

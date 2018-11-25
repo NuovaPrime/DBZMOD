@@ -39,6 +39,9 @@
     <Reference Include="ExpandedSentries">
       <HintPath>Lib\ExpandedSentries.dll</HintPath>
     </Reference>
+    <Reference Include="Laugicality">
+      <HintPath>Lib\Laugicality.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
@@ -59,17 +62,14 @@
     <Reference Include="Terraria">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\terraria\Terraria.exe</HintPath>
     </Reference>
-    <Reference Include="Tremor">
-      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\Tremor.dll</HintPath>
+    <Reference Include="ThoriumMod">
+      <HintPath>Lib\ThoriumMod.dll</HintPath>
     </Reference>
-    <Reference Include="Laugicality">
-      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\Laugicality.dll</HintPath>
+    <Reference Include="Tremor">
+      <HintPath>Lib\Tremor.dll</HintPath>
     </Reference>
     <Reference Include="UnuBattleRods">
-      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\UnuBattleRods.dll</HintPath>
-    </Reference>
-    <Reference Include="ThoriumMod">
-      <HintPath>C:\Users\Logan\Documents\My Games\Terraria\ModLoader\Mod Sources\DBZMOD\lib\ThoriumMod.dll</HintPath>
+      <HintPath>Lib\UnuBattleRods.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -137,8 +137,11 @@
   <ItemGroup>
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Effects\CircleShader.xnb" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Steam\steamapps\common\terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>"F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
