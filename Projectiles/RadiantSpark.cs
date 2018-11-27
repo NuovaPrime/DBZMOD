@@ -66,7 +66,8 @@ namespace DBZMOD.Projectiles
 			}
 			if (projectile.alpha <= 255)
 			{
-				int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 107);
+				int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 163);
+				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity /= 2f;
 			}
         }

@@ -51,6 +51,7 @@ namespace DBZMOD.Projectiles
                 if (Main.rand.NextFloat() < 1f)
                 {
                     Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, projectile.width, projectile.height, 163, 0f, 0f, 0, new Color(255, 255, 255), 1f)];
+					dust.noGravity = true;
                 }
             }
         }
