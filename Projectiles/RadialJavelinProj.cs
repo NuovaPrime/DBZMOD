@@ -16,7 +16,7 @@ namespace DBZMOD.Projectiles
         }
         public override void SetDefaults()
         {
-            projectile.width = 1;
+            projectile.width = 14;
             projectile.height = 82;
             projectile.timeLeft = 280;
             projectile.penetrate = 1;
@@ -50,7 +50,7 @@ namespace DBZMOD.Projectiles
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, projectile.width, projectile.height, 163, 0f, 0f, 0, new Color(255, 255, 255), 1f)];
+                    Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, 14, 14, 163, 0f, 0f, 0, new Color(255, 255, 255), 1f)];
 					dust.noGravity = true;
                 }
             }
@@ -85,7 +85,7 @@ namespace DBZMOD.Projectiles
 			if (target)
 			{
 				AdjustMagnitude(ref move);
-				projectile.velocity = (3 * projectile.velocity + move) / 11f;
+				projectile.velocity = (10 * projectile.velocity + move);
 				AdjustMagnitude(ref projectile.velocity);
 			}
         }
