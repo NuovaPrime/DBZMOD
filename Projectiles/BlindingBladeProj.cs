@@ -61,10 +61,30 @@ namespace DBZMOD.Projectiles
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, mod.DustType("RadiantDust"), 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, 163, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
                     dust.noGravity = true;
                 }
 
+            }
+        }
+		public override void AI()
+        {
+            Vector2 move = Vector2.Zero;
+            float distance = 400f;
+            bool target = false;
+            for (int k = 0; k < 200; k++)
+            {
+                if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5)
+                {
+                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
+                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
+                    if (distanceTo < distance)
+                    {
+                        move = newMove;
+                        distance = distanceTo;
+                        target = true;
+                    }
+                }
             }
         }
     }

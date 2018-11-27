@@ -18,7 +18,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 
         public override void SetDefaults()
         {
-            item.damage = 124;
+            item.damage = 196;
             item.useStyle = 5;
             item.useAnimation = 32;
             item.useTime = 32;

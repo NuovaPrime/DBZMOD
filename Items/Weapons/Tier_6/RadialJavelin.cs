@@ -18,11 +18,11 @@ namespace DBZMOD.Items.Weapons.Tier_6
 
 		public override void SetDefaults()
 		{
-			item.damage = 97;
+			item.damage = 230;
 			item.useStyle = 1;
 			item.useAnimation = 64;
             item.useTime = 64;
-			item.shootSpeed = 17f;
+			item.shootSpeed = 12f;
 			item.knockBack = 4.2f;
 			item.width = 56;
 			item.height = 56;
@@ -34,10 +34,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.noUseGraphic = true; 
 			item.autoReuse = true;
             KiDrain = 90;
-            if (!Main.dedServ)
-            {
-                item.UseSound = SoundID.Item45;
-            }
+            item.UseSound = SoundID.Item45;
 			WeaponType = "Unique";
         }
         public override void AddRecipes()

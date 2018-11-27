@@ -50,35 +50,27 @@ namespace DBZMOD.Projectiles
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, projectile.width, projectile.height, mod.DustType("RadiantDust"), 0f, 0f, 0, new Color(255, 255, 255), 1f)];
+                    Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, projectile.width, projectile.height, 163, 0f, 0f, 0, new Color(255, 255, 255), 1f)];
                 }
             }
         }
-        //For all of the NPC slots in Main.npc
-        //Note, you can replace NPC with other entities such as Projectiles and Players
         public override void AI()
         {
-            for (int i = 0; i < 200; i++)
+            Vector2 move = Vector2.Zero;
+            float distance = 400f;
+            bool target = false;
+            for (int k = 0; k < 200; k++)
             {
-                NPC target = Main.npc[i];
-                    //Get the shoot trajectory from the projectile and target
-                float shootToX = target.position.X + (float)target.width * 0.5f - projectile.Center.X;
-                float shootToY = target.position.Y - projectile.Center.Y;
-                float distance = (float)System.Math.Sqrt((double)(shootToX * shootToX + shootToY * shootToY));
-
-                    //If the distance between the live targeted npc and the projectile is less than 480 pixels
-                if (distance < 480f && !target.friendly && target.active)
+                if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5)
                 {
-                        //Divide the factor, 3f, which is the desired velocity
-                    distance = 3f / distance;
-
-                        //Multiply the distance by a multiplier if you wish the projectile to have go faster
-                    shootToX *= distance * 5;
-                    shootToY *= distance * 5;
-
-                        //Set the velocities to the shoot values
-                    projectile.velocity.X = shootToX;
-                    projectile.velocity.Y = shootToY;
+                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
+                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
+                    if (distanceTo < distance)
+                    {
+                        move = newMove;
+                        distance = distanceTo;
+                        target = true;
+                    }
                 }
             }
         }
