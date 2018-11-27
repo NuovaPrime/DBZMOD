@@ -1,10 +1,9 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
@@ -12,6 +11,7 @@ namespace DBZMOD.Projectiles
     {
         public override void SetStaticDefaults()
         {
+			ProjectileID.Sets.Homing[projectile.type] = true;
             DisplayName.SetDefault("Blinding Blade");
         }
         public override void SetDefaults()
@@ -26,7 +26,7 @@ namespace DBZMOD.Projectiles
             projectile.hostile = false;
             projectile.aiStyle = 56; //perfect ai for gravless and rotation, useful for disks 
             projectile.light = 3f;
-            projectile.stepSpeed = 13; ;
+            projectile.stepSpeed = 13;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
@@ -67,6 +67,14 @@ namespace DBZMOD.Projectiles
 
             }
         }
+		private void AdjustMagnitude(ref Vector2 vector)
+		{
+			float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+			if (magnitude > 6f)
+			{
+				vector *= 6f / magnitude;
+        	}
+        }
 		public override void AI()
         {
             Vector2 move = Vector2.Zero;
@@ -86,6 +94,12 @@ namespace DBZMOD.Projectiles
                     }
                 }
             }
+			if (target)
+			{
+				AdjustMagnitude(ref move);
+				projectile.velocity = (3 * projectile.velocity + move);
+				AdjustMagnitude(ref projectile.velocity);
+			}
         }
     }
 }

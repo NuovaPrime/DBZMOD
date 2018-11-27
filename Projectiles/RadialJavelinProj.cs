@@ -1,10 +1,9 @@
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DBZMOD.Projectiles
 {
@@ -12,6 +11,7 @@ namespace DBZMOD.Projectiles
     {
         public override void SetStaticDefaults()
         {
+			ProjectileID.Sets.Homing[projectile.type] = true;
             DisplayName.SetDefault("Radial Javelin");
         }
         public override void SetDefaults()
@@ -55,9 +55,17 @@ namespace DBZMOD.Projectiles
                 }
             }
         }
+		private void AdjustMagnitude(ref Vector2 vector)
+		{
+			float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+			if (magnitude > 6f)
+			{
+				vector *= 6f / magnitude;
+        	}
+        }
         public override void AI()
         {
-            Vector2 move = Vector2.Zero;
+			Vector2 move = Vector2.Zero;
             float distance = 400f;
             bool target = false;
             for (int k = 0; k < 200; k++)
@@ -74,6 +82,12 @@ namespace DBZMOD.Projectiles
                     }
                 }
             }
+			if (target)
+			{
+				AdjustMagnitude(ref move);
+				projectile.velocity = (3 * projectile.velocity + move) / 11f;
+				AdjustMagnitude(ref projectile.velocity);
+			}
         }
     }
 }

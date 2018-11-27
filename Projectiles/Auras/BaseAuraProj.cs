@@ -31,6 +31,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.netUpdate = true;
             AuraOffset.Y = -24;
 			projectile.light = 1f;
+			projectile.alpha = 240;
         }
         public override void AI()
         {
