@@ -976,8 +976,8 @@ namespace DBZMOD
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
-
-            if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && !IsFlying)
+            bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
+            if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
