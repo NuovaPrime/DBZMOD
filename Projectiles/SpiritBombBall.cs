@@ -55,7 +55,6 @@ namespace DBZMOD.Projectiles
             }
 
             Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("SpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            //proj.Hitbox.Inflate(1000, 1000);
             proj.width *= (int)projectile.scale;
             proj.height *= (int)projectile.scale;
 
@@ -107,40 +106,37 @@ namespace DBZMOD.Projectiles
             }
 
             //if button let go
-            if (!player.channel)
+            if (!player.channel || projectile.scale > 12)
             {
-                //projectile.Kill();
                 if (!Released)
                 {
                     Released = true;
                     projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
                     projectile.tileCollide = false;
                     projectile.damage *= (int)projectile.scale;
-                }
+                    projectile.position.X = projectile.position.X + (projectile.width / 2);
+                    projectile.position.Y = projectile.position.Y + (projectile.height / 2);
+                    projectile.width *= (int)projectile.scale;
+                    projectile.height *= (int)projectile.scale;
+                    projectile.position.X = projectile.position.X - (projectile.width / 2);
+                    projectile.position.Y = projectile.position.Y - (projectile.height / 2);
 
-                //Projectile p = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y) - (projectile.velocity * 5), new Vector2(0, 0), mod.ProjectileType("EnergyWaveTrail"), projectile.damage / 3, 4f, projectile.owner, 0, projectile.rotation);
-                //p.scale = projectile.scale * 1.5f;
+                }
             }
 
         }
-        /*public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-
-            var circleshader = GameShaders.Misc["DBZMOD:CircleShader"];
-
-            Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-            DrawData drawData = new DrawData(Main.projectileTexture[projectile.type], drawOrigin, color);
-            circleshader.Apply(drawData);
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            DBZMOD.Circle.ApplyShader(-9001);
             return true;
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            // As mentioned above, be sure not to forget this step.
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.Transform);
-        }*/
+        }
     }
 }

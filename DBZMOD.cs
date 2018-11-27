@@ -7,6 +7,7 @@ using Terraria.UI;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
+using DBZMOD.Effects;
 
 namespace DBZMOD
 {
@@ -32,6 +33,8 @@ namespace DBZMOD
         public bool battlerodsLoaded;
         public bool expandedSentriesLoaded;
         public static DBZMOD instance;
+
+        internal static CircleShader Circle;
 
         public DBZMOD()
         {
@@ -99,7 +102,7 @@ namespace DBZMOD
                 OverloadBarInterface = new UserInterface();
                 OverloadBarInterface.SetState(overloadbar);
 
-                GameShaders.Misc["DBZMOD:CircleShader"] = new MiscShaderData(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
+                Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
             }
         }
         public override void AddRecipeGroups()

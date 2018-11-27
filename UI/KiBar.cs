@@ -15,7 +15,7 @@ namespace DBZMOD.UI
 
 		public override void OnInitialize()
 		{
-			Kibar = new ResourceBar(ResourceBarMode.KI, 7, 92);
+			Kibar = new ResourceBar(ResourceBarMode.KI, 12, 92);
 			Kibar.Left.Set(515f, 0f);
 			Kibar.Top.Set(49f, 0f);
             Kibar.OnMouseDown += new UIElement.MouseEvent(DragStart);
