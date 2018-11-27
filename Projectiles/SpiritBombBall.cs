@@ -28,7 +28,7 @@ namespace DBZMOD.Projectiles
             projectile.friendly = true;
             projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
-            projectile.penetrate = 12;
+            projectile.penetrate = -1;
             projectile.timeLeft = 400;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
@@ -69,9 +69,7 @@ namespace DBZMOD.Projectiles
             {
                 if (!Released)
                 {
-                    projectile.scale += 0.04f;
-                    projectile.netUpdate = true;
-
+                    projectile.scale += 0.02f;
                     projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 
                     for (int d = 0; d < 25; d++)
@@ -84,6 +82,7 @@ namespace DBZMOD.Projectiles
                         tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                         tDust.noGravity = true;
                     }
+                    projectile.netUpdate = true;
 
                     if (projectile.timeLeft < 399)
                     {
@@ -102,6 +101,7 @@ namespace DBZMOD.Projectiles
                     if (projectile.ai[1] % 7 == 0)
                         Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                    projectile.netUpdate2 = true;
                 }
             }
 
@@ -111,19 +111,23 @@ namespace DBZMOD.Projectiles
                 if (!Released)
                 {
                     Released = true;
-                    projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
+                    projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 3;
                     projectile.tileCollide = false;
-                    projectile.damage *= (int)projectile.scale;
-                    projectile.position.X = projectile.position.X + (projectile.width / 2);
-                    projectile.position.Y = projectile.position.Y + (projectile.height / 2);
-                    projectile.width *= (int)projectile.scale;
-                    projectile.height *= (int)projectile.scale;
-                    projectile.position.X = projectile.position.X - (projectile.width / 2);
-                    projectile.position.Y = projectile.position.Y - (projectile.height / 2);
-
+                    projectile.damage *= (int)projectile.scale / 2;
                 }
             }
 
+        }
+        public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
+        {
+            projectile.scale -= 0.25f;
+        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            float radius = projectile.width * projectile.scale / 2f;
+            float rSquared = radius * radius;
+
+            return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {

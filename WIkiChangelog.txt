@@ -189,6 +189,10 @@
 
 1.0.6.1 Update Changelog
 
+== Additions ==
+
+1. [[Flight]] now shows your aura and rotates it accordingly.
+
 == Changes ==
 
 1. Adjusted rarities for [[Amber Infuser]] and [[Amethyst Infuser]]
@@ -196,6 +200,8 @@
 2. Slightly changed the look of the [[Ki]] bar.
 
 3. Added the +4 break range to [[Radiant Pickaxe]] and [[Radiant Hamaxe]]
+
+4. Completely reworked [[Spirit Bomb]], [[Super Spirit Bomb]], [[Supernova]] and [[Holy Wrath]].
 
 == Fixes ==
 

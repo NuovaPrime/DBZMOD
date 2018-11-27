@@ -28,7 +28,7 @@ namespace DBZMOD.Projectiles
             projectile.friendly = true;
             projectile.extraUpdates = 0;
             projectile.ignoreWater = true;
-            projectile.penetrate = 12;
+            projectile.penetrate = -1;
             projectile.timeLeft = 400;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
@@ -83,7 +83,7 @@ namespace DBZMOD.Projectiles
                 {
                     projectile.scale += 0.06f;
 
-                    projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
+                    projectile.position = player.position + new Vector2(20, -80 - (projectile.scale * 17));
 
                     for (int d = 0; d < 25; d++)
                     {
@@ -119,7 +119,7 @@ namespace DBZMOD.Projectiles
             }
 
             //if button let go
-            if (!player.channel)
+            if (!player.channel || projectile.scale > 30)
             {
                 //projectile.Kill();
                 if (!Released)
@@ -127,7 +127,7 @@ namespace DBZMOD.Projectiles
                     Released = true;
                     projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
                     projectile.tileCollide = false;
-                    projectile.damage *= (int)projectile.scale;
+                    projectile.damage *= (int)projectile.scale / 2;
                 }
 
                 //Projectile p = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y) - (projectile.velocity * 5), new Vector2(0, 0), mod.ProjectileType("EnergyWaveTrail"), projectile.damage / 3, 4f, projectile.owner, 0, projectile.rotation);
@@ -135,26 +135,29 @@ namespace DBZMOD.Projectiles
             }
 
         }
+        public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
+        {
+            projectile.scale -= 0.25f;
+        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            float radius = projectile.width * projectile.scale / 2f;
+            float rSquared = radius * radius;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			if (projectile.alpha <= 100);
-			Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-			for (int k = 0; k < projectile.oldPos.Length; k++)
-			{
-				Vector2 drawPos = projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
-				Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-				spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
-			}
-			return true;
-            //Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-            //for (int k = 0; k < projectile.oldPos.Length; k++)
-            //{
-            //Vector2 drawPos = projectile.oldPos[0] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
-            //Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-            //spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, Color.White, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
-			//}
-			return true;	
-		}   
+            return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            DBZMOD.Circle.ApplyShader(-9001);
+            return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.Transform);
+        }
     }
 }
