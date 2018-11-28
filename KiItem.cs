@@ -262,17 +262,7 @@ namespace DBZMOD
                 {
                     projectile.frame = 0;
                 }
-            }            
-
-            //original
-            //if (MyPlayer.ModPlayer(player).IsFlying)
-            //{                
-            //    projectile.alpha = 255;                
-            //}
-            //else
-            //{
-            //    projectile.alpha = 50;                
-            //}
+            }        
 
             // added so that projectile alpha is always half
             projectile.alpha = 50;
@@ -300,12 +290,18 @@ namespace DBZMOD
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y)  <= 6F;
             if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
             {
-                float rotationOffset = player.fullRotation < 0 ? (float)Math.PI : -(float)Math.PI;
-                projectile.rotation = (player.fullRotation + rotationOffset) % (float)Math.PI;
+                double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
+                float newRotation = (float)((player.fullRotation + rotationOffset) % Math.PI);
+                // hack to fix when the newRotation tries to be almost zero
+                if (Math.Abs(newRotation) < 0.000001)
+                {
+                    projectile.rotation = (float)Math.PI;
+                } else
+                {
+                    projectile.rotation = newRotation;
+                }
 
-                // initially set the center equal to the player center. From here it just needs very minor tweaking.
-                projectile.Center = player.Center;
-
+                
                 // using the angle of attack, construct the cartesian offsets of the aura based on the height of both things
 
                 double widthRadius = player.width / 4;
@@ -318,6 +314,8 @@ namespace DBZMOD
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
 
+                Main.NewText(string.Format("Rotation Offset: {0} - heightOffset: {1} before transform: {2}", projectile.rotation, cartesianOffsetY, heightOffset));
+
                 Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
 
                 // offset the aura
@@ -329,15 +327,6 @@ namespace DBZMOD
                 projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y + chargingAuraOffset));
                 projectile.rotation = 0;
             }
-
-            //float projectileOffsetX = player.Center.X - projectile.position.X;
-            //float projectileOffsetY = player.Center.Y - projectile.position.Y;
-            //Vector2 pVector = new Vector2(projectileOffsetX, projectileOffsetY);
-
-            ////projectile.position.X += pVector.X;
-            ////projectile.position.Y += pVector.Y;
-
-            //Main.NewText(String.Format("Projectile Offset X/Y: {0}, {1}", pVector.X, pVector.Y));
         }
     }
 
