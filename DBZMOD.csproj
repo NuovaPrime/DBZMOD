@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**\*.*" />
-    <Compile Include="Util\ItemHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExpandedSentries">
