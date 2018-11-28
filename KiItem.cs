@@ -314,7 +314,7 @@ namespace DBZMOD
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
 
-                Main.NewText(string.Format("Rotation Offset: {0} - heightOffset: {1} before transform: {2}", projectile.rotation, cartesianOffsetY, heightOffset));
+                // Main.NewText(string.Format("Rotation Offset: {0} - heightOffset: {1} before transform: {2}", projectile.rotation, cartesianOffsetY, heightOffset));
 
                 Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
 

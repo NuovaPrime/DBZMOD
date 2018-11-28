@@ -46,7 +46,7 @@ namespace DBZMOD
             float drainMult = (isKaioCrystalEquipped ? 0.5f : 1f);
             OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
             player.lifeRegen -= OverallHealthDrainRate;
-            Main.NewText(string.Format("Has Crystal Equipped: {0} - Drain Rate: {1}", isKaioCrystalEquipped, OverallHealthDrainRate));
+            // Main.NewText(string.Format("Has Crystal Equipped: {0} - Drain Rate: {1}", isKaioCrystalEquipped, OverallHealthDrainRate));
             if (IsSSJ)
             {
                 MyPlayer.ModPlayer(player).IsTransformed = true;
