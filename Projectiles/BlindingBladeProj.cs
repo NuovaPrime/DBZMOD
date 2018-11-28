@@ -97,7 +97,7 @@ namespace DBZMOD.Projectiles
 			if (target)
 			{
 				AdjustMagnitude(ref move);
-				projectile.velocity = (10 * projectile.velocity + move);
+
 				AdjustMagnitude(ref projectile.velocity);
 			}
         }

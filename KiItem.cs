@@ -332,7 +332,7 @@ namespace DBZMOD
 
     public abstract class KiItem : ModItem
     {
-        private Player player;
+        internal Player player;
         private NPC npc;
         public bool IsFistWeapon;
         public bool CanUseHeavyHit;

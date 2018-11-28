@@ -49,6 +49,7 @@ namespace DBZMOD
         public bool SSJGAchieved = false;
         private int lssj2timer;
         public bool LSSJ2Achieved = false;
+        public bool LSSJGAchieved = false;
         public bool IsKaioken;
         public bool IsSSJ;
         public bool IsLSSJ;
@@ -190,6 +191,11 @@ namespace DBZMOD
         public bool infuserRuby;
         public bool infuserSapphire;
         public bool infuserTopaz;
+        public bool IsDashing;
+        public bool CanUseHeavyHit;
+        public bool CanUseFlurry;
+        public bool CanUseZanzoken;
+        public int BlockState;
         public SoundEffectInstance transformationSound;
         #endregion
 
@@ -222,6 +228,7 @@ namespace DBZMOD
                         LSSJ2Transformation();
                         UI.TransMenu.MenuSelection = 6;
                         lssj2timer = 0;
+                        EndTransformations();
                     }
                     else if (lssj2timer >= 300)
                     {
@@ -513,6 +520,10 @@ namespace DBZMOD
             if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
             {
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+            }
+            if (IsDashing)
+            {
+                player.invis = true;
             }
             /*if(LSSJAchieved)
             {
@@ -1252,6 +1263,7 @@ namespace DBZMOD
                         SSJTransformation();
                         UI.TransMenu.MenuSelection = 1;
                         RageCurrent = 0;
+                        EndTransformations();
                         return false;
                     }
                 }
@@ -1268,6 +1280,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     SSJ2Transformation();
                     UI.TransMenu.MenuSelection = 2;
+                    EndTransformations();
                     RageCurrent = 0;
                     return false;
                 }
@@ -1284,6 +1297,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     LSSJTransformation();
                     UI.TransMenu.MenuSelection = 4;
+                    EndTransformations();
                     RageCurrent = 0;
                     return false;
                 }
@@ -1300,6 +1314,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     SSJ3Transformation();
                     UI.TransMenu.MenuSelection = 3;
+                    EndTransformations();
                     RageCurrent = 0;
                     return false;
                 }
@@ -1321,6 +1336,21 @@ namespace DBZMOD
             if (IsTransforming)
             {
                 return false;
+            }
+            if(BlockState == 1)
+            {
+                damage = 0;
+                return true;
+            }
+            if(BlockState == 2)
+            {
+                damage /= 2;
+                return true;
+            }
+            if(BlockState == 3)
+            {
+                damage /= 3;
+                return true;
             }
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {

@@ -203,6 +203,8 @@
 
 4. Completely reworked [[Spirit Bomb]], [[Super Spirit Bomb]], [[Supernova]] and [[Holy Wrath]].
 
+5. Unlocking a transformation now disables all forms so it doesn't get auto disabled.
+
 == Fixes ==
 
 1.
