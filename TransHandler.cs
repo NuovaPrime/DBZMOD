@@ -41,10 +41,12 @@ namespace DBZMOD
                 player.lifeRegen = 0;
             }
             player.lifeRegenTime = 0;
-            bool isKaioCrystalEquipped = player.IsItemEquipped(new KaioCrystal());
+            
+            bool isKaioCrystalEquipped = player.IsItemEquipped("Kaio Crystal");
             float drainMult = (isKaioCrystalEquipped ? 0.5f : 1f);
             OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
             player.lifeRegen -= OverallHealthDrainRate;
+            // Main.NewText(string.Format("Has Crystal Equipped: {0} - Drain Rate: {1}", isKaioCrystalEquipped, OverallHealthDrainRate));
             if (IsSSJ)
             {
                 MyPlayer.ModPlayer(player).IsTransformed = true;
