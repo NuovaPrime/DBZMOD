@@ -7,6 +7,8 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using DBZMOD;
 using Terraria;
+using System;
+using DBZMOD.Items.Accessories;
 
 namespace DBZMOD
 {
@@ -39,7 +41,9 @@ namespace DBZMOD
                 player.lifeRegen = 0;
             }
             player.lifeRegenTime = 0;
-            OverallHealthDrainRate = HealthDrainRate * (int)MyPlayer.ModPlayer(player).KaiokenDrainMulti;
+            bool isKaioCrystalEquipped = player.IsItemEquipped(new KaioCrystal());
+            float drainMult = (isKaioCrystalEquipped ? 0.5f : 1f);
+            OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
             player.lifeRegen -= OverallHealthDrainRate;
             if (IsSSJ)
             {
