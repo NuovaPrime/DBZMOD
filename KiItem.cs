@@ -317,7 +317,7 @@ namespace DBZMOD
                 double heightOffset = auraHeightRadius - (heightRadius + (AuraOffset.Y + 18) + chargingAuraOffset);
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
-                Main.NewText(String.Format("Aura offset Y: {0} {1}", AuraOffset.Y, chargingAuraOffset));
+
                 Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
 
                 // offset the aura
