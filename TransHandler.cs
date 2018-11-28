@@ -39,7 +39,9 @@ namespace DBZMOD
                 player.lifeRegen = 0;
             }
             player.lifeRegenTime = 0;
-            OverallHealthDrainRate = HealthDrainRate * (int)MyPlayer.ModPlayer(player).KaiokenDrainMulti;
+            bool isKaioCrystalEquipped = player.IsItemEquipped(new KaioCrystal());
+            float drainMult = (isKaioCrystalEquipped ? 0.5f : 1f);
+            OverallHealthDrainRate = HealthDrainRate * drainMult;
             player.lifeRegen -= OverallHealthDrainRate;
             if (IsSSJ)
             {
