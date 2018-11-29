@@ -9,13 +9,13 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartProgram>F:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
-    <StartWorkingDirectory>F:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartProgram>F:\Program Files %28x86%29\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>F:\Program Files %28x86%29\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mercurius|AnyCPU'">
-    <StartProgram>F:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
-    <StartWorkingDirectory>F:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartProgram>D:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>D:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Mercurius|x86'">
@@ -24,13 +24,13 @@
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Nuova C Drive|AnyCPU'">
-    <StartProgram>C:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
-    <StartWorkingDirectory>C:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartProgram>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Nuova C Drive|x86'">
-    <StartProgram>C:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
-    <StartWorkingDirectory>C:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartProgram>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
 </Project>
