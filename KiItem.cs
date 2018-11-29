@@ -330,19 +330,9 @@ namespace DBZMOD
             if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
             {
                 double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
-                float newRotation = (float)(player.fullRotation + rotationOffset);
-                // hack to fix when the newRotation tries to be almost zero
-                if (Math.Abs(newRotation) < 0.000001)
-                {
-                    projectile.rotation = (float)Math.PI;
-                } else
-                {
-                    projectile.rotation = newRotation;
-                }
-
+                projectile.rotation = (float)(player.fullRotation + rotationOffset);
                 
                 // using the angle of attack, construct the cartesian offsets of the aura based on the height of both things
-
                 double widthRadius = player.width / 4;
                 double heightRadius = player.height / 4;
                 double auraWidthRadius = projectile.width / 4;
