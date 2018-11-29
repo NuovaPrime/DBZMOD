@@ -203,6 +203,21 @@ namespace DBZMOD
             }
             base.SetDefaults(npc);
         }*/
+
+        public override void OnChatButtonClicked(NPC npc, bool firstButton)
+        {
+            if (npc.type == NPCID.Nurse)
+            {
+                if (firstButton)
+                {
+
+                    Player player = Main.LocalPlayer;
+                    MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).KiMax;
+                    int kihealvalue = MyPlayer.ModPlayer(player).KiMax - MyPlayer.ModPlayer(player).KiCurrent;
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kihealvalue, false, false);
+                }
+            }
+        }
         public override void NPCLoot(NPC npc)
         {
             if (npc.type == NPCID.EaterofWorldsHead && npc.boss)

@@ -10,6 +10,19 @@ using Terraria.GameInput;
 
 namespace DBZMOD.Projectiles.Fists
 {
+    // helper class that handles tracking the metadata of a particular control, its state, how long it's held/been since press/release.
+    private class ControlStateMetadata
+    {
+        // enum declaring the state of a given control at any point in time.
+        public ControlStates state;
+
+        // dual purpose int, either tracking the input delay before Pressed/PressedAndReleased reset.
+        public int inputTimer;
+
+        // if the button is being held for a protracted period of time (light attacks/heavy attacks?), this flag lets the methods know what to do with the input timer.
+        public bool isHeld;
+    }
+
     public class KiFistProj : KiProjectile
     {
         #region Variables
@@ -44,48 +57,113 @@ namespace DBZMOD.Projectiles.Fists
         #endregion
 
         #region Enums
-        // these are to coordinate with inputs in an array
-        public enum BaseDashDirections
-        {
-            None = 0,
-            Up = 1,
-            Down = 2,
-            Left = 3,
-            Right = 4
-        };
-
         // enum to handle dash direction states
         [Flags]
-        public enum DashDirectionStates : short
+        public enum ControlInputTypes : short
         {
             None = 0,
             Up = 1,
             Down = 1 << 1,
             Left = 1 << 2,
             Right = 1 << 3,
+            LightAttack = 1 << 4,
+            HeavyAttack = 1 << 5,
+            Block = LightAttack & HeavyAttack,
             UpLeft = Up & Left,
             UpRight = Up & Right,
             DownLeft = Down & Left,
-            DownRight = Down & Right
+            DownRight = Down & Right,
+            Any = Up | Down | Left | Right | LightAttack | HeavyAttack
         };
 
-        [Flags]
-        public enum ControlStates : short
+        // the possible states a control can be in.
+        public enum ControlStates
         {
-            Released = 0,
-            PressedOnce = 1,
-            PressedAndReleased = 1 << 1,
-            PressedTwice = 1 << 2,
-            PressedAndHeld = 1 << 3
+            Released, // neutral, unpressed. Synonymous to "None"
+            PressedOnce, // first detection of an input triggers this
+            PressedAndReleased, // next phase, the key is released, but was pressed in the input window (for dashing)
+            PressedTwice, // next phase, after key release, but still in the input window (for dashing), pressed a second time.
+            PressedAndHeld // alternate phase, after pressedOnce, if the key is never released. Starts a held counter (?)
         }
+
+        // the results to ultimately scan for "Should thing happen"
+        public enum Controls
+        {
+            None = 0,
+            LightPunch = 1,
+            HeavyPunch = 2,
+            DashUp = 3,
+            DashDown = 4,
+            DashLeft = 5,
+            DashRight = 6,
+            DashUpLeft = 7,
+            DashUpRight = 8,
+            DashDownLeft = 9,
+            DashDownRight = 10,
+            Block = 11
+        }
+
+        public Dictionary<Controls, ControlStateMetadata> _controlDictionary = null;
+        public Dictionary<Controls, ControlStateMetadata> ControlDictionary
+        {
+            get
+            {
+                return _controlDictionary;
+            }
+            set
+            {
+                _controlDictionary = value;
+            }
+        }
+                
         #endregion
 
         #region ControlStateHandler
         // scrape trigger states and return new state based on previous state.
-        public DashDirectionStates GetInputState(TriggersSet inputState)
+        public ControlInputTypes GetCurrentInputState(TriggersSet inputStateTriggerSet)
         {
-            return DashDirectionStates.None;
+            ControlInputTypes currentFlagInputState = ControlInputTypes.None;
+            if (inputStateTriggerSet.Up)
+            {
+                currentFlagInputState |= ControlInputTypes.Up;
+            }
+
+            if (inputStateTriggerSet.Down)
+            {
+                currentFlagInputState |= ControlInputTypes.Down;
+            }
+
+            if (inputStateTriggerSet.Left)
+            {
+                currentFlagInputState |= ControlInputTypes.Left;
+            }
+
+            if (inputStateTriggerSet.Right)
+            {
+                currentFlagInputState |= ControlInputTypes.Right;
+            }
+
+            if (inputStateTriggerSet.MouseLeft)
+            {
+                currentFlagInputState |= ControlInputTypes.LightAttack;
+            }
+
+            if (inputStateTriggerSet.MouseRight)
+            {
+                currentFlagInputState |= ControlInputTypes.HeavyAttack;
+            }
+
+            // if the current input state contains literally anything
+            if (currentFlagInputState.HasFlag(ControlInputTypes.Any))
+            {                
+                // remove the "none" state.
+                currentFlagInputState = currentFlagInputState & ~ControlInputTypes.None;
+            }
+
+            return currentFlagInputState;
         }
+
+
         #endregion
 
         public override void SetDefaults()
