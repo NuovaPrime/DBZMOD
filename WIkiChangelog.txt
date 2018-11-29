@@ -193,6 +193,8 @@
 
 1. [[Flight]] now shows your aura and rotates it accordingly.
 
+2. The [[terraria:Nurse]] now fully heals your ki.
+
 == Changes ==
 
 1. Adjusted rarities for [[Amber Infuser]] and [[Amethyst Infuser]]
@@ -207,5 +209,5 @@
 
 == Fixes ==
 
-1.
+1. Your ki bar now doesn't flicker due to ki regen.
 

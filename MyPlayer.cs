@@ -473,7 +473,10 @@ namespace DBZMOD
             }
             if (KiRegenTimer > 2)
             {
-                KiCurrent += KiRegen;
+                if (KiCurrent != KiMax)
+                {
+                    KiCurrent += KiRegen;
+                }
                 KiRegenTimer = 0;
             }
             if (DemonBonusActive)
