@@ -29,16 +29,35 @@ namespace DBZMOD.Util
     /// </summary>
     class ControlHelper
     {
-        public Dictionary<Controls, ControlStateMetadata> _controlDictionary = null;
-        public Dictionary<Controls, ControlStateMetadata> ControlDictionary
+        /// <summary>
+        ///     Dictionary property responsible for holding player control state.
+        /// </summary>
+        public Dictionary<Controls, ControlStateMetadata> _currentControlDictionary = null;
+        public Dictionary<Controls, ControlStateMetadata> CurrentControlDictionary
         {
             get
             {
-                return _controlDictionary;
+                return _previousControlDictionary;
             }
             set
             {
-                _controlDictionary = value;
+                _previousControlDictionary = value;
+            }
+        }
+
+        /// <summary>
+        ///     Dictionary property responsible for holding player's control state in the previous tick.
+        /// </summary>
+        public Dictionary<Controls, ControlStateMetadata> _previousControlDictionary = null;
+        public Dictionary<Controls, ControlStateMetadata> PreviousControlDictionary
+        {
+            get
+            {
+                return _previousControlDictionary;
+            }
+            set
+            {
+                _previousControlDictionary = value;
             }
         }
 
@@ -48,7 +67,7 @@ namespace DBZMOD.Util
         /// <param name="player">The player the input is being processed for.</param>
         /// <param name="inputStateTriggerSet">The triggerset belonging to the owner (typically a player) of the entity firing this process (presumably kifist projectile)</param>
         /// <returns></returns>
-        public ControlInputTypes GetCurrentInputState(Player player, TriggersSet inputStateTriggerSet)
+        public ControlInputTypes GetCurrentInputState(TriggersSet inputStateTriggerSet)
         {            
             ControlInputTypes currentFlagInputState = ControlInputTypes.None;
             if (inputStateTriggerSet.Up)
@@ -90,5 +109,6 @@ namespace DBZMOD.Util
 
             return currentFlagInputState;
         }
+
     }    
 }
