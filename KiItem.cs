@@ -330,7 +330,7 @@ namespace DBZMOD
             if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
             {
                 double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
-                float newRotation = (float)((player.fullRotation + rotationOffset) % Math.PI);
+                float newRotation = (float)(player.fullRotation + rotationOffset);
                 // hack to fix when the newRotation tries to be almost zero
                 if (Math.Abs(newRotation) < 0.000001)
                 {

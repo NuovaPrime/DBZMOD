@@ -76,6 +76,9 @@
     <Compile Include="Dusts\RadiantDust.cs" />
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Enums\ControlInputTypes.cs" />
+    <Compile Include="Enums\Controls.cs" />
+    <Compile Include="Enums\ControlStates.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
@@ -381,6 +384,7 @@
     <Compile Include="UI\ProgressionMenu.cs" />
     <Compile Include="UI\ResourceBar.cs" />
     <Compile Include="UI\TransMenu.cs" />
+    <Compile Include="Util\ControlHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />
@@ -492,6 +496,21 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)"=="Mercurius" (
+"D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)" -eac "$(TargetPath)"	
+exit 0	
+)	
+if "$(ConfigurationName)"=="Nuova C Drive" (	
+"C:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)" -eac "$(TargetPath)"	
+exit 0	
+)	
+if "$(ConfigurationName)"=="Debug" (	
+"F:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)" -eac "$(TargetPath)"	
+exit 0	
+)	
+if "$(ConfigurationName)"=="Release" (	
+"F:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)" -eac "$(TargetPath)"	
+exit 0	
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>
