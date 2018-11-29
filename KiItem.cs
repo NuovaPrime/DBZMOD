@@ -332,6 +332,8 @@ namespace DBZMOD
 
     public abstract class KiItem : ModItem
     {
+        internal Player player;
+        private NPC npc;
         public bool IsFistWeapon;
         public bool CanUseHeavyHit;
         #region Boss bool checks
@@ -453,16 +455,18 @@ namespace DBZMOD
             }
             return false;
         }
+        public override void HoldItem(Player player)
+        {
+            
+            base.HoldItem(player);
+        }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if(RealKiDrain(Main.LocalPlayer) > 0)
-            {
-                TooltipLine Indicate = new TooltipLine(mod, "", "");
-                string[] Text = Indicate.text.Split(' ');
-                Indicate.text = "Consumes " + RealKiDrain(Main.LocalPlayer) + " Ki ";
-                Indicate.overrideColor = new Color(34, 232, 222);
-                tooltips.Add(Indicate);
-            }
+            TooltipLine Indicate = new TooltipLine(mod, "", "");
+            string[] Text = Indicate.text.Split(' ');
+            Indicate.text = "Consumes " + RealKiDrain(Main.LocalPlayer) + " Ki ";
+            Indicate.overrideColor = new Color(34, 232, 222);
+            tooltips.Add(Indicate);
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
             if (tt != null)
             {
@@ -471,14 +475,11 @@ namespace DBZMOD
                 string damageWord = splitText.Last();
                 tt.text = damageValue + " ki " + damageWord;
             }
-            if(WeaponType != null)
-            {
-                TooltipLine Indicate2 = new TooltipLine(mod, "", "");
-                string[] Text2 = Indicate2.text.Split(' ');
-                Indicate2.text = WeaponType + " Technique ";
-                Indicate2.overrideColor = new Color(232, 202, 34);
-                tooltips.Add(Indicate2);
-            }
+            TooltipLine Indicate2 = new TooltipLine(mod, "", "");
+            string[] Text2 = Indicate.text.Split(' ');
+            Indicate2.text = WeaponType + " Technique ";
+            Indicate2.overrideColor = new Color(232, 202, 34);
+            tooltips.Add(Indicate2);
             if (item.damage > 0)
             {
                 foreach (TooltipLine line in tooltips)
