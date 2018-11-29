@@ -11,6 +11,8 @@ Global
 		Debug|x86 = Debug|x86
 		Mercurius|Any CPU = Mercurius|Any CPU
 		Mercurius|x86 = Mercurius|x86
+		Nuova C Drive|Any CPU = Nuova C Drive|Any CPU
+		Nuova C Drive|x86 = Nuova C Drive|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -23,6 +25,10 @@ Global
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Mercurius|Any CPU.Build.0 = Mercurius|Any CPU
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Mercurius|x86.ActiveCfg = Mercurius|x86
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Mercurius|x86.Build.0 = Mercurius|x86
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Nuova C Drive|Any CPU.ActiveCfg = Nuova C Drive|Any CPU
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Nuova C Drive|Any CPU.Build.0 = Nuova C Drive|Any CPU
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Nuova C Drive|x86.ActiveCfg = Nuova C Drive|x86
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Nuova C Drive|x86.Build.0 = Nuova C Drive|x86
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|x86.ActiveCfg = Release|x86

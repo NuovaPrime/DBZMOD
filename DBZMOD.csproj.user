@@ -23,4 +23,14 @@
     <StartWorkingDirectory>D:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Nuova C Drive|AnyCPU'">
+    <StartProgram>F:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>F:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Nuova C Drive|x86'">
+    <StartProgram>C:\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
+    <StartWorkingDirectory>C:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
 </Project>
