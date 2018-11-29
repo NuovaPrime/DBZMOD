@@ -549,12 +549,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Mercurius" (
-"D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
-) ELSE IF "$(ConfigurationName)" == "Nuova C Drive" (
-"C:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
-) ELSE (
-"F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
-)</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Mercurius" ("D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)")
+if "$(ConfigurationName)" == "Nuova C Drive" ("C:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)")
+if "$(ConfigurationName)" == "Debug" ("F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)")
+if "$(ConfigurationName)" == "Release" ("F:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)")</PostBuildEvent>
   </PropertyGroup>
 </Project>
