@@ -599,46 +599,6 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
-
-            if (infuserSapphire)
-            {
-                target.AddBuff(BuffID.Frostburn, 180);
-            }
-            if (infuserRuby)
-            {
-                target.AddBuff(BuffID.OnFire, 180);
-            }
-            if (infuserEmerald)
-            {
-                target.AddBuff(BuffID.Poisoned, 180);
-            }
-            if (infuserDiamond)
-            {
-                target.AddBuff(BuffID.Confused, 180);
-            }
-            if (infuserAmethyst)
-            {
-                target.AddBuff(BuffID.ShadowFlame, 300);
-            }
-            if (infuserTopaz)
-            {
-                target.AddBuff(BuffID.OnFire, 180);
-            }
-            if (infuserAmber)
-            {
-                target.AddBuff(BuffID.Ichor, 300);
-            }
-            if (infuserRainbow)
-            {
-                target.AddBuff(BuffID.Ichor, 300);
-                target.AddBuff(BuffID.OnFire, 180);
-                target.AddBuff(BuffID.ShadowFlame, 300);
-                target.AddBuff(BuffID.Confused, 180);
-                target.AddBuff(BuffID.Poisoned, 180);
-                target.AddBuff(BuffID.Bleeding, 180);
-                target.AddBuff(BuffID.Frostburn, 180);
-
-            }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
 
@@ -653,45 +613,6 @@ namespace DBZMOD
                 {
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
-            }
-            if (infuserSapphire)
-            {
-                target.AddBuff(BuffID.Frostburn, 180);
-            }
-            if (infuserRuby)
-            {
-                target.AddBuff(BuffID.Bleeding, 180);
-            }
-            if (infuserEmerald)
-            {
-                target.AddBuff(BuffID.Poisoned, 180);
-            }
-            if (infuserDiamond)
-            {
-                target.AddBuff(BuffID.Confused, 180);
-            }
-            if (infuserAmethyst)
-            {
-                target.AddBuff(BuffID.ShadowFlame, 300);
-            }
-            if (infuserTopaz)
-            {
-                target.AddBuff(BuffID.OnFire, 180);
-            }
-            if (infuserAmber)
-            {
-                target.AddBuff(BuffID.Ichor, 300);
-            }
-            if (infuserRainbow)
-            {
-                target.AddBuff(BuffID.Ichor, 300);
-                target.AddBuff(BuffID.OnFire, 180);
-                target.AddBuff(BuffID.ShadowFlame, 300);
-                target.AddBuff(BuffID.Confused, 180);
-                target.AddBuff(BuffID.Poisoned, 180);
-                target.AddBuff(BuffID.Bleeding, 180);
-                target.AddBuff(BuffID.Frostburn, 180);
-
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }

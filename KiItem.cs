@@ -198,6 +198,45 @@ namespace DBZMOD
                     }
                 }
             }
+            if (MyPlayer.ModPlayer(player).infuserSapphire)
+            {
+                npc.AddBuff(BuffID.Frostburn, 180);
+            }
+            if (MyPlayer.ModPlayer(player).infuserRuby)
+            {
+                npc.AddBuff(BuffID.OnFire, 180);
+            }
+            if (MyPlayer.ModPlayer(player).infuserEmerald)
+            {
+                npc.AddBuff(BuffID.Poisoned, 180);
+            }
+            if (MyPlayer.ModPlayer(player).infuserDiamond)
+            {
+                npc.AddBuff(BuffID.Confused, 180);
+            }
+            if (MyPlayer.ModPlayer(player).infuserAmethyst)
+            {
+                npc.AddBuff(BuffID.ShadowFlame, 300);
+            }
+            if (MyPlayer.ModPlayer(player).infuserTopaz)
+            {
+                npc.AddBuff(BuffID.OnFire, 180);
+            }
+            if (MyPlayer.ModPlayer(player).infuserAmber)
+            {
+                npc.AddBuff(BuffID.Ichor, 300);
+            }
+            if (MyPlayer.ModPlayer(player).infuserRainbow)
+            {
+                npc.AddBuff(BuffID.Ichor, 300);
+                npc.AddBuff(BuffID.OnFire, 180);
+                npc.AddBuff(BuffID.ShadowFlame, 300);
+                npc.AddBuff(BuffID.Confused, 180);
+                npc.AddBuff(BuffID.Poisoned, 180);
+                npc.AddBuff(BuffID.Bleeding, 180);
+                npc.AddBuff(BuffID.Frostburn, 180);
+
+            }
         }
     }
 

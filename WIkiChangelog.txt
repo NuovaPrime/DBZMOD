@@ -187,7 +187,7 @@
 2. Added [[MRE]]
 
 
-1.0.6.1 Update Changelog
+1.0.6.5 Update Changelog
 
 == Additions ==
 
@@ -203,11 +203,15 @@
 
 3. Added the +4 break range to [[Radiant Pickaxe]] and [[Radiant Hamaxe]]
 
-4. Completely reworked [[Spirit Bomb]], [[Super Spirit Bomb]], [[Supernova]] and [[Holy Wrath]].
+4. Completely reworked [[Spirit Bomb]] and [[Super Spirit Bomb]].
 
 5. Unlocking a transformation now disables all forms so it doesn't get auto disabled.
 
 == Fixes ==
 
 1. Your ki bar now doesn't flicker due to ki regen.
+
+2. Fixed bug where the [[Kaio Crystal]] did nothing.
+
+3. Fixed bug where [[Ki Infusers]] applied to all damage types, not just [[Ki]].
 
