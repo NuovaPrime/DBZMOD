@@ -13,6 +13,7 @@ using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
 using DBZMOD.Util;
+using DBZMOD.Enums;
 
 namespace DBZMOD
 {
@@ -93,42 +94,42 @@ namespace DBZMOD
             if (actionsToPerform.DashUp)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash up
+                PerformZanzoken(player, Controls.Up);
             }
             if (actionsToPerform.DashDown)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash down
+                PerformZanzoken(player, Controls.Down);
             }
             if (actionsToPerform.DashLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash left
+                PerformZanzoken(player, Controls.Left);
             }
             if (actionsToPerform.DashRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash right
+                PerformZanzoken(player, Controls.Right);
             }
             if (actionsToPerform.DashUpLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash up left
+                PerformZanzoken(player, Controls.Up, Controls.Left);
             }
             if (actionsToPerform.DashUpRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash up right
+                PerformZanzoken(player, Controls.Up, Controls.Right);
             }
             if (actionsToPerform.DashDownLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash down left
+                PerformZanzoken(player, Controls.Down, Controls.Left);
             }
             if (actionsToPerform.DashDownRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                //do dash down right
+                PerformZanzoken(player, Controls.Down, Controls.Right);
             }
             #endregion
 
@@ -207,7 +208,48 @@ namespace DBZMOD
                     return 0;
 
             }
+        }
 
+        // change this to change how far the player can teleport.
+        public const int ZANZOKEN_TRAVEL_DISTANCE = 50;
+        // returns the vertical/horizontal Vector offsets of a 45 degree angle that travels ZANZOKEN_TRAVEL_DISTANCE.
+        private int GetZanzokenDiagonalDistanceComponent()
+        {
+            var hypotenuse = ZANZOKEN_TRAVEL_DISTANCE;
+            var componentDistance = (int)Math.Ceiling(Math.Sqrt((hypotenuse * hypotenuse) / 2));
+            return componentDistance;
+        }
+
+        // returns a major rectangle responsible for the long range area in the teleport "cone" to scan for enemies.
+        private int GetZanzokenScanMajorSize()
+        {
+            var rectangleBisectWidth = (int)Math.Floor(GetZanzokenDiagonalDistanceComponent() / 2f);
+            return rectangleBisectWidth;
+        }
+
+        // returns a minor rectangle responsible for the close area in the teleport "cone" to scan for enemies.
+        private int GetZanzokenScanMinorSize()
+        {
+            var rectangleBisectWidth = (int)Math.Floor(GetZanzokenScanMajorSize() / 2f);
+            return rectangleBisectWidth;
+        }
+
+        public void PerformZanzoken(Player player, params Controls[] directions)
+        {
+            // if the directions array contains more than one parameter, this is a diagonal zanzoken.
+            int offset = ZANZOKEN_TRAVEL_DISTANCE;
+            if (directions.Length > 1)
+            {
+                offset = GetZanzokenDiagonalDistanceComponent();
+            }
+
+            // lazy switch to list so I can use linq.
+            List<Controls> directionList = new List<Controls>(directions);
+
+            int yOffset = (directionList.Contains(Controls.Up) ? -1 : (directionList.Contains(Controls.Down) ? 1 : 0)) * offset;
+            int xOffset = (directionList.Contains(Controls.Left) ? -1 : (directionList.Contains(Controls.Right) ? 1 : 0)) * offset;
+
+            // the easiest way to do this is with a projectile.
         }
     }
 }
