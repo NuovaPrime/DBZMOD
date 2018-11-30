@@ -406,7 +406,7 @@ namespace DBZMOD.Util
                 {
                     case ControlStates.Released:
                     case ControlStates.PressedTwice:
-                        currentState = ControlStates.Released;
+                        currentState = ControlStates.Released;                        
                         break;
                     case ControlStates.PressedOnce:
                     case ControlStates.PressedAndReleased:
@@ -416,9 +416,18 @@ namespace DBZMOD.Util
                             if (previousControlState.state == ControlStates.PressedAndHeld && previousHeldTimer <= GetHeldTimeLimit(control))
                             {
                                 currentState = ControlStates.PressedAndReleased;
-                            } else
+                            }
+                            else
                             {
-                                currentState = ControlStates.Released;
+                                if ((previousControlState.state == ControlStates.PressedOnce || previousControlState.state == ControlStates.PressedAndReleased)
+                                    && previousInputTimer <= GetInputTimeLimit(control))
+                                {
+                                    currentState = ControlStates.PressedAndReleased;
+                                }
+                                else
+                                {
+                                    currentState = ControlStates.Released;
+                                }                                
                             }
                         }
                         else
@@ -438,7 +447,7 @@ namespace DBZMOD.Util
                     heldTimer = previousHeldTimer + 1;
                 }
             }
-            
+
             var result = new ControlStateMetadata(currentState, inputTimer, heldTimer);
             return result;
         }
