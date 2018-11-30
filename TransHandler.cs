@@ -47,7 +47,7 @@ namespace DBZMOD
                 player.lifeRegenTime = 0;
 
                 // only apply the kaio crystal benefit if this is kaioken
-                bool isKaioCrystalEquipped = player.IsItemEquipped("Kaio Crystal");
+                bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
                 float drainMult = (IsKaioken && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount

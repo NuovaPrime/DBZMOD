@@ -17,15 +17,19 @@ namespace DBZMOD
             return item.Name.Equals(itemName);
         }
 
-        // checks if the player has a vanilla item equipped.
-        public static bool IsItemEquipped(this Player player, string itemName)
+        /// <summary>
+        ///     checks if the player has a vanilla item equipped in a non-vanity slot.
+        /// </summary>
+        /// <param name="player">The player being checked.</param>
+        /// <param name="itemName">The name of the item to check for.</param>
+        /// <returns></returns>
+        public static bool IsAccessoryEquipped(this Player player, string itemName)
         {
-            foreach (var armorItem in player.armor)
+            // switched to using an index so it's easier to detect vanity slots.
+            for (int i = 3; i < 8 + player.extraAccessorySlots; i++)
             {
-                if (armorItem.IsItemNamed(itemName))
-                {
+                if (player.armor[i].IsItemNamed(itemName))
                     return true;
-                }
             }
             return false;
         }
