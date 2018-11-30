@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Prideful Ki Crystal");
-            Tooltip.SetDefault("-Tier 3 Material-");
+            Tooltip.SetDefault("The prideful flame of the world lives within.");
         }
 
         public override void SetDefaults()

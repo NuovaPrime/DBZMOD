@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Armor
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.12f;
             MyPlayer.ModPlayer(player).KiCrit += 10;
-            MyPlayer.ModPlayer(player).KiMax += 250;
+            MyPlayer.ModPlayer(player).KiMax2 += 250;
         }
 
         public override void AddRecipes()

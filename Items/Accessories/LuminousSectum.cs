@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.09f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax += 250;
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 += 250;
                 player.GetModPlayer<MyPlayer>(mod).luminousSectum = true;
             }
         }

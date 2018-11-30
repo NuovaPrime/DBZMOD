@@ -84,11 +84,11 @@ namespace DBZMOD
                 player.maxRunSpeed += 2f;
                 player.runAcceleration += 2f;
             }
-            player.meleeDamage += DamageMulti - 1;
-            player.rangedDamage += DamageMulti - 1;
-            player.magicDamage += DamageMulti - 1;
-            player.minionDamage += DamageMulti - 1;
-            player.thrownDamage += DamageMulti - 1;
+            player.meleeDamage += DamageMulti - 1 * 0.5f;
+            player.rangedDamage += DamageMulti - 1 * 0.5f;
+            player.magicDamage += DamageMulti - 1 * 0.5f;
+            player.minionDamage += DamageMulti - 1 * 0.5f;
+            player.thrownDamage += DamageMulti - 1 * 0.5f;
             MyPlayer.ModPlayer(player).KiDamage += DamageMulti - 1;
             if (DBZMOD.instance.thoriumLoaded)
             {
@@ -126,24 +126,24 @@ namespace DBZMOD
         }
         public void ThoriumEffects(Player player)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += DamageMulti - 1;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += DamageMulti - 1;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += DamageMulti - 1 * 0.5f;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += DamageMulti - 1 * 0.5f;
         }
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage += DamageMulti - 1;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage += DamageMulti - 1 * 0.5f;
         }
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage += DamageMulti - 1;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage += DamageMulti - 1 * 0.5f;
         }
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti - 1;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += DamageMulti - 1 * 0.5f;
         }
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage += DamageMulti - 1;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage += DamageMulti - 1 * 0.5f;
         }
         private void KiDrainAdd(Player player)
         {

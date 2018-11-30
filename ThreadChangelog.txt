@@ -94,3 +94,16 @@ Big Bang Attack, Scattershot, Special Beam Cannon, Super Kamehameha, Trap Shoote
 12. Added cross-mod support for Expanded Sentries.
 13. Added Canadian Demon Armor
 14. Added MRE
+
+1.0.6.5 Update Changelog
+
+1. Flight now shows your aura and rotates it accordingly.
+2. The Nurse now fully heals your ki.
+3. Adjusted rarities for Amber Infuser and Amethyst Infuser
+4. Slightly changed the look of the Ki bar.
+5. Added the +4 break range to Radiant Pickaxe and Radiant Hamaxe
+6. Completely reworked Spirit Bomb and Super Spirit Bomb.
+7. Unlocking a transformation now disables all forms so it doesn't get auto disabled.
+8. Your ki bar now doesn't flicker due to ki regen.
+9. Fixed bug where the Kaio Crystal did nothing.
+10. Fixed bug where Ki Infusers applied to all damage types, not just Ki.

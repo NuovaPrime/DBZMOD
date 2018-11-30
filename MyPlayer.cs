@@ -29,6 +29,8 @@ namespace DBZMOD
         public int KiRegenTimer;
         public int KiRegen;
         public int KiMax = 1000;
+        public int KiMax2 = 0;
+        public int OverallKiMax;
         public int KiCurrent;
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
@@ -474,7 +476,7 @@ namespace DBZMOD
             }
             if (KiRegenTimer > 2)
             {
-                if (KiCurrent != KiMax)
+                if (KiCurrent != OverallKiMax)
                 {
                     KiCurrent += KiRegen;
                 }
@@ -529,6 +531,7 @@ namespace DBZMOD
             {
                 player.invis = true;
             }
+            OverallKiMax = KiMax + KiMax2;
             /*if(LSSJAchieved)
             {
                 OverloadBar.visible = true;
@@ -591,7 +594,7 @@ namespace DBZMOD
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < KiMax)
+            if (radiantBonus && KiCurrent < OverallKiMax)
             {
                 int i = Main.rand.Next(1, 6);
                 KiCurrent += i;
@@ -606,7 +609,7 @@ namespace DBZMOD
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < KiMax)
+            if (radiantBonus && KiCurrent < OverallKiMax)
             {
                 int i = Main.rand.Next(1, 6);
                 KiCurrent += i;
@@ -920,7 +923,7 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-            if (EnergyCharge.Current && (KiCurrent < KiMax) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
+            if (EnergyCharge.Current && (KiCurrent < OverallKiMax) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
@@ -965,9 +968,9 @@ namespace DBZMOD
                     ChargeSoundTimer = 0;
                 }
             }
-            if (KiCurrent > KiMax)
+            if (KiCurrent > OverallKiMax)
             {
-                KiCurrent = KiMax;
+                KiCurrent = OverallKiMax;
             }
             if (EnergyCharge.JustPressed)
             {
@@ -1023,50 +1026,6 @@ namespace DBZMOD
         {
             KiDamage = 1f;
             KiKbAddition = 0f;
-            if (Fragment1)
-            {
-                KiMax = 2000;
-                if (Fragment1 && playerTrait == "Legendary" && NPC.downedBoss1)
-                {
-                    KiMax = 4000;
-                }
-                if (Fragment2)
-                {
-                    KiMax = 4000;
-                    if (Fragment2 && playerTrait == "Legendary" && NPC.downedBoss1)
-                    {
-                        KiMax = 8000;
-                    }
-                    if (Fragment3)
-                    {
-                        KiMax = 6000;
-                        if (Fragment3 && playerTrait == "Legendary" && NPC.downedBoss1)
-                        {
-                            KiMax = 12000;
-                        }
-                        if (Fragment4)
-                        {
-                            KiMax = 8000;
-                            if (Fragment4 && playerTrait == "Legendary" && NPC.downedBoss1)
-                            {
-                                KiMax = 16000;
-                            }
-                            if (Fragment5)
-                            {
-                                KiMax = 10000;
-                                if (Fragment5 && playerTrait == "Legendary" && NPC.downedBoss1)
-                                {
-                                    KiMax = 20000;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                KiMax = 1000;
-            }
             if (KiEssence1)
             {
                 KiRegenRate = 2;
@@ -1159,6 +1118,7 @@ namespace DBZMOD
             infuserRuby = false;
             infuserSapphire = false;
             infuserTopaz = false;
+            KiMax2 = 0;
             //IsCharging = false;
         }
 
