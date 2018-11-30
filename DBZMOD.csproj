@@ -335,6 +335,8 @@
     <Compile Include="Projectiles\BigBangKamehamehaBall.cs" />
     <Compile Include="Projectiles\BigBangKamehamehaBlast.cs" />
     <Compile Include="Projectiles\BigBangKamehamehaTrail.cs" />
+    <Compile Include="Projectiles\BlackBlitz.cs" />
+    <Compile Include="Projectiles\BlackBlitzLong.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
     <Compile Include="Projectiles\BlindingBladeProj.cs" />
     <Compile Include="Projectiles\CandyLaserBlast.cs" />
