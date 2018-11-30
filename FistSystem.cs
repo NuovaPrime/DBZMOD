@@ -20,23 +20,6 @@ namespace DBZMOD
     class FistSystem
     {
         #region Variables
-        private TriggersPack triggersPack;
-        private bool IsDashLeftJustPressed;
-        private bool IsDashLeftGapped;
-        private bool IsDashRightJustPressed;
-        private bool IsDashRightGapped;
-        private bool IsDashUpJustPressed;
-        private bool IsDashUpGapped;
-        private bool IsDashDownJustPressed;
-        private bool IsDashDownGapped;
-        private bool IsDashDiagonalUpHeld;
-        private bool IsDashDiagonalDownHeld;
-        private int DashTimer;
-        private int HoldTimer;
-        private int FlurryTimer;
-        private int BlockTimer;
-        private bool LightPunchPressed;
-        private bool LightPunchHeld;
         public bool EyeDowned;
         public bool BeeDowned;
         public bool WallDowned;
@@ -47,6 +30,8 @@ namespace DBZMOD
         private int HeavyPunchDamage;
         private int FlurryPunchDamage;
         private int ShootSpeed;
+        private int ZanzokenCooldown;
+        private int ZanzokenTimer;
         #endregion
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
@@ -279,11 +264,13 @@ namespace DBZMOD
             float stepMaximum = Math.Max(Math.Abs(xOffset), Math.Abs(yOffset));
             float xStep = xOffset / stepMaximum;
             float yStep = yOffset / stepMaximum;
+            Vector2 finalVelocity = new Vector2(0, 0);
             for (float f = 0f; f < stepMaximum; f += 1.0f)
             {
                 float xPos = xStep * f;
                 float yPos = yStep * f;
-                Vector2 newPosition = origin + new Vector2(xPos, yPos);
+                finalVelocity = new Vector2(xPos, yPos);
+                Vector2 newPosition = origin + finalVelocity;
 
                 // do a tile collision check. if this returns anything other than new position, we have collision.
                 bool isCollided = Collision.SolidCollision(newPosition, player.width, player.height);
@@ -304,12 +291,14 @@ namespace DBZMOD
                     var playerRect = player.getRect();
                     if (npcRect.Intersects(playerRect))
                     {
-                        // do npc-based teleport to a safe position
+                        // do npc-based teleport to a safe position, this comes without a velocity boost so you don't fly into an enemy.
                         PerformSafeZanzokenToNPC(player, npc);
                         return;
                     }
-                }                
+                }
             }
+
+            player.velocity += finalVelocity;
         }
 
         public void PerformSafeZanzokenToNPC(Player player, NPC npc)

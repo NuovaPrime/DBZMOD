@@ -332,25 +332,25 @@ namespace DBZMOD.Util
         public static bool ShouldDashUpLeft()
         {
             return CurrentControlState[Controls.Left].state == ControlStates.PressedTwice
-                    && IsPressed(Controls.Up);
+                    && CurrentControlState[Controls.Up].state == ControlStates.PressedAndHeld;
         }
 
         public static bool ShouldDashUpRight()
         {
             return CurrentControlState[Controls.Right].state == ControlStates.PressedTwice
-                    && IsPressed(Controls.Up);
+                    && CurrentControlState[Controls.Up].state == ControlStates.PressedAndHeld;
         }
 
         public static bool ShouldDashDownLeft()
         {
             return CurrentControlState[Controls.Left].state == ControlStates.PressedTwice
-                    && IsPressed(Controls.Down);
+                    && CurrentControlState[Controls.Down].state == ControlStates.PressedAndHeld;
         }
 
         public static bool ShouldDashDownRight()
         {
             return CurrentControlState[Controls.Right].state == ControlStates.PressedTwice
-                    && IsPressed(Controls.Down);
+                    && CurrentControlState[Controls.Down].state == ControlStates.PressedAndHeld;
         }
 
         public static void ProcessControlPress(Controls control)
@@ -382,8 +382,11 @@ namespace DBZMOD.Util
                 switch (previousControlState.state)
                 {
                     case ControlStates.Released:
-                    case ControlStates.PressedTwice:
                         currentState = ControlStates.PressedOnce;
+                        break;
+                    case ControlStates.PressedTwice:
+                        // prevents you from chaining dashes on third/subsequent presses
+                        currentState = ControlStates.Released;
                         break;
                     case ControlStates.PressedOnce:
                     case ControlStates.PressedAndHeld:
