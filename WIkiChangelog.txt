@@ -215,3 +215,24 @@
 
 3. Fixed bug where [[Ki Infusers]] applied to all damage types, not just [[Ki]].
 
+
+V1.0.6.6
+
+== Additions ==
+
+1. Added flavor text to all the [[Ki Crystals]].
+
+== Changes ==
+
+1. All Super Saiyan damage multipliers have been reduced by 50% for non-[[Ki]] damage.
+
+== Fixes ==
+
+1. Fixed bug where [[Kaio Crystal]] worked in the vanity slot.
+
+2. Fixed bug where [[Kaio Crystal]] worked on [[Super Saiyan 3]]'s health drain.
+
+3. Fixed bug where your aura was misaligned while [[Flight|Flying]] downwards.
+
+4. Fixed bug where [[Super Saiyan 3]]'s health drain still drained below 30% [[Ki]].
+

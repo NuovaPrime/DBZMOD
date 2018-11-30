@@ -9,7 +9,7 @@ namespace DBZMOD.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Pure Ki Crystal");
-			Tooltip.SetDefault("-Tier 5 Material-");
+			Tooltip.SetDefault("The glowing radiance of the world lives within.");
 		}
 
 		public override void SetDefaults()

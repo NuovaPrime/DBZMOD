@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.14f;
             MyPlayer.ModPlayer(player).KiCrit += 16;
-            MyPlayer.ModPlayer(player).KiMax += 500;
+            MyPlayer.ModPlayer(player).KiMax2 += 500;
             MyPlayer.ModPlayer(player).KiRegen += 3;
             player.moveSpeed += 0.26f;
 

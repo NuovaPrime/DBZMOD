@@ -34,14 +34,14 @@ namespace DBZMOD.Items.Armor
             player.setBonus = "9% Increased Ki Damage" +
                 "\n+200 Max Ki";
             MyPlayer.ModPlayer(player).KiDamage += 0.09f;
-            MyPlayer.ModPlayer(player).KiMax += 200;
+            MyPlayer.ModPlayer(player).KiMax2 += 200;
         }
 
         public override void UpdateEquip(Player player)
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.13f;
             MyPlayer.ModPlayer(player).KiCrit += 11;
-            MyPlayer.ModPlayer(player).KiMax += 300;
+            MyPlayer.ModPlayer(player).KiMax2 += 300;
         }
 
         public override void AddRecipes()

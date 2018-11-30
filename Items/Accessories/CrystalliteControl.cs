@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiMax += 500;
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 += 500;
                 player.GetModPlayer<MyPlayer>(mod).chargeMoveSpeed += 0.5f;
                 player.GetModPlayer<MyPlayer>(mod).crystalliteControl = true;
             }

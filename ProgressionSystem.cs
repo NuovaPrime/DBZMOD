@@ -85,7 +85,7 @@ namespace DBZMOD
 
             if (ProcessCost(EXPCOST))
             {
-                MyPlayer.ModPlayer(player).KiMax += kiamount;
+                MyPlayer.ModPlayer(player).OverallKiMax += kiamount;
             }
         }
 

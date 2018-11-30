@@ -45,7 +45,7 @@ namespace DBZMOD.Items.Armor.Vanity
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).KiCrit += 20;
-            MyPlayer.ModPlayer(player).KiMax += 1000;
+            MyPlayer.ModPlayer(player).KiMax2 += 1000;
             MyPlayer.ModPlayer(player).ChargeLimitAdd += 2;
 
         }

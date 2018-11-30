@@ -44,7 +44,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).KiCrit += 20;
-            MyPlayer.ModPlayer(player).KiMax += 1000;
+            MyPlayer.ModPlayer(player).KiMax2 += 1000;
             MyPlayer.ModPlayer(player).ChargeLimitAdd += 2;
 
         }

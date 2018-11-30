@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.08f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax += 250;
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 += 250;
                 player.endurance += 0.09f;
                 player.meleeDamage += 0.09f;
                 player.meleeSpeed += 0.09f;
