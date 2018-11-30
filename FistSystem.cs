@@ -200,6 +200,7 @@ namespace DBZMOD
 
         public float GetZanzokenDistance()
         {
+            
             // TODO
             // insert things that affect zanzoken distance here, like accessories or unlocked abilities.
             return BASE_ZANZOKEN_TRAVEL_DISTANCE;

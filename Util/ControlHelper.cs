@@ -20,6 +20,7 @@ namespace DBZMOD.Util
         public const int LIGHT_ATTACK_HOLD_DURATION_TICKS = 60;
         public const int DASH_INPUT_WINDOW_TICKS = 15;
         public const int HELD_TIME_LIMIT_FOR_SINGLE_PRESS = 5;
+        public const int FRAME_WINDOW_PADDING_FOR_DIAGONAL_DASH = 5;
 
         public static int GetInputTimeLimit(Controls control)
         {

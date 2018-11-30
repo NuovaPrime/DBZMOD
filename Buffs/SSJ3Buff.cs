@@ -27,6 +27,9 @@ namespace DBZMOD.Buffs
                 if (MyPlayer.ModPlayer(player).KiCurrent < (int)(MyPlayer.ModPlayer(player).KiMax * 0.30))
                 {
                     HealthDrainRate = 10;
+                } else
+                {
+                    HealthDrainRate = 0;
                 }
             }
             else
@@ -35,6 +38,10 @@ namespace DBZMOD.Buffs
                 if (MyPlayer.ModPlayer(player).KiCurrent < (int)(MyPlayer.ModPlayer(player).KiMax * 0.30))
                 {
                     HealthDrainRate = 20;
+                }
+                else
+                {
+                    HealthDrainRate = 0;
                 }
             }
             KiDrainBuffMulti = 2.1f;
