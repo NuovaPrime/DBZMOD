@@ -122,7 +122,6 @@
     <Compile Include="Effects\CircleShader.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
-    <Compile Include="Enums\FistSystemAction.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
