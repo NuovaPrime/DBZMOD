@@ -34,32 +34,33 @@ namespace DBZMOD.Items.Weapons.Fist
             DisplayName.SetDefault("Fist");
             Tooltip.SetDefault("The most essential skill of any martial artist.");
         }
+
+        private const string FistLine1 = "\nLeft click to punch, has no cooldown between attacks.";
+        private const string FistLine2 = "\nHolding Left click allows you to do a flurry attack.";
+        private const string FistLine3 = "\nRight click to do a ki infused punch, this sends anything flying.";
+        private const string ZanzokenLine1 = "\nDouble tap in any direction to do a short ranged teleport, teleporting towards a enemy makes you teleport to them.";
+        private const string ZanzokenHeavyLine1 = "\nHeavy hitting after teleporting to a enemy will send them flying even harder.";
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             Player player = Main.LocalPlayer;
+            string tooltip = FistLine1;
             if (MyPlayer.ModPlayer(player).CanUseFlurry)
             {
-                tooltip = "\nLeft click to punch, has no cooldown between attacks." +
-                "\nHolding Left click allows you to do a flurry attack.";
+                tooltip += FistLine2;
             }
-            else if (MyPlayer.ModPlayer(player).CanUseHeavyHit)
+            if (MyPlayer.ModPlayer(player).CanUseHeavyHit)
             {
-                tooltip = "\nLeft click to punch, has no cooldown between attacks." +
-                "\nHolding Left click allows you to do a flurry attack." +
-                "\nRight click to do a ki infused punch, this sends anything flying.";
+                tooltip += FistLine3;
             }
-            else if (MyPlayer.ModPlayer(player).CanUseZanzoken)
+            if (MyPlayer.ModPlayer(player).CanUseZanzoken)
             {
-                tooltip = "\nLeft click to punch, has no cooldown between attacks." +
-                "\nHolding Left click allows you to do a flurry attack." +
-                "\nRight click to do a ki infused punch, this sends anything flying." +
-                "\nDouble tap in any direction to do a short ranged teleport, teleporting towards a enemy makes you teleport to them." +
-                "\nHeavy hitting after teleporting to a enemy will send them flying even harder.";
+                tooltip += ZanzokenLine1;
             }
-            else
+            if (MyPlayer.ModPlayer(player).CanUseHeavyHit && MyPlayer.ModPlayer(player).CanUseZanzoken)
             {
-                tooltip = "\nLeft click to punch, has no cooldown between attacks.";
+                tooltip += ZanzokenHeavyLine1;
             }
+
             foreach (TooltipLine line2 in tooltips)
             {
                 if (line2.mod == "Terraria" && line2.Name == "Tooltip0")
@@ -70,14 +71,14 @@ namespace DBZMOD.Items.Weapons.Fist
             base.ModifyTooltips(tooltips);
         }
 
-        /*public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(null, "StableKiCrystal", 20);
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(null, "StableKiCrystal", 20);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
-	        recipe.AddRecipe();
-		}*/
+            recipe.AddRecipe();
+        }
         /* public override void HoldItem(Player player)
          {
              Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KiFistProj"), 0, 0, player.whoAmI);

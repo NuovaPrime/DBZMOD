@@ -202,6 +202,7 @@ namespace DBZMOD
         #region Classes
         FlightSystem m_flightSystem = new FlightSystem();
         ProgressionSystem m_progressionSystem = new ProgressionSystem();
+        FistSystem m_fistSystem = new FistSystem();
         #endregion
 
 
@@ -730,12 +731,17 @@ namespace DBZMOD
             return m_progressionSystem;
         }
 
-
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             m_flightSystem.Update(triggersSet, player);
 
             m_progressionSystem.Update(triggersSet, player);
+
+            // dropping the fist wireup here. Fingers crossed.
+            if (player.HeldItem.Name.Equals("Fist"))
+            {
+                m_fistSystem.Update(triggersSet, player, mod);
+            }
 
             if (FlyToggle.JustPressed)
             {
