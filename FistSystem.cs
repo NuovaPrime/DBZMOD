@@ -12,6 +12,7 @@ using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {
@@ -47,164 +48,87 @@ namespace DBZMOD
         private int ShootSpeed;
         #endregion
 
-        #region Enums
-        // these are to coordinate with inputs in an array
-        public enum BaseDashDirections
-        {
-            None = 0,
-            Up = 1,
-            Down = 2,
-            Left = 3,
-            Right = 4
-        };
-
-        // enum to handle dash direction states
-        [Flags]
-        public enum DashDirectionStates : short
-        {
-            None = 0,
-            Up = 1,
-            Down = 1 << 1,
-            Left = 1 << 2,
-            Right = 1 << 3,
-            UpLeft = Up & Left,
-            UpRight = Up & Right,
-            DownLeft = Down & Left,
-            DownRight = Down & Right
-        };
-
-        [Flags]
-        public enum ControlStates : short
-        {
-            Released = 0,
-            PressedOnce = 1,
-            PressedAndReleased = 1 << 1,
-            PressedTwice = 1 << 2,
-            PressedAndHeld = 1 << 3
-        }
-        #endregion
-
-        #region ControlStateHandler
-        // scrape trigger states and return new state based on previous state.
-        public DashDirectionStates GetInputState(TriggersSet inputState)
-        {
-            return DashDirectionStates.None;
-        }
-        #endregion
-
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
             Vector2 projvelocity = Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
 
+            // returns a list of actions to be performed based on trigger states.            
+            var actionsToPerform = ControlHelper.ProcessInputs(triggersSet);
+
             #region Mouse Clicks
-            if (triggersSet.MouseLeft)
+            if (actionsToPerform.BlockPhase1)//both click, for blocking
             {
-                HoldTimer++;
-                if (HoldTimer > 60)
+                MyPlayer.ModPlayer(player).BlockState = 1;
+            }
+            else if (actionsToPerform.BlockPhase2)
+            {
+                MyPlayer.ModPlayer(player).BlockState = 2;
+            }
+            else if (actionsToPerform.BlockPhase3)
+            {
+                MyPlayer.ModPlayer(player).BlockState = 3;
+            } else
+            {
+                MyPlayer.ModPlayer(player).BlockState = 0;
+                if (actionsToPerform.Flurry && MyPlayer.ModPlayer(player).CanUseFlurry)
                 {
-                    LightPunchHeld = true;
-                    LightPunchPressed = false;
-                    if (LightPunchHeld && MyPlayer.ModPlayer(player).CanUseFlurry)
-                    {
-                        FlurryTimer++;
-
-                    }
-
+                    // Do Flurry
                 }
-                if (!LightPunchPressed && !LightPunchHeld)
+                else if (actionsToPerform.LightAttack)
                 {
-                    LightPunchPressed = true;
                     ShootSpeed = 2;
                     Projectile.NewProjectile(player.position, projvelocity, BasicFistProjSelect(mod), BasicPunchDamage, 5);
                 }
-
-            }
-            if (triggersSet.MouseRight) //Right click
-            {
-                if (!player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && MyPlayer.ModPlayer(player).CanUseHeavyHit)
+                else if (actionsToPerform.HeavyAttack)
                 {
-                    Projectile.NewProjectile(player.position, projvelocity, mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
-                }
-            }
-            if (triggersSet.MouseRight && triggersSet.MouseLeft)//both click, for blocking
-            {
-                BlockTimer++;
-                if (BlockTimer < 30)
-                {
-                    MyPlayer.ModPlayer(player).BlockState = 1;
-                    if (BlockTimer > 30 && BlockTimer < 120)
+                    if (!player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && MyPlayer.ModPlayer(player).CanUseHeavyHit)
                     {
-                        MyPlayer.ModPlayer(player).BlockState = 2;
-                        if (BlockTimer > 120)
-                        {
-                            MyPlayer.ModPlayer(player).BlockState = 3;
-                        }
+                        Projectile.NewProjectile(player.position, projvelocity, mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
                     }
                 }
-            }
-            else
-            {
-                MyPlayer.ModPlayer(player).BlockState = 0;
-                LightPunchPressed = false;
-                LightPunchHeld = false;
             }
             #endregion
 
             #region Dash Checks
-            // check initial left input for dash
-            if (triggersSet.Left && !IsDashLeftJustPressed)
+            if (actionsToPerform.DashUp)
             {
-                IsDashLeftJustPressed = true;
-                DashTimer = 0;
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash up
             }
-
-            // same for right
-            if (triggersSet.Right && !IsDashRightJustPressed)
+            if (actionsToPerform.DashDown)
             {
-                IsDashRightJustPressed = true;
-                DashTimer = 0;
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash down
             }
-
-            // same for up
-
-            // same for down
-
-            // check for control release, while the flags set above are true.
-            if (!triggersSet.Left && IsDashLeftJustPressed)
+            if (actionsToPerform.DashLeft)
             {
-                IsDashLeftGapped = true;
-            }
-
-            // same for right
-            if (!triggersSet.Right && IsDashRightJustPressed)
-            {
-                IsDashRightGapped = true;
-            }
-
-            if (triggersSet.Left && IsDashLeftJustPressed && IsDashLeftGapped)
-            {
-                IsDashLeftGapped = false;
-                IsDashLeftJustPressed = false;
                 MyPlayer.ModPlayer(player).IsDashing = true;
                 //do dash left
             }
-
-            if (triggersSet.Right && IsDashRightJustPressed && IsDashRightGapped)
+            if (actionsToPerform.DashRight)
             {
-                IsDashRightGapped = false;
-                IsDashRightJustPressed = false;
                 MyPlayer.ModPlayer(player).IsDashing = true;
                 //do dash right
             }
-
-            if (IsDashLeftJustPressed)
+            if (actionsToPerform.DashUpLeft)
             {
-                DashTimer++;
-                if (DashTimer > 15)
-                {
-                    IsDashLeftJustPressed = false;
-                    DashTimer = 0;
-                }
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash up left
+            }
+            if (actionsToPerform.DashUpRight)
+            {
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash up right
+            }
+            if (actionsToPerform.DashDownLeft)
+            {
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash down left
+            }
+            if (actionsToPerform.DashDownRight)
+            {
+                MyPlayer.ModPlayer(player).IsDashing = true;
+                //do dash down right
             }
             #endregion
 

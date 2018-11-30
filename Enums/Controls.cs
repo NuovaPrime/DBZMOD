@@ -12,16 +12,12 @@ namespace DBZMOD.Enums
     public enum Controls
     {
         None = 0,
-        LightPunch = 1,
-        HeavyPunch = 2,
-        DashUp = 3,
-        DashDown = 4,
-        DashLeft = 5,
-        DashRight = 6,
-        DashUpLeft = 7,
-        DashUpRight = 8,
-        DashDownLeft = 9,
-        DashDownRight = 10,
-        Block = 11
+        LightAttack = 1,
+        HeavyAttack = 2,
+        Up = 3,
+        Down = 4,
+        Left = 5,
+        Right = 6,
+        Block = 7
     }
 }
