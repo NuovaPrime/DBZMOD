@@ -6,7 +6,7 @@ using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Projectiles
+namespace DBZMOD.Projectiles
 {
     class TransmissionLinesProj : ModProjectile
     {

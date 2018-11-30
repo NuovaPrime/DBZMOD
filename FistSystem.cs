@@ -299,13 +299,22 @@ namespace DBZMOD
                     }
                 }
             }
+            // tone down velocity until it isn't insane.
+            bool isVelocityNormalized = false;
+            while (!isVelocityNormalized)
+            {                
+                finalVelocity *= 0.9f;
+                isVelocityNormalized = (finalVelocity.X * finalVelocity.X) + (finalVelocity.Y * finalVelocity.Y) <= 1f;
+            }
 
             if (newPosition != origin)
             {
-                // the player has moved. Spawn the visual and audio effects.
+                // the player has moved. Spawn the visual and audio effects.                
+                Projectile.NewProjectile(player.Center.X, player.Center.Y, finalVelocity.X, finalVelocity.Y, mod.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
 
-                Projectile.NewProjectile(player.position.X, player.position.Y, finalVelocity.X * 0.06f, finalVelocity.Y * 0.06f, mod.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                player.position = newPosition;
             }
+
             player.velocity += finalVelocity;
         }
 
