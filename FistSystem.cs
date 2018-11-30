@@ -79,42 +79,42 @@ namespace DBZMOD
             if (actionsToPerform.DashUp)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Up);
+                PerformZanzoken(mod, player, Controls.Up);
             }
             if (actionsToPerform.DashDown)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Down);
+                PerformZanzoken(mod, player, Controls.Down);
             }
             if (actionsToPerform.DashLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Left);
+                PerformZanzoken(mod, player, Controls.Left);
             }
             if (actionsToPerform.DashRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Right);
+                PerformZanzoken(mod, player, Controls.Right);
             }
             if (actionsToPerform.DashUpLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Up, Controls.Left);
+                PerformZanzoken(mod, player, Controls.Up, Controls.Left);
             }
             if (actionsToPerform.DashUpRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Up, Controls.Right);
+                PerformZanzoken(mod, player, Controls.Up, Controls.Right);
             }
             if (actionsToPerform.DashDownLeft)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Down, Controls.Left);
+                PerformZanzoken(mod, player, Controls.Down, Controls.Left);
             }
             if (actionsToPerform.DashDownRight)
             {
                 MyPlayer.ModPlayer(player).IsDashing = true;
-                PerformZanzoken(player, Controls.Down, Controls.Right);
+                PerformZanzoken(mod, player, Controls.Down, Controls.Right);
             }
             #endregion
 
@@ -233,7 +233,7 @@ namespace DBZMOD
             return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed);
         }
 
-        public void PerformZanzoken(Player player, params Controls[] directions)
+        public void PerformZanzoken(Mod mod, Player player, params Controls[] directions)
         {
             // checks that would prevent you from using Zanzoken
             if (!CanZanzoken(player))
@@ -266,12 +266,13 @@ namespace DBZMOD
             float xStep = xOffset / stepMaximum;
             float yStep = yOffset / stepMaximum;
             Vector2 finalVelocity = new Vector2(0, 0);
+            Vector2 newPosition = origin;
             for (float f = 0f; f < stepMaximum; f += 1.0f)
             {
                 float xPos = xStep * f;
                 float yPos = yStep * f;
                 finalVelocity = new Vector2(xPos, yPos);
-                Vector2 newPosition = origin + finalVelocity;
+                newPosition = origin + finalVelocity;
 
                 // do a tile collision check. if this returns anything other than new position, we have collision.
                 bool isCollided = Collision.SolidCollision(newPosition, player.width, player.height);
@@ -299,6 +300,12 @@ namespace DBZMOD
                 }
             }
 
+            if (newPosition != origin)
+            {
+                // the player has moved. Spawn the visual and audio effects.
+
+                Projectile.NewProjectile(player.position.X, player.position.Y, finalVelocity.X * 0.06f, finalVelocity.Y * 0.06f, mod.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+            }
             player.velocity += finalVelocity;
         }
 

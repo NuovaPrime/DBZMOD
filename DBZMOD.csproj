@@ -415,6 +415,7 @@
     <Compile Include="Projectiles\SuperSpiritBombBall.cs" />
     <Compile Include="Projectiles\SuperSpiritBombExplosion.cs" />
     <Compile Include="Projectiles\SuperSpiritBombProjectile.cs" />
+    <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
     <Compile Include="Tiles\KaiTable.cs" />

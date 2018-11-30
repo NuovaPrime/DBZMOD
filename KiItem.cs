@@ -39,7 +39,6 @@ namespace DBZMOD
         public float ballscale = 1f;
         public int dusttype;
 
-
         public override bool CloneNewInstances
         {
             get
