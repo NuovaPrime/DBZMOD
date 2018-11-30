@@ -36,16 +36,24 @@ namespace DBZMOD
                 MyPlayer.ModPlayer(player).IsKaioken = true;
                 Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
             }
-            if (player.lifeRegen > 0)
+
+            // only neuter the life regen if this is a draining buff.
+            if (HealthDrainRate > 0)
             {
-                player.lifeRegen = 0;
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+                player.lifeRegenTime = 0;
+
+                // only apply the kaio crystal benefit if this is kaioken
+                bool isKaioCrystalEquipped = player.IsItemEquipped("Kaio Crystal");
+                float drainMult = (IsKaioken && isKaioCrystalEquipped ? 0.5f : 1f);
+
+                // recalculate the final health drain rate and reduce regen by that amount
+                OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
+                player.lifeRegen -= OverallHealthDrainRate;
             }
-            player.lifeRegenTime = 0;
-            
-            bool isKaioCrystalEquipped = player.IsItemEquipped("Kaio Crystal");
-            float drainMult = (isKaioCrystalEquipped ? 0.5f : 1f);
-            OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
-            player.lifeRegen -= OverallHealthDrainRate;
             // Main.NewText(string.Format("Has Crystal Equipped: {0} - Drain Rate: {1}", isKaioCrystalEquipped, OverallHealthDrainRate));
             if (IsSSJ)
             {

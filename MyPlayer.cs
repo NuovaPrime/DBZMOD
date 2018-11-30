@@ -539,6 +539,7 @@ namespace DBZMOD
             OverloadBar.visible = false;
             KiBar.visible = true;
         }
+
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
             if (player.HasBuff(mod.BuffType("SSJGBuff")))
@@ -733,6 +734,7 @@ namespace DBZMOD
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             m_flightSystem.Update(triggersSet, player);
+
             m_progressionSystem.Update(triggersSet, player);
 
             if (FlyToggle.JustPressed)
