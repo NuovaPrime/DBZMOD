@@ -128,18 +128,21 @@ namespace DBZMOD
             return FLURRY_COOLDOWN_TIMER;
         }
 
+        public Vector2 GetProjectileVelocity(Player player)
+        {
+            return Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
+        } 
+
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
             HandleZanzokenAndComboRecovery();
-
-            Vector2 projvelocity = Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
 
             if (FlurryActiveTimer > 0)
             {
                 if (FlurryActiveTimer % 2 == 0)
                 {
                     // spawn flurry attack                    
-                    Projectile.NewProjectile(player.position, projvelocity, BasicFistProjSelect(mod), FlurryPunchDamage, 3);
+                    Projectile.NewProjectile(player.position, GetProjectileVelocity(player), BasicFistProjSelect(mod), FlurryPunchDamage, 3);
                 }
                 FlurryActiveTimer--;
 
@@ -173,7 +176,7 @@ namespace DBZMOD
                 else if (actionsToPerform.LightAttack)
                 {
                     ShootSpeed = 2;
-                    Projectile.NewProjectile(player.position, projvelocity, BasicFistProjSelect(mod), BasicPunchDamage, 5);
+                    Projectile.NewProjectile(player.position, GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
                 }
                 else if (actionsToPerform.HeavyAttack)
                 {
@@ -185,7 +188,7 @@ namespace DBZMOD
                         }
                         else
                         {
-                            Projectile.NewProjectile(player.position, projvelocity, mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
+                            Projectile.NewProjectile(player.position, GetProjectileVelocity(player), mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
                         }
                     }
                 }
