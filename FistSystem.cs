@@ -100,6 +100,9 @@ namespace DBZMOD
 
             // also reduce the cooldown for the Zanzoken Heavy Combo
             ZanzokenHeavyCooldownTimer = Math.Max(0, ZanzokenHeavyCooldownTimer - 1);
+
+            // also reduce the cooldown for flurries
+            FlurryCooldownTimer = Math.Max(0, FlurryCooldownTimer - 1);            
         }
 
         // return whether the player is in a fit state to use a zan heavy combo
@@ -170,6 +173,7 @@ namespace DBZMOD
                 MyPlayer.ModPlayer(player).BlockState = 0;
                 if (actionsToPerform.Flurry && CanPerformFlurry(player))
                 {
+                    ShootSpeed = 15;
                     FlurryActiveTimer = GetFlurryDuration(player);
                     FlurryCooldownTimer = GetFlurryCooldownDuration(player);
                 }
