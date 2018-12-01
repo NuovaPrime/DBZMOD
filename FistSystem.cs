@@ -115,8 +115,6 @@ namespace DBZMOD
 
         public bool CanPerformFlurry(Player player)
         {
-            // DEBUG REMOVE ME
-            return FlurryCooldownTimer == 0;
             // Is the flurry on cooldown?
             return FlurryCooldownTimer == 0 && MyPlayer.ModPlayer(player).CanUseFlurry;
         }
@@ -134,7 +132,15 @@ namespace DBZMOD
         public Vector2 GetProjectileVelocity(Player player)
         {
             return Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
-        } 
+        }
+
+        public Vector2 GetProjectilePosition(Player player)
+        {
+            float randX = Main.rand.NextFloat(16f);
+            float randY = Main.rand.NextFloat(16f);
+            Vector2 randVector = new Vector2(randX, randY);
+            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.position) * 16f;
+        }
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
@@ -145,7 +151,7 @@ namespace DBZMOD
                 if (FlurryActiveTimer % 2 == 0)
                 {
                     // spawn flurry attack                    
-                    Projectile.NewProjectile(player.position, GetProjectileVelocity(player), BasicFistProjSelect(mod), FlurryPunchDamage, 3);
+                    Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), FlurryPunchDamage, 3);
                 }
                 FlurryActiveTimer--;
 
@@ -173,14 +179,14 @@ namespace DBZMOD
                 MyPlayer.ModPlayer(player).BlockState = 0;
                 if (actionsToPerform.Flurry && CanPerformFlurry(player))
                 {
-                    ShootSpeed = 15;
+                    ShootSpeed = 2;
                     FlurryActiveTimer = GetFlurryDuration(player);
                     FlurryCooldownTimer = GetFlurryCooldownDuration(player);
                 }
                 else if (actionsToPerform.LightAttack)
                 {
                     ShootSpeed = 2;
-                    Projectile.NewProjectile(player.position, GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
+                    Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
                 }
                 else if (actionsToPerform.HeavyAttack)
                 {
@@ -303,20 +309,21 @@ namespace DBZMOD
         }
         public int BasicFistProjSelect(Mod mod)
         {
-            switch (Main.rand.Next((4)))
-            {
-                case 0:
-                    return mod.ProjectileType("KiFistProj1");
-                case 1:
-                    return mod.ProjectileType("KiFistProj2");
-                case 2:
-                    return mod.ProjectileType("KiFistProj3");
-                case 3:
-                    return mod.ProjectileType("KiFistProj4");
-                default:
-                    return 0;
+            return mod.ProjectileType("KiFistProj");
+            //switch (Main.rand.Next((4)))
+            //{
+            //    case 0:
+            //        return mod.ProjectileType("KiFistProj1");
+            //    case 1:
+            //        return mod.ProjectileType("KiFistProj2");
+            //    case 2:
+            //        return mod.ProjectileType("KiFistProj3");
+            //    case 3:
+            //        return mod.ProjectileType("KiFistProj4");
+            //    default:
+            //        return 0;
 
-            }
+            //}
         }
 
 

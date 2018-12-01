@@ -222,7 +222,8 @@ namespace DBZMOD.Util
         public static bool ShouldPerformLightAttack()
         {
             // experiment with Press Once and allow it to fire instantly if this feels completely awful.
-            return CurrentControlState[Controls.LightAttack].state == ControlStates.PressedAndReleased
+            return (CurrentControlState[Controls.LightAttack].state == ControlStates.PressedOnce
+                    || CurrentControlState[Controls.LightAttack].state == ControlStates.PressedTwice)
                 && CurrentControlState[Controls.HeavyAttack].state == ControlStates.Released;
         }
 
@@ -399,7 +400,8 @@ namespace DBZMOD.Util
                     case ControlStates.PressedAndReleased:
                         if (previousInputTimer <= GetInputTimeLimit(control) && doubleInputCooldown == 0)
                         {
-                            doubleInputCooldown = DOUBLE_INPUT_COOLDOWN;
+                            if (control != Controls.LightAttack)
+                                doubleInputCooldown = DOUBLE_INPUT_COOLDOWN;
                             currentState = ControlStates.PressedTwice;
                         } else
                         {
@@ -420,6 +422,11 @@ namespace DBZMOD.Util
                     case ControlStates.PressedAndHeld:
                         if (previousInputTimer <= GetInputTimeLimit(control))
                         {
+                            // light attack must be held for flurries.
+                            if (control == Controls.LightAttack)
+                            {
+                                inputTimer = 0;
+                            }
                             if (previousControlState.state == ControlStates.PressedAndHeld && previousHeldTimer <= GetHeldTimeLimit(control))
                             {
                                 currentState = ControlStates.PressedAndReleased;
