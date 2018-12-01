@@ -136,8 +136,8 @@ namespace DBZMOD
 
         public Vector2 GetProjectilePosition(Player player)
         {
-            float randX = Main.rand.NextFloat(16f);
-            float randY = Main.rand.NextFloat(16f);
+            float randX = Main.rand.NextFloat(-8f, 8f);
+            float randY = Main.rand.NextFloat(-8f, 8f);
             Vector2 randVector = new Vector2(randX, randY);
             return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.position) * 16f;
         }
