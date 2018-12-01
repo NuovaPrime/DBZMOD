@@ -25,9 +25,9 @@ namespace DBZMOD.Projectiles.Fists
             projectile.timeLeft = 10;
             projectile.ignoreWater = true;
             projectile.damage = 0;
-            projectile.penetrate = 1;
+            projectile.penetrate = 2;
             projectile.netUpdate = true;
-            projectile.aiStyle = 1;
+            projectile.aiStyle = 0;
         }
 
         public override bool CloneNewInstances
@@ -47,7 +47,7 @@ namespace DBZMOD.Projectiles.Fists
             projectile.rotation = Vector2.Normalize(projectile.velocity).ToRotation() + (float)(Math.PI / (Main.rand.NextBool() ? -2 : 2));
 
             projectile.alpha = Main.rand.Next(80, 160);
-            projectile.scale = 1.0f;
+            projectile.scale = 0.8f;
         }
 
         public override void SetStaticDefaults()

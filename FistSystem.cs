@@ -37,8 +37,8 @@ namespace DBZMOD
         private int ZanzokenHeavyCooldownTimer;
         private float ZanzokenKiCostMultiplier = 1f;
         private float ZanzokenDistanceMultiplier = 1f;
-        
-        
+        private int LightAttackCooldownTimer;
+
         #endregion
 
         #region Constants
@@ -78,6 +78,9 @@ namespace DBZMOD
 
         // change the base cooldown of the flurry attack
         public const int FLURRY_COOLDOWN_TIMER = 300;
+
+        // change the base cooldown of the light attack
+        public const int LIGHT_ATTACK_COOLDOWN = 5;        
         #endregion
 
         public void HandleZanzokenAndComboRecovery()
@@ -102,7 +105,10 @@ namespace DBZMOD
             ZanzokenHeavyCooldownTimer = Math.Max(0, ZanzokenHeavyCooldownTimer - 1);
 
             // also reduce the cooldown for flurries
-            FlurryCooldownTimer = Math.Max(0, FlurryCooldownTimer - 1);            
+            FlurryCooldownTimer = Math.Max(0, FlurryCooldownTimer - 1);
+
+            // and a cooldown for light attacks.
+            LightAttackCooldownTimer = Math.Max(0, LightAttackCooldownTimer - 1);
         }
 
         // return whether the player is in a fit state to use a zan heavy combo
@@ -119,6 +125,11 @@ namespace DBZMOD
             return FlurryCooldownTimer == 0 && MyPlayer.ModPlayer(player).CanUseFlurry;
         }
 
+        public bool CanPerformLightAttack(Player player)
+        {
+            return LightAttackCooldownTimer == 0;
+        }
+
         public int GetFlurryDuration(Player player)
         {
             return FLURRY_ACTIVE_TIMER;
@@ -131,7 +142,18 @@ namespace DBZMOD
 
         public Vector2 GetProjectileVelocity(Player player)
         {
-            return Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
+            // as this function is occurring, make the player face the correct direction...
+            Vector2 normalizedVector = Vector2.Normalize(Main.MouseWorld - player.Center);
+
+            if ((normalizedVector.ToRotation() + Math.PI / 2) < 0)
+            {
+                player.direction = -1;
+            } else
+            {
+                player.direction = 1;
+            }
+
+            return normalizedVector * ShootSpeed;
         }
 
         public Vector2 GetProjectilePosition(Player player)
@@ -139,7 +161,21 @@ namespace DBZMOD
             float randX = Main.rand.NextFloat(-8f, 8f);
             float randY = Main.rand.NextFloat(-8f, 8f);
             Vector2 randVector = new Vector2(randX, randY);
-            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.position) * 16f;
+            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.Center) * 16f;
+        }
+
+        public int GetLightAttackCooldown(Player player)
+        {
+            // Get the use speed of the player's light attack from wherever or whatever determines it.
+            var baseAttackSpeed = LIGHT_ATTACK_COOLDOWN;
+            return baseAttackSpeed;
+        }
+
+        public void PerformLightAttack(Mod mod, Player player)
+        {
+            ShootSpeed = 2;
+            Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
+            LightAttackCooldownTimer = GetLightAttackCooldown(player);
         }
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
@@ -183,10 +219,9 @@ namespace DBZMOD
                     FlurryActiveTimer = GetFlurryDuration(player);
                     FlurryCooldownTimer = GetFlurryCooldownDuration(player);
                 }
-                else if (actionsToPerform.LightAttack)
+                else if (actionsToPerform.LightAttack && CanPerformLightAttack(player))
                 {
-                    ShootSpeed = 2;
-                    Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
+                    PerformLightAttack(mod, player);
                 }
                 else if (actionsToPerform.HeavyAttack)
                 {
