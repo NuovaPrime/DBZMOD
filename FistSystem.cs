@@ -250,6 +250,7 @@ namespace DBZMOD
 
             // get the player's origin
             Vector2 origin = new Vector2(player.position.X, player.position.Y);
+            Vector2 originCenter = new Vector2(player.Center.X, player.Center.Y);
 
             // TODO  !!!
             // spawn the zanzoken projectile/effect at the player's origin
@@ -267,23 +268,38 @@ namespace DBZMOD
             float yStep = yOffset / stepMaximum;
             Vector2 finalVelocity = new Vector2(0, 0);
             Vector2 newPosition = origin;
+            Vector2 adaptiveOrigin = origin;
             for (float f = 0f; f < stepMaximum; f += 1.0f)
             {
                 float xPos = xStep * f;
                 float yPos = yStep * f;
                 finalVelocity = new Vector2(xPos, yPos);
-                newPosition = origin + finalVelocity;
+                newPosition = adaptiveOrigin + finalVelocity;
 
                 // do a tile collision check. if this returns anything other than new position, we have collision.
                 bool isCollided = Collision.SolidCollision(newPosition, player.width, player.height);
                 
                 if (isCollided)
                 {
-                    // we collided with a thing.
-                    return;
+                    // let's make the assumption we're running into a slope or halfblock. If moving us up by one causes us to be clear, we go there instead.
+                    if (yPos == 0f)
+                    {
+                        newPosition.Y -= 16f;
+                        adaptiveOrigin.Y -= 16f;
+                    } else
+                    {
+                        newPosition = newPosition - finalVelocity;
+                        break;
+                    }
+                    // we still collided. abandon all hope.
+                    if (Collision.SolidCollision(newPosition, player.width, player.height))
+                    {
+                        newPosition = newPosition - finalVelocity;
+                        break;
+                    }
                 }
 
-                player.position = newPosition;
+                Rectangle playerProjectedHitbox = new Rectangle((int)newPosition.X, (int)newPosition.Y, player.width, player.height);
                 
                 foreach(NPC npc in Main.npc)
                 {
@@ -304,13 +320,13 @@ namespace DBZMOD
             while (!isVelocityNormalized)
             {                
                 finalVelocity *= 0.9f;
-                isVelocityNormalized = (finalVelocity.X * finalVelocity.X) + (finalVelocity.Y * finalVelocity.Y) <= 1f;
+                isVelocityNormalized = (finalVelocity.X * finalVelocity.X) + (finalVelocity.Y * finalVelocity.Y) <= 10f;
             }
 
             if (newPosition != origin)
             {
                 // the player has moved. Spawn the visual and audio effects.                
-                Projectile.NewProjectile(player.Center.X, player.Center.Y, finalVelocity.X, finalVelocity.Y, mod.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(originCenter.X, originCenter.Y, finalVelocity.X, finalVelocity.Y, mod.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
 
                 player.position = newPosition;
             }
