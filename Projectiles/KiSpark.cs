@@ -42,7 +42,7 @@ namespace DBZMOD.Projectiles
 				projectile.localAI[0] = 1f;
 			}
 			Vector2 move = Vector2.Zero;
-			float distance = 400f;
+			float distance = 1000f;
 			bool target = false;
 			for (int k = 0; k < 200; k++)
 			{

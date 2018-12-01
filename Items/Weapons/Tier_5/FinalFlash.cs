@@ -18,8 +18,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.damage = 92;
 			item.knockBack = 3f;
 			item.useStyle = 5;
-			item.UseSound = SoundID.Item12;
-			item.useAnimation = 240;
+            item.useAnimation = 240;
 			item.useTime = 240;
 			item.width = 40;
 			item.noUseGraphic = true;
