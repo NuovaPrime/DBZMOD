@@ -21,6 +21,7 @@ namespace DBZMOD.Util
         public const int DASH_INPUT_WINDOW_TICKS = 15;
         public const int HELD_TIME_LIMIT_FOR_SINGLE_PRESS = 5;
         public const int FRAME_WINDOW_PADDING_FOR_DIAGONAL_DASH = 5;
+        public const int DOUBLE_INPUT_COOLDOWN = 15;
 
         public static int GetInputTimeLimit(Controls control)
         {
@@ -376,6 +377,8 @@ namespace DBZMOD.Util
             ControlStates currentState = ControlStates.Released;
             int previousInputTimer = previousControlState.inputTimer;
             int previousHeldTimer = previousControlState.heldTimer;
+            int previousDoubleInputCooldown = previousControlState.doubleInputCooldown;
+            int doubleInputCooldown = Math.Max(previousDoubleInputCooldown - 1, 0);
             int inputTimer = 0;
             int heldTimer = 0;
             if (isPressed)
@@ -394,8 +397,9 @@ namespace DBZMOD.Util
                         currentState = ControlStates.PressedAndHeld;
                         break;
                     case ControlStates.PressedAndReleased:
-                        if (previousInputTimer <= GetInputTimeLimit(control))
+                        if (previousInputTimer <= GetInputTimeLimit(control) && doubleInputCooldown == 0)
                         {
+                            doubleInputCooldown = DOUBLE_INPUT_COOLDOWN;
                             currentState = ControlStates.PressedTwice;
                         } else
                         {
@@ -408,9 +412,8 @@ namespace DBZMOD.Util
             {
                 switch (previousControlState.state)
                 {
-                    case ControlStates.Released:
-                    case ControlStates.PressedTwice:
-                        currentState = ControlStates.Released;                        
+                    case ControlStates.Released:                        
+                    case ControlStates.PressedTwice:                        
                         break;
                     case ControlStates.PressedOnce:
                     case ControlStates.PressedAndReleased:
@@ -436,6 +439,7 @@ namespace DBZMOD.Util
                         }
                         else
                         {
+                            inputTimer = 0;
                             currentState = ControlStates.Released;
                         }
                         break;
@@ -449,10 +453,16 @@ namespace DBZMOD.Util
                 if (currentState == ControlStates.PressedAndHeld)
                 {
                     heldTimer = previousHeldTimer + 1;
+                } else
+                {
+                    heldTimer = 0;
                 }
+            } else
+            {
+                inputTimer = 0;
             }
 
-            var result = new ControlStateMetadata(currentState, inputTimer, heldTimer);
+            var result = new ControlStateMetadata(currentState, inputTimer, heldTimer, doubleInputCooldown);
             return result;
         }
 
@@ -472,9 +482,9 @@ namespace DBZMOD.Util
             return PreviousControlState[control];
         }
 
-        public static void SetCurrentControlState(Controls control, ControlStates state, int inputTimer, int heldTimer)
+        public static void SetCurrentControlState(Controls control, ControlStates state, int inputTimer, int heldTimer, int doubleInputCooldown)
         {
-            SetCurrentControlState(control, new ControlStateMetadata(state, inputTimer, heldTimer));
+            SetCurrentControlState(control, new ControlStateMetadata(state, inputTimer, heldTimer, doubleInputCooldown));
         }
 
         public static void SetCurrentControlState(Controls control, ControlStateMetadata metaData)
@@ -498,20 +508,25 @@ namespace DBZMOD.Util
         // tracks the input length of a hold before it's considered too long to be just a normal press (and thus disqualified from things like dashing)
         public int heldTimer;
 
+        // the amount of time after firing a double-press sequence to delay before accepting another one. Prevents chaining zanzokens.
+        public int doubleInputCooldown;
+
         // default constructor for a control is a neutral/released state.
         public ControlStateMetadata()
         {
             this.state = ControlStates.Released;
             this.inputTimer = 0;
             this.heldTimer = 0;
+            this.doubleInputCooldown = 0;
         }
 
         // default constructor for a control is a neutral/released state.
-        public ControlStateMetadata(ControlStates initState, int initInputTimer, int initHeldTimer)
+        public ControlStateMetadata(ControlStates initState, int initInputTimer, int initHeldTimer, int doubleInputCooldown)
         {
             this.state = initState;
             this.inputTimer = initInputTimer;
             this.heldTimer = initHeldTimer;
+            this.doubleInputCooldown = doubleInputCooldown;
         }
     }
 

@@ -29,13 +29,54 @@ namespace DBZMOD
         private int BasicPunchDamage;
         private int HeavyPunchDamage;
         private int FlurryPunchDamage;
-        private int ShootSpeed;
-        private int ZanzokenCooldown;
+        private int ShootSpeed;        
         private int ZanzokenTimer;
+        private float ZanzokenKiCostMultiplier = 1f;
+        private float ZanzokenDistanceMultiplier = 1f;
         #endregion
+
+        #region Constants
+        // change how far the player can teleport.
+        public const float BASE_ZANZOKEN_TRAVEL_DISTANCE = 200f;
+
+        // change the number of frames you have to wait for zanzoken to refresh.
+        public const int BASE_ZANZOKEN_COOLDOWN = 60;
+
+        // change the base ki cost of zanzoken
+        public const int BASE_ZANZOKEN_KI_COST = 400;
+
+        // change the base limits for ki cost and distance
+        public const float BASE_ZANZOKEN_KI_COST_MINIMUM = 1f;
+        public const float BASE_ZANZOKEN_DISTANCE_MAXIMUM = 1f;
+
+        // change how much the ki cost increases by each time you use zanzoken
+        public const float BASE_ZANZOKEN_KI_COST_DELTA = 1.25f;
+
+        // change how much distance is lost each time you use zanzoken
+        public const float BASE_ZANZOKEN_KI_DISTANCE_DELTA = 0.75f;
+
+        // change how much ki cost is recovered from penalties each frame
+        public const float BASE_ZANZOKEN_KI_COST_RECOVERY = 0.99f;
+
+        // change how much distance is recovered from penalties each frame
+        public const float BASE_ZANZOKEN_DISTANCE_RECOVERY = 1.01f;
+        #endregion
+
+        public void HandleZanzokenRecovery()
+        {
+            // PUT STUFF HERE FOR BONUSES TO ZANZOKEN DISTANCE AND KI COST, IF DESIRED.
+
+            // take the greater of two numbers: the current ki cost multiplier after some decay, or the minimum ki cost multiplier.
+            ZanzokenKiCostMultiplier = Math.Max(BASE_ZANZOKEN_KI_COST_MINIMUM, ZanzokenKiCostMultiplier * BASE_ZANZOKEN_KI_COST_RECOVERY);
+
+            // take the lesser of two numbers: the current distance multiplier after some regrowth, or the maximum distance multiplier.
+            ZanzokenDistanceMultiplier = Math.Min(BASE_ZANZOKEN_DISTANCE_MAXIMUM, ZanzokenDistanceMultiplier * BASE_ZANZOKEN_DISTANCE_RECOVERY);
+        }
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
+            HandleZanzokenRecovery();
+
             Vector2 projvelocity = Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
 
             // returns a list of actions to be performed based on trigger states.            
@@ -195,8 +236,6 @@ namespace DBZMOD
             }
         }
 
-        // change this to change how far the player can teleport.
-        public const float BASE_ZANZOKEN_TRAVEL_DISTANCE = 200f;
 
         public float GetZanzokenDistance()
         {
@@ -230,7 +269,24 @@ namespace DBZMOD
 
         private bool CanZanzoken(Player player)
         {
-            return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed);
+            return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed) && !HasKiForZanzoken(player);
+        }
+
+        private bool HasKiForZanzoken(Player player)
+        {
+            return MyPlayer.ModPlayer(player).KiCurrent >= GetZanzokenKiCost(player);
+        }
+
+        private int GetZanzokenKiCost(Player player)
+        {
+            // PUT STUFF HERE TO IMPACT THE ZANZOKEN KI COST IF DESIRED.
+            return (int)Math.Ceiling(BASE_ZANZOKEN_KI_COST * ZanzokenKiCostMultiplier);
+        }
+
+
+        private void DeductKiForZanzoken(Player player)
+        {
+            MyPlayer.ModPlayer(player).KiCurrent -= GetZanzokenKiCost(player);
         }
 
         public void PerformZanzoken(Mod mod, Player player, params Controls[] directions)
@@ -240,6 +296,8 @@ namespace DBZMOD
             {
                 return;
             }
+
+            DeductKiForZanzoken(player);
 
             // if the directions array contains more than one parameter, this is a diagonal zanzoken.
             float offset = GetZanzokenDistance();
