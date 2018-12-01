@@ -19,10 +19,11 @@ namespace DBZMOD.Projectiles.Fists
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.hide = false;
-            projectile.width = 10;
-            projectile.height = 42;
+            // projectile is wider than it looks
+            projectile.width = 60;
+            projectile.height = 60;
             projectile.alpha = 80;
-            projectile.timeLeft = 10;
+            projectile.timeLeft = 4;
             projectile.ignoreWater = true;
             projectile.damage = 0;
             projectile.penetrate = 2;

@@ -145,23 +145,23 @@ namespace DBZMOD
             // as this function is occurring, make the player face the correct direction...
             Vector2 normalizedVector = Vector2.Normalize(Main.MouseWorld - player.Center);
 
-            if ((normalizedVector.ToRotation() + Math.PI / 2) < 0)
-            {
-                player.direction = -1;
-            } else
+            if (Math.Abs(normalizedVector.ToRotation()) < Math.PI / 2f)
             {
                 player.direction = 1;
+            } else
+            {
+                player.direction = -1;
             }
 
-            return normalizedVector * ShootSpeed;
+            return (normalizedVector * ShootSpeed);
         }
 
         public Vector2 GetProjectilePosition(Player player)
         {
-            float randX = Main.rand.NextFloat(-8f, 8f);
-            float randY = Main.rand.NextFloat(-8f, 8f);
+            float randX = Main.rand.NextFloat(-4f, 4f);
+            float randY = Main.rand.NextFloat(-4f, 4f);
             Vector2 randVector = new Vector2(randX, randY);
-            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.Center) * 16f;
+            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.) * 16f;
         }
 
         public int GetLightAttackCooldown(Player player)
@@ -173,7 +173,7 @@ namespace DBZMOD
 
         public void PerformLightAttack(Mod mod, Player player)
         {
-            ShootSpeed = 2;
+            ShootSpeed = 7;
             Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
             LightAttackCooldownTimer = GetLightAttackCooldown(player);
         }
