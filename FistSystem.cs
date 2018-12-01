@@ -30,9 +30,12 @@ namespace DBZMOD
         private int HeavyPunchDamage;
         private int FlurryPunchDamage;
         private int ShootSpeed;        
-        private int ZanzokenTimer;
+        private int ZanzokenCooldownTimer;
+        private int ZanzokenHeavyInputTimer;
+        private int ZanzokenHeavyCooldownTimer;
         private float ZanzokenKiCostMultiplier = 1f;
         private float ZanzokenDistanceMultiplier = 1f;
+        
         #endregion
 
         #region Constants
@@ -50,16 +53,22 @@ namespace DBZMOD
         public const float BASE_ZANZOKEN_DISTANCE_MAXIMUM = 1f;
 
         // change how much the ki cost increases by each time you use zanzoken
-        public const float BASE_ZANZOKEN_KI_COST_DELTA = 1.25f;
+        public const float BASE_ZANZOKEN_KI_COST_DELTA = 1.35f;
 
         // change how much distance is lost each time you use zanzoken
-        public const float BASE_ZANZOKEN_KI_DISTANCE_DELTA = 0.75f;
+        public const float BASE_ZANZOKEN_KI_DISTANCE_DELTA = 0.65f;
 
         // change how much ki cost is recovered from penalties each frame
-        public const float BASE_ZANZOKEN_KI_COST_RECOVERY = 0.99f;
+        public const float BASE_ZANZOKEN_KI_COST_RECOVERY = 0.995f;
 
         // change how much distance is recovered from penalties each frame
-        public const float BASE_ZANZOKEN_DISTANCE_RECOVERY = 1.01f;
+        public const float BASE_ZANZOKEN_DISTANCE_RECOVERY = 1.005f;
+
+        // change the amount of frames you have to execute a high speed heavy combo.
+        public const int BASE_ZANZOKEN_HEAVY_TIMER = 15;
+
+        // change the safe distance to teleport to an enemy by
+        public const int ZANZOKEN_ENEMY_SAFE_DISTANCE = 16;
         #endregion
 
         public void HandleZanzokenRecovery()
@@ -71,6 +80,17 @@ namespace DBZMOD
 
             // take the lesser of two numbers: the current distance multiplier after some regrowth, or the maximum distance multiplier.
             ZanzokenDistanceMultiplier = Math.Min(BASE_ZANZOKEN_DISTANCE_MAXIMUM, ZanzokenDistanceMultiplier * BASE_ZANZOKEN_DISTANCE_RECOVERY);
+
+            // PUT STUFF HERE FOR BONUSES TO COOLDOWNS (There's a few places to do this below also)
+
+            // reduce the cooldown on Zanzoken
+            ZanzokenCooldownTimer = Math.Max(0, ZanzokenCooldownTimer - 1);
+
+            // also reduce the window for the Zanzoken Heavy combo
+            ZanzokenHeavyInputTimer = Math.Max(0, ZanzokenHeavyInputTimer - 1);
+
+            // also reduce the cooldown for the Zanzoken Heavy Combo
+            ZanzokenHeavyCooldownTimer = Math.Max(0, ZanzokenHeavyCooldownTimer - 1);
         }
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
@@ -253,23 +273,9 @@ namespace DBZMOD
             return componentDistance;
         }
 
-        // returns a major rectangle responsible for the long range area in the teleport "cone" to scan for enemies.
-        private float GetZanzokenScanMajorSize()
-        {
-            var rectangleBisectWidth = (float)GetZanzokenDiagonalDistanceComponent() / 2f;
-            return rectangleBisectWidth;
-        }
-
-        // returns a minor rectangle responsible for the close area in the teleport "cone" to scan for enemies.
-        private float GetZanzokenScanMinorSize()
-        {
-            var rectangleBisectWidth = (float)GetZanzokenScanMajorSize() / 2f;
-            return rectangleBisectWidth;
-        }
-
         private bool CanZanzoken(Player player)
         {
-            return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed) && !HasKiForZanzoken(player);
+            return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed) && HasKiForZanzoken(player) && !IsZanzokenOnCooldown(player);
         }
 
         private bool HasKiForZanzoken(Player player)
@@ -283,10 +289,35 @@ namespace DBZMOD
             return (int)Math.Ceiling(BASE_ZANZOKEN_KI_COST * ZanzokenKiCostMultiplier);
         }
 
+        private bool IsZanzokenOnCooldown(Player player)
+        {
+            // PUT STUFF HERE TO IMPACT THE ZANZOKEN COOLDOWN IF DESIRED.
+            return ZanzokenCooldownTimer > 0;
+        }
+
+        private int GetZanzokenHeavyTimer(Player player)
+        {
+            // PUT STUFF HERE TO INCREASE THE WINDOW THE PLAYER CAN EXECUTE A HEAVY + ZAN COMBO
+            return BASE_ZANZOKEN_HEAVY_TIMER;
+        }
+
+        private int GetZanzokenCooldownDuration(Player player)
+        {
+            // OR HERE
+            return BASE_ZANZOKEN_COOLDOWN;
+        }
 
         private void DeductKiForZanzoken(Player player)
         {
             MyPlayer.ModPlayer(player).KiCurrent -= GetZanzokenKiCost(player);
+        }
+
+        private Rectangle GetProjectedHitboxForSafeDistance(Vector2 vector, Player player)
+        {
+            return new Rectangle((int)vector.X - ZANZOKEN_ENEMY_SAFE_DISTANCE, 
+                (int)vector.Y - ZANZOKEN_ENEMY_SAFE_DISTANCE, 
+                player.width + (ZANZOKEN_ENEMY_SAFE_DISTANCE * 2), 
+                player.height + (ZANZOKEN_ENEMY_SAFE_DISTANCE * 2));
         }
 
         public void PerformZanzoken(Mod mod, Player player, params Controls[] directions)
@@ -310,9 +341,6 @@ namespace DBZMOD
             Vector2 origin = new Vector2(player.position.X, player.position.Y);
             Vector2 originCenter = new Vector2(player.Center.X, player.Center.Y);
 
-            // TODO  !!!
-            // spawn the zanzoken projectile/effect at the player's origin
-
             // lazy switch to list so I can use Contains.
             List<Controls> directionList = new List<Controls>(directions);
 
@@ -325,8 +353,13 @@ namespace DBZMOD
             float xStep = xOffset / stepMaximum;
             float yStep = yOffset / stepMaximum;
             Vector2 finalVelocity = new Vector2(0, 0);
+            Vector2 stepVelocity = new Vector2(xStep, yStep);
             Vector2 newPosition = origin;
             Vector2 adaptiveOrigin = origin;
+
+            // the enemy you would collide with during a zanzoken movement. Move to this enemy if it isn't null.
+            NPC enemyZanzokenTarget = null;
+
             for (float f = 0f; f < stepMaximum; f += 1.0f)
             {
                 float xPos = xStep * f;
@@ -358,21 +391,39 @@ namespace DBZMOD
                 }
 
                 Rectangle playerProjectedHitbox = new Rectangle((int)newPosition.X, (int)newPosition.Y, player.width, player.height);
-                
+                                
                 foreach(NPC npc in Main.npc)
                 {
                     if (!npc.active || npc.friendly)
                         continue;
                     var npcRect = npc.getRect();
-                    var playerRect = player.getRect();
+                    var playerRect = playerProjectedHitbox;
                     if (npcRect.Intersects(playerRect))
                     {
-                        // do npc-based teleport to a safe position, this comes without a velocity boost so you don't fly into an enemy.
-                        PerformSafeZanzokenToNPC(player, npc);
-                        return;
+                        enemyZanzokenTarget = npc;
+                        break;
                     }
                 }
+
+                // we found an enemy to run up to so we abort any future movement.
+                if (enemyZanzokenTarget != null)
+                {
+                    break;
+                }
             }
+
+            // invert the velocity of the zanzoken until you're a few pixels away
+            if (enemyZanzokenTarget != null)
+            {
+
+                Rectangle playerProjectedHitbox = GetProjectedHitboxForSafeDistance(newPosition, player);
+                while(enemyZanzokenTarget.getRect().Intersects(playerProjectedHitbox))
+                {
+                    newPosition -= stepVelocity;
+                    playerProjectedHitbox = new Rectangle((int)newPosition.X - 16, (int)newPosition.Y - 16, player.width + 32, player.height + 32);
+                }
+            }
+
             // tone down velocity until it isn't insane.
             bool isVelocityNormalized = false;
             while (!isVelocityNormalized)
@@ -389,13 +440,12 @@ namespace DBZMOD
                 player.position = newPosition;
             }
 
-            player.velocity += finalVelocity;
-        }
+            // if teleporting to an enemy, don't get velocity, or you'd probably run into them.
+            if (enemyZanzokenTarget == null)
+                player.velocity += finalVelocity;
 
-        public void PerformSafeZanzokenToNPC(Player player, NPC npc)
-        {
-            // TODO
-            // Actually do the safe zan.
+            // enable the player to execute a zanzoken heavy attack
+            ZanzokenHeavyInputTimer = GetZanzokenHeavyTimer(player);
         }
     }
 }
