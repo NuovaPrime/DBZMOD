@@ -84,12 +84,12 @@ namespace DBZMOD
                 player.maxRunSpeed += 2f;
                 player.runAcceleration += 2f;
             }
-            player.meleeDamage += DamageMulti - 1 * 1.5f;
-            player.rangedDamage += DamageMulti - 1 * 1.5f;
-            player.magicDamage += DamageMulti - 1 * 1.5f;
-            player.minionDamage += DamageMulti - 1 * 1.5f;
-            player.thrownDamage += DamageMulti - 1 * 1.5f;
-            MyPlayer.ModPlayer(player).KiDamage += DamageMulti - 1;
+            player.meleeDamage += (DamageMulti - 1) * 0.5f;
+            player.rangedDamage += (DamageMulti - 1) * 0.5f;
+            player.magicDamage += (DamageMulti - 1) * 0.5f;
+            player.minionDamage += (DamageMulti - 1) * 0.5f;
+            player.thrownDamage += (DamageMulti - 1) * 0.5f;
+            MyPlayer.ModPlayer(player).KiDamage += (DamageMulti - 1);
             if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
