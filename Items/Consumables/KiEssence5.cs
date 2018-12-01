@@ -57,7 +57,7 @@ namespace DBZMOD.Items.Consumables
             recipe.AddIngredient(null, "PridefulKiCrystal", 30);
             recipe.AddIngredient(null, "CalmKiCrystal", 30);
             recipe.AddIngredient(null, "StableKiCrystal", 30);
-            recipe.AddTile(ItemID.LunarCraftingStation);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
