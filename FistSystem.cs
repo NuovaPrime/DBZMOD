@@ -29,6 +29,8 @@ namespace DBZMOD
         private int BasicPunchDamage;
         private int HeavyPunchDamage;
         private int FlurryPunchDamage;
+        private int FlurryActiveTimer;
+        private int FlurryCooldownTimer;
         private int ShootSpeed;        
         private int ZanzokenCooldownTimer;
         private int ZanzokenHeavyInputTimer;
@@ -36,50 +38,57 @@ namespace DBZMOD
         private float ZanzokenKiCostMultiplier = 1f;
         private float ZanzokenDistanceMultiplier = 1f;
         
+        
         #endregion
 
         #region Constants
         // change how far the player can teleport.
-        public const float BASE_ZANZOKEN_TRAVEL_DISTANCE = 200f;
+        public const float ZANZOKEN_TRAVEL_DISTANCE = 200f;
 
         // change the number of frames you have to wait for zanzoken to refresh.
-        public const int BASE_ZANZOKEN_COOLDOWN = 60;
+        public const int ZANZOKEN_COOLDOWN = 60;
 
         // change the base ki cost of zanzoken
-        public const int BASE_ZANZOKEN_KI_COST = 400;
+        public const int ZANZOKEN_KI_COST = 400;
 
         // change the base limits for ki cost and distance
-        public const float BASE_ZANZOKEN_KI_COST_MINIMUM = 1f;
-        public const float BASE_ZANZOKEN_DISTANCE_MAXIMUM = 1f;
+        public const float ZANZOKEN_KI_COST_MINIMUM = 1f;
+        public const float ZANZOKEN_DISTANCE_MAXIMUM = 1f;
 
         // change how much the ki cost increases by each time you use zanzoken
-        public const float BASE_ZANZOKEN_KI_COST_DELTA = 1.35f;
+        public const float ZANZOKEN_KI_COST_DELTA = 1.35f;
 
         // change how much distance is lost each time you use zanzoken
-        public const float BASE_ZANZOKEN_KI_DISTANCE_DELTA = 0.65f;
+        public const float ZANZOKEN_KI_DISTANCE_DELTA = 0.65f;
 
         // change how much ki cost is recovered from penalties each frame
-        public const float BASE_ZANZOKEN_KI_COST_RECOVERY = 0.995f;
+        public const float ZANZOKEN_KI_COST_RECOVERY = 0.995f;
 
         // change how much distance is recovered from penalties each frame
-        public const float BASE_ZANZOKEN_DISTANCE_RECOVERY = 1.005f;
+        public const float ZANZOKEN_DISTANCE_RECOVERY = 1.005f;
 
         // change the amount of frames you have to execute a high speed heavy combo.
-        public const int BASE_ZANZOKEN_HEAVY_TIMER = 15;
+        public const int ZANZOKEN_HEAVY_TIMER = 15;
 
         // change the safe distance to teleport to an enemy by
         public const int ZANZOKEN_ENEMY_SAFE_DISTANCE = 16;
+
+        // change the base duration of the flurry attack
+        public const int FLURRY_ACTIVE_TIMER = 15;
+
+        // change the base cooldown of the flurry attack
+        public const int FLURRY_COOLDOWN_TIMER = 300;
         #endregion
 
-        public void HandleZanzokenRecovery()
+        public void HandleZanzokenAndComboRecovery()
         {
             // PUT STUFF HERE FOR BONUSES TO ZANZOKEN DISTANCE AND KI COST, IF DESIRED.
 
             // take the greater of two numbers: the current ki cost multiplier after some decay, or the minimum ki cost multiplier.
-            ZanzokenKiCostMultiplier = Math.Max(BASE_ZANZOKEN_KI_COST_MINIMUM, ZanzokenKiCostMultiplier * BASE_ZANZOKEN_KI_COST_RECOVERY);
+            ZanzokenKiCostMultiplier = Math.Max(ZANZOKEN_KI_COST_MINIMUM, ZanzokenKiCostMultiplier * ZANZOKEN_KI_COST_RECOVERY);
 
             // take the lesser of two numbers: the current distance multiplier after some regrowth, or the maximum distance multiplier.
-            ZanzokenDistanceMultiplier = Math.Min(BASE_ZANZOKEN_DISTANCE_MAXIMUM, ZanzokenDistanceMultiplier * BASE_ZANZOKEN_DISTANCE_RECOVERY);
+            ZanzokenDistanceMultiplier = Math.Min(ZANZOKEN_DISTANCE_MAXIMUM, ZanzokenDistanceMultiplier * ZANZOKEN_DISTANCE_RECOVERY);
 
             // PUT STUFF HERE FOR BONUSES TO COOLDOWNS (There's a few places to do this below also)
 
@@ -93,11 +102,50 @@ namespace DBZMOD
             ZanzokenHeavyCooldownTimer = Math.Max(0, ZanzokenHeavyCooldownTimer - 1);
         }
 
+        // return whether the player is in a fit state to use a zan heavy combo
+        public bool CanUseZanzokenHeavy(Player player)
+        {
+            // Heavy input timer is a nonzero, meaning it's ticking down the frames they can use a heavy combo
+            // Meanwhile the cooldown timer must be zero, meaning not on cooldown.
+            return ZanzokenHeavyInputTimer > 0 && ZanzokenHeavyCooldownTimer == 0;
+        }
+
+        public bool CanPerformFlurry(Player player)
+        {
+            // DEBUG REMOVE ME
+            return FlurryCooldownTimer == 0;
+            // Is the flurry on cooldown?
+            return FlurryCooldownTimer == 0 && MyPlayer.ModPlayer(player).CanUseFlurry;
+        }
+
+        public int GetFlurryDuration(Player player)
+        {
+            return FLURRY_ACTIVE_TIMER;
+        }
+
+        public int GetFlurryCooldownDuration(Player player)
+        {
+            return FLURRY_COOLDOWN_TIMER;
+        }
+
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
-            HandleZanzokenRecovery();
+            HandleZanzokenAndComboRecovery();
 
             Vector2 projvelocity = Vector2.Normalize(Main.MouseWorld - player.position) * ShootSpeed;
+
+            if (FlurryActiveTimer > 0)
+            {
+                if (FlurryActiveTimer % 2 == 0)
+                {
+                    // spawn flurry attack                    
+                    Projectile.NewProjectile(player.position, projvelocity, BasicFistProjSelect(mod), FlurryPunchDamage, 3);
+                }
+                FlurryActiveTimer--;
+
+                // process no other triggers. 
+                return;
+            }
 
             // returns a list of actions to be performed based on trigger states.            
             var actionsToPerform = ControlHelper.ProcessInputs(triggersSet);
@@ -117,9 +165,10 @@ namespace DBZMOD
             } else
             {
                 MyPlayer.ModPlayer(player).BlockState = 0;
-                if (actionsToPerform.Flurry && MyPlayer.ModPlayer(player).CanUseFlurry)
+                if (actionsToPerform.Flurry && CanPerformFlurry(player))
                 {
-                    // Do Flurry
+                    FlurryActiveTimer = GetFlurryDuration(player);
+                    FlurryCooldownTimer = GetFlurryCooldownDuration(player);
                 }
                 else if (actionsToPerform.LightAttack)
                 {
@@ -130,7 +179,14 @@ namespace DBZMOD
                 {
                     if (!player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && MyPlayer.ModPlayer(player).CanUseHeavyHit)
                     {
-                        Projectile.NewProjectile(player.position, projvelocity, mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
+                        if (CanUseZanzokenHeavy(player))
+                        {
+                            // do zanzoken heavy attack combo
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(player.position, projvelocity, mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
+                        }
                     }
                 }
             }
@@ -262,7 +318,7 @@ namespace DBZMOD
             
             // TODO
             // insert things that affect zanzoken distance here, like accessories or unlocked abilities.
-            return BASE_ZANZOKEN_TRAVEL_DISTANCE;
+            return ZANZOKEN_TRAVEL_DISTANCE;
         }
 
         // returns the vertical/horizontal Vector offsets of a 45 degree angle that travels ZANZOKEN_TRAVEL_DISTANCE.
@@ -286,7 +342,7 @@ namespace DBZMOD
         private int GetZanzokenKiCost(Player player)
         {
             // PUT STUFF HERE TO IMPACT THE ZANZOKEN KI COST IF DESIRED.
-            return (int)Math.Ceiling(BASE_ZANZOKEN_KI_COST * ZanzokenKiCostMultiplier);
+            return (int)Math.Ceiling(ZANZOKEN_KI_COST * ZanzokenKiCostMultiplier);
         }
 
         private bool IsZanzokenOnCooldown(Player player)
@@ -298,13 +354,13 @@ namespace DBZMOD
         private int GetZanzokenHeavyTimer(Player player)
         {
             // PUT STUFF HERE TO INCREASE THE WINDOW THE PLAYER CAN EXECUTE A HEAVY + ZAN COMBO
-            return BASE_ZANZOKEN_HEAVY_TIMER;
+            return ZANZOKEN_HEAVY_TIMER;
         }
 
         private int GetZanzokenCooldownDuration(Player player)
         {
             // OR HERE
-            return BASE_ZANZOKEN_COOLDOWN;
+            return ZANZOKEN_COOLDOWN;
         }
 
         private void DeductKiForZanzoken(Player player)
@@ -420,7 +476,8 @@ namespace DBZMOD
                 while(enemyZanzokenTarget.getRect().Intersects(playerProjectedHitbox))
                 {
                     newPosition -= stepVelocity;
-                    playerProjectedHitbox = new Rectangle((int)newPosition.X - 16, (int)newPosition.Y - 16, player.width + 32, player.height + 32);
+                    // refresh the hitbox with a backwards step
+                    playerProjectedHitbox = GetProjectedHitboxForSafeDistance(newPosition, player);
                 }
             }
 
@@ -429,7 +486,7 @@ namespace DBZMOD
             while (!isVelocityNormalized)
             {                
                 finalVelocity *= 0.9f;
-                isVelocityNormalized = (finalVelocity.X * finalVelocity.X) + (finalVelocity.Y * finalVelocity.Y) <= 10f;
+                isVelocityNormalized = (finalVelocity.X * finalVelocity.X) + (finalVelocity.Y * finalVelocity.Y) <= 16f;
             }
 
             if (newPosition != origin)
@@ -446,6 +503,8 @@ namespace DBZMOD
 
             // enable the player to execute a zanzoken heavy attack
             ZanzokenHeavyInputTimer = GetZanzokenHeavyTimer(player);
+
+            ZanzokenCooldownTimer = GetZanzokenCooldownDuration(player);
         }
     }
 }
