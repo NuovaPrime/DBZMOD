@@ -59,7 +59,7 @@ namespace DBZMOD
         public const float ZANZOKEN_KI_COST_DELTA = 1.35f;
 
         // change how much distance is lost each time you use zanzoken
-        public const float ZANZOKEN_KI_DISTANCE_DELTA = 0.65f;
+        public const float ZANZOKEN_DISTANCE_DELTA = 0.65f;
 
         // change how much ki cost is recovered from penalties each frame
         public const float ZANZOKEN_KI_COST_RECOVERY = 0.995f;
@@ -383,6 +383,12 @@ namespace DBZMOD
                 player.height + (ZANZOKEN_ENEMY_SAFE_DISTANCE * 2));
         }
 
+        private void ApplyZanzokenReusePenalties(Player player)
+        {
+            ZanzokenKiCostMultiplier *= ZANZOKEN_KI_COST_DELTA;
+            ZanzokenDistanceMultiplier *= ZANZOKEN_DISTANCE_DELTA;
+        }
+
         public void PerformZanzoken(Mod mod, Player player, params Controls[] directions)
         {
             // checks that would prevent you from using Zanzoken
@@ -507,6 +513,9 @@ namespace DBZMOD
             // if teleporting to an enemy, don't get velocity, or you'd probably run into them.
             if (enemyZanzokenTarget == null)
                 player.velocity += finalVelocity;
+
+            // Penalize repeated uses of Zanzoken in both distance and ki cost
+            ApplyZanzokenReusePenalties(player);
 
             // enable the player to execute a zanzoken heavy attack
             ZanzokenHeavyInputTimer = GetZanzokenHeavyTimer(player);

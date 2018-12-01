@@ -501,7 +501,9 @@
     <Content Include="Sounds\EnergyWaveCharge.wav" />
     <Content Include="Sounds\Explosion.wav" />
     <Content Include="Sounds\EyeBeam.wav" />
+    <Content Include="Sounds\Flurry.wav" />
     <Content Include="Sounds\GroundRumble.wav" />
+    <Content Include="Sounds\HeavyHit.wav" />
     <Content Include="Sounds\KaioAuraAscend.wav" />
     <Content Include="Sounds\KaioAuraStart.wav" />
     <Content Include="Sounds\Kiblast1.wav" />
@@ -521,6 +523,7 @@
     <Content Include="Sounds\SSJAscension.wav" />
     <Content Include="Sounds\SSJAura.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
+    <Content Include="Sounds\Transmission.wav" />
     <Content Include="UI\Buttons\LSSJ2ButtonImage.png" />
     <Content Include="UI\Buttons\LSSJButtonImage.png" />
     <Content Include="UI\Buttons\LSSJGButtonImage.png" />
