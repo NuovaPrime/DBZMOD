@@ -89,7 +89,7 @@ namespace DBZMOD.Projectiles
             if(!startingCharge)
             {
                 startingCharge = true;
-                chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge"));
+                chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveChargeShort"));
             }
 
         }

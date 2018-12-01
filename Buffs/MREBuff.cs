@@ -16,7 +16,6 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            player.statLifeMax2 -= 25;
             MyPlayer.ModPlayer(player).KiRegen += 1;
             player.lifeRegen += 2;
             player.statDefense += 7;

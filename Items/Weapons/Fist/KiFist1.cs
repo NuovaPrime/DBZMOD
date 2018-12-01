@@ -70,7 +70,6 @@ namespace DBZMOD.Items.Weapons.Fist
             }
             base.ModifyTooltips(tooltips);
         }
-
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
