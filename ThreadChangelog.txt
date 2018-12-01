@@ -107,3 +107,17 @@ Big Bang Attack, Scattershot, Special Beam Cannon, Super Kamehameha, Trap Shoote
 8. Your ki bar now doesn't flicker due to ki regen.
 9. Fixed bug where the Kaio Crystal did nothing.
 10. Fixed bug where Ki Infusers applied to all damage types, not just Ki.
+
+V1.0.6.6
+
+1. Added flavor text to all the Ki Crystals.
+2. New sounds for Energy Wave, Final Flash and Special Beam Cannon.
+3. All Super Saiyan damage multipliers have been reduced by 50% for non-Ki damage.
+4. Drastically increased the homing range of the Radiant Armor and Luminous Sectum's projectiles.
+5. Increased the drop rate of Stable Ki Crystal's.
+6. Fixed bug where Kaio Crystal worked in the vanity slot.
+7. Fixed bug where Kaio Crystal worked on Super Saiyan 3's health drain.
+8. Fixed bug where your aura was misaligned while Flight|Flying downwards.
+9. Fixed bug where Super Saiyan 3's health drain still drained below 30% Ki.
+10. Fixed bug where the MRE lowered your health by 25.
+11. Fixed bug where Radiant Ki Scroll didn't need the Ancient Manipulator.

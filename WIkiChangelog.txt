@@ -230,6 +230,8 @@ V1.0.6.6
 
 2. Drastically increased the homing range of the [[Radiant Armor]] and [[Luminous Sectum]]'s projectiles.
 
+3. Increased the drop rate of [[Stable Ki Crystal]]'s.
+
 == Fixes ==
 
 1. Fixed bug where [[Kaio Crystal]] worked in the vanity slot.
@@ -241,4 +243,6 @@ V1.0.6.6
 4. Fixed bug where [[Super Saiyan 3]]'s health drain still drained below 30% [[Ki]].
 
 5. Fixed bug where the [[MRE]] lowered your health by 25.
+
+6. Fixed bug where [[Radiant Ki Scroll]] didn't need the [[Ancient Manipulator]].
 
