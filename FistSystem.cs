@@ -161,7 +161,7 @@ namespace DBZMOD
             float randX = Main.rand.NextFloat(-4f, 4f);
             float randY = Main.rand.NextFloat(-4f, 4f);
             Vector2 randVector = new Vector2(randX, randY);
-            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.) * 16f;
+            return player.Center + randVector + Vector2.Normalize(Main.MouseWorld - player.Center) * 16f;
         }
 
         public int GetLightAttackCooldown(Player player)
