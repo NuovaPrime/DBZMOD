@@ -41,7 +41,10 @@ namespace DBZMOD.Items.Accessories
             speed = 10f;
             acceleration *= 3f;
         }
-
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
