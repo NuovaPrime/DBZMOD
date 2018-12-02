@@ -18,7 +18,7 @@ namespace DBZMOD.Items
 			item.height = 20;
 			item.maxStack = 9999;
 			item.value = 5000;
-			item.rare = 3;
+			item.rare = 7;
 		}
 	}
 }
