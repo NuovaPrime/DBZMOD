@@ -246,3 +246,12 @@ V1.0.6.6
 
 6. Fixed bug where [[Radiant Ki Scroll]] didn't need the [[Ancient Manipulator]].
 
+
+V1.0.6.7
+
+== Fixes == 
+
+1. Fixed major bug where any [[Accessories]] that decreased [[Ki]] max would make your ki go negative.
+
+2. Fixed bug where [[Kaioken]] gave no bonuses to any damage types except [[Ki]].
+
