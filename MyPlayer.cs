@@ -36,7 +36,7 @@ namespace DBZMOD
         {
             get
             {
-                if (_kiMax <= 0)
+                if (_kiMax <= GetKiMaxFromFragments())
                 {
                     _kiMax = GetKiMaxFromFragments();
                 }
