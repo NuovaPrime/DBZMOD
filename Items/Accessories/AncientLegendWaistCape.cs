@@ -29,8 +29,8 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.06f;
-                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.14f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax -= 250;
+                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti *= 0.86f;
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 -= 250;
                 player.GetModPlayer<MyPlayer>(mod).legendWaistcape = true;
             }
         }

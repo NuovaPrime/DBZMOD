@@ -30,8 +30,8 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.09f;
-                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.12f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax -= 500;
+                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti *= 0.88f;
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 -= 500;
                 player.GetModPlayer<MyPlayer>(mod).legendNecklace = true;
             }
         }
