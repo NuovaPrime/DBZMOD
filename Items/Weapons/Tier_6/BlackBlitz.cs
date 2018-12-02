@@ -14,13 +14,12 @@ namespace DBZMOD.Items.Weapons.Tier_6
         public override void SetDefaults()
         {
             item.shoot = mod.ProjectileType("BlackBlitz");
-            item.shootSpeed = 8f;
+            item.shootSpeed = 5f;
             item.damage = 130;
             item.knockBack = 3f;
             item.useStyle = 5;
-            item.UseSound = SoundID.Item1;
-            item.useAnimation = 12;
-            item.useTime = 6;
+            item.useAnimation = 8;
+            item.useTime = 4;
             item.width = 50;
             item.height = 50;
             item.noUseGraphic = true;
@@ -37,7 +36,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
+            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(8));
             speedX = perturbedSpeed.X;
             speedY = perturbedSpeed.Y;
             return true;
