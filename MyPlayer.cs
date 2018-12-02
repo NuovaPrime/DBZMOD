@@ -189,6 +189,7 @@ namespace DBZMOD
         public bool majinNucleus;
         public bool baldurEssentia;
         public bool kiChip;
+        public bool radiantGlider;
         public bool earthenArcanium;
         public bool legendNecklace;
         public bool legendWaistcape;
@@ -592,8 +593,7 @@ namespace DBZMOD
             if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 player.eyeColor = Color.Red;
-            }
-
+            }            
         }
 
         public string ChooseTrait()
@@ -1132,6 +1132,7 @@ namespace DBZMOD
             legendNecklace = false;
             legendWaistcape = false;
             kiChip = false;
+            radiantGlider = false;
             dragongemNecklace = false;
             sapphireNecklace = false;
             topazNecklace = false;
@@ -1478,7 +1479,6 @@ namespace DBZMOD
 
     }
 
-
     public class SSJHairDraw : ModPlayer
     {
         public Texture2D Hair;
@@ -1537,6 +1537,7 @@ namespace DBZMOD
         }
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
+            
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
             if (hair < 0)
                 return;
@@ -1561,7 +1562,7 @@ namespace DBZMOD
                 PlayerLayer.HairBack.visible = false;
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
-                PlayerLayer.Arms.visible = false;
+                PlayerLayer.Arms.visible = false;                
             }
         }
         public override void clientClone(ModPlayer clientClone)

@@ -21,10 +21,37 @@ namespace DBZMOD.Items.Accessories
 			item.value = 120000;
 			item.rare = 10;
 			item.accessory = true;
-		}
+            item.UseSound = SoundID.Item24;            
+        }
+
+        public override bool WingUpdate(Player player, bool inUse)
+        {         
+            Main.NewText(string.Format("Wing: {0} Frame: {1} Counter: {2}", player.wings, player.wingFrame, player.wingFrameCounter));
+            
+            if (inUse)
+            {
+                if (player.wingFrame == 0 || player.wingFrame >= 3)
+                {
+                    player.wingFrame = 1;
+                }
+                player.wingFrameCounter++;
+                if (player.wingFrameCounter >= 4)
+                {
+                    player.wingFrameCounter = 0;
+                    player.wingFrame++;
+                }
+            } else
+            {
+                player.wingFrame = 0;
+            }
+            return true;
+        }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            player.wingsLogic = 1;
             player.wingTimeMax = 160;
+            MyPlayer.ModPlayer(player).radiantGlider = true;
         }
 
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
