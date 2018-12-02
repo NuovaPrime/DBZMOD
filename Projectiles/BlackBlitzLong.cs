@@ -49,7 +49,7 @@ namespace DBZMOD.Projectiles
         {
             projectile.velocity.Y *= 1.05f;
             projectile.velocity.X *= 1.05f;
-            if (projectile.timeLeft < 715)
+            if (projectile.timeLeft < 717)
             {
                 projectile.alpha = 0;
             }

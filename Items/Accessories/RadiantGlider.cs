@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Microsoft.Xna.Framework;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -68,7 +69,10 @@ namespace DBZMOD.Items.Accessories
             speed = 10f;
             acceleration *= 3f;
         }
-
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
