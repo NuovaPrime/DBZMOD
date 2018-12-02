@@ -83,7 +83,7 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-					quotient = (float)player.KiCurrent / (float)player.KiMax;
+					quotient = (float)player.KiCurrent / (float)player.OverallKiMax();
 					quotient = Utils.Clamp(quotient, 0, 1);
 					break;
                 case ResourceBarMode.OVERLOAD:
