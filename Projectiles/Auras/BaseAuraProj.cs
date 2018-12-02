@@ -29,7 +29,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
-            AuraOffset.Y = -55;
+            AuraOffset.Y = -26;
 			projectile.light = 1f;
 			projectile.alpha = 70;
         }
@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 89, 110, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
                     dust.noGravity = true;
                 }
 
