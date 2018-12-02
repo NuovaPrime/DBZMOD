@@ -17,10 +17,10 @@ namespace DBZMOD.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.width = 16;
-            projectile.height = 24;
+            projectile.height = 16;
             projectile.aiStyle = 6;
             projectile.light = 1f;
-            projectile.timeLeft = 10;
+            projectile.timeLeft = 15;
             projectile.ignoreWater = true;
             projectile.netUpdate = true;
             projectile.penetrate = 1;
@@ -43,10 +43,14 @@ namespace DBZMOD.Projectiles
                 }
             }
         }
+        public override void AI()
+        {
+            projectile.rotation = Vector2.Normalize(projectile.velocity).ToRotation() + (float)(Math.PI / 2);
+        }
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X * 5, projectile.velocity.Y * 5, mod.ProjectileType("BlackBlitzLong"), projectile.damage, 30, projectile.owner, 0f, 1f);
+            Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X * 3, projectile.velocity.Y * 3, mod.ProjectileType("BlackBlitzLong"), projectile.damage, 30, projectile.owner, 0f, 1f);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)

@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			item.width = 36;
+            item.width = 36;
 			item.height = 40;
 			item.value = 120000;
 			item.rare = 10;
@@ -27,8 +27,7 @@ namespace DBZMOD.Items.Accessories
             player.wingTimeMax = 160;
         }
 
-        public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising,
-            ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
+        public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
         {
             ascentWhenFalling = 0.95f;
             ascentWhenRising = 0.20f;

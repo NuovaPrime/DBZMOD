@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    [AutoloadEquip(EquipType.Face)]
+    [AutoloadEquip(EquipType.Head)]
     public class ScouterT6 : ModItem
     {
         public override void SetStaticDefaults()
@@ -36,7 +36,6 @@ namespace DBZMOD.Items.Accessories
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = true;
-            drawAltHair = true;
         }
         public override void AddRecipes()
         {

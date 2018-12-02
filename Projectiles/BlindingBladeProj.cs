@@ -67,39 +67,25 @@ namespace DBZMOD.Projectiles
 
             }
         }
-		private void AdjustMagnitude(ref Vector2 vector)
-		{
-			float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-			if (magnitude > 6f)
-			{
-				vector *= 6f / magnitude;
-        	}
-        }
-		public override void AI()
+        public override void AI()
         {
-            Vector2 move = Vector2.Zero;
-            float distance = 400f;
-            bool target = false;
-            for (int k = 0; k < 200; k++)
+            for (int i = 0; i < 200; i++)
             {
-                if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5)
+                NPC target = Main.npc[i];
+                //Get the shoot trajectory from the projectile and target
+                float shootToX = target.position.X + (float)target.width * 0.5f - projectile.Center.X;
+                float shootToY = target.position.Y - projectile.Center.Y;
+                float distance = (float)System.Math.Sqrt((double)(shootToX * shootToX + shootToY * shootToY));
                 {
-                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
-                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
-                    if (distanceTo < distance)
+                    if (distance < 780f && !target.friendly && target.active)
                     {
-                        move = newMove;
-                        distance = distanceTo;
-                        target = true;
+                        if (Main.rand.NextBool(30))
+                        {
+                            Vector2 offsetVector = new Vector2(projectile.position.X - target.position.X, projectile.position.Y - target.position.Y);
+                        }
                     }
                 }
             }
-			if (target)
-			{
-				AdjustMagnitude(ref move);
-                projectile.velocity = (10 * projectile.velocity + move);
-                AdjustMagnitude(ref projectile.velocity);
-			}
         }
     }
 }
