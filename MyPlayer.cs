@@ -28,9 +28,27 @@ namespace DBZMOD
         public int KiCrit;
         public int KiRegenTimer;
         public int KiRegen;
-        public int KiMax = 1000;
-        public int KiMax2 = 0;
-        public int OverallKiMax;
+
+        // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
+
+        private int _kiMax;
+        public int KiMax
+        {
+            get
+            {
+                if (_kiMax <= 0)
+                {
+                    _kiMax = GetKiMaxFromFragments();
+                }
+                return _kiMax;
+            }
+            set
+            {
+                _kiMax = value;
+            }
+        }
+        public int KiMax2;
+        public float KiMaxMult;
         public int KiCurrent;
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
@@ -207,7 +225,23 @@ namespace DBZMOD
         FistSystem m_fistSystem = new FistSystem();
         #endregion
 
+        public int OverallKiMax()
+        {
+            return (int)Math.Ceiling((KiMax + KiMax2) * KiMaxMult);
+        }
 
+        public const int BASE_KI_MAX = 1000;
+
+        public int GetKiMaxFromFragments()
+        {
+            var kiMaxValue = BASE_KI_MAX;
+            kiMaxValue += (Fragment1 ? 1000 : 0);
+            kiMaxValue += (Fragment2 ? 2000 : 0);
+            kiMaxValue += (Fragment3 ? 2000 : 0);
+            kiMaxValue += (Fragment4 ? 2000 : 0);
+            kiMaxValue += (Fragment5 ? 2000 : 0);
+            return kiMaxValue;
+        }
 
         public static MyPlayer ModPlayer(Player player)
         {
@@ -476,7 +510,7 @@ namespace DBZMOD
             }
             if (KiRegenTimer > 2)
             {
-                if (KiCurrent != OverallKiMax)
+                if (KiCurrent != OverallKiMax())
                 {
                     KiCurrent += KiRegen;
                 }
@@ -531,7 +565,6 @@ namespace DBZMOD
             {
                 player.invis = true;
             }
-            OverallKiMax = KiMax + KiMax2;
             /*if(LSSJAchieved)
             {
                 OverloadBar.visible = true;
@@ -594,7 +627,7 @@ namespace DBZMOD
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < OverallKiMax)
+            if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
                 KiCurrent += i;
@@ -609,7 +642,7 @@ namespace DBZMOD
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < OverallKiMax)
+            if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
                 KiCurrent += i;
@@ -672,7 +705,7 @@ namespace DBZMOD
             tag.Add("flightUpgraded", flightUpgraded);
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
-            tag.Add("KiMax", KiMax);
+            tag.Add("KiMax", KiMax);            
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -923,7 +956,7 @@ namespace DBZMOD
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-            if (EnergyCharge.Current && (KiCurrent < OverallKiMax) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
+            if (EnergyCharge.Current && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
@@ -968,9 +1001,9 @@ namespace DBZMOD
                     ChargeSoundTimer = 0;
                 }
             }
-            if (KiCurrent > OverallKiMax)
+            if (KiCurrent > OverallKiMax())
             {
-                KiCurrent = OverallKiMax;
+                KiCurrent = OverallKiMax();
             }
             if (EnergyCharge.JustPressed)
             {
@@ -1118,7 +1151,10 @@ namespace DBZMOD
             infuserRuby = false;
             infuserSapphire = false;
             infuserTopaz = false;
+            KiMax = GetKiMaxFromFragments();
             KiMax2 = 0;
+            KiMaxMult = 1f;
+            
             //IsCharging = false;
         }
 

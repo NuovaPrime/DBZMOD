@@ -155,7 +155,7 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-                    text.SetText("Ki:" + player.KiCurrent + " / " + player.OverallKiMax);
+                    text.SetText("Ki:" + player.KiCurrent + " / " + player.OverallKiMax());
 					break;
 
                 case ResourceBarMode.OVERLOAD:
