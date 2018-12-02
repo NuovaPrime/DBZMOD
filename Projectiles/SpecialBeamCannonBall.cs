@@ -65,7 +65,8 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("SpecialBeamCannonBlast"), projectile.damage + (ChargeLevel * 60), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCFire"));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCFire"));
 
                     projectile.Kill();
 
@@ -90,7 +91,8 @@ namespace DBZMOD.Projectiles
             if (!startingCharge)
             {
                 startingCharge = true;
-                chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCCharge"));
+                if (!Main.dedServ)
+                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCCharge"));
             }
 
         }

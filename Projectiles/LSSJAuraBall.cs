@@ -89,7 +89,8 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer.ModPlayer(player).IsTransformed = true;
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
                 player.AddBuff(mod.BuffType("LSSJ2Buff"), 360000);

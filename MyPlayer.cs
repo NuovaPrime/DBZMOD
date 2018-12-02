@@ -813,7 +813,8 @@ namespace DBZMOD
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ1Buff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 1", false, false);
                 }
                 else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && IsCharging && ASSJAchieved && !IsTransforming && !player.channel && (UI.TransMenu.MenuSelection == 1))
@@ -821,7 +822,8 @@ namespace DBZMOD
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("ASSJBuff"), 666666, false);
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(1.0f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(1.0f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Ascended Super Saiyan", false, false);
                 }
                 else if (player.HasBuff(mod.BuffType("ASSJBuff")) && IsCharging && USSJAchieved && !IsTransforming && !player.channel && (UI.TransMenu.MenuSelection == 1))
@@ -829,7 +831,8 @@ namespace DBZMOD
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("USSJBuff"), 666666, false);
                     player.ClearBuff(mod.BuffType("ASSJBuff"));
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Ultra Super Saiyan", false, false);
                 }
                 else if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
@@ -837,7 +840,8 @@ namespace DBZMOD
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
                 }
                 else if (!IsLSSJ && !IsSSJ && !IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
@@ -852,7 +856,9 @@ namespace DBZMOD
                     SSJDustAura();
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
                 }
                 else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsLSSJ && !IsKaioken && !IsCharging && SSJ2Achieved && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
@@ -861,7 +867,8 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
                     player.ClearBuff(mod.BuffType("SSJ1Buff"));
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
                 }
                 else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsKaioken && !IsLSSJ && !IsCharging && SSJ3Achieved && !IsTransforming && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
@@ -870,21 +877,24 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
                     player.ClearBuff(mod.BuffType("SSJ2Buff"));
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
                 }
                 if (!IsSSJ && !IsLSSJ && !IsKaioken && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("SSJGBuff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(229, 20, 51), "Super Saiyan God", false, false);
                 }
                 if (!IsLSSJ && !IsKaioken && !IsSSJ && LSSJ2Achieved && UI.TransMenu.MenuSelection == 6 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
                 {
                     player.AddBuff(mod.BuffType("LSSJ2Buff"), 666666, false);
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan 2", false, false);
                 }
                 /*else if (player.HasBuff(mod.BuffType("LSSJBuff")) && LSSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingLSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
@@ -892,7 +902,8 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("LSSJ2Buff"), 666666, false);
                     player.ClearBuff(mod.BuffType("LSSJBuff"));
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
                     CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan 2", false, false);
                 }*/
             }
@@ -916,35 +927,40 @@ namespace DBZMOD
             {
                 player.AddBuff(mod.BuffType("KaiokenBuff"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraStart").WithVolume(.5f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraStart").WithVolume(.5f));
             }
             else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && KaioFragment1)
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuff"));
                 player.AddBuff(mod.BuffType("KaiokenBuffX3"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx3"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
             }
             else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX3"))) && KaioFragment2)
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
                 player.AddBuff(mod.BuffType("KaiokenBuffX10"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx10"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
             }
             else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX10"))) && KaioFragment3)
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
                 player.AddBuff(mod.BuffType("KaiokenBuffX20"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx20"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.7f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.7f));
             }
             else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX20"))) && KaioFragment4)
             {
                 player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
                 player.AddBuff(mod.BuffType("KaiokenBuffX100"), 18000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx100"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
             else if (KaiokenKey.JustPressed && player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsLSSJ && KaioAchieved && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
             {
@@ -953,7 +969,8 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("SSJ1KaiokenBuff"), 1800);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
             if (EnergyCharge.Current && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
@@ -968,7 +985,8 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
                     ChargeSoundTimer = 0;
                 }
                 if (earthenScarab || earthenArcanium)
@@ -997,7 +1015,8 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
                     ChargeSoundTimer = 0;
                 }
             }
@@ -1011,7 +1030,8 @@ namespace DBZMOD
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                 }
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                 IsCharging = true;
             }
             if (EnergyCharge.JustReleased)
@@ -1029,7 +1049,8 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
                 player.AddBuff(mod.BuffType("TiredDebuff"), (int)KaiokenTimer);
                 KaiokenTimer = 0.0f;
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
             if (PowerDown.JustPressed && player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
@@ -1038,7 +1059,8 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
                 player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
                 KaiokenTimer = 0.0f;
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                if (!Main.dedServ)
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
                 IsTransformed = false;
             }
             if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")) || player.HasBuff(mod.BuffType("LSSJ2Buff"))))
@@ -1315,32 +1337,38 @@ namespace DBZMOD
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
         }
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public void LSSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public void LSSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("LSSJ2PillarStart"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public void SSJGTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
         public override void SetupStartInventory(IList<Item> items)
         {
@@ -1435,7 +1463,8 @@ namespace DBZMOD
             player.ClearBuff(mod.BuffType("LSSJ2Buff"));
             player.ClearBuff(mod.BuffType("SSJGBuff"));
             player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
 
             if (transformationSound != null)
             {

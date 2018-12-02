@@ -49,7 +49,8 @@ namespace DBZMOD.Projectiles
         public void InitializeVanishState()
         {
             isInitialized = true;
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Transmission").WithVolume(.7f).WithPitchVariance(.2f));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Transmission").WithVolume(.7f).WithPitchVariance(.2f));
         }
 
         public override void AI()

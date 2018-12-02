@@ -67,7 +67,8 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("GalickGunBlast"), projectile.damage + (ChargeLevel * 35), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));
 
                     projectile.Kill();
 
@@ -92,7 +93,8 @@ namespace DBZMOD.Projectiles
             if (!startingCharge)
             {
                 startingCharge = true;
-                chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge"));
+                if (!Main.dedServ)
+                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge"));
             }
 
         }

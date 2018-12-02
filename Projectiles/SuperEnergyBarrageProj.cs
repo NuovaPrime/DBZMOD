@@ -41,7 +41,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("SuperEnergyBarrageExplosion"), projectile.damage, 4f, projectile.owner, 0, projectile.rotation);
-			Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiplosion"));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiplosion"));
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {

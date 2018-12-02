@@ -93,7 +93,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
               int maxdusts = 20;
-			  Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble"));
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble"));
               for (int i = 0; i < maxdusts; i++)
 			{
 				int num304 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 20, 0f, 0f, 100, default(Color), 0.8f);

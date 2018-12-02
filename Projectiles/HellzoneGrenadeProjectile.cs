@@ -63,7 +63,8 @@ namespace DBZMOD.Projectiles
 		
         public override void Kill(int timeLeft)
         {
-        	Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 122);
+            if (!Main.dedServ)
+                Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 122);
         	int num251 = 1;
         	if (projectile.owner == Main.myPlayer)
         	{

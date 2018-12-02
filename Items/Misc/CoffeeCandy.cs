@@ -33,7 +33,8 @@ namespace DBZMOD.Items.Misc
 
         public override bool OnPickup(Player player)
         {
-            Main.PlaySound(SoundID.NPCDeath7, player.position);
+            if (!Main.dedServ)
+                Main.PlaySound(SoundID.NPCDeath7, player.position);
             //Mine makes a sound
             //modplayer resource increase goes here++
             MyPlayer.ModPlayer(player).KiCurrent += 25;
