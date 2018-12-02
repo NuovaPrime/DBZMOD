@@ -538,6 +538,7 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Config\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>

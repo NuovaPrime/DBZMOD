@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KaiokenDrainMulti -= 0.5f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax = (int)(player.GetModPlayer<MyPlayer>(mod).KiMax * 0.7);
+                player.GetModPlayer<MyPlayer>(mod).KiMax2 = (int)(player.GetModPlayer<MyPlayer>(mod).KiMax2 * 0.7);
                 player.GetModPlayer<MyPlayer>(mod).kaioCrystal = true;
             }
         }

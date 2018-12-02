@@ -1390,6 +1390,7 @@ namespace DBZMOD
         public void EndTransformations()
         {
             player.ClearBuff(mod.BuffType("SSJ1Buff"));
+            player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
             player.ClearBuff(mod.BuffType("SSJ2Buff"));
             player.ClearBuff(mod.BuffType("ASSJBuff"));
             player.ClearBuff(mod.BuffType("USSJBuff"));
