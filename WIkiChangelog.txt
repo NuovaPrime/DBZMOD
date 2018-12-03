@@ -255,3 +255,38 @@ V1.0.6.7
 
 2. Fixed bug where [[Kaioken]] gave no bonuses to any damage types except [[Ki]].
 
+3. Adjusted [[Pure Ki Crystal]]'s rarity.
+
+
+V1.0.7
+
+== Changes ==
+
+1. New sprites for the [[Scouters]] and the [[Radiant Glider]]
+
+2. New sprite for the [[Charging Aura]].
+
+3. Nerfed [[Scattershot]], [[Farmers Shotgun]].
+
+4. Buffed [[Big Bang Attack]], [[Trap Shooter]]
+
+5. Buffed all [[Beam]] attacks.
+
+5. Increased the time before all [[Massive Blast]] type weapons despawn.
+
+6. Added a bit of flavor text to [[Scrap Metal]]
+
+7. The [[Flight]] dust now changes according to your transformation.
+
+== Fixes ==
+
+1. Fixed bug where your [[Ki]] max would be broken from various items.
+
+2. Fixed alot of sounds playing on the serverside, should fix some crashes and sound spam in multiplayer.
+
+3. Running out of ki now also disables [[Kaioken Technique#Super Kaioken|Super Kaioken]].
+
+4. The [[Greater Ki Fragment]] and [[Master Ki Fragment]]'s now drop from the correct bosses in expert.
+
+5. Fixed bug where the [[Spiritual Emblem]] didn't drop in [[Normal Mode]].
+

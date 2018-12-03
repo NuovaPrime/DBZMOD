@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			item.shoot = mod.ProjectileType("SpecialBeamCannonBall");
 			item.shootSpeed = 0f;
-			item.damage = 60;
+			item.damage = 114;
 			item.knockBack = 3f;
 			item.useStyle = 5;
             item.useAnimation = 240;

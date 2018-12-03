@@ -13,10 +13,9 @@ namespace DBZMOD.Items.Weapons.Tier_1
 	{
 		public override void SetDefaults()
 		{
-			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("EnergyWaveBall");
 			item.shootSpeed = 0f;
-			item.damage = 22;
+			item.damage = 32;
 			item.knockBack = 2f;
 			item.useStyle = 5;
             item.useAnimation = 90;

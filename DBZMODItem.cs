@@ -137,11 +137,11 @@ namespace DBZMOD
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment3"));
                 }
-                if (context == "bossBag" && arg == ItemID.GolemBossBag)
+                if (context == "bossBag" && arg == ItemID.PlanteraBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment4"));
                 }
-                if (context == "bossBag" && arg == ItemID.MoonLordBossBag)
+                if (context == "bossBag" && arg == ItemID.CultistBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment5"));
                 }

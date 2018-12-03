@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         {
             item.shoot = mod.ProjectileType("TrapShooterProjectile");
             item.shootSpeed = 35f;
-            item.damage = 70;
+            item.damage = 82;
             item.knockBack = 3f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item1;

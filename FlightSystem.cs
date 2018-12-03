@@ -25,6 +25,8 @@ namespace DBZMOD
         bool m_FlightMode = false;
         Vector2 m_currentVel = new Vector2(0, 0);
         private int FLIGHT_KI_DRAIN_TIMER = 0;
+
+        private int FLIGHT_DUST_TYPE = 261;
         //float m_targetRotation = 0.0f;
 
         public void ToggleFlight(Player player, Mod mod)
@@ -84,22 +86,40 @@ namespace DBZMOD
 
                 if (m_currentVel.Length() > 0.5f)
                 {
-                    if(boostSpeed == 0) //not boosting?
+                    if (boostSpeed == 0) //not boosting?
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            Dust tdust = Terraria.Dust.NewDustPerfect(Main.LocalPlayer.Center, 91, new Vector2(0f, 0f), 0, new Color(255,255,255), 1.75f);
-							tdust.noGravity = true;
+                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FLIGHT_DUST_TYPE, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                            tdust.noGravity = true;
                         }
+
                     }
                     else
                     {
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 10; i++)
                         {
-							Dust tdust = Terraria.Dust.NewDustPerfect(Main.LocalPlayer.Center, 91, new Vector2(0f, 0f), 0, new Color(255,255,255), 2.25f);
-							tdust.noGravity = true;
+                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FLIGHT_DUST_TYPE, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                            tdust.noGravity = true;
                         }
                     }
+                }
+
+                if (MyPlayer.ModPlayer(player).IsSSJ)
+                {
+                    FLIGHT_DUST_TYPE = 169;
+                }
+                else if (MyPlayer.ModPlayer(player).IsLSSJ)
+                {
+                    FLIGHT_DUST_TYPE = 89;
+                }
+                else if (MyPlayer.ModPlayer(player).IsGodform || MyPlayer.ModPlayer(player).IsKaioken)
+                {
+                    FLIGHT_DUST_TYPE = 90;
+                }
+                else
+                {
+                    FLIGHT_DUST_TYPE = 261;
                 }
 
                 //caluclate velocity

@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         {
             item.shoot = mod.ProjectileType("BlightedFangProj");
             item.shootSpeed = 16f;
-            item.damage = 62;
+            item.damage = 74;
             item.knockBack = 4f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item1;

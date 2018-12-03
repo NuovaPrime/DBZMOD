@@ -364,6 +364,8 @@ namespace DBZMOD
         private NPC npc;
         public bool IsFistWeapon;
         public bool CanUseHeavyHit;
+        public float KiDrain;
+        public string WeaponType;
         #region Boss bool checks
         public bool EyeDowned;
         public bool BeeDowned;
@@ -415,8 +417,6 @@ namespace DBZMOD
             item.thrown = false;
             item.summon = false;
         }
-        public float KiDrain;
-        public string WeaponType;
         public override bool CloneNewInstances
         {
             get

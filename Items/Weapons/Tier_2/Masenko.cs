@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("MasenkoBall");
 			item.shootSpeed = 0f;
-			item.damage = 45;
+			item.damage = 72;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;

@@ -29,7 +29,7 @@ namespace DBZMOD.Projectiles
             projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
-            projectile.timeLeft = 400;
+            projectile.timeLeft = 1200;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;

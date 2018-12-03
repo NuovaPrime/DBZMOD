@@ -20,8 +20,8 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
-			item.useAnimation = 90;
-			item.useTime = 90;
+			item.useAnimation = 120;
+			item.useTime = 120;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
@@ -44,10 +44,10 @@ namespace DBZMOD.Items.Weapons.Tier_4
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			{
-			int numberProjectiles = 8 + Main.rand.Next(2); // 4 or 5 shots
+			int numberProjectiles = 4 + Main.rand.Next(2);
 			for (int i = 0; i < numberProjectiles; i++)
 			{
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(25)); // 30 degree spread.
+				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(25));
 				// If you want to randomize the speed to stagger the projectiles
 			 float scale = 1f - (Main.rand.NextFloat() * .4f);
 			 perturbedSpeed = perturbedSpeed * scale; 

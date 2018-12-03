@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Normal
 
 		public override void SetDefaults()
 		{
-			item.damage = 14;
+			item.damage = 9;
 			item.ranged = true;
 			item.width = 62;
 			item.height = 20;

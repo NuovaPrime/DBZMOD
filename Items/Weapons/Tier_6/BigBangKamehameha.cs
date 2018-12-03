@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		{
 			item.shoot = mod.ProjectileType("BigBangKamehamehaBall");
 			item.shootSpeed = 0f;
-			item.damage = 150;
+			item.damage = 182;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.autoReuse = false;
 			item.value = 120000;
 			item.rare = 8;
-            KiDrain = 150;
+            KiDrain = 230;
 			WeaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()

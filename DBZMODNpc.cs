@@ -212,8 +212,8 @@ namespace DBZMOD
                 {
 
                     Player player = Main.LocalPlayer;
-                    int kihealvalue = MyPlayer.ModPlayer(player).KiMax - MyPlayer.ModPlayer(player).KiCurrent;
-                    MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).KiMax;
+                    int kihealvalue = MyPlayer.ModPlayer(player).OverallKiMax() - MyPlayer.ModPlayer(player).KiCurrent;
+                    MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).OverallKiMax();
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kihealvalue, false, false);
                     if(!Main.dedServ)
                     {
@@ -422,6 +422,15 @@ namespace DBZMOD
                     {
                         {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1);
+                        }
+                    }
+                }
+                if (npc.type == NPCID.WallofFlesh)
+                {
+                    if (Main.rand.Next(4) == 0)
+                    {
+                        {
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SpiritualEmblem"), 1);
                         }
                     }
                 }

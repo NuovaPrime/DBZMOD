@@ -14,7 +14,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("BigBangAttackProjectile");
-			item.damage = 62;
+			item.damage = 66;
 			item.shootSpeed = 25f;
 			item.knockBack = 6f;
 			item.useStyle = 3;

@@ -37,11 +37,11 @@ namespace DBZMOD.Projectiles
             {
                 int velo = Main.rand.Next(1, 1); //determines the X velocity
                 int velo1 = Main.rand.Next(4, 4); //determines the Y velocity //determines the Y velocity
-				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 30, projectile.owner, 0f, 1f); 
-				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 30, projectile.owner, 0f, 1f);
-				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 30, projectile.owner, 0f, 1f); 
-				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 20, projectile.owner, 0f, 1f);
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage / 2, 20, projectile.owner, 0f, 1f);
+				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage, 30, projectile.owner, 0f, 1f); 
+				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage, 30, projectile.owner, 0f, 1f);
+				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage, 30, projectile.owner, 0f, 1f); 
+				Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage, 20, projectile.owner, 0f, 1f);
+                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, velo, velo1, mod.ProjectileType("BigBangAttackProjectile2"), projectile.damage, 20, projectile.owner, 0f, 1f);
             }
         }
 		

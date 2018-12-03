@@ -121,3 +121,9 @@ V1.0.6.6
 9. Fixed bug where Super Saiyan 3's health drain still drained below 30% Ki.
 10. Fixed bug where the MRE lowered your health by 25.
 11. Fixed bug where Radiant Ki Scroll didn't need the Ancient Manipulator.
+
+V1.0.6.7
+
+1. Fixed major bug where any Accessories that decreased Ki max would make your ki go negative.
+2. Fixed bug where Kaioken gave no bonuses to any damage types except Ki.
+3. Adjusted Pure Ki Crystal's rarity.
