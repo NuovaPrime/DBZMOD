@@ -543,14 +543,83 @@ namespace DBZMOD
                     }
                 }
             }
+
+            if (!NPC.downedBoss1)
+            {
+                if (npc.type == NPCID.EyeofCthulhu)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedBoss2)
+            {
+                if (npc.type == NPCID.BrainofCthulhu || (npc.type == NPCID.EaterofWorldsHead && npc.boss))
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedBoss3)
+            {
+                if (npc.type == NPCID.SkeletronHead)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedQueenBee)
+            {
+                if (npc.type == NPCID.QueenBee)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!Main.hardMode)
+            {
+                if (npc.type == NPCID.WallofFlesh)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PridefulKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedMechBossAny)
+            {
+                if (npc.type == NPCID.SkeletronPrime || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer || npc.type == NPCID.TheDestroyer)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedPlantBoss)
+            {
+                if (npc.type == NPCID.Plantera)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedGolemBoss)
+            {
+                if (npc.type == NPCID.Golem)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedFishron)
+            {
+                if (npc.type == NPCID.DukeFishron)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
+            if (!NPC.downedAncientCultist)
+            {
+                if (npc.type == NPCID.CultistBoss)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
+                }
+            }
             if (NPC.downedBoss2)
             {
-                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneRockLayerHeight)
+                if (Main.rand.Next(7) == 0)
                 {
-                    if (Main.rand.Next(10) == 0)
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("EarthenShard"), Main.rand.Next(1, 2));
-                    }
+                    Item.NewItem((int) npc.position.X, (int) npc.position.Y, npc.width, npc.height,
+                        mod.ItemType("EarthenShard"), Main.rand.Next(1, 3));
                 }
             }
             if (Main.hardMode)

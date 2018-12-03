@@ -70,14 +70,14 @@ namespace DBZMOD.Items.Weapons.Fist
             }
             base.ModifyTooltips(tooltips);
         }
-        public override void AddRecipes()
+        /*public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "StableKiCrystal", 20);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
-        }
+        }*/
         /* public override void HoldItem(Player player)
          {
              Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KiFistProj"), 0, 0, player.whoAmI);
