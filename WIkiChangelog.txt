@@ -272,11 +272,11 @@ V1.0.7
 
 5. Buffed all [[Beam]] attacks.
 
-5. Increased the time before all [[Massive Blast]] type weapons despawn.
+6. Increased the time before all [[Massive Blast]] type weapons despawn.
 
-6. Added a bit of flavor text to [[Scrap Metal]]
+7. Added a bit of flavor text to [[Scrap Metal]]
 
-7. The [[Flight]] dust now changes according to your transformation.
+8. The [[Flight]] dust now changes according to your transformation.
 
 == Fixes ==
 
@@ -290,3 +290,19 @@ V1.0.7
 
 5. Fixed bug where the [[Spiritual Emblem]] didn't drop in [[Normal Mode]].
 
+
+V1.0.7.1
+
+== Changes ==
+
+1. Drastically lowered the sounds of all [[Weapons|Ki Attacks]].
+
+2. [[Earthen Shard]]'s now drop anywhere at a low chance.
+
+3. Buffed [[Ki Beam]].
+
+4. The first kill of any boss now drops [[Ki Crystal]]'s depending on the boss.
+
+== Fixes ==
+
+1. Fixed bug where certain [[Accessories]] made your charge limits infinite.
