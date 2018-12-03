@@ -239,7 +239,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax + KiMax2 + KiMax3) * KiMaxMult);
+            return (int)Math.Ceiling((KiMax + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
         }
 
         public const int BASE_KI_MAX = 1000;
