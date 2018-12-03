@@ -143,3 +143,14 @@ V1.0.7
 11. Running out of ki now also disables Kaioken Technique#Super Kaioken|Super Kaioken.
 12. The Greater Ki Fragment and Master Ki Fragment's now drop from the correct bosses in expert.
 13. Fixed bug where the Spiritual Emblem didn't drop in Normal Mode.
+
+V1.0.7.1
+
+1. Drastically lowered the sounds of all Ki Attacks.
+2. Earthen Shard's now drop anywhere at a low chance.
+3. Buffed Ki Beam.
+4. The first kill of any boss now drops Ki Crystal's depending on the boss.
+5. Fixed bug where certain Accessories made your charge limits infinite.
+6. Fixed Legendary Trait not applying its x2 max Ki.
+7. Fixed debug text displaying when using the Radiant Glider
+8. Fixed various issues where bosses wouldn't drop their items at all or drop both at a time.
