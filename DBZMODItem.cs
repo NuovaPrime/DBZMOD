@@ -109,42 +109,72 @@ namespace DBZMOD
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragmentFirst"));
                 }
+            }
+            if(Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment1"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment2"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.GolemBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment3"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.MoonLordBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment4"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.EyeOfCthulhuBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment1"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment2"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment3"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.PlanteraBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment4"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.CultistBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KiFragment5"));
                 }
+            }
+            if (Main.rand.Next(4) == 0)
+            {
                 if (context == "bossBag" && arg == ItemID.WallOfFleshBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("SpiritualEmblem"));

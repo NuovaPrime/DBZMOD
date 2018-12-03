@@ -306,3 +306,9 @@ V1.0.7.1
 == Fixes ==
 
 1. Fixed bug where certain [[Accessories]] made your charge limits infinite.
+
+2. Fixed [[Legendary Trait]] not applying its x2 max [[Ki]].
+
+3. Fixed debug text displaying when using the [[Radiant Glider]]
+
+4. Fixed various issues where bosses wouldn't drop their items at all or drop both at a time.
