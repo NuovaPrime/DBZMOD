@@ -110,6 +110,7 @@
     <Compile Include="Buffs\USSJBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
+    <Compile Include="Config\ConfigModel.cs" />
     <Compile Include="DBZMOD.cs" />
     <Compile Include="DBZMODItem.cs" />
     <Compile Include="DBZMODNpc.cs" />
@@ -538,7 +539,6 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Config\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>

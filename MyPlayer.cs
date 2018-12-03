@@ -15,6 +15,7 @@ using DBZMOD;
 using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
+using Config;
 
 namespace DBZMOD
 {
@@ -30,7 +31,7 @@ namespace DBZMOD
         public int KiRegen;
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
-
+        // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
         private int _kiMax;
         public int KiMax
         {
@@ -47,8 +48,16 @@ namespace DBZMOD
                 _kiMax = value;
             }
         }
+
+        // ki max 2 is ki max from equipment and accessories. there's no point changing this value as it gets reset each frame.
         public int KiMax2;
+
+        // progression upgrades increase KiMax3. This is the only value that can be changed to have an impact on ki max and does not reset.
+        public int KiMax3;
+
+        // ki max mult is a multiplier for ki that stacks multiplicatively with other KiMaxMult bonuses. It resets to 1f each frame.
         public float KiMaxMult;
+
         public int KiCurrent;
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
@@ -171,7 +180,7 @@ namespace DBZMOD
         public int OrbGrabRange;
         public int OrbHealAmount;
         public bool IsFlying;
-        private KiItem kiitem;
+
         public int FlightUsageAdd;
         public float FlightSpeedAdd;
         public bool earthenSigil;
@@ -227,9 +236,10 @@ namespace DBZMOD
         FistSystem m_fistSystem = new FistSystem();
         #endregion
 
+        // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax + KiMax2) * KiMaxMult);
+            return (int)Math.Ceiling((KiMax + KiMax2 + KiMax3) * KiMaxMult);
         }
 
         public const int BASE_KI_MAX = 1000;
@@ -715,7 +725,7 @@ namespace DBZMOD
             tag.Add("flightUpgraded", flightUpgraded);
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
-            tag.Add("KiMax", KiMax);            
+            tag.Add("KiMax3", KiMax3);            
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -768,7 +778,7 @@ namespace DBZMOD
             flightUpgraded = tag.Get<bool>("flightUpgraded");
             SSJGAchieved = tag.Get<bool>("ssjgAchieved");
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
-            KiMax = tag.Get<int>("KiMax");
+            KiMax3 = tag.Get<int>("KiMax3");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
@@ -983,7 +993,7 @@ namespace DBZMOD
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
             }
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-            if (EnergyCharge.Current && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
+            if (IsCharging && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
@@ -1015,12 +1025,12 @@ namespace DBZMOD
                 }
 
             }
-            else if (!EnergyCharge.Current)
+            else if (!IsCharging)
             {
                 ScarabChargeTimer = 0;
                 ScarabChargeRateAdd = 0;
             }
-            if (EnergyCharge.Current && IsFlying)
+            if (IsCharging && IsFlying)
             {
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
@@ -1034,21 +1044,39 @@ namespace DBZMOD
             {
                 KiCurrent = OverallKiMax();
             }
-            if (EnergyCharge.JustPressed)
+            if (ConfigModel.IsChargeToggled)
             {
-                if (!IsTransformed)
+                if (EnergyCharge.JustPressed)
                 {
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
+                    IsCharging = !IsCharging;
+                    if (IsCharging)
+                    {
+                        if (!IsTransformed)
+                        {
+                            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
+                        }
+                        if (!Main.dedServ)
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));                        
+                    }
                 }
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
-                IsCharging = true;
             }
-            if (EnergyCharge.JustReleased)
+            else
             {
-                IsCharging = false;
+                if (EnergyCharge.JustPressed)
+                {
+                    if (!IsTransformed)
+                    {
+                        Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
+                    }
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
+                    IsCharging = true;
+                }
+                if (EnergyCharge.JustReleased)
+                {
+                    IsCharging = false;
+                }
             }
-
 
             if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
             {
@@ -1187,8 +1215,6 @@ namespace DBZMOD
             KiMax = GetKiMaxFromFragments();
             KiMax2 = 0;
             KiMaxMult = 1f;
-            
-            //IsCharging = false;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

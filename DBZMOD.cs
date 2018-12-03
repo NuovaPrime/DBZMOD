@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Effects;
+using Config;
 
 namespace DBZMOD
 {
@@ -59,6 +60,8 @@ namespace DBZMOD
         }
         public override void Load()
         {
+            // loads the mod's configuration file.
+            ConfigModel.Load();
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);
             instance = this;

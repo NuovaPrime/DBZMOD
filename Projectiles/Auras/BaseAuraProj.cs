@@ -48,8 +48,9 @@ namespace DBZMOD.Projectiles.Auras
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             projectile.netUpdate = true;
-            if (MyPlayer.EnergyCharge.JustReleased)
+            if (!modPlayer.IsCharging)
             {
                 projectile.Kill();
             }

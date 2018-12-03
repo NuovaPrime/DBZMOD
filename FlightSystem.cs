@@ -40,10 +40,11 @@ namespace DBZMOD
        
         public void Update(TriggersSet triggersSet, Player player)
         {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (m_FlightMode)
             {
                 //check for ki
-                if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                if (modPlayer.KiCurrent <= 0)
                 {
                     m_FlightMode = false;
                     player.fullRotation = MathHelper.ToRadians(0);
@@ -52,15 +53,15 @@ namespace DBZMOD
 
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
-                MyPlayer.ModPlayer(player).IsFlying = true;
+                modPlayer.IsFlying = true;
                 Vector2 m_rotationDir = Vector2.Zero;
 
                 //m_targetRotation = 0;
 
                 //Input checks
-                float boostSpeed = (BURST_SPEED) * (MyPlayer.EnergyCharge.Current? 1 : 0);
-                int totalFlightUsage = FLIGHT_KI_DRAIN - MyPlayer.ModPlayer(player).FlightUsageAdd;
-                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + MyPlayer.ModPlayer(player).FlightSpeedAdd;
+                float boostSpeed = (BURST_SPEED) * (modPlayer.IsCharging ? 1 : 0);
+                int totalFlightUsage = FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd;
+                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
 
                 if (triggersSet.Up)
                 {
@@ -105,15 +106,15 @@ namespace DBZMOD
                     }
                 }
 
-                if (MyPlayer.ModPlayer(player).IsSSJ)
+                if (modPlayer.IsSSJ)
                 {
                     FLIGHT_DUST_TYPE = 169;
                 }
-                else if (MyPlayer.ModPlayer(player).IsLSSJ)
+                else if (modPlayer.IsLSSJ)
                 {
                     FLIGHT_DUST_TYPE = 89;
                 }
-                else if (MyPlayer.ModPlayer(player).IsGodform || MyPlayer.ModPlayer(player).IsKaioken)
+                else if (modPlayer.IsGodform || modPlayer.IsKaioken)
                 {
                     FLIGHT_DUST_TYPE = 90;
                 }
@@ -153,19 +154,19 @@ namespace DBZMOD
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
                 FLIGHT_KI_DRAIN_TIMER++;
                 //drain ki
-                if (!MyPlayer.ModPlayer(player).flightUpgraded)
+                if (!modPlayer.flightUpgraded)
                 {
                     if (FLIGHT_KI_DRAIN_TIMER >= 1)
                     {
-                        MyPlayer.ModPlayer(player).KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
+                        modPlayer.KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
                         FLIGHT_KI_DRAIN_TIMER = 0;
                     }
                 }
-                else if (MyPlayer.ModPlayer(player).flightUpgraded)
+                else if (modPlayer.flightUpgraded)
                 {
                     if (FLIGHT_KI_DRAIN_TIMER >= 3)
                     {
-                        MyPlayer.ModPlayer(player).KiCurrent -= 1;
+                        modPlayer.KiCurrent -= 1;
                         FLIGHT_KI_DRAIN_TIMER = 0;
                     }
                 }
@@ -178,8 +179,8 @@ namespace DBZMOD
             {
                 Mod mod = ModLoader.GetMod("DBZMOD");
                 player.fullRotation = MathHelper.ToRadians(0);
-                MyPlayer.ModPlayer(player).IsFlying = false;
-                if (MyPlayer.ModPlayer(player).KiCurrent <= 0 && MyPlayer.ModPlayer(player).flightDampeningUnlocked)
+                modPlayer.IsFlying = false;
+                if (modPlayer.KiCurrent <= 0 && modPlayer.flightDampeningUnlocked)
                 {
                     player.AddBuff(mod.BuffType("KatchinFeet"), 600);
                 }

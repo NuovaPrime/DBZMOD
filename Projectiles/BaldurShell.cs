@@ -28,11 +28,12 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             projectile.netUpdate = true;
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(34, 30);
-            if (MyPlayer.EnergyCharge.JustReleased)
+            if (modPlayer.IsCharging)
             {
                 projectile.Kill();
             }
