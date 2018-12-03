@@ -23,6 +23,7 @@ namespace DBZMOD
         public int ChargeTimer;
         public float ChargeTimerMax;
         public int ChargeLimit = 4;
+        public int FinalChargeLimit = 4;
         public int KiDrainTimer;
         public int SizeTimer;
         public int originalWidth;
@@ -62,7 +63,7 @@ namespace DBZMOD
         {
             projectile.netUpdate = true;
             player = Main.player[projectile.owner];
-            ChargeLimit = ChargeLimit + MyPlayer.ModPlayer(player).ChargeLimitAdd;
+            FinalChargeLimit = ChargeLimit + MyPlayer.ModPlayer(player).ChargeLimitAdd;
             if (!ChargeBall)
             {
                 projectile.scale = projectile.scale + ChargeLevel;
@@ -104,7 +105,7 @@ namespace DBZMOD
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;
 
-                if (ChargeTimer > ChargeTimerMax && ChargeLevel < ChargeLimit)
+                if (ChargeTimer > ChargeTimerMax && ChargeLevel < FinalChargeLimit)
                 {
                     ChargeLevel += 1;
                     ChargeTimer = 0;
