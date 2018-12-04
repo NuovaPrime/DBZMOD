@@ -1062,7 +1062,7 @@ namespace DBZMOD
             }
             else
             {
-                if (EnergyCharge.JustPressed)
+                if (EnergyCharge.Current && !IsCharging)
                 {
                     if (!IsTransformed)
                     {
@@ -1072,7 +1072,7 @@ namespace DBZMOD
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     IsCharging = true;
                 }
-                if (EnergyCharge.JustReleased)
+                if (!EnergyCharge.Current && IsCharging)
                 {
                     IsCharging = false;
                 }
