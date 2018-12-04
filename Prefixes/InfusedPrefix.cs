@@ -26,8 +26,14 @@ namespace DBZMOD.Prefixes
 
         public override void Apply(Item item)
         {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 20;
-            ((KiItem)item.modItem).KiDrain *= 1.20f;
+            if(item.modItem is KiItem)
+            {
+                KiItem kiitem = ((KiItem)item.modItem);
+
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 20;
+                kiitem.KiDrain *= 1.20f;
+            }
+
             item.damage = (int)(item.damage * 1.12f);
         }
     }
