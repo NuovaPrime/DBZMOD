@@ -432,6 +432,7 @@
     <Compile Include="UI\ResourceBar.cs" />
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Util\ControlHelper.cs" />
+    <Compile Include="Util\HomingHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />

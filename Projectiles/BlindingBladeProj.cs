@@ -4,20 +4,24 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class BlindingBladeProj : ModProjectile
     {
+        private const int STEP_SPEED = 10;
+
         public override void SetStaticDefaults()
         {
 			ProjectileID.Sets.Homing[projectile.type] = true;
             DisplayName.SetDefault("Blinding Blade");
         }
+
         public override void SetDefaults()
         {
-            projectile.width = 54;
-            projectile.height = 54;
+            projectile.width = 40;
+            projectile.height = 40;
             projectile.timeLeft = 280;
             projectile.penetrate = 16;
             projectile.tileCollide = true;
@@ -26,7 +30,7 @@ namespace DBZMOD.Projectiles
             projectile.hostile = false;
             projectile.aiStyle = 56; //perfect ai for gravless and rotation, useful for disks 
             projectile.light = 3f;
-            projectile.stepSpeed = 13;
+            projectile.stepSpeed = STEP_SPEED;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
@@ -43,23 +47,32 @@ namespace DBZMOD.Projectiles
             }
             return true;
         }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+        {
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough);
+        }
+
+
         public override bool OnTileCollide(Vector2 velocityChange)
         {
+
             if (projectile.velocity.X != velocityChange.X)
             {
-                projectile.velocity.X = -velocityChange.X;
+                projectile.velocity.X -= velocityChange.X;
             }
             if (projectile.velocity.Y != velocityChange.Y)
             {
-                projectile.velocity.Y = -velocityChange.Y;
+                projectile.velocity.Y -= velocityChange.Y;
             }
             return false;
         }
+
         public override void PostAI()
         {
             for (int d = 0; d < 1; d++)
             {
-                if (Main.rand.NextFloat() < 1f)
+                if (Main.rand.NextFloat() < 1f) // always less than 1f?
                 {
                     Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, 163, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
                     dust.noGravity = true;
@@ -67,25 +80,11 @@ namespace DBZMOD.Projectiles
 
             }
         }
+
         public override void AI()
         {
-            for (int i = 0; i < 200; i++)
-            {
-                NPC target = Main.npc[i];
-                //Get the shoot trajectory from the projectile and target
-                float shootToX = target.position.X + (float)target.width * 0.5f - projectile.Center.X;
-                float shootToY = target.position.Y - projectile.Center.Y;
-                float distance = (float)System.Math.Sqrt((double)(shootToX * shootToX + shootToY * shootToY));
-                {
-                    if (distance < 780f && !target.friendly && target.active)
-                    {
-                        if (Main.rand.NextBool(30))
-                        {
-                            Vector2 offsetVector = new Vector2(projectile.position.X - target.position.X, projectile.position.Y - target.position.Y);
-                        }
-                    }
-                }
-            }
+            // homing range, projectile acceleration, top speed
+            HomingHelper.DoHoming(projectile, 400f, (float)STEP_SPEED, true);            
         }
     }
 }
