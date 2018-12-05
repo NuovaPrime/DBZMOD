@@ -1488,7 +1488,7 @@ namespace DBZMOD
 
         public void EndTransformations()
         {
-            // automatically
+            // automatically applies debuffs.
             Transformations.ClearAllTransformations(player);
             if (transformationSound != null)
             {
