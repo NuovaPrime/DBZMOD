@@ -1,4 +1,4 @@
-/*using System.IO;
+using System.IO;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -12,7 +12,10 @@ namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
-
+        public override void ResetNearbyTileEffects()
+        {
+            MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+            modPlayer.kiLantern = false;
+        }
     }
 }
-*/

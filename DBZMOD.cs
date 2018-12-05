@@ -10,6 +10,7 @@ using Terraria.Graphics.Shaders;
 using DBZMOD.Effects;
 using Config;
 using Util;
+using Terraria.Graphics.Effects;
 
 namespace DBZMOD
 {
@@ -110,6 +111,9 @@ namespace DBZMOD
                 OverloadBarInterface.SetState(overloadbar);
 
                 Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
+
+                Filters.Scene["DBZMOD:GodSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.9f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
+                SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
             }
         }
         public override void AddRecipeGroups()

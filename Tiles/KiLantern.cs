@@ -36,11 +36,6 @@ namespace DBZMOD.Tiles
                 MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
                 modPlayer.kiLantern = true;
             }
-            else
-            {
-                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-                modPlayer.kiLantern = false;
-            }
         }        
     }
 }
