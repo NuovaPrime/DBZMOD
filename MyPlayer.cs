@@ -1505,6 +1505,7 @@ namespace DBZMOD
 
         public void EndTransformations()
         {
+            Transformations.ClearAllTransformations(player);
             player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
             if (transformationSound != null)
             {
