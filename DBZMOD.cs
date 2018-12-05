@@ -59,17 +59,16 @@ namespace DBZMOD
             TransMenu.SSJ2On = false;
             UIFlatPanel._backgroundTexture = null;
         }
+
         public override void Load()
         {
             // loads the mod's configuration file.
             ConfigModel.Load();
 
-            // Initialize the buff helper with an instance of this class
-            global::Util.Transformations.Initialize(this);
-
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);
             instance = this;
+
             tremorLoaded = ModLoader.GetMod("Tremor") != null;
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;

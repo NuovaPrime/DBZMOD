@@ -6,13 +6,9 @@ using Terraria.GameInput;
 using DBZMOD.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
-using Terraria.Graphics;
 using Microsoft.Xna.Framework;
-using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
-using DBZMOD;
-using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
 using Config;
@@ -320,13 +316,15 @@ namespace DBZMOD
             {
                 UI.TransMenu.SSJ3On = true;
             }
-            if (player.HasBuff(mod.BuffType("KaiokenBuffX100")))
+            if (Transformations.IsPlayerTransformed(player))
             {
-                LightningFrameTimer++;
-            }
-            if (player.HasBuff(mod.BuffType("LSSJ2Buff")))
-            {
-                LightningFrameTimer += 2;
+                if (!player.HasBuff(Transformations.Kaioken100.BuffId) && !player.HasBuff(Transformations.LSSJ2.BuffId))
+                {
+                    LightningFrameTimer++;
+                } else
+                {
+                    LightningFrameTimer += 2;
+                }
             }
             if (LightningFrameTimer >= 15)
             {
@@ -881,7 +879,7 @@ namespace DBZMOD
             if (!CanTransform())
                 return;
 
-            int targetTransformation = -1;
+            BuffInfo targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
@@ -894,7 +892,7 @@ namespace DBZMOD
                 else
                 {
                     // otherwise set them to transform to whatever their selected transformation is.
-                    targetTransformation = Transformations.GetBuffIdFromMenuSelection(UI.TransMenu.MenuSelection);
+                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
                 }
             }
             // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
@@ -910,17 +908,17 @@ namespace DBZMOD
             }
 
             // if we made it this far without a target, it means for some reason we can't change transformations.
-            if (targetTransformation == -1)
+            if (targetTransformation == null)
                 return;
 
             // finally, check that the transformation is really valid and then do it.
             if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation);
+                Transformations.DoTransform(player, targetTransformation, mod);
         }
 
         public void HandleKaioken()
         {
-            int targetTransformation = -1;
+            BuffInfo targetTransformation = null;
                         
             if (KaiokenKey.JustPressed) {
                 // no possible combination of kaioken can be attained in your current state.
@@ -935,9 +933,12 @@ namespace DBZMOD
                 targetTransformation = Transformations.GetPreviousKaiokenStep(player);                    
             }
 
+            if (targetTransformation == null)
+                return;
+
             // finally, check the transformation is really valid and then do it.
             if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation);
+                Transformations.DoTransform(player, targetTransformation, mod);
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -1489,7 +1490,7 @@ namespace DBZMOD
         public void EndTransformations()
         {
             // automatically applies debuffs.
-            Transformations.ClearAllTransformations(player);
+            Transformations.ClearAllTransformations(player, true);
             if (transformationSound != null)
             {
                 transformationSound.Stop();
