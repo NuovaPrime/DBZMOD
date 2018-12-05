@@ -597,10 +597,13 @@ namespace Util
             {
                 if (Main.player[proj.owner] == player)
                 {
-                    // if it's an instance of an aura projectile kill it.
-                    if (AuraTypes().Contains(proj.modProjectile.GetType()))
+                    if(proj.modProjectile != null)
                     {
-                        proj.Kill();
+                        // if it's an instance of an aura projectile kill it.
+                        if (AuraTypes().Contains(proj.modProjectile.GetType()))
+                        {
+                            proj.Kill();
+                        }
                     }
                 }
             }
