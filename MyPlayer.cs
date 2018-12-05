@@ -861,13 +861,13 @@ namespace DBZMOD
         // handles everything that doesn't involve checking the player flags or current transformation buffs.
         public bool CanTransform()
         {
-            return !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff"));
+            return !IsTransforming && !player.channel && !Transformations.IsExhaustedFromTransformation(player);
         }
 
         // handles everything that doesn't involve checking the player flags or current transformation buffs.
         public bool CanKaioken()
         {
-            return !player.channel && !player.HasBuff(mod.BuffType("TiredDebuff"));
+            return !player.channel && !Transformations.IsTiredFromKaioken(player);
         }
 
         public bool CanAscend()
@@ -1090,22 +1090,7 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
-
-                if (Transformations.IsKaioken(player))
-                {
-                    player.AddBuff(mod.BuffType("TiredDebuff"), (int)KaiokenTimer);
-                    KaiokenTimer = 0.0f;
-                } else if (Transformations.IsSSJ1Kaioken(player))
-                {
-                    player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
-                    player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
-                    KaiokenTimer = 0.0f;
-                } else
-                {
-                    EndTransformations();
-                }
-
-                Transformations.ClearAllTransformations(player);
+                EndTransformations();
 
                 if (!Main.dedServ)
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
@@ -1503,8 +1488,8 @@ namespace DBZMOD
 
         public void EndTransformations()
         {
+            // automatically
             Transformations.ClearAllTransformations(player);
-            player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
             if (transformationSound != null)
             {
                 transformationSound.Stop();

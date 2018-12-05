@@ -137,6 +137,24 @@ namespace Util
             }
         }
 
+        // the two debuffs from transforms
+        public static int KaiokenFatigue
+        {
+            get
+            {
+                return mod.BuffType("TiredDebuff");
+            }
+        }
+
+        public static int TransformationExhaustion
+        {
+            get
+            {
+                return mod.BuffType("TransExhaustionBuff");
+            }
+        }
+
+
         // called at mod entry point to give this static class a reference to the mod's many things.
         public static void Initialize(Mod initMod)
         {
@@ -396,11 +414,48 @@ namespace Util
             DoTransform(player, GetBuffIdFromMenuSelection(buffId));
         }
 
+        public static void AddKaiokenExhaustion(Player player, int multiplier)
+        {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+            player.AddBuff(KaiokenFatigue, (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
+            modPlayer.KaiokenTimer = 0f;
+        }
+
+        public static void AddTransformationExhaustion(Player player)
+        {
+            player.AddBuff(TransformationExhaustion, 600);
+        }
+
+        public static bool IsExhaustedFromTransformation(Player player)
+        {
+            return player.HasBuff(TransformationExhaustion);
+        }
+
+        public static bool IsTiredFromKaioken(Player player)
+        {
+            return player.HasBuff(KaiokenFatigue);
+        }
+
         // wipes out all transformation buffs, requires them to be a part of the AllBuffs() union (it's a bunch of lists joined together).
         public static void ClearAllTransformations(Player player)
         {
             foreach(int buffId in AllBuffs())
             {
+                if (buffId == SSJ1Kaioken)
+                {
+                    // add both debuffs, and kaioken exhaustion is doubled
+                    AddKaiokenExhaustion(player, 2);
+                    AddTransformationExhaustion(player);
+                }
+                else if (KaiokenBuffs().Contains(buffId))
+                {
+                    // add the tired debuff and clear the kaioken timer
+                    AddKaiokenExhaustion(player, 1);
+                } else
+                {
+                    // add the exhaustion debuff for transformations
+                    AddTransformationExhaustion(player);
+                }
                 if (player.HasBuff(buffId))
                     player.ClearBuff(buffId);
             }
