@@ -57,7 +57,6 @@ namespace DBZMOD
             // Main.NewText(string.Format("Has Crystal Equipped: {0} - Drain Rate: {1}", isKaioCrystalEquipped, OverallHealthDrainRate));
             if (IsSSJ)
             {
-                MyPlayer.ModPlayer(player).IsTransformed = true;
                 KiDrainTimer++;
                 if(KiDrainTimer > 2)
                 {

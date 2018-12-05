@@ -12,6 +12,7 @@ using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
+using Util;
 
 namespace DBZMOD
 {
@@ -53,7 +54,7 @@ namespace DBZMOD
 
         private void ProcessKiExperienceGain(MyPlayer modplayer)
         {
-            if (modplayer.IsTransformed)
+            if (Transformations.IsPlayerTransformed(modplayer.player))
             {
                 AddKiExperience(0.2f);
             }

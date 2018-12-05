@@ -89,20 +89,19 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer.ModPlayer(player).IsTransformed = true;
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
-                if (!player.HasBuff(Transformations.LSSJ2))
-                    player.AddBuff(Transformations.LSSJ2, 360000);
+                if (!player.HasBuff(Transformations.LSSJ2.BuffId))
+                    player.AddBuff(Transformations.LSSJ2.BuffId, 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
-                if (!player.HasBuff(Transformations.LSSJ))
-                    player.AddBuff(Transformations.LSSJ, 360000);
+                if (!player.HasBuff(Transformations.LSSJ.BuffId))
+                    player.AddBuff(Transformations.LSSJ.BuffId, 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
