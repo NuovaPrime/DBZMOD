@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Util;
 
 namespace DBZMOD.UI
 {
@@ -138,7 +139,7 @@ namespace DBZMOD.UI
             {
                 FrameTimer2 = 0;
             }
-			if(player.IsTransformed)
+			if(Transformations.IsPlayerTransformed(player.player))
 			{
 				Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
 				int FrameHeight2 = GFX.KiBarLightning.Height / 3;

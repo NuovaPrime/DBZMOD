@@ -70,7 +70,6 @@ namespace DBZMOD
         //Transformation vars
         public bool IsTransforming;
         public int SSJAuraBeamTimer;
-        public bool IsTransformed;
         public bool hasSSJ1;
         public int TransformCooldown;
         public bool ASSJAchieved;
@@ -321,7 +320,7 @@ namespace DBZMOD
             {
                 UI.TransMenu.SSJ3On = true;
             }
-            if (IsTransformed && !player.HasBuff(mod.BuffType("LSSJ2Buff")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
+            if (player.HasBuff(mod.BuffType("KaiokenBuffX100")))
             {
                 LightningFrameTimer++;
             }
@@ -333,7 +332,7 @@ namespace DBZMOD
             {
                 LightningFrameTimer = 0;
             }
-            if (!IsTransformed)
+            if (Transformations.IsPlayerTransformed(player))
             {
                 KiDrainAddition = 0;
             }
@@ -407,37 +406,38 @@ namespace DBZMOD
             #endregion
 
             #region Form Stacking Checks
-            if ((player.HasBuff(mod.BuffType("SSJ1Buff"))
-                &&
-                (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
-            {
-                player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-                IsTransformed = false;
-                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            }
-            if ((player.HasBuff(mod.BuffType("SSJ2Buff"))
-                || player.HasBuff(mod.BuffType("SSJ3Buff"))
-                || player.HasBuff(mod.BuffType("ASSJBuff"))
-                || player.HasBuff(mod.BuffType("USSJBuff"))
-                || player.HasBuff(mod.BuffType("LSSJBuff"))
-                || player.HasBuff(mod.BuffType("LSSJ2Buff"))
-                || player.HasBuff(mod.BuffType("SSJGBuff")))
-                &&
-                (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
-            {
-                EndTransformations();
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            }
+            // these are obsolete. The player doesn't have the ability to step into impossible form combos anymore.
+            //if ((player.HasBuff(mod.BuffType("SSJ1Buff"))
+            //    &&
+            //    (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
+            //{
+            //    player.ClearBuff(mod.BuffType("SSJ1Buff"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuff"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+            //    IsTransformed = false;
+            //    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            //}
+            //if ((player.HasBuff(mod.BuffType("SSJ2Buff"))
+            //    || player.HasBuff(mod.BuffType("SSJ3Buff"))
+            //    || player.HasBuff(mod.BuffType("ASSJBuff"))
+            //    || player.HasBuff(mod.BuffType("USSJBuff"))
+            //    || player.HasBuff(mod.BuffType("LSSJBuff"))
+            //    || player.HasBuff(mod.BuffType("LSSJ2Buff"))
+            //    || player.HasBuff(mod.BuffType("SSJGBuff")))
+            //    &&
+            //    (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            //{
+            //    EndTransformations();
+            //    player.ClearBuff(mod.BuffType("KaiokenBuff"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
+            //    player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
+            //    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
+            //}
             #endregion
 
             if (adamantiteBonus)
@@ -565,10 +565,9 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("ArmorCooldown"), 3600);
                 }
             }
-            if (player.dead && IsTransformed)
+            if (player.dead && Transformations.IsPlayerTransformed(player))
             {
                 EndTransformations();
-                IsTransformed = false;
                 IsTransforming = false;
             }
             if (RageCurrent > 5)
@@ -1061,7 +1060,7 @@ namespace DBZMOD
                     IsCharging = !IsCharging;
                     if (IsCharging)
                     {
-                        if (!IsTransformed)
+                        if (!Transformations.IsPlayerTransformed(player))
                         {
                             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                         }
@@ -1074,7 +1073,7 @@ namespace DBZMOD
             {
                 if (EnergyCharge.Current && !IsCharging)
                 {
-                    if (!IsTransformed)
+                    if (!Transformations.IsPlayerTransformed(player))
                     {
                         Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                     }
@@ -1107,7 +1106,6 @@ namespace DBZMOD
                 }
 
                 Transformations.ClearAllTransformations(player);
-                IsTransformed = false;
 
                 if (!Main.dedServ)
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
@@ -1492,7 +1490,7 @@ namespace DBZMOD
                 float expierenceToAdd = 10.0f;
                 float experienceMult = 1.0f;
 
-                if (IsTransformed)
+                if (Transformations.IsPlayerTransformed(player))
                 {
                     experienceMult = 2.0f;
                 }
@@ -1513,7 +1511,6 @@ namespace DBZMOD
                 transformationSound = null;
             }
             IsTransforming = false;
-            IsTransformed = false;
         }
 
     }
@@ -1527,7 +1524,7 @@ namespace DBZMOD
         }
         public override void PreUpdate()
         {
-            if (player.GetModPlayer<MyPlayer>().IsTransformed)
+            if (Transformations.IsPlayerTransformed(player))
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
