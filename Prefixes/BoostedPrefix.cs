@@ -4,23 +4,23 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class BoostedPrefix : BasePrefix
+    public class BoostedPrefix : ModPrefix
     {
         public override void SetDefaults()
-	    {
-		    DisplayName.SetDefault("Boosted");  
-	    }
+        {
+            DisplayName.SetDefault("Boosted");
+        }
 
-        public override void ApplyItemModifier(Item item)
+        public override void Apply(Item item)
         {
             item.damage = (int)(item.damage * 1.06f);
             item.shootSpeed *= 1.10f;
-        }
 
-        public override void ApplyKiItemModifier(Item item)
-        {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 5;
-            ((KiItem)item.modItem).KiDrain *= 1.05f;
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 5;
+                ((KiItem)item.modItem).KiDrain *= 1.05f;
+            }
         }
     }
 }

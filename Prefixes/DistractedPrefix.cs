@@ -4,22 +4,22 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class DistractedPrefix : BasePrefix
+    public class DistractedPrefix : ModPrefix
     {
         public override void SetDefaults()
-	    {
-		  DisplayName.SetDefault("Distracted");  
-	    }
-
-        public override void ApplyItemModifier(Item item)
         {
-            item.damage = (int)(item.damage * 0.86f);
+            DisplayName.SetDefault("Distracted");
         }
 
-        public override void ApplyKiItemModifier(Item item)
+        public override void Apply(Item item)
         {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = -27;
-            ((KiItem)item.modItem).KiDrain *= 0.73f;
+            item.damage = (int)(item.damage * 0.86f);
+
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = -27;
+                ((KiItem)item.modItem).KiDrain *= 0.73f;
+            }
         }
 
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)

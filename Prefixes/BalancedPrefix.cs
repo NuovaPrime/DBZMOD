@@ -4,22 +4,22 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class BalancedPrefix : BasePrefix
+    public class BalancedPrefix : ModPrefix
     {
         public override void SetDefaults()
 	    {
 		  DisplayName.SetDefault("Balanced");  
 	    }
 
-        public override void ApplyItemModifier(Item item)
+        public override void Apply(Item item)
         {
             item.damage = (int)(item.damage * 1.05f);
-        }
-
-        public override void ApplyKiItemModifier(Item item)
-        {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 2;
-            ((KiItem)item.modItem).KiDrain *= 1.02f;
+        
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 2;
+                ((KiItem)item.modItem).KiDrain *= 1.02f;
+            }
         }
     }
 }

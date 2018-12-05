@@ -4,22 +4,22 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class InfusedPrefix : BasePrefix
+    public class InfusedPrefix : ModPrefix
     {
         public override void SetDefaults()
-	    {
-		    DisplayName.SetDefault("Infused");  
-	    }
-
-        public override void ApplyItemModifier(Item item)
         {
-            item.damage = (int)(item.damage * 1.12f);
+            DisplayName.SetDefault("Infused");
         }
 
-        public override void ApplyKiItemModifier(Item item)
+        public override void Apply(Item item)
         {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 20;
-            ((KiItem)item.modItem).KiDrain *= 1.20f;
+            item.damage = (int)(item.damage * 1.12f);
+
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 20;
+                ((KiItem)item.modItem).KiDrain *= 1.20f;
+            }
         }
     }
 }

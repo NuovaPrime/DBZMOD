@@ -4,24 +4,23 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class FlashyPrefix : BasePrefix
+    public class FlashyPrefix : ModPrefix
     {
         public override void SetDefaults()
-	    {
-		  DisplayName.SetDefault("Flashy");  
-	    }
+        {
+            DisplayName.SetDefault("Flashy");
+        }
 
-        public override void ApplyItemModifier(Item item)
+        public override void Apply(Item item)
         {
             item.damage = (int)(item.damage * 1.12f);
             item.shootSpeed *= 1.05f;
-        }
 
-        public override void ApplyKiItemModifier(Item item)
-        {
-            item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 1;
-            ((KiItem)item.modItem).KiDrain *= 1.01f;
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 1;
+                ((KiItem)item.modItem).KiDrain *= 1.01f;
+            }
         }
-
     }
 }

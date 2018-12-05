@@ -4,21 +4,21 @@ using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
-    public class MystifyingPrefix : BasePrefix
+    public class MystifyingPrefix : ModPrefix
     {
         public override void SetDefaults()
-	    {
-		  DisplayName.SetDefault("Mystifying");  
-	    }
-
-        public override void ApplyItemModifier(Item item)
         {
-            item.damage = (int)(item.damage * 1.07f);
+            DisplayName.SetDefault("Mystifying");
         }
 
-        public override void ApplyKiItemModifier(Item item)
+        public override void Apply(Item item)
         {
-            //no mods yet?
+            item.damage = (int)(item.damage * 1.07f);
+
+            if (item.modItem != null && item.modItem is KiItem)
+            {
+                //no mods yet?
+            }
         }
     }
 }
