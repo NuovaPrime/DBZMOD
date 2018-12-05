@@ -64,6 +64,7 @@ namespace DBZMOD
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
         public int OverloadCurrent;
+        public int OverloadTimer;
         public float chargeMoveSpeed;
 
         //Transformation vars
@@ -290,7 +291,7 @@ namespace DBZMOD
             }
             if (kiLantern)
             {
-                player.AddBuff(mod.BuffType("KiLanternBuff"), 18000);
+                player.AddBuff(mod.BuffType("KiLanternBuff"), 2);
             }
             else
             {
@@ -340,6 +341,7 @@ namespace DBZMOD
             {
                 KaiokenTimer += 1.5f;
             }
+            #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
                 if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
@@ -402,8 +404,9 @@ namespace DBZMOD
             {
                 MasteryLevelBlue = MasteryMaxBlue;
             }
+            #endregion
 
-
+            #region Form Stacking Checks
             if ((player.HasBuff(mod.BuffType("SSJ1Buff"))
                 &&
                 (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
@@ -435,6 +438,8 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
             }
+            #endregion
+
             if (adamantiteBonus)
             {
                 KiDamage += 7;
@@ -560,7 +565,7 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("ArmorCooldown"), 3600);
                 }
             }
-            if (player.dead)
+            if (player.dead && IsTransformed)
             {
                 EndTransformations();
                 IsTransformed = false;
@@ -576,7 +581,21 @@ namespace DBZMOD
             }
             if(IsLSSJ)
             {
-                OverloadCurrent++;
+                OverloadTimer++;
+                if(OverloadTimer > 60)
+                {
+                    OverloadCurrent += 1;
+                    OverloadTimer = 0;
+                }
+            }
+            if(!IsLSSJ)
+            {
+                OverloadTimer++;
+                if(OverloadTimer > 30)
+                {
+                    OverloadCurrent -= 2;
+                    OverloadTimer = 0;
+                }
             }
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 

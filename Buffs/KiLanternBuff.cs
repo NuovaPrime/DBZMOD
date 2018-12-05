@@ -20,7 +20,7 @@ namespace DBZMOD.Buffs
             LanternTimer++;
             if (LanternTimer > 5 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
             {
-                if(MyPlayer.ModPlayer(player).KiCurrent < MyPlayer.ModPlayer(player).KiMax)
+                if(MyPlayer.ModPlayer(player).KiCurrent < MyPlayer.ModPlayer(player).OverallKiMax())
                 {
                     MyPlayer.ModPlayer(player).KiCurrent += 1;
                 }
