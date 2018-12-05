@@ -484,10 +484,14 @@ namespace DBZMOD
             }
             return false;
         }
-        public override void HoldItem(Player player)
+        public override bool UseItem(Player player)
         {
-            
-            base.HoldItem(player);
+            if(MyPlayer.ModPlayer(player).IsLSSJ)
+            {
+                int i = Main.rand.Next(1, 4);
+                MyPlayer.ModPlayer(player).OverloadCurrent += i;
+            }
+            return true;
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
