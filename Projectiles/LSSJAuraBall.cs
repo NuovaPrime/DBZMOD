@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -93,13 +94,15 @@ namespace DBZMOD.Projectiles
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
-                player.AddBuff(mod.BuffType("LSSJ2Buff"), 360000);
+                if (!player.HasBuff(Transformations.LSSJ2))
+                    player.AddBuff(Transformations.LSSJ2, 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
-                player.AddBuff(mod.BuffType("LSSJBuff"), 360000);
+                if (!player.HasBuff(Transformations.LSSJ))
+                    player.AddBuff(Transformations.LSSJ, 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }

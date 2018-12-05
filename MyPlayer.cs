@@ -16,6 +16,8 @@ using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
 using Config;
+using Util;
+using Enums;
 
 namespace DBZMOD
 {
@@ -275,7 +277,7 @@ namespace DBZMOD
                         LSSJ2Achieved = true;
                         IsTransforming = true;
                         LSSJ2Transformation();
-                        UI.TransMenu.MenuSelection = 6;
+                        UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
                         lssj2timer = 0;
                         EndTransformations();
                     }
@@ -444,6 +446,7 @@ namespace DBZMOD
             }
             
             #region Transformational Checks
+
             //kaioken
             if (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
             {
@@ -453,6 +456,7 @@ namespace DBZMOD
             {
                 IsKaioken = false;
             }
+
             //SSJ1-3-G
             if (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")))
             {
@@ -462,6 +466,8 @@ namespace DBZMOD
             {
                 IsSSJ = false;
             }
+
+            // LSSJ
             if (player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("LSSJ2Buff")))
             {
                 IsLSSJ = true;
@@ -479,6 +485,7 @@ namespace DBZMOD
             {
                 IsGodform = false;
             }
+
             if (!player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 if (IsSSJ && IsKaioken)
@@ -487,6 +494,7 @@ namespace DBZMOD
                     Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
                 }
             }
+
             if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
             {
                 if (player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")) || IsLSSJ)
@@ -495,26 +503,31 @@ namespace DBZMOD
                     Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
                 }
             }
+
             if (IsSSJ && IsLSSJ)
             {
                 EndTransformations();
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
             }
+
             if (IsLSSJ && IsKaioken)
             {
                 EndTransformations();
                 Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
             }
+
             #endregion
 
             if (LSSJAchieved)
             {
                 UI.TransMenu.LSSJOn = true;
             }
+
             if (playerTrait == "Legendary" && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
+
             else if (playerTrait == "Legendary" && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
@@ -702,7 +715,7 @@ namespace DBZMOD
             tag.Add("KiEssence3", KiEssence3);
             tag.Add("KiEssence4", KiEssence4);
             tag.Add("KiEssence5", KiEssence5);
-            tag.Add("MenuSelection", UI.TransMenu.MenuSelection);
+            tag.Add("MenuSelection", (int)UI.TransMenu.MenuSelection);
             tag.Add("MasteryLevel1", MasteryLevel1);
             tag.Add("MasteryLevel2", MasteryLevel2);
             tag.Add("MasteryLevel3", MasteryLevel3);
@@ -755,7 +768,7 @@ namespace DBZMOD
             KiEssence3 = tag.Get<bool>("KiEssence3");
             KiEssence4 = tag.Get<bool>("KiEssence4");
             KiEssence5 = tag.Get<bool>("KiEssence5");
-            UI.TransMenu.MenuSelection = tag.Get<int>("MenuSelection");
+            UI.TransMenu.MenuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
             MasteryLevel1 = tag.Get<float>("MasteryLevel1");
             MasteryLevel2 = tag.Get<float>("MasteryLevel2");
             MasteryLevel3 = tag.Get<float>("MasteryLevel3");
@@ -785,6 +798,128 @@ namespace DBZMOD
         public ProgressionSystem GetProgressionSystem()
         {
             return m_progressionSystem;
+        }
+
+        public void StopTransformationSound()
+        {
+            if (transformationSound != null)
+            {
+                transformationSound.Stop();
+                transformationSound = null;
+            }
+        }
+
+        // notes from Prime:
+        // Transform goes up
+        // Charge + transform ascends(ssj1 - assj, assj - ussj)
+        // Powerdown is a remove all forms
+        // Charge + powerdown = go down a form
+
+        // by default, traverses up a step in transform - but starts off at whatever you've selected (letting you go straight to SSJ2 or LSSJ2 for example) in menu
+        public bool IsTransformingUpOneStep()
+        {
+            return Transform.JustPressed && !EnergyCharge.Current;
+        }
+
+        // by default simply clears all transformation buffs from the user, including kaioken.
+        public bool IsCompletelyPoweringDown()
+        {
+            return PowerDown.JustPressed && !EnergyCharge.Current;
+        }
+
+        // ascends the transformation state, from ssj1 to assj, or from assj to ussj
+        public bool IsAscendingTransformation()
+        {
+            return Transform.JustPressed && EnergyCharge.Current;
+        }
+
+        // functions four-fold. Steps down one level in a given transformation tree: ussj -> assj -> ssj1. lssj2 -> lssj -> ssj1. ssjg -> etc
+        // also steps down from ssj1 + kk to just ssj1.
+        public bool IsPoweringDownOneStep()
+        {
+            return PowerDown.JustPressed && EnergyCharge.Current;
+        }
+
+        // handles everything that doesn't involve checking the player flags or current transformation buffs.
+        public bool CanTransform()
+        {
+            return !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff"));
+        }
+
+        // handles everything that doesn't involve checking the player flags or current transformation buffs.
+        public bool CanKaioken()
+        {
+            return !player.channel && !player.HasBuff(mod.BuffType("TiredDebuff"));
+        }
+
+        public bool CanAscend()
+        {
+            return Transformations.IsSSJ1(player) || Transformations.IsASSJ(player);
+        }
+
+        public void HandleTransformations()
+        {
+            // player is either in mid transformation, channeling, or has the exhaustion debuff. Abort.
+            if (!CanTransform())
+                return;
+
+            int targetTransformation = -1;
+
+            // player has just pressed the normal transform button one time, which serves two functions.
+            if (IsTransformingUpOneStep())
+            {
+                // if the player is already transformed, determine what the next step is.
+                if (Transformations.IsPlayerTransformed(player))
+                {
+                    targetTransformation = Transformations.GetNextTransformationStep(player);                    
+                }
+                else
+                {
+                    // otherwise set them to transform to whatever their selected transformation is.
+                    targetTransformation = Transformations.GetBuffIdFromMenuSelection(UI.TransMenu.MenuSelection);
+                }
+            }
+            // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
+            else if (IsAscendingTransformation())
+            {                
+                if (!CanAscend())
+                    return;
+
+                targetTransformation = Transformations.GetNextAscensionStep(player);                
+            } else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player)) {
+                // player is powering down a transformation state.
+                targetTransformation = Transformations.GetPreviousTransformationStep(player);                    
+            }
+
+            // if we made it this far without a target, it means for some reason we can't change transformations.
+            if (targetTransformation == -1)
+                return;
+
+            // finally, check that the transformation is really valid and then do it.
+            if (Transformations.CanTransform(player, targetTransformation))
+                Transformations.DoTransform(player, targetTransformation);
+        }
+
+        public void HandleKaioken()
+        {
+            int targetTransformation = -1;
+                        
+            if (KaiokenKey.JustPressed) {
+                // no possible combination of kaioken can be attained in your current state.
+                if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
+                    return;
+                // otherwise get the next kaioken step (or the first one, if untransformed)
+                targetTransformation = Transformations.GetNextKaiokenStep(player);                
+            }
+            else if (IsPoweringDownOneStep() && (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)))
+            {
+                // player is powering down their kaioken state, get the previous one.
+                targetTransformation = Transformations.GetPreviousKaiokenStep(player);                    
+            }
+
+            // finally, check the transformation is really valid and then do it.
+            if (Transformations.CanTransform(player, targetTransformation))
+                Transformations.DoTransform(player, targetTransformation);
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -820,113 +955,11 @@ namespace DBZMOD
                 }
             }
 
-            if (Transform.JustPressed)//Needs to be reworked, something method based
-            {
-                if (transformationSound != null)
-                {
-                    transformationSound.Stop();
-                    transformationSound = null;
-                }
+            // calls to handle transformation or kaioken powerups per frame
 
-                if (!IsSSJ && !IsGodform && !IsLSSJ && !IsKaioken && SSJ1Achieved && UI.TransMenu.MenuSelection == 1 && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("SSJ1Buff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProjStart"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 1", false, false);
-                }
-                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && IsCharging && ASSJAchieved && !IsTransforming && !player.channel && (UI.TransMenu.MenuSelection == 1))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("ASSJBuff"), 666666, false);
-                    player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(1.0f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Ascended Super Saiyan", false, false);
-                }
-                else if (player.HasBuff(mod.BuffType("ASSJBuff")) && IsCharging && USSJAchieved && !IsTransforming && !player.channel && (UI.TransMenu.MenuSelection == 1))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("USSJBuff"), 666666, false);
-                    player.ClearBuff(mod.BuffType("ASSJBuff"));
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Ultra Super Saiyan", false, false);
-                }
-                else if (!IsSSJ && !IsLSSJ && !IsGodform && !IsKaioken && SSJ2Achieved && UI.TransMenu.MenuSelection == 2 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
-                }
-                else if (!IsLSSJ && !IsSSJ && !IsGodform && !IsKaioken && LSSJAchieved && UI.TransMenu.MenuSelection == 4 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    player.AddBuff(mod.BuffType("LSSJBuff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan", false, false);
-                }
-                else if (!IsSSJ && !IsLSSJ && !IsGodform && !IsKaioken && SSJ3Achieved && UI.TransMenu.MenuSelection == 3 && !IsTransforming && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
+            HandleTransformations();
 
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
-                }
-                else if (player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsLSSJ && !IsGodform && !IsKaioken && !IsCharging && SSJ2Achieved && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("SSJ2Buff"), 666666, false);
-                    player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 2", false, false);
-                }
-                else if (player.HasBuff(mod.BuffType("SSJ2Buff")) && !IsKaioken && !IsGodform && !IsLSSJ && !IsCharging && SSJ3Achieved && !IsTransforming && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    SSJDustAura();
-                    player.AddBuff(mod.BuffType("SSJ3Buff"), 666666, false);
-                    player.ClearBuff(mod.BuffType("SSJ2Buff"));
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Super Saiyan 3", false, false);
-                }
-                if (!IsSSJ && !IsLSSJ && !IsGodform && !IsKaioken && SSJGAchieved && UI.TransMenu.MenuSelection == 5 && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    player.AddBuff(mod.BuffType("SSJGBuff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGTransformStart"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(229, 20, 51), "Super Saiyan God", false, false);
-                }
-                if (!IsLSSJ && !IsKaioken && !IsGodform && !IsSSJ && LSSJ2Achieved && UI.TransMenu.MenuSelection == 6 && !IsTransforming && !IsTransforming && !player.channel && !player.HasBuff(mod.BuffType("TransExhaustionBuff")))
-                {
-                    player.AddBuff(mod.BuffType("LSSJ2Buff"), 666666, false);
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan 2", false, false);
-                }
-                /*else if (player.HasBuff(mod.BuffType("LSSJBuff")) && LSSJ2Achieved && !IsTransformingSSJ1 && !IsTransformingLSSJ2 && !player.channel && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && (!player.HasBuff(mod.BuffType("SSJGBuff"))) && !player.HasBuff(mod.BuffType("USSJBuff")) && !player.HasBuff(mod.BuffType("TransExhaustionBuff"))))
-                {
-                    player.AddBuff(mod.BuffType("LSSJ2Buff"), 666666, false);
-                    player.ClearBuff(mod.BuffType("LSSJBuff"));
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension").WithVolume(.7f));
-                    CombatText.NewText(player.Hitbox, new Color(219, 219, 48), "Legendary Super Saiyan 2", false, false);
-                }*/
-            }
+            HandleKaioken();            
 
             if (SpeedToggle.JustPressed)
             {
@@ -943,55 +976,7 @@ namespace DBZMOD
                 ProgressionMenu.ToggleVisibility();
             }*/
 
-            if (KaiokenKey.JustPressed && (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("KaiokenBuffX3")) && !player.HasBuff(mod.BuffType("KaiokenBuffX10")) && !player.HasBuff(mod.BuffType("KaiokenBuffX20")) && !player.HasBuff(mod.BuffType("KaiokenBuffX100"))) && !player.HasBuff(mod.BuffType("TiredDebuff")) && !player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ2Buff")) && !player.HasBuff(mod.BuffType("SSJ3Buff")) && !player.HasBuff(mod.BuffType("LSSJBuff")) && KaioAchieved && !player.channel)
-            {
-                player.AddBuff(mod.BuffType("KaiokenBuff"), 18000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraStart").WithVolume(.5f));
-            }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff"))) && KaioFragment1)
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.AddBuff(mod.BuffType("KaiokenBuffX3"), 18000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx3"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
-            }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX3"))) && KaioFragment2)
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-                player.AddBuff(mod.BuffType("KaiokenBuffX10"), 18000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx10"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.6f));
-            }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX10"))) && KaioFragment3)
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-                player.AddBuff(mod.BuffType("KaiokenBuffX20"), 18000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx20"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.7f));
-            }
-            else if (KaiokenKey.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuffX20"))) && KaioFragment4)
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-                player.AddBuff(mod.BuffType("KaiokenBuffX100"), 18000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProjx100"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
-            }
-            else if (KaiokenKey.JustPressed && player.HasBuff(mod.BuffType("SSJ1Buff")) && !IsLSSJ && !IsGodform && KaioAchieved && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("TiredDebuff")))
-            {
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.ClearBuff(mod.BuffType("SSJ1Buff"));
-                player.AddBuff(mod.BuffType("SSJ1KaiokenBuff"), 1800);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("KaiokenAuraProj"), 0, 0, player.whoAmI);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ1AuraProj"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KaioAuraAscend").WithVolume(.8f));
-            }
+            // various effects while charging
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
             if (IsCharging && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
@@ -1030,6 +1015,8 @@ namespace DBZMOD
                 ScarabChargeTimer = 0;
                 ScarabChargeRateAdd = 0;
             }
+
+            // sound effects during rapid flight
             if (IsCharging && IsFlying)
             {
                 ChargeSoundTimer++;
@@ -1040,10 +1027,14 @@ namespace DBZMOD
                     ChargeSoundTimer = 0;
                 }
             }
+
+            // throttle ki current to kimax
             if (KiCurrent > OverallKiMax())
             {
                 KiCurrent = OverallKiMax();
             }
+
+            // handle ki charging
             if (ConfigModel.IsChargeToggled)
             {
                 if (EnergyCharge.JustPressed)
@@ -1078,32 +1069,29 @@ namespace DBZMOD
                 }
             }
 
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
+            // power down handling
+            if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
-                player.ClearBuff(mod.BuffType("KaiokenBuff"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-                player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-                player.AddBuff(mod.BuffType("TiredDebuff"), (int)KaiokenTimer);
-                KaiokenTimer = 0.0f;
+
+                if (Transformations.IsKaioken(player))
+                {
+                    player.AddBuff(mod.BuffType("TiredDebuff"), (int)KaiokenTimer);
+                    KaiokenTimer = 0.0f;
+                } else if (Transformations.IsSSJ1Kaioken(player))
+                {
+                    player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
+                    player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
+                    KaiokenTimer = 0.0f;
+                } else
+                {
+                    EndTransformations();
+                }
+
+                Transformations.ClearAllTransformations(player);
+                IsTransformed = false;
+
                 if (!Main.dedServ)
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-                IsTransformed = false;
-            }
-            if (PowerDown.JustPressed && player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
-            {
-                player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
-                player.AddBuff(mod.BuffType("TiredDebuff"), (int)(KaiokenTimer * 2));
-                player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
-                KaiokenTimer = 0.0f;
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-                IsTransformed = false;
-            }
-            if (PowerDown.JustPressed && (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")) || player.HasBuff(mod.BuffType("LSSJ2Buff"))))
-            {
-                EndTransformations();
             }
             /*if(QuickKi.JustPressed && traitChecked)
             {
@@ -1248,7 +1236,7 @@ namespace DBZMOD
                         SSJ1Achieved = true;
                         IsTransforming = true;
                         SSJTransformation();
-                        UI.TransMenu.MenuSelection = 1;
+                        UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
                         RageCurrent = 0;
                         EndTransformations();
                         return false;
@@ -1266,7 +1254,7 @@ namespace DBZMOD
                     SSJ2Achieved = true;
                     IsTransforming = true;
                     SSJ2Transformation();
-                    UI.TransMenu.MenuSelection = 2;
+                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
                     EndTransformations();
                     RageCurrent = 0;
                     return false;
@@ -1283,7 +1271,7 @@ namespace DBZMOD
                     LSSJAchieved = true;
                     IsTransforming = true;
                     LSSJTransformation();
-                    UI.TransMenu.MenuSelection = 4;
+                    UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
                     EndTransformations();
                     RageCurrent = 0;
                     return false;
@@ -1300,7 +1288,7 @@ namespace DBZMOD
                     SSJ3Achieved = true;
                     IsTransforming = true;
                     SSJ3Transformation();
-                    UI.TransMenu.MenuSelection = 3;
+                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
                     EndTransformations();
                     RageCurrent = 0;
                     return false;
@@ -1318,25 +1306,26 @@ namespace DBZMOD
 
             return true;
         }
+
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (IsTransforming)
             {
                 return false;
             }
-            if(BlockState == 1)
+            if(BlockState == 1) // nearly frame-perfect block, zero damage.
             {
                 damage = 0;
                 return true;
             }
-            if(BlockState == 2)
-            {
-                damage /= 2;
-                return true;
-            }
-            if(BlockState == 3)
+            if(BlockState == 2) // block not quite perfect, one third damage
             {
                 damage /= 3;
+                return true;
+            }
+            if(BlockState == 3) // block far from perfect, half damage.
+            {
+                damage /= 2;
                 return true;
             }
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
@@ -1377,36 +1366,42 @@ namespace DBZMOD
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
         }
+
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
+
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
+
         public void LSSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
+
         public void LSSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("LSSJ2PillarStart"), 0, 0, player.whoAmI);
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
+
         public void SSJGTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
         }
+
         public override void SetupStartInventory(IList<Item> items)
         {
             Item item8 = new Item();
@@ -1414,6 +1409,7 @@ namespace DBZMOD
             item8.stack = 1;
             items.Add(item8);
         }
+
         public int LightningFrameTimer;
         public static readonly PlayerLayer LightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
@@ -1490,26 +1486,13 @@ namespace DBZMOD
 
         public void EndTransformations()
         {
-            player.ClearBuff(mod.BuffType("SSJ1Buff"));
-            player.ClearBuff(mod.BuffType("SSJ1KaiokenBuff"));
-            player.ClearBuff(mod.BuffType("SSJ2Buff"));
-            player.ClearBuff(mod.BuffType("ASSJBuff"));
-            player.ClearBuff(mod.BuffType("USSJBuff"));
-            player.ClearBuff(mod.BuffType("SSJ3Buff"));
-            player.ClearBuff(mod.BuffType("LSSJBuff"));
-            player.ClearBuff(mod.BuffType("LSSJ2Buff"));
-            player.ClearBuff(mod.BuffType("SSJGBuff"));
             player.AddBuff(mod.BuffType("TransExhaustionBuff"), 600);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
-
             if (transformationSound != null)
             {
                 transformationSound.Stop();
                 transformationSound = null;
             }
             IsTransforming = false;
-
             IsTransformed = false;
         }
 

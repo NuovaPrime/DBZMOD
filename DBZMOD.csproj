@@ -123,6 +123,7 @@
     <Compile Include="Effects\CircleShader.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
+    <Compile Include="Enums\MenuSelectionID.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
@@ -431,6 +432,7 @@
     <Compile Include="UI\ProgressionMenu.cs" />
     <Compile Include="UI\ResourceBar.cs" />
     <Compile Include="UI\TransMenu.cs" />
+    <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />
     <Compile Include="Util\HomingHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />

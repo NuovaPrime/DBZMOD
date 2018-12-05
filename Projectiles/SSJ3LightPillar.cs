@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -64,7 +65,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.AddBuff(mod.BuffType("SSJ3Buff"), 360000);
+            if (!player.HasBuff(Transformations.SSJ3))
+                player.AddBuff(Transformations.SSJ3, 360000);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
             MyPlayer.ModPlayer(player).IsTransforming = false;
             if (!Main.dedServ)

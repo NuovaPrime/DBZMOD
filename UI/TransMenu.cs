@@ -9,6 +9,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Enums;
 
 namespace DBZMOD.UI
 {
@@ -36,7 +37,7 @@ namespace DBZMOD.UI
         private UIImage unknownImageL2;
 
 
-        public static int MenuSelection;
+        public static MenuSelectionID MenuSelection;
         public static bool SSJ1On;
         public static bool SSJ2On;
         public static bool SSJ3On;
@@ -216,7 +217,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if(player.SSJ1Achieved)
             {
-                MenuSelection = 1;
+                MenuSelection = MenuSelectionID.SSJ1;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ1 Mastery = " + player.MasteryLevel1 + "/" + player.MasteryMax1);
@@ -234,7 +235,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if(player.SSJ2Achieved && !(player.playerTrait == "Legendary"))
             {
-                MenuSelection = 2;
+                MenuSelection = MenuSelectionID.SSJ2;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ2 Mastery = " + player.MasteryLevel2 + "/" + player.MasteryMax2);
@@ -251,7 +252,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if(player.SSJ3Achieved && !(player.playerTrait == "Legendary"))
             {
-                MenuSelection = 3;
+                MenuSelection = MenuSelectionID.SSJ3;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
                 Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + "/" + player.MasteryMax3);
@@ -268,7 +269,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if (player.LSSJAchieved)
             {
-                MenuSelection = 4;
+                MenuSelection = MenuSelectionID.LSSJ1;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
             }
@@ -285,7 +286,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if (player.LSSJ2Achieved)
             {
-                MenuSelection = 6;
+                MenuSelection = MenuSelectionID.LSSJ2;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
             }
@@ -301,7 +302,7 @@ namespace DBZMOD.UI
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if(player.SSJGAchieved && !(player.playerTrait == "Legendary"))
             {
-                MenuSelection = 5;
+                MenuSelection = MenuSelectionID.SSJG;
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuTick);
             }

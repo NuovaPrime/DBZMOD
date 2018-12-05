@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Effects;
 using Config;
+using Util;
 
 namespace DBZMOD
 {
@@ -62,6 +63,10 @@ namespace DBZMOD
         {
             // loads the mod's configuration file.
             ConfigModel.Load();
+
+            // Initialize the buff helper with an instance of this class
+            global::Util.Transformations.Initialize(this);
+
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);
             instance = this;
@@ -120,6 +125,7 @@ namespace DBZMOD
             });
             RecipeGroup.RegisterGroup("DBZMOD:KiFragment", group);
         }
+
         public override void UpdateUI(GameTime gameTime)
         {
             if (TransMenuInterface != null && TransMenu.menuvisible)
@@ -133,6 +139,7 @@ namespace DBZMOD
             }
 
         }
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int index = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));

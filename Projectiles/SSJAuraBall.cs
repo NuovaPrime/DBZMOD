@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -96,7 +97,8 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             if (!(MyPlayer.ModPlayer(player).playerTrait == "Legendary"))
             {
-                player.AddBuff(mod.BuffType("SSJ2Buff"), 360000);
+                if (!player.HasBuff(Transformations.SSJ2))
+                    player.AddBuff(Transformations.SSJ2, 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
                 if (!Main.dedServ)
