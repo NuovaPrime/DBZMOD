@@ -256,7 +256,7 @@ namespace DBZMOD
 
         public bool IsPlayerLegendary()
         {
-            return this.playerTrait.Equals("Legendary");
+            return playerTrait != null && playerTrait.Equals("Legendary");
         }
 
         public override void PostUpdate()
