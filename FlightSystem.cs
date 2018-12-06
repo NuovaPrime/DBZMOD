@@ -52,6 +52,9 @@ namespace DBZMOD
                     return;
                 }
 
+                // check for platform collision
+                player.DryCollision(true, true);                
+
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
                 modPlayer.IsFlying = true;
