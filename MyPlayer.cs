@@ -261,7 +261,7 @@ namespace DBZMOD
 
         public override void PostUpdate()
         {
-            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2timer++;
                 if (lssj2timer >= 300)
@@ -454,12 +454,12 @@ namespace DBZMOD
                 UI.TransMenu.LSSJOn = true;
             }
 
-            if (playerTrait == "Legendary" && !LSSJAchieved && NPC.downedBoss1)
+            if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
 
-            else if (playerTrait == "Legendary" && LSSJAchieved)
+            else if (IsPlayerLegendary() && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
@@ -509,7 +509,7 @@ namespace DBZMOD
             if (IsPlayerLegendary())
             {
                 // is the player in a legendary transform step (that isn't SSJ1)?
-                if (Transformations.IsLegendary(player) && !Transformations.IsSSJ1(player))
+                if (Transformations.IsLSSJ(player) && !Transformations.IsSSJ1(player))
                 {
                     OverloadTimer++;
                     if (OverloadTimer >= 60)
@@ -570,7 +570,7 @@ namespace DBZMOD
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
             // godlike is included in SSJ, so only make them turquoise if not in god form.
-            } else if (Transformations.IsSSJ(player) || Transformations.IsLegendary(player))
+            } else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
                 player.eyeColor = Color.Turquoise;
             }
@@ -1180,7 +1180,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !(playerTrait == "Legendary") && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1197,7 +1197,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1214,7 +1214,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !(playerTrait == "Legendary") && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")) && MasteryLevel2 >= 1)
+                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")) && MasteryLevel2 >= 1)
                 {
                     Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                     player.statLife = player.statLifeMax2 / 2;

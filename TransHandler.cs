@@ -54,7 +54,7 @@ namespace DBZMOD
             }
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (Transformations.IsSSJ(player) || Transformations.IsLegendary(player) || Transformations.IsSSJ1Kaioken(player))
+            if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (MyPlayer.ModPlayer(player).KiCurrent <= 0)

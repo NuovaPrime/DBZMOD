@@ -416,13 +416,13 @@ namespace Util
         }
 
         // whether the buff ID is one of the legendary states; caution, this includes SSJ1 for "Next/Previous" behavior reasons.
-        public static bool IsLegendary(BuffInfo buff)
+        public static bool IsLSSJ(BuffInfo buff)
         {
             return LegendaryBuffs().Contains(buff);
         }
 
         // whether the player is in one of the legendary states; caution, this includes SSJ1 for "Next/Previous" behavior reasons.
-        public static bool IsLegendary(Player player)
+        public static bool IsLSSJ(Player player)
         {
             return PlayerHasBuffIn(player, LegendaryBuffs());
         }
@@ -488,15 +488,15 @@ namespace Util
             if (buff == SSJ1)
                 return !IsKaioken(player) && modPlayer.SSJ1Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ2)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ3)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJG)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ)
-                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !IsKaioken(player) && modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
-                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !IsKaioken(player) && modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             //if (buffId == SSJB)
             //  return !IsKaioken(player) && modPlayer.SSJBAchieved;
             if (buff == ASSJ)
@@ -504,15 +504,15 @@ namespace Util
             if (buff == USSJ)
                 return !IsKaioken(player) && IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Kaioken)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken3)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment1 && !Transformations.IsTiredFromKaioken(player);
+                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment1 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken10)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment2 && !Transformations.IsTiredFromKaioken(player);
+                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment2 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken20)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
+                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken100)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
+                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
             if (buff == SSJ1Kaioken)
                 return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             return false;
@@ -674,7 +674,7 @@ namespace Util
                 return SSJ1;
 
             // the player is legendary and doing a legendary step up.
-            if (IsLegendary(currentTransformation) && MyPlayer.ModPlayer(player).playerTrait == "Legendary")
+            if (IsLSSJ(currentTransformation) && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < LegendaryBuffs().Length; i++)
                 {
@@ -686,7 +686,7 @@ namespace Util
             }
 
             // the player isn't legendary and is doing a normal step up.
-            if (IsSSJ(currentTransformation) && MyPlayer.ModPlayer(player).playerTrait != "Legendary")
+            if (IsSSJ(currentTransformation) && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < SSJBuffs().Length; i++)
                 {
@@ -707,7 +707,7 @@ namespace Util
             BuffInfo currentTransformation = GetCurrentTransformation(player);
 
             // the player is legendary and doing a legendary step down.
-            if (IsLegendary(currentTransformation) && MyPlayer.ModPlayer(player).playerTrait == "Legendary")
+            if (IsLSSJ(currentTransformation) && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < LegendaryBuffs().Length; i++)
                 {
@@ -719,7 +719,7 @@ namespace Util
             }
 
             // the player isn't legendary and is doing a normal step down.
-            if (IsSSJ(currentTransformation) && MyPlayer.ModPlayer(player).playerTrait != "Legendary")
+            if (IsSSJ(currentTransformation) && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < SSJBuffs().Length; i++)
                 {

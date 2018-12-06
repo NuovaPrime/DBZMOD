@@ -159,7 +159,7 @@ namespace DBZMOD.UI
 
             lockedImage1.ImageScale = !player.SSJ1Achieved ? 1.0f : 0.0f;
 
-            if(player.playerTrait == "Legendary")
+            if(player.IsPlayerLegendary())
             {
                 lockedImageL1.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
 
@@ -233,7 +233,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJ2Achieved && !(player.playerTrait == "Legendary"))
+            if(player.SSJ2Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ2;
                 if (!Main.dedServ)
@@ -250,7 +250,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ3(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJ3Achieved && !(player.playerTrait == "Legendary"))
+            if(player.SSJ3Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ3;
                 if (!Main.dedServ)
@@ -300,7 +300,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJG(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJGAchieved && !(player.playerTrait == "Legendary"))
+            if(player.SSJGAchieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJG;
                 if (!Main.dedServ)

@@ -111,7 +111,7 @@ namespace DBZMOD
                 {
                     FLIGHT_DUST_TYPE = 169;
                 }
-                else if (Transformations.IsLegendary(player))
+                else if (Transformations.IsLSSJ(player))
                 {
                     FLIGHT_DUST_TYPE = 89;
                 }
