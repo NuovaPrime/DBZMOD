@@ -12,8 +12,6 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            IsKaioken = false;
-            IsSSJ = true;
             Description.SetDefault("5x Damage, 5x Speed, Rapidly Drains Ki, Slight health regen.");
         }
         public override void Update(Player player, ref int buffIndex)

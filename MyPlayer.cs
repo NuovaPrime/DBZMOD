@@ -77,10 +77,6 @@ namespace DBZMOD
         private int lssj2timer;
         public bool LSSJ2Achieved = false;
         public bool LSSJGAchieved = false;
-        public bool IsKaioken;
-        public bool IsSSJ;
-        public bool IsGodform;
-        public bool IsLSSJ;
         public int RageCurrent = 0;
         public int RageDecreaseTimer = 0;
         public int FormUnlockChance;
@@ -258,6 +254,11 @@ namespace DBZMOD
             return player.GetModPlayer<MyPlayer>();
         }
 
+        public bool IsPlayerLegendary()
+        {
+            return this.playerTrait.Equals("Legendary");
+        }
+
         public override void PostUpdate()
         {
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && playerTrait == "Legendary" && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
@@ -334,7 +335,7 @@ namespace DBZMOD
             {
                 KiDrainAddition = 0;
             }
-            if (IsKaioken)
+            if (Transformations.IsKaioken(player))
             {
                 KaiokenTimer += 1.5f;
             }
@@ -447,79 +448,6 @@ namespace DBZMOD
             {
                 ChooseTrait();
             }
-            
-            #region Transformational Checks
-
-            //kaioken
-            if (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))
-            {
-                IsKaioken = true;
-            }
-            else
-            {
-                IsKaioken = false;
-            }
-
-            //SSJ1-3-G
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")) || player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")))
-            {
-                IsSSJ = true;
-            }
-            else
-            {
-                IsSSJ = false;
-            }
-
-            // LSSJ
-            if (player.HasBuff(mod.BuffType("LSSJBuff")) || player.HasBuff(mod.BuffType("LSSJ2Buff")))
-            {
-                IsLSSJ = true;
-            }
-            else
-            {
-                IsLSSJ = false;
-            }
-
-            if (player.HasBuff(mod.BuffType("SSJGBuff")))
-            {
-                IsGodform = true;
-            }
-            else
-            {
-                IsGodform = false;
-            }
-
-            if (!player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
-            {
-                if (IsSSJ && IsKaioken)
-                {
-                    EndTransformations();
-                    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-                }
-            }
-
-            if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
-            {
-                if (player.HasBuff(mod.BuffType("SSJ2Buff")) || player.HasBuff(mod.BuffType("ASSJBuff")) || player.HasBuff(mod.BuffType("USSJBuff")) || player.HasBuff(mod.BuffType("SSJ3Buff")) || player.HasBuff(mod.BuffType("SSJGBuff")) || IsLSSJ)
-                {
-                    EndTransformations();
-                    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-                }
-            }
-
-            if (IsSSJ && IsLSSJ)
-            {
-                EndTransformations();
-                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            }
-
-            if (IsLSSJ && IsKaioken)
-            {
-                EndTransformations();
-                Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            }
-
-            #endregion
 
             if (LSSJAchieved)
             {
@@ -576,22 +504,29 @@ namespace DBZMOD
             {
                 OverloadCurrent = OverloadMax;
             }
-            if(IsLSSJ)
+
+            // does the player have the legendary trait
+            if (IsPlayerLegendary())
             {
-                OverloadTimer++;
-                if(OverloadTimer > 60)
+                // is the player in a legendary transform step (that isn't SSJ1)?
+                if (Transformations.IsLegendary(player) && !Transformations.IsSSJ1(player))
                 {
-                    OverloadCurrent += 1;
-                    OverloadTimer = 0;
+                    OverloadTimer++;
+                    if (OverloadTimer >= 60)
+                    {
+                        OverloadCurrent += 1;
+                        OverloadTimer = 0;
+                    }
                 }
-            }
-            if(!IsLSSJ)
-            {
-                OverloadTimer++;
-                if(OverloadTimer > 30)
+                else
                 {
-                    OverloadCurrent -= 2;
-                    OverloadTimer = 0;
+                    // player isn't in legendary form, cools the player overload down
+                    OverloadTimer++;
+                    if (OverloadTimer >= 30)
+                    {
+                        OverloadCurrent -= 2;
+                        OverloadTimer = 0;
+                    }
                 }
             }
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
@@ -629,17 +564,18 @@ namespace DBZMOD
 
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (player.HasBuff(mod.BuffType("SSJGBuff")))
+            if (Transformations.IsGodlike(player))
             {
                 drawInfo.hairColor = new Color(183, 25, 46);
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
-            }
-            if (IsSSJ || IsLSSJ)
+            // godlike is included in SSJ, so only make them turquoise if not in god form.
+            } else if (Transformations.IsSSJ(player) || Transformations.IsLegendary(player))
             {
                 player.eyeColor = Color.Turquoise;
             }
-            if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            // this still works tho
+            if (Transformations.IsSSJ1Kaioken(player))
             {
                 player.eyeColor = Color.Red;
             }            
@@ -862,18 +798,6 @@ namespace DBZMOD
             return PowerDown.JustPressed && EnergyCharge.Current;
         }
 
-        // handles everything that doesn't involve checking the player flags or current transformation buffs.
-        public bool CanTransform()
-        {
-            return !IsTransforming && !player.channel && !Transformations.IsExhaustedFromTransformation(player);
-        }
-
-        // handles everything that doesn't involve checking the player flags or current transformation buffs.
-        public bool CanKaioken()
-        {
-            return !player.channel && !Transformations.IsTiredFromKaioken(player);
-        }
-
         public bool CanAscend()
         {
             return Transformations.IsSSJ1(player) || Transformations.IsASSJ(player);
@@ -881,10 +805,6 @@ namespace DBZMOD
 
         public void HandleTransformations()
         {
-            // player is either in mid transformation, channeling, or has the exhaustion debuff. Abort.
-            if (!CanTransform())
-                return;
-
             BuffInfo targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.

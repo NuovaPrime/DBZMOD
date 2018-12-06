@@ -6,14 +6,12 @@ namespace DBZMOD.Buffs
 {
     public class KaiokenBuffX3 : TransBuff
     {
-        private Player player;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Kaioken x3");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            IsKaioken = true;
             KaioLightValue = 7f;
             Description.SetDefault("2x Damage, 2x Speed, Drains Life.");
         }

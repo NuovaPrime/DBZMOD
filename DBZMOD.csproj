@@ -122,6 +122,7 @@
     <Compile Include="Dusts\RadiantDust.cs" />
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Effects\GodSky.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
     <Compile Include="Enums\MenuSelectionID.cs" />

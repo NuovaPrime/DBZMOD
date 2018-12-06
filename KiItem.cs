@@ -14,6 +14,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using DBZMOD;
 using System;
+using Util;
 
 namespace DBZMOD
 {
@@ -486,7 +487,7 @@ namespace DBZMOD
         }
         public override bool UseItem(Player player)
         {
-            if(MyPlayer.ModPlayer(player).IsLSSJ)
+            if(Transformations.IsLegendary(player) && !Transformations.IsSSJ1(player))
             {
                 int i = Main.rand.Next(1, 4);
                 MyPlayer.ModPlayer(player).OverloadCurrent += i;

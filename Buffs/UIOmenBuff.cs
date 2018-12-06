@@ -12,8 +12,6 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            IsKaioken = false;
-            IsSSJ = true;
             Description.SetDefault("The secret technique of the gods. Grants the ability to dodge any attack.");
         }
         public override void Update(Player player, ref int buffIndex)

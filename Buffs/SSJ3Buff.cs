@@ -12,8 +12,6 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            IsKaioken = false;
-            IsSSJ = true;
             Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki " +
                 "\nand slightly drains life when below 30% ki.");
         }

@@ -12,6 +12,7 @@ using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
+using Util;
 
 namespace DBZMOD
 {
@@ -106,15 +107,15 @@ namespace DBZMOD
                     }
                 }
 
-                if (modPlayer.IsSSJ)
+                if (Transformations.IsSSJ(player) && !Transformations.IsGodlike(player))
                 {
                     FLIGHT_DUST_TYPE = 169;
                 }
-                else if (modPlayer.IsLSSJ)
+                else if (Transformations.IsLegendary(player))
                 {
                     FLIGHT_DUST_TYPE = 89;
                 }
-                else if (modPlayer.IsGodform || modPlayer.IsKaioken)
+                else if (Transformations.IsGodlike(player) || Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
                 {
                     FLIGHT_DUST_TYPE = 90;
                 }

@@ -74,7 +74,7 @@ namespace DBZMOD
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;
             battlerodsLoaded = ModLoader.GetMod("UnuBattleRods") != null;
-            expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;
+            expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;            
             MyPlayer.KaiokenKey = RegisterHotKey("Kaioken", "J");
             MyPlayer.EnergyCharge = RegisterHotKey("Energy Charge", "C");
             MyPlayer.Transform = RegisterHotKey("Transform", "X");

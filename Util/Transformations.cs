@@ -468,7 +468,12 @@ namespace Util
         {
             return player.HasBuff(ASSJ.BuffId) || player.HasBuff(USSJ.BuffId);
         }
-
+        public static bool IsTransformBlocked(Player player)
+        {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+            return modPlayer.IsTransforming || player.channel;
+        }
+        
         // handle all the conditions of a transformation which would prevent the player from reaching that state. Return false if you can't transform.
         // this doesn't include a few bits of player state which get handled in the player class. See MyPlayer CanTransform for more flags.
         public static bool CanTransform(Player player, BuffInfo buff)
@@ -476,37 +481,40 @@ namespace Util
             if (buff == null)
                 return false;
 
+            if (IsTransformBlocked(player))
+                return false;
+            
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (buff == SSJ1)
-                return !IsKaioken(player) && modPlayer.SSJ1Achieved;
+                return !IsKaioken(player) && modPlayer.SSJ1Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ2)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ2Achieved;
+                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ3)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ3Achieved;
+                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJG)
-                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJGAchieved;
+                return !IsKaioken(player) && modPlayer.playerTrait != "Legendary" && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ)
-                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJAchieved;
+                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
-                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJ2Achieved;
+                return !IsKaioken(player) && modPlayer.playerTrait == "Legendary" && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             //if (buffId == SSJB)
             //  return !IsKaioken(player) && modPlayer.SSJBAchieved;
             if (buff == ASSJ)
-                return !IsKaioken(player) && (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved;
+                return !IsKaioken(player) && (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == USSJ)
-                return !IsKaioken(player) && IsASSJ(player) && modPlayer.USSJAchieved;
+                return !IsKaioken(player) && IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Kaioken)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioAchieved;
+                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken3)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment1;
+                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment1 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken10)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment2;
+                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment2 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken20)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment3;
+                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken100)
-                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment4;
+                return !IsSSJ(player) && !IsLegendary(player) && !IsAscended(player) && modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
             if (buff == SSJ1Kaioken)
-                return IsSSJ1(player) && modPlayer.KaioAchieved;
+                return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             return false;
         }
 

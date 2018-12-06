@@ -12,7 +12,6 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            IsKaioken = true;
             KaioLightValue = 5f;
             Description.SetDefault("50% More Damage, 2x Speed, Slowly Drains Life.");
         }
