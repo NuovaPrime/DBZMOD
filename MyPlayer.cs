@@ -924,24 +924,24 @@ namespace DBZMOD
                 ProgressionMenu.ToggleVisibility();
             }*/
 
-            // various effects while charging
+            // check if the player isn't moving quickly, counts as being mostly stationary during flight
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
+
+            // various effects while charging
             if (IsCharging && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
+                // determine base regen rate and bonuses
                 KiCurrent += KiRegenRate + ScarabChargeRateAdd;
+
+                // slow down the player a bunch
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
                     player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
                 else
                 {
                     player.velocity = new Vector2(0, player.velocity.Y);
                 }
-                ChargeSoundTimer++;
-                if (ChargeSoundTimer > 22)
-                {
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
-                    ChargeSoundTimer = 0;
-                }
+
+                // grant multiplicative charge bonuses that grow over time if using either earthen accessories
                 if (earthenScarab || earthenArcanium)
                 {
                     ScarabChargeTimer++;
@@ -951,21 +951,23 @@ namespace DBZMOD
                         ScarabChargeTimer = 0;
                     }
                 }
+
+                // grant defense and a protective barrier visual if charging with baldur essentia
                 if (baldurEssentia)
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.30f);
                 }
-
             }
             else if (!IsCharging)
             {
+                // reset scarab/earthen bonuses
                 ScarabChargeTimer = 0;
                 ScarabChargeRateAdd = 0;
             }
 
-            // sound effects during rapid flight
-            if (IsCharging && IsFlying)
+            // sound effects during rapid flight or while charging are the same.
+            if (IsCharging)
             {
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
