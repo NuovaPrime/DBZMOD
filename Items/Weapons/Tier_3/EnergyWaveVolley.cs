@@ -44,7 +44,8 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(20));
 			speedX = perturbedSpeed.X;
 			speedY = perturbedSpeed.Y;
-			return true;
+            
+            return true;
 		}
 		
 		public override void AddRecipes()

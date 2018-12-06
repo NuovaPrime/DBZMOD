@@ -15,6 +15,7 @@ namespace DBZMOD.Buffs
             KaioLightValue = 5f;
             Description.SetDefault("50% More Damage, 2x Speed, Slowly Drains Life.");
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             DamageMulti = 1.5f;

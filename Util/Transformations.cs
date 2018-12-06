@@ -647,6 +647,8 @@ namespace Util
 
             if (!string.IsNullOrEmpty(buff.TransformationText))
                 CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
+
+            NetworkHelper.SyncBuffs(player);
         }
 
         // return the first located transformation of a given player. Assumes there should only ever be one, returns the first it finds.

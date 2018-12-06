@@ -52,7 +52,7 @@ namespace DBZMOD
                     return;
                 }
 
-                // check for platform collision
+                // cancel platform collision
                 player.DryCollision(true, true);                
 
                 //prepare vals
