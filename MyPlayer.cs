@@ -335,7 +335,7 @@ namespace DBZMOD
             {
                 KiDrainAddition = 0;
             }
-            if (Transformations.IsKaioken(player))
+            if (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
             {
                 KaiokenTimer += 1.5f;
             }
@@ -805,6 +805,7 @@ namespace DBZMOD
 
         public void HandleTransformations()
         {
+            bool isPoweringDownOneStep = false;
             BuffInfo targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.
@@ -830,7 +831,8 @@ namespace DBZMOD
                 targetTransformation = Transformations.GetNextAscensionStep(player);                
             } else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player)) {
                 // player is powering down a transformation state.
-                targetTransformation = Transformations.GetPreviousTransformationStep(player);                    
+                targetTransformation = Transformations.GetPreviousTransformationStep(player);
+                isPoweringDownOneStep = true;
             }
 
             // if we made it this far without a target, it means for some reason we can't change transformations.
@@ -839,13 +841,13 @@ namespace DBZMOD
 
             // finally, check that the transformation is really valid and then do it.
             if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation, mod);
+                Transformations.DoTransform(player, targetTransformation, mod, isPoweringDownOneStep);
         }
 
         public void HandleKaioken()
         {
             BuffInfo targetTransformation = null;
-                        
+            bool isPoweringDownOneStep = false;
             if (KaiokenKey.JustPressed) {
                 // no possible combination of kaioken can be attained in your current state.
                 if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
@@ -856,7 +858,8 @@ namespace DBZMOD
             else if (IsPoweringDownOneStep() && (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)))
             {
                 // player is powering down their kaioken state, get the previous one.
-                targetTransformation = Transformations.GetPreviousKaiokenStep(player);                    
+                targetTransformation = Transformations.GetPreviousKaiokenStep(player);
+                isPoweringDownOneStep = true;
             }
 
             if (targetTransformation == null)
@@ -864,7 +867,7 @@ namespace DBZMOD
 
             // finally, check the transformation is really valid and then do it.
             if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation, mod);
+                Transformations.DoTransform(player, targetTransformation, mod, isPoweringDownOneStep);
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -1416,7 +1419,7 @@ namespace DBZMOD
         public void EndTransformations()
         {
             // automatically applies debuffs.
-            Transformations.ClearAllTransformations(player, true);
+            Transformations.ClearAllTransformations(player, true, false);
             if (transformationSound != null)
             {
                 transformationSound.Stop();

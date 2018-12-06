@@ -85,7 +85,7 @@ namespace Util
                 if (_SSJ1Kaioken == null)
                 {
                     _SSJ1Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SSJ1Kaioken, modInstance.BuffType(BuffKeyNames.SSJ1Kaioken), 0.8f, "Sounds/KaioAuraAscend",
-                        null, DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj), typeof(KaiokenAuraProj) }, new string[] { "SSJ1AuraProjStart" });                    
+                        null, DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj), typeof(KaiokenAuraProj) }, new string[] { "SSJ1AuraProjStart", "KaiokenAuraProj" });                    
                 }
                 return _SSJ1Kaioken;
             }
@@ -523,7 +523,8 @@ namespace Util
         {
             if (buffId == MenuSelectionID.None)
                 return;
-            DoTransform(player, GetBuffFromMenuSelection(buffId), mod);
+            // overload of do transform from this method will never be a power down, always a power up.
+            DoTransform(player, GetBuffFromMenuSelection(buffId), mod, false);
         }
 
         public static void AddKaiokenExhaustion(Player player, int multiplier)
@@ -540,7 +541,7 @@ namespace Util
         public static bool IsTiredFromKaioken(Player player) { return player.HasBuff(KaiokenFatigue.BuffId); }
 
         // wipes out all transformation buffs, requires them to be a part of the AllBuffs() union (it's a bunch of lists joined together).
-        public static void ClearAllTransformations(Player player, bool isPoweringDown)
+        public static void ClearAllTransformations(Player player, bool isPoweringDown, bool isOneStep)
         {
             foreach (BuffInfo buff in AllBuffs())
             {
@@ -555,19 +556,33 @@ namespace Util
                     {
                         // add both debuffs, and kaioken exhaustion is doubled
                         AddKaiokenExhaustion(player, 2);
-                        AddTransformationExhaustion(player);
+
+                        // if we're stepping down from SSJ1Kaioken, we're still transformed.
+                        if (!isOneStep)
+                        {
+                            AddTransformationExhaustion(player);
+                        }
                     }
                     else if (KaiokenBuffs().Contains(buff))
                     {
-                        // add the tired debuff and clear the kaioken timer
-                        AddKaiokenExhaustion(player, 1);
+                        // if we're stepping down from Kaioken, we haven't left Kaioken yet. Timer's still ticking.
+                        if (!isOneStep)
+                        {
+                            // add the tired debuff and clear the kaioken timer
+                            AddKaiokenExhaustion(player, 1);
+                        }
                     }
                     else
                     {
-                        // add the exhaustion debuff for transformations
-                        AddTransformationExhaustion(player);
+                        // if we're stepping down our transformation, we're still transformed.
+                        if (!isOneStep)
+                        {
+                            // add the exhaustion debuff for transformations
+                            AddTransformationExhaustion(player);
+                        }
                     }
                 }
+
                 foreach (Type auraType in buff.AuraProjectileTypes)
                 {
                     FindAndKillPlayerAurasOfType(player, auraType);
@@ -601,7 +616,7 @@ namespace Util
         }
 
         // actually handle transforming. Takes quite a few steps to clean up after itself and do all the things.
-        public static void DoTransform(Player player, BuffInfo buff, Mod mod)
+        public static void DoTransform(Player player, BuffInfo buff, Mod mod, bool isOneStep)
         {
             BuffInfo currentTransformation = GetCurrentTransformation(player);
 
@@ -614,7 +629,8 @@ namespace Util
                 return;
 
             // remove all *transformation* buffs from the player.
-            ClearAllTransformations(player, isPoweringDown);
+            // this needs to know we're powering down a step or not
+            ClearAllTransformations(player, isPoweringDown, isOneStep);
 
             // if the buff needs dust aura, do that.
             if (SSJBuffs().Contains(buff) || buff == ASSJ || buff == USSJ)
