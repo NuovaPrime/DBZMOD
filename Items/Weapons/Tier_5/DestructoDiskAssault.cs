@@ -33,12 +33,12 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			WeaponType = "Disk";
 			if(!Main.dedServ)
             {
-                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithVolume(0.7f).WithPitchVariance(.3f);
             }
 	    }
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Destructo Disk Assault");
+		    DisplayName.SetDefault("Destructo Disk Assault");
 		}
 
 		public override void AddRecipes()

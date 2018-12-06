@@ -36,8 +36,8 @@ namespace DBZMOD.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Projectile.NewProjectile(target.Center.X - 40, target.Center.Y + 20, 0, 0, mod.ProjectileType("DestructoDiskAssaultMini"), projectile.damage, 3f);
-            Projectile.NewProjectile(target.Center.X - 40, target.Center.Y + 10, 0, 0, mod.ProjectileType("DestructoDiskAssaultMini"), projectile.damage, 3f);
+            Projectile.NewProjectile(target.Center.X - 40, target.Center.Y + 20, 0, 0, mod.ProjectileType("DestructoDiskAssaultMini"), projectile.damage, 3f, projectile.owner);
+            Projectile.NewProjectile(target.Center.X - 40, target.Center.Y + 10, 0, 0, mod.ProjectileType("DestructoDiskAssaultMini"), projectile.damage, 3f, projectile.owner);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
