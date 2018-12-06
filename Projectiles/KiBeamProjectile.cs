@@ -21,7 +21,8 @@ namespace DBZMOD.Projectiles
             projectile.width = 6;
             projectile.height = 174;
 			projectile.light = 1f;
-			projectile.alpha = 220;
+            projectile.knockBack = 1.0f;
+            projectile.alpha = 220;
             projectile.friendly = true;
             projectile.ignoreWater = true;
             projectile.tileCollide = false;

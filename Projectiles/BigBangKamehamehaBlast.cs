@@ -24,6 +24,7 @@ namespace DBZMOD.Projectiles
             projectile.light = 1f;
             projectile.timeLeft = 200;
             projectile.netUpdate = true;
+            projectile.knockBack = DefaultBeamKnockback;
             aiType = 14;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;

@@ -20,6 +20,7 @@ namespace DBZMOD
 {
     public abstract class KiProjectile : ModProjectile
     {
+        public static float DefaultBeamKnockback = 1.5f;
         public int ChargeLevel;
         public int ChargeTimer;
         public float ChargeTimerMax;

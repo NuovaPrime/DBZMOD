@@ -21,7 +21,8 @@ namespace DBZMOD.Projectiles
             projectile.height = 90;
 			projectile.aiStyle = 1;
 			projectile.light = 1f;
-			projectile.timeLeft = 150;
+            projectile.knockBack = DefaultBeamKnockback;
+            projectile.timeLeft = 150;
             projectile.netUpdate = true;
             projectile.damage = 180;
 			aiType = 14;
