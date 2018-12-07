@@ -57,7 +57,9 @@ namespace DBZMOD
         // ki max mult is a multiplier for ki that stacks multiplicatively with other KiMaxMult bonuses. It resets to 1f each frame.
         public float KiMaxMult;
 
-        public int KiCurrent;
+        // made KiCurrent private forcing everyone to use a method that syncs to clients, centralizing ki increase/decrease logic.
+        private int KiCurrent;
+
         public int KiRegenRate = 1;
         public int OverloadMax = 100;
         public int OverloadCurrent;
@@ -237,6 +239,28 @@ namespace DBZMOD
             return (int)Math.Ceiling((KiMax + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
         }
 
+        // all changes to Ki Current are now made through this method.
+        public void AddKi(int kiAmount)
+        {
+            KiCurrent = Math.Max(0, Math.Min(OverallKiMax(), KiCurrent + kiAmount));
+        }
+
+        // return the amount of ki the player has, readonly
+        public int GetKi()
+        {
+            return KiCurrent;
+        }
+
+        public bool IsKiDepleted()
+        {
+            return KiCurrent == 0;
+        }
+
+        public bool HasKi(int kiAmount)
+        {
+            return KiCurrent >= kiAmount;
+        }
+
         public const int BASE_KI_MAX = 1000;
 
         public int GetKiMaxFromFragments()
@@ -302,10 +326,6 @@ namespace DBZMOD
             if (IsTransforming)
             {
                 SSJAuraBeamTimer++;
-            }
-            if (KiCurrent < 0)
-            {
-                KiCurrent = 0;
             }
             if (OverloadCurrent < 0)
             {
@@ -447,10 +467,7 @@ namespace DBZMOD
             }
             if (KiRegenTimer > 2)
             {
-                if (KiCurrent != OverallKiMax())
-                {
-                    KiCurrent += KiRegen;
-                }
+                AddKi(KiRegen);             
                 KiRegenTimer = 0;
             }
             if (DemonBonusActive)
@@ -588,7 +605,7 @@ namespace DBZMOD
             if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
-                KiCurrent += i;
+                AddKi(i);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(2) == 0)
                 {
@@ -603,7 +620,7 @@ namespace DBZMOD
             if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
-                KiCurrent += i;
+                AddKi(i);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(3) == 0)
                 {
@@ -907,7 +924,7 @@ namespace DBZMOD
             if (IsCharging && (KiCurrent < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
             {
                 // determine base regen rate and bonuses
-                KiCurrent += KiRegenRate + ScarabChargeRateAdd;
+                AddKi(KiRegenRate + ScarabChargeRateAdd);
 
                 // slow down the player a bunch
                 if (chargeMoveSpeed > 0 && (triggersSet.Left || triggersSet.Right))
@@ -952,12 +969,6 @@ namespace DBZMOD
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
                     ChargeSoundTimer = 0;
                 }
-            }
-
-            // throttle ki current to kimax
-            if (KiCurrent > OverallKiMax())
-            {
-                KiCurrent = OverallKiMax();
             }
 
             // handle ki charging

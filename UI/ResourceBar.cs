@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
@@ -80,15 +82,16 @@ namespace DBZMOD.UI
 
 			MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 			float quotient = 1f;
-			//Calculate quotient
-			switch (stat)
+            float averageKi = (float)Math.Floor(cleanAverageKi.Sum() / 15f);
+            //Calculate quotient
+            switch (stat)
 			{
 				case ResourceBarMode.KI:
-					quotient = (float)player.KiCurrent / (float)player.OverallKiMax();
+					quotient = averageKi / player.OverallKiMax();
 					quotient = Utils.Clamp(quotient, 0, 1);
 					break;
                 case ResourceBarMode.OVERLOAD:
-                    quotient = (float)player.OverloadCurrent / (float)player.OverloadMax;
+                    quotient = player.OverloadCurrent / player.OverloadMax;
                     quotient = Utils.Clamp(quotient, 0, 1);
                     break;
 
@@ -150,13 +153,24 @@ namespace DBZMOD.UI
 			
 		}
 
+        private static List<int> cleanAverageKi = new List<int>();
 		public override void Update(GameTime gameTime)
-		{
+		{            
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-			switch (stat)
+
+            // the point of this is to get a one second average of the ki changes. This makes the ki bar stabilize instead of flickering so goddamn much.
+            cleanAverageKi.Add(player.GetKi());
+            if (cleanAverageKi.Count > 15)
+            {
+                cleanAverageKi.RemoveRange(0, cleanAverageKi.Count - 15);
+            }
+
+            int averageKi = (int)Math.Floor(cleanAverageKi.Sum() / 15f);
+
+            switch (stat)
 			{
 				case ResourceBarMode.KI:
-                    text.SetText("Ki:" + player.KiCurrent + " / " + player.OverallKiMax());
+                    text.SetText("Ki:" + averageKi + " / " + player.OverallKiMax());
 					break;
 
                 case ResourceBarMode.OVERLOAD:

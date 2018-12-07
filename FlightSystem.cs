@@ -46,7 +46,7 @@ namespace DBZMOD
             if (m_FlightMode)
             {
                 //check for ki
-                if (modPlayer.KiCurrent <= 0)
+                if (modPlayer.IsKiDepleted())
                 {
                     m_FlightMode = false;
                     player.fullRotation = MathHelper.ToRadians(0);
@@ -155,7 +155,7 @@ namespace DBZMOD
                 {
                     if (FLIGHT_KI_DRAIN_TIMER >= 1)
                     {
-                        modPlayer.KiCurrent -= totalFlightUsage + (totalFlightUsage * (int)boostSpeed);
+                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1);
                         FLIGHT_KI_DRAIN_TIMER = 0;
                     }
                 }
@@ -163,7 +163,7 @@ namespace DBZMOD
                 {
                     if (FLIGHT_KI_DRAIN_TIMER >= 3)
                     {
-                        modPlayer.KiCurrent -= 1;
+                        modPlayer.AddKi(-1);
                         FLIGHT_KI_DRAIN_TIMER = 0;
                     }
                 }
@@ -193,7 +193,7 @@ namespace DBZMOD
                 {
                     NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, false);
                 }
-                if (modPlayer.KiCurrent <= 0 && modPlayer.flightDampeningUnlocked)
+                if (modPlayer.IsKiDepleted() && modPlayer.flightDampeningUnlocked)
                 {
                     player.AddBuff(mod.BuffType("KatchinFeet"), 600);
                 }

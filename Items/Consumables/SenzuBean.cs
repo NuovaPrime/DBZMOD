@@ -43,7 +43,7 @@ namespace DBZMOD.Items.Consumables
             {
                 player.AddBuff(mod.BuffType("SenzuCooldown"), 18000);
             }
-            MyPlayer.ModPlayer(player).KiCurrent = MyPlayer.ModPlayer(player).OverallKiMax();
+            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OverallKiMax());
             return true;
             
         }

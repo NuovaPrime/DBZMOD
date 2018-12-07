@@ -89,12 +89,12 @@ namespace DBZMOD.Projectiles
                     {
                         projectile.timeLeft = 400;
                     }
-                    if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                    if (MyPlayer.ModPlayer(player).IsKiDepleted())
                     {
                         projectile.Kill();
                     }
 
-                    MyPlayer.ModPlayer(player).KiCurrent -= 5;
+                    MyPlayer.ModPlayer(player).AddKi(-5);
                     player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
 
                     //Rock effect

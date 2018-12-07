@@ -386,7 +386,7 @@ namespace DBZMOD
 
         private bool HasKiForZanzoken(Player player)
         {
-            return MyPlayer.ModPlayer(player).KiCurrent >= GetZanzokenKiCost(player);
+            return MyPlayer.ModPlayer(player).HasKi(GetZanzokenKiCost(player));
         }
 
         private int GetZanzokenKiCost(Player player)
@@ -415,7 +415,7 @@ namespace DBZMOD
 
         private void DeductKiForZanzoken(Player player)
         {
-            MyPlayer.ModPlayer(player).KiCurrent -= GetZanzokenKiCost(player);
+            MyPlayer.ModPlayer(player).AddKi(-GetZanzokenKiCost(player));
         }
 
         private Rectangle GetProjectedHitboxForSafeDistance(Vector2 vector, Player player)

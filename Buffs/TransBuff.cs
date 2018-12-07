@@ -57,7 +57,7 @@ namespace DBZMOD
             if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
-                if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
                     MyPlayer.ModPlayer(player).EndTransformations();
                 }
@@ -67,7 +67,7 @@ namespace DBZMOD
                     KiDrainTimer++;
                     if (KiDrainTimer > 2)
                     {
-                        MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate + MyPlayer.ModPlayer(player).KiDrainAddition;
+                        MyPlayer.ModPlayer(player).AddKi((KiDrainRate + MyPlayer.ModPlayer(player).KiDrainAddition) * -1);
                         KiDrainTimer = 0;
                     }
                     KiDrainAddTimer++;

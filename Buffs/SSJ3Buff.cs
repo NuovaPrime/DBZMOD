@@ -17,31 +17,20 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             DamageMulti = 4f;
             SpeedMulti = 4f;
-            if (MyPlayer.ModPlayer(player).MasteryLevel3 >= 1)
+            bool isMastered = modPlayer.MasteryLevel3 >= 1f;
+            KiDrainRate = isMastered ? 4 : 6;
+            float kiQuotient = (float)modPlayer.GetKi() / modPlayer.OverallKiMax();
+            if (kiQuotient <= 0.3f)
             {
-                KiDrainRate = 4;
-                if (MyPlayer.ModPlayer(player).KiCurrent < (int)(MyPlayer.ModPlayer(player).KiMax * 0.30))
-                {
-                    HealthDrainRate = 10;
-                } else
-                {
-                    HealthDrainRate = 0;
-                }
-            }
-            else
+                HealthDrainRate = isMastered ? 10 : 20;
+            } else
             {
-                KiDrainRate = 6;
-                if (MyPlayer.ModPlayer(player).KiCurrent < (int)(MyPlayer.ModPlayer(player).KiMax * 0.30))
-                {
-                    HealthDrainRate = 20;
-                }
-                else
-                {
-                    HealthDrainRate = 0;
-                }
+                HealthDrainRate = 0;
             }
+            
             KiDrainBuffMulti = 2.1f;
             MasteryTimer++;
             if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)

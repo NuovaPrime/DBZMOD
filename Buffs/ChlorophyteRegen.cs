@@ -21,7 +21,7 @@ namespace DBZMOD.Buffs
             RegenTimer++;
             if(RegenTimer > 10)
             {
-                MyPlayer.ModPlayer(player).KiCurrent += 1;
+                MyPlayer.ModPlayer(player).AddKi(1);
                 RegenTimer = 0;
             }
         }

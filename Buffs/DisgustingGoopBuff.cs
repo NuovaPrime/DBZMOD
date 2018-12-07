@@ -19,9 +19,9 @@ namespace DBZMOD.Buffs
         {
             player.statLifeMax2 -= 25;
             GoopTimer++;
-            if (GoopTimer > 3 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
+            if (GoopTimer > 3)
             {
-                MyPlayer.ModPlayer(player).KiCurrent += 1;
+                MyPlayer.ModPlayer(player).AddKi(1);
                 GoopTimer = 0;
             }
         }

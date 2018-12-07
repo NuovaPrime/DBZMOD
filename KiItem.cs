@@ -80,7 +80,7 @@ namespace DBZMOD
             }
             if (ChargeBall)
             {
-                if (MyPlayer.ModPlayer(player).KiCurrent <= 0)
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
                     projectile.active = false;
                 }
@@ -113,9 +113,9 @@ namespace DBZMOD
                     ChargeLevel += 1;
                     ChargeTimer = 0;
                 }
-                if (KiDrainTimer > 1 && MyPlayer.ModPlayer(player).KiCurrent >= 0)
+                if (KiDrainTimer > 1 && !MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    MyPlayer.ModPlayer(player).KiCurrent -= KiDrainRate;
+                    MyPlayer.ModPlayer(player).AddKi(-KiDrainRate);
                     KiDrainTimer = 0;
                 }
                 for (int d = 0; d < 4; d++)
@@ -429,6 +429,7 @@ namespace DBZMOD
             item.thrown = false;
             item.summon = false;
         }
+
         public override bool CloneNewInstances
         {
             get
@@ -436,6 +437,7 @@ namespace DBZMOD
                 return true;
             }
         }
+
         public override int ChoosePrefix(Terraria.Utilities.UnifiedRandom rand)
         {
             var PrefixChooser = new WeightedRandom<int>();
@@ -461,22 +463,27 @@ namespace DBZMOD
             }
             return -1;
         }
+
         public override bool ReforgePrice(ref int reforgePrice, ref bool canApplyDiscount)
         {
             return true;
         }
+
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
             knockback = knockback + MyPlayer.ModPlayer(player).KiKbAddition;
         }
+
         public override void GetWeaponDamage(Player player, ref int damage)
         {
             damage = (int)(damage * MyPlayer.ModPlayer(player).KiDamage);
         }
+
         public override void GetWeaponCrit(Player player, ref int crit)
         {
             crit = crit + MyPlayer.ModPlayer(player).KiCrit;
         }
+
         public override float UseTimeMultiplier(Player player)
         {
             return MyPlayer.ModPlayer(player).KiSpeedAddition;
@@ -486,15 +493,17 @@ namespace DBZMOD
         {
             return (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
         }
+
         public override bool CanUseItem(Player player)
         {
-            if (RealKiDrain(Main.LocalPlayer) <= MyPlayer.ModPlayer(player).KiCurrent)
+            if (MyPlayer.ModPlayer(player).HasKi(RealKiDrain(player)))
             {
-                MyPlayer.ModPlayer(player).KiCurrent -= RealKiDrain(Main.LocalPlayer);
+                MyPlayer.ModPlayer(player).AddKi(-RealKiDrain(player));
                 return true;
             }
             return false;
         }
+
         public override bool UseItem(Player player)
         {
             if(Transformations.IsLSSJ(player) && !Transformations.IsSSJ1(player))
@@ -547,7 +556,7 @@ namespace DBZMOD
         }
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).KiCurrent += KiHeal;
+            MyPlayer.ModPlayer(player).AddKi(KiHeal);
             player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), KiHeal, false, false);
             return true;

@@ -44,7 +44,7 @@ namespace DBZMOD.Items
                 Main.PlaySound(SoundID.NPCDeath7, player.position);
             //Mine makes a sound
             //modplayer resource increase goes here++
-            MyPlayer.ModPlayer(player).KiCurrent += MyPlayer.ModPlayer(player).OrbHealAmount;
+            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OrbHealAmount);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), 50, false, false);
             //(165, 255, 185) is the color of the text
             //(1) is the displayed text
