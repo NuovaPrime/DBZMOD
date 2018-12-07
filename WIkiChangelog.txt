@@ -314,13 +314,19 @@ V1.0.7.1
 4. Fixed various issues where bosses wouldn't drop their items at all or drop both at a time.
 
 
-V1.0.7.2
+V1.0.8
 
 == Additions ==
 
 1. Added a [[Configuration]] option to make [[Charging Aura|Charging]] a toggle.
 
-2.
+== Changes ==
+
+1. [[Flight]] now goes through platforms.
+
+2. Many new quick transforms, like going from [[Super Saiyan 3]] to [[Super Saiyan God]], etc.
+
+3. You can now step down a form by pressing [[Charging Aura|Charge]] and [[Power Down]] at the same time.
 
 == Fixes ==
 
@@ -329,6 +335,12 @@ V1.0.7.2
 2. The [[Charging Aura]] now disappears when you die or desync.
 
 3. Fixed [[Blinding Blade]]'s homing.
+
+4. Fixed bug where you would sometime crash when reforging.
+
+5. Fixed [[Ki Diffuser]] giving buffs forever and such.
+
+6. Fixed bug where [[Destructo Disk Assault]]'s mini disks did no damage.
 
 == Patreon Items ==
 
