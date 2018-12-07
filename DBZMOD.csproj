@@ -133,7 +133,11 @@
     <Compile Include="Items\Accessories\AmethystNecklace.cs" />
     <Compile Include="Items\Accessories\AncientLegendNecklace.cs" />
     <Compile Include="Items\Accessories\AncientLegendWaistCape.cs" />
+    <Compile Include="Items\Accessories\PureEnergyCirclet.cs" />
+    <Compile Include="Items\Accessories\IceTalisman.cs" />
+    <Compile Include="Items\Accessories\BurningEnergyAmulet.cs" />
     <Compile Include="Items\Accessories\ArmCannon.cs" />
+    <Compile Include="Items\Accessories\BuldariumSigmite.cs" />
     <Compile Include="Items\Accessories\BaldurEssentia.cs" />
     <Compile Include="Items\Accessories\BattleKit.cs" />
     <Compile Include="Items\Accessories\CrystalliteAlleviate.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Items\Accessories\Infusers\InfuserTopaz.cs" />
     <Compile Include="Items\Accessories\KaioCrystal.cs" />
     <Compile Include="Items\Accessories\KiChip.cs" />
+    <Compile Include="Items\Accessories\BlackDiamondShell.cs" />
     <Compile Include="Items\Accessories\LargeTurtleShell.cs" />
     <Compile Include="Items\Accessories\LuminousSectum.cs" />
     <Compile Include="Items\Accessories\MajinNucleus.cs" />
@@ -170,7 +175,9 @@
     <Compile Include="Items\Accessories\SenzuBag.cs" />
     <Compile Include="Items\Accessories\SpiritCharm.cs" />
     <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
+    <Compile Include="Items\Accessories\TimeRing.cs" />
     <Compile Include="Items\Accessories\TopazNecklace.cs" />
+    <Compile Include="Items\Accessories\Vanity\GreenPotara.cs" />
     <Compile Include="Items\Accessories\WornGloves.cs" />
     <Compile Include="Items\Accessories\ZenkaiCharm.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
@@ -509,6 +516,8 @@
     <Content Include="Items\Accessories\Infusers\InfuserRuby.png" />
     <Content Include="Items\Accessories\Infusers\InfuserSapphire.png" />
     <Content Include="Items\Accessories\Infusers\InfuserTopaz.png" />
+    <Content Include="Items\Accessories\Vanity\GreenPotara.png" />
+    <Content Include="Items\Accessories\Vanity\GreenPotara_Face.png" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.mp3" />
     <Content Include="Sounds\DiscFire.wav" />

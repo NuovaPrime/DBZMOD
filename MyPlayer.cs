@@ -213,6 +213,13 @@ namespace DBZMOD
         public bool CanUseFlurry;
         public bool CanUseZanzoken;
         public int BlockState;
+        public bool blackDiamondShell;
+        public bool buldariumSigmite;
+        public bool attunementBracers;
+        public bool burningEnergyAmulet;
+        public bool iceTalisman;
+        public bool pureEnergyCirclet;
+        public bool timeRing;
         public SoundEffectInstance transformationSound;
 
         public int syncOverallKiMax = 0;
@@ -965,10 +972,28 @@ namespace DBZMOD
                 }
 
                 // grant defense and a protective barrier visual if charging with baldur essentia
-                if (baldurEssentia)
+                if (baldurEssentia && !buldariumSigmite)
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.30f);
+                }
+                if(buldariumSigmite)
+                {
+                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
+                    player.statDefense = (int)(player.statDefense * 1.50f);
+                    player.shinyStone = true;
+                }
+                if(burningEnergyAmulet)
+                {
+                    //on fire aura
+                }
+                if(iceTalisman)
+                {
+                    //frostburn aura
+                }
+                if(pureEnergyCirclet)
+                {
+                    //on fire and frostburn mix aura
                 }
             }
             else if (!IsCharging)
@@ -1152,6 +1177,13 @@ namespace DBZMOD
             infuserRuby = false;
             infuserSapphire = false;
             infuserTopaz = false;
+            blackDiamondShell = false;
+            buldariumSigmite = false;
+            attunementBracers = false;
+            burningEnergyAmulet = false;
+            iceTalisman = false;
+            pureEnergyCirclet = false;
+            timeRing = false;
             KiMax2 = 0;
             KiMaxMult = 1f;
         }
@@ -1282,6 +1314,13 @@ namespace DBZMOD
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
                 player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
+                return true;
+            }
+            if (blackDiamondShell)
+            {
+                int i = Main.rand.Next(10, 100);
+                AddKi(i);
+                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 return true;
             }
             return true;
