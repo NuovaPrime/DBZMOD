@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBZMOD.Projectiles.Auras;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,11 +28,11 @@ namespace Network
             }
         }
 
-        public void SendAuraInFlightChanges(int toWho, int fromWho, int whichProjectile, float positionX, float positionY, float rotation)
+        public void SendAuraInFlightChanges(int toWho, int fromWho, int whichPlayer, float positionX, float positionY, float rotation)
         {
             ModPacket packet = GetPacket(SyncAuras, fromWho);
             // this indicates we're the originator of the packet. include our player.
-            packet.Write(whichProjectile);
+            packet.Write(whichPlayer);
             packet.Write(positionX);
             packet.Write(positionY);
             packet.Write(rotation);
@@ -40,20 +41,27 @@ namespace Network
 
         public void ReceiveAuraInFlightChanges(BinaryReader reader, int fromWho)
         {
-            int whichProjectile = reader.ReadInt32();
+            int whichPlayer = reader.ReadInt32();
             float positionX = reader.ReadSingle();
             float positionY = reader.ReadSingle();
             float rotation = reader.ReadSingle();
             if (Main.netMode == NetmodeID.Server)
-            {
-                SendAuraInFlightChanges(-1, fromWho, whichProjectile, positionX, positionY, rotation);
+            {                
+                SendAuraInFlightChanges(-1, fromWho, whichPlayer, positionX, positionY, rotation);
             }
             else
             {
-                Projectile theProjectile = Main.projectile[whichProjectile];
-                theProjectile.position.X = positionX;
-                theProjectile.position.Y = positionY;
-                theProjectile.rotation = rotation;
+                foreach(Projectile proj in Main.projectile)
+                {
+                    if (proj.modProjectile == null)
+                        continue;
+                    if (proj.owner == whichPlayer && proj.modProjectile.GetType().IsAssignableFrom(typeof(BaseAuraProj)))
+                    {
+                        proj.position.X = positionX;
+                        proj.position.Y = positionY;
+                        proj.rotation = rotation;
+                    }
+                }
             }
         }
     }

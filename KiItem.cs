@@ -351,20 +351,21 @@ namespace DBZMOD
                 // offset the aura
                 projectile.Center = cartesianOffset;
 
-                // netcode!
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
-                }
+                //// netcode!
+                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                //{
+                //    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, player.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
+                //}
             }
             else
             {
                 projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y + chargingAuraOffset));
                 projectile.rotation = 0;
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
-                }
+                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                //{
+                //    Main.NewText(string.Format("Sending server a flight aura sync for player {0} projectile {1} position {2}, {3} rotation {4}", player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation));
+                //    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, player.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
+                //}
             }
         }
     }
