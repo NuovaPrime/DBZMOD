@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using DBZMOD;
 using System;
 using Util;
+using Network;
 
 namespace DBZMOD
 {
@@ -344,19 +345,26 @@ namespace DBZMOD
                 double heightOffset = auraHeightRadius - (heightRadius + (AuraOffset.Y + 18) + chargingAuraOffset);
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
-
-                // Main.NewText(string.Format("Rotation Offset: {0} - heightOffset: {1} before transform: {2}", projectile.rotation, cartesianOffsetY, heightOffset));
-
+                
                 Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
 
                 // offset the aura
                 projectile.Center = cartesianOffset;
 
+                // netcode!
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
+                }
             }
             else
             {
                 projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y + chargingAuraOffset));
                 projectile.rotation = 0;
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
+                }
             }
         }
     }

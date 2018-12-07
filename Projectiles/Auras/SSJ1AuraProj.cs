@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -38,11 +39,11 @@ namespace DBZMOD.Projectiles.Auras
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(mod.BuffType("SSJ1Buff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")) && !player.HasBuff(mod.BuffType("ASSJBuff")) && !player.HasBuff(mod.BuffType("USSJBuff")))
+            if (!player.HasBuff(Transformations.SSJ1.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
             {
                 projectile.Kill();
             }
-            if (player.HasBuff(mod.BuffType("SSJ1Buff")))
+            if (player.HasBuff(Transformations.SSJ1.BuffId))
             {
                 if (BaseAuraTimer > 0)
                 {
@@ -50,7 +51,7 @@ namespace DBZMOD.Projectiles.Auras
                     BaseAuraTimer--;
                 }
             }
-            else if (player.HasBuff(mod.BuffType("ASSJBuff")))
+            else if (player.HasBuff(Transformations.ASSJ.BuffId))
             {
                 if (BaseAuraTimer > 0)
                 {
@@ -58,7 +59,7 @@ namespace DBZMOD.Projectiles.Auras
                     BaseAuraTimer--;
                 }
             }
-            else if (player.HasBuff(mod.BuffType("USSJBuff")))
+            else if (player.HasBuff(Transformations.USSJ.BuffId))
             {
                 if (BaseAuraTimer > 0)
                 {

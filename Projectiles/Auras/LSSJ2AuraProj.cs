@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -39,7 +40,7 @@ namespace DBZMOD.Projectiles.Auras
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(mod.BuffType("LSSJ2Buff")))
+            if (!player.HasBuff(Transformations.LSSJ2.BuffId))
             {
                 projectile.Kill();
             }

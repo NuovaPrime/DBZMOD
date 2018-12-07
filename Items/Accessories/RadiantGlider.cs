@@ -26,9 +26,7 @@ namespace DBZMOD.Items.Accessories
         }
 
         public override bool WingUpdate(Player player, bool inUse)
-        {         
-            // Main.NewText(string.Format("Wing: {0} Frame: {1} Counter: {2}", player.wings, player.wingFrame, player.wingFrameCounter));
-            
+        {            
             if (inUse)
             {
                 if (player.wingFrame == 0 || player.wingFrame >= 3)

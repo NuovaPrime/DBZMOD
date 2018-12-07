@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -35,7 +36,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(mod.BuffType("KaiokenBuffX100")))
+            if (!player.HasBuff(Transformations.Kaioken100.BuffId))
             {
                 projectile.Kill();
             }

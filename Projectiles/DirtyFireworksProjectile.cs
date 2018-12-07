@@ -139,8 +139,6 @@ namespace DBZMOD.Projectiles
                 projectile.hide = true;
                 projectile.timeLeft = 100;
             }
-
-            //Main.NewText("NPC HIT", Color.White);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {

@@ -13,6 +13,7 @@ using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
 using Util;
+using Network;
 
 namespace DBZMOD
 {
@@ -27,7 +28,7 @@ namespace DBZMOD
         Vector2 m_currentVel = new Vector2(0, 0);
         private int FLIGHT_KI_DRAIN_TIMER = 0;
 
-        private int FLIGHT_DUST_TYPE = 261;
+        private int FlightDustType = 261;
         //float m_targetRotation = 0.0f;
 
         public void ToggleFlight(Player player, Mod mod)
@@ -90,41 +91,29 @@ namespace DBZMOD
                 }
 
                 if (m_currentVel.Length() > 0.5f)
-                {
-                    if (boostSpeed == 0) //not boosting?
+                {                    
+                    for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
                     {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FLIGHT_DUST_TYPE, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                            tdust.noGravity = true;
-                        }
-
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 10; i++)
-                        {
-                            Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FLIGHT_DUST_TYPE, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                            tdust.noGravity = true;
-                        }
+                        Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FlightDustType, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                        tdust.noGravity = true;
                     }
                 }
 
                 if (Transformations.IsSSJ(player) && !Transformations.IsGodlike(player))
                 {
-                    FLIGHT_DUST_TYPE = 169;
+                    FlightDustType = 169;
                 }
                 else if (Transformations.IsLSSJ(player))
                 {
-                    FLIGHT_DUST_TYPE = 89;
+                    FlightDustType = 89;
                 }
                 else if (Transformations.IsGodlike(player) || Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
                 {
-                    FLIGHT_DUST_TYPE = 90;
+                    FlightDustType = 90;
                 }
                 else
                 {
-                    FLIGHT_DUST_TYPE = 261;
+                    FlightDustType = 261;
                 }
 
                 //caluclate velocity
@@ -177,6 +166,12 @@ namespace DBZMOD
                 if (totalFlightUsage < 1)
                 {
                     totalFlightUsage = 1;
+                }
+
+                // netcode!
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
                 }
             }
             else //no longer flying cuz of mode change or ki ran out
