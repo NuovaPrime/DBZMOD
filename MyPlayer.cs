@@ -14,6 +14,7 @@ using Terraria.Utilities;
 using Config;
 using Util;
 using Enums;
+using Network;
 
 namespace DBZMOD
 {
@@ -974,6 +975,10 @@ namespace DBZMOD
                         if (!Main.dedServ)
                             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     }
+                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    {
+                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    }
                 }
             }
             else
@@ -987,10 +992,18 @@ namespace DBZMOD
                     if (!Main.dedServ)
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     IsCharging = true;
+                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    {
+                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    }
                 }
                 if (!EnergyCharge.Current && IsCharging)
                 {
                     IsCharging = false;
+                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    {
+                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    }
                 }
             }
 

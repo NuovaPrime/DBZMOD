@@ -51,14 +51,18 @@ namespace DBZMOD
                     m_FlightMode = false;
                     player.fullRotation = MathHelper.ToRadians(0);
                     return;
-                }
+                }                
 
                 // cancel platform collision
-                player.DryCollision(true, true);                
+                player.DryCollision(true, true);
 
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
                 modPlayer.IsFlying = true;
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, true);
+                }
                 Vector2 m_rotationDir = Vector2.Zero;
 
                 //m_targetRotation = 0;
@@ -168,10 +172,16 @@ namespace DBZMOD
                     totalFlightUsage = 1;
                 }
 
+                if (player.velocity.Y == -0.4f && Math.Abs(player.velocity.X) > 0.5f)
+                {
+                    // if the player is "running", stop that. EXPERIMENTAL
+                    player.velocity.Y = -0.4001f;                    
+                }
+
                 // netcode!
                 if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
                 {
-                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
+                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
                 }
             }
             else //no longer flying cuz of mode change or ki ran out
@@ -179,6 +189,10 @@ namespace DBZMOD
                 Mod mod = ModLoader.GetMod("DBZMOD");
                 player.fullRotation = MathHelper.ToRadians(0);
                 modPlayer.IsFlying = false;
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, false);
+                }
                 if (modPlayer.KiCurrent <= 0 && modPlayer.flightDampeningUnlocked)
                 {
                     player.AddBuff(mod.BuffType("KatchinFeet"), 600);

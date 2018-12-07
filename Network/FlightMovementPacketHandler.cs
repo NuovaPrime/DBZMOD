@@ -10,11 +10,11 @@ using Terraria.ModLoader;
 
 namespace Network
 {
-    internal class FlightPacketHandler : PacketHandler
+    internal class FlightMovementPacketHandler : PacketHandler
     {
         public const byte SyncFlight = 1;
 
-        public FlightPacketHandler(byte handlerType) : base(handlerType)
+        public FlightMovementPacketHandler(byte handlerType) : base(handlerType)
         {
         }
 
@@ -65,10 +65,14 @@ namespace Network
                 thePlayer.velocity.X = velocityX;
                 thePlayer.velocity.Y = velocityY;
                 thePlayer.fullRotation = rotation;
-                for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
+                // fake dust spawn, checks if the player is kinda stationary, if not, spray some dust, who cares.
+                if (Math.Abs(velocityX) > 4f || Math.Abs(velocityY) > 4f)
                 {
-                    Dust tdust = Dust.NewDustDirect(thePlayer.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, flightDustType, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                    tdust.noGravity = true;
+                    for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
+                    {
+                        Dust tdust = Dust.NewDustDirect(thePlayer.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, flightDustType, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                        tdust.noGravity = true;
+                    }
                 }
             }
         }

@@ -302,9 +302,11 @@
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
     <Compile Include="Network\FlightAuraPacketHandler.cs" />
-    <Compile Include="Network\FlightPacketHandler.cs" />
+    <Compile Include="Network\FlightMovementPacketHandler.cs" />
+    <Compile Include="Network\KiChargingPacket.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PacketHandler.cs" />
+    <Compile Include="Network\PlayerFlightPacket.cs" />
     <Compile Include="Network\TransformationPacketHandler.cs" />
     <Compile Include="Npcs\MajinSlime.cs" />
     <Compile Include="Npcs\MajinZombie.cs" />
