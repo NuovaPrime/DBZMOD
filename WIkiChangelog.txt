@@ -328,6 +328,8 @@ V1.0.8
 
 3. You can now step down a form by pressing [[Charging Aura|Charge]] and [[Power Down]] at the same time.
 
+4. New sprites for various [[Consumables]], [[Consumables#Ki Potions|Ki Potions]].
+
 == Fixes ==
 
 1. Fixed flickering with the [[Ki Diffuser]].
@@ -341,6 +343,8 @@ V1.0.8
 5. Fixed [[Ki Diffuser]] giving buffs forever and such.
 
 6. Fixed bug where [[Destructo Disk Assault]]'s mini disks did no damage.
+
+7. Fixed many issues where things wouldn't sync in multiplayer.
 
 == Patreon Items ==
 
