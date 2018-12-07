@@ -11,6 +11,9 @@ using DBZMOD.Effects;
 using Config;
 using Util;
 using Terraria.Graphics.Effects;
+using System.IO;
+using Network;
+using Enums;
 
 namespace DBZMOD
 {
@@ -18,7 +21,7 @@ namespace DBZMOD
     {
         private UserInterface KiBarInterface;
         private KiBar kibar;
-	    private OverloadBar overloadbar;
+        private OverloadBar overloadbar;
         private UserInterface OverloadBarInterface;
         private UIFlatPanel UIFlatPanel;
 
@@ -48,6 +51,7 @@ namespace DBZMOD
                 AutoloadSounds = true
             };
         }
+
         public override void Unload()
         {
             GFX.UnloadGFX();
@@ -74,7 +78,7 @@ namespace DBZMOD
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;
             battlerodsLoaded = ModLoader.GetMod("UnuBattleRods") != null;
-            expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;            
+            expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;
             MyPlayer.KaiokenKey = RegisterHotKey("Kaioken", "J");
             MyPlayer.EnergyCharge = RegisterHotKey("Energy Charge", "C");
             MyPlayer.Transform = RegisterHotKey("Transform", "X");
@@ -85,7 +89,7 @@ namespace DBZMOD
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
             MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
-            if(!Main.dedServ)
+            if (!Main.dedServ)
             {
                 GFX.LoadGFX(this);
                 KiBar.visible = true;
@@ -116,6 +120,7 @@ namespace DBZMOD
                 SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
             }
         }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Ki Fragment", new int[]
@@ -136,7 +141,7 @@ namespace DBZMOD
                 TransMenuInterface.Update(gameTime);
             }
 
-            if(ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
+            if (ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
             {
                 progressionMenu.Update(gameTime);
             }
@@ -174,7 +179,7 @@ namespace DBZMOD
                             TransMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
-                        if(ProgressionMenu.menuvisible)
+                        if (ProgressionMenu.menuvisible)
                         {
                             ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
@@ -201,6 +206,12 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
+        }
+
+        // packet handling goes here
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            NetworkHelper.HandlePacket(reader, whoAmI);
         }
     }
 }

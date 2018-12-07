@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -33,7 +34,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(mod.BuffType("KaiokenBuff")) && !player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            if (!player.HasBuff(Transformations.Kaioken.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
             {
                 projectile.Kill();
             }
@@ -42,7 +43,7 @@ namespace DBZMOD.Projectiles.Auras
                 //projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
             }
-            if(player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+            if(player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
             {
                 ScaleExtra = 0.5f;
                 AuraOffset.Y = -40;

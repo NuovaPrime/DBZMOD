@@ -380,7 +380,8 @@ namespace DBZMOD
 
         private bool CanZanzoken(Player player)
         {
-            return !player.frozen && !player.stoned && !player.HasBuff(BuffID.Cursed) && HasKiForZanzoken(player) && !IsZanzokenOnCooldown(player);
+            bool isImmobilized = MyPlayer.ModPlayer(player).IsPlayerImmobilized();
+            return !isImmobilized && HasKiForZanzoken(player) && !IsZanzokenOnCooldown(player);
         }
 
         private bool HasKiForZanzoken(Player player)

@@ -3,10 +3,12 @@ using DBZMOD;
 using DBZMOD.Projectiles.Auras;
 using Enums;
 using Microsoft.Xna.Framework;
+using Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Util
@@ -14,6 +16,8 @@ namespace Util
     // class for helping out with all the buff integers, lists of buffs in order, presence of buffs/abstraction
     public static class Transformations
     {
+        public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
+
         private static Mod _modInstance;
         public static Mod modInstance
         {
@@ -72,7 +76,7 @@ namespace Util
                 if (_SSJ1 == null)
                 {
                     _SSJ1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.SSJ1, modInstance.BuffType(BuffKeyNames.SSJ1), 0.6f, "Sounds/SSJAscension",
-                        "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ2AuraProj) }, new string[] { "SSJ1AuraProjStart" });
+                        "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ2AuraProj) }, new string[] { "SSJ1AuraProj" });
                 }
                 return _SSJ1;
             }
@@ -85,7 +89,7 @@ namespace Util
                 if (_SSJ1Kaioken == null)
                 {
                     _SSJ1Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SSJ1Kaioken, modInstance.BuffType(BuffKeyNames.SSJ1Kaioken), 0.8f, "Sounds/KaioAuraAscend",
-                        null, DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj), typeof(KaiokenAuraProj) }, new string[] { "SSJ1AuraProjStart", "KaiokenAuraProj" });                    
+                        null, DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj), typeof(KaiokenAuraProj) }, new string[] { "KaiokenAuraProj", "SSJ1AuraProj" });                    
                 }
                 return _SSJ1Kaioken;
             }
@@ -183,7 +187,7 @@ namespace Util
                 if (_ASSJ == null)
                 {
                     _ASSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ASSJ, modInstance.BuffType(BuffKeyNames.ASSJ), 1.0f, "Sounds/SSJAscension",
-                         "Ascended Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ3AuraProj) }, new string[] { "SSJ3AuraProj" });
+                         "Ascended Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
                 }
                 return _ASSJ;
             }
@@ -197,7 +201,7 @@ namespace Util
                 if (_USSJ == null)
                 {
                     _USSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.USSJ, modInstance.BuffType(BuffKeyNames.USSJ), 0.7f, "Sounds/SSJAscension",
-                         "Ultra Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ3AuraProj) }, new string[] { "SSJ3AuraProj" });
+                         "Ultra Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
                 }
                 return _USSJ;
             }
@@ -471,7 +475,7 @@ namespace Util
         public static bool IsTransformBlocked(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            return modPlayer.IsTransforming || player.channel;
+            return modPlayer.IsTransforming || player.channel || modPlayer.IsPlayerImmobilized();
         }
         
         // handle all the conditions of a transformation which would prevent the player from reaching that state. Return false if you can't transform.
@@ -583,12 +587,23 @@ namespace Util
                     }
                 }
 
-                foreach (Type auraType in buff.AuraProjectileTypes)
-                {
-                    FindAndKillPlayerAurasOfType(player, auraType);
-                }
-                                
-                player.ClearBuff(buff.BuffId);
+                RemoveTransformation(player, buff.BuffId, false);
+            }
+        }
+
+        public static void RemoveTransformation(Player player, int buffId, bool isNetworkInitiated)
+        {
+            BuffInfo buff = GetBuffByBuffId(buffId);
+
+            foreach (Type auraType in buff.AuraProjectileTypes)
+            {
+                FindAndKillPlayerAurasOfType(player, auraType);
+            }
+
+            player.ClearBuff(buff.BuffId);
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+            { 
+                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buff.BuffId, 0);                
             }
         }
 
@@ -607,11 +622,11 @@ namespace Util
         }
 
         // create the projectile(s) representing the transformation aura.
-        public static void DoProjectileForBuff(Player player, BuffInfo buff, Mod mod)
+        public static void DoProjectileForBuff(Player player, BuffInfo buff)
         {
             foreach (string projectileKey in buff.ProjectileKeys)
             {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType(projectileKey), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, DBZMOD.DBZMOD.instance.ProjectileType(projectileKey), 0, 0, player.whoAmI);
             }
         }
 
@@ -632,23 +647,32 @@ namespace Util
             // this needs to know we're powering down a step or not
             ClearAllTransformations(player, isPoweringDown, isOneStep);
 
-            // if the buff needs dust aura, do that.
-            if (SSJBuffs().Contains(buff) || buff == ASSJ || buff == USSJ)
-                modPlayer.SSJDustAura();
 
             // add whatever buff it is for a really long time.
-            player.AddBuff(buff.BuffId, 666666, false);
+            AddTransformation(player, buff.BuffId, ABSURDLY_LONG_BUFF_DURATION, false);
+        }
 
-            // create the projectile starter if applicable.
-            DoProjectileForBuff(player, buff, mod);
-
-            if (!Main.dedServ && buff.SoundKey != null)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, buff.SoundKey).WithVolume(buff.Volume));
+        public static void AddTransformation(Player player, int buffId, int duration, bool isNetworkInitiated)
+        {
+            BuffInfo buff = GetBuffByBuffId(buffId);
+            player.AddBuff(buff.BuffId, ABSURDLY_LONG_BUFF_DURATION, false);
 
             if (!string.IsNullOrEmpty(buff.TransformationText))
                 CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
 
-            NetworkHelper.SyncBuffs(player);
+            // create the projectile starter if applicable.
+            DoProjectileForBuff(player, buff);
+
+            // if the buff needs dust aura, do that.
+            if (SSJBuffs().Contains(buff) || buff == ASSJ || buff == USSJ)
+                player.GetModPlayer<MyPlayer>().SSJDustAura();
+
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {                     
+                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffId, duration);
+            }
+
+            if (!Main.dedServ && buff.SoundKey != null)
+                Main.PlaySound(DBZMOD.DBZMOD.instance.GetLegacySoundSlot(SoundType.Custom, buff.SoundKey).WithVolume(buff.Volume), player.Center);
         }
 
         // return the first located transformation of a given player. Assumes there should only ever be one, returns the first it finds.

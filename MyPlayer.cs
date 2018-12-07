@@ -259,6 +259,11 @@ namespace DBZMOD
             return playerTrait != null && playerTrait.Equals("Legendary");
         }
 
+        public bool IsPlayerImmobilized()
+        {
+            return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
+        }
+
         public override void PostUpdate()
         {
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
@@ -322,7 +327,8 @@ namespace DBZMOD
                 if (!player.HasBuff(Transformations.Kaioken100.BuffId) && !player.HasBuff(Transformations.LSSJ2.BuffId))
                 {
                     LightningFrameTimer++;
-                } else
+                }
+                else
                 {
                     LightningFrameTimer += 2;
                 }
@@ -402,42 +408,7 @@ namespace DBZMOD
             {
                 MasteryLevelBlue = MasteryMaxBlue;
             }
-            #endregion
-
-            #region Form Stacking Checks
-            // these are obsolete. The player doesn't have the ability to step into impossible form combos anymore.
-            //if ((player.HasBuff(mod.BuffType("SSJ1Buff"))
-            //    &&
-            //    (player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100")))))
-            //{
-            //    player.ClearBuff(mod.BuffType("SSJ1Buff"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuff"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-            //    IsTransformed = false;
-            //    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            //}
-            //if ((player.HasBuff(mod.BuffType("SSJ2Buff"))
-            //    || player.HasBuff(mod.BuffType("SSJ3Buff"))
-            //    || player.HasBuff(mod.BuffType("ASSJBuff"))
-            //    || player.HasBuff(mod.BuffType("USSJBuff"))
-            //    || player.HasBuff(mod.BuffType("LSSJBuff"))
-            //    || player.HasBuff(mod.BuffType("LSSJ2Buff"))
-            //    || player.HasBuff(mod.BuffType("SSJGBuff")))
-            //    &&
-            //    (player.HasBuff(mod.BuffType("KaiokenBuff")) || player.HasBuff(mod.BuffType("KaiokenBuffX3")) || player.HasBuff(mod.BuffType("KaiokenBuffX10")) || player.HasBuff(mod.BuffType("KaiokenBuffX20")) || player.HasBuff(mod.BuffType("KaiokenBuffX100"))))
-            //{
-            //    EndTransformations();
-            //    player.ClearBuff(mod.BuffType("KaiokenBuff"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX3"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX10"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX20"));
-            //    player.ClearBuff(mod.BuffType("KaiokenBuffX100"));
-            //    Main.NewText("Your body can't sustain that combination.", new Color(255, 25, 79));
-            //}
-            #endregion
+            #endregion            
 
             if (adamantiteBonus)
             {
@@ -569,8 +540,9 @@ namespace DBZMOD
                 drawInfo.hairColor = new Color(183, 25, 46);
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
-            // godlike is included in SSJ, so only make them turquoise if not in god form.
-            } else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
+                // godlike is included in SSJ, so only make them turquoise if not in god form.
+            }
+            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
                 player.eyeColor = Color.Turquoise;
             }
@@ -578,7 +550,7 @@ namespace DBZMOD
             if (Transformations.IsSSJ1Kaioken(player))
             {
                 player.eyeColor = Color.Red;
-            }            
+            }
         }
 
         public string ChooseTrait()
@@ -696,7 +668,7 @@ namespace DBZMOD
             tag.Add("flightUpgraded", flightUpgraded);
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
-            tag.Add("KiMax3", KiMax3);            
+            tag.Add("KiMax3", KiMax3);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -814,7 +786,7 @@ namespace DBZMOD
                 // if the player is already transformed, determine what the next step is.
                 if (Transformations.IsPlayerTransformed(player))
                 {
-                    targetTransformation = Transformations.GetNextTransformationStep(player);                    
+                    targetTransformation = Transformations.GetNextTransformationStep(player);
                 }
                 else
                 {
@@ -824,12 +796,14 @@ namespace DBZMOD
             }
             // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
             else if (IsAscendingTransformation())
-            {                
+            {
                 if (!CanAscend())
                     return;
 
-                targetTransformation = Transformations.GetNextAscensionStep(player);                
-            } else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player)) {
+                targetTransformation = Transformations.GetNextAscensionStep(player);
+            }
+            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
+            {
                 // player is powering down a transformation state.
                 targetTransformation = Transformations.GetPreviousTransformationStep(player);
                 isPoweringDownOneStep = true;
@@ -848,12 +822,13 @@ namespace DBZMOD
         {
             BuffInfo targetTransformation = null;
             bool isPoweringDownOneStep = false;
-            if (KaiokenKey.JustPressed) {
+            if (KaiokenKey.JustPressed)
+            {
                 // no possible combination of kaioken can be attained in your current state.
                 if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
                     return;
                 // otherwise get the next kaioken step (or the first one, if untransformed)
-                targetTransformation = Transformations.GetNextKaiokenStep(player);                
+                targetTransformation = Transformations.GetNextKaiokenStep(player);
             }
             else if (IsPoweringDownOneStep() && (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)))
             {
@@ -907,7 +882,7 @@ namespace DBZMOD
 
             HandleTransformations();
 
-            HandleKaioken();            
+            HandleKaioken();
 
             if (SpeedToggle.JustPressed)
             {
@@ -997,7 +972,7 @@ namespace DBZMOD
                             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                         }
                         if (!Main.dedServ)
-                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));                        
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     }
                 }
             }
@@ -1154,7 +1129,7 @@ namespace DBZMOD
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
                 if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
                 {
-                    if(RageCurrent >= 3)
+                    if (RageCurrent >= 3)
                     {
                         OverallFormUnlockChance = 1;
                     }
@@ -1180,7 +1155,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.BuffId) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1197,7 +1172,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(mod.BuffType("SSJ1Buff")) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.BuffId) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1214,7 +1189,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(mod.BuffType("SSJ2Buff")) && MasteryLevel2 >= 1)
+                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.BuffId) && MasteryLevel2 >= 1)
                 {
                     Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1247,17 +1222,17 @@ namespace DBZMOD
             {
                 return false;
             }
-            if(BlockState == 1) // nearly frame-perfect block, zero damage.
+            if (BlockState == 1) // nearly frame-perfect block, zero damage.
             {
                 damage = 0;
                 return true;
             }
-            if(BlockState == 2) // block not quite perfect, one third damage
+            if (BlockState == 2) // block not quite perfect, one third damage
             {
                 damage /= 3;
                 return true;
             }
-            if(BlockState == 3) // block far from perfect, half damage.
+            if (BlockState == 3) // block far from perfect, half damage.
             {
                 damage /= 2;
                 return true;
@@ -1355,7 +1330,7 @@ namespace DBZMOD
             {
                 return;
             }
-            if (drawPlayer.HasBuff(mod.BuffType("SSJ2Buff")))
+            if (drawPlayer.HasBuff(Transformations.SSJ2.BuffId))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningBlue");
                 int frameSize = texture.Height / 3;
@@ -1364,7 +1339,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(mod.BuffType("LSSJBuff")) || drawPlayer.HasBuff(mod.BuffType("LSSJ2Buff")))
+            if (drawPlayer.HasBuff(Transformations.LSSJ.BuffId) || drawPlayer.HasBuff(Transformations.LSSJ2.BuffId))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningGreen");
                 int frameSize = texture.Height / 3;
@@ -1373,7 +1348,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(mod.BuffType("SSJ3Buff")))
+            if (drawPlayer.HasBuff(Transformations.SSJ3.BuffId))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningYellow");
                 int frameSize = texture.Height / 3;
@@ -1382,7 +1357,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(mod.BuffType("KaiokenBuffX100")) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if (drawPlayer.HasBuff(Transformations.Kaioken100.BuffId) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningRed");
                 int frameSize = texture.Height / 3;
@@ -1396,8 +1371,37 @@ namespace DBZMOD
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
+            //handle lightning effects
             LightningEffects.visible = true;
             layers.Add(LightningEffects);
+
+            // handle SSJ hair/etc.
+            int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
+            if (hair < 0)
+                return;
+            if (Hair != null)
+            {
+                layers[hair] = new PlayerLayer(mod.Name, "TransHair",
+                    delegate (PlayerDrawInfo draw)
+                    {
+                        Player player = draw.drawPlayer;
+
+                        Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), Color.White), draw.shadow);
+                        DrawData data = new DrawData(Hair, new Vector2((float)((int)(draw.position.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.position.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 4f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
+                        data.shader = draw.hairShader;
+                        Main.playerDrawData.Add(data);
+                    });
+            }
+
+            if (Hair != null)
+            {
+                PlayerLayer.Head.visible = false;
+                PlayerLayer.Hair.visible = false;
+                PlayerLayer.HairBack.visible = false;
+                PlayerHeadLayer.Hair.visible = false;
+                PlayerHeadLayer.Head.visible = false;
+                PlayerLayer.Arms.visible = false;
+            }
         }
 
         public override void OnHitAnything(float x, float y, Entity victim)
@@ -1430,50 +1434,43 @@ namespace DBZMOD
             IsTransforming = false;
         }
 
-    }
-
-    public class SSJHairDraw : ModPlayer
-    {
         public Texture2D Hair;
-        public static SSJHairDraw ModPlayer(Player player)
-        {
-            return player.GetModPlayer<SSJHairDraw>();
-        }
+
         public override void PreUpdate()
         {
             if (Transformations.IsPlayerTransformed(player))
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (player.HasBuff(mod.BuffType("SSJ1Buff")))
+                    if (player.HasBuff(Transformations.SSJ1.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                     }
-                    else if (player.HasBuff(mod.BuffType("ASSJBuff")))
+                    else if (player.HasBuff(Transformations.ASSJ.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
                     }
-                    else if (player.HasBuff(mod.BuffType("USSJBuff")))
+                    else if (player.HasBuff(Transformations.USSJ.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (player.HasBuff(mod.BuffType("SSJ1KaiokenBuff")))
+                    else if (player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }
-                    else if (player.HasBuff(mod.BuffType("SSJ2Buff")))
+                    else if (player.HasBuff(Transformations.SSJ2.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
                     }
-                    else if (player.HasBuff(mod.BuffType("SSJ3Buff")))
+                    else if (player.HasBuff(Transformations.SSJ3.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                     }
-                    else if (player.HasBuff(mod.BuffType("LSSJBuff")))
+                    else if (player.HasBuff(Transformations.LSSJ.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                     }
-                    else if (player.HasBuff(mod.BuffType("LSSJ2Buff")))
+                    else if (player.HasBuff(Transformations.LSSJ2.BuffId))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
@@ -1483,57 +1480,10 @@ namespace DBZMOD
             {
                 Hair = null;
             }
-            if(player.dead)
+            if (player.dead)
             {
                 Hair = null;
             }
         }
-        public override void ModifyDrawLayers(List<PlayerLayer> layers)
-        {
-            
-            int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
-            if (hair < 0)
-                return;
-            if (Hair != null)
-            {
-                layers[hair] = new PlayerLayer(mod.Name, "TransHair",
-                    delegate (PlayerDrawInfo draw)
-                   {
-                       Player player = draw.drawPlayer;
-
-                       Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), Color.White), draw.shadow);
-                       DrawData data = new DrawData(Hair, new Vector2((float)((int)(draw.position.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.position.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 4f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
-                       data.shader = draw.hairShader;
-                       Main.playerDrawData.Add(data);
-                   });
-            }
-
-            if (Hair != null)
-            {
-                PlayerLayer.Head.visible = false;
-                PlayerLayer.Hair.visible = false;
-                PlayerLayer.HairBack.visible = false;
-                PlayerHeadLayer.Hair.visible = false;
-                PlayerHeadLayer.Head.visible = false;
-                PlayerLayer.Arms.visible = false;                
-            }
-        }
-        public override void clientClone(ModPlayer clientClone)
-        {
-            SSJHairDraw clone = clientClone as SSJHairDraw;
-
-            clone.Hair = Hair;
-        }
-
-        public override void SendClientChanges(ModPlayer clientPlayer)
-        {
-            SSJHairDraw clone = clientPlayer as SSJHairDraw;
-            var packet = mod.GetPacket();
-            if (clone.Hair != Hair)
-            {
-                packet.Send();
-            }
-        }
     }
-
 }
