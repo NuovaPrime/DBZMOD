@@ -76,7 +76,7 @@ namespace Util
                 if (_SSJ1 == null)
                 {
                     _SSJ1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.SSJ1, modInstance.BuffType(BuffKeyNames.SSJ1), 0.6f, "Sounds/SSJAscension",
-                        "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ2AuraProj) }, new string[] { "SSJ1AuraProj" });
+                        "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
                 }
                 return _SSJ1;
             }
@@ -602,7 +602,7 @@ namespace Util
 
             player.ClearBuff(buff.BuffId);
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-            { 
+            {                
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buff.BuffId, 0);                
             }
         }

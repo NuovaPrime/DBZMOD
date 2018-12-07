@@ -41,6 +41,7 @@ namespace DBZMOD.Projectiles.Auras
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(Transformations.SSJ1.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
             {
+                // Main.NewText(string.Format("Player is missing a buff! Aura proj died for {0}", player.whoAmI));
                 projectile.Kill();
             }
             if (player.HasBuff(Transformations.SSJ1.BuffId))

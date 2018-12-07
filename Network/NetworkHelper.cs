@@ -14,12 +14,16 @@ namespace Network
         public const byte FlightAuraHandler = 3;
         public const byte FlightHandler = 4;
         public const byte KiChargingHandler = 5;
+        public const byte KiChangeHandler = 6;
+        public const byte KiFragmentHandler = 7;
 
         internal static TransformationPacketHandler formSync = new TransformationPacketHandler(TransformationHandler);
         internal static FlightMovementPacketHandler flightMovementSync = new FlightMovementPacketHandler(FlightMovementHandler);
-        internal static FlightAuraPacketHandler flightAuraSync = new FlightAuraPacketHandler(FlightAuraHandler);
+        //internal static FlightAuraPacketHandler flightAuraSync = new FlightAuraPacketHandler(FlightAuraHandler);
         internal static FlightPacketHandler flightSync = new FlightPacketHandler(FlightHandler);
         internal static KiChargingPacketHandler kiChargingSync = new KiChargingPacketHandler(KiChargingHandler);
+        internal static KiChangePacketHandler kiChangeSync = new KiChangePacketHandler(KiChangeHandler);
+        internal static KiFragmentPacketHandler kiFragmentSync = new KiFragmentPacketHandler(KiFragmentHandler);
 
         public static void HandlePacket(BinaryReader r, int fromWho)
         {
@@ -31,14 +35,20 @@ namespace Network
                 case FlightMovementHandler:
                     flightMovementSync.HandlePacket(r, fromWho);
                     break;
-                case FlightAuraHandler:
-                    flightAuraSync.HandlePacket(r, fromWho);
-                    break;
+                //case FlightAuraHandler:
+                //    flightAuraSync.HandlePacket(r, fromWho);
+                //    break;
                 case FlightHandler:
                     flightSync.HandlePacket(r, fromWho);
                     break;
                 case KiChargingHandler:
                     kiChargingSync.HandlePacket(r, fromWho);
+                    break;
+                case KiChangeHandler:
+                    kiChangeSync.HandlePacket(r, fromWho);
+                    break;
+                case KiFragmentHandler:
+                    kiFragmentSync.HandlePacket(r, fromWho);
                     break;
             }
         }

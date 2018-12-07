@@ -31,21 +31,10 @@ namespace DBZMOD
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
         // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
-        private int _kiMax;
-        public int KiMax
+        
+        public int KiMax()
         {
-            get
-            {
-                if (_kiMax <= GetKiMaxFromFragments())
-                {
-                    _kiMax = GetKiMaxFromFragments();
-                }
-                return _kiMax;
-            }
-            set
-            {
-                _kiMax = value;
-            }
+            return GetKiMaxFromFragments();
         }
 
         // ki max 2 is ki max from equipment and accessories. there's no point changing this value as it gets reset each frame.
@@ -225,6 +214,8 @@ namespace DBZMOD
         public bool CanUseZanzoken;
         public int BlockState;
         public SoundEffectInstance transformationSound;
+
+        public int syncOverallKiMax = 0;
         #endregion
 
         #region Classes
@@ -236,13 +227,26 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
+            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));             
         }
 
         // all changes to Ki Current are now made through this method.
         public void AddKi(int kiAmount)
         {
-            KiCurrent = Math.Max(0, Math.Min(OverallKiMax(), KiCurrent + kiAmount));
+            SetKi(KiCurrent + kiAmount);
+        }
+
+        public void SetKi(int kiAmount)
+        {
+            int originalKi = KiCurrent;
+            KiCurrent = Math.Max(0, Math.Min(OverallKiMax(), kiAmount));
+            if (originalKi != KiCurrent)
+            {
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                {
+                    NetworkHelper.kiChangeSync.SendKiChanges(256, player.whoAmI, player.whoAmI, GetKi(), KiMax2, KiMax3, KiMaxMult, player.HasBuff(mod.BuffType("LegendaryTrait")));
+                }
+            }
         }
 
         // return the amount of ki the player has, readonly
@@ -253,7 +257,7 @@ namespace DBZMOD
 
         public bool IsKiDepleted()
         {
-            return KiCurrent == 0;
+            return KiCurrent <= 0;
         }
 
         public bool HasKi(int kiAmount)
@@ -689,6 +693,21 @@ namespace DBZMOD
             tag.Add("KiMax3", KiMax3);
             //tag.Add("RealismMode", RealismMode);
             return tag;
+        }
+
+        public override void PlayerConnect(Player player)
+        {
+            // take this opportunity to sync fragments, they're important.
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+            {
+                NetworkHelper.kiFragmentSync.SendFragmentChanges(256, player.whoAmI, player.whoAmI, Fragment1, Fragment2, Fragment3, Fragment4, Fragment5);
+            }
+
+            // other ki factors while we're at it.
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+            {
+                NetworkHelper.kiChangeSync.SendKiChanges(256, player.whoAmI, player.whoAmI, GetKi(), KiMax2, KiMax3, KiMaxMult, player.HasBuff(mod.BuffType("LegendaryTrait")));
+            }
         }
 
         public override void Load(TagCompound tag)
@@ -1133,7 +1152,6 @@ namespace DBZMOD
             infuserRuby = false;
             infuserSapphire = false;
             infuserTopaz = false;
-            KiMax = GetKiMaxFromFragments();
             KiMax2 = 0;
             KiMaxMult = 1f;
         }

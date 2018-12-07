@@ -29,6 +29,8 @@ namespace DBZMOD
         public int MasteryTimer;
         public override void Update(Player player, ref int buffIndex)
         {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+
             KiDrainAdd(player);
             if(Transformations.IsKaioken(player))
             {
@@ -57,9 +59,10 @@ namespace DBZMOD
             if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
-                if (MyPlayer.ModPlayer(player).IsKiDepleted())
+                if (modPlayer.IsKiDepleted())
                 {
-                    MyPlayer.ModPlayer(player).EndTransformations();
+                   //  Main.NewText(string.Format("Player is out of ki??! {0} has {1} of {2} ki", player.whoAmI, modPlayer.GetKi(), modPlayer.OverallKiMax()));
+                    modPlayer.EndTransformations();
                 }
                 else
                 {
@@ -67,13 +70,13 @@ namespace DBZMOD
                     KiDrainTimer++;
                     if (KiDrainTimer > 2)
                     {
-                        MyPlayer.ModPlayer(player).AddKi((KiDrainRate + MyPlayer.ModPlayer(player).KiDrainAddition) * -1);
+                        modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
                         KiDrainTimer = 0;
                     }
                     KiDrainAddTimer++;
                     if (KiDrainAddTimer > 600)
                     {
-                        MyPlayer.ModPlayer(player).KiDrainAddition += 1;
+                        modPlayer.KiDrainAddition += 1;
                         KiDrainAddTimer = 0;
                     }
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
@@ -81,16 +84,16 @@ namespace DBZMOD
             } else
             {
                 // the player isn't in a ki draining state anymore, reset KiDrainAddition
-                MyPlayer.ModPlayer(player).KiDrainAddition = 0;                
+                modPlayer.KiDrainAddition = 0;                
             }
 
-            if (MyPlayer.ModPlayer(player).speedToggled)
+            if (modPlayer.speedToggled)
             {
                 player.moveSpeed += SpeedMulti - 1f;
                 player.maxRunSpeed += SpeedMulti - 1f;
                 player.runAcceleration += SpeedMulti - 1f;
             }
-            else if (!MyPlayer.ModPlayer(player).speedToggled)
+            else if (!modPlayer.speedToggled)
             {
                 player.moveSpeed += 2f;
                 player.maxRunSpeed += 2f;
@@ -103,7 +106,7 @@ namespace DBZMOD
             player.magicDamage += (DamageMulti - 1) * 0.5f;
             player.minionDamage += (DamageMulti - 1) * 0.5f;
             player.thrownDamage += (DamageMulti - 1) * 0.5f;
-            MyPlayer.ModPlayer(player).KiDamage += (DamageMulti - 1);
+            modPlayer.KiDamage += (DamageMulti - 1);
 
             // cross mod support stuff
             if (DBZMOD.instance.thoriumLoaded)

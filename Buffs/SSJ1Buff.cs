@@ -18,14 +18,10 @@ namespace DBZMOD.Buffs
         {
             DamageMulti = 1.75f;
             SpeedMulti = 1.75f;
-            if (MyPlayer.ModPlayer(player).MasteryLevel1 >= 1)
-            {
-                KiDrainRate = 1;
-            }
-            else
-            {
-                KiDrainRate = 3;
-            }
+            bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
+            
+            KiDrainRate = isMastered ? 1 : 3;
+            
             KiDrainBuffMulti = 1.3f;
 
             MasteryTimer++;
@@ -40,7 +36,7 @@ namespace DBZMOD.Buffs
                 MasteryTimer = 0;
             }
             base.Update(player, ref buffIndex);
-        }
+        }        
     }
 }
 

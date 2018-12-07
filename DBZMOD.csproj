@@ -303,10 +303,12 @@
     <Compile Include="MyPlayer.cs" />
     <Compile Include="Network\FlightAuraPacketHandler.cs" />
     <Compile Include="Network\FlightMovementPacketHandler.cs" />
-    <Compile Include="Network\KiChargingPacket.cs" />
+    <Compile Include="Network\KiChangePacketHandler.cs" />
+    <Compile Include="Network\KiFragmentPacketHandler.cs" />
+    <Compile Include="Network\KiChargingPacketHandler.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PacketHandler.cs" />
-    <Compile Include="Network\PlayerFlightPacket.cs" />
+    <Compile Include="Network\PlayerFlightPacketHandler.cs" />
     <Compile Include="Network\TransformationPacketHandler.cs" />
     <Compile Include="Npcs\MajinSlime.cs" />
     <Compile Include="Npcs\MajinZombie.cs" />
