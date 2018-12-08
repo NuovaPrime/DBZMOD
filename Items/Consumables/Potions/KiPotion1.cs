@@ -23,21 +23,23 @@ namespace DBZMOD.Items.Consumables.Potions
             item.rare = 3;
             item.potion = false;
             IsKiPotion = true;
-            KiHeal = 200;
+            KiHeal = 330;
         }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lesser Ki Potion");
-            Tooltip.SetDefault("Restores 200 Ki.");
+            Tooltip.SetDefault("Restores 330 Ki.");
         }
 		 public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "StableKiCrystal", 2);
-            recipe.AddIngredient(null, "ScrapMetal", 2);
-            recipe.AddTile(null, "ZTable");
-            recipe.SetResult(this);
+            recipe.AddIngredient(null, "StableKiCrystal", 5);
+            recipe.AddIngredient(ItemID.Blinkroot, 2);
+            recipe.AddIngredient(ItemID.Waterleaf, 3);
+            recipe.AddIngredient(ItemID.BottledWater, 2);
+            recipe.AddTile(TileID.Bottles);
+            recipe.SetResult(this, 2);
             recipe.AddRecipe();
         }
     }

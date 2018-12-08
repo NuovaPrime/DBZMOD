@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lesser Ki Fragment");
+            DisplayName.SetDefault("Student Ki Fragment");
             Tooltip.SetDefault("Increases your max ki by 2000.");
         }
 

@@ -97,7 +97,7 @@ namespace DBZMOD
                 {                    
                     for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
                     {
-                        Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FlightDustType, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
+                        Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FlightDustType, 0f, 0f, 0, new Color(255, 255, 255), 0f);
                         tdust.noGravity = true;
                     }
                 }

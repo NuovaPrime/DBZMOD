@@ -23,13 +23,13 @@ namespace DBZMOD.Items.Consumables.Potions
             item.rare = 4;
             item.potion = false;
             IsKiPotion = true;
-            KiHeal = 2500;
+            KiHeal = 5100;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gigantic Ki Potion");
-            Tooltip.SetDefault("Restores 2500 Ki.");
+            DisplayName.SetDefault("Overflowing Ki Potion");
+            Tooltip.SetDefault("Restores 5100 Ki.");
         }
 		
 		 public override void AddRecipes()
@@ -37,7 +37,7 @@ namespace DBZMOD.Items.Consumables.Potions
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PureKiCrystal", 2);
             recipe.AddIngredient(null, "KiPotion4", 1);
-            recipe.AddTile(null, "KaiTable");
+            recipe.AddTile(TileID.Bottles);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
