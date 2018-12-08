@@ -94,12 +94,8 @@ namespace DBZMOD
                 }
 
                 if (m_currentVel.Length() > 0.5f)
-                {                    
-                    for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
-                    {
-                        Dust tdust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, FlightDustType, 0f, 0f, 0, new Color(255, 255, 255), 0f);
-                        tdust.noGravity = true;
-                    }
+                {
+                    SpawnFlightDust(player, boostSpeed, FlightDustType, 0f);
                 }
 
                 if (Transformations.IsSSJ(player) && !Transformations.IsGodlike(player))
@@ -184,7 +180,7 @@ namespace DBZMOD
                 // netcode!
                 if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
                 {
-                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
+                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, player.fullRotationOrigin.X, player.fullRotationOrigin.Y, FlightDustType, boostSpeed);
                 }
             }
 
@@ -197,7 +193,7 @@ namespace DBZMOD
                 // netcode!
                 if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
                 {
-                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, 0f);
+                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, player.fullRotationOrigin.X, player.fullRotationOrigin.Y, FlightDustType, 0f);
                 }
                 if (modPlayer.flightDampeningUnlocked)
                 {
@@ -205,6 +201,15 @@ namespace DBZMOD
                 }
             }
             SyncFlightMode = m_FlightMode;
+        }
+
+        public static void SpawnFlightDust(Player thePlayer, float boostSpeed, int flightDustType, float scale)
+        {
+            for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
+            {
+                Dust tdust = Dust.NewDustDirect(thePlayer.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, flightDustType, 0f, 0f, 0, new Color(255, 255, 255), scale);
+                tdust.noGravity = true;
+            }
         }
     }
 }

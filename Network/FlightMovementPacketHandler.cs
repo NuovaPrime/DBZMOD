@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,7 @@ namespace Network
             }
         }
 
-        public void SendFlightChanges(int toWho, int fromWho, int whichPlayer, float positionX, float positionY, float velocityX, float velocityY, float rotation, int flightDustType, float boostSpeed)
+        public void SendFlightChanges(int toWho, int fromWho, int whichPlayer, float positionX, float positionY, float velocityX, float velocityY, float rotation, float rotationOriginX, float rotationOriginY, int flightDustType, float boostSpeed)
         {
             ModPacket packet = GetPacket(SyncFlight, fromWho);
             // this indicates we're the originator of the packet. include our player.
@@ -38,6 +39,8 @@ namespace Network
             packet.Write(velocityX);
             packet.Write(velocityY);
             packet.Write(rotation);
+            packet.Write(rotationOriginX);
+            packet.Write(rotationOriginY);
             packet.Write(flightDustType);
             packet.Write(boostSpeed);
             packet.Send(toWho, fromWho);
@@ -51,11 +54,13 @@ namespace Network
             float velocityX = reader.ReadSingle();
             float velocityY = reader.ReadSingle();
             float rotation = reader.ReadSingle();
+            float rotationOriginX = reader.ReadSingle();
+            float rotationOriginY = reader.ReadSingle();
             int flightDustType = reader.ReadInt32();
             float boostSpeed = reader.ReadSingle();
             if (Main.netMode == NetmodeID.Server)
             {
-                SendFlightChanges(-1, fromWho, whichPlayer, positionX, positionY, velocityX, velocityY, rotation, flightDustType, boostSpeed);
+                SendFlightChanges(-1, fromWho, whichPlayer, positionX, positionY, velocityX, velocityY, rotation, rotationOriginX, rotationOriginY, flightDustType, boostSpeed);
             }
             else
             {
@@ -65,14 +70,11 @@ namespace Network
                 thePlayer.velocity.X = velocityX;
                 thePlayer.velocity.Y = velocityY;
                 thePlayer.fullRotation = rotation;
+                thePlayer.fullRotationOrigin = new Vector2(rotationOriginX, rotationOriginY);
                 // fake dust spawn, checks if the player is kinda stationary, if not, spray some dust, who cares.
                 if (Math.Abs(velocityX) > 4f || Math.Abs(velocityY) > 4f)
                 {
-                    for (int i = 0; i < (boostSpeed == 0 ? 2 : 10); i++)
-                    {
-                        Dust tdust = Dust.NewDustDirect(thePlayer.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 3.5f), 30, 30, flightDustType, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
-                        tdust.noGravity = true;
-                    }
+                    FlightSystem.SpawnFlightDust(thePlayer, boostSpeed, flightDustType, 0f);
                 }
             }
         }
