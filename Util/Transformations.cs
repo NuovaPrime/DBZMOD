@@ -595,10 +595,10 @@ namespace Util
         {
             BuffInfo buff = GetBuffByBuffId(buffId);
 
-            foreach (Type auraType in buff.AuraProjectileTypes)
-            {
-                FindAndKillPlayerAurasOfType(player, auraType);
-            }
+            //foreach (Type auraType in buff.AuraProjectileTypes)
+            //{
+            //    FindAndKillPlayerAurasOfType(player, auraType);
+            //}
 
             player.ClearBuff(buff.BuffId);
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
@@ -607,19 +607,19 @@ namespace Util
             }
         }
 
-        public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
-        {
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (Main.player[proj.owner] != player)
-                    continue;
-                if (proj.modProjectile == null)
-                    continue;
-                // if it's an instance of an aura projectile kill it.
-                if (proj.modProjectile.GetType().Equals(auraType))
-                    proj.Kill();
-            }
-        }
+        //public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
+        //{
+        //    foreach (Projectile proj in Main.projectile)
+        //    {
+        //        if (Main.player[proj.owner] != player)
+        //            continue;
+        //        if (proj.modProjectile == null)
+        //            continue;
+        //        // if it's an instance of an aura projectile kill it.
+        //        if (proj.modProjectile.GetType().Equals(auraType))
+        //            proj.Kill();
+        //    }
+        //}
 
         // create the projectile(s) representing the transformation aura.
         public static void DoProjectileForBuff(Player player, BuffInfo buff)
@@ -645,11 +645,26 @@ namespace Util
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
-            ClearAllTransformations(player, isPoweringDown, isOneStep);
-
+            EndTransformations(player, isPoweringDown, isOneStep);
 
             // add whatever buff it is for a really long time.
             AddTransformation(player, buff.BuffId, ABSURDLY_LONG_BUFF_DURATION, false);
+        }
+
+        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep)
+        {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            // automatically applies debuffs.
+            ClearAllTransformations(player, isPoweringDown, isOneStep);
+            if (!Main.dedServ)
+            {
+                if (modPlayer.transformationSound != null)
+                {
+                    modPlayer.transformationSound.Stop();
+                    modPlayer.transformationSound = null;
+                }
+                modPlayer.IsTransforming = false;
+            }
         }
 
         public static void AddTransformation(Player player, int buffId, int duration, bool isNetworkInitiated)
@@ -660,16 +675,17 @@ namespace Util
             if (!string.IsNullOrEmpty(buff.TransformationText))
                 CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
 
-            // create the projectile starter if applicable.
-            DoProjectileForBuff(player, buff);
-
             // if the buff needs dust aura, do that.
             if (SSJBuffs().Contains(buff) || buff == ASSJ || buff == USSJ)
                 player.GetModPlayer<MyPlayer>().SSJDustAura();
 
-            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {                     
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
+                // Main.NewText(string.Format("Syncing buff to server {0} for {1} frames", buffId, duration));
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffId, duration);
             }
+
+            // create the projectile starter if applicable.
+            DoProjectileForBuff(player, buff);
 
             if (!Main.dedServ && buff.SoundKey != null)
                 Main.PlaySound(DBZMOD.DBZMOD.instance.GetLegacySoundSlot(SoundType.Custom, buff.SoundKey).WithVolume(buff.Volume), player.Center);

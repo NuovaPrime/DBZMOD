@@ -31,13 +31,6 @@ namespace Network
 
         public void SendFormChanges(int toWho, int fromWho, int whichPlayer, int buffId, int duration)
         {
-            if (toWho == -1)
-            {
-                // Console.WriteLine(string.Format("Sending players sync for {0} for form {1} for {2} frames", whichPlayer, buffId, duration));
-            } else
-            {
-                // Main.NewText(string.Format("Sending server sync for forms: {0} for {1} frames", buffId, duration));
-            }
             ModPacket packet = GetPacket(SyncTransformations, fromWho);  
             // this indicates we're the originator of the packet. include our player.
             packet.Write(whichPlayer);

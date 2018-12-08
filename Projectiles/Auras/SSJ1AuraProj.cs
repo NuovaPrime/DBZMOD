@@ -36,6 +36,7 @@ namespace DBZMOD.Projectiles.Auras
             IsSSJAura = true;
 			projectile.light = 1f;
         }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];

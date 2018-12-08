@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Util;
 
 namespace DBZMOD.Items.Misc
 {
@@ -37,10 +38,10 @@ namespace DBZMOD.Items.Misc
         {
             if (!Main.dedServ)
                 Main.PlaySound(SoundID.NPCDeath7, player.position);
+            Transformations.EndTransformations(player, true, false);
             MyPlayer.ModPlayer(player).SSJGTransformation();
             MyPlayer.ModPlayer(player).IsTransforming = true;
             MyPlayer.ModPlayer(player).SSJGAchieved = true;
-            MyPlayer.ModPlayer(player).EndTransformations();
             Main.NewText("You feel enveloped in a divine energy.");
             return false;
         }

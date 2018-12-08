@@ -44,7 +44,7 @@ namespace DBZMOD
         public int KiMax3;
 
         // ki max mult is a multiplier for ki that stacks multiplicatively with other KiMaxMult bonuses. It resets to 1f each frame.
-        public float KiMaxMult;
+        public float KiMaxMult = 1f;
 
         // made KiCurrent private forcing everyone to use a method that syncs to clients, centralizing ki increase/decrease logic.
         private int KiCurrent;
@@ -66,7 +66,7 @@ namespace DBZMOD
         public bool SSJ3Achieved;
         public bool LSSJAchieved = false;
         public bool SSJGAchieved = false;
-        private int lssj2timer;
+        public int lssj2timer;
         public bool LSSJ2Achieved = false;
         public bool LSSJGAchieved = false;
         public int RageCurrent = 0;
@@ -132,7 +132,7 @@ namespace DBZMOD
         public bool turtleShell;
         public bool KiEssence4;
         public bool KiEssence5;
-        private bool DemonBonusActive;
+        public bool DemonBonusActive;
         public bool spiritualEmblem;
         public float KaiokenTimer = 0.0f;
         public bool kiLantern;
@@ -150,10 +150,10 @@ namespace DBZMOD
         public int ChargeSoundTimer;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
-        public static bool JungleMessage = false;
-        public static bool HellMessage = false;
-        public static bool EvilMessage = false;
-        public static bool MushroomMessage = false;
+        public bool JungleMessage = false;
+        public bool HellMessage = false;
+        public bool EvilMessage = false;
+        public bool MushroomMessage = false;
         public int KiOrbDropChance;
         public bool IsHoldingKiWeapon;
         public bool wornGloves;
@@ -172,12 +172,12 @@ namespace DBZMOD
         public bool earthenSigil;
         public bool earthenScarab;
         public bool radiantTotem;
-        private int ScarabChargeRateAdd;
-        private int ScarabChargeTimer;
+        public int ScarabChargeRateAdd;
+        public int ScarabChargeTimer;
         public bool flightUnlocked = false;
         public bool flightDampeningUnlocked = false;
         public bool flightUpgraded = false;
-        private int DemonBonusTimer;
+        public int DemonBonusTimer;
         public bool hermitBonus;
         public bool spiritCharm;
         public bool zenkaiCharm;
@@ -214,8 +214,6 @@ namespace DBZMOD
         public bool CanUseZanzoken;
         public int BlockState;
         public SoundEffectInstance transformationSound;
-
-        public int syncOverallKiMax = 0;
         #endregion
 
         #region Classes
@@ -240,13 +238,6 @@ namespace DBZMOD
         {
             int originalKi = KiCurrent;
             KiCurrent = Math.Max(0, Math.Min(OverallKiMax(), kiAmount));
-            if (originalKi != KiCurrent)
-            {
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.kiChangeSync.SendKiChanges(256, player.whoAmI, player.whoAmI, GetKi(), KiMax2, KiMax3, KiMaxMult, player.HasBuff(mod.BuffType("LegendaryTrait")));
-                }
-            }
         }
 
         // return the amount of ki the player has, readonly
@@ -310,7 +301,7 @@ namespace DBZMOD
                         LSSJ2Transformation();
                         UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
                         lssj2timer = 0;
-                        EndTransformations();
+                        Transformations.EndTransformations(player, true, false);
                     }
                     else if (lssj2timer >= 300)
                     {
@@ -486,7 +477,7 @@ namespace DBZMOD
             }
             if (player.dead && Transformations.IsPlayerTransformed(player))
             {
-                EndTransformations();
+                Transformations.EndTransformations(player, true, false);
                 IsTransforming = false;
             }
             if (RageCurrent > 5)
@@ -553,7 +544,166 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
+
+            // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
+            CheckSyncState();
         }
+
+        #region Sync
+
+        public int SyncKiMax2;
+        public int SyncKiMax3;
+        public float SyncKiMaxMult;
+        public bool SyncIsTransforming;
+        public bool SyncFragment1;
+        public bool SyncFragment2;
+        public bool SyncFragment3;
+        public bool SyncFragment4;
+        public bool SyncFragment5;
+        public bool SyncIsCharging;
+        public bool SyncJungleMessage;
+        public bool SyncHellMessage;
+        public bool SyncEvilMessage;
+        public bool SyncIsHoldingKiWeapon;
+        public bool SyncTraitChecked;
+        public string SyncPlayerTrait;
+        public bool SyncIsFlying;
+        public int SyncKiCurrent;
+
+        public void CheckSyncState()
+        {
+            // server doesn't fire these things, and players only fire for themselves
+            if (Main.dedServ)
+                return;
+
+            if (Main.myPlayer != player.whoAmI)
+                return;
+
+            if (SyncKiMax2 != KiMax2)
+            {
+                NetworkHelper.playerSync.SendChangedKiMax2(256, player.whoAmI, player.whoAmI, KiMax2);
+                SyncKiMax2 = KiMax2;
+            }
+
+            if (SyncKiMax3 != KiMax3)
+            {
+                NetworkHelper.playerSync.SendChangedKiMax3(256, player.whoAmI, player.whoAmI, KiMax3);
+                SyncKiMax3 = KiMax3;
+            }
+
+            if (SyncKiMaxMult != KiMaxMult)
+            {
+
+                DebugUtil.Log(string.Format("Ki max sync: was {0} but should be {1}", SyncKiMaxMult, KiMaxMult));
+                NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, KiMaxMult);
+                SyncKiMaxMult = KiMaxMult;
+            }
+
+            if (SyncIsTransforming != IsTransforming)
+            {
+                NetworkHelper.playerSync.SendChangedIsTransforming(256, player.whoAmI, player.whoAmI, IsTransforming);
+                SyncIsTransforming = IsTransforming;
+            }
+
+
+            if (SyncFragment1 != Fragment1)
+            {
+                NetworkHelper.playerSync.SendChangedFragment1(256, player.whoAmI, player.whoAmI, Fragment1);
+                SyncFragment1 = Fragment1;
+            }
+
+
+            if (SyncFragment2 != Fragment2)
+            {
+                NetworkHelper.playerSync.SendChangedFragment2(256, player.whoAmI, player.whoAmI, Fragment2);
+                SyncFragment2 = Fragment2;
+            }
+
+
+            if (SyncFragment3 != Fragment3)
+            {
+                NetworkHelper.playerSync.SendChangedFragment3(256, player.whoAmI, player.whoAmI, Fragment3);
+                SyncFragment3 = Fragment3;
+            }
+
+
+            if (SyncFragment4 != Fragment4)
+            {
+                NetworkHelper.playerSync.SendChangedFragment4(256, player.whoAmI, player.whoAmI, Fragment4);
+                SyncFragment4 = Fragment4;
+            }
+
+
+            if (SyncFragment5 != Fragment5)
+            {
+                NetworkHelper.playerSync.SendChangedFragment5(256, player.whoAmI, player.whoAmI, Fragment5);
+                SyncFragment5 = Fragment5;
+            }
+
+
+            if (SyncIsCharging != IsCharging)
+            {
+                NetworkHelper.playerSync.SendChangedIsCharging(256, player.whoAmI, player.whoAmI, IsCharging);
+                SyncIsCharging = IsCharging;
+            }
+
+
+            if (SyncJungleMessage != JungleMessage)
+            {
+                NetworkHelper.playerSync.SendChangedJungleMessage(256, player.whoAmI, player.whoAmI, JungleMessage);
+                SyncJungleMessage = JungleMessage;
+            }
+
+
+            if (SyncHellMessage != HellMessage)
+            {
+                NetworkHelper.playerSync.SendChangedHellMessage(256, player.whoAmI, player.whoAmI, HellMessage);
+                SyncHellMessage = HellMessage;
+            }
+
+
+            if (SyncEvilMessage != EvilMessage)
+            {
+                NetworkHelper.playerSync.SendChangedEvilMessage(256, player.whoAmI, player.whoAmI, EvilMessage);
+                SyncEvilMessage = EvilMessage;
+            }
+
+
+            if (SyncIsHoldingKiWeapon != IsHoldingKiWeapon)
+            {
+                NetworkHelper.playerSync.SendChangedIsHoldingKiWeapon(256, player.whoAmI, player.whoAmI, IsHoldingKiWeapon);
+                SyncIsHoldingKiWeapon = IsHoldingKiWeapon;
+            }
+
+
+            if (SyncTraitChecked != traitChecked)
+            {
+                NetworkHelper.playerSync.SendChangedTraitChecked(256, player.whoAmI, player.whoAmI, traitChecked);
+                SyncTraitChecked = traitChecked;
+            }
+
+
+            if (SyncPlayerTrait != playerTrait)
+            {
+                NetworkHelper.playerSync.SendChangedPlayerTrait(256, player.whoAmI, player.whoAmI, playerTrait);
+                SyncPlayerTrait = playerTrait;
+            }
+
+
+            if (SyncIsFlying != IsFlying)
+            {
+                NetworkHelper.playerSync.SendChangedIsFlying(256, player.whoAmI, player.whoAmI, IsFlying);
+                SyncIsFlying = IsFlying;
+            }
+
+
+            if (SyncKiCurrent != GetKi())
+            {
+                NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
+                SyncKiCurrent = GetKi();
+            }
+    }
+        #endregion
 
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
@@ -693,21 +843,6 @@ namespace DBZMOD
             tag.Add("KiMax3", KiMax3);
             //tag.Add("RealismMode", RealismMode);
             return tag;
-        }
-
-        public override void PlayerConnect(Player player)
-        {
-            // take this opportunity to sync fragments, they're important.
-            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-            {
-                NetworkHelper.kiFragmentSync.SendFragmentChanges(256, player.whoAmI, player.whoAmI, Fragment1, Fragment2, Fragment3, Fragment4, Fragment5);
-            }
-
-            // other ki factors while we're at it.
-            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-            {
-                NetworkHelper.kiChangeSync.SendKiChanges(256, player.whoAmI, player.whoAmI, GetKi(), KiMax2, KiMax3, KiMaxMult, player.HasBuff(mod.BuffType("LegendaryTrait")));
-            }
         }
 
         public override void Load(TagCompound tag)
@@ -1005,10 +1140,10 @@ namespace DBZMOD
                         if (!Main.dedServ)
                             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     }
-                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                    {
-                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
-                    }
+                    //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    //{
+                    //    NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    //}
                 }
             }
             else
@@ -1022,25 +1157,25 @@ namespace DBZMOD
                     if (!Main.dedServ)
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
                     IsCharging = true;
-                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                    {
-                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
-                    }
+                    //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    //{
+                    //    NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    //}
                 }
                 if (!EnergyCharge.Current && IsCharging)
                 {
                     IsCharging = false;
-                    if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                    {
-                        NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
-                    }
+                    //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    //{
+                    //    NetworkHelper.kiChargingSync.SendChargeChanges(256, player.whoAmI, player.whoAmI, IsCharging);
+                    //}
                 }
             }
 
             // power down handling
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
-                EndTransformations();
+                Transformations.EndTransformations(player, true, false);
 
                 if (!Main.dedServ)
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
@@ -1189,7 +1324,7 @@ namespace DBZMOD
                         SSJTransformation();
                         UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
                         RageCurrent = 0;
-                        EndTransformations();
+                        Transformations.EndTransformations(player, true, false);
                         return false;
                     }
                 }
@@ -1206,7 +1341,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     SSJ2Transformation();
                     UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
-                    EndTransformations();
+                    Transformations.EndTransformations(player, true, false);
                     RageCurrent = 0;
                     return false;
                 }
@@ -1223,7 +1358,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     LSSJTransformation();
                     UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
-                    EndTransformations();
+                    Transformations.EndTransformations(player, true, false);
                     RageCurrent = 0;
                     return false;
                 }
@@ -1240,7 +1375,7 @@ namespace DBZMOD
                     IsTransforming = true;
                     SSJ3Transformation();
                     UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
-                    EndTransformations();
+                    Transformations.EndTransformations(player, true, false);
                     RageCurrent = 0;
                     return false;
                 }
@@ -1462,18 +1597,6 @@ namespace DBZMOD
             }
 
             base.OnHitAnything(x, y, victim);
-        }
-
-        public void EndTransformations()
-        {
-            // automatically applies debuffs.
-            Transformations.ClearAllTransformations(player, true, false);
-            if (transformationSound != null)
-            {
-                transformationSound.Stop();
-                transformationSound = null;
-            }
-            IsTransforming = false;
         }
 
         public Texture2D Hair;

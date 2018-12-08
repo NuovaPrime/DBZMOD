@@ -126,6 +126,7 @@
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
     <Compile Include="Enums\MenuSelectionID.cs" />
+    <Compile Include="Enums\PlayerVarSyncEnum.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
@@ -301,14 +302,10 @@
     <Compile Include="ModWorld.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
-    <Compile Include="Network\FlightAuraPacketHandler.cs" />
     <Compile Include="Network\FlightMovementPacketHandler.cs" />
-    <Compile Include="Network\KiChangePacketHandler.cs" />
-    <Compile Include="Network\KiFragmentPacketHandler.cs" />
-    <Compile Include="Network\KiChargingPacketHandler.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
+    <Compile Include="Network\PlayerPacketHandler.cs" />
     <Compile Include="Network\PacketHandler.cs" />
-    <Compile Include="Network\PlayerFlightPacketHandler.cs" />
     <Compile Include="Network\TransformationPacketHandler.cs" />
     <Compile Include="Npcs\MajinSlime.cs" />
     <Compile Include="Npcs\MajinZombie.cs" />
@@ -444,6 +441,7 @@
     <Compile Include="UI\ResourceBar.cs" />
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Util\BuffInfo.cs" />
+    <Compile Include="Util\DebugUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />
     <Compile Include="Util\HomingHelper.cs" />

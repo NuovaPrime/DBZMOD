@@ -16,7 +16,6 @@ namespace DBZMOD
                 return true;
             }
         }
-        private Player player;
         /*public override void SetDefaults(NPC npc)
         {
             Mod thoriummod = ModLoader.GetMod("ThoriumMod");
@@ -224,85 +223,104 @@ namespace DBZMOD
         }
         public override void NPCLoot(NPC npc)
         {
-            if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
-            {
-                if (!MyPlayer.JungleMessage)
+            // now loops over all connected players and plays the message for anyone who doesn't have it.
+            bool isDisplayingJungleMessage = false;
+            bool isDisplayingHellMessage = false;
+            bool isDisplayingEvilMessage = false;
+            bool isDisplayingMushroomMessage = false;
+            foreach (Player player in Main.player) {
+                MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+                if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                 {
-                    MyPlayer.JungleMessage = true;
-                    if (Main.netMode != 2)
+                    if (!modPlayer.JungleMessage)
                     {
-                        Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                        modPlayer.JungleMessage = true;
+                        isDisplayingJungleMessage = true;
                     }
-                    else
+                }
+                if (npc.type == NPCID.BrainofCthulhu)
+                {
+                    if (!modPlayer.JungleMessage)
                     {
-                        NetworkText text2 = NetworkText.FromKey("You feel a calm radiance of ki from the jungle.");
-                        NetMessage.BroadcastChatMessage(text2, new Color(13, 201, 10));
+                        modPlayer.JungleMessage = true;
+                        isDisplayingJungleMessage = true;
+                    }
+                }
+                if (npc.type == NPCID.SkeletronHead)
+                {
+                    if (!modPlayer.HellMessage)
+                    {
+                        modPlayer.HellMessage = true;
+                        isDisplayingHellMessage = true;
+                    }
+                }
+                if (npc.type == NPCID.WallofFlesh)
+                {
+                    if (!modPlayer.EvilMessage)
+                    {
+                        modPlayer.EvilMessage = true;
+                        isDisplayingEvilMessage = true;
+                    }
+                }
+                if (npc.type == NPCID.Plantera)
+                {
+                    if (!modPlayer.MushroomMessage)
+                    {
+                        modPlayer.MushroomMessage = true;
+                        isDisplayingMushroomMessage = true;
                     }
                 }
             }
-            if (npc.type == NPCID.BrainofCthulhu)
+
+            if (isDisplayingJungleMessage)
             {
-                if (!MyPlayer.JungleMessage)
+                if (Main.netMode != 2)
                 {
-                    MyPlayer.JungleMessage = true;
-                    if (Main.netMode != 2)
-                    {
-                        Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
-                    }
-                    else
-                    {
-                        NetworkText text2 = NetworkText.FromKey("You feel a calm radiance of ki from the jungle.");
-                        NetMessage.BroadcastChatMessage(text2, new Color(13, 201, 10));
-                    }
+                    Main.NewText("You feel a calm radiance of ki from the jungle.", 13, 201, 10);
+                }
+                else
+                {
+                    NetworkText text2 = NetworkText.FromKey("You feel a calm radiance of ki from the jungle.");
+                    NetMessage.BroadcastChatMessage(text2, new Color(13, 201, 10));
                 }
             }
-            if (npc.type == NPCID.SkeletronHead)
+
+            if (isDisplayingHellMessage)
             {
-                if (!MyPlayer.HellMessage)
+                if (Main.netMode != 2)
                 {
-                    MyPlayer.HellMessage = true;
-                    if (Main.netMode != 2)
-                    {
-                        Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
-                    }
-                    else
-                    {
-                        NetworkText text2 = NetworkText.FromKey("The underworld's flames shimmer with energy.");
-                        NetMessage.BroadcastChatMessage(text2, new Color(201, 10, 10));
-                    }
+                    Main.NewText("The underworld's flames shimmer with energy.", 201, 10, 10);
+                }
+                else
+                {
+                    NetworkText text2 = NetworkText.FromKey("The underworld's flames shimmer with energy.");
+                    NetMessage.BroadcastChatMessage(text2, new Color(201, 10, 10));
                 }
             }
-            if (npc.type == NPCID.WallofFlesh)
+
+            if (isDisplayingEvilMessage)
             {
-                if (!MyPlayer.EvilMessage)
+                if (Main.netMode != 2)
                 {
-                    MyPlayer.EvilMessage = true;
-                    if (Main.netMode != 2)
-                    {
-                        Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
-                    }
-                    else
-                    {
-                        NetworkText text2 = NetworkText.FromKey("The world's evil erupts with destructive energy.");
-                        NetMessage.BroadcastChatMessage(text2, new Color(152, 36, 173));
-                    }
+                    Main.NewText("The world's evil erupts with destructive energy.", 152, 36, 173);
+                }
+                else
+                {
+                    NetworkText text2 = NetworkText.FromKey("The world's evil erupts with destructive energy.");
+                    NetMessage.BroadcastChatMessage(text2, new Color(152, 36, 173));
                 }
             }
-            if (npc.type == NPCID.Plantera)
+
+            if (isDisplayingMushroomMessage)
             {
-                if (!MyPlayer.MushroomMessage)
+                if (Main.netMode != 2)
                 {
                     Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
-                    MyPlayer.MushroomMessage = true;
-                    if (Main.netMode != 2)
-                    {
-                        Main.NewText("The glowing mushrooms of the caverns explode with radiance.", 232, 242, 50);
-                    }
-                    else
-                    {
-                        NetworkText text2 = NetworkText.FromKey("The glowing mushrooms of the caverns explode with radiance.");
-                        NetMessage.BroadcastChatMessage(text2, new Color(232, 242, 50));
-                    }
+                }
+                else
+                {
+                    NetworkText text2 = NetworkText.FromKey("The glowing mushrooms of the caverns explode with radiance.");
+                    NetMessage.BroadcastChatMessage(text2, new Color(232, 242, 50));
                 }
             }
             if (npc.damage > 1 && npc.lifeMax > 10 && !npc.friendly)

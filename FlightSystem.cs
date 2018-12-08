@@ -25,6 +25,7 @@ namespace DBZMOD
         const float FLIGHT_SPEED = 0.3f;
 
         bool m_FlightMode = false;
+        bool SyncFlightMode = false;
         Vector2 m_currentVel = new Vector2(0, 0);
         private int FLIGHT_KI_DRAIN_TIMER = 0;
 
@@ -41,28 +42,26 @@ namespace DBZMOD
         }
        
         public void Update(TriggersSet triggersSet, Player player)
-        {
+        {            
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (m_FlightMode)
+            //check for ki
+            if (modPlayer.IsKiDepleted())
             {
-                //check for ki
-                if (modPlayer.IsKiDepleted())
-                {
-                    m_FlightMode = false;
-                    player.fullRotation = MathHelper.ToRadians(0);
-                    return;
-                }                
+                m_FlightMode = false;
+            }
 
+            if (m_FlightMode)
+            {             
                 // cancel platform collision
                 player.DryCollision(true, true);
 
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
                 modPlayer.IsFlying = true;
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, true);
-                }
+                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                //{
+                //    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, true);
+                //}
                 Vector2 m_rotationDir = Vector2.Zero;
 
                 //m_targetRotation = 0;
@@ -184,22 +183,25 @@ namespace DBZMOD
                     NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
                 }
             }
-            else //no longer flying cuz of mode change or ki ran out
+
+            // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.
+            if (!m_FlightMode && SyncFlightMode != m_FlightMode)
             {
                 Mod mod = ModLoader.GetMod("DBZMOD");
                 player.fullRotation = MathHelper.ToRadians(0);
                 modPlayer.IsFlying = false;
+                // netcode!
                 if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
                 {
-                    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, false);
+                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
                 }
-                if (modPlayer.IsKiDepleted() && modPlayer.flightDampeningUnlocked)
+                if (modPlayer.flightDampeningUnlocked)
                 {
                     player.AddBuff(mod.BuffType("KatchinFeet"), 600);
                 }
             }
+            SyncFlightMode = m_FlightMode;
         }
-
     }
 }
 
