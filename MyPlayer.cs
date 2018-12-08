@@ -553,20 +553,25 @@ namespace DBZMOD
             {
                 player.invis = true;
             }
+            bool isAnyBossAlive = false;
             foreach (NPC npc in Main.npc)
             {
                 if (npc.boss && npc.active)
                 {
-                    blackFusionBonusTimer++;
-                    if (blackFusionBonusTimer > 60 && blackFusionIncrease <= 5f)
+                    isAnyBossAlive = true;
+                    if (blackFusionBonus)
                     {
-                        blackFusionIncrease += 0.05f;
-                        blackFusionBonusTimer = 0;
+                        blackFusionBonusTimer++;
+                        if (blackFusionBonusTimer > 300 && blackFusionIncrease <= 3f)
+                        {
+                            blackFusionIncrease += 0.05f;
+                            blackFusionBonusTimer = 0;
+                        }
                     }
                 }
             }
 
-            if (blackFusionBonus)
+            if (blackFusionIncrease > 1f)
             {
                 player.meleeDamage *= blackFusionIncrease;
                 player.rangedDamage *= blackFusionIncrease;
@@ -596,6 +601,12 @@ namespace DBZMOD
                     ExpandedSentriesEffects(player);
                 }
             }
+
+            if (!isAnyBossAlive)
+            {
+                blackFusionIncrease = 1f;
+            }
+
             /*if(LSSJAchieved)
             {
                 OverloadBar.visible = true;

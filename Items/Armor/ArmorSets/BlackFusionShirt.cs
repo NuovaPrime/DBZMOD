@@ -38,7 +38,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "All damage is slowly increased while a boss is alive, limits at 500%." +
+            player.setBonus = "All damage is slowly increased while a boss is alive, limits at 300%." +
                               "\n+100 Max Life";
             player.statLifeMax2 += 100;
             MyPlayer.ModPlayer(player).blackFusionBonus = true;

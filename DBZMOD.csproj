@@ -182,7 +182,9 @@
     <Compile Include="Items\Accessories\ZenkaiCharm.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\BlackFusionPants.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
+    <Compile Include="Items\Armor\ArmorSets\BlackFusionShirt.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonShirt.cs" />
     <Compile Include="Items\Armor\ArmorSets\HermitGi.cs" />
     <Compile Include="Items\Armor\ArmorSets\HermitPants.cs" />
@@ -259,6 +261,7 @@
     <Compile Include="Items\PureKiCrystal.cs" />
     <Compile Include="Items\RadiantFragment.cs" />
     <Compile Include="Items\RadiantFragmentBlockItem.cs" />
+    <Compile Include="Items\DivineThreads.cs" />
     <Compile Include="Items\SatanicCloth.cs" />
     <Compile Include="Items\ScrapMetal.cs" />
     <Compile Include="Items\SkeletalEssence.cs" />
@@ -483,7 +486,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
+      <HintPath>F:\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>
@@ -518,6 +521,11 @@
     <Content Include="Items\Accessories\Infusers\InfuserTopaz.png" />
     <Content Include="Items\Accessories\Vanity\GreenPotara.png" />
     <Content Include="Items\Accessories\Vanity\GreenPotara_Face.png" />
+    <Content Include="Lib\ExpandedSentries.dll" />
+    <Content Include="Lib\Laugicality.dll" />
+    <Content Include="Lib\ThoriumMod.dll" />
+    <Content Include="Lib\Tremor.dll" />
+    <Content Include="Lib\UnuBattleRods.dll" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.mp3" />
     <Content Include="Sounds\DiscFire.wav" />
