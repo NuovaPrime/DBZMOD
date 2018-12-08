@@ -197,7 +197,7 @@ namespace DBZMOD
                 // netcode!
                 if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
                 {
-                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, boostSpeed);
+                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, FlightDustType, 0f);
                 }
                 if (modPlayer.flightDampeningUnlocked)
                 {
