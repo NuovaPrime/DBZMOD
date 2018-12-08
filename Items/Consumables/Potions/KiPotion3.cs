@@ -23,22 +23,24 @@ namespace DBZMOD.Items.Consumables.Potions
             item.rare = 3;
             item.potion = false;
             IsKiPotion = true;
-            KiHeal = 550;
+            KiHeal = 1080;
         }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Greater Ki Potion");
-            Tooltip.SetDefault("Restores 550 Ki.");
+            Tooltip.SetDefault("Restores 1080 Ki.");
         }
 		
 		 public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 2);
-            recipe.AddIngredient(null, "KiPotion2", 1);
-            recipe.AddTile(null, "ZTable");
-            recipe.SetResult(this);
+            recipe.AddIngredient(ItemID.UnicornHorn, 5);
+            recipe.AddIngredient(ItemID.Waterleaf, 3);
+            recipe.AddIngredient(ItemID.BottledWater, 3);
+            recipe.AddTile(TileID.Bottles);
+            recipe.SetResult(this, 3);
             recipe.AddRecipe();
         }
     }

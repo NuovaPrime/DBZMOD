@@ -10,7 +10,6 @@ namespace DBZMOD.Items.Accessories
         {
             Tooltip.SetDefault("It explodes with radiant energy." +
                 "\n12% Increased Ki damage" +
-                "\nIncreased flight speed" +
                 "\n+500 Max Ki" +
                 "\nDrastically increased ki regen");
             DisplayName.SetDefault("Radiant Totem");
@@ -30,7 +29,6 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.12f;
                 player.GetModPlayer<MyPlayer>(mod).KiMax2 += 500;
-                player.GetModPlayer<MyPlayer>(mod).FlightSpeedAdd += 0.5f;
                 player.GetModPlayer<MyPlayer>(mod).KiRegen += 2;
                 player.GetModPlayer<MyPlayer>(mod).radiantTotem = true;
             }

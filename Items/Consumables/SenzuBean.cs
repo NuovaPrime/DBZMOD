@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Consumables
 			item.healLife = 9001;
             item.healMana = 9001;
 			item.consumable = true;
-			item.maxStack = 3;
+			item.maxStack = 10;
 			item.UseSound = SoundID.Item3;
 			item.useStyle = 2;
 			item.useTurn = true;

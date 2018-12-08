@@ -29,9 +29,9 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
-            AuraOffset.Y = -24;
+            AuraOffset.Y = -30;
 			projectile.light = 1f;
-			projectile.alpha = 20;
+			projectile.alpha = 50;
         }
         public override void PostAI()
         {
@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.75f);
                     dust.noGravity = true;
                 }
 
@@ -79,13 +79,12 @@ namespace DBZMOD.Projectiles.Auras
             }
             base.AI();
         }
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-        {
+		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
 			spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);                                                                                 
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             spriteBatch.End();
             spriteBatch.Begin();
-			return true;
 		}
     }
 }

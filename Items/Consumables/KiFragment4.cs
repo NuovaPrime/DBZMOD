@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Greater Ki Fragment");
+            DisplayName.SetDefault("Enraged Ki Fragment");
             Tooltip.SetDefault("Increases your max ki by 2000.");
         }
 

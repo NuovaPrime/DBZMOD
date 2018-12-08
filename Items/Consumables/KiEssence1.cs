@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stable Ki Scroll");
+            DisplayName.SetDefault("Novice Ki Scroll");
             Tooltip.SetDefault("Increases your ki charge rate.");
         }
 
