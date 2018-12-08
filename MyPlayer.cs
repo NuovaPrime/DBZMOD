@@ -31,7 +31,7 @@ namespace DBZMOD
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
         // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
-        
+
         public int KiMax()
         {
             return GetKiMaxFromFragments();
@@ -235,7 +235,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));             
+            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
         }
 
         // all changes to Ki Current are now made through this method.
@@ -371,6 +371,7 @@ namespace DBZMOD
             {
                 KaiokenTimer += 1.5f;
             }
+
             #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
@@ -472,7 +473,7 @@ namespace DBZMOD
             }
             if (KiRegenTimer > 2)
             {
-                AddKi(KiRegen);             
+                AddKi(KiRegen);
                 KiRegenTimer = 0;
             }
             if (DemonBonusActive)
@@ -494,6 +495,7 @@ namespace DBZMOD
             {
                 RageCurrent = 5;
             }
+
             if (OverloadCurrent > OverloadMax)
             {
                 OverloadCurrent = OverloadMax;
@@ -523,8 +525,8 @@ namespace DBZMOD
                     }
                 }
             }
-            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 
+            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
 
             /*if (!(playerTrait == null))
             {
@@ -613,6 +615,7 @@ namespace DBZMOD
             CheckSyncState();
         }
 
+
         #region Sync
 
         public int SyncKiMax2;
@@ -669,13 +672,11 @@ namespace DBZMOD
                 SyncIsTransforming = IsTransforming;
             }
 
-
             if (SyncFragment1 != Fragment1)
             {
                 NetworkHelper.playerSync.SendChangedFragment1(256, player.whoAmI, player.whoAmI, Fragment1);
                 SyncFragment1 = Fragment1;
             }
-
 
             if (SyncFragment2 != Fragment2)
             {
@@ -683,13 +684,11 @@ namespace DBZMOD
                 SyncFragment2 = Fragment2;
             }
 
-
             if (SyncFragment3 != Fragment3)
             {
                 NetworkHelper.playerSync.SendChangedFragment3(256, player.whoAmI, player.whoAmI, Fragment3);
                 SyncFragment3 = Fragment3;
             }
-
 
             if (SyncFragment4 != Fragment4)
             {
@@ -697,13 +696,11 @@ namespace DBZMOD
                 SyncFragment4 = Fragment4;
             }
 
-
             if (SyncFragment5 != Fragment5)
             {
                 NetworkHelper.playerSync.SendChangedFragment5(256, player.whoAmI, player.whoAmI, Fragment5);
                 SyncFragment5 = Fragment5;
             }
-
 
             if (SyncIsCharging != IsCharging)
             {
@@ -711,13 +708,11 @@ namespace DBZMOD
                 SyncIsCharging = IsCharging;
             }
 
-
             if (SyncJungleMessage != JungleMessage)
             {
                 NetworkHelper.playerSync.SendChangedJungleMessage(256, player.whoAmI, player.whoAmI, JungleMessage);
                 SyncJungleMessage = JungleMessage;
             }
-
 
             if (SyncHellMessage != HellMessage)
             {
@@ -725,13 +720,11 @@ namespace DBZMOD
                 SyncHellMessage = HellMessage;
             }
 
-
             if (SyncEvilMessage != EvilMessage)
             {
                 NetworkHelper.playerSync.SendChangedEvilMessage(256, player.whoAmI, player.whoAmI, EvilMessage);
                 SyncEvilMessage = EvilMessage;
             }
-
 
             if (SyncIsHoldingKiWeapon != IsHoldingKiWeapon)
             {
@@ -739,13 +732,11 @@ namespace DBZMOD
                 SyncIsHoldingKiWeapon = IsHoldingKiWeapon;
             }
 
-
             if (SyncTraitChecked != traitChecked)
             {
                 NetworkHelper.playerSync.SendChangedTraitChecked(256, player.whoAmI, player.whoAmI, traitChecked);
                 SyncTraitChecked = traitChecked;
             }
-
 
             if (SyncPlayerTrait != playerTrait)
             {
@@ -753,51 +744,52 @@ namespace DBZMOD
                 SyncPlayerTrait = playerTrait;
             }
 
-
             if (SyncIsFlying != IsFlying)
             {
                 NetworkHelper.playerSync.SendChangedIsFlying(256, player.whoAmI, player.whoAmI, IsFlying);
                 SyncIsFlying = IsFlying;
             }
 
-
             if (SyncKiCurrent != GetKi())
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
                 SyncKiCurrent = GetKi();
             }
-    }
+        }
+    
+
         #endregion
-    }
-    #region Cross-mod damage increases for player
-    public void ThoriumEffects(Player player)
-    {
-        player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= blackFusionIncrease;
-        player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= blackFusionIncrease;
-    }
 
-    public void TremorEffects(Player player)
-    {
-        player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= blackFusionIncrease;
-    }
+        #region Cross-mod damage increases for player
+        public void ThoriumEffects(Player player)
+        {
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= blackFusionIncrease;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= blackFusionIncrease;
+        }
 
-    public void EnigmaEffects(Player player)
-    {
-        player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= blackFusionIncrease;
-    }
+        public void TremorEffects(Player player)
+        {
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= blackFusionIncrease;
+        }
 
-    public void BattleRodEffects(Player player)
-    {
-        player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= blackFusionIncrease;
-    }
+        public void EnigmaEffects(Player player)
+        {
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= blackFusionIncrease;
+        }
 
-    public void ExpandedSentriesEffects(Player player)
-    {
-        player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= blackFusionIncrease;
-    }
-    #endregion
+        public void BattleRodEffects(Player player)
+        {
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= blackFusionIncrease;
+        }
 
-    public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
+        public void ExpandedSentriesEffects(Player player)
+        {
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= blackFusionIncrease;
+        }
+
+        #endregion
+
+        public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
             if (Transformations.IsGodlike(player))
             {
@@ -1197,21 +1189,21 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.30f);
                 }
-                if(buldariumSigmite)
+                if (buldariumSigmite)
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.50f);
                     player.shinyStone = true;
                 }
-                if(burningEnergyAmulet)
+                if (burningEnergyAmulet)
                 {
                     //on fire aura
                 }
-                if(iceTalisman)
+                if (iceTalisman)
                 {
                     //frostburn aura
                 }
-                if(pureEnergyCirclet)
+                if (pureEnergyCirclet)
                 {
                     //on fire and frostburn mix aura
                 }
@@ -1297,9 +1289,11 @@ namespace DBZMOD
                 Main.NewText(playerTrait);
             }*/
         }
+    
         public MyPlayer() : base()
         {
         }
+
         public override void ResetEffects()
         {
             KiDamage = 1f;
