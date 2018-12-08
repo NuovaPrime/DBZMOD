@@ -221,6 +221,52 @@ namespace DBZMOD
                 }
             }
         }
+
+        public void DoPlayerMessageCheck(Player player, NPC npc, ref bool isDisplayingJungleMessage, ref bool isDisplayingHellMessage, ref bool isDisplayingEvilMessage, ref bool isDisplayingMushroomMessage)
+        {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
+            {
+                if (!modPlayer.JungleMessage)
+                {
+                    modPlayer.JungleMessage = true;
+                    isDisplayingJungleMessage = true;
+                }
+            }
+            if (npc.type == NPCID.BrainofCthulhu)
+            {
+                if (!modPlayer.JungleMessage)
+                {
+                    modPlayer.JungleMessage = true;
+                    isDisplayingJungleMessage = true;
+                }
+            }
+            if (npc.type == NPCID.SkeletronHead)
+            {
+                if (!modPlayer.HellMessage)
+                {
+                    modPlayer.HellMessage = true;
+                    isDisplayingHellMessage = true;
+                }
+            }
+            if (npc.type == NPCID.WallofFlesh)
+            {
+                if (!modPlayer.EvilMessage)
+                {
+                    modPlayer.EvilMessage = true;
+                    isDisplayingEvilMessage = true;
+                }
+            }
+            if (npc.type == NPCID.Plantera)
+            {
+                if (!modPlayer.MushroomMessage)
+                {
+                    modPlayer.MushroomMessage = true;
+                    isDisplayingMushroomMessage = true;
+                }
+            }
+        }
+
         public override void NPCLoot(NPC npc)
         {
             // now loops over all connected players and plays the message for anyone who doesn't have it.
@@ -228,47 +274,12 @@ namespace DBZMOD
             bool isDisplayingHellMessage = false;
             bool isDisplayingEvilMessage = false;
             bool isDisplayingMushroomMessage = false;
-            foreach (Player player in Main.player) {
-                MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-                if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
-                {
-                    if (!modPlayer.JungleMessage)
-                    {
-                        modPlayer.JungleMessage = true;
-                        isDisplayingJungleMessage = true;
-                    }
-                }
-                if (npc.type == NPCID.BrainofCthulhu)
-                {
-                    if (!modPlayer.JungleMessage)
-                    {
-                        modPlayer.JungleMessage = true;
-                        isDisplayingJungleMessage = true;
-                    }
-                }
-                if (npc.type == NPCID.SkeletronHead)
-                {
-                    if (!modPlayer.HellMessage)
-                    {
-                        modPlayer.HellMessage = true;
-                        isDisplayingHellMessage = true;
-                    }
-                }
-                if (npc.type == NPCID.WallofFlesh)
-                {
-                    if (!modPlayer.EvilMessage)
-                    {
-                        modPlayer.EvilMessage = true;
-                        isDisplayingEvilMessage = true;
-                    }
-                }
-                if (npc.type == NPCID.Plantera)
-                {
-                    if (!modPlayer.MushroomMessage)
-                    {
-                        modPlayer.MushroomMessage = true;
-                        isDisplayingMushroomMessage = true;
-                    }
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                DoPlayerMessageCheck(Main.player[Main.myPlayer], npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
+            } else if (Main.netMode == NetmodeID.Server) { 
+                foreach (Player player in Main.player) {
+                    DoPlayerMessageCheck(player, npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
                 }
             }
 
