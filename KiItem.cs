@@ -111,6 +111,7 @@ namespace DBZMOD
                 if (ChargeTimer > ChargeTimerMax && ChargeLevel < FinalChargeLimit)
                 {
                     ChargeLevel += 1;
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), ChargeLevel, false, false);
                     ChargeTimer = 0;
                 }
                 if (KiDrainTimer > 1 && !MyPlayer.ModPlayer(player).IsKiDepleted())

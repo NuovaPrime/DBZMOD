@@ -104,19 +104,23 @@ namespace DBZMOD
 
                 if (Transformations.IsSSJ(player) && !Transformations.IsGodlike(player))
                 {
-                    FlightDustType = 169;
+                    FlightDustType = 170;
                 }
                 else if (Transformations.IsLSSJ(player))
                 {
-                    FlightDustType = 89;
+                    FlightDustType = 107;
                 }
-                else if (Transformations.IsGodlike(player) || Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
+                else if (Transformations.IsGodlike(player))
                 {
-                    FlightDustType = 90;
+                    FlightDustType = 174;
+                }
+                else if (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
+                {
+                    FlightDustType = 182;
                 }
                 else
                 {
-                    FlightDustType = 261;
+                    FlightDustType = 267;
                 }
 
                 //caluclate velocity
