@@ -20,8 +20,8 @@ namespace DBZMOD.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 40;
+            projectile.width = 52;
+            projectile.height = 52;
             projectile.timeLeft = 280;
             projectile.penetrate = 16;
             projectile.tileCollide = true;

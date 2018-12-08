@@ -13,12 +13,12 @@ namespace DBZMOD.Projectiles.Auras
         public int BaseAuraTimer;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 4;
         }
         public override void SetDefaults()
         {
-            projectile.width = 89;
-            projectile.height = 110;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.alpha = 70;
             projectile.timeLeft = 10;
@@ -29,9 +29,9 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             BaseAuraTimer = 5;
             projectile.netUpdate = true;
-            AuraOffset.Y = -26;
+            AuraOffset.Y = -24;
 			projectile.light = 1f;
-			projectile.alpha = 70;
+			projectile.alpha = 20;
         }
         public override void PostAI()
         {
@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles.Auras
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 89, 110, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
                     dust.noGravity = true;
                 }
 
@@ -59,12 +59,12 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.rotation = 0;
             }
             projectile.frameCounter++;
-            if (projectile.frameCounter > 3)
+            if (projectile.frameCounter > 2)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
             }
-            if (projectile.frame >= 3)
+            if (projectile.frame >= 4)
             {
                 projectile.frame = 0;
             }
