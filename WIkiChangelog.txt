@@ -320,7 +320,7 @@ V1.0.8
 
 1. Added a [[Configuration]] option to make [[Charging Aura|Charging]] a toggle.
 
-2. Added [[Black Diamond Shell]], [[Buldarium Sigmite]], [[Burning Energy Amulet]], [[Ice Energy Talisman]], [[Pure Energy Circlet]].
+2. Added [[Black Diamond Shell]], [[Buldarium Sigmite]], [[Burning Energy Amulet]], [[Ice Energy Talisman]], [[Pure Energy Circlet]] and [[Bloodstained Bandana]].
 
 3. Added [[Black Fusion Armor]]
 
@@ -359,6 +359,8 @@ V1.0.8
 9. Fixed [[Destructo Disk]] being really loud.
 
 10. Fixed [[Dragon Crystal Infuser]]'s rarity and value.
+
+11. Fixed issue where the [[Dryad]]'s summoning items had no value.
 
 == Patreon Items ==
 
