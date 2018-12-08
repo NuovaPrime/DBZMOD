@@ -484,9 +484,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria">
-      <HintPath>D:\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
-      <HintPath>F:\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
-      <HintPath>F:\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
+      <HintPath>Lib\Terraria.exe</HintPath>
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>
