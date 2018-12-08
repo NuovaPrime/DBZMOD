@@ -356,6 +356,8 @@ V1.0.8
 
 9. Fixed [[Destructo Disk]] being really loud.
 
+10. Fixed [[Dragon Crystal Infuser]]'s rarity and value.
+
 == Patreon Items ==
 
 1. Added [[Time Ring]] and [[Potara Earrings]].

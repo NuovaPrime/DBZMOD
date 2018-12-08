@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using Terraria.GameInput;
 using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Generation;
@@ -99,11 +100,14 @@ namespace DBZMOD
                 {
                     projectile.Kill();
                 }
+
                 if (player.channel && projectile.active)
                 {
                     ChargeTimer++;
                     KiDrainTimer++;
+
                     player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+
                 }
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;
