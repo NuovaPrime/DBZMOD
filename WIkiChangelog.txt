@@ -320,7 +320,9 @@ V1.0.8
 
 1. Added a [[Configuration]] option to make [[Charging Aura|Charging]] a toggle.
 
-2. Added [[Black Diamond Shell]], [[Buldarium Sigmite]], [[Burning Energy Amulet]], [[Ice Energy Talisman]], [[Pure Energy Circlet]]
+2. Added [[Black Diamond Shell]], [[Buldarium Sigmite]], [[Burning Energy Amulet]], [[Ice Energy Talisman]], [[Pure Energy Circlet]].
+
+3. Added [[Black Fusion Armor]]
 
 == Changes ==
 
@@ -331,6 +333,8 @@ V1.0.8
 3. You can now step down a form by pressing [[Charging Aura|Charge]] and [[Power Down]] at the same time.
 
 4. New sprites for various [[Consumables]], [[Consumables#Ki Potions|Ki Potions]].
+
+5. Nerfed [[Demon Armor]] to be post-mechanical bosses.
 
 == Fixes ==
 
@@ -347,6 +351,10 @@ V1.0.8
 6. Fixed bug where [[Destructo Disk Assault]]'s mini disks did no damage.
 
 7. Fixed many issues where things wouldn't sync in multiplayer.
+
+8. Fixed crash issue with Dual Wielding.
+
+9. Fixed [[Destructo Disk]] being really loud.
 
 == Patreon Items ==
 
