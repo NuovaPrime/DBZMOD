@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor.ArmorSets
 {
     [AutoloadEquip(EquipType.Legs)]
-    public class DemonLeggings : ModItem
+    public class BlackFusionPants : ModItem
     {
         public override void SetStaticDefaults()
         {
