@@ -336,6 +336,8 @@ V1.0.8
 
 5. Nerfed [[Demon Armor]] to be post-mechanical bosses.
 
+6. Added visual effects for the [[Battle Kit]] and [[Worn Gloves]].
+
 == Fixes ==
 
 1. Fixed flickering with the [[Ki Diffuser]].

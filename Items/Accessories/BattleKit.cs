@@ -4,8 +4,9 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
+    [AutoloadEquip(EquipType.HandsOn, EquipType.HandsOff, EquipType.Face)]
     public class BattleKit : ModItem
-    {
+    {        
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A generic kit of tools for the average soldier." +

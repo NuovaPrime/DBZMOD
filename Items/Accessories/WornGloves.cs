@@ -9,6 +9,7 @@ using DBZMOD.Items.Accessories;
 
 namespace DBZMOD.Items.Accessories
 {
+    [AutoloadEquip(EquipType.HandsOn, EquipType.HandsOff)]
     public class WornGloves : ModItem
     {
         public override void SetStaticDefaults()
