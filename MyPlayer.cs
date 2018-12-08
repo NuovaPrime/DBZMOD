@@ -639,8 +639,12 @@ namespace DBZMOD
 
         public void CheckSyncState()
         {
+            // if we're not in network mode, do nothing.
+            if (!Main.dedServ)
+                return;
+
             // server doesn't fire these things, and players only fire for themselves
-            if (Main.dedServ)
+            if (Main.netMode == NetmodeID.Server)
                 return;
 
             if (Main.myPlayer != player.whoAmI)
