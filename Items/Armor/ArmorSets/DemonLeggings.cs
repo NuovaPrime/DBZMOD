@@ -9,11 +9,11 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("20% Increased Ki Damage"
-                + "\n16% Increased Ki Crit Chance" +
-                               "\n+500 Max Ki" +
+            Tooltip.SetDefault("13% Increased Ki Damage"
+                + "\n9% Increased Ki Crit Chance" +
+                               "\n+300 Max Ki" +
                                "\nIncreased Ki Regen" +
-                               "\n18% Increased movement speed");
+                               "\n12% Increased movement speed");
             DisplayName.SetDefault("Demon Leggings");
         }
 
@@ -21,23 +21,22 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             item.width = 28;
             item.height = 18;
-            item.value = 32000;
+            item.value = 18000;
             item.rare = 9;
-            item.defense = 14;
+            item.defense = 12;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.20f;
-            MyPlayer.ModPlayer(player).KiCrit += 16;
-            MyPlayer.ModPlayer(player).KiMax2 += 500;
-            MyPlayer.ModPlayer(player).KiRegen += 2;
-            player.moveSpeed += 0.18f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.13f;
+            MyPlayer.ModPlayer(player).KiCrit += 9;
+            MyPlayer.ModPlayer(player).KiMax2 += 300;
+            MyPlayer.ModPlayer(player).KiRegen += 1;
+            player.moveSpeed += 0.12f;
 
         }
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 15);
             recipe.AddIngredient(null, "SatanicCloth", 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

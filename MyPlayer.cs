@@ -220,6 +220,9 @@ namespace DBZMOD
         public bool iceTalisman;
         public bool pureEnergyCirclet;
         public bool timeRing;
+        public bool blackFusionBonus;
+        public float blackFusionIncrease = 1f;
+        public int blackFusionBonusTimer;
         public SoundEffectInstance transformationSound;
 
         public int syncOverallKiMax = 0;
@@ -550,6 +553,49 @@ namespace DBZMOD
             {
                 player.invis = true;
             }
+            foreach (NPC npc in Main.npc)
+            {
+                if (npc.boss && npc.active)
+                {
+                    blackFusionBonusTimer++;
+                    if (blackFusionBonusTimer > 60 && blackFusionIncrease <= 5f)
+                    {
+                        blackFusionIncrease += 0.05f;
+                        blackFusionBonusTimer = 0;
+                    }
+                }
+            }
+
+            if (blackFusionBonus)
+            {
+                player.meleeDamage *= blackFusionIncrease;
+                player.rangedDamage *= blackFusionIncrease;
+                player.magicDamage *= blackFusionIncrease;
+                player.minionDamage *= blackFusionIncrease;
+                player.thrownDamage *= blackFusionIncrease;
+                KiDamage *= blackFusionIncrease;
+                player.statDefense *= (int)blackFusionIncrease;
+                if (DBZMOD.instance.thoriumLoaded)
+                {
+                    ThoriumEffects(player);
+                }
+                if (DBZMOD.instance.tremorLoaded)
+                {
+                    TremorEffects(player);
+                }
+                if (DBZMOD.instance.enigmaLoaded)
+                {
+                    EnigmaEffects(player);
+                }
+                if (DBZMOD.instance.battlerodsLoaded)
+                {
+                    BattleRodEffects(player);
+                }
+                if (DBZMOD.instance.expandedSentriesLoaded)
+                {
+                    ExpandedSentriesEffects(player);
+                }
+            }
             /*if(LSSJAchieved)
             {
                 OverloadBar.visible = true;
@@ -561,7 +607,33 @@ namespace DBZMOD
             OverloadBar.visible = false;
             KiBar.visible = true;
         }
+        #region Cross-mod damage increases for player
+        public void ThoriumEffects(Player player)
+        {
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= blackFusionIncrease;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= blackFusionIncrease;
+        }
 
+        public void TremorEffects(Player player)
+        {
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= blackFusionIncrease;
+        }
+
+        public void EnigmaEffects(Player player)
+        {
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= blackFusionIncrease;
+        }
+
+        public void BattleRodEffects(Player player)
+        {
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= blackFusionIncrease;
+        }
+
+        public void ExpandedSentriesEffects(Player player)
+        {
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= blackFusionIncrease;
+        }
+        #endregion
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
             if (Transformations.IsGodlike(player))
@@ -1150,6 +1222,7 @@ namespace DBZMOD
             OrbGrabRange = 2;
             OrbHealAmount = 50;
             DemonBonus = false;
+            blackFusionBonus = false;
             ChargeLimitAdd = 0;
             FlightSpeedAdd = 0;
             FlightUsageAdd = 0;

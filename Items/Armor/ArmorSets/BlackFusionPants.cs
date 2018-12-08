@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor.ArmorSets
 {
     [AutoloadEquip(EquipType.Legs)]
-    public class DemonLeggings : ModItem
+    public class BlackFusionPants : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +14,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
                                "\n+500 Max Ki" +
                                "\nIncreased Ki Regen" +
                                "\n18% Increased movement speed");
-            DisplayName.SetDefault("Demon Leggings");
+            DisplayName.SetDefault("Black Fusion Pants");
         }
 
         public override void SetDefaults()
@@ -23,7 +23,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.height = 18;
             item.value = 32000;
             item.rare = 9;
-            item.defense = 14;
+            item.defense = 16;
         }
         public override void UpdateEquip(Player player)
         {
@@ -37,9 +37,8 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 15);
-            recipe.AddIngredient(null, "SatanicCloth", 10);
-            recipe.AddTile(TileID.Anvils);
+            recipe.AddIngredient(null, "DivineThreads", 12);
+            recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
