@@ -206,7 +206,7 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-        }
+        }        
 
         // packet handling goes here
         public override void HandlePacket(BinaryReader reader, int whoAmI)

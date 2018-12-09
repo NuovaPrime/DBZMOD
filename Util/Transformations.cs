@@ -595,10 +595,10 @@ namespace Util
         {
             BuffInfo buff = GetBuffByBuffId(buffId);
 
-            //foreach (Type auraType in buff.AuraProjectileTypes)
-            //{
-            //    FindAndKillPlayerAurasOfType(player, auraType);
-            //}
+            foreach (Type auraType in buff.AuraProjectileTypes)
+            {
+                FindAndKillPlayerAurasOfType(player, auraType);
+            }
 
             player.ClearBuff(buff.BuffId);
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
@@ -607,19 +607,19 @@ namespace Util
             }
         }
 
-        //public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
-        //{
-        //    foreach (Projectile proj in Main.projectile)
-        //    {
-        //        if (Main.player[proj.owner] != player)
-        //            continue;
-        //        if (proj.modProjectile == null)
-        //            continue;
-        //        // if it's an instance of an aura projectile kill it.
-        //        if (proj.modProjectile.GetType().Equals(auraType))
-        //            proj.Kill();
-        //    }
-        //}
+        public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
+        {
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (Main.player[proj.owner] != player)
+                    continue;
+                if (proj.modProjectile == null)
+                    continue;
+                // if it's an instance of an aura projectile kill it.
+                if (proj.modProjectile.GetType().Equals(auraType))
+                    proj.Kill();
+            }
+        }
 
         // create the projectile(s) representing the transformation aura.
         public static void DoProjectileForBuff(Player player, BuffInfo buff)

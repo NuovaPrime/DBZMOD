@@ -1720,6 +1720,15 @@ namespace DBZMOD
             base.OnHitAnything(x, y, victim);
         }
 
+        public override void PlayerConnect(Player player)
+        {
+            if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                // players already sync themselves to the server automatically, but they need to request the sync of other players who are already on
+                NetworkHelper.playerSync.SendServerSyncAllPlayersRequest(256, player.whoAmI);
+            }
+        }
+
         public Texture2D Hair;
 
         public override void PreUpdate()

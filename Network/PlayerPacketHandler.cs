@@ -12,6 +12,7 @@ namespace Network
     {
         // this timer keeps the ki sync from firing *every frame* which really hurts performance.
         public const byte SyncPlayer = 43;
+        public const byte RequestSyncAll = 44;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -24,7 +25,17 @@ namespace Network
                 case (SyncPlayer):
                     ReceiveChangedPlayerData(reader, fromWho);
                     break;
+                case (RequestSyncAll):
+                    ReceiveSyncAllRequest(reader, fromWho);
+                    break;
             }
+        }
+
+        // should always be to server, from joining player
+        public void SendServerSyncAllPlayersRequest(int toWho, int fromWho)
+        {
+            var packet = GetPacket(RequestSyncAll, fromWho);
+            packet.Send(toWho, fromWho);
         }
 
         public void SendChangedKiMax2(int toWho, int fromWho, int whichPlayer, int kiMax2)
@@ -32,7 +43,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending kiMax2 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMax2);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(kiMax2);
             packet.Send(toWho, fromWho);
         }
@@ -42,7 +53,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending kiMax3 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMax3);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(kiMax3);
             packet.Send(toWho, fromWho);
         }
@@ -52,7 +63,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending kiMaxMult changes from {0} to {1} for player {2} to {3}", fromWho, toWho, whichPlayer, KiMaxMult));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMaxMult);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(KiMaxMult);
             packet.Send(toWho, fromWho);
         }
@@ -62,7 +73,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending IsTransforming changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsTransforming);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(IsTransforming);
             packet.Send(toWho, fromWho);
         }
@@ -72,7 +83,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Fragment1 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment1);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(Fragment1);
             packet.Send(toWho, fromWho);
         }
@@ -82,7 +93,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Fragment2 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment2);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(Fragment2);
             packet.Send(toWho, fromWho);
         }
@@ -92,7 +103,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Fragment3 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment3);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(Fragment3);
             packet.Send(toWho, fromWho);
         }
@@ -102,7 +113,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Fragment4 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment4);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(Fragment4);
             packet.Send(toWho, fromWho);
         }
@@ -112,7 +123,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Fragment5 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment5);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(Fragment5);
             packet.Send(toWho, fromWho);
         }
@@ -122,7 +133,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending IsCharging changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsCharging);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(IsCharging);
             packet.Send(toWho, fromWho);
         }
@@ -132,7 +143,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Jungle Message changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.JungleMessage);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(JungleMessage);
             packet.Send(toWho, fromWho);
         }
@@ -142,7 +153,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Hell Message changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.HellMessage);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(HellMessage);
             packet.Send(toWho, fromWho);
         }
@@ -152,7 +163,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Evil Message changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.EvilMessage);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(EvilMessage);
             packet.Send(toWho, fromWho);
         }
@@ -162,7 +173,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending Mushroom Message changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.MushroomMessage);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(MushroomMessage);
             packet.Send(toWho, fromWho);
         }
@@ -172,7 +183,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending IsHoldingKiWeapon changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsHoldingKiWeapon);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(IsHoldingKiWeapon);
             packet.Send(toWho, fromWho);
         }
@@ -182,7 +193,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending traitChecked changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.traitChecked);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(traitChecked);
             packet.Send(toWho, fromWho);
         }
@@ -192,7 +203,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending PlayerTrait changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.playerTrait);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(playerTrait);
             packet.Send(toWho, fromWho);
         }
@@ -202,7 +213,7 @@ namespace Network
             DebugUtil.Log(string.Format("Sending IsFlying changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsFlying);
-            packet.Write(fromWho);
+            packet.Write(whichPlayer);
             packet.Write(IsFlying);
             packet.Send(toWho, fromWho);
         }
@@ -215,6 +226,36 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(kiCurrent);
             packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveSyncAllRequest(BinaryReader reader, int fromWho)
+        {
+            foreach (Player player in Main.player)
+            {
+                if (player.whoAmI == fromWho)
+                    continue;
+
+                MyPlayer modPlayer = Main.player[fromWho].GetModPlayer<MyPlayer>();
+                SendChangedKiMax2(fromWho, 256, player.whoAmI, modPlayer.KiMax2);
+                SendChangedKiMax3(fromWho, 256, player.whoAmI, modPlayer.KiMax3);
+                SendChangedKiMaxMult(fromWho, 256, player.whoAmI, modPlayer.KiMaxMult);
+                SendChangedIsTransforming(fromWho, 256, player.whoAmI, modPlayer.IsTransforming);
+                SendChangedFragment1(fromWho, 256, player.whoAmI, modPlayer.Fragment1);
+                SendChangedFragment2(fromWho, 256, player.whoAmI, modPlayer.Fragment2);
+                SendChangedFragment3(fromWho, 256, player.whoAmI, modPlayer.Fragment3);
+                SendChangedFragment4(fromWho, 256, player.whoAmI, modPlayer.Fragment4);
+                SendChangedFragment5(fromWho, 256, player.whoAmI, modPlayer.Fragment5);
+                SendChangedIsCharging(fromWho, 256, player.whoAmI, modPlayer.IsCharging);
+                SendChangedJungleMessage(fromWho, 256, player.whoAmI, modPlayer.JungleMessage);
+                SendChangedHellMessage(fromWho, 256, player.whoAmI, modPlayer.HellMessage);
+                SendChangedEvilMessage(fromWho, 256, player.whoAmI, modPlayer.EvilMessage);
+                SendChangedMushroomMessage(fromWho, 256, player.whoAmI, modPlayer.MushroomMessage);
+                SendChangedIsHoldingKiWeapon(fromWho, 256, player.whoAmI, modPlayer.IsHoldingKiWeapon);
+                SendChangedTraitChecked(fromWho, 256, player.whoAmI, modPlayer.traitChecked);
+                SendChangedPlayerTrait(fromWho, 256, player.whoAmI, modPlayer.playerTrait);
+                SendChangedIsFlying(fromWho, 256, player.whoAmI, modPlayer.IsFlying);
+                SendChangedKiCurrent(fromWho, 256, player.whoAmI, modPlayer.GetKi());
+            }
         }
 
         public void ReceiveChangedPlayerData(BinaryReader reader, int fromWho)
