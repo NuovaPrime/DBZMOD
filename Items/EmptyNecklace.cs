@@ -8,7 +8,7 @@ namespace DBZMOD.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("It seems you can attach a gem to it.");
+            Tooltip.SetDefault("'It seems you can attach a gem to it.'");
             DisplayName.SetDefault("Empty Necklace");
         }
 

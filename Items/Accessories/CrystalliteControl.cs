@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The essence of pure ki control lives within the crystal." +
+            Tooltip.SetDefault("'The essence of pure ki control lives within the crystal.'" +
                 "\nIncreased speed while charging" +
                 "\n+500 Max ki");
             DisplayName.SetDefault("Imperium Crystallite");

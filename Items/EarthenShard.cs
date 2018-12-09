@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Earthen Shard");
-            Tooltip.SetDefault("A fragment of the land's soul.");
+            Tooltip.SetDefault("'A fragment of the land's soul.'");
         }
 
         public override void SetDefaults()

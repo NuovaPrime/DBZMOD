@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ki Diffuser");
-            Tooltip.SetDefault("It radiates with the glow of ki energy."
+            Tooltip.SetDefault("'It radiates with the glow of ki energy.'"
         + "\nGives slight ki regen when placed.");
         }
 

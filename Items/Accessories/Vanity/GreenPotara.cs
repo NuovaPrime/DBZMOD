@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Accessories.Vanity
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A useful pair of earrings used by the kais.");
+            Tooltip.SetDefault("'A useful pair of earrings used by the kais.'");
             DisplayName.SetDefault("Green Potaras");
         }
 

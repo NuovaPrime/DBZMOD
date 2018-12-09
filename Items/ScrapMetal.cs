@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Scrap Metal");
-            Tooltip.SetDefault("An old piece of metal, seems like something a junk merchant would sell.");
+            Tooltip.SetDefault("'An old piece of metal, seems like something a junk merchant would sell.'");
         }
 
         public override void SetDefaults()

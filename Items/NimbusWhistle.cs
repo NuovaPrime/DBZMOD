@@ -25,7 +25,7 @@ namespace DBZMOD.Items
     public override void SetStaticDefaults()
     {
       DisplayName.SetDefault("Nimbus Whistle");
-      Tooltip.SetDefault("Calls The Legendary Cloud, Nimbus.");
+      Tooltip.SetDefault("'Calls The Legendary Cloud, Nimbus.'");
     }
 
 		public override void AddRecipes()

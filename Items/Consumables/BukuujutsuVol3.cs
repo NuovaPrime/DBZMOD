@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Consumables
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bukuujutsu Guide Vol 3 - Fugam Arriperent");
-            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes your ki feel calmer.");
+            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes your ki feel calmer.'");
         }
 
 

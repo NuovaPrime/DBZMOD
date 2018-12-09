@@ -338,6 +338,8 @@ V1.0.8
 
 6. Added visual effects for the [[Battle Kit]] and [[Worn Gloves]].
 
+7. Added a visual indication for flavor texts.
+
 == Fixes ==
 
 1. Fixed flickering with the [[Ki Diffuser]].

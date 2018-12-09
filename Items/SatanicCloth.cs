@@ -8,7 +8,7 @@ namespace DBZMOD.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The cloth radiates with animosity.");
+            Tooltip.SetDefault("'The cloth radiates with animosity.'");
             DisplayName.SetDefault("Satanic Cloth");
         }
 

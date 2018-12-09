@@ -8,7 +8,7 @@ namespace DBZMOD.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A unbelievably soft material that radiates a divine-like energy.");
+            Tooltip.SetDefault("'A unbelievably soft material that radiates a divine-like energy.'");
             DisplayName.SetDefault("Divine Threads");
         }
 

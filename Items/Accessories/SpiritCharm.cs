@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An emblem enscribed with markings of the dragon."
+            Tooltip.SetDefault("'An emblem enscribed with markings of the dragon.'"
                + "\n20% Increased Ki Damage" +
                "\nAll damage increased by 14%" +
                "\n+500 Maximum ki" +

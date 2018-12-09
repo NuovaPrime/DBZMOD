@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("It explodes with radiant energy." +
+            Tooltip.SetDefault("'It explodes with radiant energy.'" +
                 "\n12% Increased Ki damage" +
                 "\n+500 Max Ki" +
                 "\nDrastically increased ki regen");

@@ -32,7 +32,7 @@ namespace DBZMOD.Items.Weapons.Fist
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fist");
-            Tooltip.SetDefault("The most essential skill of any martial artist.");
+            Tooltip.SetDefault("'The most essential skill of any martial artist.'");
         }
 
         private const string FistLine1 = "\nLeft click to punch, has no cooldown between attacks.";

@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A glowing amulet that radiates with extreme heat." +
+            Tooltip.SetDefault("'A glowing amulet that radiates with extreme heat.'" +
                 "\n5% Increased Ki damage" +
                 "\n+200 Max ki" +
                 "\nCharging grants a aura of fire around you.");

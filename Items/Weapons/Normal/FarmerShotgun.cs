@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Weapons.Normal
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("A weapon forged by the gods.");
+			Tooltip.SetDefault("'A weapon forged by the gods.'");
             DisplayName.SetDefault("Farmer's Shotgun");
 		}
 

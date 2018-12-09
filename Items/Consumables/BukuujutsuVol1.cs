@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Consumables
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bukuujutsu Guide Vol 1 - Chorus Aeria");
-            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes you feel lighter.");
+            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes you feel lighter.'");
         }
 
 
