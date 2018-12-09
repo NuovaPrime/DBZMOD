@@ -611,15 +611,15 @@ namespace DBZMOD
             OverloadBar.visible = false;
             KiBar.visible = true;
 
+            ThrottleKi();
+
             // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
             CheckSyncState();
-
-            ThrottleKi();
         }
 
         public void ThrottleKi()
         {
-            KiCurrent = Math.Max(0, Math.Min(OverallKiMax(), GetKi()));
+            SetKi(Math.Max(0, Math.Min(OverallKiMax(), GetKi())));
         }
 
 
