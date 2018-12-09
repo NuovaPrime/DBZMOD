@@ -65,7 +65,12 @@ namespace DBZMOD
 		{
 			if (!item.social && item.prefix > 0)
 			{
+                // try to find the end of the prefix indexes. If one can't be found, just slap it at the end?
                 int index = tooltips.FindLastIndex(t => (t.mod == "Terraria" || t.mod == mod.Name) && (t.isModifier || t.Name.StartsWith("Tooltip")));
+                if (index == -1)
+                {
+                    index = tooltips.Count - 1;
+                }
 				if (kiChangeBonus > 0)
 				{
 					TooltipLine line = new TooltipLine(mod, "PrefixKiChange", "+" + kiChangeBonus + "% More Ki Usage");
