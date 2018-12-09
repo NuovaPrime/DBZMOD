@@ -15,11 +15,11 @@ namespace DBZMOD.Mounts
             mountData.fallDamage = 0f;
             mountData.runSpeed = 4f;
             mountData.dashSpeed = 10f;
-            mountData.flightTimeMax = 240;
+            mountData.flightTimeMax = 400;
             mountData.fatigueMax = 0;
             mountData.jumpHeight = 5;
             mountData.acceleration = 0.20f;
-            mountData.jumpSpeed = 4f;
+            mountData.jumpSpeed = 6f;
             mountData.blockExtraJumps = false;
             mountData.totalFrames = 1;            //mount frame/animation
             mountData.constantJump = true;

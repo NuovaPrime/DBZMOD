@@ -1,5 +1,5 @@
 author = NuovaPrime
-version = 1.0.7.1
+version = 1.0.8.0
 displayName = Dragon Ball Terraria
 homepage = https://forums.terraria.org/index.php?threads/dragon-ball-terraria.49804/
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .git\*, *.db
