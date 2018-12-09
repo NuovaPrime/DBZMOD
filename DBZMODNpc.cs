@@ -706,6 +706,15 @@ namespace DBZMOD
                     }
                 }
             }
+
+            if (npc.type == NPCID.Herpling || npc.type == NPCID.Crimslime || npc.type == NPCID.BloodJelly ||
+                npc.type == NPCID.BloodFeeder || npc.type == NPCID.Corruptor || npc.type == NPCID.Slimer)
+            {
+                if (Main.rand.Next(10) == 0)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodstainedBandana"));
+                }
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
@@ -744,22 +753,30 @@ namespace DBZMOD
             if (type == NPCID.Dryad && NPC.downedBoss1)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.SuspiciousLookingEye);
+                shop.item[nextSlot].value = 30000;
                 nextSlot++;
             }
             if (type == NPCID.Dryad && NPC.downedBoss3)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.ClothierVoodooDoll);
+                shop.item[nextSlot].value = 150000;
                 nextSlot++;
             }
             if (type == NPCID.Dryad && NPC.downedGolemBoss)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.LihzahrdPowerCell);
+                shop.item[nextSlot].value = 60000;
                 nextSlot++;
             }
 
             if (type == NPCID.Steampunker)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.LuminousSectum>());
+                nextSlot++;
+            }
+            if (type == NPCID.Clothier)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
                 nextSlot++;
             }
 

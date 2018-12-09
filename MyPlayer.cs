@@ -220,6 +220,7 @@ namespace DBZMOD
         public bool iceTalisman;
         public bool pureEnergyCirclet;
         public bool timeRing;
+        public bool bloodstainedBandana;
         public bool blackFusionBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
@@ -1401,6 +1402,7 @@ namespace DBZMOD
             iceTalisman = false;
             pureEnergyCirclet = false;
             timeRing = false;
+            bloodstainedBandana = false;
             KiMax2 = 0;
             KiMaxMult = 1f;
         }
