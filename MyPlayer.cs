@@ -650,8 +650,9 @@ namespace DBZMOD
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 return;
 
-            // if this method is firing on a player who isn't me, abort.
-            DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
+            // if this method is firing on a player who isn't me, abort. 
+            // spammy af
+            // DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -669,8 +670,7 @@ namespace DBZMOD
 
             if (SyncKiMaxMult != KiMaxMult)
             {
-
-                DebugUtil.Log(string.Format("Ki max sync: was {0} but should be {1}", SyncKiMaxMult, KiMaxMult));
+                // DebugUtil.Log(string.Format("Ki max sync: was {0} but should be {1}", SyncKiMaxMult, KiMaxMult));
                 NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, KiMaxMult);
                 SyncKiMaxMult = KiMaxMult;
             }

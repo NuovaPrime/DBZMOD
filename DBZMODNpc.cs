@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD
 {
@@ -223,8 +224,13 @@ namespace DBZMOD
         }
 
         public void DoPlayerMessageCheck(Player player, NPC npc, ref bool isDisplayingJungleMessage, ref bool isDisplayingHellMessage, ref bool isDisplayingEvilMessage, ref bool isDisplayingMushroomMessage)
-        {
+        {            
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (modPlayer == null)
+                return;
+
+            DebugUtil.Log("Eater of worlds check");
             if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
             {
                 if (!modPlayer.JungleMessage)
@@ -233,6 +239,8 @@ namespace DBZMOD
                     isDisplayingJungleMessage = true;
                 }
             }
+
+            DebugUtil.Log("Brain check");
             if (npc.type == NPCID.BrainofCthulhu)
             {
                 if (!modPlayer.JungleMessage)
@@ -241,6 +249,8 @@ namespace DBZMOD
                     isDisplayingJungleMessage = true;
                 }
             }
+
+            DebugUtil.Log("Skeletron check");
             if (npc.type == NPCID.SkeletronHead)
             {
                 if (!modPlayer.HellMessage)
@@ -249,6 +259,8 @@ namespace DBZMOD
                     isDisplayingHellMessage = true;
                 }
             }
+
+            DebugUtil.Log("WoF check");
             if (npc.type == NPCID.WallofFlesh)
             {
                 if (!modPlayer.EvilMessage)
@@ -257,6 +269,8 @@ namespace DBZMOD
                     isDisplayingEvilMessage = true;
                 }
             }
+
+            DebugUtil.Log("Plantera check");
             if (npc.type == NPCID.Plantera)
             {
                 if (!modPlayer.MushroomMessage)
@@ -265,6 +279,7 @@ namespace DBZMOD
                     isDisplayingMushroomMessage = true;
                 }
             }
+            DebugUtil.Log("End player message check");
         }
 
         public override void NPCLoot(NPC npc)
@@ -274,15 +289,30 @@ namespace DBZMOD
             bool isDisplayingHellMessage = false;
             bool isDisplayingEvilMessage = false;
             bool isDisplayingMushroomMessage = false;
+            DebugUtil.Log("Is npc a boss kill check");
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 DoPlayerMessageCheck(Main.player[Main.myPlayer], npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
-            } else if (Main.netMode == NetmodeID.Server) { 
-                foreach (Player player in Main.player) {
+            } else if (Main.netMode == NetmodeID.Server) {
+                if (!Main.dedServ)
+                    return;
+                for (int i = 0; i < Main.player.Length; i++)
+                {
+                    // i wish I could tell you why this is a thing.
+                    Player player = Main.player[i];
+                    // this. wtf is this terraria. why?
+                    if (player.whoAmI != i)
+                    {
+                        continue;
+                    }                       
+                    DebugUtil.Log(string.Format("Checking player messages for player {0} killing npc {1}", player.whoAmI, npc.type));                    
                     DoPlayerMessageCheck(player, npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
                 }
+            } else
+            {
+                return;
             }
-
+            DebugUtil.Log("Message for npc kills section");
             if (isDisplayingJungleMessage)
             {
                 if (Main.netMode != 2)
@@ -334,6 +364,8 @@ namespace DBZMOD
                     NetMessage.BroadcastChatMessage(text2, new Color(232, 242, 50));
                 }
             }
+
+            DebugUtil.Log("Ki Crystal drops check");
             if (npc.damage > 1 && npc.lifeMax > 10 && !npc.friendly)
             {
                 if (!Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneBeach && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDungeon && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneOldOneArmy && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSandstorm && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerNebula && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerSolar && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerStardust && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerVortex && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUndergroundDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneRockLayerHeight && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDirtLayerHeight)
@@ -706,7 +738,7 @@ namespace DBZMOD
                     }
                 }
             }
-
+                        
             if (npc.type == NPCID.Herpling || npc.type == NPCID.Crimslime || npc.type == NPCID.BloodJelly ||
                 npc.type == NPCID.BloodFeeder || npc.type == NPCID.Corruptor || npc.type == NPCID.Slimer)
             {
