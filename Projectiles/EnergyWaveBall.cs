@@ -93,8 +93,6 @@ namespace DBZMOD.Projectiles
                 if (!Main.dedServ)
                     chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveChargeShort"));
             }
-
         }
-
 	}
 }

@@ -847,7 +847,7 @@ namespace Util
         {
             BuffInfo currentTransformation = GetCurrentTransformation(player);
 
-            if (IsAscended(currentTransformation))
+            if (IsAscended(currentTransformation) || IsSSJ1(player))
             {
                 for (int i = 0; i < AscensionBuffs().Length; i++)
                 {
