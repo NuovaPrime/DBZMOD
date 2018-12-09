@@ -5,6 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras
 {

@@ -6,6 +6,7 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
+using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -33,7 +34,6 @@ namespace DBZMOD.Projectiles.Auras
             BaseAuraTimer = 5;
             AuraOffset.Y = -38;
             ScaleExtra = 0.1f;
-            FrameAmount = 6;
             IsSSJAura = true;
 			projectile.light = 1f;
         }

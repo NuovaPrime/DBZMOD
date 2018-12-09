@@ -6,6 +6,7 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
+using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -16,12 +17,12 @@ namespace DBZMOD.Projectiles.Auras
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[projectile.type] = 4;
         }
         public override void SetDefaults()
         {
-            projectile.width = 95;
-            projectile.height = 89;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
             projectile.friendly = true;
@@ -31,8 +32,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             projectile.alpha = 20;
             BaseAuraTimer = 5;
-            AuraOffset.Y = -38;
-			ScaleExtra = 0.1f;
+            AuraOffset.Y = -30;
             IsSSJAura = true;
 			projectile.light = 1f;
         }

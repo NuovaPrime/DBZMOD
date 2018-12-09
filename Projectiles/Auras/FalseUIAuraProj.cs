@@ -1,6 +1,7 @@
 ﻿﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Projectiles.Auras;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,7 +29,6 @@ namespace DBZMOD.Projectiles.Auras
 			ScaleExtra = 0.15f;
 			AuraOffset.X = -1;
 			AuraOffset.Y = -10;
-            FrameAmount = 15;
 
         }
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)

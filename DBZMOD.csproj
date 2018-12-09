@@ -337,6 +337,7 @@
     <Compile Include="Prefixes\TranscendedPrefix.cs" />
     <Compile Include="Prefixes\UnstablePrefix.cs" />
     <Compile Include="ProgressionSystem.cs" />
+    <Compile Include="Projectiles\Auras\AuraProjectile.cs" />
     <Compile Include="Projectiles\Auras\BaseAuraProj.cs" />
     <Compile Include="Projectiles\Auras\FalseUIAuraProj.cs" />
     <Compile Include="Projectiles\Auras\KaiokenAuraProj.cs" />
