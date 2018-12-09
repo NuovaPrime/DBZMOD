@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A core of the pure energy of the earth." +
+            Tooltip.SetDefault("'A core of the pure energy of the earth.'" +
                 "\n10% Increased ki damage" +
                 "\nIncreased ki regen" +
                 "\nReduced flight ki usage" +

@@ -35,7 +35,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Freezy Puff!.");
+		Tooltip.SetDefault("'Freezy Puff!.'");
 		DisplayName.SetDefault("Dirty Fireworks");
 		}
 

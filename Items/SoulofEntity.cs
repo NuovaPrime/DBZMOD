@@ -13,7 +13,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soul of Entity");
-            Tooltip.SetDefault("The soul of a reanimated foe.");
+            Tooltip.SetDefault("'The soul of a reanimated foe.'");
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(5, 4)); //5 = ticks per frame change, 4 = number of frames
             ItemID.Sets.AnimatesAsSoul[item.type] = true;
             ItemID.Sets.ItemIconPulse[item.type] = true;

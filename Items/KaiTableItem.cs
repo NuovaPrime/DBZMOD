@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Kai Table");
-            Tooltip.SetDefault("It pulses with divine pressure, it seems to entrance you.");
+            Tooltip.SetDefault("'It pulses with divine pressure, it seems to entrance you.'");
         }
 
         public override void SetDefaults()

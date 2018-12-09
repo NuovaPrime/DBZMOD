@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Angerful Ki Crystal");
-            Tooltip.SetDefault("The corrupt rage of the world lives within.");
+            Tooltip.SetDefault("'The corrupt rage of the world lives within.'");
         }
 
         public override void SetDefaults()

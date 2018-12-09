@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Accessories
     {        
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A generic kit of tools for the average soldier." +
+            Tooltip.SetDefault("'A generic kit of tools for the average soldier.'" +
                 "\n6% Increased Ki damage" +
                 "\n10% Reduced Ki usage" +
                 "\nHunter effect + Increased charge speed" +

@@ -13,7 +13,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Demonic Soul");
-            Tooltip.SetDefault("A fragment of the devil's rage.");
+            Tooltip.SetDefault("'A fragment of the devil's rage.'");
             ItemID.Sets.ItemNoGravity[item.type] = true;
         }
 

@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Calm Ki Crystal");
-            Tooltip.SetDefault("The calm force of nature lives within.");
+            Tooltip.SetDefault("'The calm force of nature lives within.'");
         }
 
         public override void SetDefaults()

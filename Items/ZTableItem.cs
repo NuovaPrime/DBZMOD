@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Z Table");
-            Tooltip.SetDefault("Looks like it could bend the essence of ki itself.");
+            Tooltip.SetDefault("'Looks like it could bend the essence of ki itself.'");
         }
 
         public override void SetDefaults()

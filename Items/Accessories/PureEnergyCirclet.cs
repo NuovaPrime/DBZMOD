@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("It radiates a unbelievably pure presence." +
+            Tooltip.SetDefault("'It radiates a unbelievably pure presence.'" +
                 "\n12% Increased Ki damage" +
                 "\nIncreased Ki regen" +
                 "\n+300 Max Ki" +

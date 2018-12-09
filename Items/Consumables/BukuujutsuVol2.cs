@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Consumables
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bukuujutsu Guide Vol 2 - Lux Ruinam");
-            Tooltip.SetDefault("It has an ancient technique inscribed in it, holding it makes your feet feel softer.");
+            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes your feet feel softer.'");
         }
 
 

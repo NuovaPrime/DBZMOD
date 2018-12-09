@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Armor.Vanity
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The head of the ancient god of balance");
+            Tooltip.SetDefault("'The head of a god of morality.'");
             DisplayName.SetDefault("Green God Head");
         }
 

@@ -13,7 +13,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Astral Essentia");
-            Tooltip.SetDefault("The sky's astral energy emanates from within.");
+            Tooltip.SetDefault("'The sky's astral energy emanates from within.'");
         }
 
         public override void SetDefaults()

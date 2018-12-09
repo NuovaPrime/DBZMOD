@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("It radiates with unstable energy." +
+            Tooltip.SetDefault("'It radiates with unstable energy.'" +
                 "\n9% increased ki damage" +
                 "\n+250 max ki" +
                 "\nHitting enemies has a small chance to fire off homing ki sparks.");

@@ -9,7 +9,7 @@ namespace DBZMOD.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Skeletal Essence");
-            Tooltip.SetDefault("A chunk of the dungeon's inhabitants.");
+            Tooltip.SetDefault("'A chunk of the dungeon's inhabitants.'");
         }
 
         public override void SetDefaults()
