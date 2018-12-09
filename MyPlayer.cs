@@ -877,11 +877,11 @@ namespace DBZMOD
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
 
-        public override void UpdateBiomeVisuals()
+        /*public override void UpdateBiomeVisuals()
         {
             bool useGodSky = Transformations.IsGodlike(player);
             player.ManageSpecialBiomeVisuals("DBZMOD:GodSky", useGodSky, player.Center);
-        }
+        }*/
 
         public override TagCompound Save()
         {
@@ -1206,15 +1206,19 @@ namespace DBZMOD
                 }
                 if (burningEnergyAmulet)
                 {
-                    //on fire aura
+                    FireAura();
+                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireAuraProj"), 1, 0, player.whoAmI);
                 }
                 if (iceTalisman)
                 {
-                    //frostburn aura
+                    FrostAura();
+                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FrostAuraProj"), 1, 0, player.whoAmI);
                 }
                 if (pureEnergyCirclet)
                 {
-                    //on fire and frostburn mix aura
+                    FireAura();
+                    FrostAura();
+                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireFrostAuraProj"), 1, 0, player.whoAmI);
                 }
             }
             else if (!IsCharging)
@@ -1574,7 +1578,52 @@ namespace DBZMOD
                 tDust.noGravity = true;
             }
         }
+        public void FrostAura()
+        {
+            const float AURAWIDTH = 2f;
 
+            for (int i = 0; i < 4; i++)
+            {
+                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
+                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
+
+                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 59, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+
+                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
+                {
+                    tDust.scale *= 0.75f;
+                }
+
+                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
+                dir.Normalize();
+
+                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
+                tDust.noGravity = true;
+            }            
+        }
+        public void FireAura()
+        {
+            const float AURAWIDTH = 2f;
+
+            for (int i = 0; i < 4; i++)
+            {
+                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
+                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
+
+                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 60, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+
+                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
+                {
+                    tDust.scale *= 0.75f;
+                }
+
+                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
+                dir.Normalize();
+
+                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
+                tDust.noGravity = true;
+            }
+        }
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);

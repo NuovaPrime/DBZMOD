@@ -340,6 +340,8 @@ V1.0.8
 
 7. Added a visual indication for flavor texts.
 
+8. Buffed flight time and vertical speed of the [[Nimbus Whistle|Nimbus]]
+
 == Fixes ==
 
 1. Fixed flickering with the [[Ki Diffuser]].
