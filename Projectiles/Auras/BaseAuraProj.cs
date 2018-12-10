@@ -58,16 +58,12 @@ namespace DBZMOD.Projectiles.Auras
             {
                 projectile.rotation = 0;
             }
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 10)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
-            }
+
+            // this might seem counterintuitive, but *reverse* the charge frame counter by 1
+            // this makes the base charge aura as slow as other auras, and makes other auras faster when charging
+            projectile.frameCounter--;
+
+
             if (BaseAuraTimer > 0)
             {
                 projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);

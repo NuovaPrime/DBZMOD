@@ -47,9 +47,15 @@ namespace Projectiles.Auras
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            int frameCounterLimit = modPlayer.IsCharging ? 3 : 5;
+            int frameCounterLimit = 3;
 
+            // normal frame progression
             projectile.frameCounter++;
+
+            // double the frame counter speed if charging
+            if (modPlayer.IsCharging)
+                projectile.frameCounter++;
+
             if (projectile.frameCounter > frameCounterLimit)
             {
                 projectile.frame++;
