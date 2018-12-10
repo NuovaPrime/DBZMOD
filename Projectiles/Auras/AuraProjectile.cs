@@ -65,9 +65,6 @@ namespace Projectiles.Auras
             {
                 projectile.frame = 0;
             }
-
-            // added so that projectile alpha is always half
-            projectile.alpha = 50;
             
             projectile.scale = 1.0f + ScaleExtra;
 
