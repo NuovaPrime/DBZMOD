@@ -32,7 +32,6 @@ namespace DBZMOD.Projectiles.Auras
             projectile.netUpdate = true;
             AuraOffset.Y = -30;
 			projectile.light = 1f;
-			projectile.alpha = 50;
         }
         public override void PostAI()
         {
@@ -60,7 +59,7 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.rotation = 0;
             }
             projectile.frameCounter++;
-            if (projectile.frameCounter > 2)
+            if (projectile.frameCounter > 10)
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
@@ -80,12 +79,18 @@ namespace DBZMOD.Projectiles.Auras
             }
             base.AI();
         }
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
+		
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
 			spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
             spriteBatch.End();
             spriteBatch.Begin();
-		}
+        }
     }
 }
