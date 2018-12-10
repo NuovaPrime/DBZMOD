@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).KiRegenRate += 2;
+            MyPlayer.ModPlayer(player).KiChargeRate += 2;
             MyPlayer.ModPlayer(player).KiEssence3 = true;
             return true;
 

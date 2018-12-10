@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
                 player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.10f;
-                player.GetModPlayer<MyPlayer>(mod).KiRegenRate += 1;
+                player.GetModPlayer<MyPlayer>(mod).KiChargeRate += 1;
                 player.detectCreature = true;
                 player.GetModPlayer<MyPlayer>(mod).KiSpeedAddition += 0.15f;
                 player.GetModPlayer<MyPlayer>(mod).battleKit = true;

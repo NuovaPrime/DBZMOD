@@ -1,6 +1,7 @@
 ﻿using DBZMOD;
 using DBZMOD.Projectiles.Auras;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Projectiles.Auras
                 return true;
             }
         }
-
+        
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -81,7 +82,7 @@ namespace Projectiles.Auras
                 // for right now, I'm just doing this with some hard coding. When we get more aura work done
                 // we can try to unify this code a bit.
                 bool isSSJ1Aura = projectile.modProjectile.GetType().IsAssignableFrom(typeof(SSJ1AuraProj));
-                double forwardOffset =  isSSJ1Aura ? 32 : 18;
+                double forwardOffset =  isSSJ1Aura ? 32 : 24;
                 double widthOffset = auraWidthRadius - (widthRadius + (AuraOffset.Y + forwardOffset));
                 double heightOffset = auraHeightRadius - (heightRadius + (AuraOffset.Y + forwardOffset));
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
@@ -91,22 +92,11 @@ namespace Projectiles.Auras
 
                 // offset the aura
                 projectile.Center = cartesianOffset;
-
-                //// netcode!
-                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                //{
-                //    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, player.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
-                //}
             }
             else
             {
                 projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y));
                 projectile.rotation = 0;
-                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                //{
-                //    Main.NewText(string.Format("Sending server a flight aura sync for player {0} projectile {1} position {2}, {3} rotation {4}", player.whoAmI, projectile.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation));
-                //    NetworkHelper.flightAuraSync.SendAuraInFlightChanges(256, player.whoAmI, player.whoAmI, projectile.position.X, projectile.position.Y, projectile.rotation);
-                //}
             }
         }
     }

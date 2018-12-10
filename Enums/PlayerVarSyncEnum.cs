@@ -26,6 +26,11 @@ namespace Enums
         IsHoldingKiWeapon,
         traitChecked,
         playerTrait,
-        IsFlying
+        IsFlying,
+        TriggerLeft,
+        TriggerRight,
+        TriggerUp,
+        TriggerDown,
+        ChargeMoveSpeed
     }
 }

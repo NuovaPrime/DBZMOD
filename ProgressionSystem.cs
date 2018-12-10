@@ -47,7 +47,7 @@ namespace DBZMOD
             SetKiExperience(GetKiExperience() + value);
         }
 
-        public void Update(TriggersSet triggersSet, Player player)
+        public void Update(Player player)
         {
             ProcessKiExperienceGain(MyPlayer.ModPlayer(player));
         }

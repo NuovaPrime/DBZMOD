@@ -314,7 +314,6 @@
     <Compile Include="ModWorld.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
-    <Compile Include="Network\FlightMovementPacketHandler.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PlayerPacketHandler.cs" />
     <Compile Include="Network\PacketHandler.cs" />

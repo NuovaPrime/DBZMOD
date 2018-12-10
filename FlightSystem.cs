@@ -24,44 +24,28 @@ namespace DBZMOD
         public const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
-        bool m_FlightMode = false;
-        bool SyncFlightMode = false;
         Vector2 m_currentVel = new Vector2(0, 0);
         private int FLIGHT_KI_DRAIN_TIMER = 0;
 
         private int FlightDustType = 261;
-        //float m_targetRotation = 0.0f;
-
-        public void ToggleFlight(Player player, Mod mod)
-        {
-            m_FlightMode = !m_FlightMode;
-            if(!m_FlightMode && MyPlayer.ModPlayer(player).flightDampeningUnlocked)
-            {
-                player.AddBuff(mod.BuffType("KatchinFeet"), 600);
-            }
-        }
        
-        public void Update(TriggersSet triggersSet, Player player)
+        public void Update(Player player)
         {            
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            //check for ki
-            if (modPlayer.IsKiDepleted())
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);           
+
+            //check for ki or death lol
+            if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
-                m_FlightMode = false;
+                modPlayer.IsFlying = false;                
             }
 
-            if (m_FlightMode)
-            {             
+            if (modPlayer.IsFlying)
+            {
                 // cancel platform collision
                 player.DryCollision(true, true);
 
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
-                modPlayer.IsFlying = true;
-                //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                //{
-                //    NetworkHelper.flightSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, true);
-                //}
                 Vector2 m_rotationDir = Vector2.Zero;
 
                 //m_targetRotation = 0;
@@ -71,23 +55,23 @@ namespace DBZMOD
                 int totalFlightUsage = FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd;
                 float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
 
-                if (triggersSet.Up)
+                if (modPlayer.IsUpHeld)
                 {
                     m_currentVel.Y -= totalFlightSpeed;
                     m_rotationDir = Vector2.UnitY;
                 }
-                else if (triggersSet.Down)
+                else if (modPlayer.IsDownHeld)
                 {
                     m_currentVel.Y += totalFlightSpeed;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
-                if (triggersSet.Right)
+                if (modPlayer.IsRightHeld)
                 {
                     m_currentVel.X += totalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
-                else if (triggersSet.Left)
+                else if (modPlayer.IsLeftHeld)
                 {
                     m_currentVel.X -= totalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
@@ -176,31 +160,23 @@ namespace DBZMOD
                     // if the player is "running", stop that. EXPERIMENTAL
                     player.velocity.Y = -0.4001f;                    
                 }
-
-                // netcode!
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, player.fullRotationOrigin.X, player.fullRotationOrigin.Y, FlightDustType, boostSpeed);
-                }
             }
 
             // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.
-            if (!m_FlightMode && SyncFlightMode != m_FlightMode)
+            if (!modPlayer.IsFlying)
+            {                
+                player.fullRotation = MathHelper.ToRadians(0);
+                AddKatchinFeetBuff(player);
+            }
+        }
+
+        public void AddKatchinFeetBuff(Player player)
+        {
+            if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
             {
                 Mod mod = ModLoader.GetMod("DBZMOD");
-                player.fullRotation = MathHelper.ToRadians(0);
-                modPlayer.IsFlying = false;
-                // netcode!
-                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                {
-                    NetworkHelper.flightMovementSync.SendFlightChanges(256, player.whoAmI, player.whoAmI, player.position.X, player.position.Y, player.velocity.X, player.velocity.Y, player.fullRotation, player.fullRotationOrigin.X, player.fullRotationOrigin.Y, FlightDustType, 0f);
-                }
-                if (modPlayer.flightDampeningUnlocked)
-                {
-                    player.AddBuff(mod.BuffType("KatchinFeet"), 600);
-                }
+                player.AddBuff(mod.BuffType("KatchinFeet"), 600);
             }
-            SyncFlightMode = m_FlightMode;
         }
 
         public static void SpawnFlightDust(Player thePlayer, float boostSpeed, int flightDustType, float scale)
