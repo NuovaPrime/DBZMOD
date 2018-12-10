@@ -21,7 +21,6 @@ namespace DBZMOD.Projectiles.Auras
             projectile.width = 113;
             projectile.height = 115;
             projectile.aiStyle = 0;
-            projectile.alpha = 70;
             projectile.timeLeft = 10;
             projectile.friendly = true;
             projectile.tileCollide = false;
