@@ -55,7 +55,7 @@ namespace DBZMOD.Projectiles
 				spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
 			}
 			return true;
-			}
+		}
 		
         public override void SetStaticDefaults()
         {
