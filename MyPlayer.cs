@@ -1312,14 +1312,14 @@ namespace DBZMOD
             // check if the player isn't moving quickly, counts as being mostly stationary during flight
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
 
-            //if (Math.Ceiling(Main.time) % 60 == 0)
-            //{
-            //    if (player.whoAmI != Main.myPlayer)
-            //    {
-            //        DebugUtil.Log(string.Format("I think player {0} is... charging? {1}, ki? {2} / {3}, channeling? {4}, flying? {5}, stationary? {6}", player.whoAmI, IsCharging, GetKi(), OverallKiMax(), player.channel, IsFlying, isPlayerMostlyStationary));
-            //        DebugUtil.Log(string.Format("Frag1 {0} Frag2 {1} Frag3 {2} Frag4 {3} Frag5 {4}", Fragment1, Fragment2, Fragment3, Fragment4, Fragment5));
-            //    }
-            //}
+            if (Math.Ceiling(Main.time) % 600 == 0)
+            {
+                if (player.whoAmI != Main.myPlayer)
+                {
+                    DebugUtil.Log(string.Format("I think player {0} is... charging? {1}, ki? {2} / {3}, channeling? {4}, flying? {5}, stationary? {6}", player.whoAmI, IsCharging, GetKi(), OverallKiMax(), player.channel, IsFlying, isPlayerMostlyStationary));
+                    DebugUtil.Log(string.Format("Frag1 {0} Frag2 {1} Frag3 {2} Frag4 {3} Frag5 {4}", Fragment1, Fragment2, Fragment3, Fragment4, Fragment5));
+                }
+            }
 
             // various effects while charging
             if (IsCharging && (GetKi() < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
@@ -1886,11 +1886,18 @@ namespace DBZMOD
 
         public override void PlayerConnect(Player player)
         {
-            if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                DebugUtil.Log("I am requesting sync from the server for all players");
-                // players already sync themselves to the server automatically, but they need to request the sync of other players who are already on
-                NetworkHelper.playerSync.SendServerSyncAllPlayersRequest(256, player.whoAmI);
+                if (player.whoAmI != Main.myPlayer)
+                {
+                    DebugUtil.Log(string.Format("I am player {0}", Main.myPlayer));
+
+                    DebugUtil.Log(string.Format("I am requesting my information be sent to player {0}", player.whoAmI));
+                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
+
+                    DebugUtil.Log(string.Format("I am sending a request to the server to ship me that player's data."));
+                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
+                }
             }
         }
 

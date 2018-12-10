@@ -12,8 +12,8 @@ namespace Network
     {
         // this timer keeps the ki sync from firing *every frame* which really hurts performance.
         public const byte SyncPlayer = 43;
-        public const byte RequestSyncAll = 44;
-        public const byte SyncTriggers = 45;
+        public const byte SyncTriggers = 44;
+        public const byte RequestForSyncFromJoinedPlayer = 45;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -26,20 +26,48 @@ namespace Network
                 case (SyncPlayer):
                     ReceiveChangedPlayerData(reader, fromWho);
                     break;
-                case (RequestSyncAll):
-                    ReceiveSyncAllRequest(reader, fromWho);
-                    break;
                 case (SyncTriggers):
                     ReceiveSyncTriggers(reader, fromWho);
+                    break;
+                case (RequestForSyncFromJoinedPlayer):
+                    int whichPlayersDataNeedsRelay = reader.ReadInt32();
+                    DebugUtil.Log(string.Format("I have received a request from {0} to send {1}'s info. Sending...", fromWho, whichPlayersDataNeedsRelay));
+                    SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
             }
         }
 
-        // should always be to server, from joining player
-        public void SendServerSyncAllPlayersRequest(int toWho, int fromWho)
+        public void RequestPlayerSendTheirInfo(int toWho, int fromWho, int playerWhoseDataIneed)
         {
-            var packet = GetPacket(RequestSyncAll, fromWho);
+            ModPacket packet = GetPacket(RequestForSyncFromJoinedPlayer, fromWho);
+            packet.Write(playerWhoseDataIneed);
             packet.Send(toWho, fromWho);
+        }
+
+        // should always be to server, from joining player
+        public void SendPlayerInfoToPlayerFromOtherPlayer(int toWho, int fromWho)
+        {
+            Player player = Main.player[fromWho];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            SendChangedKiMax2(toWho, fromWho, fromWho, modPlayer.KiMax2);
+            SendChangedKiMax3(toWho, fromWho, fromWho, modPlayer.KiMax3);
+            SendChangedKiMaxMult(toWho, fromWho, fromWho, modPlayer.KiMaxMult);
+            SendChangedIsTransforming(toWho, fromWho, fromWho, modPlayer.IsTransforming);
+            SendChangedFragment1(toWho, fromWho, fromWho, modPlayer.Fragment1);
+            SendChangedFragment2(toWho, fromWho, fromWho, modPlayer.Fragment2);
+            SendChangedFragment3(toWho, fromWho, fromWho, modPlayer.Fragment3);
+            SendChangedFragment4(toWho, fromWho, fromWho, modPlayer.Fragment4);
+            SendChangedFragment5(toWho, fromWho, fromWho, modPlayer.Fragment5);
+            SendChangedIsCharging(toWho, fromWho, fromWho, modPlayer.IsCharging);
+            SendChangedJungleMessage(toWho, fromWho, fromWho, modPlayer.JungleMessage);
+            SendChangedHellMessage(toWho, fromWho, fromWho, modPlayer.HellMessage);
+            SendChangedEvilMessage(toWho, fromWho, fromWho, modPlayer.EvilMessage);
+            SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.MushroomMessage);
+            SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.IsHoldingKiWeapon);
+            SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
+            SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
+            SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.IsFlying);
+            SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -279,48 +307,6 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(kiCurrent);
             packet.Send(toWho, fromWho);
-        }
-
-        // receive a request from a user to forward all other connected user's data.
-        public void ReceiveSyncAllRequest(BinaryReader reader, int fromWho)
-        {
-            // this uses the same dysfunctional loop as the npc checks, because Main.player is nightmare fuel.
-            for (int i = 0; i < Main.player.Length; i++)
-            {
-                // i wish I could tell you why this is a thing.
-                Player player = Main.player[i];
-                // this. wtf is this terraria. why?
-                if (player.whoAmI != i)
-                {
-                    continue;
-                }
-
-                // don't send the players info to themselves.
-                if (player.whoAmI == fromWho)
-                    continue;
-
-                DebugUtil.Log(string.Format("Sending sync-all packet to {0} for player {1}", player.whoAmI, fromWho));
-                MyPlayer modPlayer = Main.player[fromWho].GetModPlayer<MyPlayer>();
-                SendChangedKiMax2(player.whoAmI, 256, fromWho, modPlayer.KiMax2);
-                SendChangedKiMax3(player.whoAmI, 256, fromWho, modPlayer.KiMax3);
-                SendChangedKiMaxMult(player.whoAmI, 256, fromWho, modPlayer.KiMaxMult);
-                SendChangedIsTransforming(player.whoAmI, 256, fromWho, modPlayer.IsTransforming);
-                SendChangedFragment1(player.whoAmI, 256, fromWho, modPlayer.Fragment1);
-                SendChangedFragment2(player.whoAmI, 256, fromWho, modPlayer.Fragment2);
-                SendChangedFragment3(player.whoAmI, 256, fromWho, modPlayer.Fragment3);
-                SendChangedFragment4(player.whoAmI, 256, fromWho, modPlayer.Fragment4);
-                SendChangedFragment5(player.whoAmI, 256, fromWho, modPlayer.Fragment5);
-                SendChangedIsCharging(player.whoAmI, 256, fromWho, modPlayer.IsCharging);
-                SendChangedJungleMessage(player.whoAmI, 256, fromWho, modPlayer.JungleMessage);
-                SendChangedHellMessage(player.whoAmI, 256, fromWho, modPlayer.HellMessage);
-                SendChangedEvilMessage(player.whoAmI, 256, fromWho, modPlayer.EvilMessage);
-                SendChangedMushroomMessage(player.whoAmI, 256, fromWho, modPlayer.MushroomMessage);
-                SendChangedIsHoldingKiWeapon(player.whoAmI, 256, fromWho, modPlayer.IsHoldingKiWeapon);
-                SendChangedTraitChecked(player.whoAmI, 256, fromWho, modPlayer.traitChecked);
-                SendChangedPlayerTrait(player.whoAmI, 256, fromWho, modPlayer.playerTrait);
-                SendChangedIsFlying(player.whoAmI, 256, fromWho, modPlayer.IsFlying);
-                SendChangedKiCurrent(player.whoAmI, 256, fromWho, modPlayer.GetKi());
-            }
         }
 
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
