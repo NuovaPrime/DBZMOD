@@ -958,11 +958,11 @@ namespace DBZMOD
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
 
-        public override void UpdateBiomeVisuals()
+        /*public override void UpdateBiomeVisuals()
         {
             bool useGodSky = Transformations.IsGodlike(player);
             player.ManageSpecialBiomeVisuals("DBZMOD:GodSky", useGodSky, player.Center);
-        }
+        }*/
 
         public override TagCompound Save()
         {

@@ -207,6 +207,7 @@
     <Compile Include="Items\Armor\Vanity\GreenGodHead.cs" />
     <Compile Include="Items\AstralEssentia.cs" />
     <Compile Include="Items\CalmKiCrystal.cs" />
+    <Compile Include="Items\CoarseRock.cs" />
     <Compile Include="Items\Consumables\BukuujutsuVol1.cs" />
     <Compile Include="Items\Consumables\BukuujutsuVol2.cs" />
     <Compile Include="Items\Consumables\BukuujutsuVol3.cs" />
@@ -311,7 +312,7 @@
     <Compile Include="Items\Weapons\Tier_6\SuperSpiritBomb.cs" />
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
-    <Compile Include="ModWorld.cs" />
+    <Compile Include="DBZWorld.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
@@ -446,6 +447,8 @@
     <Compile Include="Tiles\KaiTable.cs" />
     <Compile Include="Tiles\KiLantern.cs" />
     <Compile Include="Tiles\RadiantFragmentBlock.cs" />
+    <Compile Include="Tiles\Wasteland\CoarseRockTile.cs" />
+    <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
     <Compile Include="Buffs\TransBuff.cs" />
     <Compile Include="UI\EasyMenu.cs" />
@@ -560,6 +563,7 @@
     <Content Include="Sounds\SSJAura.wav" />
     <Content Include="Sounds\SwordSlash.wav" />
     <Content Include="Sounds\Transmission.wav" />
+    <Content Include="Tiles\Wasteland\CoarseRockTile.png" />
     <Content Include="UI\Buttons\LSSJ2ButtonImage.png" />
     <Content Include="UI\Buttons\LSSJButtonImage.png" />
     <Content Include="UI\Buttons\LSSJGButtonImage.png" />
