@@ -25,7 +25,7 @@ namespace DBZMOD
         const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
-        public static void Update(Player player)
+        public static void Update(Player player, bool wasFlying)
         {
             // this might seem weird but the server isn't allowed to control the flight system.
             if (Main.netMode == NetmodeID.Server)
@@ -119,6 +119,7 @@ namespace DBZMOD
 
                 //calculate rotation
                 float radRot = 0;
+                DebugUtil.Log(string.Format("m_rotation is X: {0} Y: {1}", m_rotationDir.X, m_rotationDir.Y));
                 if (m_rotationDir != Vector2.Zero)
                 {
                     m_rotationDir.Normalize();
@@ -132,12 +133,11 @@ namespace DBZMOD
                             radRot -= MathHelper.ToRadians(180);
                         else
                         {
-                            if (player.velocity.X > 0)
+                            if (player.velocity.X >= 0)
                                 radRot = MathHelper.ToRadians(180);
                             else if (player.velocity.X < 0)
                                 radRot = MathHelper.ToRadians(-180);
                         }
-
                     }
                 }
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
@@ -169,7 +169,11 @@ namespace DBZMOD
             if (!modPlayer.IsFlying)
             {                
                 player.fullRotation = MathHelper.ToRadians(0);
-                AddKatchinFeetBuff(player);
+
+                if (wasFlying)
+                {
+                    AddKatchinFeetBuff(player);
+                }
             }
         }
 
