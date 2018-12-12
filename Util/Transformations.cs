@@ -831,7 +831,7 @@ namespace Util
             }
 
             // whatever happened here, the function couldn't find a next step. Either the player is maxed in their steps, or something bad happened.
-            return currentTransformation;
+            return null;
         }
 
         // based on some conditions, figure out what the previous "step" of kaioken should be.

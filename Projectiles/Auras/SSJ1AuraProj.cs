@@ -33,11 +33,12 @@ namespace DBZMOD.Projectiles.Auras
             BaseAuraTimer = 5;
             AuraOffset.Y = -30;
             IsSSJAura = true;
-			projectile.light = 1f;
+			projectile.light = 1f;            
         }
 
         public override void AI()
         {
+            DebugUtil.Log("Zoom is at " + Main.zoomX + ", " + Main.zoomY);
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(Transformations.SSJ1.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId) && !player.HasBuff(Transformations.ASSJ.BuffId) && !player.HasBuff(Transformations.USSJ.BuffId))
             {

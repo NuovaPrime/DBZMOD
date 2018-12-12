@@ -245,7 +245,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
+            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult);
         }
 
         // all changes to Ki Current are now made through this method.
@@ -1529,7 +1529,8 @@ namespace DBZMOD
             timeRing = false;
             bloodstainedBandana = false;
             KiMax2 = 0;
-            KiMaxMult = 1f;
+            bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait") || player.HasBuff(mod.BuffType("UnknownLegendary");
+            KiMaxMult = hasLegendaryBuff ? 2f : 1f;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
