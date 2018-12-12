@@ -96,7 +96,9 @@ namespace DBZMOD.Projectiles
                 if (projectile.ai[1] % 7 == 0)
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);                
-            } else {
+            }
+            else if (!IsReleased)
+            {
                 IsReleased = true;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2;
                 projectile.tileCollide = false;

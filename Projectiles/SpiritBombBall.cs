@@ -104,7 +104,7 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 projectile.netUpdate2 = true;
-            } else
+            } else if (!IsReleased)
             {
                 IsReleased = true;
                 DebugUtil.Log(string.Format("Spirit bomb thinks it's being let go by player {0}", player.whoAmI));
