@@ -99,8 +99,9 @@ namespace DBZMOD.Projectiles
             }
             else if (!IsReleased)
             {
+                projectile.timeLeft = 600;
                 IsReleased = true;
-                projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2;
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2.8f;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
             }
