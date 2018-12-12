@@ -176,7 +176,7 @@ namespace DBZMOD
             {
                 float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
                 // don't neuter falling - keep the positive Y velocity if it's greater - if the player is jumping, this reduces their height. if falling, falling is always greater.                        
-                player.velocity = new Vector2(player.velocity.X /1.2f - chargeMoveSpeedBonus), Math.Max(player.velocity.Y, player.velocity.Y / (1.2f - chargeMoveSpeedBonus)));
+                player.velocity = new Vector2(player.velocity.X / (1.2f - chargeMoveSpeedBonus), Math.Max(player.velocity.Y, player.velocity.Y / (1.2f - chargeMoveSpeedBonus)));
             }
         }
 
