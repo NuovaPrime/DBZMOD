@@ -7,12 +7,12 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class SpiritBombBall : KiProjectile
     {
-        public bool Released = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spirit Bomb");
@@ -34,7 +34,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 10;
-        }
+        }        
 
         public override Color? GetAlpha(Color lightColor)
         {
@@ -65,63 +65,61 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
 
-            if (Main.myPlayer == projectile.owner)
+            // cancel channeling if the projectile is maxed
+            if (projectile.scale > 12 && player.channel)
             {
-                if (!Released)
-                {
-                    projectile.scale += 0.02f;
-                    projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
-
-                    for (int d = 0; d < 25; d++)
-                    {
-                        float angle = Main.rand.NextFloat(360);
-                        float angleRad = MathHelper.ToRadians(angle);
-                        Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-
-                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
-                        tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
-                        tDust.noGravity = true;
-                    }
-                    projectile.netUpdate = true;
-
-                    if (projectile.timeLeft < 399)
-                    {
-                        projectile.timeLeft = 400;
-                    }
-                    if (MyPlayer.ModPlayer(player).IsKiDepleted())
-                    {
-                        projectile.Kill();
-                    }
-
-                    MyPlayer.ModPlayer(player).AddKi(-2);
-                    player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
-
-                    //Rock effect
-                    projectile.ai[1]++;
-                    if (projectile.ai[1] % 7 == 0)
-                        Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                    projectile.netUpdate2 = true;
-                }
+                player.channel = false;
             }
 
-            //if button let go
-            if (!player.channel || projectile.scale > 12)
+            if (player.channel)
             {
-                if (!Released)
-                {
-                    Released = true;
-                    projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 3;
-                    projectile.tileCollide = false;
-                    projectile.damage *= (int)projectile.scale / 2;
-                }
-            }
+                projectile.scale += 0.02f;
+                projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
 
+                for (int d = 0; d < 25; d++)
+                {
+                    float angle = Main.rand.NextFloat(360);
+                    float angleRad = MathHelper.ToRadians(angle);
+                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    tDust.noGravity = true;
+                }
+                projectile.netUpdate = true;
+
+                if (projectile.timeLeft < 399)
+                {
+                    projectile.timeLeft = 400;
+                }
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
+                {
+                    projectile.Kill();
+                }
+
+                MyPlayer.ModPlayer(player).AddKi(-2);
+                player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+
+                //Rock effect
+                projectile.ai[1]++;
+                if (projectile.ai[1] % 7 == 0)
+                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                projectile.netUpdate2 = true;
+            } else
+            {
+                DebugUtil.Log(string.Format("Spirit bomb thinks it's being let go by player {0}", player.whoAmI));
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 3;
+                projectile.tileCollide = false;
+                projectile.damage *= (int)projectile.scale / 2;
+            }
         }
+
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
             projectile.scale -= 0.25f;
         }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float radius = projectile.width * projectile.scale / 2f;
@@ -129,6 +127,7 @@ namespace DBZMOD.Projectiles
 
             return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             spriteBatch.End();

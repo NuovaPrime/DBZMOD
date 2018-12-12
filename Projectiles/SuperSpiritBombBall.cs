@@ -12,7 +12,6 @@ namespace DBZMOD.Projectiles
 {
     public class SuperSpiritBombBall : KiProjectile
     {
-        public bool Released = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Super Spirit Bomb");
@@ -65,64 +64,53 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
 
-            if (Main.myPlayer == projectile.owner)
+            if (player.channel)
             {
-                if (!Released)
+                projectile.scale += 0.05f;
+                projectile.netUpdate = true;
+
+                projectile.position = player.position + new Vector2(0, -40 - (projectile.scale * 17));
+
+                for (int d = 0; d < 25; d++)
                 {
-                    projectile.scale += 0.05f;
-                    projectile.netUpdate = true;
+                    float angle = Main.rand.NextFloat(360);
+                    float angleRad = MathHelper.ToRadians(angle);
+                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    projectile.position = player.position + new Vector2(0, -40 - (projectile.scale * 17));
-
-                    for (int d = 0; d < 25; d++)
-                    {
-                        float angle = Main.rand.NextFloat(360);
-                        float angleRad = MathHelper.ToRadians(angle);
-                        Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-
-                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
-                        tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
-                        tDust.noGravity = true;
-                    }
-
-                    if (projectile.timeLeft < 399)
-                    {
-                        projectile.timeLeft = 400;
-                    }
-                    if (MyPlayer.ModPlayer(player).IsKiDepleted())
-                    {
-                        projectile.Kill();
-                    }
-
-                    MyPlayer.ModPlayer(player).AddKi(-5);
-                    player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
-
-                    //Rock effect
-                    projectile.ai[1]++;
-                    if (projectile.ai[1] % 7 == 0)
-                        Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    tDust.noGravity = true;
                 }
-            }
 
-            //if button let go
-            if (!player.channel)
-            {
-                if (!Released)
+                if (projectile.timeLeft < 399)
                 {
-                    Released = true;
-                    projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2;
-                    projectile.tileCollide = false;
-                    projectile.damage *= (int)projectile.scale / 2;
-
+                    projectile.timeLeft = 400;
                 }
-            }
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
+                {
+                    projectile.Kill();
+                }
 
+                MyPlayer.ModPlayer(player).AddKi(-5);
+                player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+
+                //Rock effect
+                projectile.ai[1]++;
+                if (projectile.ai[1] % 7 == 0)
+                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);                
+            } else {                    
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2;
+                projectile.tileCollide = false;
+                projectile.damage *= (int)projectile.scale / 2;
+            }
         }
+
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
             projectile.scale -= 0.25f;
         }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float radius = projectile.width * projectile.scale / 2f;
@@ -130,6 +118,7 @@ namespace DBZMOD.Projectiles
 
             return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             spriteBatch.End();
