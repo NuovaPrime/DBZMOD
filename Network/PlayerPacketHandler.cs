@@ -31,7 +31,7 @@ namespace Network
                     break;
                 case (RequestForSyncFromJoinedPlayer):
                     int whichPlayersDataNeedsRelay = reader.ReadInt32();
-                    DebugUtil.Log(string.Format("I have received a request from {0} to send {1}'s info. Sending...", fromWho, whichPlayersDataNeedsRelay));
+                    //DebugUtil.Log(string.Format("I have received a request from {0} to send {1}'s info. Sending...", fromWho, whichPlayersDataNeedsRelay));
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
             }
@@ -71,13 +71,13 @@ namespace Network
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
-        {
-            // DebugUtil.Log(string.Format("Sending kiMax2 changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
+        {            
             var packet = GetPacket(SyncTriggers, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerLeft);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
+            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerLeft.ToString(), fromWho, toWho, whichPlayer, isHeld));
         }
 
         public void SendChangedTriggerRight(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -88,6 +88,7 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
+            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerRight.ToString(), fromWho, toWho, whichPlayer, isHeld));
         }
 
         public void SendChangedTriggerUp(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -98,6 +99,7 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
+            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerUp.ToString(), fromWho, toWho, whichPlayer, isHeld));
         }
 
         public void SendChangedTriggerDown(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -108,6 +110,7 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
+            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerDown.ToString(), fromWho, toWho, whichPlayer, isHeld));
         }
 
         public void SendChangedKiMax2(int toWho, int fromWho, int whichPlayer, int kiMax2)
@@ -310,11 +313,11 @@ namespace Network
         }
 
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
-        {
+        {            
             PlayerVarSyncEnum syncEnum = (PlayerVarSyncEnum)reader.ReadInt32();
             int playerNum = reader.ReadInt32();
             MyPlayer player = Main.player[playerNum].GetModPlayer<MyPlayer>();
-
+            bool isHeld = reader.ReadBoolean();
             // if this is a server, start to assemble the relay packet.
             ModPacket packet = null;
             if (Main.netMode == NetmodeID.Server)
@@ -327,34 +330,37 @@ namespace Network
             switch(syncEnum)
             {
                 case PlayerVarSyncEnum.TriggerLeft:
-                    player.IsLeftHeld = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        packet.Write(player.IsLeftHeld);
+                    player.IsLeftHeld = isHeld;
+                    //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsLeftHeld));
+                    if (Main.netMode == NetmodeID.Server)                    {
+                        packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerRight:
-                    player.IsRightHeld = reader.ReadBoolean();
+                    player.IsRightHeld = isHeld;
+                    //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsRightHeld));
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsRightHeld);
+                        packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerUp:
-                    player.IsUpHeld = reader.ReadBoolean();
+                    player.IsUpHeld = isHeld;
+                    //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsUpHeld));
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsUpHeld);
+                        packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerDown:
-                    player.IsDownHeld = reader.ReadBoolean();
+                    player.IsDownHeld = isHeld;
+                    // DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsDownHeld));
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsDownHeld);
+                        packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
                     break;
@@ -532,7 +538,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.KiCurrent:
-                    player.SetKi(reader.ReadInt32());
+                    player.SetKi(reader.ReadInt32(), true);
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.GetKi());

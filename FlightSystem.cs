@@ -19,23 +19,27 @@ namespace DBZMOD
 {
     public class FlightSystem
     {
+
         //constants
         const int FLIGHT_KI_DRAIN = 4;
-        public const float BURST_SPEED = 0.5f;
+        const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
-        Vector2 m_currentVel = new Vector2(0, 0);
-        private int FLIGHT_KI_DRAIN_TIMER = 0;
+        public static void Update(Player player)
+        {
+            // this might seem weird but the server isn't allowed to control the flight system.
+            if (Main.netMode == NetmodeID.Server)
+                return;
 
-        private int FlightDustType = 261;
-       
-        public void Update(Player player)
-        {            
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);           
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+
+            if (Math.Ceiling(Main.time % 60) == 0)
+                DebugUtil.Log(string.Format("Update flight firing for player {0} whose controls are Up {1} Down {2} Left {3} Right {4}", player.whoAmI, modPlayer.IsUpHeld, modPlayer.IsDownHeld, modPlayer.IsLeftHeld, modPlayer.IsRightHeld));
 
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
+                // DebugUtil.Log(string.Format("Disabling flying on player {0} because ki is depleted or player is dead? Player was flying.", player.whoAmI));
                 modPlayer.IsFlying = false;                
             }
 
@@ -48,36 +52,40 @@ namespace DBZMOD
                 player.fullRotationOrigin = new Vector2(11, 22);
                 Vector2 m_rotationDir = Vector2.Zero;
 
-                //m_targetRotation = 0;
+                int FlightDustType = 261;
 
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (modPlayer.IsCharging ? 1 : 0);
-                int totalFlightUsage = FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd;
+                int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd);
                 float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
 
                 if (modPlayer.IsUpHeld)
                 {
-                    m_currentVel.Y -= totalFlightSpeed;
+                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    player.velocity.Y -= totalFlightSpeed;
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
-                    m_currentVel.Y += totalFlightSpeed;
+                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    player.velocity.Y += totalFlightSpeed;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
-                    m_currentVel.X += totalFlightSpeed;
+                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    player.velocity.X += totalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
-                    m_currentVel.X -= totalFlightSpeed;
+                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    player.velocity.X -= totalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
 
-                if (m_currentVel.Length() > 0.5f)
+                if (player.velocity.Length() > 0.5f)
                 {
                     SpawnFlightDust(player, boostSpeed, FlightDustType, 0f);
                 }
@@ -103,10 +111,11 @@ namespace DBZMOD
                     FlightDustType = 267;
                 }
 
-                //caluclate velocity
-                player.velocity = m_currentVel - (Vector2.UnitY * 0.4f);
-                m_currentVel.X = MathHelper.Lerp(m_currentVel.X, 0, 0.1f);
-                m_currentVel.Y = MathHelper.Lerp(m_currentVel.Y, 0, 0.1f);
+                //calculate velocity
+                player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);
+                player.velocity.Y = MathHelper.Lerp(player.velocity.Y, 0, 0.1f);
+                // keep the player suspended at worst.
+                player.velocity = player.velocity - (Vector2.UnitY * 0.4f);
 
                 //calculate rotation
                 float radRot = 0;
@@ -123,36 +132,30 @@ namespace DBZMOD
                             radRot -= MathHelper.ToRadians(180);
                         else
                         {
-                            if (m_currentVel.X > 0)
+                            if (player.velocity.X > 0)
                                 radRot = MathHelper.ToRadians(180);
-                            else if (m_currentVel.X < 0)
+                            else if (player.velocity.X < 0)
                                 radRot = MathHelper.ToRadians(-180);
                         }
 
                     }
                 }
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
-                FLIGHT_KI_DRAIN_TIMER++;
+
                 //drain ki
                 if (!modPlayer.flightUpgraded)
                 {
-                    if (FLIGHT_KI_DRAIN_TIMER >= 1)
+                    if (Main.time > 0 && Main.time % 2 == 0)
                     {
-                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1);
-                        FLIGHT_KI_DRAIN_TIMER = 0;
+                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1);                        
                     }
                 }
-                else if (modPlayer.flightUpgraded)
+                else
                 {
-                    if (FLIGHT_KI_DRAIN_TIMER >= 3)
+                    if (Main.time > 0 && Main.time % 4 == 0)
                     {
-                        modPlayer.AddKi(-1);
-                        FLIGHT_KI_DRAIN_TIMER = 0;
+                        modPlayer.AddKi(-1);                        
                     }
-                }
-                if (totalFlightUsage < 1)
-                {
-                    totalFlightUsage = 1;
                 }
 
                 if (player.velocity.Y == -0.4f && Math.Abs(player.velocity.X) > 0.5f)
@@ -170,7 +173,7 @@ namespace DBZMOD
             }
         }
 
-        public void AddKatchinFeetBuff(Player player)
+        public static void AddKatchinFeetBuff(Player player)
         {
             if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
             {

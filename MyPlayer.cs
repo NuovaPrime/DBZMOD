@@ -238,7 +238,6 @@ namespace DBZMOD
         #endregion
 
         #region Classes
-        FlightSystem m_flightSystem = new FlightSystem();
         ProgressionSystem m_progressionSystem = new ProgressionSystem();
         FistSystem m_fistSystem = new FistSystem();
         #endregion
@@ -255,9 +254,13 @@ namespace DBZMOD
             SetKi(KiCurrent + kiAmount);
         }
 
-        public void SetKi(int kiAmount)
+        public void SetKi(int kiAmount, bool isSync = false)
         {
-            KiCurrent = kiAmount;
+            // this might seem weird, but remote clients aren't allowed to set eachothers ki. This prevents desync issues.
+            if (player.whoAmI == Main.myPlayer || isSync)
+            {
+                KiCurrent = kiAmount;
+            }
         }
 
         // return the amount of ki the player has, readonly
@@ -634,7 +637,7 @@ namespace DBZMOD
             KiBar.visible = true;
 
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
-            m_flightSystem.Update(player);
+            FlightSystem.Update(player);
 
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
@@ -1309,20 +1312,19 @@ namespace DBZMOD
 
         public void HandleChargeEffects()
         {
-            // check if the player isn't moving quickly, counts as being mostly stationary during flight
-            bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-
             if (Math.Ceiling(Main.time) % 600 == 0)
             {
                 if (player.whoAmI != Main.myPlayer)
                 {
-                    DebugUtil.Log(string.Format("I think player {0} is... charging? {1}, ki? {2} / {3}, channeling? {4}, flying? {5}, stationary? {6}", player.whoAmI, IsCharging, GetKi(), OverallKiMax(), player.channel, IsFlying, isPlayerMostlyStationary));
-                    DebugUtil.Log(string.Format("Frag1 {0} Frag2 {1} Frag3 {2} Frag4 {3} Frag5 {4}", Fragment1, Fragment2, Fragment3, Fragment4, Fragment5));
+                    //DebugUtil.Log(string.Format("I think player {0} is... charging? {1}, ki? {2} / {3}, channeling? {4}, flying? {5}, stationary? {6}", player.whoAmI, IsCharging, GetKi(), OverallKiMax(), player.channel, IsFlying, isPlayerMostlyStationary));
+                    //DebugUtil.Log(string.Format("Frag1 {0} Frag2 {1} Frag3 {2} Frag4 {3} Frag5 {4}", Fragment1, Fragment2, Fragment3, Fragment4, Fragment5));
                 }
             }
 
             // various effects while charging
-            if (IsCharging && (GetKi() < OverallKiMax()) && !player.channel && (!IsFlying || isPlayerMostlyStationary))
+            // if the player is flying and moving, charging applies a speed boost and doesn't recharge ki, but also doesn't slow the player.
+            bool isAnyKeyHeld = IsLeftHeld || IsRightHeld || IsUpHeld || IsDownHeld;
+            if (IsCharging && (GetKi() < OverallKiMax()) && !player.channel && (!IsFlying || !isAnyKeyHeld))
             {
                 // determine base regen rate and bonuses
                 AddKi(KiChargeRate + ScarabChargeRateAdd);
@@ -1890,12 +1892,12 @@ namespace DBZMOD
             {
                 if (player.whoAmI != Main.myPlayer)
                 {
-                    DebugUtil.Log(string.Format("I am player {0}", Main.myPlayer));
+                    //DebugUtil.Log(string.Format("I am player {0}", Main.myPlayer));
 
-                    DebugUtil.Log(string.Format("I am requesting my information be sent to player {0}", player.whoAmI));
+                    //DebugUtil.Log(string.Format("I am requesting my information be sent to player {0}", player.whoAmI));
                     NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
 
-                    DebugUtil.Log(string.Format("I am sending a request to the server to ship me that player's data."));
+                    //DebugUtil.Log(string.Format("I am sending a request to the server to ship me that player's data."));
                     NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
                 }
             }
