@@ -289,7 +289,7 @@ namespace DBZMOD
             bool isDisplayingHellMessage = false;
             bool isDisplayingEvilMessage = false;
             bool isDisplayingMushroomMessage = false;
-            DebugUtil.Log("Is npc a boss kill check");
+            // DebugUtil.Log("Is npc a boss kill check");
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 DoPlayerMessageCheck(Main.player[Main.myPlayer], npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);

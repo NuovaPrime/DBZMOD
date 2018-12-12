@@ -33,8 +33,8 @@ namespace DBZMOD
 
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            if (Math.Ceiling(Main.time % 60) == 0)
-                DebugUtil.Log(string.Format("Update flight firing for player {0} whose controls are Up {1} Down {2} Left {3} Right {4}", player.whoAmI, modPlayer.IsUpHeld, modPlayer.IsDownHeld, modPlayer.IsLeftHeld, modPlayer.IsRightHeld));
+            //if (Math.Ceiling(Main.time % 60) == 0)
+            //DebugUtil.Log(string.Format("Update flight firing for player {0} whose controls are Up {1} Down {2} Left {3} Right {4}", player.whoAmI, modPlayer.IsUpHeld, modPlayer.IsDownHeld, modPlayer.IsLeftHeld, modPlayer.IsRightHeld));
 
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
@@ -61,26 +61,26 @@ namespace DBZMOD
 
                 if (modPlayer.IsUpHeld)
                 {
-                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.Y -= totalFlightSpeed;
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
-                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.Y += totalFlightSpeed;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
-                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X += totalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
-                    DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
+                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X -= totalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
