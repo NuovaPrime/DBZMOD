@@ -116,10 +116,9 @@ namespace DBZMOD
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), ChargeLevel, false, false);
                     ChargeTimer = 0;
                 }
-                if (KiDrainTimer > 1 && !MyPlayer.ModPlayer(player).IsKiDepleted())
+                if (Main.time > 0 && Math.Ceiling(Main.time % 2) == 0 && !MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
                     MyPlayer.ModPlayer(player).AddKi(-KiDrainRate);
-                    KiDrainTimer = 0;
                 }
                 for (int d = 0; d < 4; d++)
                 {
