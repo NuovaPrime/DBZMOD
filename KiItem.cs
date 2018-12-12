@@ -100,12 +100,11 @@ namespace DBZMOD
                     projectile.Kill();
                 }
 
+                // if the player is channeling, increment the timer and apply some slowdown
                 if (player.channel && projectile.active)
                 {
                     ChargeTimer++;
-
-                    player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
-
+                    ApplyChannelingSlowdown(player);
                 }
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;
@@ -156,6 +155,29 @@ namespace DBZMOD
                 }
             }
         }
+
+        public static void ApplyChannelingSlowdown(Player player)
+        {
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+            if (modPlayer.IsFlying)
+            {
+                float yVelocity = 0f;
+                if (modPlayer.IsDownHeld || modPlayer.IsUpHeld)
+                {
+                    yVelocity = player.velocity.Y / 1.2f;
+                } else
+                {
+                    yVelocity = Math.Min(-0.4f, player.velocity.Y / 1.2f);
+                }
+                player.velocity = new Vector2(player.velocity.X / 1.4f, yVelocity);
+            }
+            else
+            {
+                // don't neuter falling - keep the positive Y velocity if it's greater - if the player is jumping, this reduces their height. if falling, falling is always greater.                        
+                player.velocity = new Vector2(player.velocity.X / 1.8f, Math.Max(player.velocity.Y, player.velocity.Y / 1.8f));
+            }
+        }
+
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
             Player player = Main.player[projectile.owner];

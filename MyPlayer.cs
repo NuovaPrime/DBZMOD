@@ -378,7 +378,7 @@ namespace DBZMOD
                 LightningFrameTimer = 0;
             }
 
-            if (Transformations.IsPlayerTransformed(player))
+            if (!Transformations.IsPlayerTransformed(player))
             {
                 KiDrainAddition = 0;
             }
@@ -1330,12 +1330,13 @@ namespace DBZMOD
                 AddKi(KiChargeRate + ScarabChargeRateAdd);
 
                 
-                // slow down the player a bunch
-                if (chargeMoveSpeed > 0 && (IsLeftHeld || IsRightHeld))
-                    player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
-                else
+                // slow down the player a bunch - only when not flying
+                if ((IsLeftHeld || IsRightHeld) && !IsFlying)
                 {
-                    player.velocity = new Vector2(0, player.velocity.Y);
+                    if (chargeMoveSpeed > 0)
+                        player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
+                    else
+                        player.velocity = new Vector2(0, player.velocity.Y);
                 }
 
                 // DebugUtil.Log(string.Format("I think player {0} is moving at {1}, {2}", player.whoAmI, player.velocity.X, player.velocity.Y));

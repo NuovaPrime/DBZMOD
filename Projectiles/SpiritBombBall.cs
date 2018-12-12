@@ -96,7 +96,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2);
-                player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
+                ApplyChannelingSlowdown(player);
 
                 //Rock effect
                 projectile.ai[1]++;

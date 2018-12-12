@@ -40,10 +40,6 @@ namespace Projectiles.Auras
             {
                 projectile.timeLeft = 10;
             }
-            if (player.channel)
-            {
-                player.velocity = new Vector2(0, player.velocity.Y);
-            }
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
