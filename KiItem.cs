@@ -161,20 +161,22 @@ namespace DBZMOD
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (modPlayer.IsFlying)
             {
+                float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
                 float yVelocity = 0f;
                 if (modPlayer.IsDownHeld || modPlayer.IsUpHeld)
                 {
-                    yVelocity = player.velocity.Y / 1.2f;
+                    yVelocity = player.velocity.Y / (1.2f - chargeMoveSpeedBonus);
                 } else
                 {
-                    yVelocity = Math.Min(-0.4f, player.velocity.Y / 1.2f);
+                    yVelocity = Math.Min(-0.4f, player.velocity.Y / (1.2f - chargeMoveSpeedBonus));
                 }
-                player.velocity = new Vector2(player.velocity.X / 1.4f, yVelocity);
+                player.velocity = new Vector2(player.velocity.X / (1.2f - chargeMoveSpeedBonus), yVelocity);
             }
             else
             {
+                float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
                 // don't neuter falling - keep the positive Y velocity if it's greater - if the player is jumping, this reduces their height. if falling, falling is always greater.                        
-                player.velocity = new Vector2(player.velocity.X / 1.8f, Math.Max(player.velocity.Y, player.velocity.Y / 1.8f));
+                player.velocity = new Vector2(player.velocity.X /1.2f - chargeMoveSpeedBonus), Math.Max(player.velocity.Y, player.velocity.Y / (1.2f - chargeMoveSpeedBonus)));
             }
         }
 
