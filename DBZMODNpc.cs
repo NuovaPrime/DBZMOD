@@ -718,11 +718,11 @@ namespace DBZMOD
                     }
                 }
             }
-            if (NPC.downedBoss1)
+            if (NPC.downedBoss2)
             {
-                if (npc.type == NPCID.MeteorHead)
+                if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor)
                 {
-                    if (Main.rand.Next(5) == 0)
+                    if (Main.rand.Next(100) == 0)
                     {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BurningEnergyAmulet"));
                     }
@@ -732,7 +732,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.IceBat || npc.type == NPCID.IceSlime || npc.type == NPCID.SpikedIceSlime)
                 {
-                    if (Main.rand.Next(7) == 0)
+                    if (Main.rand.Next(20) == 0)
                     {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("IceTalisman"));
                     }

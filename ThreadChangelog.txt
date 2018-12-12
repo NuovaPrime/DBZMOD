@@ -1,6 +1,6 @@
 1.0.2 Update Changelog
 
-== Fixes ==
+ Fixes 
 
 1. Fixed bug where all ssj hairs would stay on after dying.
 
@@ -10,7 +10,7 @@
 
 1.0.3 Update Changelog
 
-== Fixes ==
+ Fixes 
 
 1. Fixed bug where ssj hairs wouldn't disappear when powering down.
 
@@ -154,3 +154,29 @@ V1.0.7.1
 6. Fixed Legendary Trait not applying its x2 max Ki.
 7. Fixed debug text displaying when using the Radiant Glider
 8. Fixed various issues where bosses wouldn't drop their items at all or drop both at a time.
+
+V1.0.8.0
+
+1. Added a Configuration option to make Charging Aura|Charging a toggle.
+2. Added Black Diamond Shell, Buldarium Sigmite, Burning Energy Amulet, Ice Energy Talisman, Pure Energy Circlet and Bloodstained Bandana.
+3. Added Black Fusion Armor
+4. Flight now goes through platforms.
+5. Many new quick transforms, like going from Super Saiyan 3 to Super Saiyan God, etc.
+6. You can now step down a form by pressing Charging Aura|Charge and Power Down at the same time.
+7. New sprites for various Consumables, Consumables#Ki Potions|Ki Potions.
+8. Nerfed Demon Armor to be post-mechanical bosses.
+9. Added visual effects for the Battle Kit and Worn Gloves.
+10. Added a visual indication for flavor texts.
+11. Buffed flight time and vertical speed of the Nimbus Whistle|Nimbus
+12. Fixed flickering with the Ki Diffuser.
+13. The Charging Aura now disappears when you die or desync.
+14. Fixed Blinding Blade's homing.
+15. Fixed bug where you would sometime crash when reforging.
+16. Fixed Ki Diffuser giving buffs forever and such.
+17. Fixed bug where Destructo Disk Assault's mini disks did no damage.
+18. Fixed many issues where things wouldn't sync in multiplayer.
+19. Fixed crash issue with Dual Wielding.
+20. Fixed Destructo Disk being really loud.
+21. Fixed Dragon Crystal Infuser's rarity and value.
+22. Fixed issue where the Dryad's summoning items had no value.
+23. Added Time Ring and Potara Earrings.

@@ -369,3 +369,24 @@ V1.0.8
 == Patreon Items ==
 
 1. Added [[Time Ring]] and [[Potara Earrings]].
+
+
+V1.0.8.1
+
+== Changes ==
+
+1. Lowered drop rate of [[Ice Talisman]].
+
+2. [[Burning Energy Amulet]] now drops from anything near a meteor biome at a 1% chance.
+
+== Fixes ==
+
+1. Fixed bug where ASSJ and USSJ didn't drain [[Ki]].
+
+2. Fixed bug where [[Spirit Bomb]] followed your mouse and had a delayed explosion.
+
+3. Fixed a few more sync issues.
+
+4. Fixed the ki drain scaling on transformations.
+
+5. Fixed [[Katchin Feet]] being infinite.

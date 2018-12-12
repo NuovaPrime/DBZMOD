@@ -41,5 +41,7 @@ namespace Buffs
         public static string KaiokenFatigue = "TiredDebuff";
 
         public static string TransformationExhaustion = "TransExhaustionBuff";
+
+        public static string Spectrum = "SSJSBuff";
     }
 }

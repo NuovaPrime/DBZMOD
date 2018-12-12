@@ -1949,6 +1949,14 @@ namespace DBZMOD
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
+                    else if (player.HasBuff(Transformations.SPECTRUM.BuffId))
+                    {
+                        Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
+                    }
+                    if(player.HasBuff(Transformations.SSJG.BuffId))
+                    {
+                        Hair = null;
+                    }
                 }
             }
             else

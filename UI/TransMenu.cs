@@ -24,6 +24,7 @@ namespace DBZMOD.UI
         private UIImageButton lssjButtonTexture;
         private UIImageButton lssj2ButtonTexture;
         private UIImageButton ssjgButtonTexture;
+        private UIImageButton ssjSButtonTexture;
         private UIImage lockedImage1;
         private UIImage lockedImage2;
         private UIImage lockedImage3;
@@ -149,21 +150,37 @@ namespace DBZMOD.UI
                 0, 
                 0,
                 lssj2ButtonTexture);
+
+            InitButton(ref ssjSButtonTexture, GFX.SSJSButtonImage, new MouseEvent(TrySelectingSSJS),
+                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width,
+                PADDINGY + 55,
+                backPanelImage);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            lockedImage1.ImageScale = !player.SSJ1Achieved ? 1.0f : 0.0f;
+            Player player = Main.LocalPlayer;
 
-            if(player.IsPlayerLegendary())
+            lockedImage1.ImageScale = !modplayer.SSJ1Achieved ? 1.0f : 0.0f;
+
+            if(player.name == "Nuova")
             {
-                lockedImageL1.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
+                ssjSButtonTexture.SetVisibility(1.0f, 0.5f);
+            }
+            else
+            {
+                ssjSButtonTexture.SetVisibility(0.0f, 0.0f);
+            }
 
-                lockedImageL2.ImageScale = !player.LSSJ2Achieved ? 1.0f : 0.0f;
+            if (modplayer.IsPlayerLegendary())
+            {
+                lockedImageL1.ImageScale = !modplayer.LSSJAchieved ? 1.0f : 0.0f;
+
+                lockedImageL2.ImageScale = !modplayer.LSSJ2Achieved ? 1.0f : 0.0f;
 
                 lockedImage2.ImageScale = 1.0f;
 
@@ -179,7 +196,7 @@ namespace DBZMOD.UI
 
                 unknownImageL1.ImageScale = 0.0f;
 
-                unknownImageL2.ImageScale = !player.LSSJAchieved ? 1.0f : 0.0f;
+                unknownImageL2.ImageScale = !modplayer.LSSJAchieved ? 1.0f : 0.0f;
             }
             else
             {
@@ -188,16 +205,16 @@ namespace DBZMOD.UI
                 unknownImage2.ImageScale = 0.0f;
                 unknownImage3.ImageScale = 0.0f;
                 unknownImageG.ImageScale = 0.0f;
-                lockedImage2.ImageScale = !player.SSJ2Achieved ? 1.0f : 0.0f;
+                lockedImage2.ImageScale = !modplayer.SSJ2Achieved ? 1.0f : 0.0f;
 
-                lockedImage3.ImageScale = !player.SSJ3Achieved ? 1.0f : 0.0f;
+                lockedImage3.ImageScale = !modplayer.SSJ3Achieved ? 1.0f : 0.0f;
 
-                lockedImageG.ImageScale = !player.SSJGAchieved ? 1.0f : 0.0f;
+                lockedImageG.ImageScale = !modplayer.SSJGAchieved ? 1.0f : 0.0f;
 
                 lockedImageL1.ImageScale = 1.0f;
                 lockedImageL2.ImageScale = 0.0f;
+                
             }
-
         }
 
         /*
@@ -311,6 +328,16 @@ namespace DBZMOD.UI
                 if (!Main.dedServ)
                     Main.PlaySound(SoundID.MenuClose);
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
+            }
+        }
+        private void TrySelectingSSJS(UIMouseEvent evt, UIElement listeningelement)
+        {
+            Player player = Main.LocalPlayer;
+            if (player.name == "Nuova")
+            {
+                MenuSelection = MenuSelectionID.Spectrum;
+                if (!Main.dedServ)
+                    Main.PlaySound(SoundID.MenuTick);
             }
         }
 

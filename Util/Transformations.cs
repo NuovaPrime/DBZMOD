@@ -1,6 +1,7 @@
 ﻿using Buffs;
 using DBZMOD;
 using DBZMOD.Projectiles.Auras;
+using DBZMOD.Projectiles.Auras.Dev;
 using Enums;
 using Microsoft.Xna.Framework;
 using Network;
@@ -65,6 +66,7 @@ namespace Util
             _buffInfoDict[SSJ1Kaioken.BuffKeyName] = SSJ1Kaioken;
             _buffInfoDict[KaiokenFatigue.BuffKeyName] = KaiokenFatigue;
             _buffInfoDict[TransformationExhaustion.BuffKeyName] = TransformationExhaustion;
+            _buffInfoDict[SPECTRUM.BuffKeyName] = SPECTRUM;
         }
 
         // the following are cached info classes that get passed around for all sorts of things.
@@ -304,6 +306,19 @@ namespace Util
                 return _TransformationExhaustion;
             }
         }
+        public static BuffInfo _SPECTRUM;
+        public static BuffInfo SPECTRUM
+        {
+            get
+            {
+                if (_SPECTRUM == null)
+                {
+                    _SPECTRUM = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.Spectrum, modInstance.BuffType(BuffKeyNames.Spectrum), 0.7f, "Sounds/SSJAscension",
+                         "Super Saiyan Spectrum", DefaultTransformationTextColor, new Type[] { typeof(SSJSpectrumAuraProj) }, new string[] { "SSJSpectrumAuraProj" });
+                }
+                return _SPECTRUM;
+            }
+        }
 
         // returns the buff Id of a transformation menu selection
         public static BuffInfo GetBuffFromMenuSelection(MenuSelectionID menuId)
@@ -519,6 +534,8 @@ namespace Util
                 return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
             if (buff == SSJ1Kaioken)
                 return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+            if (buff == SPECTRUM)
+                return player.name == "Nuova";
             return false;
         }
 

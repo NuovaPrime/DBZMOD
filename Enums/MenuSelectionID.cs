@@ -16,6 +16,7 @@ namespace Enums
         LSSJ2 = 6,
         SSJB = 7,
         LSSJG = 8,
-        UI = 9         
+        UI = 9,
+        Spectrum = 69
     }
 }

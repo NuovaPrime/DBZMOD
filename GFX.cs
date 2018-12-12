@@ -24,6 +24,7 @@ namespace DBZMOD
         private const string SSJGBUTTON = BUTTON_DIRECTORY + "SSJGButtonImage";
         private const string LSSJBUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
         private const string LSSJ2BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage";
+        private const string SSJSBUTTON = BUTTON_DIRECTORY + "SSJSButtonImage";
         private const string BG = UI_DIRECTORY + "Bg";
         private const string LOCKED = UI_DIRECTORY + "LockedImage";
         private const string UNKNOWN = UI_DIRECTORY + "UnknownImage";
@@ -40,6 +41,7 @@ namespace DBZMOD
         public static Texture2D SSJGButtonImage;
         public static Texture2D LSSJButtonImage;
         public static Texture2D LSSJ2ButtonImage;
+        public static Texture2D SSJSButtonImage;
         public static Texture2D LockedImage;
         public static Texture2D UnknownImage;
         public static void LoadGFX(Mod mod)
@@ -55,6 +57,7 @@ namespace DBZMOD
             SSJGButtonImage = mod.GetTexture(SSJGBUTTON);
             LSSJButtonImage = mod.GetTexture(LSSJBUTTON);
             LSSJ2ButtonImage = mod.GetTexture(LSSJ2BUTTON);
+            SSJSButtonImage = mod.GetTexture(SSJSBUTTON);
             LockedImage = mod.GetTexture(LOCKED);
             UnknownImage = mod.GetTexture(UNKNOWN);
 
@@ -72,6 +75,7 @@ namespace DBZMOD
             LSSJButtonImage = null;
             LSSJ2ButtonImage = null;
             SSJGButtonImage = null;
+            SSJSButtonImage = null;
             LockedImage = null;
             BackPanel = null;
             UnknownImage = null;
