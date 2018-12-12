@@ -28,7 +28,6 @@ namespace DBZMOD
         public float ChargeTimerMax;
         public int ChargeLimit = 4;
         public int FinalChargeLimit = 4;
-        public int KiDrainTimer;
         public int SizeTimer;
         public int originalWidth;
         public int originalHeight;
@@ -83,7 +82,7 @@ namespace DBZMOD
             {
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    projectile.active = false;
+                    player.channel = false;
                 }
                 projectile.hide = true;
 
@@ -104,7 +103,6 @@ namespace DBZMOD
                 if (player.channel && projectile.active)
                 {
                     ChargeTimer++;
-                    KiDrainTimer++;
 
                     player.velocity = new Vector2(player.velocity.X / 3, player.velocity.Y);
 

@@ -30,27 +30,17 @@ namespace DBZMOD.Items.Weapons.Tier_6
             if (!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
-
             }
             item.value = 75000;
             item.rare = 8;
             KiDrain = 500;
             WeaponType = "Massive Blast";
         }
+
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Super Spirit Bomb");
+		    DisplayName.SetDefault("Super Spirit Bomb");
 		}
-
-        //public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        //{
-        //	//Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-        //	//if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-        //	//{
-        //	//	position += muzzleOffset;
-        //	//}
-        //	return true;
-        //}
 
         public override void AddRecipes()
         {
@@ -64,13 +54,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
+
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SuperSpiritBombBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
+            return player.ownedProjectileCounts[mod.ProjectileType("SuperSpiritBombBall")] == 0;
         }
     }
 }

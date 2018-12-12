@@ -13,6 +13,8 @@ namespace DBZMOD.Projectiles
 {
     public class SpiritBombBall : KiProjectile
     {
+        bool IsReleased = false;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spirit Bomb");
@@ -34,6 +36,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 10;
+            IsReleased = false;
         }        
 
         public override Color? GetAlpha(Color lightColor)
@@ -49,11 +52,6 @@ namespace DBZMOD.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!projectile.active)
-            {
-                return;
-            }
-
             Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("SpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
             proj.width *= (int)projectile.scale;
             proj.height *= (int)projectile.scale;
@@ -71,7 +69,7 @@ namespace DBZMOD.Projectiles
                 player.channel = false;
             }
 
-            if (player.channel)
+            if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.02f;
                 projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
@@ -94,7 +92,7 @@ namespace DBZMOD.Projectiles
                 }
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    projectile.Kill();
+                    IsReleased = true;
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2);
@@ -108,6 +106,7 @@ namespace DBZMOD.Projectiles
                 projectile.netUpdate2 = true;
             } else
             {
+                IsReleased = true;
                 DebugUtil.Log(string.Format("Spirit bomb thinks it's being let go by player {0}", player.whoAmI));
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 3;
                 projectile.tileCollide = false;

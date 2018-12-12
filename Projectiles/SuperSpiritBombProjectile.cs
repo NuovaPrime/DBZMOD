@@ -19,8 +19,7 @@ namespace DBZMOD.Projectiles
 				byte a2 = (byte)(100f * ((float)b2 / 255f));
 				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
 			}
-			return new Color(100, 100, 100, 100);	
-            return Color.AliceBlue;
+            return new Color(100, 100, 100, 100);
         }
 		
 		public int localtimer = 0;
@@ -92,7 +91,7 @@ namespace DBZMOD.Projectiles
    
         public override void Kill(int timeLeft)
         {
-              int maxdusts = 20;
+            int maxdusts = 20;
             if (!Main.dedServ)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble"));
               for (int i = 0; i < maxdusts; i++)

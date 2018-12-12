@@ -37,9 +37,10 @@ namespace DBZMOD.Items.Weapons.Tier_4
             KiDrain = 200;
             WeaponType = "Massive Blast";
         }
+
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Spirit Bomb");
+		    DisplayName.SetDefault("Spirit Bomb");
 		}
 
         //public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -63,11 +64,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         }
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SpiritBombBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
+            return player.ownedProjectileCounts[mod.ProjectileType("SpiritBombBall")] == 0;
         }
     }
 }

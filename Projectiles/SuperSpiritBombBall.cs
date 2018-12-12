@@ -12,6 +12,7 @@ namespace DBZMOD.Projectiles
 {
     public class SuperSpiritBombBall : KiProjectile
     {
+        bool IsReleased = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Super Spirit Bomb");
@@ -33,6 +34,7 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 10;
+            IsReleased = false;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -48,11 +50,6 @@ namespace DBZMOD.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!projectile.active)
-            {
-                return;
-            }
-
             Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0, 0), mod.ProjectileType("SuperSpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
             proj.width *= (int)projectile.scale;
             proj.height *= (int)projectile.scale;
@@ -64,7 +61,7 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
 
-            if (player.channel)
+            if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.05f;
                 projectile.netUpdate = true;
@@ -88,7 +85,7 @@ namespace DBZMOD.Projectiles
                 }
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    projectile.Kill();
+                    IsReleased = true;
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-5);
@@ -99,7 +96,8 @@ namespace DBZMOD.Projectiles
                 if (projectile.ai[1] % 7 == 0)
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);                
-            } else {                    
+            } else {
+                IsReleased = true;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 2;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
