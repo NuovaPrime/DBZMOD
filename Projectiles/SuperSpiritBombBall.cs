@@ -50,9 +50,9 @@ namespace DBZMOD.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0, 0), mod.ProjectileType("SuperSpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            proj.width *= (int)projectile.scale;
-            proj.height *= (int)projectile.scale;
+            //Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0, 0), mod.ProjectileType("SuperSpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
+            //proj.width *= (int)projectile.scale;
+            //proj.height *= (int)projectile.scale;
 
             projectile.active = false;
         }
