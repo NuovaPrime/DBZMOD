@@ -186,28 +186,7 @@ namespace DBZMOD
             }
             if (HealthDrainRate > 0)
             {
-                string drainRateDescriptor = string.Empty;
-                if (HealthDrainRate < 25)
-                {
-                    drainRateDescriptor = "slowly";
-                }
-                else if (HealthDrainRate < 50)
-                {
-                    // drain rate descriptor is already empty. There is no descriptor.
-                }
-                else if (HealthDrainRate < 100)
-                {
-                    drainRateDescriptor = "quickly";
-                }
-                else if (HealthDrainRate < 250)
-                {
-                    drainRateDescriptor = "rapidly";
-                }
-                else if (HealthDrainRate < 500)
-                {
-                    drainRateDescriptor = "extremely quickly";
-                }
-                displayString = string.Format("{0}\nDrains life {1}.", displayString, drainRateDescriptor);
+                displayString = string.Format("{0}\nDrains life -{1}/s.", displayString, HealthDrainRate / 2);
             }
             return displayString;
         }
