@@ -12,14 +12,13 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki " +
-                "\nand slightly drains life when below 30% ki.");
+            Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             DamageMulti = 4f;
-            SpeedMulti = 3f;
+            SpeedMulti = 4f;
             bool isMastered = modPlayer.MasteryLevel3 >= 1f;
             KiDrainRate = isMastered ? 4 : 6;
             float kiQuotient = (float)modPlayer.GetKi() / modPlayer.OverallKiMax();

@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            DamageMulti += 2;
+            DamageMulti *= 2f;
             MyPlayer.ModPlayer(player).zenkaiCharmActive = true;
         }
     }

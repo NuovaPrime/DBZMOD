@@ -12,12 +12,12 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("2.5x Damage, 2.5x Speed, Quickly Drains Ki.");
+            Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)
         {
             DamageMulti = 2.5f;
-            SpeedMulti = 1.5f;
+            SpeedMulti = 2.5f;
             if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
             {
                 KiDrainRate = 2;

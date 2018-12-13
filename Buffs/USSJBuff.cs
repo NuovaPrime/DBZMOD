@@ -12,7 +12,7 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("2.1x Damage, 10% less Speed, Drains alot of Ki.");
+            Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)
         {

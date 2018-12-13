@@ -12,12 +12,12 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("4.3x Damage, 4.3x Speed, Quickly Drains Ki.");
+            Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)
         {
             DamageMulti = 4.3f;
-            SpeedMulti = 3.3f;
+            SpeedMulti = 4.3f;
             KiDrainBuffMulti = 3f;
             KiDrainRate = 7;
             base.Update(player, ref buffIndex);
