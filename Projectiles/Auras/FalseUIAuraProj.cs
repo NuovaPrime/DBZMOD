@@ -25,11 +25,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            projectile.alpha = 250;
-			ScaleExtra = 0.15f;
-			AuraOffset.X = -1;
-			AuraOffset.Y = -10;
-
+            projectile.alpha = 0;
         }
 
         public override void AI()

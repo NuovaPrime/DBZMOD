@@ -12,7 +12,6 @@ namespace DBZMOD.Projectiles.Auras.Dev
 {
     public class SSJSpectrumAuraProj : AuraProjectile
     {
-        public int BaseAuraTimer;
         private int ChargeSoundTimer = 240;
         private int LightningTimer = 0;
 
@@ -22,8 +21,8 @@ namespace DBZMOD.Projectiles.Auras.Dev
         }
         public override void SetDefaults()
         {
-            projectile.width = 95;
-            projectile.height = 89;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
             projectile.friendly = true;
@@ -31,10 +30,8 @@ namespace DBZMOD.Projectiles.Auras.Dev
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            BaseAuraTimer = 5;
-            AuraOffset.Y = -40;
-            AuraOffset.X = -10;
-            IsSSJAura = true;
+            projectile.netUpdate = true;
+            AuraOffset.Y = -30;
 			projectile.light = 1f;
         }
         public override void AI()
@@ -53,11 +50,6 @@ namespace DBZMOD.Projectiles.Auras.Dev
             {
                 projectile.Kill();
             }
-            if (BaseAuraTimer > 0)
-            {
-                projectile.scale = 1.5f - 0.7f * (BaseAuraTimer / 5f);
-                BaseAuraTimer--;
-            }
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 420 && player.whoAmI == Main.myPlayer)
             {
@@ -65,15 +57,19 @@ namespace DBZMOD.Projectiles.Auras.Dev
                     player.GetModPlayer<MyPlayer>().transformationSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSG").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
             }
-            else
-            {
-                projectile.scale = 1.5f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.2f;
-            }
             base.AI();
+        }
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+			spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin();
         }
     }
 }

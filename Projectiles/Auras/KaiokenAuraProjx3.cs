@@ -16,12 +16,11 @@ namespace DBZMOD.Projectiles.Auras
         {
             Main.projFrames[projectile.type] = 4;
         }
-        public override void SetDefaults()
+		public override void SetDefaults()
         {
             projectile.width = 97;
             projectile.height = 102;
             projectile.aiStyle = 0;
-            projectile.alpha = 70;
             projectile.timeLeft = 10;
             projectile.friendly = true;
             projectile.tileCollide = false;
@@ -29,9 +28,8 @@ namespace DBZMOD.Projectiles.Auras
             projectile.penetrate = -1;
             projectile.damage = 0;
             KaioAuraTimer = 240;
-            AuraOffset.Y = -40;
             IsKaioAura = true;
-            ScaleExtra = 0.5f;
+            AuraOffset.Y = -24;
         }
         public override void AI()
         {

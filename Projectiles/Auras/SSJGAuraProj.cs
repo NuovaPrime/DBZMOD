@@ -12,7 +12,6 @@ namespace DBZMOD.Projectiles.Auras
 {
     public class SSJGAuraProj : AuraProjectile
     {
-        public int BaseAuraTimer;
         private int ChargeSoundTimer = 240;
         private int LightningTimer = 0;
 
@@ -31,47 +30,35 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            BaseAuraTimer = 5;
             AuraOffset.Y = -38;
-            ScaleExtra = 0.1f;
             IsSSJAura = true;
 			projectile.light = 1f;
         }
+		public override void PostAI()
+        {
+            for (int d = 0; d < 1; d++)
+            {
+                if (Main.rand.NextFloat() < 1f)
+                {
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 187, 0f, 0f, 0, new Color(255, 255, 255), 0.75f);
+                    dust.noGravity = true;
+                }
+            }
+        }
         public override void AI()
         {
-            if (Main.rand.NextFloat() < 0.7236842f)
-            {
-                Dust dust;
-                Vector2 position = projectile.Center + new Vector2(-40, -5);
-                dust = Main.dust[Dust.NewDust(position, 84, 105, 187, 0f, -3.421053f, 213, new Color(255, 0, 0), 1.1f)];
-                dust.noGravity = true;
-                dust.noLight = true;
-            }
-
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(Transformations.SSJG.GetBuffId()))
             {
                 projectile.Kill();
             }
-            if (BaseAuraTimer > 0)
-            {
-                projectile.scale = 1.5f - 0.7f * (BaseAuraTimer / 5f);
-                BaseAuraTimer--;
-            }
+
             ChargeSoundTimer++;
             if (ChargeSoundTimer > 420 && player.whoAmI == Main.myPlayer)
             {
                 if (!Main.dedServ)
                     player.GetModPlayer<MyPlayer>().transformationSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSG").WithVolume(.7f).WithPitchVariance(.1f));
                 ChargeSoundTimer = 0;
-            }
-            else
-            {
-                projectile.scale = 1.5f;
-            }
-            if (MyPlayer.ModPlayer(player).IsCharging)
-            {
-                projectile.scale *= 1.2f;
             }
             base.AI();
         }
