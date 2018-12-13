@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             item.width = 28;
             item.height = 38;
-            item.consumable = true;
+            item.consumable = false;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
             item.useStyle = 2;
