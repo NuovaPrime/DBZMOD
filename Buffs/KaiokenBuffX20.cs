@@ -13,15 +13,11 @@ namespace DBZMOD.Buffs
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
             KaioLightValue = 12f;
-            Description.SetDefault(AssembleTransBuffDescription());
-        }
-        public override void Update(Player player, ref int buffIndex)
-        {
             DamageMulti = 4f;
             SpeedMulti = 4f;
             HealthDrainRate = 100;
             KiDrainBuffMulti = 3f;
-            base.Update(player, ref buffIndex);
+            Description.SetDefault(AssembleTransBuffDescription());
         }
     }
 }

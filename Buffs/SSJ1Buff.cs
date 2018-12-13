@@ -12,17 +12,18 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
+            DamageMulti = 1.75f;
+            SpeedMulti = 1.75f;
+            KiDrainBuffMulti = 1.3f;
+            KiDrainRate = 3;
+            KiDrainRateWithMastery = 1;
             Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            DamageMulti = 1.75f;
-            SpeedMulti = 1.75f;
             bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
             
-            KiDrainRate = isMastered ? 1 : 3;
-            
-            KiDrainBuffMulti = 1.3f;
+            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;         
 
             MasteryTimer++;
             if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)

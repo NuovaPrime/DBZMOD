@@ -12,14 +12,14 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
-        }
-        public override void Update(Player player, ref int buffIndex)
-        {
             DamageMulti = 5f;
             SpeedMulti = 5f;
             KiDrainRate = 8;
             KiDrainBuffMulti = 1.5f;
+            Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
+        }
+        public override void Update(Player player, ref int buffIndex)
+        {
             player.lifeRegen += 2;
             base.Update(player, ref buffIndex);
         }

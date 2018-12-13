@@ -24,6 +24,7 @@ namespace DBZMOD
         public int HealthDrainRate;
         public int OverallHealthDrainRate;
         public int KiDrainRate;
+        public int KiDrainRateWithMastery;
         private int KiDrainTimer;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
@@ -124,11 +125,6 @@ namespace DBZMOD
             {
                 ExpandedSentriesEffects(player);
             }
-
-            if (!Description.Equals(AssembleTransBuffDescription()))
-            {
-                Description.SetDefault(AssembleTransBuffDescription());
-            }
         }
 
         public void ThoriumEffects(Player player)
@@ -174,6 +170,7 @@ namespace DBZMOD
             int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
             int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
             int kiDrainPerSecond = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRate;
+            int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
             int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
             string displayString = string.Empty;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
@@ -182,6 +179,10 @@ namespace DBZMOD
             if (kiDrainPerSecond > 0)
             {
                 displayString = string.Format("{0}\nKi Drain: {1} per second.", displayString, kiDrainPerSecond);
+                if (kiDrainPerSecondWithMastery > 0)
+                {
+                    displayString = string.Format("{0}\n(With mastery): {1} per second.", displayString, kiDrainPerSecondWithMastery);
+                }
             }
             if (HealthDrainRate > 0)
             {
@@ -206,7 +207,7 @@ namespace DBZMOD
                 {
                     drainRateDescriptor = " extremely quickly";
                 }
-                displayString = string.Format("{0}{1}", displayString, drainRateDescriptor);
+                displayString = string.Format("{0}\nDrains life {1}.", displayString, drainRateDescriptor);
             }
             return displayString;
         }
