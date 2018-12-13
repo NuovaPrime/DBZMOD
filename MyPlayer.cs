@@ -1232,8 +1232,12 @@ namespace DBZMOD
         public float GetNextSpeedMultiplier()
         {
             if (bonusSpeedMultiplier == 0f)            
-                    return 0.5f;
+                    return 0.25f;
+            else if (bonusSpeedMultiplier == 0.25f)
+                return 0.5f;
             else if (bonusSpeedMultiplier == 0.5f)
+                return 0.75f;
+            else if (bonusSpeedMultiplier == 0.75f)
                 return 1.0f;
             else
                 return 0f;            
