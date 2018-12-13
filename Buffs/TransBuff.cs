@@ -27,6 +27,7 @@ namespace DBZMOD
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
+        
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
@@ -87,18 +88,11 @@ namespace DBZMOD
                 modPlayer.KiDrainAddition = 0;                
             }
 
-            if (modPlayer.speedToggled)
-            {
-                player.moveSpeed += SpeedMulti - 1f;
-                player.maxRunSpeed += SpeedMulti - 1f;
-                player.runAcceleration += SpeedMulti - 1f;
-            }
-            else if (!modPlayer.speedToggled)
-            {
-                player.moveSpeed += 2f;
-                player.maxRunSpeed += 2f;
-                player.runAcceleration += 2f;
-            }
+            //DebugUtil.Log(string.Format("Before: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
+            player.moveSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            player.maxRunSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            player.runAcceleration *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
             player.meleeDamage += (DamageMulti - 1) * 0.5f;

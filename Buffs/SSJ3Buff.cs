@@ -19,7 +19,7 @@ namespace DBZMOD.Buffs
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             DamageMulti = 4f;
-            SpeedMulti = 4f;
+            SpeedMulti = 3f;
             bool isMastered = modPlayer.MasteryLevel3 >= 1f;
             KiDrainRate = isMastered ? 4 : 6;
             float kiQuotient = (float)modPlayer.GetKi() / modPlayer.OverallKiMax();

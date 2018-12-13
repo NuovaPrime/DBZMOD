@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles.Auras
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.LSSJ2.BuffId))
+            if (!player.HasBuff(Transformations.LSSJ2.GetBuffId()))
             {
                 projectile.Kill();
             }

@@ -57,8 +57,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJG.BuffId))
-                player.AddBuff(Transformations.SSJG.BuffId, 360000);
+            if (!player.HasBuff(Transformations.SSJG.GetBuffId()))
+                player.AddBuff(Transformations.SSJG.GetBuffId(), 360000);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGAuraProj"), 0, 0, player.whoAmI);
             MyPlayer.ModPlayer(player).IsTransforming = false;
             if (!Main.dedServ)

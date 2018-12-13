@@ -93,15 +93,15 @@ namespace DBZMOD.Projectiles
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
-                if (!player.HasBuff(Transformations.LSSJ2.BuffId))
-                    player.AddBuff(Transformations.LSSJ2.BuffId, 360000);
+                if (!player.HasBuff(Transformations.LSSJ2.GetBuffId()))
+                    player.AddBuff(Transformations.LSSJ2.GetBuffId(), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
-                if (!player.HasBuff(Transformations.LSSJ.BuffId))
-                    player.AddBuff(Transformations.LSSJ.BuffId, 360000);
+                if (!player.HasBuff(Transformations.LSSJ.GetBuffId()))
+                    player.AddBuff(Transformations.LSSJ.GetBuffId(), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }

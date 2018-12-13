@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             DamageMulti = 2.5f;
-            SpeedMulti = 2.5f;
+            SpeedMulti = 1.5f;
             if (MyPlayer.ModPlayer(player).MasteryLevel2 >= 1)
             {
                 KiDrainRate = 2;

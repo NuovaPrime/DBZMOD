@@ -40,12 +40,12 @@ namespace DBZMOD.Projectiles.Auras
         {
             DebugUtil.Log("Zoom is at " + Main.zoomX + ", " + Main.zoomY);
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJ1.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId) && !player.HasBuff(Transformations.ASSJ.BuffId) && !player.HasBuff(Transformations.USSJ.BuffId))
+            if (!player.HasBuff(Transformations.SSJ1.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()) && !player.HasBuff(Transformations.ASSJ.GetBuffId()) && !player.HasBuff(Transformations.USSJ.GetBuffId()))
             {
                 // Main.NewText(string.Format("Player is missing a buff! Aura proj died for {0}", player.whoAmI));
                 projectile.Kill();
             }
-            if (player.HasBuff(Transformations.SSJ1.BuffId))
+            if (player.HasBuff(Transformations.SSJ1.GetBuffId()))
             {
                 if (BaseAuraTimer > 0)
                 {
@@ -53,7 +53,7 @@ namespace DBZMOD.Projectiles.Auras
                     BaseAuraTimer--;
                 }
             }
-            else if (player.HasBuff(Transformations.ASSJ.BuffId))
+            else if (player.HasBuff(Transformations.ASSJ.GetBuffId()))
             {
                 if (BaseAuraTimer > 0)
                 {
@@ -61,7 +61,7 @@ namespace DBZMOD.Projectiles.Auras
                     BaseAuraTimer--;
                 }
             }
-            else if (player.HasBuff(Transformations.USSJ.BuffId))
+            else if (player.HasBuff(Transformations.USSJ.GetBuffId()))
             {
                 if (BaseAuraTimer > 0)
                 {

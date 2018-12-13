@@ -49,7 +49,7 @@ namespace DBZMOD.Projectiles.Auras
             }
 
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJG.BuffId))
+            if (!player.HasBuff(Transformations.SSJG.GetBuffId()))
             {
                 projectile.Kill();
             }

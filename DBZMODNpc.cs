@@ -223,65 +223,6 @@ namespace DBZMOD
             }
         }
 
-        public void DoPlayerMessageCheck(Player player, NPC npc, ref bool isDisplayingJungleMessage, ref bool isDisplayingHellMessage, ref bool isDisplayingEvilMessage, ref bool isDisplayingMushroomMessage)
-        {            
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-
-            if (modPlayer == null)
-                return;
-
-            //DebugUtil.Log("Eater of worlds check");
-            if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
-            {
-                if (!modPlayer.JungleMessage)
-                {
-                    modPlayer.JungleMessage = true;
-                    isDisplayingJungleMessage = true;
-                }
-            }
-
-            //DebugUtil.Log("Brain check");
-            if (npc.type == NPCID.BrainofCthulhu)
-            {
-                if (!modPlayer.JungleMessage)
-                {
-                    modPlayer.JungleMessage = true;
-                    isDisplayingJungleMessage = true;
-                }
-            }
-
-            //DebugUtil.Log("Skeletron check");
-            if (npc.type == NPCID.SkeletronHead)
-            {
-                if (!modPlayer.HellMessage)
-                {
-                    modPlayer.HellMessage = true;
-                    isDisplayingHellMessage = true;
-                }
-            }
-
-            //DebugUtil.Log("WoF check");
-            if (npc.type == NPCID.WallofFlesh)
-            {
-                if (!modPlayer.EvilMessage)
-                {
-                    modPlayer.EvilMessage = true;
-                    isDisplayingEvilMessage = true;
-                }
-            }
-
-            //DebugUtil.Log("Plantera check");
-            if (npc.type == NPCID.Plantera)
-            {
-                if (!modPlayer.MushroomMessage)
-                {
-                    modPlayer.MushroomMessage = true;
-                    isDisplayingMushroomMessage = true;
-                }
-            }
-            //DebugUtil.Log("End player message check");
-        }
-
         public override void NPCLoot(NPC npc)
         {
             // now loops over all connected players and plays the message for anyone who doesn't have it.
@@ -292,7 +233,60 @@ namespace DBZMOD
             // DebugUtil.Log("Is npc a boss kill check");
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                DoPlayerMessageCheck(Main.player[Main.myPlayer], npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+
+                if (modPlayer == null)
+                    return;
+
+                //DebugUtil.Log("Eater of worlds check");
+                if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
+                {
+                    if (!modPlayer.JungleMessage)
+                    {
+                        modPlayer.JungleMessage = true;
+                        isDisplayingJungleMessage = true;
+                    }
+                }
+
+                //DebugUtil.Log("Brain check");
+                if (npc.type == NPCID.BrainofCthulhu)
+                {
+                    if (!modPlayer.JungleMessage)
+                    {
+                        modPlayer.JungleMessage = true;
+                        isDisplayingJungleMessage = true;
+                    }
+                }
+
+                //DebugUtil.Log("Skeletron check");
+                if (npc.type == NPCID.SkeletronHead)
+                {
+                    if (!modPlayer.HellMessage)
+                    {
+                        modPlayer.HellMessage = true;
+                        isDisplayingHellMessage = true;
+                    }
+                }
+
+                //DebugUtil.Log("WoF check");
+                if (npc.type == NPCID.WallofFlesh)
+                {
+                    if (!modPlayer.EvilMessage)
+                    {
+                        modPlayer.EvilMessage = true;
+                        isDisplayingEvilMessage = true;
+                    }
+                }
+
+                //DebugUtil.Log("Plantera check");
+                if (npc.type == NPCID.Plantera)
+                {
+                    if (!modPlayer.MushroomMessage)
+                    {
+                        modPlayer.MushroomMessage = true;
+                        isDisplayingMushroomMessage = true;
+                    }
+                }
             } else if (Main.netMode == NetmodeID.Server) {
                 if (!Main.dedServ)
                     return;
@@ -305,8 +299,61 @@ namespace DBZMOD
                     {
                         continue;
                     }
-                    //DebugUtil.Log(string.Format("Checking player messages for player {0} killing npc {1}", player.whoAmI, npc.type));                    
-                    DoPlayerMessageCheck(player, npc, ref isDisplayingJungleMessage, ref isDisplayingHellMessage, ref isDisplayingEvilMessage, ref isDisplayingMushroomMessage);
+
+                    MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+                    if (modPlayer == null)
+                        return;
+
+                    //DebugUtil.Log("Eater of worlds check");
+                    if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
+                    {
+                        if (!modPlayer.JungleMessage)
+                        {
+                            modPlayer.JungleMessage = true;
+                            isDisplayingJungleMessage = true;
+                        }
+                    }
+
+                    //DebugUtil.Log("Brain check");
+                    if (npc.type == NPCID.BrainofCthulhu)
+                    {
+                        if (!modPlayer.JungleMessage)
+                        {
+                            modPlayer.JungleMessage = true;
+                            isDisplayingJungleMessage = true;
+                        }
+                    }
+
+                    //DebugUtil.Log("Skeletron check");
+                    if (npc.type == NPCID.SkeletronHead)
+                    {
+                        if (!modPlayer.HellMessage)
+                        {
+                            modPlayer.HellMessage = true;
+                            isDisplayingHellMessage = true;
+                        }
+                    }
+
+                    //DebugUtil.Log("WoF check");
+                    if (npc.type == NPCID.WallofFlesh)
+                    {
+                        if (!modPlayer.EvilMessage)
+                        {
+                            modPlayer.EvilMessage = true;
+                            isDisplayingEvilMessage = true;
+                        }
+                    }
+
+                    //DebugUtil.Log("Plantera check");
+                    if (npc.type == NPCID.Plantera)
+                    {
+                        if (!modPlayer.MushroomMessage)
+                        {
+                            modPlayer.MushroomMessage = true;
+                            isDisplayingMushroomMessage = true;
+                        }
+                    }
                 }
             } else
             {

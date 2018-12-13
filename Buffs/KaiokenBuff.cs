@@ -19,7 +19,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             DamageMulti = 1.5f;
-            SpeedMulti = 2f;
+            SpeedMulti = 1f;
             HealthDrainRate = 16;
             KiDrainBuffMulti = 1f;
             base.Update(player, ref buffIndex);

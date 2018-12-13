@@ -37,7 +37,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(Transformations.Kaioken20.BuffId))
+            if (!player.HasBuff(Transformations.Kaioken20.GetBuffId()))
             {
                 projectile.Kill();
             }
