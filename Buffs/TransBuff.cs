@@ -162,7 +162,7 @@ namespace DBZMOD
         {
             if (percent == 0)
                 return currentDisplayString;
-            return string.Format("{0}\n{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
+            return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
         public string AssembleTransBuffDescription()
@@ -173,15 +173,15 @@ namespace DBZMOD
             int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
             int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
             string displayString = string.Empty;
-            displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
-            displayString = GetPercentForDisplay(displayString, "Speed", percentSpeedMult);
-            displayString = GetPercentForDisplay(displayString, "Ki Costs", percentKiDrainMulti);
+            displayString = GetPercentForDisplay(displayString, "\nDamage", percentDamageMult);
+            displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
+            displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1} per second.", displayString, kiDrainPerSecond);
+                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, kiDrainPerSecond);
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}\n(With mastery): {1} per second.", displayString, kiDrainPerSecondWithMastery);
+                    displayString = string.Format("{0}, {1}/s when mastered", displayString, kiDrainPerSecondWithMastery);
                 }
             }
             if (HealthDrainRate > 0)
@@ -189,7 +189,7 @@ namespace DBZMOD
                 string drainRateDescriptor = string.Empty;
                 if (HealthDrainRate < 25)
                 {
-                    drainRateDescriptor = " slowly";
+                    drainRateDescriptor = "slowly";
                 }
                 else if (HealthDrainRate < 50)
                 {
@@ -197,15 +197,15 @@ namespace DBZMOD
                 }
                 else if (HealthDrainRate < 100)
                 {
-                    drainRateDescriptor = " quickly";
+                    drainRateDescriptor = "quickly";
                 }
                 else if (HealthDrainRate < 250)
                 {
-                    drainRateDescriptor = " rapidly";
+                    drainRateDescriptor = "rapidly";
                 }
                 else if (HealthDrainRate < 500)
                 {
-                    drainRateDescriptor = " extremely quickly";
+                    drainRateDescriptor = "extremely quickly";
                 }
                 displayString = string.Format("{0}\nDrains life {1}.", displayString, drainRateDescriptor);
             }
