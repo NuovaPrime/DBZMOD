@@ -1529,7 +1529,7 @@ namespace DBZMOD
             timeRing = false;
             bloodstainedBandana = false;
             KiMax2 = 0;
-            bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait") || player.HasBuff(mod.BuffType("UnknownLegendary");
+            bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
         }
 
