@@ -53,10 +53,7 @@ namespace Util
 
             // this method doesn't return a sound effect instance, it just plays a sound.
             return Main.PlaySound(soundId, (int)location.X, (int)location.Y, style);
-        }
-
-
-        
+        }        
 
         public static ReLogic.Utilities.SlotId PlayVanillaSound(Terraria.Audio.LegacySoundStyle soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
@@ -100,6 +97,33 @@ namespace Util
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)
         {
             return mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
+        }
+
+        public static void KillTrackedSound(ref ReLogic.Utilities.SlotId slotId)
+        {
+            if (slotId == ReLogic.Utilities.SlotId.Invalid)
+                return;
+
+            var sound = Main.GetActiveSound(slotId);
+            if (sound != null)
+            {
+                sound.Stop();
+            }
+
+            slotId = ReLogic.Utilities.SlotId.Invalid;
+        }
+
+        public static void UpdateTrackedSound(ReLogic.Utilities.SlotId slotId, Vector2 position)
+        {
+            if (slotId == ReLogic.Utilities.SlotId.Invalid)
+                return;
+
+            var sound = Main.GetActiveSound(slotId);
+            if (sound != null)
+            {
+                sound.Position = position;
+                sound.Update();
+            }
         }
     }
 }

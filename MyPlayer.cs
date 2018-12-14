@@ -150,6 +150,7 @@ namespace DBZMOD
         // bool used internally to handle managing effects
         public bool WasCharging;
         public int ChargeSoundTimer;
+        public ReLogic.Utilities.SlotId ChargeSoundSlotId;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -227,7 +228,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public ReLogic.Utilities.SlotId transformationSound;
+        public ReLogic.Utilities.SlotId TransformationSoundSlotId;
         #endregion
 
         #region Syncable Controls
@@ -659,11 +660,7 @@ namespace DBZMOD
             CheckSyncState();
 
             // try to update positional audio?
-            if (transformationSound != null)
-            {
-                var tranSound = Main.GetActiveSound(transformationSound);
-                tranSound.Position = player.position;                
-            }
+            SoundUtil.UpdateTrackedSound(TransformationSoundSlotId, player.position);
         }        
 
         public void ThrottleKi()
@@ -1102,11 +1099,11 @@ namespace DBZMOD
 
         public void StopTransformationSound()
         {
-            var tranSound = Main.GetActiveSound(transformationSound);
-            if (transformationSound != null)
+            var tranSound = Main.GetActiveSound(TransformationSoundSlotId);
+            if (TransformationSoundSlotId != null)
             {
                 tranSound.Stop();
-                transformationSound = ReLogic.Utilities.SlotId.Invalid;
+                TransformationSoundSlotId = ReLogic.Utilities.SlotId.Invalid;
             }
         }
 
@@ -1434,9 +1431,12 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
+                    ChargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
                     ChargeSoundTimer = 0;
                 }
+            } else
+            {
+                SoundUtil.KillTrackedSound(ref ChargeSoundSlotId);                
             }
             if (IsCharging && !WasCharging)
             { 
