@@ -96,7 +96,7 @@ namespace DBZMOD
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,4,0,0,0,0,0,5,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,2,0,0,0,6,0,0,1,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
@@ -332,7 +332,7 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
                             break;
                         case 7:
-                            WorldGen.PlaceObject(offsetX, offsetY, (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile"), true);
+                            WorldGen.PlaceObject(GohanHouseStartPositionX + X, GohanHouseStartPositionY + 2 - Y, (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile"), false);
                             break;
                     }
                 }
