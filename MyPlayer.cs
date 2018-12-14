@@ -1365,8 +1365,6 @@ namespace DBZMOD
                         player.velocity = new Vector2(0, player.velocity.Y);
                 }
 
-                // DebugUtil.Log(string.Format("I think player {0} is moving at {1}, {2}", player.whoAmI, player.velocity.X, player.velocity.Y));
-
                 // grant multiplicative charge bonuses that grow over time if using either earthen accessories
                 if (earthenScarab || earthenArcanium)
                 {
@@ -1407,7 +1405,7 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireFrostAuraProj"), 1, 0, player.whoAmI);
                 }
             }
-            else if (!IsCharging)
+            else
             {
                 // reset scarab/earthen bonuses
                 ScarabChargeTimer = 0;
