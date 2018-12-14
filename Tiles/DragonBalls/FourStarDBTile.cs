@@ -14,8 +14,9 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = false;
+            Main.tileSpelunker[Type] = true;
             Main.tileLighted[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Origin = new Point16(0, 0);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();

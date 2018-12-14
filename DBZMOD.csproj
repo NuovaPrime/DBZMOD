@@ -249,6 +249,7 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
+    <Compile Include="Items\DragonBalls\DBNote.cs" />
     <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
     <Compile Include="Items\DragonBalls\FourStarDB.cs" />
     <Compile Include="Items\DragonBalls\OneStarDB.cs" />
