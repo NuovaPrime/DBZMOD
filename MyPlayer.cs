@@ -227,7 +227,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public SoundEffectInstance transformationSound;
+        public ReLogic.Utilities.SlotId transformationSound;
         #endregion
 
         #region Syncable Controls
@@ -657,7 +657,14 @@ namespace DBZMOD
 
             // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
             CheckSyncState();
-        }
+
+            // try to update positional audio?
+            if (transformationSound != null)
+            {
+                var tranSound = Main.GetActiveSound(transformationSound);
+                tranSound.Position = player.position;                
+            }
+        }        
 
         public void ThrottleKi()
         {
@@ -1095,10 +1102,11 @@ namespace DBZMOD
 
         public void StopTransformationSound()
         {
+            var tranSound = Main.GetActiveSound(transformationSound);
             if (transformationSound != null)
             {
-                transformationSound.Stop();
-                transformationSound = null;
+                tranSound.Stop();
+                transformationSound = ReLogic.Utilities.SlotId.Invalid;
             }
         }
 
@@ -1426,8 +1434,7 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
+                    SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
                     ChargeSoundTimer = 0;
                 }
             }
@@ -1437,8 +1444,7 @@ namespace DBZMOD
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                 }
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
+                SoundUtil.PlayCustomSound("Sounds/EnergyChargeStart", player, .7f);
             }
         }
     
@@ -1767,43 +1773,37 @@ namespace DBZMOD
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/GroundRumble", player);
         }
 
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("LSSJ2PillarStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJGTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public override void SetupStartInventory(IList<Item> items)
