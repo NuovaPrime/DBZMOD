@@ -226,6 +226,7 @@ namespace DBZMOD
         public bool blackFusionBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
+        public bool FirstFourStarDBPickup = false;
         public SoundEffectInstance transformationSound;
         #endregion
 
@@ -1029,6 +1030,7 @@ namespace DBZMOD
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
             tag.Add("KiMax3", KiMax3);
+            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -1082,6 +1084,7 @@ namespace DBZMOD
             SSJGAchieved = tag.Get<bool>("ssjgAchieved");
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             KiMax3 = tag.Get<int>("KiMax3");
+            FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 

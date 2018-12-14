@@ -390,3 +390,9 @@ V1.0.8.1
 4. Fixed the ki drain scaling on transformations.
 
 5. Fixed [[Katchin Feet]] being infinite.
+
+6. Fixed player not rotating correctly when flying downwards.
+
+== Secrets ==
+
+1. Added a dev form for NuovaPrime
