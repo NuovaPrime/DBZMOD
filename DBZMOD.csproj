@@ -102,6 +102,7 @@
     <Compile Include="Buffs\SSJ1Buff.cs" />
     <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
+    <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJGBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
@@ -339,6 +340,7 @@
     <Compile Include="ProgressionSystem.cs" />
     <Compile Include="Projectiles\Auras\AuraProjectile.cs" />
     <Compile Include="Projectiles\Auras\BaseAuraProj.cs" />
+    <Compile Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.cs" />
     <Compile Include="Projectiles\Auras\FalseUIAuraProj.cs" />
     <Compile Include="Projectiles\Auras\KaiokenAuraProj.cs" />
     <Compile Include="Projectiles\Auras\KaiokenAuraProjx10.cs" />
@@ -505,6 +507,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Buffs\DevBuffs\SSJSBuff.png" />
     <Content Include="Hairs\God\SSJBEHair.png" />
     <Content Include="Hairs\God\SSJBHair.png" />
     <Content Include="Hairs\God\SSJGHair.png" />
@@ -532,6 +535,7 @@
     <Content Include="Lib\ThoriumMod.dll" />
     <Content Include="Lib\Tremor.dll" />
     <Content Include="Lib\UnuBattleRods.dll" />
+    <Content Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.png" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.mp3" />
     <Content Include="Sounds\DiscFire.wav" />
@@ -578,6 +582,7 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Projectiles\Auras\Patron\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>
