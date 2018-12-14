@@ -453,6 +453,7 @@
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
+    <Compile Include="Tiles\DragonBalls\FiveStarDBTile.cs" />
     <Compile Include="Tiles\DragonBalls\FourStarDBTile.cs" />
     <Compile Include="Tiles\KaiTable.cs" />
     <Compile Include="Tiles\KiLantern.cs" />
