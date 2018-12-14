@@ -136,11 +136,6 @@ namespace Util
             {
                 sound.Position = position;
                 sound.Update();
-            } else
-            {
-                // there's nothing to process updates on if it's untracked :(
-                
-                DebugUtil.Log("Can't update positional audio on untracked sound. :( ");
             }
         }
     }

@@ -228,7 +228,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundSlotId;
+        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
         #endregion
 
         #region Syncable Controls
@@ -660,7 +660,7 @@ namespace DBZMOD
             CheckSyncState();
 
             // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(TransformationSoundSlotId, player.position);
+            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
         }        
 
         public void ThrottleKi()
