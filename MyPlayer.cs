@@ -642,9 +642,7 @@ namespace DBZMOD
             KiBar.visible = true;
             
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
-            FlightSystem.Update(player, WasFlying);
-
-            WasFlying = IsFlying;
+            FlightSystem.Update(player);
 
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
@@ -1252,6 +1250,10 @@ namespace DBZMOD
                 if (flightUnlocked)
                 {
                     IsFlying = !IsFlying;
+                    if (!IsFlying)
+                    {
+                        FlightSystem.AddKatchinFeetBuff(player);
+                    }
                 }
             }
 
