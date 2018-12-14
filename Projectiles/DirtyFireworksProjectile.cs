@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -169,8 +170,7 @@ namespace DBZMOD.Projectiles
             int num = projectile.timeLeft;
             projectile.timeLeft = 0;
 
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiplosion").WithVolume(1.0f));
+            SoundUtil.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
 
             projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
             projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);

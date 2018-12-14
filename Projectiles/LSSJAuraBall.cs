@@ -89,8 +89,7 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
+            SoundUtil.PlayCustomSound("Sounds/SSJAscension");
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
                 if (!player.HasBuff(Transformations.LSSJ2.GetBuffId()))

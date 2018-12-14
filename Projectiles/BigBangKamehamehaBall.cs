@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
     public class BigBangKamehamehaBall : KiProjectile
     {
         public bool startingCharge = false;
-        ReLogic.Utilities.SlotId chargeSoundSlotId;
+        uint chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -83,9 +83,7 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
                 }
-                var chargeSoundKill = Main.GetActiveSound(chargeSoundSlotId);
-                if (chargeSoundKill != null)
-                    chargeSoundKill.Stop();
+                SoundUtil.KillTrackedSound(ref chargeSoundSlotId);                
             }
 
             if (!startingCharge)
@@ -95,12 +93,7 @@ namespace DBZMOD.Projectiles
                     chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
             }
 
-            var chargeSoundUpdate = Main.GetActiveSound(chargeSoundSlotId);
-            if (chargeSoundUpdate != null)
-            {
-                chargeSoundUpdate.Position = projectile.Center;
-            }
+            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
-
     }
 }

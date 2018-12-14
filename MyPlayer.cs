@@ -150,7 +150,7 @@ namespace DBZMOD
         // bool used internally to handle managing effects
         public bool WasCharging;
         public int ChargeSoundTimer;
-        public ReLogic.Utilities.SlotId ChargeSoundSlotId;
+        public uint ChargeSoundSlotId;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -228,7 +228,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public ReLogic.Utilities.SlotId TransformationSoundSlotId;
+        public uint TransformationSoundSlotId;
         #endregion
 
         #region Syncable Controls
@@ -1099,12 +1099,7 @@ namespace DBZMOD
 
         public void StopTransformationSound()
         {
-            var tranSound = Main.GetActiveSound(TransformationSoundSlotId);
-            if (TransformationSoundSlotId != null)
-            {
-                tranSound.Stop();
-                TransformationSoundSlotId = ReLogic.Utilities.SlotId.Invalid;
-            }
+            SoundUtil.KillTrackedSound(ref TransformationSoundSlotId);
         }
 
         // notes from Prime:

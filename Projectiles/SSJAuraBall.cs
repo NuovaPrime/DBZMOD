@@ -101,14 +101,12 @@ namespace DBZMOD.Projectiles
                     player.AddBuff(Transformations.SSJ2.GetBuffId(), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SSJAscension"));
+                SoundUtil.PlayCustomSound("Sounds/SSJAscension");
             }
             if (MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
+                SoundUtil.PlayCustomSound("Sounds/SSJAscension");
             }
         }
     }

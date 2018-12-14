@@ -7,13 +7,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class SpecialBeamCannonBall : KiProjectile
     {
         public bool startingCharge = false;
-        SoundEffectInstance chargeSound;
+        uint chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -64,9 +65,7 @@ namespace DBZMOD.Projectiles
                     float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("SpecialBeamCannonBlast"), projectile.damage + (ChargeLevel * 60), projectile.knockBack, projectile.owner);
 
-                    //ChargeLevel = 0;
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCFire"));
+                    SoundUtil.PlayCustomSound("Sounds/SBCFire");
 
                     projectile.Kill();
 
@@ -82,19 +81,16 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                if (chargeSound != null)
-                {
-                    chargeSound.Stop();
-                }
+                SoundUtil.KillTrackedSound(ref chargeSoundSlotId);
             }
 
             if (!startingCharge)
             {
                 startingCharge = true;
-                if (!Main.dedServ)
-                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SBCCharge"));
+                chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/SBCCharge", projectile.Center);
             }
 
+            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 
     }

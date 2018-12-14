@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Enums;
+using Util;
 
 namespace DBZMOD.UI
 {
@@ -235,14 +236,12 @@ namespace DBZMOD.UI
             if(player.SSJ1Achieved)
             {
                 MenuSelection = MenuSelectionID.SSJ1;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText("SSJ1 Mastery = " + player.MasteryLevel1 + "/" + player.MasteryMax1);
             }
             else
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("Only through failure with a powerful foe will true power awaken.");
             }
         }
@@ -253,14 +252,12 @@ namespace DBZMOD.UI
             if(player.SSJ2Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ2;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText("SSJ2 Mastery = " + player.MasteryLevel2 + "/" + player.MasteryMax2);
             }
             else if (!player.LSSJAchieved)
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("One may awaken their true power through extreme pressure while ascended.");
             }
         }
@@ -270,14 +267,12 @@ namespace DBZMOD.UI
             if(player.SSJ3Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ3;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + "/" + player.MasteryMax3);
             }
             else if (!player.LSSJAchieved)
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
             }
         }
@@ -287,13 +282,11 @@ namespace DBZMOD.UI
             if (player.LSSJAchieved)
             {
                 MenuSelection = MenuSelectionID.LSSJ1;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.SSJ2Achieved)
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
             }
         }
@@ -304,13 +297,11 @@ namespace DBZMOD.UI
             if (player.LSSJ2Achieved)
             {
                 MenuSelection = MenuSelectionID.LSSJ2;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.LSSJ2Achieved)
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("A legendary saiyan sometimes may lose complete control upon being pushed into a critical state.");
             }
         }
@@ -320,13 +311,11 @@ namespace DBZMOD.UI
             if(player.SSJGAchieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJG;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.LSSJAchieved)
             {
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuClose);
+                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
             }
         }
@@ -336,8 +325,7 @@ namespace DBZMOD.UI
             if (player.name == "Nuova")
             {
                 MenuSelection = MenuSelectionID.Spectrum;
-                if (!Main.dedServ)
-                    Main.PlaySound(SoundID.MenuTick);
+                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
             }
         }
 

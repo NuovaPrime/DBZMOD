@@ -7,15 +7,16 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
 	public class EnergyWaveBall : KiProjectile
 	{
         public bool startingCharge = false;
-        SoundEffectInstance chargeSound;
+        public uint chargeSoundSlotId;
 
-		public override void SetDefaults()
+        public override void SetDefaults()
         {
             projectile.hostile = false;
             projectile.friendly = false;
@@ -64,9 +65,8 @@ namespace DBZMOD.Projectiles
                     float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 10)), (float)((Math.Sin(rot) * 10))), mod.ProjectileType("EnergyWaveBlast"), projectile.damage + (ChargeLevel * 10), projectile.knockBack, projectile.owner);
 
-                    //ChargeLevel = 0;
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));
+
+                    SoundUtil.PlayCustomSound("Sounds/BasicBeamFire", projectile.position, 1.0f);
 
                     projectile.Kill();
 
@@ -81,18 +81,16 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                if (chargeSound != null)
-                {
-                    chargeSound.Stop();
-                }
+                SoundUtil.KillTrackedSound(ref chargeSoundSlotId);
             }
 
-            if(!startingCharge)
+            if (!startingCharge)
             {
                 startingCharge = true;
-                if (!Main.dedServ)
-                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveChargeShort"));
+                chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveChargeShort", projectile.Center);
             }
+
+            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 	}
 }

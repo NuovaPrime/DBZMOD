@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -63,8 +64,7 @@ namespace DBZMOD.Projectiles
 		
         public override void Kill(int timeLeft)
         {
-            if (!Main.dedServ)
-                Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 122);
+            SoundUtil.PlayVanillaSound(2, projectile.position, 122);
         	int num251 = 1;
         	if (projectile.owner == Main.myPlayer)
         	{

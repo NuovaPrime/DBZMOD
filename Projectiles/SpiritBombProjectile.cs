@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -93,9 +94,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
               int maxdusts = 20;
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble"));
-              for (int i = 0; i < maxdusts; i++)
+            SoundUtil.PlayCustomSound("Sounds/GroundRumble", projectile.Center);
+            for (int i = 0; i < maxdusts; i++)
 			{
 				int num304 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 20, 0f, 0f, 100, default(Color), 0.8f);
 				Main.dust[num304].noGravity = true;

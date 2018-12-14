@@ -11,6 +11,7 @@ namespace Util
 {
     public static class SoundUtil
     {
+        public static uint InvalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
         public static DBZMOD.DBZMOD _mod;
         public static DBZMOD.DBZMOD mod
         {
@@ -75,23 +76,36 @@ namespace Util
             }            
         }
 
-        public static ReLogic.Utilities.SlotId PlayCustomSound(string soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
+        public static uint PlayCustomSound(string soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
             Vector2 location = player != null ? player.Center : Vector2.Zero;
             return PlayCustomSound(soundId, location, volume, pitchVariance);
         }
 
-        public static ReLogic.Utilities.SlotId PlayCustomSound(string soundId, Vector2 location, float volume = 1f, float pitchVariance = 0f)
+        public static uint PlayCustomSound(string soundId, Vector2 location, float volume = 1f, float pitchVariance = 0f)
         {
             if (Main.dedServ)
-                return ReLogic.Utilities.SlotId.Invalid;
+                return InvalidSlot;
+
+            var slotId = InvalidSlot;
+            var style = GetCustomStyle(soundId, volume, pitchVariance);
             if (location == Vector2.Zero)
             {
-                return Main.PlayTrackedSound(GetCustomStyle(soundId));
+                Main.PlaySound(style);
+                
             } else
             {
-                return Main.PlayTrackedSound(GetCustomStyle(soundId, volume, pitchVariance), location);
+                Main.PlaySound(style, location);
             }
+            slotId = (uint)mod.GetSoundSlot(SoundType.Custom, soundId);
+            return slotId;
+        }
+
+        public static void PlayCustomSound(ReLogic.Utilities.SlotId slotId)
+        {            
+            var sound = Main.GetActiveSound(slotId);
+            if (!sound.IsPlaying)
+                sound.Resume();
         }
 
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)
@@ -99,26 +113,24 @@ namespace Util
             return mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
         }
 
-        public static void KillTrackedSound(ref ReLogic.Utilities.SlotId slotId)
+        public static void KillTrackedSound(ref uint slotId)
         {
-            if (slotId == ReLogic.Utilities.SlotId.Invalid)
+            if (slotId == InvalidSlot)
                 return;
-
-            var sound = Main.GetActiveSound(slotId);
+            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(slotId));
             if (sound != null)
             {
                 sound.Stop();
             }
 
-            slotId = ReLogic.Utilities.SlotId.Invalid;
+            slotId = InvalidSlot;
         }
 
-        public static void UpdateTrackedSound(ReLogic.Utilities.SlotId slotId, Vector2 position)
+        public static void UpdateTrackedSound(uint slotId, Vector2 position)
         {
-            if (slotId == ReLogic.Utilities.SlotId.Invalid)
+            if (slotId == InvalidSlot)
                 return;
-
-            var sound = Main.GetActiveSound(slotId);
+            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(slotId));
             if (sound != null)
             {
                 sound.Position = position;
