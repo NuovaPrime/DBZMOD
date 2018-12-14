@@ -7,13 +7,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class BigBangKamehamehaBall : KiProjectile
     {
         public bool startingCharge = false;
-        SoundEffectInstance chargeSound;
+        ReLogic.Utilities.SlotId chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -58,6 +59,8 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
 
+            
+
             if (!player.channel || (ChargeLevel >= ChargeLimit))
             {
                 if (ChargeLevel >= 1)
@@ -66,8 +69,7 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("BigBangKamehamehaBlast"), projectile.damage + (ChargeLevel * 65), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));
+                    SoundUtil.PlayCustomSound("Sounds/BasicBeamFire", projectile.Center);
 
                     projectile.Kill();
 
@@ -81,20 +83,23 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
                 }
-
-                if (chargeSound != null)
-                {
-                    chargeSound.Stop();
-                }
+                var chargeSoundKill = Main.GetActiveSound(chargeSoundSlotId);
+                if (chargeSoundKill != null)
+                    chargeSoundKill.Stop();
             }
 
             if (!startingCharge)
             {
                 startingCharge = true;
                 if (!Main.dedServ)
-                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge"));
+                    chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
             }
 
+            var chargeSoundUpdate = Main.GetActiveSound(chargeSoundSlotId);
+            if (chargeSoundUpdate != null)
+            {
+                chargeSoundUpdate.Position = projectile.Center;
+            }
         }
 
     }

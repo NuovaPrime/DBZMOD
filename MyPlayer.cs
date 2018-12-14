@@ -227,7 +227,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public SoundEffectInstance transformationSound;
+        public ReLogic.Utilities.SlotId transformationSound;
         #endregion
 
         #region Syncable Controls
@@ -661,10 +661,8 @@ namespace DBZMOD
             // try to update positional audio?
             if (transformationSound != null)
             {
-                if (!Main.dedServ)
-                {
-                    Main.GetActiveSound();
-                }
+                var tranSound = Main.GetActiveSound(transformationSound);
+                tranSound.Position = player.position;                
             }
         }        
 
@@ -1104,10 +1102,11 @@ namespace DBZMOD
 
         public void StopTransformationSound()
         {
+            var tranSound = Main.GetActiveSound(transformationSound);
             if (transformationSound != null)
             {
-                transformationSound.Stop();
-                transformationSound = null;
+                tranSound.Stop();
+                transformationSound = ReLogic.Utilities.SlotId.Invalid;
             }
         }
 

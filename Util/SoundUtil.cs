@@ -46,6 +46,18 @@ namespace Util
             }
         }
 
+        public static SoundEffectInstance PlayVanillaSound(int soundId, Vector2 location, int style)
+        {
+            if (Main.dedServ)
+                return null;
+
+            // this method doesn't return a sound effect instance, it just plays a sound.
+            return Main.PlaySound(soundId, (int)location.X, (int)location.Y, style);
+        }
+
+
+        
+
         public static ReLogic.Utilities.SlotId PlayVanillaSound(Terraria.Audio.LegacySoundStyle soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
             Vector2 location = player != null ? player.Center : Vector2.Zero;
