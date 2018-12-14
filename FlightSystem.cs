@@ -25,7 +25,7 @@ namespace DBZMOD
         const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
-        public static void Update(Player player, bool wasFlying)
+        public static void Update(Player player)
         {
             // this might seem weird but the server isn't allowed to control the flight system.
             if (Main.netMode == NetmodeID.Server)
@@ -40,7 +40,8 @@ namespace DBZMOD
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
                 // DebugUtil.Log(string.Format("Disabling flying on player {0} because ki is depleted or player is dead? Player was flying.", player.whoAmI));
-                modPlayer.IsFlying = false;                
+                modPlayer.IsFlying = false;
+                AddKatchinFeetBuff(player);
             }
 
             if (modPlayer.IsFlying)
@@ -169,11 +170,6 @@ namespace DBZMOD
             if (!modPlayer.IsFlying)
             {                
                 player.fullRotation = MathHelper.ToRadians(0);
-
-                if (wasFlying)
-                {
-                    AddKatchinFeetBuff(player);
-                }
             }
         }
 

@@ -150,6 +150,7 @@ namespace DBZMOD
         // bool used internally to handle managing effects
         public bool WasCharging;
         public int ChargeSoundTimer;
+        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundInfo;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -227,7 +228,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public SoundEffectInstance transformationSound;
+        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
         #endregion
 
         #region Syncable Controls
@@ -639,11 +640,15 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
+
+            // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
+            if (IsPlayerImmobilized() && IsFlying)
+            {
+                IsFlying = false;
+            }
             
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
-            FlightSystem.Update(player, WasFlying);
-
-            WasFlying = IsFlying;
+            FlightSystem.Update(player);
 
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
@@ -657,7 +662,10 @@ namespace DBZMOD
 
             // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
             CheckSyncState();
-        }
+
+            // try to update positional audio?
+            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+        }        
 
         public void ThrottleKi()
         {
@@ -1093,15 +1101,6 @@ namespace DBZMOD
             return m_progressionSystem;
         }
 
-        public void StopTransformationSound()
-        {
-            if (transformationSound != null)
-            {
-                transformationSound.Stop();
-                transformationSound = null;
-            }
-        }
-
         // notes from Prime:
         // Transform goes up
         // Charge + transform ascends(ssj1 - assj, assj - ussj)
@@ -1257,6 +1256,10 @@ namespace DBZMOD
                 if (flightUnlocked)
                 {
                     IsFlying = !IsFlying;
+                    if (!IsFlying)
+                    {
+                        FlightSystem.AddKatchinFeetBuff(player);
+                    }
                 }
             }
 
@@ -1329,8 +1332,7 @@ namespace DBZMOD
             {
                 Transformations.EndTransformations(player, true, false);
 
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
             /*if(QuickKi.JustPressed && traitChecked)
             {
@@ -1368,8 +1370,6 @@ namespace DBZMOD
                     else
                         player.velocity = new Vector2(0, player.velocity.Y);
                 }
-
-                // DebugUtil.Log(string.Format("I think player {0} is moving at {1}, {2}", player.whoAmI, player.velocity.X, player.velocity.Y));
 
                 // grant multiplicative charge bonuses that grow over time if using either earthen accessories
                 if (earthenScarab || earthenArcanium)
@@ -1411,7 +1411,7 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireFrostAuraProj"), 1, 0, player.whoAmI);
                 }
             }
-            else if (!IsCharging)
+            else
             {
                 // reset scarab/earthen bonuses
                 ScarabChargeTimer = 0;
@@ -1427,10 +1427,12 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.5f));
+                    ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
                     ChargeSoundTimer = 0;
                 }
+            } else
+            {
+                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);                
             }
             if (IsCharging && !WasCharging)
             { 
@@ -1438,8 +1440,7 @@ namespace DBZMOD
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
                 }
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyChargeStart").WithVolume(.7f));
+                SoundUtil.PlayCustomSound("Sounds/EnergyChargeStart", player, .7f);
             }
         }
     
@@ -1768,43 +1769,37 @@ namespace DBZMOD
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/GroundRumble").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/GroundRumble", player);
         }
 
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("LSSJ2PillarStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJGTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Awakening").WithVolume(1f));
+            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public override void SetupStartInventory(IList<Item> items)

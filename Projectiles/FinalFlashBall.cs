@@ -7,13 +7,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class FinalFlashBall : KiProjectile
     {
         public bool startingCharge = false;
-        SoundEffectInstance chargeSound;
+        KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -66,8 +67,7 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("FinalFlashBlast"), projectile.damage + (ChargeLevel * 60), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/FinalFlashFire").WithVolume(0.8f));
+                    SoundUtil.PlayCustomSound("Sounds/FinalFlashFire", projectile.Center, 0.8f);
 
                     projectile.Kill();
 
@@ -81,20 +81,16 @@ namespace DBZMOD.Projectiles
                         tDust.noGravity = true;
                     }
                 }
-
-                if (chargeSound != null)
-                {
-                    chargeSound.Stop();
-                }
+                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);
             }
 
             if (!startingCharge)
             {
-                startingCharge = true;
-                if (!Main.dedServ)
-                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/FinalFlashCharge"));
+                startingCharge = true;                
+                chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/FinalFlashCharge", projectile.Center);
             }
 
+            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 
     }

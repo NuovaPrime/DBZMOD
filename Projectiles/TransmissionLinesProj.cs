@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Terraria;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -49,8 +50,7 @@ namespace DBZMOD.Projectiles
         public void InitializeVanishState()
         {
             isInitialized = true;
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Transmission").WithVolume(.7f).WithPitchVariance(.2f));
+            SoundUtil.PlayCustomSound("Sounds/Transmission", projectile.Center, .7f, .2f);
         }
 
         public override void AI()

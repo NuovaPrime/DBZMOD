@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Util;
 
 namespace DBZMOD.Items
 {
@@ -40,17 +41,13 @@ namespace DBZMOD.Items
 
         public override bool OnPickup(Player player)
         {
-            if (!Main.dedServ)
-                Main.PlaySound(SoundID.NPCDeath7, player.position);
-            //Mine makes a sound
-            //modplayer resource increase goes here++
+            SoundUtil.PlayVanillaSound(SoundID.NPCDeath7, player);
             MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OrbHealAmount);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), 50, false, false);
-            //(165, 255, 185) is the color of the text
-            //(1) is the displayed text
             return false;
         }
-			public override Color? GetAlpha(Color lightColor)
+
+		public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
         }

@@ -8,13 +8,14 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Graphics.Shaders;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
     public class GalickGunBall : KiProjectile
     {
         public bool startingCharge = false;
-        SoundEffectInstance chargeSound;
+        public KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -66,9 +67,7 @@ namespace DBZMOD.Projectiles
                     float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("GalickGunBlast"), projectile.damage + (ChargeLevel * 35), projectile.knockBack, projectile.owner);
 
-                    //ChargeLevel = 0;
-                    if (!Main.dedServ)
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/BasicBeamFire"));
+                    SoundUtil.PlayCustomSound("Sounds/BasicBeamFire", projectile.position, 1.0f);
 
                     projectile.Kill();
 
@@ -84,20 +83,16 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                if (chargeSound != null)
-                {
-                    chargeSound.Stop();
-                }
+                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);
             }
 
             if (!startingCharge)
             {
                 startingCharge = true;
-                if (!Main.dedServ)
-                    chargeSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyWaveCharge"));
+                chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
             }
 
+            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
-
     }
 }

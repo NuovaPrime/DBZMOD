@@ -1,4 +1,5 @@
-﻿﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.GetModPlayer<MyPlayer>(mod).KiMax2 += 2500;
-                player.GetModPlayer<MyPlayer>(mod).chargeMoveSpeed += 1.5f;
+                player.GetModPlayer<MyPlayer>(mod).chargeMoveSpeed = Math.Max(player.GetModPlayer<MyPlayer>(mod).chargeMoveSpeed, 1.5f);
                 player.GetModPlayer<MyPlayer>(mod).crystalliteAlleviate = true;
             }
         }

@@ -668,15 +668,8 @@ namespace Util
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
             ClearAllTransformations(player, isPoweringDown, isOneStep);
-            if (!Main.dedServ)
-            {
-                if (modPlayer.transformationSound != null)
-                {
-                    modPlayer.transformationSound.Stop();
-                    modPlayer.transformationSound = null;
-                }
-                modPlayer.IsTransforming = false;
-            }
+            modPlayer.TransformationSoundInfo = SoundUtil.KillTrackedSound(modPlayer.TransformationSoundInfo);             
+            modPlayer.IsTransforming = false;
         }
 
         public static void AddTransformation(Player player, string buffKeyName, int duration, bool isNetworkInitiated)
@@ -699,8 +692,8 @@ namespace Util
             // create the projectile starter if applicable.
             DoProjectileForBuff(player, buff);
 
-            if (!Main.dedServ && buff.SoundKey != null)
-                Main.PlaySound(DBZMOD.DBZMOD.instance.GetLegacySoundSlot(SoundType.Custom, buff.SoundKey).WithVolume(buff.Volume), player.Center);
+            if (buff.SoundKey != null)
+                SoundUtil.PlayCustomSound(buff.SoundKey, player, buff.Volume);
         }
 
         // return the first located transformation of a given player. Assumes there should only ever be one, returns the first it finds.

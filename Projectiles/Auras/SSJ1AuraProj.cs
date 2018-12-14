@@ -45,10 +45,9 @@ namespace DBZMOD.Projectiles.Auras
             }
 
             ChargeSoundTimer++;
-            if (ChargeSoundTimer > 22 && player.whoAmI == Main.myPlayer)
+            if (ChargeSoundTimer > 22)
             {
-                if (!Main.dedServ)
-                    player.GetModPlayer<MyPlayer>().transformationSound = player.GetModPlayer<MyPlayer>().transformationSound = Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EnergyCharge").WithVolume(.7f).WithPitchVariance(.2f));
+                player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .7f, .2f);
                 ChargeSoundTimer = 0;
             }
 

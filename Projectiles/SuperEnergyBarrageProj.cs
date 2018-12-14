@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -41,8 +42,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("SuperEnergyBarrageExplosion"), projectile.damage, 4f, projectile.owner, 0, projectile.rotation);
-            if (!Main.dedServ)
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Kiplosion"));
+
+            SoundUtil.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
