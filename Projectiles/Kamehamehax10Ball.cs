@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
     public class Kamehamehax10Ball : KiProjectile
     {
         public bool startingCharge = false;
-        public uint chargeSoundSlotId;
+        public KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -81,7 +81,7 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                SoundUtil.KillTrackedSound(ref chargeSoundSlotId);
+                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);
             }
 
             if (!startingCharge)

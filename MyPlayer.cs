@@ -150,7 +150,7 @@ namespace DBZMOD
         // bool used internally to handle managing effects
         public bool WasCharging;
         public int ChargeSoundTimer;
-        public uint ChargeSoundSlotId;
+        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundInfo;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -228,7 +228,7 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
-        public uint TransformationSoundSlotId;
+        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundSlotId;
         #endregion
 
         #region Syncable Controls
@@ -1097,11 +1097,6 @@ namespace DBZMOD
             return m_progressionSystem;
         }
 
-        public void StopTransformationSound()
-        {
-            SoundUtil.KillTrackedSound(ref TransformationSoundSlotId);
-        }
-
         // notes from Prime:
         // Transform goes up
         // Charge + transform ascends(ssj1 - assj, assj - ussj)
@@ -1426,12 +1421,12 @@ namespace DBZMOD
                 ChargeSoundTimer++;
                 if (ChargeSoundTimer > 22)
                 {
-                    ChargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
+                    ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
                     ChargeSoundTimer = 0;
                 }
             } else
             {
-                SoundUtil.KillTrackedSound(ref ChargeSoundSlotId);                
+                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);                
             }
             if (IsCharging && !WasCharging)
             { 

@@ -76,29 +76,29 @@ namespace Util
             }            
         }
 
-        public static uint PlayCustomSound(string soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
+        public static KeyValuePair<uint, SoundEffectInstance> PlayCustomSound(string soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
             Vector2 location = player != null ? player.Center : Vector2.Zero;
             return PlayCustomSound(soundId, location, volume, pitchVariance);
         }
 
-        public static uint PlayCustomSound(string soundId, Vector2 location, float volume = 1f, float pitchVariance = 0f)
+        public static KeyValuePair<uint, SoundEffectInstance> PlayCustomSound(string soundId, Vector2 location, float volume = 1f, float pitchVariance = 0f)
         {
             if (Main.dedServ)
-                return InvalidSlot;
+                return new KeyValuePair<uint, SoundEffectInstance>(InvalidSlot, null);
 
             var slotId = InvalidSlot;
             var style = GetCustomStyle(soundId, volume, pitchVariance);
+            SoundEffectInstance sound = null;
             if (location == Vector2.Zero)
             {
-                Main.PlaySound(style);
-                
+                sound = Main.PlaySound(style);                
             } else
             {
-                Main.PlaySound(style, location);
+                sound = Main.PlaySound(style, location);
             }
             slotId = (uint)mod.GetSoundSlot(SoundType.Custom, soundId);
-            return slotId;
+            return new KeyValuePair<uint, SoundEffectInstance>(slotId, sound);
         }
 
         public static void PlayCustomSound(ReLogic.Utilities.SlotId slotId)
@@ -113,28 +113,34 @@ namespace Util
             return mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
         }
 
-        public static void KillTrackedSound(ref uint slotId)
+        public static KeyValuePair<uint, SoundEffectInstance> KillTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo)
         {
-            if (slotId == InvalidSlot)
-                return;
-            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(slotId));
+            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(soundInfo.Key));
             if (sound != null)
             {
                 sound.Stop();
+            } else
+            {
+                var soundInstance = soundInfo.Value;
+                if (soundInstance != null)
+                    soundInstance.Stop();
             }
 
-            slotId = InvalidSlot;
+            return new KeyValuePair<uint, SoundEffectInstance>(InvalidSlot, null);
         }
 
-        public static void UpdateTrackedSound(uint slotId, Vector2 position)
+        public static void UpdateTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo, Vector2 position)
         {
-            if (slotId == InvalidSlot)
-                return;
-            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(slotId));
+            var sound = Main.GetActiveSound(new ReLogic.Utilities.SlotId(soundInfo.Key));
             if (sound != null)
             {
                 sound.Position = position;
                 sound.Update();
+            } else
+            {
+                // there's nothing to process updates on if it's untracked :(
+                
+                DebugUtil.Log("Can't update positional audio on untracked sound. :( ");
             }
         }
     }

@@ -667,8 +667,8 @@ namespace Util
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
-            ClearAllTransformations(player, isPoweringDown, isOneStep);            
-            SoundUtil.KillTrackedSound(ref modPlayer.TransformationSoundSlotId);             
+            ClearAllTransformations(player, isPoweringDown, isOneStep);
+            modPlayer.TransformationSoundSlotId = SoundUtil.KillTrackedSound(modPlayer.TransformationSoundSlotId);             
             modPlayer.IsTransforming = false;
         }
 

@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
     public class SpecialBeamCannonBall : KiProjectile
     {
         public bool startingCharge = false;
-        uint chargeSoundSlotId;
+        KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -81,7 +81,7 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                SoundUtil.KillTrackedSound(ref chargeSoundSlotId);
+                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);
             }
 
             if (!startingCharge)
