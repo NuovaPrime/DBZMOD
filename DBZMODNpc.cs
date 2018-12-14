@@ -215,10 +215,8 @@ namespace DBZMOD
                     int kihealvalue = MyPlayer.ModPlayer(player).OverallKiMax() - MyPlayer.ModPlayer(player).GetKi();
                     MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OverallKiMax());
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kihealvalue, false, false);
-                    if(!Main.dedServ)
-                    {
-                        Main.PlaySound(SoundID.MaxMana);
-                    }
+                    SoundUtil.PlayVanillaSound(SoundID.MaxMana, player);
+                    
                 }
             }
         }

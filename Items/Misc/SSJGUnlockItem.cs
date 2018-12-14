@@ -36,8 +36,7 @@ namespace DBZMOD.Items.Misc
 
         public override bool OnPickup(Player player)
         {
-            if (!Main.dedServ)
-                Main.PlaySound(SoundID.NPCDeath7, player.position);
+            SoundUtil.PlayVanillaSound(SoundID.NPCDeath7, player);
             Transformations.EndTransformations(player, true, false);
             MyPlayer.ModPlayer(player).SSJGTransformation();
             MyPlayer.ModPlayer(player).IsTransforming = true;

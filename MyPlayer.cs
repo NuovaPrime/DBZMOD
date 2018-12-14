@@ -1329,8 +1329,7 @@ namespace DBZMOD
             {
                 Transformations.EndTransformations(player, true, false);
 
-                if (!Main.dedServ)
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/PowerDown").WithVolume(.3f));
+                SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
             /*if(QuickKi.JustPressed && traitChecked)
             {

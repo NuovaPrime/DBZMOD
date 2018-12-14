@@ -19,6 +19,7 @@ namespace DBZMOD.Items.DragonBalls
             item.maxStack = 1;
             item.value = 0;
             item.rare = -12;
+            item.createTile = mod.TileType("FourStarDBTile");
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -42,11 +43,13 @@ namespace DBZMOD.Tiles.DragonBalls
             }
             
         }
+
         public override void RightClick(int i, int j)
         {
             KillMultiTile(i, j, frameX, frameY);
             KillSound(i, j);
         }
+
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;

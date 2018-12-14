@@ -16,8 +16,9 @@ namespace DBZMOD
     public class DBZWorld : ModWorld
     {
         private static bool GenerateGohanHouse = false;
-        public static int StartPositionX = 0;
-        public static int StartPositionY = 0;
+        private static bool IsGohanHouseCleaned = false;
+        public static int GohanHouseStartPositionX = 0;
+        public static int GohanHouseStartPositionY = 0;
         public override void ResetNearbyTileEffects()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
@@ -73,7 +74,7 @@ namespace DBZMOD
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,1,0,0,0,0,0,0,0,0,2,0,0,0,0},
+            {0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -95,7 +96,7 @@ namespace DBZMOD
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,4,0,0,0,0,0,5,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0},
             {0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,2,0,0,0,6,0,0,1,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
@@ -116,14 +117,20 @@ namespace DBZMOD
             {                
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House", AddGohanHouse));
             }
+
+            // insert a cleanup task
+            index = tasks.FindIndex(x => x.Name == "Micro Biomes");
+            if (index != -1)
+            {
+                tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House Validation", CleanupGohanHouse));
+            }
         }
 
         public void AddGohanHouse(GenerationProgress progress = null)
         {
             if (GenerateGohanHouse)
-            {
                 return;
-            }
+
             try
             {
                 bool Success = MakeGohanHouse(progress);
@@ -134,9 +141,34 @@ namespace DBZMOD
             }
             catch (Exception exception)
             {
-                Main.NewText("Oh no, an error happened! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
+                Main.NewText("Oh no, an error happened [AddGohanHouse]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
                 ErrorLogger.Log(exception);
             }
+        }
+
+        public void CleanupGohanHouse(GenerationProgress progress = null)
+        {
+            // bail if the house never generated, something is wrong :(
+            if (!GenerateGohanHouse)
+                return;
+
+            // bail if already done.
+            if (IsGohanHouseCleaned)
+                return;
+
+            try
+            {
+                bool Success = RunGohanCleanupRoutine(progress);
+                if (Success)
+                {
+                    IsGohanHouseCleaned = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                Main.NewText("Oh no, an error happened [CleanupGohanHouse]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
+                ErrorLogger.Log(exception);
+            }            
         }
 
         bool MakeGohanHouse(GenerationProgress progress)
@@ -148,25 +180,25 @@ namespace DBZMOD
                 progress.Set(0.50f);
             }
 
-            StartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
+            GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
             for (var Attempts = 0; Attempts < 10000; Attempts++)
             {
                 for (var i = 0; i < 25; i++)
                 {
-                    StartPositionY = 190;
+                    GohanHouseStartPositionY = 190;
                     do
                     {
-                        StartPositionY++;
+                        GohanHouseStartPositionY++;
                     }
-                    while ((!Main.tile[StartPositionX + i, StartPositionY].active() && StartPositionY < Main.worldSurface) || Main.tile[StartPositionX + i, StartPositionY].type == TileID.Trees || Main.tile[StartPositionX + i, StartPositionY].type == 27);
-                    if (!Main.tile[StartPositionX, StartPositionY].active() || Main.tile[StartPositionX, StartPositionY].liquid > 0)
+                    while ((!Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].active() && GohanHouseStartPositionY < Main.worldSurface) || Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].type == TileID.Trees || Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].type == 27);
+                    if (!Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].active() || Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0)
                     {
-                        StartPositionX++;
+                        GohanHouseStartPositionX++;
                     }
-                    if (Main.tile[StartPositionX + i, StartPositionY].active())
+                    if (Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].active())
                     {
-                        if (Main.tile[StartPositionX, StartPositionY].liquid > 0)
-                            StartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
+                        if (Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0)
+                            GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
                         goto GenerateBuild;
                     }
                 }
@@ -175,6 +207,12 @@ namespace DBZMOD
             return false;
 
         GenerateBuild:
+            GenerateGohanStructureWithByteArrays();
+            return true;
+        }
+
+        public void GenerateGohanStructureWithByteArrays()
+        {
 
             // if we're here it means we are ready to generate our structure
 
@@ -183,12 +221,14 @@ namespace DBZMOD
             {
                 for (var Y = 0; Y < GohanHouseTiles.GetLength(0); Y++)
                 {
-                    int offsetX = StartPositionX + X;
-                    int offsetY = StartPositionY + Y - GohanHouseTiles.GetLength(0);
+                    int offsetX = GohanHouseStartPositionX + X;
+                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseTiles.GetLength(0);
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseTiles[Y, X])
                     {
                         case 0:
+                            tile.type = 0;
+                            tile.active(false);
                             break;
                         case 1:
                             tile.type = TileID.GrayStucco;
@@ -217,8 +257,8 @@ namespace DBZMOD
             {
                 for (var Y = 0; Y < GohanHouseSlopes.GetLength(0); Y++)
                 {
-                    int offsetX = StartPositionX + X;
-                    int offsetY = StartPositionY + Y - GohanHouseSlopes.GetLength(0);
+                    int offsetX = GohanHouseStartPositionX + X;
+                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseSlopes.GetLength(0);
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     tile.slope(GohanHouseSlopes[Y, X]);
                 }
@@ -228,9 +268,9 @@ namespace DBZMOD
             {
                 for (var Y = 0; Y < GohanHouseWalls.GetLength(0); Y++)
                 {
-                    int offsetX = StartPositionX + X;
-                    int offsetY = StartPositionY + Y - GohanHouseWalls.GetLength(0);
-                    var tile = Framing.GetTileSafely(offsetX, offsetY);                    
+                    int offsetX = GohanHouseStartPositionX + X;
+                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseWalls.GetLength(0);
+                    var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseWalls[Y, X])
                     {
                         case 0:
@@ -257,8 +297,8 @@ namespace DBZMOD
                 // house objects are different.. they go in reverse (ground up) so that the bottle placement actually works.
                 for (var Y = GohanHouseObjects.GetLength(0) - 1; Y >= 0; Y--)
                 {
-                    int offsetX = StartPositionX + X;
-                    int offsetY = StartPositionY + Y - GohanHouseObjects.GetLength(0);
+                    int offsetX = GohanHouseStartPositionX + X;
+                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseObjects.GetLength(0);
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     // break rocks!
                     if (tile.type == TileID.SmallPiles || tile.type == TileID.LargePiles || tile.type == TileID.LargePiles2 || tile.type == TileID.Dirt || tile.type == TileID.Stone)
@@ -282,28 +322,28 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.Bottles, true, 5); // confirmed dynasty cup
                             break;
                         case 4:
-                            WorldGen.PlaceObject(offsetX, offsetY, TileID.HangingLanterns, true, 24); // some hot garbage, I haven't found the large dynasty lantern yet.
-                            // tile.color(28);
+                            WorldGen.PlaceObject(offsetX, offsetY, TileID.Chandeliers, true, 22); // confirmed large dynasty lantern
+                            tile.color(28);
                             break;
                         case 5:
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.HangingLanterns, true, 26); // confirmed dynasty hanging lantern (small one)
                             break;
                         case 6:
-                            WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 29); // confirmed dynasty dresser
+                            WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
                             break;
                         case 7:
-                            WorldGen.PlaceObject(offsetX, offsetY, (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile"));
+                            WorldGen.PlaceObject(offsetX, offsetY, (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile"), true);
                             break;
                     }
                 }
             }
 
             // sample tiles at the origin (it's to the right, this isn't perfect)
-            var sampleTile = Framing.GetTileSafely(StartPositionX, StartPositionY + 1);
+            var sampleTile = Framing.GetTileSafely(GohanHouseStartPositionX, GohanHouseStartPositionY + 1);
             bool isSnowBiome = false;
             if (sampleTile.type == TileID.SnowBlock || sampleTile.type == TileID.IceBlock)
                 isSnowBiome = true;
-            
+
 
             // experimental, also doesn't work when the tiles below are snow... which happens at spawn sometimes.
             // put dirt under the house and make sure gaps are filled. this might look weird.
@@ -311,16 +351,30 @@ namespace DBZMOD
             {
                 for (var X = -1 - (Y * 2); X < GohanHouseTiles.GetLength(1) + 1 + (Y * 2); X++)
                 {
-                    int offsetX = StartPositionX + X;
-                    int offsetY = StartPositionY + Y;
-                    var tile = Framing.GetTileSafely(offsetX, offsetY);                    
+                    int offsetX = GohanHouseStartPositionX + X;
+                    int offsetY = GohanHouseStartPositionY + Y;
+                    var tile = Framing.GetTileSafely(offsetX, offsetY);
                     bool isEdge = IsAnySideExposed(offsetX, offsetY);
                     tile.type = isSnowBiome ? TileID.SnowBlock : (isEdge ? TileID.Grass : TileID.Dirt);
                     // if it's a slope, unslope that shit. quit putting gaps in the ground terraria.
                     tile.slope(0);
+                    tile.halfBrick(false);
                     tile.active(true);
                 }
             }
+        }
+
+        bool RunGohanCleanupRoutine(GenerationProgress progress)
+        {
+            // we already have the starting position, just cut straight to the build cleanup.
+            string GohanHouseGen = "Cleaning up Grandpa's House...";
+            if (progress != null)
+            {
+                progress.Message = GohanHouseGen;
+                progress.Set(0.50f);
+            }
+
+            GenerateGohanStructureWithByteArrays();
             return true;
         }
 
@@ -331,7 +385,7 @@ namespace DBZMOD
                 for (var offY = -1; offY <= 1; offY++)
                 {
                     var tile = Framing.GetTileSafely(startX + offX, startY + offY);
-                    if (tile.type == 0 && tile.active() == false)
+                    if (!tile.active())
                         return true;
                 }
             }

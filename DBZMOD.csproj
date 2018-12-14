@@ -249,6 +249,13 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
+    <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
+    <Compile Include="Items\DragonBalls\FourStarDB.cs" />
+    <Compile Include="Items\DragonBalls\OneStarDB.cs" />
+    <Compile Include="Items\DragonBalls\SevenStarDB.cs" />
+    <Compile Include="Items\DragonBalls\SixStarDB.cs" />
+    <Compile Include="Items\DragonBalls\ThreeStarDB.cs" />
+    <Compile Include="Items\DragonBalls\TwoStarDB.cs" />
     <Compile Include="Items\EarthenShard.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\KaiTableItem.cs" />
@@ -446,6 +453,7 @@
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
+    <Compile Include="Tiles\DragonBalls\FourStarDBTile.cs" />
     <Compile Include="Tiles\KaiTable.cs" />
     <Compile Include="Tiles\KiLantern.cs" />
     <Compile Include="Tiles\RadiantFragmentBlock.cs" />
@@ -462,6 +470,7 @@
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
+    <Compile Include="Util\SoundUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />
     <Compile Include="Util\HomingHelper.cs" />
