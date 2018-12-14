@@ -12,16 +12,19 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("4x Damage, 4x Speed, Rapidly Drains Ki " +
-                "\nand slightly drains life when below 30% ki.");
+            DamageMulti = 4f;
+            SpeedMulti = 4f;
+            KiDrainBuffMulti = 2.1f;
+            KiDrainRate = 6;
+            KiDrainRateWithMastery = 4;
+            Description.SetDefault(AssembleTransBuffDescription() + "\n(Life drains when below 30% Max Ki)");
         }
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            DamageMulti = 4f;
-            SpeedMulti = 4f;
             bool isMastered = modPlayer.MasteryLevel3 >= 1f;
-            KiDrainRate = isMastered ? 4 : 6;
+
+            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
             float kiQuotient = (float)modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)
             {
@@ -31,7 +34,6 @@ namespace DBZMOD.Buffs
                 HealthDrainRate = 0;
             }
             
-            KiDrainBuffMulti = 2.1f;
             MasteryTimer++;
             if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax3 <= 1)
             {

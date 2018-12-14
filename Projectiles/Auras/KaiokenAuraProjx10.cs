@@ -21,23 +21,21 @@ namespace DBZMOD.Projectiles.Auras
             projectile.width = 97;
             projectile.height = 102;
             projectile.aiStyle = 0;
-            projectile.alpha = 70;
             projectile.timeLeft = 10;
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            KaioAuraTimer = 250;
-            AuraOffset.Y = -80;
+            KaioAuraTimer = 240;
             IsKaioAura = true;
-            ScaleExtra = 1.5f;
+            AuraOffset.Y = -24;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(Transformations.Kaioken10.BuffId))
+            if (!player.HasBuff(Transformations.Kaioken10.GetBuffId()))
             {
                 projectile.Kill();
             }

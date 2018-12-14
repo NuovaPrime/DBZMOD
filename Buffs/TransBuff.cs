@@ -15,6 +15,7 @@ namespace DBZMOD
 {
     public abstract class TransBuff : ModBuff
     {
+        public const int KI_DRAIN_TIMER_MAX = 3;
         public float DamageMulti;
         public float SpeedMulti;
         public float KaioLightValue;
@@ -23,10 +24,12 @@ namespace DBZMOD
         public int HealthDrainRate;
         public int OverallHealthDrainRate;
         public int KiDrainRate;
+        public int KiDrainRateWithMastery;
         private int KiDrainTimer;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
+        
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
@@ -68,7 +71,7 @@ namespace DBZMOD
                 {
                     // player still has some ki, perform drain routine
                     KiDrainTimer++;
-                    if (KiDrainTimer > 2)
+                    if (KiDrainTimer >= KI_DRAIN_TIMER_MAX)
                     {
                         modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
                         KiDrainTimer = 0;
@@ -87,26 +90,19 @@ namespace DBZMOD
                 modPlayer.KiDrainAddition = 0;                
             }
 
-            if (modPlayer.speedToggled)
-            {
-                player.moveSpeed += SpeedMulti - 1f;
-                player.maxRunSpeed += SpeedMulti - 1f;
-                player.runAcceleration += SpeedMulti - 1f;
-            }
-            else if (!modPlayer.speedToggled)
-            {
-                player.moveSpeed += 2f;
-                player.maxRunSpeed += 2f;
-                player.runAcceleration += 2f;
-            }
+            //DebugUtil.Log(string.Format("Before: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
+            player.moveSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            player.maxRunSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            player.runAcceleration *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
-            player.meleeDamage += (DamageMulti - 1) * 0.5f;
-            player.rangedDamage += (DamageMulti - 1) * 0.5f;
-            player.magicDamage += (DamageMulti - 1) * 0.5f;
-            player.minionDamage += (DamageMulti - 1) * 0.5f;
-            player.thrownDamage += (DamageMulti - 1) * 0.5f;
-            modPlayer.KiDamage += (DamageMulti - 1);
+            player.meleeDamage *= DamageMulti * 0.5f;
+            player.rangedDamage *= DamageMulti * 0.5f;
+            player.magicDamage *= DamageMulti * 0.5f;
+            player.minionDamage *= DamageMulti * 0.5f;
+            player.thrownDamage *= DamageMulti * 0.5f;
+            modPlayer.KiDamage *= DamageMulti;
 
             // cross mod support stuff
             if (DBZMOD.instance.thoriumLoaded)
@@ -133,33 +129,66 @@ namespace DBZMOD
 
         public void ThoriumEffects(Player player)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage += (DamageMulti - 1) * 0.5f;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost += (DamageMulti - 1) * 0.5f;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= DamageMulti * 0.5f;
         }
 
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage += (DamageMulti - 1) * 0.5f;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= DamageMulti * 0.5f;
         }
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage += (DamageMulti - 1) * 0.5f;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= DamageMulti * 0.5f;
         }
 
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage += (DamageMulti - 1) * 0.5f;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= DamageMulti * 0.5f;
         }
 
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage += (DamageMulti - 1) * 0.5f;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= DamageMulti * 0.5f;
         }
 
         private void KiDrainAdd(Player player)
         {
             MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
+        }
+
+        public string GetPercentForDisplay(string currentDisplayString, string text, int percent)
+        {
+            if (percent == 0)
+                return currentDisplayString;
+            return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
+        }
+
+        public string AssembleTransBuffDescription()
+        {
+            int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
+            int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
+            int kiDrainPerSecond = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRate;
+            int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
+            int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
+            string displayString = string.Empty;
+            displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
+            displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
+            displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
+            if (kiDrainPerSecond > 0)
+            {
+                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, kiDrainPerSecond);
+                if (kiDrainPerSecondWithMastery > 0)
+                {
+                    displayString = string.Format("{0}, {1}/s when mastered", displayString, kiDrainPerSecondWithMastery);
+                }
+            }
+            if (HealthDrainRate > 0)
+            {
+                displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, HealthDrainRate / 2);
+            }
+            return displayString;
         }
     }
 }

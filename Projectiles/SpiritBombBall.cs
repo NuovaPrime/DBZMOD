@@ -90,10 +90,6 @@ namespace DBZMOD.Projectiles
                 {
                     projectile.timeLeft = 400;
                 }
-                if (MyPlayer.ModPlayer(player).IsKiDepleted())
-                {
-                    IsReleased = true;
-                }
 
                 MyPlayer.ModPlayer(player).AddKi(-2);
                 ApplyChannelingSlowdown(player);
@@ -104,6 +100,12 @@ namespace DBZMOD.Projectiles
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 projectile.netUpdate2 = true;
+
+                // depleted check, release the ball
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
+                {
+                    player.channel = false;
+                }
             } else if (!IsReleased)
             {
                 projectile.timeLeft = 600;

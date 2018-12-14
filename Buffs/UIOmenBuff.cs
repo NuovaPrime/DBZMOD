@@ -12,15 +12,11 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("The secret technique of the gods. Grants the ability to dodge any attack.");
-        }
-        public override void Update(Player player, ref int buffIndex)
-        {
             DamageMulti = 2f;
             SpeedMulti = 7f;
             KiDrainRate = 10;
             KiDrainBuffMulti = 1f;
-            base.Update(player, ref buffIndex);
+            Description.SetDefault("The secret technique of the gods. Grants the ability to dodge any attack.");
         }
     }
 }

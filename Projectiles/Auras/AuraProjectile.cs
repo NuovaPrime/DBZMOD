@@ -18,7 +18,6 @@ namespace Projectiles.Auras
         public bool IsGodAura;
         public bool AuraActive;
         public Vector2 AuraOffset;
-        public float ScaleExtra;
         public override bool CloneNewInstances
         {
             get
@@ -61,10 +60,7 @@ namespace Projectiles.Auras
             {
                 projectile.frame = 0;
             }
-            
-            projectile.scale = 1.0f + ScaleExtra;
-
-
+			
             // update handler to reorient the charge up aura after the aura offsets are defined.
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
             if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)

@@ -35,7 +35,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Player player = Main.player[projectile.owner];
             projectile.netUpdate = true;
-            if (!player.HasBuff(Transformations.Kaioken.BuffId) && !player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
+            if (!player.HasBuff(Transformations.Kaioken.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
             {
                 projectile.Kill();
             }
@@ -44,9 +44,9 @@ namespace DBZMOD.Projectiles.Auras
                 //projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
             }
-            if(player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
+            if(player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
             {
-                ScaleExtra = 0.5f;
+                projectile.scale *= 1.5f;
                 AuraOffset.Y = -40;
             }
             else

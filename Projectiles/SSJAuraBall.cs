@@ -97,8 +97,8 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
-                if (!player.HasBuff(Transformations.SSJ2.BuffId))
-                    player.AddBuff(Transformations.SSJ2.BuffId, 360000);
+                if (!player.HasBuff(Transformations.SSJ2.GetBuffId()))
+                    player.AddBuff(Transformations.SSJ2.GetBuffId(), 360000);
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ2AuraProj"), 0, 0, player.whoAmI);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
                 if (!Main.dedServ)

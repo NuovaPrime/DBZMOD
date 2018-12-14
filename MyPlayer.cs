@@ -136,7 +136,7 @@ namespace DBZMOD
         public bool spiritualEmblem;
         public float KaiokenTimer = 0.0f;
         public bool kiLantern;
-        public bool speedToggled = true;
+        public float bonusSpeedMultiplier = 1f;
         public float KiDrainMulti;
         public bool diamondNecklace;
         public bool emeraldNecklace;
@@ -246,7 +246,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult * (player.HasBuff(mod.BuffType("LegendaryTrait")) ? 2f : 1f));
+            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult);
         }
 
         // all changes to Ki Current are now made through this method.
@@ -367,7 +367,7 @@ namespace DBZMOD
             }
             if (Transformations.IsPlayerTransformed(player))
             {
-                if (!player.HasBuff(Transformations.Kaioken100.BuffId) && !player.HasBuff(Transformations.LSSJ2.BuffId))
+                if (!player.HasBuff(Transformations.Kaioken100.GetBuffId()) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
                 {
                     LightningFrameTimer++;
                 }
@@ -687,6 +687,7 @@ namespace DBZMOD
         public bool? SyncIsFlying;
         public int? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
+        public float? SyncBonusSpeedMultiplier;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetLeft;
@@ -815,6 +816,11 @@ namespace DBZMOD
                 SyncChargeMoveSpeed = chargeMoveSpeed;
             }
 
+            if (SyncBonusSpeedMultiplier != bonusSpeedMultiplier)
+            {
+                NetworkHelper.playerSync.SendChangedBonusSpeedMultiplier(256, player.whoAmI, player.whoAmI, bonusSpeedMultiplier);
+                SyncBonusSpeedMultiplier = bonusSpeedMultiplier;
+            }
             if (SyncKiCurrent != GetKi())
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
@@ -1226,6 +1232,20 @@ namespace DBZMOD
                 IsDownHeld = false;
         }
 
+        public float GetNextSpeedMultiplier()
+        {
+            if (bonusSpeedMultiplier == 0f)            
+                    return 0.25f;
+            else if (bonusSpeedMultiplier == 0.25f)
+                return 0.5f;
+            else if (bonusSpeedMultiplier == 0.5f)
+                return 0.75f;
+            else if (bonusSpeedMultiplier == 0.75f)
+                return 1.0f;
+            else
+                return 0f;            
+        }
+
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             UpdateSynchronizedControls(triggersSet);
@@ -1289,7 +1309,9 @@ namespace DBZMOD
 
             if (SpeedToggle.JustPressed)
             {
-                speedToggled = !speedToggled;
+                float oldSpeedMult = bonusSpeedMultiplier;
+                bonusSpeedMultiplier = GetNextSpeedMultiplier();
+                CombatText.NewText(player.Hitbox, new Color(255, 255, 255), string.Format("Speed bonus {0}!", (bonusSpeedMultiplier == 0f) ? "off" : ((int)Math.Ceiling(bonusSpeedMultiplier * 100f)).ToString() + "%"), false, false);
             }
 
             if (TransMenu.JustPressed)
@@ -1532,7 +1554,8 @@ namespace DBZMOD
             timeRing = false;
             bloodstainedBandana = false;
             KiMax2 = 0;
-            KiMaxMult = 1f;
+            bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
+            KiMaxMult = hasLegendaryBuff ? 2f : 1f;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
@@ -1576,7 +1599,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.BuffId) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1593,7 +1616,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.BuffId) && MasteryLevel1 >= 1)
+                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
                 {
                     Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1610,7 +1633,7 @@ namespace DBZMOD
             if (damageSource.SourceNPCIndex > -1)
             {
                 NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.BuffId) && MasteryLevel2 >= 1)
+                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
                 {
                     Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                     player.statLife = player.statLifeMax2 / 2;
@@ -1803,7 +1826,7 @@ namespace DBZMOD
             {
                 return;
             }
-            if (drawPlayer.HasBuff(Transformations.SSJ2.BuffId))
+            if (drawPlayer.HasBuff(Transformations.SSJ2.GetBuffId()))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningBlue");
                 int frameSize = texture.Height / 3;
@@ -1812,7 +1835,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(Transformations.LSSJ.BuffId) || drawPlayer.HasBuff(Transformations.LSSJ2.BuffId))
+            if (drawPlayer.HasBuff(Transformations.LSSJ.GetBuffId()) || drawPlayer.HasBuff(Transformations.LSSJ2.GetBuffId()))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningGreen");
                 int frameSize = texture.Height / 3;
@@ -1821,7 +1844,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(Transformations.SSJ3.BuffId))
+            if (drawPlayer.HasBuff(Transformations.SSJ3.GetBuffId()))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningYellow");
                 int frameSize = texture.Height / 3;
@@ -1830,7 +1853,7 @@ namespace DBZMOD
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
-            if (drawPlayer.HasBuff(Transformations.Kaioken100.BuffId) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if (drawPlayer.HasBuff(Transformations.Kaioken100.GetBuffId()) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Texture2D texture = mod.GetTexture("Dusts/LightningRed");
                 int frameSize = texture.Height / 3;
@@ -1920,43 +1943,43 @@ namespace DBZMOD
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (player.HasBuff(Transformations.SSJ1.BuffId))
+                    if (player.HasBuff(Transformations.SSJ1.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                     }
-                    else if (player.HasBuff(Transformations.ASSJ.BuffId))
+                    else if (player.HasBuff(Transformations.ASSJ.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
                     }
-                    else if (player.HasBuff(Transformations.USSJ.BuffId))
+                    else if (player.HasBuff(Transformations.USSJ.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ1Kaioken.BuffId))
+                    else if (player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ2.BuffId))
+                    else if (player.HasBuff(Transformations.SSJ2.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ3.BuffId))
+                    else if (player.HasBuff(Transformations.SSJ3.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                     }
-                    else if (player.HasBuff(Transformations.LSSJ.BuffId))
+                    else if (player.HasBuff(Transformations.LSSJ.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                     }
-                    else if (player.HasBuff(Transformations.LSSJ2.BuffId))
+                    else if (player.HasBuff(Transformations.LSSJ2.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.SPECTRUM.BuffId))
+                    else if (player.HasBuff(Transformations.SPECTRUM.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }
-                    if(player.HasBuff(Transformations.SSJG.BuffId))
+                    if(player.HasBuff(Transformations.SSJG.GetBuffId()))
                     {
                         Hair = null;
                     }

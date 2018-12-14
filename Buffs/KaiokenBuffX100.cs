@@ -14,15 +14,11 @@ namespace DBZMOD.Buffs
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
             KaioLightValue = 10f;
-            Description.SetDefault("5x Damage, 5x Speed, Drains life Extremely Quickly.");
-        }
-        public override void Update(Player player, ref int buffIndex)
-        {
             DamageMulti = 5f;
             SpeedMulti = 5f;
             HealthDrainRate = 380;
             KiDrainBuffMulti = 4f;
-            base.Update(player, ref buffIndex);
+            Description.SetDefault(AssembleTransBuffDescription());
         }
     }
 }

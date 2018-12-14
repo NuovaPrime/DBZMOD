@@ -31,6 +31,7 @@ namespace Enums
         TriggerRight,
         TriggerUp,
         TriggerDown,
-        ChargeMoveSpeed
+        ChargeMoveSpeed,
+        BonusSpeedMultiplier
     }
 }

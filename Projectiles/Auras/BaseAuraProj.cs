@@ -11,7 +11,6 @@ namespace DBZMOD.Projectiles.Auras
 {
     public class BaseAuraProj : AuraProjectile
     {
-        public int BaseAuraTimer;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -27,7 +26,6 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            BaseAuraTimer = 5;
             projectile.netUpdate = true;
             AuraOffset.Y = -30;
 			projectile.light = 1f;
@@ -41,7 +39,6 @@ namespace DBZMOD.Projectiles.Auras
                     Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(255, 255, 255), 0.75f);
                     dust.noGravity = true;
                 }
-
             }
         }
         public override void AI()
@@ -53,40 +50,16 @@ namespace DBZMOD.Projectiles.Auras
             {
                 projectile.Kill();
             }
-            else
-            {
-                projectile.rotation = 0;
-            }
-
-            // this might seem counterintuitive, but *reverse* the charge frame counter by 1
-            // this makes the base charge aura as slow as other auras, and makes other auras faster when charging
-            projectile.frameCounter--;
-
-
-            if (BaseAuraTimer > 0)
-            {
-                projectile.scale = 1f - 0.7f * (BaseAuraTimer / 5f);
-                BaseAuraTimer--;
-            }
-            else
-            {
-                projectile.scale = 1f;
-            }
             base.AI();
         }
 		
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-			spriteBatch.End();
+            projectile.scale = Main.GameZoomTarget;
+            AuraOffset.Y = -30 * Main.GameZoomTarget;
+            spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
-            Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-            for (int k = 0; k < projectile.oldPos.Length; k++)
-            {
-                Vector2 drawPos = projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
-                Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-                spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
-            }
-            return true;
+            return base.PreDraw(spriteBatch, lightColor);
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)

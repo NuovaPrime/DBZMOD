@@ -82,6 +82,7 @@
     <Compile Include="Buffs\BuffKeyNames.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\DemonBonus.cs" />
+    <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
     <Compile Include="Buffs\DisgustingGoopBuff.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuffX10.cs" />
@@ -460,7 +461,7 @@
     <Compile Include="UI\ProgressionMenu.cs" />
     <Compile Include="UI\ResourceBar.cs" />
     <Compile Include="UI\TransMenu.cs" />
-    <Compile Include="Util\BuffInfo.cs" />
+    <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />
@@ -508,6 +509,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Buffs\DevBuffs\SSJSBuff.png" />
+    <Content Include="Hairs\Dev\SSJSHair.png" />
     <Content Include="Hairs\God\SSJBEHair.png" />
     <Content Include="Hairs\God\SSJBHair.png" />
     <Content Include="Hairs\God\SSJGHair.png" />
@@ -602,7 +604,7 @@
 exit 0
 )
 if "$(ConfigurationName)"=="Nuova C Drive" (
-"C:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"	
+"C:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
 exit 0
 )
 if "$(ConfigurationName)"=="Debug" (
