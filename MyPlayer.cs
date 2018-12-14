@@ -640,6 +640,12 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
+
+            // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
+            if (IsPlayerImmobilized() && IsFlying)
+            {
+                IsFlying = false;
+            }
             
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
             FlightSystem.Update(player);
