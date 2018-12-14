@@ -51,7 +51,7 @@ namespace DBZMOD
 
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = (Transformations.IsKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
+                float drainMult = ((Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)) && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount
                 OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);

@@ -212,7 +212,7 @@ namespace DBZMOD
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
            NetworkHelper.HandlePacket(reader, whoAmI);
-        }
+        }        
     }
 }
  
