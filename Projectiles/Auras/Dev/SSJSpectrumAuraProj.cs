@@ -62,7 +62,7 @@ namespace DBZMOD.Projectiles.Auras.Dev
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             projectile.scale = Main.GameZoomTarget;
-            AuraOffset.Y = -30 * Main.GameZoomTarget;
+            AuraOffset.Y = -30 * Main.GameZoomTarget;            
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             return base.PreDraw(spriteBatch, lightColor);

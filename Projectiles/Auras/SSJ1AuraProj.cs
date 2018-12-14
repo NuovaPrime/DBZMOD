@@ -36,7 +36,7 @@ namespace DBZMOD.Projectiles.Auras
 
         public override void AI()
         {
-            DebugUtil.Log("Zoom is at " + Main.zoomX + ", " + Main.zoomY);
+            //DebugUtil.Log("Zoom is at " + Main.zoomX + ", " + Main.zoomY);
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(Transformations.SSJ1.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()) && !player.HasBuff(Transformations.ASSJ.GetBuffId()) && !player.HasBuff(Transformations.USSJ.GetBuffId()))
             {

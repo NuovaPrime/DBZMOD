@@ -119,7 +119,7 @@ namespace DBZMOD
 
                 //calculate rotation
                 float radRot = 0;
-                DebugUtil.Log(string.Format("m_rotation is X: {0} Y: {1}", m_rotationDir.X, m_rotationDir.Y));
+                // DebugUtil.Log(string.Format("m_rotation is X: {0} Y: {1}", m_rotationDir.X, m_rotationDir.Y));
                 if (m_rotationDir != Vector2.Zero)
                 {
                     m_rotationDir.Normalize();
