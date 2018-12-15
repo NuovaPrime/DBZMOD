@@ -15,7 +15,6 @@ namespace DBZMOD.UI
     internal class EasyMenu : UIState
     {
         public UIPanel backPanel;
-        private Player player;
 
         public override void OnInitialize()
         {

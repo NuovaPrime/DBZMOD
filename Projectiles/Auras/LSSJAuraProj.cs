@@ -13,7 +13,6 @@ namespace DBZMOD.Projectiles.Auras
     public class LSSJAuraProj : AuraProjectile
     {
         private int ChargeSoundTimer = 480;
-        private int LightningTimer = 0;
 
         public override void SetStaticDefaults()
         {

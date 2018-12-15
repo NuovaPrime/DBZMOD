@@ -32,7 +32,6 @@ namespace DBZMOD
         private ResourceBar resourceBar;
         private UserInterface ProgressionMenuInterface;
 
-        private DBZMOD mod;
         public bool thoriumLoaded;
         public bool tremorLoaded;
         public bool enigmaLoaded;

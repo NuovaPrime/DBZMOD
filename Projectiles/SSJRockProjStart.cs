@@ -11,7 +11,6 @@ namespace DBZMOD.Projectiles
 {
     public class SSJRockProjStart : ModProjectile
     {
-        private float SizeTimer;
         public override void SetDefaults()
         {
             projectile.width = 2;

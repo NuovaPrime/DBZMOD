@@ -10,7 +10,6 @@ namespace DBZMOD.Projectiles
 {
     public class SSJGDustCenter : ModProjectile
     {
-        private float SizeTimer;
         public override void SetDefaults()
         {
             projectile.width = 2;

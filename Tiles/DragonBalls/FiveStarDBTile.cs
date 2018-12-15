@@ -10,8 +10,6 @@ namespace DBZMOD.Tiles.DragonBalls
 {
     public class FiveStarDBTile : ModTile
     {
-        private int frameX;
-        private int frameY;
         public override void SetDefaults()
         {
             Main.tileFrameImportant[Type] = true;

@@ -11,8 +11,6 @@ namespace DBZMOD.Items.Weapons.Tier_2
 {
 	public class DestructoDisk : KiItem
 	{
-        private Player player;
-
         public override void SetDefaults()
 		{
 			item.shoot = mod.ProjectileType("DestructoDiskProjectile");

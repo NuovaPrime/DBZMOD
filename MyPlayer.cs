@@ -313,9 +313,6 @@ namespace DBZMOD
             return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
         }
 
-        // tracks whether a player was flying in the previous frame. Allows Flight System to apply Katchin Feet correctly
-        private bool WasFlying = false;
-
         public override void PostUpdate()
         {            
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))

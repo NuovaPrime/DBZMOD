@@ -13,6 +13,15 @@ namespace DBZMOD.Projectiles
 {
 	public class BrolyMouthBeamProj : BaseBeamProj
 	{
-        
-	}
+        public override void SetDefaults()
+        {
+            projectile.width = 10;
+            projectile.height = 10;
+            projectile.friendly = true;
+            projectile.penetrate = -1;
+            projectile.tileCollide = false;
+            projectile.magic = true;
+            projectile.hide = true;
+        }
+    }
 }

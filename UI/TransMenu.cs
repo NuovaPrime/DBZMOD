@@ -44,7 +44,6 @@ namespace DBZMOD.UI
         public static bool SSJ2On;
         public static bool SSJ3On;
         public static bool LSSJOn;
-        private Player player;
         public const float PADDINGX = 10f;
         public const float PADDINGY = 30f;
 
