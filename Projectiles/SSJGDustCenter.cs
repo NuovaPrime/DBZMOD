@@ -21,7 +21,6 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            SizeTimer = 0f;
         }
         public override void AI()
         {

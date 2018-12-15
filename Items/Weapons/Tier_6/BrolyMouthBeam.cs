@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Items.Weapons.Tier_6
+namespace DBZMOD.Items.Weapons.Tier_6
 {
     public class BrolyMouthBeam : KiItem
     {
