@@ -534,14 +534,14 @@ namespace Util
             return false;
         }
 
-        // handle a transformation where the startup goes to the menu selection instead of stepping up or down.
-        public static void DoTransform(Player player, MenuSelectionID buffId, Mod mod)
-        {
-            if (buffId == MenuSelectionID.None)
-                return;
-            // overload of do transform from this method will never be a power down, always a power up.
-            DoTransform(player, GetBuffFromMenuSelection(buffId), mod, false);
-        }
+        //// handle a transformation where the startup goes to the menu selection instead of stepping up or down.
+        //public static void DoTransform(Player player, MenuSelectionID buffId, Mod mod)
+        //{
+        //    if (buffId == MenuSelectionID.None)
+        //        return;
+        //    // overload of do transform from this method will never be a power down, always a power up.
+        //    DoTransform(player, GetBuffFromMenuSelection(buffId), mod, false);
+        //}
 
         public static void AddKaiokenExhaustion(Player player, int multiplier)
         {
@@ -603,6 +603,7 @@ namespace Util
             }
         }
 
+        // clear a single transformation buff from the target player
         public static void RemoveTransformation(Player player, string buffKeyName, bool isNetworkInitiated)
         {
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
@@ -613,12 +614,17 @@ namespace Util
             }
 
             player.ClearBuff(buff.GetBuffId());
+
+            // presumably if they're having their buff cleared, their audio needs killing.
+            player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.KillTrackedSound(player.GetModPlayer<MyPlayer>().TransformationSoundInfo);
+
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
             {                
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, 0);                
             }
         }
 
+        // enforces the prevention of superimposed auras on a given player
         public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
         {
             foreach (Projectile proj in Main.projectile)

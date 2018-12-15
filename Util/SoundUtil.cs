@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
@@ -137,6 +138,49 @@ namespace Util
                 sound.Position = position;
                 sound.Update();
             }
+        }
+
+        // tries to settle ties when trying to play aura and charge effects - the local player always wins, otherwise it's first come first serve. Only one at a time.
+        public static bool ShouldPlayPlayerAudio(Player player, bool isTransformation)
+        {
+            bool shouldPlayAudio;
+            var modPlayer = player.GetModPlayer<MyPlayer>();            
+            if (player.whoAmI == Main.myPlayer)
+            {
+                shouldPlayAudio = (modPlayer.ChargeSoundInfo.Value == null || isTransformation) && modPlayer.TransformationSoundInfo.Value == null;
+                if (modPlayer.IsAlreadyPlayingOtherPlayerAudio)
+                {
+                    KillOtherPlayerAudio(player);
+                }
+            }            
+            else
+            {
+                var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && !myPlayer.IsAlreadyPlayingOtherPlayerAudio;        
+                if (shouldPlayAudio)
+                {
+                    myPlayer.IsAlreadyPlayingOtherPlayerAudio = true;
+                }
+            }
+            return shouldPlayAudio;
+        }
+
+        // handles terminating other player's audio loops when my player does something that needs unrestricted audio usage.
+        public static void KillOtherPlayerAudio(Player myPlayer)
+        {
+            for(var i = 0; i < Main.player.Length; i++)
+            {
+                var player = Main.player[i];
+                if (player.whoAmI != i)
+                    continue;
+                if (player.whoAmI == Main.myPlayer)
+                    continue;
+                var modPlayer = player.GetModPlayer<MyPlayer>();
+                modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
+                modPlayer.TransformationSoundInfo = KillTrackedSound(modPlayer.TransformationSoundInfo);
+            }
+            var myModPlayer = myPlayer.GetModPlayer<MyPlayer>();
+            myModPlayer.IsAlreadyPlayingOtherPlayerAudio = false;
         }
     }
 }

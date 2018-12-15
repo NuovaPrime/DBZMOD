@@ -229,6 +229,10 @@ namespace DBZMOD
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
+
+        // helper bool tracks whether my local player is playing other player's audio or not
+        // useful for preventing the mod from playing too many sounds
+        public bool IsAlreadyPlayingOtherPlayerAudio;
         #endregion
 
         #region Syncable Controls
@@ -1424,16 +1428,25 @@ namespace DBZMOD
             // sound effects during rapid flight or while charging are the same.
             if (IsCharging)
             {
-                ChargeSoundTimer++;
-                if (ChargeSoundTimer > 22)
+                // check to see if an aura sound is playing and skip this if it would overlay.
+                // this handles killing other player's sounds if the local player has started any.
+                bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);              
+              
+                if (shouldPlaySound)
                 {
-                    ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .5f);
-                    ChargeSoundTimer = 0;
+                    ChargeSoundTimer++;
+                    if (ChargeSoundTimer > 22)
+                    {
+                        ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .4f);
+                        ChargeSoundTimer = 0;
+                    }
                 }
             } else
             {
-                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);                
+                // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
+                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
             }
+
             if (IsCharging && !WasCharging)
             { 
                 if (!Transformations.IsPlayerTransformed(player))

@@ -44,13 +44,17 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.Kill();
             }
 
-            ChargeSoundTimer++;
-            if (ChargeSoundTimer > 22)
-            {
-                player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .7f, .2f);
-                ChargeSoundTimer = 0;
-            }
 
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, true);
+            if (shouldPlayAudio)
+            {
+                ChargeSoundTimer++;
+                if (ChargeSoundTimer > 22)
+                {
+                    player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .7f, .2f);
+                    ChargeSoundTimer = 0;
+                }
+            }
             base.AI();
         }
         

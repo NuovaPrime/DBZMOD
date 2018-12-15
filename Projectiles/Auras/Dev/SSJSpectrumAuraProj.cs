@@ -50,11 +50,17 @@ namespace DBZMOD.Projectiles.Auras.Dev
             {
                 projectile.Kill();
             }
-            ChargeSoundTimer++;
-            if (ChargeSoundTimer > 420)
+
+
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, true);
+            if (shouldPlayAudio)
             {
-                player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/SSG", player, .7f, .1f);                
-                ChargeSoundTimer = 0;
+                ChargeSoundTimer++;
+                if (ChargeSoundTimer > 420)
+                {
+                    player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/SSG", player, .7f, .1f);
+                    ChargeSoundTimer = 0;
+                }
             }
             base.AI();
         }
