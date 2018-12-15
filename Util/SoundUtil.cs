@@ -147,7 +147,7 @@ namespace Util
             var modPlayer = player.GetModPlayer<MyPlayer>();            
             if (player.whoAmI == Main.myPlayer)
             {
-                shouldPlayAudio = (modPlayer.ChargeSoundInfo.Value == null || isTransformation) && modPlayer.TransformationSoundInfo.Value == null;
+                shouldPlayAudio = (modPlayer.ChargeSoundInfo.Value == null || isTransformation);
                 if (modPlayer.IsAlreadyPlayingOtherPlayerAudio)
                 {
                     KillOtherPlayerAudio(player);

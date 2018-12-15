@@ -1441,6 +1441,11 @@ namespace DBZMOD
                         ChargeSoundTimer = 0;
                     }
                 }
+                else
+                {
+                    // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
+                    ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
+                }
             } else
             {
                 // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.

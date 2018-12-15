@@ -47,7 +47,7 @@ namespace DBZMOD.Projectiles.Auras
             if (shouldPlayAudio)
             {
                 ChargeSoundTimer++;
-                if (ChargeSoundTimer > 480)
+                if (ChargeSoundTimer > 519)
                 {
                     player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/SSJ2", player, .7f, .1f);
                     ChargeSoundTimer = 0;
