@@ -15,7 +15,7 @@ namespace DBZMOD.Projectiles
 	{
         public bool startingCharge = false;
         public KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
-
+        public bool IsReleased = false;
         public override void SetDefaults()
         {
             projectile.hostile = false;
@@ -28,12 +28,14 @@ namespace DBZMOD.Projectiles
             projectile.timeLeft = 10;
             projectile.netUpdate = true;
             projectile.damage = 0;
+            projectile.knockBack = 1f;
 			aiType = 14;
             projectile.ignoreWater = true;
 			projectile.penetrate = -1;
             ChargeBall = true;
             ChargeLimit = 4;
             KiDrainRate = 1;
+            
             ChargeTimerMax = 30f;
             dusttype = 15;
             color = Color.Blue;
@@ -57,7 +59,6 @@ namespace DBZMOD.Projectiles
    
         public override void AI()
         {
-
             if(!player.channel || (ChargeLevel >= ChargeLimit))
             {
                 if (ChargeLevel >= 1)
@@ -70,7 +71,7 @@ namespace DBZMOD.Projectiles
 
                     projectile.Kill();
 
-                    for (int i = 0; i < 100; i++)
+                    for (int i = 0; i < 8; i++)
                     {
                         float angle = Main.rand.NextFloat(360);
                         float angleRad = MathHelper.ToRadians(angle);

@@ -7,11 +7,15 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
+using DBZMOD.Destruction;
 
 namespace DBZMOD.Projectiles
 {
     public class SuperSpiritBombBall : KiProjectile
     {
+        int rocksFloating = 0;
+        const int MAX_ROCKS = 25;
+
         bool IsReleased = false;
         public override void SetStaticDefaults()
         {
@@ -37,26 +41,6 @@ namespace DBZMOD.Projectiles
             IsReleased = false;
         }
 
-        public override Color? GetAlpha(Color lightColor)
-        {
-            /*if (projectile.timeLeft < 85) 
-			{
-				byte b2 = (byte)(projectile.timeLeft * 3);
-				byte a2 = (byte)(100f * ((float)b2 / 255f));
-				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
-			}*/
-            return new Color(255, 255, 255, 100);
-        }
-
-        public override void Kill(int timeLeft)
-        {
-            //Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0, 0), mod.ProjectileType("SuperSpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            //proj.width *= (int)projectile.scale;
-            //proj.height *= (int)projectile.scale;
-
-            projectile.active = false;
-        }
-
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -64,12 +48,16 @@ namespace DBZMOD.Projectiles
             if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.05f;
-                projectile.netUpdate = true;
 
                 projectile.position = player.position + new Vector2(0, -40 - (projectile.scale * 17));
 
-                for (int d = 0; d < 25; d++)
+                // reduced from 25.
+                for (int d = 0; d < 15; d++)
                 {
+                    // loop hitch for variance.
+                    if (Main.rand.NextFloat() < 0.3f)
+                        continue;
+
                     float angle = Main.rand.NextFloat(360);
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
@@ -78,6 +66,8 @@ namespace DBZMOD.Projectiles
                     tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
+
+                projectile.netUpdate = true;
 
                 if (projectile.timeLeft < 399)
                 {
@@ -88,10 +78,15 @@ namespace DBZMOD.Projectiles
                 ApplyChannelingSlowdown(player);
 
                 //Rock effect
-                projectile.ai[1]++;
-                if (projectile.ai[1] % 7 == 0)
-                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)
+                {
+                    // only some of the time, keeps it a little more varied.
+                    if (Main.rand.NextFloat() < 0.6f)
+                    {
+                        rocksFloating++;
+                        BaseFloatingDestructionProj.SpawnNewFloatingRock(player, projectile);
+                    }
+                }
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

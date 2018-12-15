@@ -116,6 +116,7 @@
     <Compile Include="DBZMOD.cs" />
     <Compile Include="DBZMODItem.cs" />
     <Compile Include="DBZMODNpc.cs" />
+    <Compile Include="Destruction\BaseFloatingDestructionProj.cs" />
     <Compile Include="Destruction\DirtBlockDestruction.cs" />
     <Compile Include="Destruction\StoneBlockDestruction.cs" />
     <Compile Include="Dusts\LightningBlue.cs" />
