@@ -133,7 +133,7 @@ namespace Util
                 if (_SSJG == null)
                 {
                     _SSJG = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.SSJG, 0.7f, "Sounds/SSJAscension",
-                         "Super Saiyan God", DefaultTransformationTextColor, new Type[] { typeof(SSJGAuraProj) }, new string[] { "SSJGTransformStart" });
+                         "Super Saiyan God", DefaultTransformationTextColor, new Type[] { typeof(SSJGAuraProj) }, new string[] { "SSJGAuraProj" });
                 }
                 return _SSJG;
             }
@@ -409,6 +409,12 @@ namespace Util
         public static bool IsSSJ(Player player)
         {
             return PlayerHasBuffIn(player, SSJBuffs());
+        }
+
+        // FAIRY special state, whether the player is in Nuova's Dev form, SPECTRUM, which is fabulous.
+        public static bool IsSpectrum(Player player)
+        {
+            return player.HasBuff(SPECTRUM.GetBuffId());
         }
 
         // fairly special state, whether the player is in SSJ1 and Kaioken combined, which has some special behaviors.
@@ -697,6 +703,9 @@ namespace Util
 
             // create the projectile starter if applicable.
             DoProjectileForBuff(player, buff);
+
+            // start the transformation animation, if one exists. This auto cancels if nothing is there to play.
+            player.GetModPlayer<MyPlayer>().IsTransformationAnimationPlaying = true;
 
             if (buff.SoundKey != null)
                 SoundUtil.PlayCustomSound(buff.SoundKey, player, buff.Volume);

@@ -25,7 +25,25 @@ namespace Projectiles.Auras
                 return true;
             }
         }
-        
+
+        public override bool PreAI()
+        {
+            Player player = Main.player[projectile.owner];
+
+            // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            projectile.hide = modPlayer.IsTransformationAnimationPlaying;
+
+            // make sure behind the scenes we're still playing keep-alive.
+            if (projectile.timeLeft < 2)
+            {
+                projectile.timeLeft = 10;
+            }
+
+            // don't run AI on the hidden projectile, this prevents sounds from playing, etc.
+            return !projectile.hide;
+        }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -35,11 +53,7 @@ namespace Projectiles.Auras
             projectile.netUpdate2 = true;
             projectile.netImportant = true;
 
-            if (projectile.timeLeft < 2)
-            {
-                projectile.timeLeft = 10;
-            }
-
+            // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             int frameCounterLimit = 3;

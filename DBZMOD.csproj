@@ -439,7 +439,6 @@
     <Compile Include="Projectiles\SSJEnergyBarrageProj.cs" />
     <Compile Include="Projectiles\SSJGDustCenter.cs" />
     <Compile Include="Projectiles\SSJGDustStart.cs" />
-    <Compile Include="Projectiles\SSJGTransformStart.cs" />
     <Compile Include="Projectiles\SSJRockProjStart.cs" />
     <Compile Include="Projectiles\SuperEnergyBarrageExplosion.cs" />
     <Compile Include="Projectiles\SuperEnergyBarrageProj.cs" />

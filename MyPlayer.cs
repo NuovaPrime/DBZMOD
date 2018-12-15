@@ -667,6 +667,10 @@ namespace DBZMOD
             // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
             CheckSyncState();
 
+            // if the player is in mid-transformation, totally neuter horizontal velocity
+            if (IsTransformationAnimationPlaying)
+                player.velocity = new Vector2(0, player.velocity.Y);
+
             // try to update positional audio?
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
         }        
@@ -1348,15 +1352,6 @@ namespace DBZMOD
 
         public void HandleChargeEffects()
         {
-            if (Math.Ceiling(Main.time) % 600 == 0)
-            {
-                if (player.whoAmI != Main.myPlayer)
-                {
-                    //DebugUtil.Log(string.Format("I think player {0} is... charging? {1}, ki? {2} / {3}, channeling? {4}, flying? {5}, stationary? {6}", player.whoAmI, IsCharging, GetKi(), OverallKiMax(), player.channel, IsFlying, isPlayerMostlyStationary));
-                    //DebugUtil.Log(string.Format("Frag1 {0} Frag2 {1} Frag3 {2} Frag4 {3} Frag5 {4}", Fragment1, Fragment2, Fragment3, Fragment4, Fragment5));
-                }
-            }
-
             // various effects while charging
             // if the player is flying and moving, charging applies a speed boost and doesn't recharge ki, but also doesn't slow the player.
             bool isAnyKeyHeld = IsLeftHeld || IsRightHeld || IsUpHeld || IsDownHeld;
@@ -1831,58 +1826,130 @@ namespace DBZMOD
         public int LightningFrameTimer;
         public static readonly PlayerLayer LightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("DBZMOD");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = modPlayer.LightningFrameTimer / 5;
+            Mod mod = DBZMOD.instance;
             if (drawInfo.shadow != 0f)
             {
                 return;
             }
+            Player drawPlayer = drawInfo.drawPlayer;
             if (drawPlayer.HasBuff(Transformations.SSJ2.GetBuffId()))
             {
-                Texture2D texture = mod.GetTexture("Dusts/LightningBlue");
-                int frameSize = texture.Height / 3;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
+                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
             if (drawPlayer.HasBuff(Transformations.LSSJ.GetBuffId()) || drawPlayer.HasBuff(Transformations.LSSJ2.GetBuffId()))
             {
-                Texture2D texture = mod.GetTexture("Dusts/LightningGreen");
-                int frameSize = texture.Height / 3;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
+                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
             }
             if (drawPlayer.HasBuff(Transformations.SSJ3.GetBuffId()))
             {
-                Texture2D texture = mod.GetTexture("Dusts/LightningYellow");
-                int frameSize = texture.Height / 3;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
+                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
             if (drawPlayer.HasBuff(Transformations.Kaioken100.GetBuffId()) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
-                Texture2D texture = mod.GetTexture("Dusts/LightningRed");
-                int frameSize = texture.Height / 3;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
+                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
+            }
+        });
+
+
+        public int TransformationFrameTimer;
+        public bool IsTransformationAnimationPlaying = false;
+        public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            Mod mod = DBZMOD.instance;
+            if (drawInfo.shadow != 0f)
+            {
+                return;
+            }
+            if (!modPlayer.IsTransformationAnimationPlaying)
+            {
+                modPlayer.TransformationFrameTimer = 0;
+                return;
             }
 
+            modPlayer.TransformationFrameTimer++;
+
+            bool isAnyAnimationPlaying = false;
+            // ssj 1 through 3. (forcibly exclude god form)
+            if (Transformations.IsSSJ(drawPlayer) && !Transformations.IsGodlike(drawPlayer))
+            {
+                var frameCounterLimit = 5;
+                var numberOfFrames = 4;
+                var yOffset = -18;
+                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJTransformStart", frameCounterLimit, numberOfFrames, yOffset));
+                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+            }
+            if (Transformations.IsGodlike(drawPlayer))
+            {
+                var frameCounterLimit = 8;
+                var numberOfFrames = 6;
+                var yOffset = 35;
+                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJGTransformStart", frameCounterLimit, numberOfFrames, yOffset));
+                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+            }
+            if (Transformations.IsLSSJ(drawPlayer))
+            {
+                // not done yet
+                // Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/LSSJWhateverHere", frameCounterLimit, numberOfFrames));
+            }
+            if (Transformations.IsSpectrum(drawPlayer))
+            {
+                var frameCounterLimit = 6;
+                var numberOfFrames = 7;
+                var yOffset = 0;
+                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJSPECTRUMTransformStart", frameCounterLimit, numberOfFrames, yOffset));
+                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+            }
+            
+            // if we made it this far, we don't want to get stuck in a transformation animation state just because one doesn't exist
+            // cancel it so we can move on and show auras.
+            if (!isAnyAnimationPlaying)
+            {
+                modPlayer.IsTransformationAnimationPlaying = false;
+            }
         });
+
+        public static DrawData TransformationAnimationDrawData(PlayerDrawInfo drawInfo, string transformationSpriteSheet, int frameCounterLimit, int numberOfFrames, int yOffset)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = DBZMOD.instance;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
+            int frame = modPlayer.TransformationFrameTimer / frameCounterLimit;
+            Texture2D texture = mod.GetTexture(transformationSpriteSheet);
+            int frameSize = texture.Height / numberOfFrames;
+            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+            int drawY = (int)(drawInfo.position.Y + frameSize + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+            // we've hit the frame limit, so kill the animation
+            if (frame == numberOfFrames)
+            {
+                modPlayer.IsTransformationAnimationPlaying = false;
+            }
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+        }
+
+        public static DrawData LightningEffectDrawData(PlayerDrawInfo drawInfo, string lightningTexture)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = DBZMOD.instance;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
+            int frame = modPlayer.LightningFrameTimer / 5;
+            Texture2D texture = mod.GetTexture(lightningTexture);
+            int frameSize = texture.Height / 3;
+            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+            int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+        }
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             //handle lightning effects
             LightningEffects.visible = true;
             layers.Add(LightningEffects);
+
+            // handle transformation animations
+            TransformationEffects.visible = true;
+            layers.Add(TransformationEffects);
 
             // handle SSJ hair/etc.
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);

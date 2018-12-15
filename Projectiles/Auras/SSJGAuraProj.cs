@@ -19,6 +19,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Main.projFrames[projectile.type] = 8;
         }
+
         public override void SetDefaults()
         {
             projectile.width = 113;
@@ -34,6 +35,7 @@ namespace DBZMOD.Projectiles.Auras
             AuraOffset.Y = -30;
 			projectile.light = 1f;
         }
+
 		public override void PostAI()
         {
             for (int d = 0; d < 1; d++)
@@ -45,12 +47,13 @@ namespace DBZMOD.Projectiles.Auras
                 }
             }
         }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             projectile.netUpdate = true;
-            if (!modPlayer.IsCharging)
+            if (!Transformations.IsGodlike(player))
             {
                 projectile.Kill();
             }
@@ -58,7 +61,7 @@ namespace DBZMOD.Projectiles.Auras
             if (shouldPlayAudio)
             {
                 ChargeSoundTimer++;
-                if (ChargeSoundTimer > 348)
+                if (ChargeSoundTimer > 340)
                 {
                     player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.PlayCustomSound("Sounds/SSG", player, 0.7f, 0.1f);
                     ChargeSoundTimer = 0;
