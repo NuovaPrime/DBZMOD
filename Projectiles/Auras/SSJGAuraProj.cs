@@ -40,9 +40,14 @@ namespace DBZMOD.Projectiles.Auras
         {
             for (int d = 0; d < 1; d++)
             {
-                if (Main.rand.NextFloat() < 1f)
+                if (Main.rand.NextFloat() < 0.5f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(255, 100, 0), 0.75f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(150, 255, Main.DiscoColor.B), 0.5f);
+                    dust.noGravity = true;
+                }
+				if (Main.rand.NextFloat() < 0.25f)
+                {
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(Main.DiscoColor.R, 150, 150), 0.75f);
                     dust.noGravity = true;
                 }
             }

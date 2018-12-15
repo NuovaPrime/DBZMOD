@@ -57,7 +57,6 @@ namespace DBZMOD.Projectiles.Auras
             }
             base.AI();
         }
-        
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             projectile.scale = Main.GameZoomTarget;
