@@ -60,7 +60,6 @@ namespace DBZMOD.Items.Consumables
             recipe.AddIngredient(ItemID.SoulofFright, 8);
             recipe.AddIngredient(ItemID.SoulofSight, 8);
             recipe.AddIngredient(ItemID.SoulofMight, 8);
-            recipe.AddIngredient(ItemID.Ectoplasm, 35);
             recipe.AddIngredient(ItemID.Book, 3);
             recipe.AddTile(null, "KaiTable");
             recipe.SetResult(this);
