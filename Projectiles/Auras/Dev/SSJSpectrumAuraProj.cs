@@ -34,16 +34,19 @@ namespace DBZMOD.Projectiles.Auras.Dev
             AuraOffset.Y = -30;
 			projectile.light = 1f;
         }
+		public override void PostAI()
+        {
+            for (int d = 0; d < 1; d++)
+            {
+                if (Main.rand.NextFloat() < 1f)
+                {
+                    Dust dust = Dust.NewDustDirect(projectile.position, 113, 115, 63, 0f, 0f, 0, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B), 0.75f);
+                    dust.noGravity = true;
+                }
+            }
+        }
         public override void AI()
         {
-            if (Main.rand.NextFloat() < 0.2236842f)
-            {
-                Dust dust;
-                Vector2 position = projectile.Center + new Vector2(-40, -5);
-                dust = Main.dust[Dust.NewDust(position, 84, 105, 261, 0f, -3.421053f, 213, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B), 1.4f)];
-                dust.noGravity = true;
-                dust.noLight = true;
-            }
 
             Player player = Main.player[projectile.owner];
             if (!player.HasBuff(Transformations.SPECTRUM.GetBuffId()))
