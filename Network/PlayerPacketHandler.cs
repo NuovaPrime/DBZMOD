@@ -67,6 +67,7 @@ namespace Network
             SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
             SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.IsFlying);
+            SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.IsTransformationAnimationPlaying);
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
         }
 
@@ -290,6 +291,16 @@ namespace Network
             packet.Write((int)PlayerVarSyncEnum.IsFlying);
             packet.Write(whichPlayer);
             packet.Write(IsFlying);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void SendChangedIsTransformationAnimationPlaying(int toWho, int fromWho, int whichPlayer, bool IsTransformationAnimationPlaying)
+        {
+            // DebugUtil.Log(string.Format("Sending IsTransformationAnimationPlaying changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.IsTransformationAnimationPlaying);
+            packet.Write(whichPlayer);
+            packet.Write(IsTransformationAnimationPlaying);
             packet.Send(toWho, fromWho);
         }
 
@@ -535,6 +546,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.IsFlying);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.IsTransformationAnimationPlaying:
+                    player.IsTransformationAnimationPlaying = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.IsTransformationAnimationPlaying);
                         packet.Send(-1, fromWho);
                     }
                     break;

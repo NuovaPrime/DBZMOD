@@ -701,6 +701,7 @@ namespace DBZMOD
         public bool? SyncTraitChecked;
         public string SyncPlayerTrait;
         public bool? SyncIsFlying;
+        public bool? SyncIsTransformationAnimationPlaying;
         public int? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
@@ -826,6 +827,12 @@ namespace DBZMOD
                 SyncIsFlying = IsFlying;
             }
 
+            if (SyncIsTransformationAnimationPlaying != IsTransformationAnimationPlaying)
+            {
+                NetworkHelper.playerSync.SendChangedIsTransformationAnimationPlaying(256, player.whoAmI, player.whoAmI, IsTransformationAnimationPlaying);
+                SyncIsTransformationAnimationPlaying = IsTransformationAnimationPlaying;
+            }
+            
             if (SyncChargeMoveSpeed != chargeMoveSpeed)
             {
                 NetworkHelper.playerSync.SendChangedChargeMoveSpeed(256, player.whoAmI, player.whoAmI, chargeMoveSpeed);

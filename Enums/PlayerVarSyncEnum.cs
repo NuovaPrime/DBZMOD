@@ -27,6 +27,7 @@ namespace Enums
         traitChecked,
         playerTrait,
         IsFlying,
+        IsTransformationAnimationPlaying,
         TriggerLeft,
         TriggerRight,
         TriggerUp,
