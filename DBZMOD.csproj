@@ -314,6 +314,7 @@
     <Compile Include="Items\Weapons\Tier_6\BigBangKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlackBlitz.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BrolyMouthBeam.cs" />
     <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
     <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
     <Compile Include="Items\Weapons\Tier_6\HolyWrath.cs" />
@@ -372,6 +373,7 @@
     <Compile Include="Projectiles\BlackBlitzLong.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
     <Compile Include="Projectiles\BlindingBladeProj.cs" />
+    <Compile Include="Projectiles\BaseBeamProj.cs" />
     <Compile Include="Projectiles\CandyLaserBlast.cs" />
     <Compile Include="Projectiles\CandyLaserTrail.cs" />
     <Compile Include="Projectiles\DestructoDiskAssaultMini.cs" />
@@ -381,6 +383,7 @@
     <Compile Include="Projectiles\DoubleSundayBlast.cs" />
     <Compile Include="Projectiles\DoubleSundayTrail.cs" />
     <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
+    <Compile Include="Projectiles\BrolyMouthBeamProj.cs" />
     <Compile Include="Projectiles\EnergyWaveBall.cs" />
     <Compile Include="Projectiles\EnergyWaveBlast.cs" />
     <Compile Include="Projectiles\EnergyWaveTrail.cs" />
