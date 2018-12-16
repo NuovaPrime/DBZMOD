@@ -44,8 +44,8 @@ namespace Util
             {
                 var proj = Main.projectile[i];
 
-                // abort if the projectile is invalid, the player isn't the owner or the type doesn't match what we want.
-                if (proj == null || proj.owner != player.whoAmI || proj.type != type)
+                // abort if the projectile is invalid, the player isn't the owner, the projectile is inactive or the type doesn't match what we want.
+                if (proj == null || proj.owner != player.whoAmI || !proj.active || proj.type != type)
                     continue;               
                 
                 var projDistance = proj.Distance(player.Center);
@@ -56,6 +56,85 @@ namespace Util
                 }                
             }
             return closestProjectile == -1 ? null : Main.projectile[closestProjectile];
+        }
+
+        public static bool RecapturePlayerProjectile(Player player, int type)
+        {            
+            var proj = FindNearestOwnedProjectileOfType(player, type);
+            if (proj != null)
+            {
+                // the part that matters
+                player.heldProj = proj.whoAmI;
+                return true;
+            }
+            return false;
+        }        
+
+        // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
+        public static void DoChargeDust(Vector2 chargeBallPosition, int dustId, float dustFrequency, bool isDecaying, Vector2 chargeSize)
+        {
+            // snazzy charge up dust, reduced to less or equal to one per frame.
+            if (Main.rand.NextFloat() < dustFrequency)
+            {
+                chargeBallPosition -= chargeSize / 2f;
+                float angle = Main.rand.NextFloat(360);
+                float angleRad = MathHelper.ToRadians(angle);
+                Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+                // float hypotenuse = chargeSize.LengthSquared();
+                Vector2 offsetPosition = chargeBallPosition + position * (10f + 2.0f);
+                Vector2 spawnPosition = isDecaying ? chargeBallPosition : offsetPosition;
+                // DebugUtil.Log(string.Format("Trying to spawn charge particles at {0}, {1} - Decaying? {2}", spawnPosition.X, spawnPosition.Y, isDecaying));
+                Vector2 velocity = isDecaying ? Vector2.Normalize(spawnPosition - offsetPosition) : Vector2.Normalize(chargeBallPosition - spawnPosition);
+                Dust tDust = Dust.NewDustDirect(spawnPosition, (int)chargeSize.X, (int)chargeSize.Y, dustId, 0f, 0f, 213, default(Color), 1.0f);
+                tDust.velocity = velocity;
+                tDust.noGravity = true;
+            }
+        }
+
+        // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
+        public static void DoBeamDust(Vector2 TailPosition, Vector2 velocity, int dustId, float dustFrequency, float travelDistance, float TailHeldDistance, Vector2 tailSize, float BeamSpeed)
+        {
+            // snazzy beam shooting dust, reduced to less than 1 per frame.
+            if (Main.rand.NextFloat() < dustFrequency)
+            {
+                TailPosition -= tailSize / 2f;
+                float angle = velocity.ToRotation();
+                Vector2 spawnPositionOffset = tailSize + new Vector2(tailSize.X * (Main.rand.NextFloat() - 0.5f), tailSize.Y * (Main.rand.NextFloat() - 0.5f));
+                Vector2 beamTailPosition = TailPosition ;
+                Dust tDust = Dust.NewDustDirect(beamTailPosition, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
+                tDust.velocity = velocity * travelDistance / 10f;
+                tDust.noGravity = true;
+            }
+        }
+
+        // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
+        public static void DoBeamCollisionDust(int dustId, float dustFrequency, Vector2 startPosition, Vector2 endPosition, float lineLength, Vector2 headSize)
+        {
+            // snazzy charge up dust, reduced to less or equal to one per frame.
+            if (Main.rand.NextFloat() < dustFrequency)
+            {
+                Vector2 beamCollisionPosition = (endPosition - startPosition) * lineLength;
+                float angle = Main.rand.NextFloat(360);
+                float angleRad = MathHelper.ToRadians(angle);
+                Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+                DebugUtil.Log(string.Format("Trying to spawn charge particles at {0}, {1} - Collision!", beamCollisionPosition.X, beamCollisionPosition.Y));
+                Vector2 velocity = Vector2.Normalize(beamCollisionPosition - position) * 4f;
+                Dust tDust = Dust.NewDustDirect(beamCollisionPosition, (int)headSize.X, (int)headSize.Y, dustId, 0f, 0f, 213, default(Color), 1.0f);
+                tDust.velocity = velocity;
+                tDust.noGravity = true;
+            }
+        }
+
+        // starts the kill routine for beams that lets them detach from the charge ball and fade incrementally.
+        public static void StartKillRoutine(Projectile projectile)
+        {
+            if (projectile == null)
+                return;
+
+            var modProjectile = projectile.modProjectile;
+
+            if (modProjectile == null)
+                return;
         }
     }
 }

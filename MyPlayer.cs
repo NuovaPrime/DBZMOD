@@ -1247,6 +1247,11 @@ namespace DBZMOD
                 IsDownHeld = true;
             else
                 IsDownHeld = false;
+
+            if (triggerSet.MouseRight)
+                IsMouseRightHeld = true;
+            else
+                IsMouseRightHeld = false;
         }
 
         public float GetNextSpeedMultiplier()
@@ -1365,7 +1370,7 @@ namespace DBZMOD
             // various effects while charging
             // if the player is flying and moving, charging applies a speed boost and doesn't recharge ki, but also doesn't slow the player.
             bool isAnyKeyHeld = IsLeftHeld || IsRightHeld || IsUpHeld || IsDownHeld;
-            if (IsCharging && (GetKi() < OverallKiMax()) && !player.channel && (!IsFlying || !isAnyKeyHeld))
+            if (IsCharging && (GetKi() < OverallKiMax()) && (!IsFlying || !isAnyKeyHeld))
             {
                 // determine base regen rate and bonuses
                 AddKi(KiChargeRate + ScarabChargeRateAdd);

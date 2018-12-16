@@ -41,17 +41,27 @@ namespace DBZMOD.Items.Weapons.Tier_6
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            DebugUtil.Log(string.Format("Player trying to shoot debug beam item."));
-            var proj = ProjectileUtil.FindNearestOwnedProjectileOfType(player, item.shoot);
-            if (proj != null)
-                proj.active = true;
+            // DebugUtil.Log(string.Format("Player trying to shoot debug beam item."));
+            if (ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
+                return false;
             return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+        }
+
+        //public override bool UseItem(Player player)
+        //{
+        //    // DebugUtil.Log(string.Format("Player trying to use debug beam item."));
+        //    return base.UseItem(player);
+        //}
+
+        public override float UseTimeMultiplier(Player player)
+        {
+            return 1f;
         }
 
         public override bool CanUseItem(Player player)
         {
 
-            DebugUtil.Log(string.Format("Player trying to use debug beam item."));
+            // DebugUtil.Log(string.Format("Player trying to use debug beam item."));
             // the answer is yes, always.
             return true;
         }

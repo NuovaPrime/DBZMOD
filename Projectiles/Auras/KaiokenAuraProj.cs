@@ -46,12 +46,12 @@ namespace DBZMOD.Projectiles.Auras
             }
             if(player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
             {
-                projectile.scale *= 1.5f;
-                AuraOffset.Y = -40;
+                projectile.scale = 1.5f * Main.GameZoomTarget;
+                AuraOffset.Y = -40 * projectile.scale;
             }
             else
             {
-                AuraOffset.Y = -20;
+                AuraOffset.Y = -20 * projectile.scale;
             }
             base.AI();
         }
