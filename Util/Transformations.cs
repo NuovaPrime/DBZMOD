@@ -689,6 +689,8 @@ namespace Util
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
             ClearAllTransformations(player, isPoweringDown, isOneStep);
+            modPlayer.IsTransformationAnimationPlaying = false;
+            modPlayer.TransformationFrameTimer = 0;
             modPlayer.TransformationSoundInfo = SoundUtil.KillTrackedSound(modPlayer.TransformationSoundInfo);             
             modPlayer.IsTransforming = false;
         }
