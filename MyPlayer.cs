@@ -1878,33 +1878,41 @@ namespace DBZMOD
             modPlayer.TransformationFrameTimer++;
 
             bool isAnyAnimationPlaying = false;
-            // ssj 1 through 3. (forcibly exclude god form)
-            if (Transformations.IsSSJ(drawPlayer) && !Transformations.IsGodlike(drawPlayer))
+            // ssj 1 through 3. (forcibly exclude ssj3 and god form)
+            if (Transformations.IsSSJ(drawPlayer) && !Transformations.IsGodlike(drawPlayer) && !Transformations.IsSSJ3(drawPlayer))
             {
-                var frameCounterLimit = 5;
+                var frameCounterLimit = 4;
                 var numberOfFrames = 4;
                 var yOffset = -18;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJTransformStart", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }
+			if (Transformations.IsSSJ3(drawPlayer) && !Transformations.IsGodlike(drawPlayer))
+            {
+				var frameCounterLimit = 4;
+                var numberOfFrames = 4;
+                var yOffset = -18;
+				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJ3TransformStart", frameCounterLimit, numberOfFrames, yOffset));
+				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+            }
             if (Transformations.IsGodlike(drawPlayer))
             {
-                var frameCounterLimit = 8;
+                var frameCounterLimit = 6;
                 var numberOfFrames = 6;
                 var yOffset = 35;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJGTransformStart", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }
-            if (Transformations.IsLSSJ(drawPlayer))
+            /*if (Transformations.IsLSSJ(drawPlayer))
             {
-                // not done yet
-                // Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/LSSJWhateverHere", frameCounterLimit, numberOfFrames));
-            }
+				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/LSSJWhateverHere", frameCounterLimit, numberOfFrames, yOffset));
+				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+            }*/
             if (Transformations.IsSpectrum(drawPlayer))
             {
-                var frameCounterLimit = 6;
+                var frameCounterLimit = 4;
                 var numberOfFrames = 7;
-                var yOffset = 0;
+                var yOffset = -18;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJSPECTRUMTransformStart", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }

@@ -410,7 +410,16 @@ namespace Util
         {
             return PlayerHasBuffIn(player, SSJBuffs());
         }
-
+		// whether the player is in SSJ2
+        public static bool IsSSJ2(Player player)
+        {
+            return player.HasBuff(SSJ2.GetBuffId());
+        }
+		// whether the player is in long hair mode
+		 public static bool IsSSJ3(Player player)
+        {
+            return player.HasBuff(SSJ3.GetBuffId());
+        }
         // FAIRY special state, whether the player is in Nuova's Dev form, SPECTRUM, which is fabulous.
         public static bool IsSpectrum(Player player)
         {
