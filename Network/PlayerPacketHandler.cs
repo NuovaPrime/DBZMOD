@@ -71,6 +71,16 @@ namespace Network
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
         }
 
+        public void SendChangedTriggerMouseRight(int toWho, int fromWho, int whichPlayer, bool isHeld)
+        {
+            var packet = GetPacket(SyncTriggers, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.TriggerMouseRight);
+            packet.Write(whichPlayer);
+            packet.Write(isHeld);
+            packet.Send(toWho, fromWho);
+            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerLeft.ToString(), fromWho, toWho, whichPlayer, isHeld));
+        }
+
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {            
             var packet = GetPacket(SyncTriggers, fromWho);
@@ -349,6 +359,15 @@ namespace Network
 
             switch(syncEnum)
             {
+                case PlayerVarSyncEnum.TriggerMouseRight:
+                    player.IsMouseRightHeld = isHeld;
+                    //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsLeftHeld));
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(isHeld);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
                 case PlayerVarSyncEnum.TriggerLeft:
                     player.IsLeftHeld = isHeld;
                     //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsLeftHeld));

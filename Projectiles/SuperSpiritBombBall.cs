@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Destruction;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -75,7 +76,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-5);
-                ApplyChannelingSlowdown(player);
+                ProjectileUtil.ApplyChannelingSlowdown(player);
 
                 //Rock effect
                 if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)

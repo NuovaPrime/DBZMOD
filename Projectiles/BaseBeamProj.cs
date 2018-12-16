@@ -19,18 +19,42 @@ namespace DBZMOD.Projectiles
         private const float MaxChargeValue = 50f;
 
         //The distance charge particle from the player center
-        private const float MoveDistance = 30f;
+        private const float MoveDistance = 60f;
 
         // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
         // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
-        public Point ChargeOrigin = new Point(22, 0);
-        public Point ChargeSize = new Point(30, 30);
-        public Point TailOrigin = new Point(14, 32);
+        public Point TailOrigin = new Point(14, 0);
         public Point TailSize = new Point(46, 72);
         public Point BeamOrigin = new Point(14, 106);
-        public Point BeamSize = new Point(36, 36);
+        public Point BeamSize = new Point(46, 36);
         public Point HeadOrigin = new Point(0, 144);
         public Point HeadSize = new Point(74, 74);
+
+        private Rectangle _tailRectangle;
+        public Rectangle TailRectangle
+        {
+            get
+            {
+                if (_tailRectangle == null)
+                {
+                    _tailRectangle = new Rectangle(TailOrigin.X, TailOrigin.Y, TailSize.X, TailSize.Y);
+                }
+                return _tailRectangle;
+            }
+        }
+
+        private Rectangle _beamRectangle;
+        public Rectangle BeamRectangle
+        {
+            get
+            {
+                if (_beamRectangle == null)
+                {
+                    _beamRectangle = new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y);
+                }
+                return _beamRectangle;
+            }
+        }
 
         // The actual distance is stored in the ai0 field
         // By making a property to handle this it makes our life easier, and the accessibility more readable
@@ -79,27 +103,9 @@ namespace DBZMOD.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            // We start drawing the laser if we have charged up
-            if (AtMaxCharge)
-            {
-                DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center,
-                    projectile.velocity, 10, projectile.damage, -1.57f, 1f, 1000f, Color.White, (int)MoveDistance);
-            } else
-            {
-                DrawChargeBall(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center,
-                    projectile.velocity, 10, projectile.damage, -1.57f, 1f, 1000f, Color.White, (int)MoveDistance);
-            }
+            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center,
+                projectile.velocity, 10, projectile.damage, -1.57f, 1f, 1000f, Color.White, (int)MoveDistance);
             return false;
-        }
-
-        // The core function of drawing a charge ball
-        public void DrawChargeBall(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 unit, float step, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50)
-        {
-            Vector2 origin = start;
-            float r = unit.ToRotation() + rotation;
-
-            spriteBatch.Draw(texture, start + unit * (transDist - step) - Main.screenPosition,
-                new Rectangle(ChargeOrigin.X, ChargeOrigin.Y, ChargeSize.X, ChargeSize.Y), Color.White, r, new Vector2(ChargeSize.X * .5f, ChargeSize.Y * .5f), scale, 0, 0);
         }
 
         // The core function of drawing a laser

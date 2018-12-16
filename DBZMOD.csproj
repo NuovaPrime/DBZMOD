@@ -314,7 +314,7 @@
     <Compile Include="Items\Weapons\Tier_6\BigBangKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlackBlitz.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
-    <Compile Include="Items\Weapons\Tier_6\BrolyMouthBeam.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BeamOverhaulTestItem.cs" />
     <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
     <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
     <Compile Include="Items\Weapons\Tier_6\HolyWrath.cs" />
@@ -324,6 +324,7 @@
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="DBZWorld.cs" />
+    <Compile Include="KiProjectile.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
@@ -364,6 +365,7 @@
     <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
     <Compile Include="Projectiles\BaldurShell.cs" />
+    <Compile Include="Projectiles\BaseChargeProj.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
     <Compile Include="Projectiles\BigBangKamehamehaBall.cs" />
@@ -383,7 +385,6 @@
     <Compile Include="Projectiles\DoubleSundayBlast.cs" />
     <Compile Include="Projectiles\DoubleSundayTrail.cs" />
     <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
-    <Compile Include="Projectiles\BrolyMouthBeamProj.cs" />
     <Compile Include="Projectiles\EnergyWaveBall.cs" />
     <Compile Include="Projectiles\EnergyWaveBlast.cs" />
     <Compile Include="Projectiles\EnergyWaveTrail.cs" />
@@ -475,6 +476,7 @@
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
+    <Compile Include="Util\ProjectileUtil.cs" />
     <Compile Include="Util\SoundUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />

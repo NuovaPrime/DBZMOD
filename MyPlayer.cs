@@ -236,7 +236,7 @@ namespace DBZMOD
         #endregion
 
         #region Syncable Controls
-
+        public bool IsMouseRightHeld = false;
         public bool IsLeftHeld = false;
         public bool IsRightHeld = false;
         public bool IsUpHeld = false;
@@ -704,6 +704,7 @@ namespace DBZMOD
         public float? SyncBonusSpeedMultiplier;
 
         // triggerset sync has its own method, but dropping these here anyway
+        public bool? SyncTriggerSetMouseRight;
         public bool? SyncTriggerSetLeft;
         public bool? SyncTriggerSetRight;
         public bool? SyncTriggerSetUp;
@@ -879,6 +880,11 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedTriggerDown(256, player.whoAmI, player.whoAmI, IsDownHeld);
                 SyncTriggerSetDown = IsDownHeld;
+            }
+            if (SyncTriggerSetMouseRight != IsMouseRightHeld)
+            {
+                NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseRightHeld);
+                SyncTriggerSetMouseRight = IsMouseRightHeld;
             }
         }
 

@@ -101,7 +101,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2);
-                ApplyChannelingSlowdown(player);
+                ProjectileUtil.ApplyChannelingSlowdown(player);
 
                 //Rock effect
                 if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)

@@ -28,6 +28,7 @@ namespace Enums
         playerTrait,
         IsFlying,
         IsTransformationAnimationPlaying,
+        TriggerMouseRight,
         TriggerLeft,
         TriggerRight,
         TriggerUp,

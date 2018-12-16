@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -84,7 +85,7 @@ namespace DBZMOD.Projectiles
                     }
 
                     MyPlayer.ModPlayer(player).AddKi(-2);
-                    ApplyChannelingSlowdown(player);
+                    ProjectileUtil.ApplyChannelingSlowdown(player);
 
                     //Rock effect
                     projectile.ai[1]++;
