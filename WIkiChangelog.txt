@@ -396,3 +396,32 @@ V1.0.8.1
 == Secrets ==
 
 1. Added a dev form for NuovaPrime
+
+
+V1.0.8.2
+
+== Additions ==
+
+1. Added small animations for transforming into various forms.
+
+== Changes ==
+
+1. Drastically increased the time before [[Massive Blast]] type weapons disappear.
+
+2. Changed the behavior of the rocks with [[Spirit Bomb]] and [[Super Spirit Bomb]].
+
+3. Reworked how speed toggle works.
+
+4. Adjusted the tooltips on various form buffs.
+
+== Fixes ==
+
+1. Fixed a weird bug where you would sometimes end up with the wrong forms or buffs when transforming.
+
+2. Fixed sounds being heard across the map.
+
+3. Fixed bug where you could fly while petrified.
+
+4. Fixed bug where [[Katchin Feet]] activated too late and killed people.
+
+5. Fixed bug where equipping multiple crystallites gave way too much speed.
