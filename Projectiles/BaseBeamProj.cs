@@ -125,42 +125,49 @@ namespace DBZMOD.Projectiles
             projectile.height = 10;
             projectile.friendly = true;
             projectile.penetrate = -1;
-            projectile.tileCollide = false;
-            projectile.hide = false;
+            projectile.tileCollide = true;
+            projectile.hide = true;
+        }
+
+        // doesn't work!
+        public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
+        {
+            drawCacheProjsBehindNPCsAndTiles.Add(index);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {            
+            return false;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White);
-            return false;
         }
 
         // The core function of drawing a laser
         public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Color color)
-        {   
+        {               
             // half pi subtracted from the rotation.
             float rotation = projectile.velocity.ToRotation() - 1.57f;
             
-            DebugUtil.Log(string.Format("Trying to draw laser tail at {0}, {1}", TailPositionStart().X, TailPositionStart().Y));
             // draw the beam tail
-            spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), 1f, 0, 0.96f);
+            spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), 1f, 0, 0f);
                         
             // draw the body between the beam and its destination point.
             for (float i = 0; i < Distance - StepLength(); i += StepLength())
             {
                 Vector2 origin = TailPositionEnd() + i * projectile.velocity;
-                spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangle(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0.97f);
+                spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangle(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0f);
             }
 
-            DebugUtil.Log(string.Format("Trying to draw laser head at {0}, {1}", BodyPositionEnd().X, BodyPositionEnd().Y));
             // draw the beam head
-            // don't make the head transparent or it looks weird.
-            spriteBatch.Draw(texture, BodyPositionEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(HeadSize.X * .5f, HeadSize.Y * .5f), 1f, 0, 0.98f);
+            spriteBatch.Draw(texture, BodyPositionEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(HeadSize.X * .5f, HeadSize.Y * .5f), 1f, 0, 0f);
         }
         
         public Vector2 TailPositionStart()
         {
-            return projectile.position + OffsetY + TailHeldDistance * projectile.velocity;
+            return projectile.position + OffsetY + (TailHeldDistance + TailDistance) * projectile.velocity;
         }
 
         public Vector2 TailPositionEnd()
@@ -175,7 +182,7 @@ namespace DBZMOD.Projectiles
 
         public Vector2 HeadPositionEnd()
         {
-            return BodyPositionEnd() + HeadSize.Y * projectile.velocity;
+            return BodyPositionEnd() + (HeadSize.Y * 0.66f) * projectile.velocity;
         }
 
         // Change the way of collision check of the projectile
@@ -202,13 +209,14 @@ namespace DBZMOD.Projectiles
             if (headCollision)
                 ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, BodyPositionEnd(), HeadPositionEnd(), headPoint, HeadSize.ToVector2());
 
-            DebugUtil.Log(string.Format("Collision detection Head: {0} Body: {1}", headCollision, bodyCollision));
+            if (tailCollision)
+            {
+                ProjectileUtil.StartKillRoutine(projectile);
+            }
             // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
             // It will look for collisions on the given line using AABB
-            return headCollision || bodyCollision;
+            return tailCollision || headCollision || bodyCollision;
         }
-
-
 
         // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -258,23 +266,24 @@ namespace DBZMOD.Projectiles
             // handle the distance routine
             // the difference between distance and tracked distance is that distance is the actual travel.
             // tracked distance is with collision, and resets distance if it's too high.
-            // once released, the distance doesn't increase anymore.
-            if (DetachmentTimer == 0)
+            Distance += BeamSpeed;
+            for (TrackedDistance = 0; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
             {
-                Distance = Math.Max(TailHeldDistance, Math.Min(MaxBeamDistance, Distance + BeamSpeed));
-                for (TrackedDistance = TailHeldDistance; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
+                Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                
+                if (!Collision.CanHit(projectile.position, 1, 1, origin, (int)(HeadSize.X * 0.66f), (int)(HeadSize.Y * 0.66f)))
                 {
-                    Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;
-                    if (!Collision.CanHit(projectile.position, 1, 1, origin, 1, 1))
+                    ProjectileUtil.DoBeamCollisionDust(DustType, DustFrequency, projectile.position, origin, Distance, HeadSize.ToVector2());
+                    TrackedDistance -= BeamSpeed;
+                    if (TrackedDistance <= 0)
                     {
-                        TrackedDistance -= BeamSpeed;
-                        break;
+                        ProjectileUtil.StartKillRoutine(projectile);
                     }
+                    break;
                 }
-
-                // throttle distance by collision
-                Distance = Math.Min(TrackedDistance, Distance);
             }
+
+            // throttle distance by collision
+            Distance = Math.Min(TrackedDistance, Distance);            
 
             // shoot sweet sweet particles
             ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
