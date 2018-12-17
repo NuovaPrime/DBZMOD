@@ -659,6 +659,8 @@ namespace DBZMOD
 
             HandleChargeVisualAndSoundEffects();
 
+            CheckPlayerForTransformationStateDebuffApplication();
+
             // update WasCharging so we can ensure we're managing state each frame
             WasCharging = IsCharging;
 
@@ -1858,6 +1860,29 @@ namespace DBZMOD
             }
         });
 
+
+        // bools used to apply transformation debuffs appropriately
+        public bool IsKaioken;
+        public bool WasKaioken;
+        public bool IsTransformed;
+        public bool WasTransformed;
+        public void CheckPlayerForTransformationStateDebuffApplication()
+        {
+            WasKaioken = IsKaioken;
+            WasTransformed = IsTransformed;
+
+            IsKaioken = Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player);
+            IsTransformed = Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player);
+            // this way, we can apply exhaustion debuffs correctly.
+            if (WasKaioken && !IsKaioken)
+            {
+                bool WasSSJKK = WasTransformed;
+                Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
+            }
+            if (WasTransformed && !IsTransformed) { 
+                Transformations.AddTransformationExhaustion(player);
+            }
+        }
 
         public int TransformationFrameTimer;
         public bool IsTransformationAnimationPlaying = false;

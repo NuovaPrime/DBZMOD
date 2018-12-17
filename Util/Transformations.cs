@@ -580,40 +580,6 @@ namespace Util
                 if (!player.HasBuff(buff.GetBuffId()))
                     continue;
 
-                // this way, we can apply exhaustion debuffs correctly.
-                if (isPoweringDown)
-                {
-                    if (buff == SSJ1Kaioken)
-                    {
-                        // add both debuffs, and kaioken exhaustion is doubled
-                        AddKaiokenExhaustion(player, 2);
-
-                        // if we're stepping down from SSJ1Kaioken, we're still transformed.
-                        if (!isOneStep)
-                        {
-                            AddTransformationExhaustion(player);
-                        }
-                    }
-                    else if (KaiokenBuffs().Contains(buff))
-                    {
-                        // if we're stepping down from Kaioken, we haven't left Kaioken yet. Timer's still ticking.
-                        if (!isOneStep)
-                        {
-                            // add the tired debuff and clear the kaioken timer
-                            AddKaiokenExhaustion(player, 1);
-                        }
-                    }
-                    else
-                    {
-                        // if we're stepping down our transformation, we're still transformed.
-                        if (!isOneStep)
-                        {
-                            // add the exhaustion debuff for transformations
-                            AddTransformationExhaustion(player);
-                        }
-                    }
-                }
-
                 RemoveTransformation(player, buff.BuffKeyName, false);
             }
         }
