@@ -131,10 +131,8 @@ namespace Util
             if (projectile == null)
                 return;
 
-            var modProjectile = projectile.modProjectile;
-
-            if (modProjectile == null)
-                return;
+            if (projectile.localAI[0] == 0)
+                projectile.localAI[0] = 1;
         }
     }
 }

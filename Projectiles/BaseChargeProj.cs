@@ -160,7 +160,7 @@ namespace DBZMOD.Projectiles
         public void DrawChargeBall(SpriteBatch spriteBatch, Texture2D texture, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color))
         {
             float r = projectile.velocity.ToRotation() + rotation;
-            // DebugUtil.Log(string.Format("Drawing charge ball... start vec {0}, {1}, orientation {2}, {3} hidden {4}", start.X, start.Y, orientation.X, orientation.Y, projectile.hide));            
+            // DebugUtil.Log(string.Format("Trying to draw charge ball, transparency is {0}", GetTransparency()));
             spriteBatch.Draw(texture, GetChargeBallPosition() - Main.screenPosition,
                 new Rectangle(0, 0, ChargeSize.X, ChargeSize.Y), color * GetTransparency(), r, new Vector2(ChargeSize.X * .5f, ChargeSize.Y * .5f), scale, 0, 0.99f);
         }
@@ -181,9 +181,6 @@ namespace DBZMOD.Projectiles
             {
                 projectile.timeLeft = 10;
             }
-
-            // track whether charge level has changed by snapshotting it.
-            float oldChargeLevel = ChargeLevel;
 
             // The energy in the projectile decays if the player stops channeling.
             if (!player.channel)
@@ -223,12 +220,6 @@ namespace DBZMOD.Projectiles
                 if (!IsSustainingFire)
                     ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());
             }
-
-            // If we just crossed a threshold, display combat text for the charge level increase.
-            if (Math.Floor(oldChargeLevel) != Math.Floor(ChargeLevel) && oldChargeLevel != ChargeLevel)
-            {
-                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)ChargeLevel, false, false);
-            }
         }
 
         private bool WasSustainingFire = false;
@@ -249,13 +240,11 @@ namespace DBZMOD.Projectiles
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), projectile.damage, projectile.knockBack, projectile.owner);
                 }
 
-                if (MyProjectile.localAI[0] < BeamFadeInTime)
-                    MyProjectile.localAI[0]++;
-
                 MyProjectile.velocity = projectile.velocity;
 
                 if (!modPlayer.IsKiDepleted())
                 {
+
                     if (Main.time > 0 && Main.time % FireKiDrainWindow == 0)
                     {
                         modPlayer.AddKi(-FireKiDrainRate);
@@ -269,7 +258,7 @@ namespace DBZMOD.Projectiles
 
                 if (MyProjectile != null)
                 {
-                    MyProjectile.Kill();
+                    ProjectileUtil.StartKillRoutine(MyProjectile);
                 }
             }
             WasSustainingFire = IsSustainingFire;
@@ -288,7 +277,7 @@ namespace DBZMOD.Projectiles
             {
                 if (MyProjectile != null)
                 {
-                    MyProjectile.Kill();
+                    ProjectileUtil.StartKillRoutine(MyProjectile);
                 }
                 projectile.Kill();
                 return false;
@@ -343,6 +332,9 @@ namespace DBZMOD.Projectiles
             // capture the player instance so we can toss it around.
             Player player = Main.player[projectile.owner];
 
+            // track whether charge level has changed by snapshotting it.
+            float oldChargeLevel = ChargeLevel;
+
             // handles the initial binding to a weapon and determines if the player has changed items, which should kill the projectile.
             if (!ShouldHandleWeaponChangesAndContinue(player))
                 return;
@@ -364,6 +356,12 @@ namespace DBZMOD.Projectiles
 
             // capture the current screen position as the previous screen position.
             OldScreenPosition = screenPosition;
+
+            // If we just crossed a threshold, display combat text for the charge level increase.
+            if (Math.Floor(oldChargeLevel) != Math.Floor(ChargeLevel) && oldChargeLevel != ChargeLevel)
+            {
+                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)ChargeLevel, false, false);
+            }
         }
 
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)

@@ -28,10 +28,7 @@ namespace DBZMOD.Projectiles
         public Point HeadSize = new Point(74, 74);
         
         // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
-        public float BeamFadeInTime = 300f;
-
-        // the rate at which the beam fades out when no longer sustaining fire.
-        public float BeamFadeOutRate = -1f;
+        public float BeamFadeOutTime = 60f;
 
         // THIS HAS TO MATCH THE BASE CHARGE PROJ OR IT WILL LOOK STUPID. YOU HAVE BEEN WARNED. Bigger number = slower movement. For reference, 60f is pretty fast.
         public float RotationSlowness = 120f;
@@ -50,31 +47,20 @@ namespace DBZMOD.Projectiles
 
         // the frequency at which to spawn dust when the beam is firing
         public float DustFrequency = 0.6f;
-
-        private Rectangle _tailRectangle;
-        public Rectangle TailRectangle
+                
+        public Rectangle TailRectangle()
         {
-            get
-            {
-                if (_tailRectangle == null)
-                {
-                    _tailRectangle = new Rectangle(TailOrigin.X, TailOrigin.Y, TailSize.X, TailSize.Y);
-                }
-                return _tailRectangle;
-            }
+            return new Rectangle(TailOrigin.X, TailOrigin.Y, TailSize.X, TailSize.Y);
+        }
+                
+        public Rectangle BeamRectangle()
+        {
+            return new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y);
         }
 
-        private Rectangle _beamRectangle;
-        public Rectangle BeamRectangle
+        public Rectangle HeadRectangle()
         {
-            get
-            {
-                if (_beamRectangle == null)
-                {
-                    _beamRectangle = new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y);
-                }
-                return _beamRectangle;
-            }
+            return new Rectangle(HeadOrigin.X, HeadOrigin.Y, HeadSize.X, HeadSize.Y);
         }
 
         // The actual distance is stored in the ai0 field
@@ -103,6 +89,18 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public float DetachmentTimer
+        {
+            get
+            {
+                return projectile.localAI[0];
+            }
+            set
+            {
+                projectile.localAI[0] = value;
+            }
+        }
+
         public float TailDistance
         {
             get
@@ -114,19 +112,11 @@ namespace DBZMOD.Projectiles
                 projectile.localAI[1] = value;
             }
         }
-
-        // The actual charge value is stored in the localAI0 field
-        // this handles fade in as well as "freedom"
-        public float BeamFadeIn
+        
+        // the length of a "step" of the body, defined loosely as the body's Y length minus an arbitrary cluster of pixels to overlap cleanly.
+        public float StepLength()
         {
-            get
-            {
-                return projectile.localAI[0];
-            }
-            set
-            {
-                projectile.localAI[0] = value;
-            }
+            return BeamSize.Y - 4f;
         }
 
         public override void SetDefaults()
@@ -141,36 +131,51 @@ namespace DBZMOD.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Main.player[projectile.owner].Center + TailDistance * projectile.velocity,
-                projectile.velocity, 10f, projectile.damage, -1.57f, 1f, 1000f, Color.White, (int)TailHeldDistance);
+            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White);
             return false;
         }
 
         // The core function of drawing a laser
-        public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 unit, float step, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50)
-        {
-            start = start + TailDistance * unit + OffsetY;
-            Vector2 origin = start;
-            float r = unit.ToRotation() + rotation;
-
+        public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Color color)
+        {   
+            // half pi subtracted from the rotation.
+            float rotation = projectile.velocity.ToRotation() - 1.57f;
+            
+            DebugUtil.Log(string.Format("Trying to draw laser tail at {0}, {1}", TailPositionStart().X, TailPositionStart().Y));
+            // draw the beam tail
+            spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), 1f, 0, 0.96f);
+                        
             // draw the body between the beam and its destination point.
-            for (float i = (transDist - step * 2) + TailSize.Y * 0.5f; i <= Distance; i += step)
+            for (float i = 0; i < Distance - StepLength(); i += StepLength())
             {
-                Color c = Color.White;
-                origin = start + i * unit;
-                spriteBatch.Draw(texture, origin - Main.screenPosition,
-                    new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y), i < transDist ? Color.Transparent : c, r,
-                    new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), scale, 0, 0.97f);
+                Vector2 origin = TailPositionEnd() + i * projectile.velocity;
+                spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangle(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0.97f);
             }
 
-            // draw the beam tail
-            spriteBatch.Draw(texture, start + unit * (transDist - step) - Main.screenPosition,
-                new Rectangle(TailOrigin.X, TailOrigin.Y, TailSize.X, TailSize.Y), Color.White, r, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), scale, 0, 0.97f);
-
+            DebugUtil.Log(string.Format("Trying to draw laser head at {0}, {1}", BodyPositionEnd().X, BodyPositionEnd().Y));
             // draw the beam head
             // don't make the head transparent or it looks weird.
-            spriteBatch.Draw(texture, start + ((TailSize.Y * 0.6f + Distance) * unit) - Main.screenPosition,
-                new Rectangle(HeadOrigin.X, HeadOrigin.Y, HeadSize.X, HeadSize.Y), Color.White, r, new Vector2(HeadSize.X * .5f, HeadSize.Y * .5f), scale, 0, 0.98f);
+            spriteBatch.Draw(texture, BodyPositionEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(HeadSize.X * .5f, HeadSize.Y * .5f), 1f, 0, 0.98f);
+        }
+        
+        public Vector2 TailPositionStart()
+        {
+            return projectile.position + OffsetY + TailHeldDistance * projectile.velocity;
+        }
+
+        public Vector2 TailPositionEnd()
+        {
+            return TailPositionStart() + (TailSize.Y - StepLength()) * projectile.velocity;
+        }
+
+        public Vector2 BodyPositionEnd()
+        {
+            return TailPositionEnd() + (Distance - StepLength()) * projectile.velocity;
+        }
+
+        public Vector2 HeadPositionEnd()
+        {
+            return BodyPositionEnd() + HeadSize.Y * projectile.velocity;
         }
 
         // Change the way of collision check of the projectile
@@ -178,28 +183,32 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
             Vector2 unit = projectile.velocity;
+            float tailPoint = 0f;
             float bodyPoint = 0f;
             float headPoint = 0f;
-            // head hitbox can be much larger than body hitbox.
-            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), projectile.position + (TailSize.Y * 0.6f + Distance - HeadSize.Y / 4f) * unit,
-                projectile.position + unit * (TailSize.Y * 0.6f + Distance + HeadSize.Y / 4f), HeadSize.X, ref headPoint);
+            
+            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionStart(), TailPositionEnd(), TailSize.X, ref tailPoint);
 
-            bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), projectile.position,
-                projectile.position + unit * (Distance - HeadSize.Y / 2f), BeamSize.X, ref bodyPoint);
+            bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionEnd(), BodyPositionEnd(), BeamSize.X, ref bodyPoint);
 
+            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionEnd(), HeadSize.X, ref headPoint);
+
+            if (tailCollision)
+                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, TailPositionStart(), TailPositionEnd(), tailPoint, HeadSize.ToVector2());
 
             if (bodyCollision)
-                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, projectile.position, projectile.position + unit * (Distance - HeadSize.Y / 2f), bodyPoint, HeadSize.ToVector2());
+                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, TailPositionEnd(), BodyPositionEnd(), bodyPoint, HeadSize.ToVector2());
 
             if (headCollision)
-                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, projectile.position + (TailSize.Y * 0.6f + Distance - HeadSize.Y / 4f) * unit, projectile.position + unit * (TailSize.Y * 0.6f + Distance + HeadSize.Y / 4f), headPoint, HeadSize.ToVector2());
+                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, BodyPositionEnd(), HeadPositionEnd(), headPoint, HeadSize.ToVector2());
 
-
-            // DebugUtil.Log(string.Format("Collision detection Head: {0} Body: {1}", headCollision, bodyCollision));
+            DebugUtil.Log(string.Format("Collision detection Head: {0} Body: {1}", headCollision, bodyCollision));
             // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
             // It will look for collisions on the given line using AABB
             return headCollision || bodyCollision;
         }
+
+
 
         // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -209,8 +218,8 @@ namespace DBZMOD.Projectiles
 
         public void HandleBeamVisibility()
         {
-            var beamVisibility = (int)Math.Min(255f, Math.Ceiling((Math.Sqrt(projectile.localAI[0]) / Math.Sqrt(BeamFadeInTime)) * 255f));
-            projectile.alpha = beamVisibility;
+            var beamTransparency = (int)Math.Min(255f, (1f - (DetachmentTimer / BeamFadeOutTime)) * 255f);
+            projectile.alpha = beamTransparency;
         }
 
         public float GetTransparency()
@@ -227,6 +236,8 @@ namespace DBZMOD.Projectiles
         // The AI of the projectile
         public override void AI()
         {
+            ProcessKillRoutine();
+            
             Player player = Main.player[projectile.owner];
 
             // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
@@ -245,25 +256,25 @@ namespace DBZMOD.Projectiles
             HandleBeamVisibility();
 
             // handle the distance routine
-            Vector2 start = projectile.position;
-            Vector2 unit = projectile.velocity;
-            unit *= -1;
             // the difference between distance and tracked distance is that distance is the actual travel.
             // tracked distance is with collision, and resets distance if it's too high.
-            Distance = Math.Max(TailHeldDistance, Math.Min(MaxBeamDistance, Distance + BeamSpeed));            
-            for (TrackedDistance = TailHeldDistance; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
+            // once released, the distance doesn't increase anymore.
+            if (DetachmentTimer == 0)
             {
-                start = projectile.position + projectile.velocity * TrackedDistance;
-                if (!Collision.CanHit(projectile.position, 1, 1, start, 1, 1))
+                Distance = Math.Max(TailHeldDistance, Math.Min(MaxBeamDistance, Distance + BeamSpeed));
+                for (TrackedDistance = TailHeldDistance; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
                 {
-                    TrackedDistance -= BeamSpeed;
-                    break;
+                    Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;
+                    if (!Collision.CanHit(projectile.position, 1, 1, origin, 1, 1))
+                    {
+                        TrackedDistance -= BeamSpeed;
+                        break;
+                    }
                 }
-            }
 
-            // throttle distance by collision
-            Distance = Math.Min(TrackedDistance, Distance);
-            
+                // throttle distance by collision
+                Distance = Math.Min(TrackedDistance, Distance);
+            }
 
             // shoot sweet sweet particles
             ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
@@ -277,8 +288,29 @@ namespace DBZMOD.Projectiles
             OldScreenPosition = screenPosition;
         }
 
+        public void ProcessKillRoutine()
+        {
+            if (DetachmentTimer > 0)
+            {
+                DetachmentTimer++;
+                TailDistance += BeamSpeed;
+                Distance -= BeamSpeed;
+            }
+
+            if (DetachmentTimer >= BeamFadeOutTime || (DetachmentTimer > 0 && Distance <= 0))
+            {
+                projectile.Kill();
+            }
+        }
+
         public void UpdateBeamTailLocationAndDirection(Player player, Vector2 mouseVector)
-        {            
+        {
+            projectile.timeLeft = 2;
+
+            // skip this entire routine if the detachment timer is greater than 0
+            if (DetachmentTimer > 0)
+                return;
+
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer)
             {
@@ -288,9 +320,8 @@ namespace DBZMOD.Projectiles
                 projectile.direction = mouseVector.X > player.position.X ? 1 : -1;
                 projectile.netUpdate = true;
             }
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.position = player.Center + projectile.velocity * TailHeldDistance;
-            projectile.timeLeft = 2;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();            
+            projectile.position = player.Center;
             int dir = projectile.direction;
             player.ChangeDir(dir);
             player.heldProj = projectile.whoAmI;
@@ -300,15 +331,6 @@ namespace DBZMOD.Projectiles
                 player.itemAnimation = 2;
             }
             player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
-        }
-
-        public override bool PreKill(int timeLeft)
-        {            
-            BeamFadeIn -= BeamFadeOutRate;
-            TailDistance += BeamSpeed;
-            projectile.timeLeft = timeLeft + 1;
-            DebugUtil.Log(string.Format("Killing the beam! {0} timeLeft, fadeIn {1}, tailDistance update: {2}", timeLeft, BeamFadeIn, TailDistance));
-            return BeamFadeIn <= 0f;
         }
 
         public override bool ShouldUpdatePosition()
