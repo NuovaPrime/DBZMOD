@@ -97,11 +97,11 @@ namespace DBZMOD
             //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
-            player.meleeDamage *= DamageMulti * 0.5f;
-            player.rangedDamage *= DamageMulti * 0.5f;
-            player.magicDamage *= DamageMulti * 0.5f;
-            player.minionDamage *= DamageMulti * 0.5f;
-            player.thrownDamage *= DamageMulti * 0.5f;
+            player.meleeDamage *= GetHalvedDamageBonus();
+            player.rangedDamage *= GetHalvedDamageBonus();
+            player.magicDamage *= GetHalvedDamageBonus();
+            player.minionDamage *= GetHalvedDamageBonus();
+            player.thrownDamage *= GetHalvedDamageBonus();
             modPlayer.KiDamage *= DamageMulti;
 
             // cross mod support stuff
@@ -127,30 +127,35 @@ namespace DBZMOD
             }
         }
 
+        public float GetHalvedDamageBonus()
+        {
+            return 1 + ((DamageMulti - 1) * 0.5f);
+        }
+
         public void ThoriumEffects(Player player)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= DamageMulti * 0.5f;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= DamageMulti * 0.5f;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= GetHalvedDamageBonus();
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= GetHalvedDamageBonus();
         }
 
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= GetHalvedDamageBonus();
         }
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= GetHalvedDamageBonus();
         }
 
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= GetHalvedDamageBonus();
         }
 
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= GetHalvedDamageBonus();
         }
 
         private void KiDrainAdd(Player player)

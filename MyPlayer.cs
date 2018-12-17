@@ -1434,6 +1434,7 @@ namespace DBZMOD
                 // this handles killing other player's sounds if the local player has started any.
                 bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);              
               
+                DebugUtil.Log(string.Format("Player is charging and shouldPlaySound is {0}", shouldPlaySound));
                 if (shouldPlaySound)
                 {
                     ChargeSoundTimer++;
