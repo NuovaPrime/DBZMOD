@@ -213,8 +213,8 @@ namespace DBZMOD
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
                     Transformations.EndTransformations(player, true, false);
-                    int kihealvalue = .OverallKiMax() - MyPlayer.ModPlayer(player).GetKi();
-                    MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OverallKiMax());
+                    int kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
+                    modPlayer.AddKi(modPlayer.OverallKiMax());
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kihealvalue, false, false);
                     SoundUtil.PlayVanillaSound(SoundID.MaxMana, player);                    
                 }
