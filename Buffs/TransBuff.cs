@@ -91,9 +91,9 @@ namespace DBZMOD
             }
 
             //DebugUtil.Log(string.Format("Before: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
-            player.moveSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
-            player.maxRunSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
-            player.runAcceleration *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
+            player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
+            player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
             //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
@@ -127,9 +127,14 @@ namespace DBZMOD
             }
         }
 
+        public float GetModifiedSpeedMultiplier(MyPlayer modPlayer)
+        {
+            return 1f + ((SpeedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
+        }
+
         public float GetHalvedDamageBonus()
         {
-            return 1 + ((DamageMulti - 1) * 0.5f);
+            return 1f + ((DamageMulti - 1f) * 0.5f);
         }
 
         public void ThoriumEffects(Player player)
