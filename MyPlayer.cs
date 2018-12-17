@@ -230,9 +230,9 @@ namespace DBZMOD
         public bool FirstFourStarDBPickup = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
 
-        // helper bool tracks whether my local player is playing other player's audio or not
+        // helper int tracks which player my local player is playing audio for
         // useful for preventing the mod from playing too many sounds
-        public bool IsAlreadyPlayingOtherPlayerAudio;
+        public int PlayerIndexWithLocalAudio = -1;
         #endregion
 
         #region Syncable Controls
@@ -1436,7 +1436,7 @@ namespace DBZMOD
                 // this handles killing other player's sounds if the local player has started any.
                 bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);              
               
-                DebugUtil.Log(string.Format("Player is charging and shouldPlaySound is {0}", shouldPlaySound));
+                // DebugUtil.Log(string.Format("Player is charging and shouldPlaySound is {0}", shouldPlaySound));
                 if (shouldPlaySound)
                 {
                     ChargeSoundTimer++;
