@@ -1584,6 +1584,14 @@ namespace DBZMOD
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
+            bool isAnyBossAlive = false;
+            foreach (NPC npc in Main.npc)
+            {
+                if (npc.boss && npc.active)
+                {
+                    isAnyBossAlive = true;
+                }
+            }
             if (zenkaiCharm && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
             {
                 player.statLife = 50;
@@ -1592,93 +1600,77 @@ namespace DBZMOD
                 return false;
             }
 
-            if (damageSource.SourceNPCIndex > -1)
+            if (isAnyBossAlive && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+                if (RageCurrent >= 3)
                 {
-                    if (RageCurrent >= 3)
-                    {
-                        OverallFormUnlockChance = 1;
-                    }
-                    else
-                    {
-                        FormUnlockChance = 20;
-                    }
-                    if ((Main.rand.Next(OverallFormUnlockChance) == 0))
-                    {
-                        Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
-                        player.statLife = player.statLifeMax2 / 2;
-                        player.HealEffect(player.statLifeMax2 / 2);
-                        SSJ1Achieved = true;
-                        IsTransforming = true;
-                        SSJTransformation();
-                        UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
-                        RageCurrent = 0;
-                        Transformations.EndTransformations(player, true, false);
-                        return false;
-                    }
+                    OverallFormUnlockChance = 1;
                 }
-            }
-            if (damageSource.SourceNPCIndex > -1)
-            {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
+                else
                 {
-                    Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
+                    FormUnlockChance = 20;
+                }
+                if ((Main.rand.Next(OverallFormUnlockChance) == 0))
+                {
+                    Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                     player.statLife = player.statLifeMax2 / 2;
                     player.HealEffect(player.statLifeMax2 / 2);
-                    SSJ2Achieved = true;
+                    SSJ1Achieved = true;
                     IsTransforming = true;
-                    SSJ2Transformation();
-                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
-                    Transformations.EndTransformations(player, true, false);
+                    SSJTransformation();
+                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
                     RageCurrent = 0;
+                    Transformations.EndTransformations(player, true, false);
                     return false;
                 }
             }
-            if (damageSource.SourceNPCIndex > -1)
+            if (isAnyBossAlive && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
-                {
-                    Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                    player.statLife = player.statLifeMax2 / 2;
-                    player.HealEffect(player.statLifeMax2 / 2);
-                    LSSJAchieved = true;
-                    IsTransforming = true;
-                    LSSJTransformation();
-                    UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
-                    Transformations.EndTransformations(player, true, false);
-                    RageCurrent = 0;
-                    return false;
-                }
+                Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
+                player.statLife = player.statLifeMax2 / 2;
+                player.HealEffect(player.statLifeMax2 / 2);
+                SSJ2Achieved = true;
+                IsTransforming = true;
+                SSJ2Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+                return false;
             }
-            if (damageSource.SourceNPCIndex > -1)
+
+            if (isAnyBossAlive && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if ((culprit.type == NPCID.Golem || culprit.type == NPCID.GolemFistLeft || culprit.type == NPCID.GolemFistRight || culprit.type == NPCID.GolemHead || culprit.type == NPCID.GolemHeadFree) && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
-                {
-                    Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
-                    player.statLife = player.statLifeMax2 / 2;
-                    player.HealEffect(player.statLifeMax2 / 2);
-                    SSJ3Achieved = true;
-                    IsTransforming = true;
-                    SSJ3Transformation();
-                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
-                    Transformations.EndTransformations(player, true, false);
-                    RageCurrent = 0;
-                    return false;
-                }
+                Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
+                player.statLife = player.statLifeMax2 / 2;
+                player.HealEffect(player.statLifeMax2 / 2);
+                LSSJAchieved = true;
+                IsTransforming = true;
+                LSSJTransformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+                return false;
             }
-            if (damageSource.SourceNPCIndex > -1)
+
+
+            if (isAnyBossAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
             {
-                NPC culprit = Main.npc[damageSource.SourceNPCIndex];
-                if (culprit.boss && player.whoAmI == Main.myPlayer)
-                {
-                    RageCurrent += 1;
-                    return true;
-                }
+                Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
+                player.statLife = player.statLifeMax2 / 2;
+                player.HealEffect(player.statLifeMax2 / 2);
+                SSJ3Achieved = true;
+                IsTransforming = true;
+                SSJ3Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+                return false;
+            }
+
+            if (isAnyBossAlive && player.whoAmI == Main.myPlayer)
+            {
+                RageCurrent += 1;
+                return true;
             }
 
             return true;
