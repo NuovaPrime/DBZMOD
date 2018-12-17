@@ -116,7 +116,9 @@ namespace DBZMOD
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);
                 player.velocity.Y = MathHelper.Lerp(player.velocity.Y, 0, 0.1f);
                 // keep the player suspended at worst.
-                player.velocity = player.velocity - (Vector2.UnitY * 0.4f);
+                // player.gravDir = 0;
+                player.velocity = player.velocity - (Vector2.UnitY * player.gravity);
+                DebugUtil.Log(string.Format("Player gravity {0} gravDir {1}", player.gravity, player.gravDir));
 
                 //calculate rotation
                 float radRot = 0;
@@ -159,10 +161,10 @@ namespace DBZMOD
                     }
                 }
 
-                if (player.velocity.Y == -0.4f && Math.Abs(player.velocity.X) > 0.5f)
+                if (player.velocity.Y == -player.gravity && Math.Abs(player.velocity.X) > 0.5f)
                 {
                     // if the player is "running", stop that. EXPERIMENTAL
-                    player.velocity.Y = -0.4001f;                    
+                    player.velocity.Y = -player.gravity - 0.001f;
                 }
             }
 
