@@ -11,7 +11,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Kaioken x10");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
             KaioLightValue = 10f;
             DamageMulti = 3f;
             SpeedMulti = 3f;

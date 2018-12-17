@@ -13,7 +13,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Ki Diffuser");
             Description.SetDefault("Gives some slight ki regen.");
             Main.buffNoTimeDisplay[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
         }
         public override void Update(Player player, ref int buffIndex)
         {

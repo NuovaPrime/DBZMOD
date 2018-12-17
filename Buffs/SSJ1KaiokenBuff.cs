@@ -11,7 +11,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Super Saiyan Kaioken");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
             KaioLightValue = 10f;
             DamageMulti = 4f;
             SpeedMulti = 4f;

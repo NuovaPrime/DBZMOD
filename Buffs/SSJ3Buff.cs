@@ -11,7 +11,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Super Saiyan 3");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
             DamageMulti = 4f;
             SpeedMulti = 4f;
             KiDrainBuffMulti = 2.1f;

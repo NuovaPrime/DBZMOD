@@ -13,7 +13,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Ki Stimulance");
             Description.SetDefault("Your body is enhanced, passively regenerating ki.");
             Main.buffNoTimeDisplay[Type] = false;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
         }
 
         public override void Update(Player player, ref int buffIndex)
