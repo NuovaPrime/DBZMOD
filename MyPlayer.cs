@@ -251,7 +251,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling((KiMax() + KiMax2 + KiMax3) * KiMaxMult);
+            return (int)Math.Ceiling(KiMax() * KiMaxMult + KiMax2 + KiMax3);
         }
 
         // all changes to Ki Current are now made through this method.
