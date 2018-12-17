@@ -99,8 +99,8 @@ namespace Util
             {
                 TailPosition -= tailSize / 2f;
                 float angle = velocity.ToRotation();
-                Vector2 spawnPositionOffset = tailSize + new Vector2(tailSize.X * (Main.rand.NextFloat() - 0.5f), tailSize.Y * (Main.rand.NextFloat() - 0.5f));
-                Vector2 beamTailPosition = TailPosition ;
+                Vector2 spawnPositionOffset = tailSize + new Vector2(tailSize.X * (Main.rand.NextFloat(0.5f) - 0.25f), tailSize.Y * (Main.rand.NextFloat(0.5f) - 0.25f));
+                Vector2 beamTailPosition = TailPosition + tailSize * velocity;
                 Dust tDust = Dust.NewDustDirect(beamTailPosition, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
                 tDust.velocity = velocity * travelDistance / 10f;
                 tDust.noGravity = true;
@@ -108,19 +108,18 @@ namespace Util
         }
 
         // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
-        public static void DoBeamCollisionDust(int dustId, float dustFrequency, Vector2 startPosition, Vector2 endPosition, float lineLength, Vector2 headSize)
+        public static void DoBeamCollisionDust(int dustId, float dustFrequency, Vector2 velocity, Vector2 endPosition)
         {
             // snazzy charge up dust, reduced to less or equal to one per frame.
             if (Main.rand.NextFloat() < dustFrequency)
             {
-                Vector2 beamCollisionPosition = (endPosition - startPosition) * lineLength;
-                float angle = Main.rand.NextFloat(360);
-                float angleRad = MathHelper.ToRadians(angle);
-                Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-                DebugUtil.Log(string.Format("Trying to spawn charge particles at {0}, {1} - Collision!", beamCollisionPosition.X, beamCollisionPosition.Y));
-                Vector2 velocity = Vector2.Normalize(beamCollisionPosition - position) * 4f;
-                Dust tDust = Dust.NewDustDirect(beamCollisionPosition, (int)headSize.X, (int)headSize.Y, dustId, 0f, 0f, 213, default(Color), 1.0f);
-                tDust.velocity = velocity;
+                Vector2 beamCollisionPosition = endPosition;
+                float angle = Main.rand.NextFloat(-62.5f, 62.5f);
+                Vector2 backDraft = velocity * -1f;
+                float angleRad = MathHelper.ToRadians(angle) + backDraft.ToRotation();
+                Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+                Dust tDust = Dust.NewDustDirect(beamCollisionPosition, 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
+                tDust.velocity = backdraftWithRandomization;
                 tDust.noGravity = true;
             }
         }

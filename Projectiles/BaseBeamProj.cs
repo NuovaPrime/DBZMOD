@@ -28,10 +28,10 @@ namespace DBZMOD.Projectiles
         public Point HeadSize = new Point(74, 74);
         
         // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
-        public float BeamFadeOutTime = 60f;
+        public float BeamFadeOutTime = 30f;
 
         // THIS HAS TO MATCH THE BASE CHARGE PROJ OR IT WILL LOOK STUPID. YOU HAVE BEEN WARNED. Bigger number = slower movement. For reference, 60f is pretty fast.
-        public float RotationSlowness = 120f;
+        public float RotationSlowness = 60f;
 
         // vector to reposition the beam tail down if it feels too low or too high on the character sprite
         public Vector2 OffsetY = new Vector2(0, 4f);
@@ -40,13 +40,22 @@ namespace DBZMOD.Projectiles
         public float MaxBeamDistance = 2000f;
 
         // the speed at which the beam head travels through space
-        public float BeamSpeed = 5f;
+        public float BeamSpeed = 15f;
 
         // the type of dust to spawn when the beam is firing
         public int DustType = 169;
 
         // the frequency at which to spawn dust when the beam is firing
         public float DustFrequency = 0.6f;
+
+        // how many particles per frame fire while firing the beam.
+        public int FireParticleDensity = 6;
+
+        // the frequency at which to spawn dust when the beam collides with something
+        public float CollisionDustFrequency = 1.0f;
+
+        // how many particles per frame fire when the beam collides with something
+        public int CollisionParticleDensity = 8;
                 
         public Rectangle TailRectangle()
         {
@@ -142,7 +151,7 @@ namespace DBZMOD.Projectiles
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White);
+            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White * GetTransparency());
         }
 
         // The core function of drawing a laser
@@ -201,15 +210,6 @@ namespace DBZMOD.Projectiles
             bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionEnd(), HeadSize.X, ref headPoint);
 
             if (tailCollision)
-                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, TailPositionStart(), TailPositionEnd(), tailPoint, HeadSize.ToVector2());
-
-            if (bodyCollision)
-                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, TailPositionEnd(), BodyPositionEnd(), bodyPoint, HeadSize.ToVector2());
-
-            if (headCollision)
-                ProjectileUtil.DoBeamCollisionDust(DustType, 1.0f, BodyPositionEnd(), HeadPositionEnd(), headPoint, HeadSize.ToVector2());
-
-            if (tailCollision)
             {
                 ProjectileUtil.StartKillRoutine(projectile);
             }
@@ -244,9 +244,9 @@ namespace DBZMOD.Projectiles
         // The AI of the projectile
         public override void AI()
         {
-            ProcessKillRoutine();
-            
             Player player = Main.player[projectile.owner];
+
+            ProcessKillRoutine(player);            
 
             // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
             Vector2 mouseVector = Main.MouseWorld;
@@ -272,7 +272,11 @@ namespace DBZMOD.Projectiles
                 Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                
                 if (!Collision.CanHit(projectile.position, 1, 1, origin, (int)(HeadSize.X * 0.66f), (int)(HeadSize.Y * 0.66f)))
                 {
-                    ProjectileUtil.DoBeamCollisionDust(DustType, DustFrequency, projectile.position, origin, Distance, HeadSize.ToVector2());
+                    var tilesColliding = Collision.GetTilesIn(origin, origin + HeadSize.ToVector2());
+                    foreach (Point point in tilesColliding)
+                    {
+                        ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, point.ToVector2());
+                    }                    
                     TrackedDistance -= BeamSpeed;
                     if (TrackedDistance <= 0)
                     {
@@ -283,10 +287,13 @@ namespace DBZMOD.Projectiles
             }
 
             // throttle distance by collision
-            Distance = Math.Min(TrackedDistance, Distance);            
+            Distance = Math.Min(TrackedDistance, Distance);
 
             // shoot sweet sweet particles
-            ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
+            for (var i = 0; i < FireParticleDensity; i++)
+            {
+                ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
+            }
 
             //Add lights
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
@@ -297,8 +304,15 @@ namespace DBZMOD.Projectiles
             OldScreenPosition = screenPosition;
         }
 
-        public void ProcessKillRoutine()
+        public void ProcessKillRoutine(Player player)
         {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (!modPlayer.IsMouseRightHeld)
+            {
+                ProjectileUtil.StartKillRoutine(projectile);
+            }
+
             if (DetachmentTimer > 0)
             {
                 DetachmentTimer++;

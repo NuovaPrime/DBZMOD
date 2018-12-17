@@ -68,7 +68,7 @@ namespace DBZMOD.Projectiles
         public int DisperseDustQuantity = 40;
 
         // THIS HAS TO MATCH THE BASE BEAM PROJ OR IT WILL LOOK STUPID. YOU HAVE BEEN WARNED. Bigger number = slower movement. For reference, 60f is pretty fast.
-        public float RotationSlowness = 120f;
+        public float RotationSlowness = 60f;
 
         // the charge ball is just a single texture.
         // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
