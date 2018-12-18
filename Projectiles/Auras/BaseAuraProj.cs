@@ -58,7 +58,7 @@ namespace DBZMOD.Projectiles.Auras
             }
 
             // commit suicide if the player is transforming.
-            if (Transformations.IsPlayerTransformed(player))
+            if (Transformations.IsPlayerTransformed(player) || player.dead)
             {
                 projectile.Kill();
             }
