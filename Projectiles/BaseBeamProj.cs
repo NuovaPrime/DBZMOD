@@ -30,7 +30,7 @@ namespace DBZMOD.Projectiles
         // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
         public float BeamFadeOutTime = 30f;
 
-        // THIS HAS TO MATCH THE BASE CHARGE PROJ OR IT WILL LOOK STUPID. YOU HAVE BEEN WARNED. Bigger number = slower movement. For reference, 60f is pretty fast.
+        // Bigger number = slower movement. For reference, 60f is pretty fast. 180f is pretty slow.
         public float RotationSlowness = 60f;
 
         // vector to reposition the beam tail down if it feels too low or too high on the character sprite
@@ -83,18 +83,6 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[0] = value;
-            }
-        }
-
-        public float TrackedDistance
-        {
-            get
-            {
-                return projectile.ai[1];
-            }
-            set
-            {
-                projectile.ai[1] = value;
             }
         }
 
@@ -267,7 +255,8 @@ namespace DBZMOD.Projectiles
             // the difference between distance and tracked distance is that distance is the actual travel.
             // tracked distance is with collision, and resets distance if it's too high.
             Distance += BeamSpeed;
-            for (TrackedDistance = 0; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
+            float TrackedDistance;
+            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
             {
                 Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                
                 if (!Collision.CanHit(projectile.position, 1, 1, origin, (int)(HeadSize.X * 0.66f), (int)(HeadSize.Y * 0.66f)))

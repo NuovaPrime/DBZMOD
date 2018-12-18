@@ -67,8 +67,14 @@ namespace DBZMOD.Projectiles
         // the amount of dust that tries to spawn when the charge orb disperses from weapon swapping.
         public int DisperseDustQuantity = 40;
 
-        // THIS HAS TO MATCH THE BASE BEAM PROJ OR IT WILL LOOK STUPID. YOU HAVE BEEN WARNED. Bigger number = slower movement. For reference, 60f is pretty fast.
-        public float RotationSlowness = 60f;
+        // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
+        public float RotationSlowness = 15f;
+
+        // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
+        public int BeamFiringCooldown = 180;
+
+        // this is the minimum charge level you have to have before you can actually fire the beam
+        public float MinimumChargeLevel = 4f;
 
         // the charge ball is just a single texture.
         // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
@@ -101,6 +107,19 @@ namespace DBZMOD.Projectiles
             get
             {
                 return (ChargeSize.X + ChargeSize.Y) * projectile.scale / 2 + 5f;
+            }
+        }
+
+        // Any nonzero number is on cooldown
+        public float BeamCooldown
+        {
+            get
+            {
+                return projectile.ai[1];
+            }
+            set
+            {
+                projectile.ai[1] = value;
             }
         }
 
