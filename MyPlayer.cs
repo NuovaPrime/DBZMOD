@@ -919,23 +919,30 @@ namespace DBZMOD
 
         #endregion
 
+        public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
+            if (OriginalEyeColor == null)
+            {
+                OriginalEyeColor = player.eyeColor;
+            }
             if (Transformations.IsGodlike(player))
             {
                 drawInfo.hairColor = new Color(183, 25, 46);
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
-                // godlike is included in SSJ, so only make them turquoise if not in god form.
             }
             else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
                 player.eyeColor = Color.Turquoise;
             }
-            // this still works tho
-            if (Transformations.IsSSJ1Kaioken(player))
+            else if (Transformations.IsSSJ1Kaioken(player))
             {
                 player.eyeColor = Color.Red;
+            }
+            else
+            {
+                player.eyeColor = OriginalEyeColor.Value;
             }
         }
 
@@ -1055,7 +1062,14 @@ namespace DBZMOD
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
             tag.Add("KiMax3", KiMax3);
-            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);
+            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);		            
+            // added to store the player's original eye color if possible
+            if (OriginalEyeColor != null)
+            {
+                tag.Add("OriginalEyeColorR", OriginalEyeColor.Value.R);
+                tag.Add("OriginalEyeColorG", OriginalEyeColor.Value.G);
+                tag.Add("OriginalEyeColorB", OriginalEyeColor.Value.B);
+            }
             //tag.Add("RealismMode", RealismMode);
             return tag;
         }
@@ -1110,6 +1124,11 @@ namespace DBZMOD
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             KiMax3 = tag.Get<int>("KiMax3");
             FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
+            // load the player's original eye color if possible
+            if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
+            {
+                OriginalEyeColor = new Color(tag.Get<byte>("OriginalEyeColorR"), tag.Get<byte>("OriginalEyeColorG"), tag.Get<byte>("OriginalEyeColorB"));
+            }
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
