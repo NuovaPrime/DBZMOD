@@ -118,7 +118,9 @@ namespace DBZMOD
                 // keep the player suspended at worst.
                 // player.gravDir = 0;
                 player.velocity = player.velocity - (Vector2.UnitY * player.gravity);
-                DebugUtil.Log(string.Format("Player gravity {0} gravDir {1}", player.gravity, player.gravDir));
+                player.fallStart = (int)(player.position.Y / 16f);
+                
+                // DebugUtil.Log(string.Format("Player gravity {0} gravDir {1}", player.gravity, player.gravDir));
 
                 //calculate rotation
                 float radRot = 0;
@@ -159,12 +161,6 @@ namespace DBZMOD
                     {
                         modPlayer.AddKi(-1);                        
                     }
-                }
-
-                if (player.velocity.Y == -player.gravity && Math.Abs(player.velocity.X) > 0.5f)
-                {
-                    // if the player is "running", stop that. EXPERIMENTAL
-                    player.velocity.Y = -player.gravity - 0.001f;
                 }
             }
 
