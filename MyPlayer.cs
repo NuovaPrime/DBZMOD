@@ -237,6 +237,7 @@ namespace DBZMOD
 
         #region Syncable Controls
         public bool IsMouseRightHeld = false;
+        public bool IsMouseLeftHeld = false;
         public bool IsLeftHeld = false;
         public bool IsRightHeld = false;
         public bool IsUpHeld = false;
