@@ -9,7 +9,7 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles.DragonBalls
 {
-    public class FiveStarDBTile : ModTile
+    public class OneStarDBTile : ModTile
     {
         public override void SetDefaults()
         {
@@ -29,8 +29,8 @@ namespace DBZMOD.Tiles.DragonBalls
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("5 Star Dragon Ball");
-            drop = mod.ItemType("FiveStarDB");
+            name.SetDefault("1 Star Dragon Ball");
+            drop = mod.ItemType("OneStarDB");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
         }
