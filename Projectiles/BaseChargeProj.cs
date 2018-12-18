@@ -19,26 +19,30 @@ namespace DBZMOD.Projectiles
 
         #region Things you should definitely mess with
 
-        // refactored portions of KiProjectile that make Charge Balls do what they do        
+        // the maximum charge level of the ball     
         public float ChargeLimit = 4;
+
+        // this is the minimum charge level you have to have before you can actually fire the beam
+        public float MinimumChargeLevel = 4f;
 
         // the rate at which charge level increases while channeling
         public float ChargeRate = 0.016f; // approximately 1 level per second.
 
         // Rate at which Ki is drained while channeling
-        public int ChargeKiDrainRate = 1;
+        public int ChargeKiDrainRate = 12;
 
         // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
         public int ChargeKiDrainWindow = 2;
 
-        // Rate at which Ki is drained while firing the beam
-        public int FireKiDrainRate = 1;
+        // Rate at which Ki is drained while firing the beam *without a charge*
+        // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
+        public int FireKiDrainRate = 48;
 
         // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
-        public int FireKiDrainWindow = 4;
+        public int FireKiDrainWindow = 2;
 
         // the rate at which firing drains the charge level of the ball, play with this for balance.
-        public float FireDecayRate = 0.018f;
+        public float FireDecayRate = 0.036f;
 
         // the rate at which the charge decays when not channeling
         public float DecayRate = 0.016f; // very slow decay when not channeling
@@ -73,16 +77,16 @@ namespace DBZMOD.Projectiles
         // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
         public int BeamFiringCooldown = 180;
 
-        // this is the minimum charge level you have to have before you can actually fire the beam
-        public float MinimumChargeLevel = 4f;
-
         // the charge ball is just a single texture.
         // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
         public Point ChargeOrigin = new Point(0, 0);
-        public Point ChargeSize = new Point(30, 30);
+        public Point ChargeSize = new Point(18, 18);
 
         // vector to reposition the charge ball if it feels too low or too high on the character sprite
-        public Vector2 OffsetY = new Vector2(0, 4f);
+        public Vector2 ChannelingOffset = new Vector2(0, 4f);
+
+        // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
+        public Vector2 NotChannelingOffset = new Vector2(-15, 20f);
 
         #endregion
 
@@ -170,9 +174,18 @@ namespace DBZMOD.Projectiles
             return false;
         }
 
+        public Vector2 GetPlayerHandPosition(Player drawPlayer)
+        {
+            var Position = drawPlayer.position;
+            var handVector = new Vector2((float)((int)(Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2));
+            return handVector;
+        }
+
         public Vector2 GetChargeBallPosition()
         {
-            return Main.player[projectile.owner].Center + OffsetY + projectile.velocity * ChargeBallHeldDistance;
+            Player player = Main.player[projectile.owner];
+            Vector2 positionOffset = player.channel ? ChannelingOffset + projectile.velocity * ChargeBallHeldDistance : NotChannelingOffset + GetPlayerHandPosition(player);
+            return Main.player[projectile.owner].Center + positionOffset;
         }
 
         // The core function of drawing a charge ball
@@ -201,8 +214,10 @@ namespace DBZMOD.Projectiles
                 projectile.timeLeft = 10;
             }
 
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+
             // The energy in the projectile decays if the player stops channeling.
-            if (!player.channel)
+            if (!player.channel && !modPlayer.IsMouseRightHeld && !IsSustainingFire)
             {
                 if (ChargeLevel > 0f)
                 {
@@ -220,11 +235,12 @@ namespace DBZMOD.Projectiles
                 }
             }
 
+            // charge the ball if the proper keys are held.
             // increment the charge timer if channeling and apply slowdown effect
-            if (player.channel && projectile.active)
+            if (player.channel && projectile.active && modPlayer.IsMouseRightHeld && !IsSustainingFire)
             {
                 // drain ki from the player when charging
-                if (Main.time > 0 && Math.Ceiling(Main.time % ChargeKiDrainWindow) == 0 && !MyPlayer.ModPlayer(player).IsKiDepleted())
+                if (Main.time > 0 && Math.Ceiling(Main.time % ChargeKiDrainWindow) == 0 && !modPlayer.IsKiDepleted())
                 {
                     MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate);
                 }
@@ -237,7 +253,7 @@ namespace DBZMOD.Projectiles
 
                 // dust 169 is some green dust off of final shine (I think). 0.2 is a relatively low frequency (1/5th of the time), ball is not decaying.
                 if (!IsSustainingFire)
-                    ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());
+                    ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());                
             }
         }
 
@@ -248,8 +264,8 @@ namespace DBZMOD.Projectiles
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            // minimum charge level
-            if (ChargeLevel >= 0f && modPlayer.IsMouseRightHeld)
+            // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
+            if ((ChargeLevel >= MinimumChargeLevel || IsSustainingFire) && modPlayer.IsMouseLeftHeld)
             {
                 if (!WasSustainingFire)
                 {
@@ -261,15 +277,26 @@ namespace DBZMOD.Projectiles
 
                 MyProjectile.velocity = projectile.velocity;
 
-                if (!modPlayer.IsKiDepleted())
+                // if the player has charge left, drain the ball
+                if (ChargeLevel > 0f)
                 {
-
+                    ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate);
+                }
+                else if(!modPlayer.IsKiDepleted())
+                {
                     if (Main.time > 0 && Main.time % FireKiDrainWindow == 0)
                     {
                         modPlayer.AddKi(-FireKiDrainRate);
                     }
-                    ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate);
-                }
+                } else
+                {
+                    IsSustainingFire = false;
+
+                    if (MyProjectile != null)
+                    {
+                        ProjectileUtil.StartKillRoutine(MyProjectile);
+                    }
+                }                
             }
             else
             {
@@ -341,7 +368,7 @@ namespace DBZMOD.Projectiles
             Vector2 screenPosition = Main.screenPosition;
             if (OldMouseVector != Vector2.Zero)
             {
-                Vector2 mouseMovementVector = (mouseVector - OldMouseVector) / 180f;
+                Vector2 mouseMovementVector = (mouseVector - OldMouseVector) / RotationSlowness;
                 //DebugUtil.Log(string.Format("Mouse Movement Vector {0} {1}", mouseMovementVector.X, mouseMovementVector.Y));
                 Vector2 screenChange = screenPosition - OldScreenPosition;
                 //DebugUtil.Log(string.Format("Weirdness with vectors. Mouse Vector {0} {1} Old Mouse Vector {2} {3}", mouseVector.X, mouseVector.Y, OldMouseVector.X, OldMouseVector.Y));
@@ -379,12 +406,17 @@ namespace DBZMOD.Projectiles
             // If we just crossed a threshold, display combat text for the charge level increase.
             if (Math.Floor(oldChargeLevel) != Math.Floor(ChargeLevel) && oldChargeLevel != ChargeLevel)
             {
-                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)ChargeLevel, false, false);
+                Color chargeColor = oldChargeLevel < ChargeLevel ? new Color(51, 224, 255) : new Color(251, 74, 55);
+                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), chargeColor, (int)ChargeLevel, false, false);
             }
         }
 
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)
         {
+            // custom channeling handler
+            if (player.GetModPlayer<MyPlayer>().IsMouseRightHeld)
+                player.channel = true;
+
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer)
             {
@@ -396,15 +428,15 @@ namespace DBZMOD.Projectiles
             }
             projectile.position = player.Center - new Vector2(0, ChargeSize.Y / 2f) + projectile.velocity * ChargeBallHeldDistance;
             projectile.timeLeft = 2;
-            int dir = projectile.direction;
-            player.ChangeDir(dir);
             player.heldProj = projectile.whoAmI;
             if (player.channel)
             {
                 player.itemTime = 2;
                 player.itemAnimation = 2;
+                int dir = projectile.direction;
+                player.ChangeDir(dir);
+                player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
             }
-            player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
         }
 
         public override bool ShouldUpdatePosition()

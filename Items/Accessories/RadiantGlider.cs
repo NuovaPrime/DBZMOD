@@ -50,6 +50,7 @@ namespace DBZMOD.Items.Accessories
         {
             player.wingsLogic = 1;
             player.wingTimeMax = 160;
+            player.flapSound = false; // lol no
             MyPlayer.ModPlayer(player).radiantGlider = true;
         }
 

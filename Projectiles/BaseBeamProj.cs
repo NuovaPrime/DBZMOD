@@ -297,7 +297,7 @@ namespace DBZMOD.Projectiles
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (!modPlayer.IsMouseRightHeld)
+            if (!modPlayer.IsMouseLeftHeld)
             {
                 ProjectileUtil.StartKillRoutine(projectile);
             }
@@ -337,7 +337,7 @@ namespace DBZMOD.Projectiles
             int dir = projectile.direction;
             player.ChangeDir(dir);
             player.heldProj = projectile.whoAmI;
-            if (modPlayer.IsMouseRightHeld)
+            if (modPlayer.IsMouseLeftHeld)
             {
                 player.itemTime = 2;
                 player.itemAnimation = 2;

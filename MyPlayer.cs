@@ -314,8 +314,8 @@ namespace DBZMOD
             return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
         }
 
-        public override void PostUpdate()
-        {            
+        public void DoLSSJ2Check()
+        {
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2timer++;
@@ -340,34 +340,10 @@ namespace DBZMOD
                     }
                 }
             }
-            if (kiLantern)
-            {
-                player.AddBuff(mod.BuffType("KiLanternBuff"), 2);
-            }
-            else
-            {
-                player.ClearBuff(mod.BuffType("KiLanternBuff"));
-            }
-            if (IsTransforming)
-            {
-                SSJAuraBeamTimer++;
-            }
-            if (OverloadCurrent < 0)
-            {
-                OverloadCurrent = 0;
-            }
-            if (SSJ1Achieved)
-            {
-                UI.TransMenu.SSJ1On = true;
-            }
-            if (SSJ2Achieved)
-            {
-                UI.TransMenu.SSJ2On = true;
-            }
-            if (SSJ3Achieved)
-            {
-                UI.TransMenu.SSJ3On = true;
-            }
+        }
+
+        public void HandleLightningFrames()
+        {
             if (Transformations.IsPlayerTransformed(player))
             {
                 if (!player.HasBuff(Transformations.Kaioken100.GetBuffId()) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
@@ -384,6 +360,47 @@ namespace DBZMOD
             {
                 LightningFrameTimer = 0;
             }
+        }
+
+        public override void PostUpdate()
+        {
+            DoLSSJ2Check();
+
+            if (kiLantern)
+            {
+                player.AddBuff(mod.BuffType("KiLanternBuff"), 2);
+            }
+            else
+            {
+                player.ClearBuff(mod.BuffType("KiLanternBuff"));
+            }
+
+            if (IsTransforming)
+            {
+                SSJAuraBeamTimer++;
+            }
+
+            if (OverloadCurrent < 0)
+            {
+                OverloadCurrent = 0;
+            }
+
+            if (SSJ1Achieved)
+            {
+                UI.TransMenu.SSJ1On = true;
+            }
+
+            if (SSJ2Achieved)
+            {
+                UI.TransMenu.SSJ2On = true;
+            }
+
+            if (SSJ3Achieved)
+            {
+                UI.TransMenu.SSJ3On = true;
+            }
+
+            HandleLightningFrames();
 
             if (!Transformations.IsPlayerTransformed(player))
             {
@@ -669,6 +686,10 @@ namespace DBZMOD
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
 
+            // if the player is holding right click, and a ki weapon, try to channel
+            if (IsHoldingKiWeapon && IsMouseRightHeld)
+                player.channel = true;
+
             // try to update positional audio?
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
         }        
@@ -705,6 +726,7 @@ namespace DBZMOD
         public float? SyncBonusSpeedMultiplier;
 
         // triggerset sync has its own method, but dropping these here anyway
+        public bool? SyncTriggerSetMouseLeft;
         public bool? SyncTriggerSetMouseRight;
         public bool? SyncTriggerSetLeft;
         public bool? SyncTriggerSetRight;
@@ -886,6 +908,11 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseRightHeld);
                 SyncTriggerSetMouseRight = IsMouseRightHeld;
+            }
+            if (SyncTriggerSetMouseLeft != IsMouseLeftHeld)
+            {
+                NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseLeftHeld);
+                SyncTriggerSetMouseLeft = IsMouseLeftHeld;
             }
         }
 
@@ -1253,6 +1280,11 @@ namespace DBZMOD
                 IsMouseRightHeld = true;
             else
                 IsMouseRightHeld = false;
+
+            if (triggerSet.MouseLeft)
+                IsMouseLeftHeld = true;
+            else
+                IsMouseLeftHeld = false;
         }
 
         public float GetNextSpeedMultiplier()

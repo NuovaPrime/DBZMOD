@@ -29,8 +29,14 @@ namespace DBZMOD.Items.Weapons.Tier_6
             item.height = 40;
             item.autoReuse = false;            
             item.value = 120000;
-            item.rare = 8;
+            item.rare = 8;            
             KiDrain = 1;            
+        }
+
+        public override void HoldItem(Player player)
+        {
+            // set the ki weapon held var
+            player.GetModPlayer<MyPlayer>().IsHoldingKiWeapon = true;
         }
 
         public override void SetStaticDefaults()
@@ -39,31 +45,27 @@ namespace DBZMOD.Items.Weapons.Tier_6
             DisplayName.SetDefault("Beam Overhaul Test Item");
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool AltFunctionUse(Player player)
         {
-            // DebugUtil.Log(string.Format("Player trying to shoot debug beam item."));
-            if (ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
-                return false;
-            return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+            player.channel = true;
+            if (!ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
+            {
+                var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, item.damage, item.knockBack, player.whoAmI);
+                player.heldProj = proj.whoAmI;
+            }
+            return base.AltFunctionUse(player);
         }
 
-        //public override bool UseItem(Player player)
-        //{
-        //    // DebugUtil.Log(string.Format("Player trying to use debug beam item."));
-        //    return base.UseItem(player);
-        //}
-
-        public override float UseTimeMultiplier(Player player)
-        {
-            return 1f;
-        }
-
+        // this is important, don't let the player left click, basically.
         public override bool CanUseItem(Player player)
         {
+            return false;
+        }
 
-            // DebugUtil.Log(string.Format("Player trying to use debug beam item."));
-            // the answer is yes, always.
-            return true;
+        // this is important, don't let the player left click, basically. We spawn the projectile manually because of controls.
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            return false;
         }
 
         //public override void AddRecipes()

@@ -16,7 +16,7 @@ namespace Util
             if (modPlayer.IsFlying)
             {
                 float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
-                float yVelocity = 0f;
+                float yVelocity = -(player.gravity + 0.001f);
                 if (modPlayer.IsDownHeld || modPlayer.IsUpHeld)
                 {
                     yVelocity = player.velocity.Y / (1.2f - chargeMoveSpeedBonus);

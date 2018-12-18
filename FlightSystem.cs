@@ -116,7 +116,16 @@ namespace DBZMOD
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);
                 player.velocity.Y = MathHelper.Lerp(player.velocity.Y, 0, 0.1f);
                 // keep the player suspended at worst.
-                player.velocity = player.velocity - (Vector2.UnitY * 0.4f);
+                player.velocity = player.velocity - (player.gravity * Vector2.UnitY);
+
+                // handles keeping legs from moving when the player is in flight/moving fast/channeling.
+                if (player.velocity.X > 0)
+                {
+                    player.legFrameCounter = -player.velocity.X;
+                } else
+                {
+                    player.legFrameCounter = player.velocity.X;
+                }                
 
                 //calculate rotation
                 float radRot = 0;
@@ -125,21 +134,7 @@ namespace DBZMOD
                 {
                     m_rotationDir.Normalize();
                     radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
-
-                    if (m_rotationDir.Y < 0)
-                    {
-                        if (m_rotationDir.X > 0)
-                            radRot += MathHelper.ToRadians(180);
-                        else if (m_rotationDir.X < 0)
-                            radRot -= MathHelper.ToRadians(180);
-                        else
-                        {
-                            if (player.velocity.X >= 0)
-                                radRot = MathHelper.ToRadians(180);
-                            else if (player.velocity.X < 0)
-                                radRot = MathHelper.ToRadians(-180);
-                        }
-                    }
+                    radRot = GetPlayerFlightRotation(m_rotationDir, radRot, player);
                 }
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
 
@@ -158,19 +153,49 @@ namespace DBZMOD
                         modPlayer.AddKi(-1);                        
                     }
                 }
-
-                if (player.velocity.Y == -0.4f && Math.Abs(player.velocity.X) > 0.5f)
-                {
-                    // if the player is "running", stop that. EXPERIMENTAL
-                    player.velocity.Y = -0.4001f;                    
-                }
             }
 
             // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.
             if (!modPlayer.IsFlying)
-            {                
-                player.fullRotation = MathHelper.ToRadians(0);
+            {
+                player.fullRotation = MathHelper.Lerp(player.fullRotation, 0, 0.1f);
             }
+        }
+
+        public static float GetPlayerFlightRotation(Vector2 m_rotationDir, float radRot, Player player)
+        {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            float leanThrottle = 180;
+            if (modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld))            
+            {
+                leanThrottle = 45;
+            }
+
+            if (m_rotationDir.Y < 0)
+            {
+                if (m_rotationDir.X > 0)
+                    radRot += MathHelper.ToRadians(leanThrottle);
+                else if (m_rotationDir.X < 0)
+                    radRot -= MathHelper.ToRadians(leanThrottle);
+                else
+                {
+                    if (player.velocity.X >= 0)
+                        radRot = MathHelper.ToRadians(leanThrottle);
+                    else if (player.velocity.X < 0)
+                        radRot = MathHelper.ToRadians(-leanThrottle);
+                }
+            } else
+            {
+                // if the player is channeling, throttle direction turn and make it their facing direction.
+                if (leanThrottle == 45)
+                {
+                    if (player.direction == 1)
+                        radRot = MathHelper.ToRadians(leanThrottle);
+                    else if (player.direction == -1)
+                        radRot = MathHelper.ToRadians(-leanThrottle);
+                }
+            }
+            return radRot;
         }
 
         public static void AddKatchinFeetBuff(Player player)

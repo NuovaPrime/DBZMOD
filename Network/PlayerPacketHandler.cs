@@ -359,6 +359,15 @@ namespace Network
 
             switch(syncEnum)
             {
+                case PlayerVarSyncEnum.TriggerMouseLeft:
+                    player.IsMouseLeftHeld = isHeld;
+                    //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsLeftHeld));
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(isHeld);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
                 case PlayerVarSyncEnum.TriggerMouseRight:
                     player.IsMouseRightHeld = isHeld;
                     //DebugUtil.Log(string.Format("I am receiving sync triggers from {0} for player {1} for key {2} Trigger is {3}", fromWho, playerNum, syncEnum.ToString(), player.IsLeftHeld));
