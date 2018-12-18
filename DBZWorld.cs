@@ -106,7 +106,7 @@ namespace DBZMOD
 
 
 
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+        /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
             // useful debug tool type thing. Help me find the names of tasks to decide where to put this one.
             var taskNames = tasks.Select(x => x.Name).ToList();
@@ -124,7 +124,7 @@ namespace DBZMOD
             {
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House Validation", CleanupGohanHouse));
             }
-        }
+        }*/
 
         public void AddGohanHouse(GenerationProgress progress = null)
         {

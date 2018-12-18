@@ -792,6 +792,20 @@ namespace DBZMOD
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodstainedBandana"));
                 }
             }
+            if (npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinWarrior || npc.type == NPCID.GoblinThief)
+            {
+                if (Main.rand.Next(50) == 0)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
+                }
+            }
+            if (npc.type == NPCID.GoblinSummoner)
+            {
+                if (Main.rand.Next(4) == 0)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
+                }
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)

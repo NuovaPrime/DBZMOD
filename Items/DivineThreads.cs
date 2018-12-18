@@ -21,7 +21,7 @@ namespace DBZMOD.Items
             item.maxStack = 9999;
         }
 		
-		 public override void AddRecipes()
+		public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PureKiCrystal", 2);

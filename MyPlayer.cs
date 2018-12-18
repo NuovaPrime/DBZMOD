@@ -224,6 +224,8 @@ namespace DBZMOD
         public bool pureEnergyCirclet;
         public bool timeRing;
         public bool bloodstainedBandana;
+        public bool goblinKiEnhancer;
+        public bool mechanicalAmplifier;
         public bool blackFusionBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
@@ -1596,6 +1598,8 @@ namespace DBZMOD
             pureEnergyCirclet = false;
             timeRing = false;
             bloodstainedBandana = false;
+            goblinKiEnhancer = false;
+            mechanicalAmplifier = false;
             KiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
@@ -1719,6 +1723,11 @@ namespace DBZMOD
             if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
                 player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
+                return true;
+            }
+            if (goblinKiEnhancer && !player.HasBuff(mod.BuffType("EnhancedReserves")))
+            {
+                player.AddBuff(mod.BuffType("EnhancedReserves"), 180);
                 return true;
             }
             if (blackDiamondShell)

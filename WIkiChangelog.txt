@@ -404,6 +404,8 @@ V1.0.8.2
 
 1. Added small animations for transforming into various forms.
 
+2. Added [[Goblin Ki Enhancer]].
+
 == Changes ==
 
 1. Drastically increased the time before [[Massive Blast]] type weapons disappear.
@@ -425,3 +427,9 @@ V1.0.8.2
 4. Fixed bug where [[Katchin Feet]] activated too late and killed people.
 
 5. Fixed bug where equipping multiple crystallites gave way too much speed.
+
+6. Fixed a few occasions where your [[Charging Aura]] wouldn't disappear.
+
+7. Fixed a bug where your eye color wouldn't change back after transforming.
+
+8. Fixed a bug where you'd take alot of damage after flying.
