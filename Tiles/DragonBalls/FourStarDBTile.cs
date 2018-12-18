@@ -20,6 +20,8 @@ namespace DBZMOD.Tiles.DragonBalls
             Main.tileNoFail[Type] = true;
             Main.tileLavaDeath[Type] = false;
             Main.tileMergeDirt[Type] = false;
+            Main.tileShine[Type] = 1150;
+            Main.tileShine2[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Origin = new Point16(0, 0);
             TileObjectData.newTile.Style = 0;
