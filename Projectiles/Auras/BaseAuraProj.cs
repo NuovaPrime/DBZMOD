@@ -6,6 +6,7 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Projectiles.Auras;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -52,6 +53,12 @@ namespace DBZMOD.Projectiles.Auras
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             projectile.netUpdate = true;
             if (!modPlayer.IsCharging)
+            {
+                projectile.Kill();
+            }
+
+            // commit suicide if the player is transforming.
+            if (Transformations.IsPlayerTransformed(player))
             {
                 projectile.Kill();
             }
