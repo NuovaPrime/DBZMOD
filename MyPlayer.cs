@@ -1883,7 +1883,7 @@ namespace DBZMOD
             WasTransformed = IsTransformed;
 
             IsKaioken = Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player);
-            IsTransformed = Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player);
+            IsTransformed = Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player);
             // this way, we can apply exhaustion debuffs correctly.
             if (WasKaioken && !IsKaioken)
             {
