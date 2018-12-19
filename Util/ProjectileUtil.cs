@@ -113,15 +113,24 @@ namespace Util
             // snazzy charge up dust, reduced to less or equal to one per frame.
             if (Main.rand.NextFloat() < dustFrequency)
             {
-                Vector2 beamCollisionPosition = endPosition;
-                float angle = Main.rand.NextFloat(-62.5f, 62.5f);
-                Vector2 backDraft = velocity * -1f;
-                float angleRad = MathHelper.ToRadians(angle) + backDraft.ToRotation();
-                Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-                Dust tDust = Dust.NewDustDirect(beamCollisionPosition, 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
-                tDust.velocity = backdraftWithRandomization;
+                //float angle = Main.rand.NextFloat(-62.5f, 62.5f);
+                Vector2 backDraft = Vector2.Normalize((velocity * -1f) + AngleToVector(Main.rand.NextFloat(-150f, -210f)));
+                //float angleRad = MathHelper.ToRadians(angle);
+                //Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad)) + backDraft;
+                Dust tDust = Dust.NewDustDirect(endPosition, 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
+                tDust.velocity = backDraft * 30f;
                 tDust.noGravity = true;
             }
+        }
+
+        public static Vector2 AngleToVector(float angle)
+        {
+            return VectorizeRadians(MathHelper.ToRadians(angle));
+        }
+
+        public static Vector2 VectorizeRadians(float angleRad)
+        {
+            return new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
         }
 
         // starts the kill routine for beams that lets them detach from the charge ball and fade incrementally.

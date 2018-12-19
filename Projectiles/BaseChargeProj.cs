@@ -75,7 +75,7 @@ namespace DBZMOD.Projectiles
         public float RotationSlowness = 15f;
 
         // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-        public int BeamFiringCooldown = 180;
+        public int InitialBeamCooldown = 180;
 
         // the charge ball is just a single texture.
         // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
@@ -257,6 +257,11 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        private bool CanFireBeam(MyPlayer modPlayer)
+        {
+            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && modPlayer.IsMouseLeftHeld;
+        }
+
         private bool WasSustainingFire = false;
 
         Projectile MyProjectile = null;
@@ -265,7 +270,7 @@ namespace DBZMOD.Projectiles
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
-            if ((ChargeLevel >= MinimumChargeLevel || IsSustainingFire) && modPlayer.IsMouseLeftHeld)
+            if (CanFireBeam(modPlayer))
             {
                 if (!WasSustainingFire)
                 {
@@ -273,6 +278,9 @@ namespace DBZMOD.Projectiles
 
                     // fire the laser!
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), projectile.damage, projectile.knockBack, projectile.owner);
+
+                    // set the cooldown
+                    BeamCooldown = InitialBeamCooldown;
                 }
 
                 MyProjectile.velocity = projectile.velocity;
@@ -384,6 +392,10 @@ namespace DBZMOD.Projectiles
             // handles the initial binding to a weapon and determines if the player has changed items, which should kill the projectile.
             if (!ShouldHandleWeaponChangesAndContinue(player))
                 return;
+
+            // decrease the beam cooldown if it's not zero
+            if (BeamCooldown > 0)
+                BeamCooldown--;
 
             // handle.. handling the charge.
             UpdateChargeBallLocationAndDirection(player, mouseVector);

@@ -1413,7 +1413,7 @@ namespace DBZMOD
                 if ((IsLeftHeld || IsRightHeld) && !IsFlying)
                 {
                     if (chargeMoveSpeed > 0)
-                        player.velocity = new Vector2(chargeMoveSpeed * player.direction, player.velocity.Y);
+                        player.velocity = new Vector2(chargeMoveSpeed * (IsLeftHeld ? -1f : 1f), player.velocity.Y);
                     else
                         player.velocity = new Vector2(0, player.velocity.Y);
                 }

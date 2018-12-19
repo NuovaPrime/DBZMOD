@@ -197,10 +197,6 @@ namespace DBZMOD.Projectiles
 
             bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionEnd(), HeadSize.X, ref headPoint);
 
-            if (tailCollision)
-            {
-                ProjectileUtil.StartKillRoutine(projectile);
-            }
             // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
             // It will look for collisions on the given line using AABB
             return tailCollision || headCollision || bodyCollision;
@@ -258,25 +254,45 @@ namespace DBZMOD.Projectiles
             float TrackedDistance;
             for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
             {
-                Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                
-                if (!Collision.CanHit(projectile.position, 1, 1, origin, (int)(HeadSize.X * 0.66f), (int)(HeadSize.Y * 0.66f)))
+                var finalDistance = TrackedDistance;
+                Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                            
+                while (!Collision.CanHit(projectile.position, 1, 1, GetTopLeftCollisionPoint(origin), (int)(BeamSize.X * 0.8f), (int)(BeamSize.Y * 0.8f)))
                 {
-                    var tilesColliding = Collision.GetTilesIn(origin, origin + HeadSize.ToVector2());
-                    foreach (Point point in tilesColliding)
-                    {
-                        ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, point.ToVector2());
-                    }                    
-                    TrackedDistance -= BeamSpeed;
+                    // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
+                    TrackedDistance -= 0.66f;
                     if (TrackedDistance <= 0)
                     {
-                        ProjectileUtil.StartKillRoutine(projectile);
+                        TrackedDistance = 0;
+                        break;
                     }
+                    // reset origin to the new tracked position
+                    origin = TailPositionStart() + projectile.velocity * TrackedDistance;
+                }
+                if (finalDistance != TrackedDistance)
+                {
+                    var dustVector = projectile.position + finalDistance * projectile.velocity;
+                    DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", dustVector.X, dustVector.Y));
+                    ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, finalDistance * projectile.velocity);
                     break;
                 }
             }
 
             // throttle distance by collision
             Distance = Math.Min(TrackedDistance, Distance);
+
+            // this doesn't work super well
+            // now observe the collision taking place at the distance we're in
+            //Vector2 dustTrackingOrigin = BodyPositionEnd();
+            //var topLeftCollider = GetTopLeftCollisionPoint(dustTrackingOrigin);
+            //var bottomRightCollider = GetBottomRightCollisionPoint(dustTrackingOrigin);
+            //var tilesColliding = Collision.GetTilesIn(topLeftCollider, bottomRightCollider);
+            //foreach (Point point in tilesColliding)
+            //{
+            //    DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", point.X * 16f, point.Y * 16f));
+            //    var tile = Main.tile[point.X, point.Y];
+            //    if (tile.active())
+            //        ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, point.ToVector2() * 16f);
+            //}
 
             // shoot sweet sweet particles
             for (var i = 0; i < FireParticleDensity; i++)
@@ -291,6 +307,20 @@ namespace DBZMOD.Projectiles
 
             OldMouseVector = mouseVector;
             OldScreenPosition = screenPosition;
+        }
+
+        public Vector2 GetTopLeftCollisionPoint(Vector2 beamEnding)
+        {            
+            var beamEndingOffset = beamEnding - BeamSize.ToVector2() * 0.5f * projectile.velocity;
+
+            return new Vector2(Math.Min(beamEnding.X, beamEndingOffset.X), Math.Min(beamEnding.Y, beamEndingOffset.Y));
+        }
+
+        public Vector2 GetBottomRightCollisionPoint(Vector2 beamEnding)
+        {
+            var beamEndingOffset = beamEnding + BeamSize.ToVector2() * 0.5f * projectile.velocity;
+
+            return new Vector2(Math.Max(beamEnding.X, beamEndingOffset.X), Math.Max(beamEnding.Y, beamEndingOffset.Y));
         }
 
         public void ProcessKillRoutine(Player player)
