@@ -97,12 +97,13 @@ namespace Util
             // snazzy beam shooting dust, reduced to less than 1 per frame.
             if (Main.rand.NextFloat() < dustFrequency)
             {
-                TailPosition -= tailSize / 2f;
-                float angle = velocity.ToRotation();
-                Vector2 spawnPositionOffset = tailSize + new Vector2(tailSize.X * (Main.rand.NextFloat(0.5f) - 0.25f), tailSize.Y * (Main.rand.NextFloat(0.5f) - 0.25f));
-                Vector2 beamTailPosition = TailPosition + tailSize * velocity;
-                Dust tDust = Dust.NewDustDirect(beamTailPosition, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
-                tDust.velocity = velocity * travelDistance / 10f;
+                float randomLengthOnBeam = Main.rand.NextFloat(TailHeldDistance, travelDistance);
+                Vector2 beamWidthVariance = tailSize / 2f;
+                Vector2 variance = new Vector2(Main.rand.NextFloat(-beamWidthVariance.X, beamWidthVariance.X), Main.rand.NextFloat(beamWidthVariance.Y, beamWidthVariance.Y));
+                Vector2 randomPositionOnBeam = TailPosition - (tailSize / 2f) + variance * velocity + randomLengthOnBeam * velocity;
+                Dust tDust = Dust.NewDustDirect(randomPositionOnBeam, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
+                float angleVariance = Main.rand.NextFloat() < 0.5f ? -90 : 90f;
+                tDust.velocity = DegreesToVector(VectorToDegrees(velocity) + angleVariance) * (tailSize.Y / 40f);
                 tDust.noGravity = true;
             }
         }
@@ -114,21 +115,32 @@ namespace Util
             if (Main.rand.NextFloat() < dustFrequency)
             {
                 //float angle = Main.rand.NextFloat(-62.5f, 62.5f);
-                Vector2 backDraft = Vector2.Normalize((velocity * -1f) + AngleToVector(Main.rand.NextFloat(-150f, -210f)));
+                Vector2 backDraftVector = velocity * -1f;
+                Vector2 backDraft = DegreesToVector(VectorToDegrees(backDraftVector) + Main.rand.NextFloat(-45f, 45f));
                 //float angleRad = MathHelper.ToRadians(angle);
                 //Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad)) + backDraft;
                 Dust tDust = Dust.NewDustDirect(endPosition, 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
-                tDust.velocity = backDraft * 30f;
+                tDust.velocity = backDraft * 15f;
                 tDust.noGravity = true;
             }
         }
 
-        public static Vector2 AngleToVector(float angle)
+        public static float VectorToRadians(Vector2 vector)
         {
-            return VectorizeRadians(MathHelper.ToRadians(angle));
+            return (float)Math.Atan2(vector.Y, vector.X);
         }
 
-        public static Vector2 VectorizeRadians(float angleRad)
+        public static float VectorToDegrees(Vector2 vector)
+        {
+            return MathHelper.ToDegrees(VectorToRadians(vector));
+        }
+
+        public static Vector2 DegreesToVector(float degrees)
+        {
+            return RadiansToVector(MathHelper.ToRadians(degrees));
+        }
+
+        public static Vector2 RadiansToVector(float angleRad)
         {
             return new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
         }

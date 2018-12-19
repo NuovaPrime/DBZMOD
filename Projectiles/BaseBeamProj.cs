@@ -56,7 +56,10 @@ namespace DBZMOD.Projectiles
 
         // how many particles per frame fire when the beam collides with something
         public int CollisionParticleDensity = 8;
-                
+
+        // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
+        public int ImmunityFrameOverride = 2;
+
         public Rectangle TailRectangle()
         {
             return new Rectangle(TailOrigin.X, TailOrigin.Y, TailSize.X, TailSize.Y);
@@ -182,7 +185,7 @@ namespace DBZMOD.Projectiles
             return BodyPositionEnd() + (HeadSize.Y * 0.66f) * projectile.velocity;
         }
 
-        // Change the way of collision check of the projectile
+        // This collision check is for living entities, not tiles. This is what determines damage is being dealt.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Player player = Main.player[projectile.owner];
@@ -205,7 +208,7 @@ namespace DBZMOD.Projectiles
         // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.immune[projectile.owner] = 5;
+            target.immune[projectile.owner] = ImmunityFrameOverride;
         }
 
         public void HandleBeamVisibility()
@@ -252,29 +255,27 @@ namespace DBZMOD.Projectiles
             // tracked distance is with collision, and resets distance if it's too high.
             Distance += BeamSpeed;
             float TrackedDistance;
-            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += BeamSpeed)
+            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += (BeamSpeed / 5f))
             {
-                var finalDistance = TrackedDistance;
                 Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                            
-                while (!Collision.CanHit(projectile.position, 1, 1, GetTopLeftCollisionPoint(origin), (int)(BeamSize.X * 0.8f), (int)(BeamSize.Y * 0.8f)))
+                if (!Collision.CanHit(projectile.position, 1, 1, GetTopLeftCollisionPoint(origin), (int)(BeamSize.X * 0.75f), (int)(BeamSize.Y * 0.75f)))
                 {
                     // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
-                    TrackedDistance -= 0.66f;
+                    TrackedDistance -= (BeamSpeed / 5f);
                     if (TrackedDistance <= 0)
                     {
                         TrackedDistance = 0;
-                        break;
                     }
-                    // reset origin to the new tracked position
-                    origin = TailPositionStart() + projectile.velocity * TrackedDistance;
-                }
-                if (finalDistance != TrackedDistance)
-                {
-                    var dustVector = projectile.position + finalDistance * projectile.velocity;
-                    DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", dustVector.X, dustVector.Y));
-                    ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, finalDistance * projectile.velocity);
                     break;
                 }
+            }
+
+            // if distance is about to be throttled, we're hitting something. Spawn some dust.
+            if (Distance >= TrackedDistance)
+            {
+                var dustVector = projectile.position + TrackedDistance * projectile.velocity;
+                // DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", dustVector.X, dustVector.Y));
+                ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, dustVector);                    
             }
 
             // throttle distance by collision
