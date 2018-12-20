@@ -10,7 +10,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class MakankosappoBeam : BaseBeam
+    public class Kamehameha10Beam : BaseBeam
     {
         public override void SetDefaults()
         {
@@ -57,12 +57,12 @@ namespace DBZMOD.Projectiles
             ImmunityFrameOverride = 2;
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
-            BeamSoundKey = "Sounds/SBCFire";
+            BeamSoundKey = "Sounds/BasicBeamFire";
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Special Beam Cannon Blast");
+            DisplayName.SetDefault("Kamehameha x10");
         }
     }
 }

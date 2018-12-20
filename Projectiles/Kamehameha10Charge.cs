@@ -7,12 +7,11 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
-using Terraria.Graphics.Shaders;
 using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class GalickGunCharge : BaseCharge
+    public class Kamehameha10Charge : BaseCharge
     {
         public override void SetDefaults()
         {
@@ -48,14 +47,14 @@ namespace DBZMOD.Projectiles
             DecayRate = 0.016f; // very slow decay when not channeling
 
             // this is the beam the charge beam fires when told to.
-            BeamProjectileName = "GalickGunBeam";
+            BeamProjectileName = "Kamehameha10Beam";
 
             // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame.
             // For the most part, you want to make this the same as the beam's FadeInTime, *unless* you want the beam to stay partially transparent.
             BeamFadeInTime = 300f;
 
             // the type of dust that should spawn when charging or decaying
-            DustType = 169;
+            DustType = 183;
 
             // the percentage frequency at which dust spawns each frame
 
@@ -94,6 +93,11 @@ namespace DBZMOD.Projectiles
             // EXPERIMENTAL, UNUSED - needs adjustment
             // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
             NotChannelingOffset = new Vector2(-15, 20f);
+        }
+
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Kamehameha x10 Ball");
         }
     }
 }

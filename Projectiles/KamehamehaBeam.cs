@@ -1,4 +1,4 @@
-﻿﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -10,9 +10,9 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class MakankosappoBeam : BaseBeam
-    {
-        public override void SetDefaults()
+	public class KamehamehaBeam : BaseBeam
+	{
+		public override void SetDefaults()
         {
             // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
             // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
@@ -57,12 +57,12 @@ namespace DBZMOD.Projectiles
             ImmunityFrameOverride = 2;
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
-            BeamSoundKey = "Sounds/SBCFire";
+            BeamSoundKey = "Sounds/BasicBeamFire";
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Special Beam Cannon Blast");
+            DisplayName.SetDefault("KamehamehaBlast");
         }
-    }
+	}
 }
