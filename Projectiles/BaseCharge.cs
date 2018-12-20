@@ -322,7 +322,7 @@ namespace DBZMOD.Projectiles
 
         private bool CanFireBeam(MyPlayer modPlayer)
         {
-            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || CurrentFireTime < MinimumFireFrames);
+            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
         }
 
         private bool WasSustainingFire = false;

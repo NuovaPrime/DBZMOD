@@ -9,12 +9,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_2
 {
-	public class DoubleSunday : KiItem
-	{
+	public class DoubleSunday : BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
-			item.shoot = mod.ProjectileType("DoubleSundayBlast");
+			item.shoot = mod.ProjectileType("DoubleSundayCharge");
 			item.shootSpeed = 70f;
 			item.damage = 62;
 			item.knockBack = 2f;
@@ -31,22 +31,10 @@ namespace DBZMOD.Items.Weapons.Tier_2
             KiDrain = 55;
 			WeaponType = "Beam";
 	    }
+
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Double Sunday");
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			float numberProjectiles = 2 + Main.rand.Next(1); // 3, 4, or 5 shots
-			float rotation = MathHelper.ToRadians(7);
-			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-			for (int i = 0; i < numberProjectiles; i++)
-			{
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Watch out for dividing by 0 if there is only 1 projectile.
-				Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-			}
-			return false;
+		    DisplayName.SetDefault("Double Sunday");
 		}
 
 		public override void AddRecipes()

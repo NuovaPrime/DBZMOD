@@ -9,12 +9,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_4
 {
-	public class SpecialBeamCannon : KiItem
-	{
+	public class SpecialBeamCannon : BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
-			item.shoot = mod.ProjectileType("SpecialBeamCannonBall");
-			item.shootSpeed = 0f;
+			item.shoot = mod.ProjectileType("MakankosappoCharge");
+            item.shootSpeed = 0f;
 			item.damage = 114;
 			item.knockBack = 3f;
 			item.useStyle = 5;
@@ -32,18 +32,8 @@ namespace DBZMOD.Items.Weapons.Tier_4
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Maximum Charges = 6");
-		DisplayName.SetDefault("Makankosappo");
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-			if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-			{
-				position += muzzleOffset;
-			}
-			return true;
+		    Tooltip.SetDefault("Maximum Charges = 6");
+		    DisplayName.SetDefault("Makankosappo");
 		}
 
 		public override void AddRecipes()
@@ -55,13 +45,5 @@ namespace DBZMOD.Items.Weapons.Tier_4
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SpecialBeamCannonBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }

@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
 
-namespace DBZMOD.Items.Weapons.Tier_6
+namespace DBZMOD
 {
     public abstract class BaseBeamItem : KiItem
     {

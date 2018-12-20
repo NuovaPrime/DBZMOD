@@ -9,12 +9,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_4
 {
-	public class SuperKamehameha: KiItem
-	{
+	public class SuperKamehameha: BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
-			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
-			item.shoot = mod.ProjectileType("SuperKamehamehaBall");
+			item.shoot = mod.ProjectileType("SuperKamehamehaCharge");
 			item.shootSpeed = 0f;
 			item.damage = 118;
 			item.knockBack = 7f;
@@ -32,20 +31,11 @@ namespace DBZMOD.Items.Weapons.Tier_4
             KiDrain = 150;
 			WeaponType = "Beam";
 	    }
+
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Maximum Charges = 8");
-		DisplayName.SetDefault("Super Kamehameha");
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-			if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-			{
-				position += muzzleOffset;
-			}
-			return true;
+		    Tooltip.SetDefault("Maximum Charges = 8");
+		    DisplayName.SetDefault("Super Kamehameha");
 		}
 
 		public override void AddRecipes()
@@ -57,13 +47,5 @@ namespace DBZMOD.Items.Weapons.Tier_4
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SuperKamehamehaBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }

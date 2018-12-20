@@ -9,12 +9,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_2
 {
-	public class Masenko : KiItem
-	{
+	public class Masenko : BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
-			item.shoot = mod.ProjectileType("MasenkoBall");
+			item.shoot = mod.ProjectileType("MasenkoCharge");
 			item.shootSpeed = 0f;
 			item.damage = 72;
 			item.knockBack = 2f;
@@ -32,20 +32,11 @@ namespace DBZMOD.Items.Weapons.Tier_2
             KiDrain = 60;
 			WeaponType = "Beam";
 	    }
+
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Maximum Charges = 5");
-		DisplayName.SetDefault("Masenko");
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 12f;
-			if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-			{
-				position += muzzleOffset;
-			}
-			return true;
+		    Tooltip.SetDefault("Maximum Charges = 5");
+		    DisplayName.SetDefault("Masenko");
 		}
 
 		public override void AddRecipes()
@@ -58,13 +49,5 @@ namespace DBZMOD.Items.Weapons.Tier_2
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if(player.ownedProjectileCounts[mod.ProjectileType("MasenkoBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }

@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_3
 {
-    public class GalickGun : KiItem
+    public class GalickGun : BaseBeamItem
     {
         public override void SetDefaults()
         {
-            item.shoot = mod.ProjectileType("GalickGunBall");
+            item.shoot = mod.ProjectileType("GalickGunCharge");
             item.shootSpeed = 0f;
             item.damage = 94;
             item.knockBack = 2f;
@@ -32,20 +32,11 @@ namespace DBZMOD.Items.Weapons.Tier_3
             item.channel = true;
             WeaponType = "Beam";
         }
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Maximum Charges = 7");
             DisplayName.SetDefault("Galick Gun");
-        }
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        {
-            Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-            if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-            {
-                position += muzzleOffset;
-            }
-            return true;
         }
 
         public override void AddRecipes()
@@ -56,14 +47,6 @@ namespace DBZMOD.Items.Weapons.Tier_3
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
-        }
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("GalickGunBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
         }
     }
 }

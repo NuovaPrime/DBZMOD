@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_5
 {
-	public class FinalFlash : KiItem
-	{
+	public class FinalFlash : BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
-			item.shoot = mod.ProjectileType("FinalFlashBall");
+			item.shoot = mod.ProjectileType("FinalFlashCharge");
 			item.shootSpeed = 0f;
 			item.damage = 144;
 			item.knockBack = 3f;
@@ -32,20 +32,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Maximum Charges = 9");
-		DisplayName.SetDefault("Final Flash");
+		    Tooltip.SetDefault("Maximum Charges = 9");
+		    DisplayName.SetDefault("Final Flash");
 		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-			if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-			{
-				position += muzzleOffset;
-			}
-			return true;
-		}
-
+        
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
@@ -55,13 +45,5 @@ namespace DBZMOD.Items.Weapons.Tier_5
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("FinalFlashBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }

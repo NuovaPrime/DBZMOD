@@ -9,18 +9,18 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_1
 {
-	public class EnergyWave : KiItem
+	public class EnergyWave : BaseBeamItem
 	{
 		public override void SetDefaults()
 		{
-			item.shoot = mod.ProjectileType("EnergyWaveBall");
+			item.shoot = mod.ProjectileType("EnergyWaveCharge");
 			item.shootSpeed = 0f;
 			item.damage = 32;
 			item.knockBack = 2f;
 			item.useStyle = 5;
-            item.useAnimation = 90;
-			item.useTime = 90;
-			item.width = 40;
+            item.useAnimation = 2;
+            item.useTime = 2;
+            item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
 			item.autoReuse = false;
@@ -30,20 +30,11 @@ namespace DBZMOD.Items.Weapons.Tier_1
             item.channel = true;
 			WeaponType = "Beam";
 	    }
+
 	    public override void SetStaticDefaults()
 		{
 		    Tooltip.SetDefault("Maximum Charges = 4");
 		    DisplayName.SetDefault("Energy Wave");
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-			if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-			{
-				position += muzzleOffset;
-			}
-			return true;
 		}
 
 		public override void AddRecipes()
@@ -54,13 +45,5 @@ namespace DBZMOD.Items.Weapons.Tier_1
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("EnergyWaveBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }

@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_5
 {
-	public class Kamehamehax10 : KiItem
-	{
+	public class Kamehamehax10 : BaseBeamItem
+    {
 		public override void SetDefaults()
 		{
-			item.shoot = mod.ProjectileType("Kamehamehax10Ball");
+			item.shoot = mod.ProjectileType("Kamehameha10Charge");
 			item.shootSpeed = 0f;
 			item.damage = 156;
 			item.knockBack = 2f;
@@ -33,8 +33,8 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("Maximum Charges = 8");
-		DisplayName.SetDefault("Kamehameha x10");
+		    Tooltip.SetDefault("Maximum Charges = 8");
+		    DisplayName.SetDefault("Kamehameha x10");
 		}
 
 		public override void AddRecipes()
@@ -47,13 +47,5 @@ namespace DBZMOD.Items.Weapons.Tier_5
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
-        public override bool CanUseItem(Player player)
-        {
-            if (player.ownedProjectileCounts[mod.ProjectileType("Kamehamehax10Ball")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
-        }
     }
 }
