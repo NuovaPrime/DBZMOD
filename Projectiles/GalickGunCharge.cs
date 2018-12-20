@@ -17,10 +17,10 @@ namespace DBZMOD.Projectiles
         public override void SetDefaults()
         {
             // the maximum charge level of the ball     
-            ChargeLimit = 10;
+            ChargeLimit = 7;
 
             // this is the minimum charge level you have to have before you can actually fire the beam
-            MinimumChargeLevel = 4f;
+            MinimumChargeLevel = 2f;
 
             // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
             MinimumFireFrames = 120;
@@ -29,10 +29,10 @@ namespace DBZMOD.Projectiles
             ChargeRatePerSecond = 1f;
 
             // Rate at which Ki is drained while channeling
-            ChargeKiDrainPerSecond = 40;
+            ChargeKiDrainPerSecond = 80;
 
             // rate at which firing drains ki when charge is depleted
-            FireKiDrainPerSecond = 80;
+            FireKiDrainPerSecond = 160;
 
             // rate at which firing drains charge until depleted, keep this less than the ratio between ki drain (charge and fire) or charging won't be beneficial to preserving ki.
             FireChargeDrainPerSecond = 1.2f;
