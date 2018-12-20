@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_6
 {
-	public class BigBangKamehameha : BaseBeamItem
-    {
+	public class BigBangKamehameha : KiItem
+	{
 		public override void SetDefaults()
 		{
-			item.shoot = mod.ProjectileType("BigBangKamehamehaCharge");
+			item.shoot = mod.ProjectileType("BigBangKamehamehaBall");
 			item.shootSpeed = 0f;
 			item.damage = 182;
 			item.knockBack = 2f;
@@ -31,11 +31,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
             KiDrain = 230;
 			WeaponType = "Beam";
 	    }
-
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 10");
-		    DisplayName.SetDefault("Big Bang Kamehameha");
+		Tooltip.SetDefault("Maximum Charges = 10");
+		DisplayName.SetDefault("Big Bang Kamehameha");
 		}
 
 		public override void AddRecipes()
@@ -47,5 +46,13 @@ namespace DBZMOD.Items.Weapons.Tier_6
             recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}
+        public override bool CanUseItem(Player player)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("BigBangKamehamehaBall")] > 1)
+            {
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
     }
 }

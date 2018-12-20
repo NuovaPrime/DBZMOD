@@ -368,6 +368,9 @@
     <Compile Include="Projectiles\BaseCharge.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaBall.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaBlast.cs" />
+    <Compile Include="Projectiles\BigBangKamehamehaTrail.cs" />
     <Compile Include="Projectiles\BlackBlitz.cs" />
     <Compile Include="Projectiles\BlackBlitzLong.cs" />
     <Compile Include="Projectiles\BlightedFangProj.cs" />
