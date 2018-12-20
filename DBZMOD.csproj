@@ -80,6 +80,7 @@
     <Compile Include="Buffs\ArmorCooldown.cs" />
     <Compile Include="Buffs\ASSJBuff.cs" />
     <Compile Include="Buffs\BuffKeyNames.cs" />
+    <Compile Include="Buffs\EnhancedReserves.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\DemonBonus.cs" />
     <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
@@ -137,6 +138,8 @@
     <Compile Include="Items\Accessories\AncientLegendNecklace.cs" />
     <Compile Include="Items\Accessories\AncientLegendWaistCape.cs" />
     <Compile Include="Items\Accessories\BloodstainedBandana.cs" />
+    <Compile Include="Items\Accessories\EndlessKi.cs" />
+    <Compile Include="Items\Accessories\GoblinKiEnhancer.cs" />
     <Compile Include="Items\Accessories\PureEnergyCirclet.cs" />
     <Compile Include="Items\Accessories\IceTalisman.cs" />
     <Compile Include="Items\Accessories\BurningEnergyAmulet.cs" />
@@ -250,6 +253,7 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar.cs" />
     <Compile Include="Items\DragonBalls\DBNote.cs" />
     <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
     <Compile Include="Items\DragonBalls\FourStarDB.cs" />
@@ -454,6 +458,11 @@
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
+    <Compile Include="Tiles\DragonBalls\TwoStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\ThreeStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\SixStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\SevenStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\OneStarDBTile.cs" />
     <Compile Include="Tiles\DragonBalls\FiveStarDBTile.cs" />
     <Compile Include="Tiles\DragonBalls\FourStarDBTile.cs" />
     <Compile Include="Tiles\KaiTable.cs" />

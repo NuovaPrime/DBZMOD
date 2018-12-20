@@ -34,5 +34,28 @@ namespace DBZMOD.Tiles.DragonBalls
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
         }
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (closer)
+            {
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+                modPlayer.SevenStarDBNearby = true;
+            }
+        }
+        public override void RightClick(int i, int j)
+        {
+            MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+            if (modPlayer.AllDBNearby)
+            {
+                modPlayer.WishActive = true;
+            }
+        }
+        public override void MouseOver(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+            player.noThrow = 2;
+            player.showItemIcon = true;
+            player.showItemIcon2 = mod.ItemType("SevenStarDB");
+        }
     }
 }

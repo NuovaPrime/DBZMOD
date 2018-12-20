@@ -230,6 +230,15 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
+        public bool OneStarDBNearby = false;
+        public bool TwoStarDBNearby = false;
+        public bool ThreeStarDBNearby = false;
+        public bool FourStarDBNearby = false;
+        public bool FiveStarDBNearby = false;
+        public bool SixStarDBNearby = false;
+        public bool SevenStarDBNearby = false;
+        public bool AllDBNearby = false;
+        public bool WishActive = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
@@ -634,6 +643,10 @@ namespace DBZMOD
             if (!isAnyBossAlive)
             {
                 blackFusionIncrease = 1f;
+            }
+            if(OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
+            {
+                AllDBNearby = true;
             }
 
             /*if(LSSJAchieved)
@@ -1603,6 +1616,7 @@ namespace DBZMOD
             KiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
+            AllDBNearby = false;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

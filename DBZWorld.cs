@@ -23,6 +23,13 @@ namespace DBZMOD
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
             modPlayer.kiLantern = false;
+            modPlayer.OneStarDBNearby = false;
+            modPlayer.TwoStarDBNearby = false;
+            modPlayer.ThreeStarDBNearby = false;
+            modPlayer.FourStarDBNearby = false;
+            modPlayer.FiveStarDBNearby = false;
+            modPlayer.SixStarDBNearby = false;
+            modPlayer.SevenStarDBNearby = false;
         }
         #region Gohan House Bytes
 

@@ -51,5 +51,28 @@ namespace DBZMOD.Tiles.DragonBalls
             }
             return false;
         }
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (closer)
+            {
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+                modPlayer.FourStarDBNearby = true;
+            }
+        }
+        public override void RightClick(int i, int j)
+        {
+            MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+            if (modPlayer.AllDBNearby)
+            {
+                modPlayer.WishActive = true;
+            }
+        }
+        public override void MouseOver(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+            player.noThrow = 2;
+            player.showItemIcon = true;
+            player.showItemIcon2 = mod.ItemType("FourStarDB");
+        }
     }
 }
