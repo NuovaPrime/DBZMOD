@@ -13,7 +13,7 @@ using Terraria.Enums;
 namespace DBZMOD.Projectiles
 {
     // unabashedly stolen from blushie's laser example, and then customized WIP
-    public class BaseCharge : ModProjectile
+    public abstract class BaseCharge : ModProjectile
     {
         // CHARGE/BEAM SETTINGS, these are the things you can change to affect charge appearance behavior!
 
@@ -88,17 +88,11 @@ namespace DBZMOD.Projectiles
         // vector to reposition the charge ball if it feels too low or too high on the character sprite
         public Vector2 ChannelingOffset = new Vector2(0, 4f);
 
-        // The sound slot used by the projectile to kill the sounds it's making
-        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
-
         // The sound effect used by the projectile when charging up.
-        public string ChargeSoundKey;
+        public string ChargeSoundKey = "Sounds/EnergyWaveCharge";
 
-        // The sound slot used by the projectile to kill the sounds it's making
-        public KeyValuePair<uint, SoundEffectInstance> BeamSoundSlotId;
-
-        // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
-        public string BeamSoundKey;
+        // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
+        public int ChargeSoundDelay = 120;
 
         // EXPERIMENTAL, UNUSED - needs adjustment
         // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
@@ -110,6 +104,9 @@ namespace DBZMOD.Projectiles
 
         public const float MAX_DISTANCE = 1000f;
         public const float STEP_LENGTH = 10f;
+
+        // The sound slot used by the projectile to kill the sounds it's making
+        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
 
         #endregion
 
@@ -130,6 +127,19 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        // the amount of time the beam has been firing, used to track whether it has surpassed the minimum fire time the beam *has* to be fired.
+        public float CurrentFireTime
+        {
+            get
+            {
+                return projectile.ai[0];
+            }
+            set
+            {
+                projectile.ai[0] = value;
+            }
+        }
+
         // Any nonzero number is on cooldown
         public float BeamCooldown
         {
@@ -140,6 +150,19 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[1] = value;
+            }
+        }
+
+        // Any nonzero number is on cooldown
+        public float ChargeSoundCooldown
+        {
+            get
+            {
+                return projectile.localAI[0];
+            }
+            set
+            {
+                projectile.localAI[0] = value;
             }
         }
 
@@ -213,8 +236,11 @@ namespace DBZMOD.Projectiles
                 new Rectangle(0, 0, ChargeSize.X, ChargeSize.Y), color * GetTransparency(), r, new Vector2(ChargeSize.X * .5f, ChargeSize.Y * .5f), scale, 0, 0.99f);
         }
 
+        private bool WasCharging = false;
+
         public void HandleChargingKi(Player player)
         {
+            bool IsCharging = false;
 
             FinalChargeLimit = ChargeLimit + MyPlayer.ModPlayer(player).ChargeLimitAdd;
 
@@ -235,11 +261,13 @@ namespace DBZMOD.Projectiles
             // The energy in the projectile decays if the player stops channeling.
             if (!player.channel && !modPlayer.IsMouseRightHeld && !IsSustainingFire)
             {
+                // kill the tracked charge sound if the player let go, immediately
+                ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
+
                 if (ChargeLevel > 0f)
                 {
                     ChargeLevel = Math.Max(0, ChargeLevel - DecayRate);
 
-                    // dust 169 is some green dust off of final shine (I think). 0.4 is a middling frequency (2/5th of the time), ball is decaying.
                     // don't draw the ball when firing.
                     if (!IsSustainingFire)
                         ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, DecayDustFrequency, true, ChargeSize.ToVector2());
@@ -255,27 +283,46 @@ namespace DBZMOD.Projectiles
             // increment the charge timer if channeling and apply slowdown effect
             if (player.channel && projectile.active && modPlayer.IsMouseRightHeld && !IsSustainingFire)
             {
-                // drain ki from the player when charging
-                if (Main.time > 0 && Math.Ceiling(Main.time % ChargeKiDrainWindow) == 0 && !modPlayer.IsKiDepleted())
+                // the player can hold the charge all they like once it's fully charged up. Currently this doesn't incur a movespeed debuff either.
+                if (ChargeLevel < FinalChargeLimit && !modPlayer.IsKiDepleted())
                 {
-                    MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate);
+                    IsCharging = true;
+
+                    // drain ki from the player when charging
+                    if (Main.time > 0 && Math.Ceiling(Main.time % ChargeKiDrainWindow) == 0)
+                    {
+                        MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate);
+                    }
+
+                    // increase the charge
+                    ChargeLevel = Math.Min(FinalChargeLimit, ChargeRate + ChargeLevel);
+
+                    // slow down the player while charging.
+                    ProjectileUtil.ApplyChannelingSlowdown(player);
+                    
+                    // shoot some dust into the ball to show it's charging, and to look cool.
+                    if (!IsSustainingFire)
+                        ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());
                 }
-
-                // increase the charge
-                ChargeLevel = Math.Min(FinalChargeLimit, ChargeRate + ChargeLevel);
-
-                // slow down the player while charging.
-                ProjectileUtil.ApplyChannelingSlowdown(player);
-
-                // dust 169 is some green dust off of final shine (I think). 0.2 is a relatively low frequency (1/5th of the time), ball is not decaying.
-                if (!IsSustainingFire)
-                    ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());                
             }
+
+            // play the sound if the player just started charging and the audio is "off cooldown"
+            if (!WasCharging && IsCharging && ChargeSoundCooldown == 0f) {             
+                if (!Main.dedServ)
+                    ChargeSoundSlotId = SoundUtil.PlayCustomSound(ChargeSoundKey, projectile.Center);
+                ChargeSoundCooldown = ChargeSoundDelay;
+            } else
+            {
+                ChargeSoundCooldown = Math.Max(0f, ChargeSoundCooldown - 1);
+            }
+
+            // set the wasCharging flag for proper tracking
+            WasCharging = IsCharging;
         }
 
         private bool CanFireBeam(MyPlayer modPlayer)
         {
-            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && modPlayer.IsMouseLeftHeld;
+            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || CurrentFireTime < MinimumFireFrames);
         }
 
         private bool WasSustainingFire = false;
@@ -331,6 +378,7 @@ namespace DBZMOD.Projectiles
                     ProjectileUtil.StartKillRoutine(MyProjectile);
                 }
             }
+
             WasSustainingFire = IsSustainingFire;
         }
 
@@ -424,6 +472,9 @@ namespace DBZMOD.Projectiles
 
             // figure out if the player is shooting and fire the laser
             HandleFiring(player, mouseVector);
+
+            // Handle Audio
+            SoundUtil.UpdateTrackedSound(ChargeSoundSlotId, projectile.Center);
 
             // capture the current mouse vector as the previous mouse vector.
             OldMouseVector = mouseVector;

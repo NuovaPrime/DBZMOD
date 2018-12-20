@@ -57,6 +57,12 @@ namespace DBZMOD.Projectiles
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
         public int ImmunityFrameOverride = 2;
 
+        // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
+        public string BeamSoundKey = "Sounds/BasicBeamFire";
+
+        // The sound slot used by the projectile to kill the sounds it's making
+        public KeyValuePair<uint, SoundEffectInstance> BeamSoundSlotId;
+
         // I'm not sure this ever needs to be changed, but we can always change it later.
         //The distance charge particle from the player center
         private const float TailHeldDistance = 60f;
@@ -229,6 +235,9 @@ namespace DBZMOD.Projectiles
         // the old screen position helps us offset the MouseWorld vector by our screen position so it's more stable.
         private Vector2 OldScreenPosition = Vector2.Zero;
 
+        // Just fired bool is true the moment the beam comes into existence, to process audio, and then immediately set to false afterwards to prevent sound from looping.
+        private bool JustFired = true;
+
         // The AI of the projectile
         public override void AI()
         {
@@ -282,30 +291,26 @@ namespace DBZMOD.Projectiles
             // throttle distance by collision
             Distance = Math.Min(TrackedDistance, Distance);
 
-            // this doesn't work super well
-            // now observe the collision taking place at the distance we're in
-            //Vector2 dustTrackingOrigin = BodyPositionEnd();
-            //var topLeftCollider = GetTopLeftCollisionPoint(dustTrackingOrigin);
-            //var bottomRightCollider = GetBottomRightCollisionPoint(dustTrackingOrigin);
-            //var tilesColliding = Collision.GetTilesIn(topLeftCollider, bottomRightCollider);
-            //foreach (Point point in tilesColliding)
-            //{
-            //    DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", point.X * 16f, point.Y * 16f));
-            //    var tile = Main.tile[point.X, point.Y];
-            //    if (tile.active())
-            //        ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, point.ToVector2() * 16f);
-            //}
-
             // shoot sweet sweet particles
             for (var i = 0; i < FireParticleDensity; i++)
             {
                 ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
             }
 
+            // Handle the audio playing, note this positionally tracks at the head position end for effect.
+            if (JustFired)
+            {
+                BeamSoundSlotId = SoundUtil.PlayCustomSound(BeamSoundKey, HeadPositionEnd());
+            }
+
+            JustFired = false;
+
+            // Update tracked audio
+            SoundUtil.UpdateTrackedSound(BeamSoundSlotId, HeadPositionEnd());
+
             //Add lights
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
-            Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), 26,
-                DelegateMethods.CastLight);
+            Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), BeamSize.Y, DelegateMethods.CastLight);
 
             OldMouseVector = mouseVector;
             OldScreenPosition = screenPosition;
