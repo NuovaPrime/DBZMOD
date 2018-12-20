@@ -15,9 +15,6 @@ namespace DBZMOD.Projectiles
     // unabashedly stolen from blushie's laser example, and then customized WIP
 	public class BaseBeamProj : ModProjectile
     {
-        //The distance charge particle from the player center
-        private const float TailHeldDistance = 60f;
-
         // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
         // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
         public Point TailOrigin = new Point(14, 0);
@@ -59,6 +56,10 @@ namespace DBZMOD.Projectiles
 
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
         public int ImmunityFrameOverride = 2;
+
+        // I'm not sure this ever needs to be changed, but we can always change it later.
+        //The distance charge particle from the player center
+        private const float TailHeldDistance = 60f;
 
         public Rectangle TailRectangle()
         {
