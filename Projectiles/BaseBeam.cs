@@ -184,7 +184,7 @@ namespace DBZMOD.Projectiles
 
         public Vector2 BodyPositionEnd()
         {
-            return TailPositionEnd() + (Distance - StepLength()) * projectile.velocity;
+            return TailPositionEnd() + Math.Max(0f, (Distance - StepLength())) * projectile.velocity;
         }
 
         public Vector2 HeadPositionEnd()

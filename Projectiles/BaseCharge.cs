@@ -349,6 +349,10 @@ namespace DBZMOD.Projectiles
                 {
                     modPlayer.IsMouseLeftHeld = true;
                 }
+
+                // kill the charge sound if we're firing
+                ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
+
                 if (!WasSustainingFire)
                 {
                     IsSustainingFire = true;
