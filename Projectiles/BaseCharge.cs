@@ -13,7 +13,7 @@ using Terraria.Enums;
 namespace DBZMOD.Projectiles
 {
     // unabashedly stolen from blushie's laser example, and then customized WIP
-    public class BaseChargeProj : ModProjectile
+    public class BaseCharge : ModProjectile
     {
         // CHARGE/BEAM SETTINGS, these are the things you can change to affect charge appearance behavior!
 
@@ -24,6 +24,9 @@ namespace DBZMOD.Projectiles
 
         // this is the minimum charge level you have to have before you can actually fire the beam
         public float MinimumChargeLevel = 4f;
+
+        // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
+        public int MinimumFireFrames = 120;
 
         // the rate at which charge level increases while channeling
         public float ChargeRate = 0.016f; // approximately 1 level per second.
@@ -85,6 +88,19 @@ namespace DBZMOD.Projectiles
         // vector to reposition the charge ball if it feels too low or too high on the character sprite
         public Vector2 ChannelingOffset = new Vector2(0, 4f);
 
+        // The sound slot used by the projectile to kill the sounds it's making
+        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
+
+        // The sound effect used by the projectile when charging up.
+        public string ChargeSoundKey;
+
+        // The sound slot used by the projectile to kill the sounds it's making
+        public KeyValuePair<uint, SoundEffectInstance> BeamSoundSlotId;
+
+        // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
+        public string BeamSoundKey;
+
+        // EXPERIMENTAL, UNUSED - needs adjustment
         // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
         public Vector2 NotChannelingOffset = new Vector2(-15, 20f);
 

@@ -10,7 +10,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class BigBangKamehamehaBlast : KiProjectile
+    public class BigBangKamehamehaBeam : KiProjectile
     {
         private Player player;
         public override void SetDefaults()

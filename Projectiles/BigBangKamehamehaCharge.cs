@@ -11,10 +11,9 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class BigBangKamehamehaBall : KiProjectile
+    public class BigBangKamehamehaCharge : KiProjectile
     {
         public bool startingCharge = false;
-        KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
 
         public override void SetDefaults()
         {

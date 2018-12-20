@@ -13,7 +13,7 @@ using Terraria.Enums;
 namespace DBZMOD.Projectiles
 {
     // unabashedly stolen from blushie's laser example, and then customized WIP
-	public class BaseBeamProj : ModProjectile
+	public class BaseBeam : ModProjectile
     {
         // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
         // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
