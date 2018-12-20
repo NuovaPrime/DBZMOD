@@ -58,6 +58,8 @@ namespace DBZMOD.Projectiles
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
             BeamSoundKey = "Sounds/FinalFlashFire";
+
+            base.SetDefaults();
         }
 
         public override void SetStaticDefaults()

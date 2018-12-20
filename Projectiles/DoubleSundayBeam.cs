@@ -17,11 +17,11 @@ namespace DBZMOD.Projectiles
             // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
             // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
             TailOrigin = new Point(14, 0);
-            TailSize = new Point(46, 72);
-            BeamOrigin = new Point(14, 74);
+            TailSize = new Point(46, 74);
+            BeamOrigin = new Point(14, 76);
             BeamSize = new Point(46, 36);
-            HeadOrigin = new Point(0, 112);
-            HeadSize = new Point(74, 74);
+            HeadOrigin = new Point(6, 114);
+            HeadSize = new Point(62, 74);
 
             // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
             BeamFadeOutTime = 30f;
@@ -58,6 +58,8 @@ namespace DBZMOD.Projectiles
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
             BeamSoundKey = "Sounds/BasicBeamFire";
+
+            base.SetDefaults();
         }
 	}
 }

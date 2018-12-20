@@ -132,7 +132,7 @@ namespace DBZMOD.Projectiles
         {
             get
             {
-                return (ChargeSize.X + ChargeSize.Y) * projectile.scale / 2 + 5f;
+                return (float)Math.Sqrt(Math.Pow(ChargeSize.X, 2) + Math.Pow(ChargeSize.Y, 2));
             }
         }
 
@@ -329,7 +329,7 @@ namespace DBZMOD.Projectiles
             WasCharging = IsCharging;
         }
 
-        private bool CanFireBeam(MyPlayer modPlayer)
+        private bool ShouldFireBeam(MyPlayer modPlayer)
         {
             return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
         }
@@ -342,8 +342,13 @@ namespace DBZMOD.Projectiles
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
-            if (CanFireBeam(modPlayer))
+            if (ShouldFireBeam(modPlayer))
             {
+                // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
+                if (!modPlayer.IsMouseLeftHeld)
+                {
+                    modPlayer.IsMouseLeftHeld = true;
+                }
                 if (!WasSustainingFire)
                 {
                     IsSustainingFire = true;
@@ -376,12 +381,13 @@ namespace DBZMOD.Projectiles
                     {
                         ProjectileUtil.StartKillRoutine(MyProjectile);
                     }
-                }                
+                }
+                CurrentFireTime++;
             }
             else
             {
                 IsSustainingFire = false;
-
+                CurrentFireTime = 0;
                 if (MyProjectile != null)
                 {
                     ProjectileUtil.StartKillRoutine(MyProjectile);
