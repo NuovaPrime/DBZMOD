@@ -314,7 +314,7 @@
     <Compile Include="Items\Weapons\Tier_6\BigBangKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlackBlitz.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
-    <Compile Include="Items\Weapons\Tier_6\BeamOverhaulTestItem.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BaseBeamItem.cs" />
     <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
     <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
     <Compile Include="Items\Weapons\Tier_6\HolyWrath.cs" />

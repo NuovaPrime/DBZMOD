@@ -9,57 +9,93 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class DoubleSundayTrail : KiProjectile
+    public class DoubleSundayCharge : BaseCharge
     {
     	public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("DoubleSundayTrail");
+			DisplayName.SetDefault("DoubleSundayCharge");
 		}
     	
         public override void SetDefaults()
         {
-            projectile.CloneDefaults(ProjectileID.SwordBeam);
-            projectile.hostile = false;
-            projectile.friendly = true;
-			projectile.tileCollide = false;
-            projectile.width = 20;
-            projectile.height = 28;
-			projectile.aiStyle = 1;
-			projectile.light = 1f;
-			projectile.timeLeft = 180;
-            projectile.knockBack = DefaultBeamKnockback;
-            aiType = 14;
-            projectile.ignoreWater = true;
-			projectile.penetrate = -1;
-            BeamTrail = true;
-			ProjectileID.Sets.TrailCacheLength[projectile.type] = 1;
-            ProjectileID.Sets.TrailingMode[projectile.type] = 0;
-            projectile.netUpdate = true;
+            // the maximum charge level of the ball     
+            ChargeLimit = 10;
+
+            // this is the minimum charge level you have to have before you can actually fire the beam
+            MinimumChargeLevel = 4f;
+
+            // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
+            MinimumFireFrames = 120;
+
+            // the rate at which charge level increases while channeling
+            ChargeRate = 0.016f; // approximately 1 level per second.
+
+            // Rate at which Ki is drained while channeling
+            ChargeKiDrainRate = 12;
+
+            // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
+            ChargeKiDrainWindow = 2;
+
+            // Rate at which Ki is drained while firing the beam *without a charge*
+            // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
+            FireKiDrainRate = 48;
+
+            // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
+            FireKiDrainWindow = 2;
+
+            // the rate at which firing drains the charge level of the ball, play with this for balance.
+            FireDecayRate = 0.036f;
+
+            // the rate at which the charge decays when not channeling
+            DecayRate = 0.016f; // very slow decay when not channeling
+
+            // this is the beam the charge beam fires when told to.
+            BeamProjectileName = "DoubleSundayBeam";
+
+            // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame.
+            // For the most part, you want to make this the same as the beam's FadeInTime, *unless* you want the beam to stay partially transparent.
+            BeamFadeInTime = 300f;
+
+            // the type of dust that should spawn when charging or decaying
+            DustType = 169;
+
+            // the percentage frequency at which dust spawns each frame
+
+            // rate at which decaying produces dust
+            DecayDustFrequency = 0.6f;
+
+            // rate at which charging produces dust
+            ChargeDustFrequency = 0.4f;
+
+            // rate at which dispersal of the charge ball (from weapon swapping) produces dust
+            DisperseDustFrequency = 1.0f;
+
+            // the amount of dust that tries to spawn when the charge orb disperses from weapon swapping.
+            DisperseDustQuantity = 40;
+
+            // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
+            RotationSlowness = 15f;
+
+            // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
+            InitialBeamCooldown = 180;
+
+            // the charge ball is just a single texture.
+            // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
+            ChargeOrigin = new Point(0, 0);
+            ChargeSize = new Point(18, 18);
+
+            // vector to reposition the charge ball if it feels too low or too high on the character sprite
+            ChannelingOffset = new Vector2(0, 4f);
+
+            // The sound effect used by the projectile when charging up.
+            ChargeSoundKey = "Sounds/EnergyWaveCharge";
+
+            // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
+            ChargeSoundDelay = 120;
+
+            // EXPERIMENTAL, UNUSED - needs adjustment
+            // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
+            NotChannelingOffset = new Vector2(-15, 20f);
         }
-		
-		public override void AI()
-        {   
-            projectile.rotation = projectile.ai[1]; 
-            projectile.localAI[0] += 1f;
-            projectile.alpha = (int)projectile.localAI[0] * 2;
-            
-            if (projectile.localAI[0] > 130f)
-            {
-                projectile.Kill();
-            }
-           
-        }
-		
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
-			for (int k = 0; k < projectile.oldPos.Length; k++)
-			{
-				Vector2 drawPos = projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, projectile.gfxOffY);
-				Color color = projectile.GetAlpha(lightColor) * ((float)(projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-				spriteBatch.Draw(Main.projectileTexture[projectile.type], drawPos, null, color, projectile.rotation, drawOrigin, projectile.scale, SpriteEffects.None, 0f);
-			}
-			return true;
-		}
 	}
 }

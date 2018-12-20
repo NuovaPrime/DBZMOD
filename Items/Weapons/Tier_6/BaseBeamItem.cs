@@ -11,11 +11,11 @@ using Util;
 
 namespace DBZMOD.Items.Weapons.Tier_6
 {
-    public class BeamOverhaulTestItem : KiItem
+    public abstract class BaseBeamItem : KiItem
     {
         public override void SetDefaults()
         {
-            item.shoot = mod.ProjectileType("BaseChargeProj");
+            item.shoot = mod.ProjectileType("BaseCharge");
             item.shootSpeed = 0f;
             item.damage = 50;
             item.knockBack = 2f;
@@ -30,19 +30,19 @@ namespace DBZMOD.Items.Weapons.Tier_6
             item.autoReuse = false;            
             item.value = 120000;
             item.rare = 8;            
-            KiDrain = 1;            
+            KiDrain = 1;
+        }
+
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Abstract Beam Item");
+            DisplayName.SetDefault("Base Beam Item");
         }
 
         public override void HoldItem(Player player)
         {
             // set the ki weapon held var
             player.GetModPlayer<MyPlayer>().IsHoldingKiWeapon = true;
-        }
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("TEST ITEM");
-            DisplayName.SetDefault("Beam Overhaul Test Item");
         }
 
         public override bool AltFunctionUse(Player player)
@@ -67,15 +67,5 @@ namespace DBZMOD.Items.Weapons.Tier_6
         {
             return false;
         }
-
-        //public override void AddRecipes()
-        //{
-        //    ModRecipe recipe = new ModRecipe(mod);
-        //    recipe.AddIngredient(ItemID.FragmentStardust, 18);
-        //    recipe.AddIngredient(null, "Kamehamehax10");
-        //    recipe.AddTile(null, "KaiTable");
-        //    recipe.SetResult(this);
-        //    recipe.AddRecipe();
-        //}
     }
 }
