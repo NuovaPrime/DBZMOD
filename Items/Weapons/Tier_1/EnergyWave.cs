@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 4");
+		    Tooltip.SetDefault("Maximum Charges = 3");
 		    DisplayName.SetDefault("Energy Wave");
 		}
 

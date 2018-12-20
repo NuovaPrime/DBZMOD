@@ -33,8 +33,9 @@ namespace DBZMOD.Items.Weapons.Tier_2
 	    }
 
 	    public override void SetStaticDefaults()
-		{
-		    DisplayName.SetDefault("Double Sunday");
+        {
+            Tooltip.SetDefault("Maximum Charges = 4");
+            DisplayName.SetDefault("Double Sunday");
 		}
 
 		public override void AddRecipes()

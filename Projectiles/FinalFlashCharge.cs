@@ -31,14 +31,14 @@ namespace DBZMOD.Projectiles
             ChargeKiDrainRate = 12;
 
             // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
-            ChargeKiDrainWindow = 2;
+            CHARGE_KI_DRAIN_WINDOW = 2;
 
             // Rate at which Ki is drained while firing the beam *without a charge*
             // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
             FireKiDrainRate = 48;
 
             // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
-            FireKiDrainWindow = 2;
+            FIRE_KI_DRAIN_WINDOW = 2;
 
             // the rate at which firing drains the charge level of the ball, play with this for balance.
             FireDecayRate = 0.036f;

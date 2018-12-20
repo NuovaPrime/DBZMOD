@@ -25,30 +25,19 @@ namespace DBZMOD.Projectiles
         // this is the minimum charge level you have to have before you can actually fire the beam
         public float MinimumChargeLevel = 4f;
 
+        // made to humanize some of the variables in the beam routine and make balance a bit simpler.
+        public int ChargeKiDrainPerSecond = 40;
+
+        public int FireKiDrainPerSecond = 80;
+
+        public float FireChargeDrainPerSecond = 1.2f;
+
+        public float ChargeRatePerSecond = 1f;
+
+        public float DecayChargeLevelPerSecond = 1f;
+
         // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
         public int MinimumFireFrames = 120;
-
-        // the rate at which charge level increases while channeling
-        public float ChargeRate = 0.016f; // approximately 1 level per second.
-
-        // Rate at which Ki is drained while channeling
-        public int ChargeKiDrainRate = 12;
-
-        // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
-        public int ChargeKiDrainWindow = 2;
-
-        // Rate at which Ki is drained while firing the beam *without a charge*
-        // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        public int FireKiDrainRate = 48;
-
-        // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
-        public int FireKiDrainWindow = 2;
-
-        // the rate at which firing drains the charge level of the ball, play with this for balance.
-        public float FireDecayRate = 0.036f;
-
-        // the rate at which the charge decays when not channeling
-        public float DecayRate = 0.016f; // very slow decay when not channeling
 
         // this is the beam the charge beam fires when told to.
         public string BeamProjectileName = "BaseBeamProj";
@@ -60,33 +49,10 @@ namespace DBZMOD.Projectiles
         // the type of dust that should spawn when charging or decaying
         public int DustType = 169;
 
-        // the percentage frequency at which dust spawns each frame
-
-        // rate at which decaying produces dust
-        public float DecayDustFrequency = 0.6f;
-
-        // rate at which charging produces dust
-        public float ChargeDustFrequency = 0.4f;
-
-        // rate at which dispersal of the charge ball (from weapon swapping) produces dust
-        public float DisperseDustFrequency = 1.0f; 
-
-        // the amount of dust that tries to spawn when the charge orb disperses from weapon swapping.
-        public int DisperseDustQuantity = 40;
-
-        // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
-        public float RotationSlowness = 15f;
-
-        // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-        public int InitialBeamCooldown = 180;
-
         // the charge ball is just a single texture.
         // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
         public Point ChargeOrigin = new Point(0, 0);
         public Point ChargeSize = new Point(18, 18);
-
-        // vector to reposition the charge ball if it feels too low or too high on the character sprite
-        public Vector2 ChannelingOffset = new Vector2(0, 4f);
 
         // The sound effect used by the projectile when charging up.
         public string ChargeSoundKey = "Sounds/EnergyWaveCharge";
@@ -102,11 +68,54 @@ namespace DBZMOD.Projectiles
 
         #region Things you probably should not mess with
 
-        public const float MAX_DISTANCE = 1000f;
-        public const float STEP_LENGTH = 10f;
+        private const float MAX_DISTANCE = 1000f;
+        private const float STEP_LENGTH = 10f;
+
+        // vector to reposition the charge ball if it feels too low or too high on the character sprite
+        public Vector2 ChannelingOffset = new Vector2(0, 4f);
+
+        // rate at which decaying produces dust
+        private float DecayDustFrequency = 0.6f;
+
+        // rate at which charging produces dust
+        private float ChargeDustFrequency = 0.4f;
+
+        // rate at which dispersal of the charge ball (from weapon swapping) produces dust
+        private float DisperseDustFrequency = 1.0f;
+
+        // the amount of dust that tries to spawn when the charge orb disperses from weapon swapping.
+        private int DisperseDustQuantity = 40;
+
+        // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
+        protected float RotationSlowness = 15f;
+
+        // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
+        protected int InitialBeamCooldown = 180;
+
+        // the rate at which charge level increases while channeling
+        private float ChargeRate() { return ChargeRatePerSecond / 60f; }
+
+        // Rate at which Ki is drained while channeling
+        private int ChargeKiDrainRate() { return ChargeKiDrainPerSecond / (60 / CHARGE_KI_DRAIN_WINDOW); }
+
+        // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
+        private const int CHARGE_KI_DRAIN_WINDOW = 2;
+
+        // Rate at which Ki is drained while firing the beam *without a charge*
+        // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
+        private int FireKiDrainRate() { return FireKiDrainPerSecond / (60 / FIRE_KI_DRAIN_WINDOW); }
+
+        // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
+        private const int FIRE_KI_DRAIN_WINDOW = 2;
+
+        // the rate at which firing drains the charge level of the ball, play with this for balance.
+        private float FireDecayRate() { return FireChargeDrainPerSecond / 60f; }
+
+        // the rate at which the charge decays when not channeling
+        private float DecayRate() { return DecayChargeLevelPerSecond / 60f; }
 
         // The sound slot used by the projectile to kill the sounds it's making
-        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
+        private KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
 
         #endregion
 
@@ -266,7 +275,7 @@ namespace DBZMOD.Projectiles
 
                 if (ChargeLevel > 0f)
                 {
-                    ChargeLevel = Math.Max(0, ChargeLevel - DecayRate);
+                    ChargeLevel = Math.Max(0, ChargeLevel - DecayRate());
 
                     // don't draw the ball when firing.
                     if (!IsSustainingFire)
@@ -289,13 +298,13 @@ namespace DBZMOD.Projectiles
                     IsCharging = true;
 
                     // drain ki from the player when charging
-                    if (Main.time > 0 && Math.Ceiling(Main.time % ChargeKiDrainWindow) == 0)
+                    if (Main.time > 0 && Math.Ceiling(Main.time % CHARGE_KI_DRAIN_WINDOW) == 0)
                     {
-                        MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate);
+                        MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate());
                     }
 
                     // increase the charge
-                    ChargeLevel = Math.Min(FinalChargeLimit, ChargeRate + ChargeLevel);
+                    ChargeLevel = Math.Min(FinalChargeLimit, ChargeRate() + ChargeLevel);
 
                     // slow down the player while charging.
                     ProjectileUtil.ApplyChannelingSlowdown(player);
@@ -351,13 +360,13 @@ namespace DBZMOD.Projectiles
                 // if the player has charge left, drain the ball
                 if (ChargeLevel > 0f)
                 {
-                    ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate);
+                    ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
                 }
                 else if(!modPlayer.IsKiDepleted())
                 {
-                    if (Main.time > 0 && Main.time % FireKiDrainWindow == 0)
+                    if (Main.time > 0 && Main.time % FIRE_KI_DRAIN_WINDOW == 0)
                     {
-                        modPlayer.AddKi(-FireKiDrainRate);
+                        modPlayer.AddKi(-FireKiDrainRate());
                     }
                 } else
                 {
