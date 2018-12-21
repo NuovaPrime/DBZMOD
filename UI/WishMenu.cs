@@ -46,20 +46,20 @@ namespace DBZMOD.UI
             backPanelImage.Top.Set(-12, 0f);
             backPanel.Append(backPanelImage);
 
-            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, backPanelImage);
+            InitText(ref titleText, "I Wish for...", 0.66f, 4, 6, Color.Yellow, backPanelImage);
 
-            InitText(ref descText, descTextValue, 1, 10, 82, Color.Yellow, backPanelImage);
+            InitText(ref descText, descTextValue, 0.66f, 10, 82, Color.Yellow, backPanelImage);
 
-            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, backPanelImage);
+            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonPower), 10, 20, backPanelImage);
         }
 
         
-        private void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
+        private void SelectButtonPower(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            descTextValue = "Wish for Power" +
-                "\n" +
-                "\nWish for a permanent increase in Maximum Health, Maximum Ki and Damage." +
+            descTextValue = "Power" +
+                "\nWish for a permanent increase in" +
+                "\nMaximum Health, Maximum Ki and Damage." +
                 "\nWish limit = 3" +
                 "\nWishes left = " + modplayer.PowerWishesLeft;
             WishSelection = WishSelectionID.Power;
