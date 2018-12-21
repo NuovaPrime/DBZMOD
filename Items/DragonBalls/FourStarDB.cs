@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.DragonBalls
 {
-    public class FourStarDB : ModItem
+    public class FourStarDB : DragonBallItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,15 +14,7 @@ namespace DBZMOD.Items.DragonBalls
 
         public override void SetDefaults()
         {
-            item.width = 20;
-            item.height = 20;
-            item.maxStack = 1;
-            item.value = 0;
-            item.rare = -12;
-            item.useAnimation = 15;
-            item.useTime = 10;
-            item.useStyle = 1;
-            item.consumable = true;
+            base.SetDefaults();
             item.createTile = mod.TileType("FourStarDBTile");
         }
     }

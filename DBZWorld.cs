@@ -15,6 +15,38 @@ namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
+        private static Point[] DragonBallCoordinates = new Point[7];
+        private static int? _worldDragonBallKey;
+        public static int WorldDragonBallKey
+        {
+            get
+            {
+                if (!_worldDragonBallKey.HasValue)
+                {
+                    _worldDragonBallKey = Main.rand.Next(int.MaxValue);
+                }
+                return _worldDragonBallKey.Value;
+            }           
+            set
+            {
+                _worldDragonBallKey = value;
+            }
+        }
+
+        public override TagCompound Save()
+        {
+            var dbtWorldTag = new TagCompound();
+            dbtWorldTag.Add("WorldDragonBallKey", WorldDragonBallKey);
+            return dbtWorldTag;
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            var dbKey = tag.GetInt("WorldDragonBallKey");
+            WorldDragonBallKey = dbKey;
+            base.Load(tag);
+        }
+
         private static bool GenerateGohanHouse = false;
         private static bool IsGohanHouseCleaned = false;
         public static int GohanHouseStartPositionX = 0;
@@ -113,7 +145,7 @@ namespace DBZMOD
 
 
 
-        /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
             // useful debug tool type thing. Help me find the names of tasks to decide where to put this one.
             var taskNames = tasks.Select(x => x.Name).ToList();
@@ -131,7 +163,9 @@ namespace DBZMOD
             {
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House Validation", CleanupGohanHouse));
             }
-        }*/
+
+            tasks.Add(new PassLegacy("[DBZMOD] Placing dragon balls", PlaceDragonballs));
+        }
 
         public void AddGohanHouse(GenerationProgress progress = null)
         {
@@ -175,7 +209,18 @@ namespace DBZMOD
             {
                 Main.NewText("Oh no, an error happened [CleanupGohanHouse]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
                 ErrorLogger.Log(exception);
-            }            
+            }
+        }
+
+        public void PlaceDragonballs(GenerationProgress progress = null)
+        {
+            string PlacingDragonballs = "Placing Dragon Balls";
+            if (progress != null)
+            {
+                progress.Message = PlacingDragonballs;
+                progress.Set(0.25f);
+            }
+            AttemptToPlaceDragonballsInWorld();
         }
 
         bool MakeGohanHouse(GenerationProgress progress)
@@ -339,9 +384,7 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
                             break;
                         case 7:
-                            var dbTile = Framing.GetTileSafely(offsetX, offsetY);
-                            dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile");
-                            dbTile.active(true);
+                            TryPlacingDragonball(4, offsetX, offsetY);
                             break;
                     }
                 }
@@ -399,6 +442,151 @@ namespace DBZMOD
                 }
             }
             return false;
+        }
+
+        public bool IsExistingDragonBall(int whichDragonball)
+        {
+            int dbIndex = whichDragonball - 1;
+            var coordinates = DragonBallCoordinates[dbIndex];
+            if (coordinates == null)
+                return false;
+            var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
+            if (dbTile.type == (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball)))
+                return true;
+            return false;
+        }
+
+        public string GetDragonBallTileTypeFromNumber(int whichDragonBall)
+        {
+            switch (whichDragonBall) {
+                case 1:
+                    return "OneStarDBTile";
+                case 2:
+                    return "TwoStarDBTile";
+                case 3:
+                    return "ThreeStarDBTile";
+                case 4:
+                    return "FourStarDBTile";
+                case 5:
+                    return "FiveStarDBTile";
+                case 6:
+                    return "SixStarDBTile";
+                case 7:
+                    return "SevenStarDBTile";
+                default:
+                    return "";
+            }
+        }
+
+        public string GetDragonBallItemTypeFromNumber(int whichDragonBall)
+        {
+            switch (whichDragonBall)
+            {
+                case 1:
+                    return "OneStarDB";
+                case 2:
+                    return "TwoStarDB";
+                case 3:
+                    return "ThreeStarDB";
+                case 4:
+                    return "FourStarDB";
+                case 5:
+                    return "FiveStarDB";
+                case 6:
+                    return "SixStarDB";
+                case 7:
+                    return "SevenStarDB";
+                default:
+                    return "";
+            }
+        }
+
+        public bool IsDragonBallWithPlayers(int whichDragonball)
+        {
+            for (var i = 0; i < Main.player.Length; i++)
+            {
+                if (Main.player[i] == null)
+                    continue;
+                if (Main.player[i].whoAmI != i)
+                    continue;
+                var player = Main.player[i];                
+                if (InventoryContainsDragonball(whichDragonball, player.inventory))
+                    return true;
+                // bank, bank2 and bank3 are player safes (piggy banks)
+                if (InventoryContainsDragonball(whichDragonball, player.bank.item))
+                    return true;
+
+                if (InventoryContainsDragonball(whichDragonball, player.bank2.item))
+                    return true;
+
+                if (InventoryContainsDragonball(whichDragonball, player.bank3.item))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool InventoryContainsDragonball(int whichDragonball, Item[] inventory)
+        {
+            for (var i = 0; i < inventory.Length; i++)
+            {
+                var item = inventory[i];
+                if (item.type == mod.GetItem(GetDragonBallItemTypeFromNumber(whichDragonball)).item.type)
+                    return true;
+
+                
+            }
+            return false;
+        }
+
+        public bool IsDragonBallInventoried(int whichDragonball)
+        {
+            for (var i = 0; i < Main.chest.Length; i++)
+            {
+                if (Main.chest[i] == null)
+                    continue;
+                var inventory = Main.chest[i].item;
+                if (InventoryContainsDragonball(whichDragonball, inventory))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY)
+        {
+            // dragon ball already exists, bail out.
+            if (IsExistingDragonBall(whichDragonball))
+                return true;
+
+            // dragon ball is in a connected player's inventory. This isn't fool proof.
+            if (IsDragonBallWithPlayers(whichDragonball))
+                return true;
+
+            // dragon ball is in a chest somewhere. This also isn't fool proof.
+            if (IsDragonBallInventoried(whichDragonball))
+                return true;
+
+            int dbIndex = whichDragonball - 1;
+            var dbTile = Framing.GetTileSafely(offsetX, offsetY);
+            dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile");
+            dbTile.active(true);
+            DragonBallCoordinates[dbIndex] = new Point(offsetX, offsetY);
+            return true;
+        }
+
+        public void AttemptToPlaceDragonballsInWorld()
+        {
+            for (int i = 1; i <= 7; i++)
+            {
+                Point safeCoordinates = GetSafeDragonBallCoordinates();
+                TryPlacingDragonball(i, safeCoordinates.X, safeCoordinates.Y);
+            }
+        }
+
+        public Point GetSafeDragonBallCoordinates()
+        {
+            var underworldHeight = 4;
+            // made up stuff.
+            return new Point();
         }
 
         /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
