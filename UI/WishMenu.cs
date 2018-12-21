@@ -20,8 +20,8 @@ namespace DBZMOD.UI
         private UIText titleText;
         private UIText descText;
         public UIImage backPanelImage;
-        private UIImageButton WishButtonTest;
-        private string descTextValue = "";
+        private UIImageButton WishButtonTest;        
+        private static string descTextValue = "";
 
 
         public static WishSelectionID WishSelection;
@@ -65,6 +65,7 @@ namespace DBZMOD.UI
             WishSelection = WishSelectionID.Power;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
+            DBZMOD.ActivateWishmenu();
         }
     }
 }
