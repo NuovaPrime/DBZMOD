@@ -58,6 +58,8 @@ namespace DBZMOD.Projectiles
 
             // The sound effect used by the projectile when charging up.
             ChargeSoundKey = "Sounds/EnergyWaveChargeShort";
+
+            base.SetDefaults();
         }
 	}
 }

@@ -103,7 +103,7 @@ namespace DBZMOD.Projectiles
 
         // Rate at which Ki is drained while firing the beam *without a charge*
         // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        private int FireKiDrainRate() { return (int)Math.Ceiling(GetBeamPowerMultiplier() * (FireKiDrainPerSecond / (60 / FIRE_KI_DRAIN_WINDOW))); }
+        private int FireKiDrainRate() { return (int)Math.Ceiling(GetBeamPowerMultiplier() * (FireKiDrainPerSecond / (60f / FIRE_KI_DRAIN_WINDOW))); }
 
         // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
         private const int FIRE_KI_DRAIN_WINDOW = 2;
@@ -283,6 +283,7 @@ namespace DBZMOD.Projectiles
                 }
                 else
                 {
+                    DebugUtil.Log("Being killed because player isn't channeling and let go of right mouse and is not sustaining fire.");
                     // the charge level zeroed out, kill the projectile.
                     projectile.Kill();
                 }
@@ -411,6 +412,12 @@ namespace DBZMOD.Projectiles
             WasSustainingFire = IsSustainingFire;
         }
 
+        public override void Kill(int timeLeft)
+        {
+            DebugUtil.Log(string.Format("I am being killed and I don't know why. Time left is {0}", timeLeft));
+            base.Kill(timeLeft);
+        }
+
         public void HandleChargeBallVisibility()
         {
             var chargeVisibility = (int)Math.Ceiling((Math.Sqrt(ChargeLevel) / Math.Sqrt(FinalChargeLimit)) * 255f);
@@ -426,6 +433,7 @@ namespace DBZMOD.Projectiles
                 {
                     ProjectileUtil.StartKillRoutine(MyProjectile);
                 }
+                DebugUtil.Log("Being killed because player weapon is null?");
                 projectile.Kill();
                 return false;
             }
@@ -447,6 +455,7 @@ namespace DBZMOD.Projectiles
                     {
                         ProjectileUtil.StartKillRoutine(MyProjectile);
                     }
+                    DebugUtil.Log("Being killed because player changed weapons?");
                     projectile.Kill();
                     return false;
                 }
@@ -535,12 +544,12 @@ namespace DBZMOD.Projectiles
                 projectile.netUpdate = true;
             }
             projectile.position = player.Center - new Vector2(0, ChargeSize.Y / 2f) + projectile.velocity * ChargeBallHeldDistance;
-            projectile.timeLeft = 2;
+            projectile.timeLeft = 10;
             player.heldProj = projectile.whoAmI;
             if (player.channel)
             {
-                player.itemTime = 2;
-                player.itemAnimation = 2;
+                player.itemTime = 10;
+                player.itemAnimation = 10;
                 int dir = projectile.direction;
                 player.ChangeDir(dir);
                 player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
