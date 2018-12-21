@@ -43,6 +43,7 @@ namespace DBZMOD.UI
 
 
         }
+
         /*public override void Update(GameTime gametime)
         {
             backPanel.SetVisibility(0.0f);
@@ -119,7 +120,6 @@ namespace DBZMOD.UI
             }
         }
 
-
         Vector2 offset;
         public bool dragging = false;
 
@@ -139,6 +139,7 @@ namespace DBZMOD.UI
 
             Recalculate();
         }
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
@@ -153,7 +154,5 @@ namespace DBZMOD.UI
                 Recalculate();
             }
         }
-
-
     }
 }
