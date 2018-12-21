@@ -103,13 +103,13 @@ namespace DBZMOD.Projectiles
 
         // Rate at which Ki is drained while firing the beam *without a charge*
         // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        private int FireKiDrainRate() { return FireKiDrainPerSecond / (60 / FIRE_KI_DRAIN_WINDOW); }
+        private int FireKiDrainRate() { return (int)Math.Ceiling(GetBeamPowerMultiplier() * (FireKiDrainPerSecond / (60 / FIRE_KI_DRAIN_WINDOW))); }
 
         // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
         private const int FIRE_KI_DRAIN_WINDOW = 2;
 
         // the rate at which firing drains the charge level of the ball, play with this for balance.
-        private float FireDecayRate() { return FireChargeDrainPerSecond / 60f; }
+        private float FireDecayRate() { return GetBeamPowerMultiplier() * FireChargeDrainPerSecond / 60f; }
 
         // the rate at which the charge decays when not channeling
         private float DecayRate() { return DecayChargeLevelPerSecond / 60f; }
@@ -334,6 +334,16 @@ namespace DBZMOD.Projectiles
             return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
         }
 
+        private float GetBeamPowerMultiplier()
+        {
+            return (1f + ChargeLevel / ChargeLimit);
+        }
+
+        private int GetBeamDamage()
+        {
+            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier());
+        }
+
         private bool WasSustainingFire = false;
 
         Projectile MyProjectile = null;
@@ -358,7 +368,7 @@ namespace DBZMOD.Projectiles
                     IsSustainingFire = true;
 
                     // fire the laser!
-                    MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), projectile.damage, projectile.knockBack, projectile.owner);
+                    MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
 
                     // set the cooldown
                     BeamCooldown = InitialBeamCooldown;

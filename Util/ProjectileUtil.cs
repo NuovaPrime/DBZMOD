@@ -119,7 +119,7 @@ namespace Util
                 Vector2 backDraft = DegreesToVector(VectorToDegrees(backDraftVector) + Main.rand.NextFloat(-45f, 45f));
                 //float angleRad = MathHelper.ToRadians(angle);
                 //Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad)) + backDraft;
-                Dust tDust = Dust.NewDustDirect(endPosition, 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
+                Dust tDust = Dust.NewDustDirect(endPosition - new Vector2(8f, 8f), 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
                 tDust.velocity = backDraft * 15f;
                 tDust.noGravity = true;
             }
