@@ -478,6 +478,7 @@
     <Compile Include="UI\OverloadBar.cs" />
     <Compile Include="UI\ProgressionMenu.cs" />
     <Compile Include="UI\ResourceBar.cs" />
+    <Compile Include="UI\WishMenu.cs" />
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
