@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles
             BeamSpeed = 15f;
 
             // the type of dust to spawn when the beam is firing
-            DustType = 169;
+            DustType = 31;
 
             // the frequency at which to spawn dust when the beam is firing
             DustFrequency = 0.6f;

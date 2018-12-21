@@ -154,5 +154,72 @@ namespace Util
             if (projectile.localAI[0] == 0)
                 projectile.localAI[0] = 1;
         }
+
+        public static int GetTileX(float xCoord)
+        {
+            return (int)Math.Min(Main.maxTilesX - 1, Math.Max(1, xCoord / 16f));
+        }
+
+        public static int GetTileY(float yCoord)
+        {
+            return (int)Math.Min(Main.maxTilesY - 1, Math.Max(1, yCoord / 16f));
+        }
+
+        // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
+        public static bool CanHitLine(Vector2 Position1, Vector2 Position2)
+        {
+            var step = Vector2.Normalize(Position2 - Position1) * 8f;
+            bool isColliding = false;
+            // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
+            if (step.X < 0)
+            {
+                while (Position1.X >= Position2.X)
+                {
+                    Position1 += step;
+                    isColliding = IsPositionInTile(Position1);
+                    if (isColliding)
+                        break;
+                }
+            } else if (step.X > 0)
+            {
+                while (Position1.X <= Position2.X)
+                {
+                    Position1 += step;
+                    isColliding = IsPositionInTile(Position1);
+                    if (isColliding)
+                        break;
+                }
+            } else if (step.Y < 0)
+            {
+                while (Position1.Y >= Position2.Y)
+                {
+                    Position1 += step;
+                    isColliding = IsPositionInTile(Position1);
+                    if (isColliding)
+                        break;
+                }
+            } else if (step.Y > 0)
+            {
+                while (Position1.Y <= Position2.Y)
+                {
+                    Position1 += step;
+                    isColliding = IsPositionInTile(Position1);
+                    if (isColliding)
+                        break;
+                }
+            }
+            return !isColliding;
+        }
+
+        public static bool IsPositionInTile(Vector2 position)
+        {
+            var tilePoint = new Point(GetTileX(position.X), GetTileY(position.Y));
+            var tile = Main.tile[tilePoint.X, tilePoint.Y];
+            if (tile.active() && Main.tileSolid[tile.type])
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

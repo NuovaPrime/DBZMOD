@@ -31,8 +31,8 @@ namespace DBZMOD.Projectiles
         public float RotationSlowness = 60f;
 
         // vector to reposition the beam tail down if it feels too low or too high on the character sprite
-        public Vector2 OffsetY = new Vector2(0, 4f);
-        
+        public Vector2 OffsetY = new Vector2(0, -14f);
+
         // the maximum travel distance the beam can go
         public float MaxBeamDistance = 2000f;
 
@@ -57,6 +57,9 @@ namespace DBZMOD.Projectiles
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
         public int ImmunityFrameOverride = 2;
 
+        // Flag for whether the beam segment is animated (meaning it has its own movement protocol), defaults to false.
+        public bool IsBeamSegmentAnimated = false;
+
         // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
         public string BeamSoundKey = "Sounds/BasicBeamFire";
 
@@ -65,7 +68,10 @@ namespace DBZMOD.Projectiles
 
         // I'm not sure this ever needs to be changed, but we can always change it later.
         //The distance charge particle from the player center
-        private const float TailHeldDistance = 60f;
+        protected float TailHeldDistance = 30f;
+        
+        // controls what sections of the beam segment we're drawing at any given point in time (assumes two or more beam segments tile correctly)
+        private int BeamSegmentAnimation = 0;
 
         public Rectangle TailRectangle()
         {
@@ -75,6 +81,17 @@ namespace DBZMOD.Projectiles
         public Rectangle BeamRectangle()
         {
             return new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y);
+        }
+
+        // special handling for segment animation when a beam has animations in the central segment.
+        public Rectangle BeamRectangleAnimatedSegment1()
+        {
+            return new Rectangle(BeamOrigin.X, BeamOrigin.Y + BeamSize.Y - BeamSegmentAnimation, BeamSize.X, BeamSegmentAnimation);
+        }
+
+        public Rectangle BeamRectangleAnimatedSegment2()
+        {
+            return new Rectangle(BeamOrigin.X, BeamOrigin.Y, BeamSize.X, BeamSize.Y - BeamSegmentAnimation);
         }
 
         public Rectangle HeadRectangle()
@@ -123,7 +140,7 @@ namespace DBZMOD.Projectiles
         // the length of a "step" of the body, defined loosely as the body's Y length minus an arbitrary cluster of pixels to overlap cleanly.
         public float StepLength()
         {
-            return BeamSize.Y - 4f;
+            return BeamSize.Y;
         }
 
         public override void SetDefaults()
@@ -161,11 +178,20 @@ namespace DBZMOD.Projectiles
             // draw the beam tail
             spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), 1f, 0, 0f);
                         
-            // draw the body between the beam and its destination point.
+            // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
             for (float i = 0; i < Distance - StepLength(); i += StepLength())
             {
                 Vector2 origin = TailPositionEnd() + i * projectile.velocity;
-                spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangle(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0f);
+                
+                if (BeamSegmentAnimation > 0)
+                {
+                    spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangleAnimatedSegment1(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0f);
+                    spriteBatch.Draw(texture, origin + (BeamSegmentAnimation * projectile.velocity) - Main.screenPosition, BeamRectangleAnimatedSegment2(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0f);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangle(), color, rotation, new Vector2(BeamSize.X * .5f, BeamSize.Y * .5f), 1f, 0, 0f);
+                }
             }
 
             // draw the beam head
@@ -174,17 +200,17 @@ namespace DBZMOD.Projectiles
         
         public Vector2 TailPositionStart()
         {
-            return projectile.position + OffsetY + (TailHeldDistance + TailDistance) * projectile.velocity;
+            return projectile.position + OffsetY + ((TailHeldDistance + TailDistance) * projectile.velocity);
         }
 
         public Vector2 TailPositionEnd()
         {
-            return TailPositionStart() + (TailSize.Y - StepLength()) * projectile.velocity;
+            return TailPositionStart() + (TailSize.Y * projectile.velocity) + (IsBeamSegmentAnimated ? ((BeamSize.Y / 2f) - (TailSize.Y / 2f)) : 0f) * projectile.velocity;
         }
 
         public Vector2 BodyPositionEnd()
         {
-            return TailPositionEnd() + Math.Max(0f, (Distance - StepLength())) * projectile.velocity;
+            return TailPositionEnd() + Math.Max(0f, Distance - StepLength()) * projectile.velocity;
         }
 
         public Vector2 HeadPositionEnd()
@@ -267,8 +293,9 @@ namespace DBZMOD.Projectiles
             float TrackedDistance;
             for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += (BeamSpeed / 5f))
             {
-                Vector2 origin = TailPositionStart() + projectile.velocity * TrackedDistance;                            
-                if (!Collision.CanHit(projectile.position, 1, 1, GetTopLeftCollisionPoint(origin), (int)(BeamSize.X * 0.75f), (int)(BeamSize.Y * 0.75f)))
+                Vector2 origin = TailPositionStart() + projectile.velocity * (TrackedDistance + HeadSize.Y - StepLength());
+                
+                if (!ProjectileUtil.CanHitLine(TailPositionStart(), origin))
                 {
                     // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
                     TrackedDistance -= (BeamSpeed / 5f);
@@ -280,10 +307,20 @@ namespace DBZMOD.Projectiles
                 }
             }
 
+            // handle animation frames on animated beams
+            if (IsBeamSegmentAnimated)
+            {
+                BeamSegmentAnimation += 8;
+                if (BeamSegmentAnimation >= StepLength())
+                {
+                    BeamSegmentAnimation = 0;
+                }
+            }
+
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
             if (Distance >= TrackedDistance)
             {
-                var dustVector = projectile.position + TrackedDistance * projectile.velocity;
+                var dustVector = TailPositionStart() + (TrackedDistance + HeadSize.Y - StepLength()) * projectile.velocity;
                 // DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", dustVector.X, dustVector.Y));
                 ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, dustVector);                    
             }
@@ -316,19 +353,19 @@ namespace DBZMOD.Projectiles
             OldScreenPosition = screenPosition;
         }
 
-        public Vector2 GetTopLeftCollisionPoint(Vector2 beamEnding)
-        {            
-            var beamEndingOffset = beamEnding - BeamSize.ToVector2() * 0.5f * projectile.velocity;
+        //public Vector2 GetTopLeftCollisionPoint(Vector2 beamEnding)
+        //{            
+        //    var beamEndingOffset = beamEnding - BeamSize.ToVector2() * projectile.velocity;
 
-            return new Vector2(Math.Min(beamEnding.X, beamEndingOffset.X), Math.Min(beamEnding.Y, beamEndingOffset.Y));
-        }
+        //    return new Vector2(Math.Min(beamEnding.X, beamEndingOffset.X), Math.Min(beamEnding.Y, beamEndingOffset.Y));
+        //}
 
-        public Vector2 GetBottomRightCollisionPoint(Vector2 beamEnding)
-        {
-            var beamEndingOffset = beamEnding + BeamSize.ToVector2() * 0.5f * projectile.velocity;
+        //public Vector2 GetBottomRightCollisionPoint(Vector2 beamEnding)
+        //{
+        //    var beamEndingOffset = beamEnding + BeamSize.ToVector2() * projectile.velocity;
 
-            return new Vector2(Math.Max(beamEnding.X, beamEndingOffset.X), Math.Max(beamEnding.Y, beamEndingOffset.Y));
-        }
+        //    return new Vector2(Math.Max(beamEnding.X, beamEndingOffset.X), Math.Max(beamEnding.Y, beamEndingOffset.Y));
+        //}
 
         public void ProcessKillRoutine(Player player)
         {

@@ -61,7 +61,7 @@ namespace DBZMOD.Projectiles
             ChargeSize = new Point(16, 16);
 
             // vector to reposition the charge ball if it feels too low or too high on the character sprite
-            ChannelingOffset = new Vector2(0, 4f);
+            ChannelingOffset = new Vector2(0, -14f);
 
             // The sound effect used by the projectile when charging up.
             ChargeSoundKey = "Sounds/SBCCharge";
