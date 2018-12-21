@@ -37,7 +37,7 @@ namespace DBZMOD.Projectiles
         public float MaxBeamDistance = 2000f;
 
         // the speed at which the beam head travels through space
-        public float BeamSpeed = 15f;
+        public float BeamSpeed = 24f;
 
         // the type of dust to spawn when the beam is firing
         public int DustType = 169;
@@ -291,14 +291,14 @@ namespace DBZMOD.Projectiles
             // tracked distance is with collision, and resets distance if it's too high.
             Distance += BeamSpeed;
             float TrackedDistance;
-            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += (BeamSpeed / 5f))
+            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += (BeamSpeed / 3f))
             {
                 Vector2 origin = TailPositionStart() + projectile.velocity * (TrackedDistance + HeadSize.Y - StepLength());
                 
                 if (!ProjectileUtil.CanHitLine(TailPositionStart(), origin))
                 {
                     // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
-                    TrackedDistance -= (BeamSpeed / 5f);
+                    TrackedDistance -= (BeamSpeed / 3f);
                     if (TrackedDistance <= 0)
                     {
                         TrackedDistance = 0;
@@ -417,6 +417,13 @@ namespace DBZMOD.Projectiles
                 player.itemAnimation = 2;
             }
             player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
+        }
+
+        public override void CutTiles()
+        {
+            DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+            Vector2 unit = projectile.velocity;
+            Utils.PlotTileLine(TailPositionStart(), TailPositionStart() + unit * (Distance + HeadSize.Y * 0.66f), (BeamSize.Y) * projectile.scale, DelegateMethods.CutTiles);
         }
 
         public override bool ShouldUpdatePosition()

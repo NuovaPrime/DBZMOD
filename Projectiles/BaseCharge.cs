@@ -337,7 +337,7 @@ namespace DBZMOD.Projectiles
 
         private float GetBeamPowerMultiplier()
         {
-            return (1f + ChargeLevel / ChargeLimit);
+            return (1f + ChargeLevel / 10f);
         }
 
         private int GetBeamDamage()
