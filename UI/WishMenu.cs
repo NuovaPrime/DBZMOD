@@ -24,7 +24,7 @@ namespace DBZMOD.UI
         private string descTextValue = "";
 
 
-        public static MenuSelectionID MenuSelection;
+        public static WishSelectionID WishSelection;
         private Player player;
 
         public override void OnInitialize()
@@ -56,7 +56,14 @@ namespace DBZMOD.UI
         
         private void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
         {
-            descTextValue = "Test";
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            descTextValue = "Wish for Power" +
+                "\n" +
+                "\nWish for a permanent increase in Maximum Health, Maximum Ki and Damage." +
+                "\nWish limit = 3" +
+                "\nWishes left = " + modplayer.PowerWishesLeft;
+            WishSelection = WishSelectionID.Power;
+            Main.PlaySound(SoundID.MenuTick);
             Initialize();
         }
     }

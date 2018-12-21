@@ -106,6 +106,13 @@ namespace DBZMOD
         public float MasteryMaxFlight = 1;
         public float MasteryLevelFlight = 0;
 
+        //Wish vars
+        public int PowerWishesLeft = 3;
+        public int ImmortalityWishesLeft = 1;
+        public int SkillWishesLeft = 3;
+        public int AwakeningWishesLeft = 3;
+
+
         //unsorted vars
         public int drawX;
         public int drawY;
