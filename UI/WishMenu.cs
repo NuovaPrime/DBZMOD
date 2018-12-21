@@ -20,8 +20,9 @@ namespace DBZMOD.UI
         private UIText titleText;
         private UIText descText;
         public UIImage backPanelImage;
-        private UIImageButton WishButtonTest;        
-        private static string descTextValue = "";
+        private UIImageButton WishButtonPower;        
+        private static string descTextValue = "Select one of the wishes above to grant your deepest desire." +
+            "\nCertain wishes have limits.";
 
 
         public static WishSelectionID WishSelection;
@@ -50,7 +51,7 @@ namespace DBZMOD.UI
 
             InitText(ref descText, descTextValue, 0.66f, 10, 82, Color.Yellow, backPanelImage);
 
-            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonPower), 10, 20, backPanelImage);
+            InitButton(ref WishButtonPower, GFX.WishIconEmpty, new MouseEvent(SelectButtonPower), 10, 20, backPanelImage);
         }
 
         
