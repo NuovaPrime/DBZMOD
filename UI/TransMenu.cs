@@ -61,7 +61,7 @@ namespace DBZMOD.UI
             backPanel.Append(backPanelImage);
             float Row1_OffsetX = 0.0f;
 
-            InitText(ref titleText, "Transformation Tree", 55, -32, Color.White);
+            InitText(ref titleText, "Transformation Tree", 1, 55, -32, Color.White);
 
             Row1_OffsetX = PADDINGX;
             InitButton(ref ssjButtonTexture, GFX.SSJ1ButtonImage, new MouseEvent(TrySelectingSSJ1),
