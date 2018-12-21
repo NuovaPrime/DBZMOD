@@ -26,7 +26,12 @@ namespace DBZMOD
         private const string LSSJBUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
         private const string LSSJ2BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage";
         private const string SSJSBUTTON = BUTTON_DIRECTORY + "SSJSButtonImage";
-        private const string WISHICONEMPTY = UI_DIRECTORY + "WishIconEmpty";
+        private const string WISHFORPOWER = BUTTON_DIRECTORY + "WishforPower";
+        private const string WISHFORWEALTH = BUTTON_DIRECTORY + "WishforWealth";
+        private const string WISHFORIMMORTALITY = BUTTON_DIRECTORY + "WishforImmortality";
+        private const string WISHFORGENETICS = BUTTON_DIRECTORY + "WishforGenetics";
+        private const string WISHFORSKILL = BUTTON_DIRECTORY + "WishforSkill";
+        private const string WISHFORAWAKENING = BUTTON_DIRECTORY + "WishforAwakening";
         private const string BG = UI_DIRECTORY + "Bg";
         private const string LOCKED = UI_DIRECTORY + "LockedImage";
         private const string UNKNOWN = UI_DIRECTORY + "UnknownImage";
@@ -45,7 +50,12 @@ namespace DBZMOD
         public static Texture2D LSSJButtonImage;
         public static Texture2D LSSJ2ButtonImage;
         public static Texture2D SSJSButtonImage;
-        public static Texture2D WishIconEmpty;
+        public static Texture2D WishforPower;
+        public static Texture2D WishforWealth;
+        public static Texture2D WishforImmortality;
+        public static Texture2D WishforGenetics;
+        public static Texture2D WishforSkill;
+        public static Texture2D WishforAwakening;
         public static Texture2D LockedImage;
         public static Texture2D UnknownImage;
         public static void LoadGFX(Mod mod)
@@ -65,7 +75,12 @@ namespace DBZMOD
             SSJSButtonImage = mod.GetTexture(SSJSBUTTON);
             LockedImage = mod.GetTexture(LOCKED);
             UnknownImage = mod.GetTexture(UNKNOWN);
-            WishIconEmpty = mod.GetTexture(WISHICONEMPTY);
+            WishforPower = mod.GetTexture(WISHFORPOWER);
+            WishforWealth = mod.GetTexture(WISHFORWEALTH);
+            WishforImmortality = mod.GetTexture(WISHFORIMMORTALITY);
+            WishforGenetics = mod.GetTexture(WISHFORGENETICS);
+            WishforSkill = mod.GetTexture(WISHFORSKILL);
+            WishforAwakening = mod.GetTexture(WISHFORAWAKENING);
 
         }
 
@@ -86,7 +101,7 @@ namespace DBZMOD
             BackPanel = null;
             UnknownImage = null;
             WishBackPanel = null;
-            WishIconEmpty = null;
+            WishforPower = null;
         }
     }
 }

@@ -870,6 +870,12 @@ namespace DBZMOD
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
                 nextSlot++;
             }
+            if (type == NPCID.Mechanic)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
+                shop.item[nextSlot].value = 200000;
+                nextSlot++;
+            }
 
         }
     }
