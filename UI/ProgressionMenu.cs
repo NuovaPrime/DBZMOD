@@ -38,9 +38,9 @@ namespace DBZMOD.UI
             backPanel.Append(backPanelImage);
             float Row1_OffsetX = 0.0f;
 
-            InitText(ref titleText, "Progression Menu", 55, -32, Color.White);
+            InitText(ref titleText, "Progression Menu", 1, 55, -32, Color.White);
 
-            InitText(ref kiExperienceText, "Ki Experience: ???", 0, 0, Color.Cyan);
+            InitText(ref kiExperienceText, "Ki Experience: ???", 1, 0, 0, Color.Cyan);
         }
 
         public static void ToggleVisibility()

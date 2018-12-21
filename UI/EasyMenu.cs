@@ -95,9 +95,9 @@ namespace DBZMOD.UI
             }
         }
 
-        public void InitText(ref UIText TextToInitialise, string text, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
+        public void InitText(ref UIText TextToInitialise, string text, float scale = 1, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
         {
-            TextToInitialise = new UIText(text);
+            TextToInitialise = new UIText(text, scale);
 
             TextToInitialise.Width.Set(16f, 0f);
             TextToInitialise.Height.Set(16f, 0f);

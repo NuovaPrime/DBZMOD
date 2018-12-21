@@ -18,8 +18,10 @@ namespace DBZMOD.UI
     {
         public static bool menuvisible = false;
         private UIText titleText;
+        private UIText descText;
         public UIImage wishbackPanelImage;
         private UIImageButton WishButtonTest;
+        private string descTextValue;
 
 
         public static MenuSelectionID MenuSelection;
@@ -36,14 +38,18 @@ namespace DBZMOD.UI
             wishbackPanelImage.Top.Set(-12, 0f);
             wishbackPanel.Append(wishbackPanelImage);
 
-            InitText(ref titleText, "Test", 55, -32, Color.White, wishbackPanel);
+            descTextValue = "";
 
-            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, wishbackPanelImage);
+            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, wishbackPanel);
+
+            InitText(ref descText, descTextValue, 1, 10, 62, Color.Yellow, wishbackPanel);
+
+            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, wishbackPanel);
 
         }
         public void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
         {
-
+            descTextValue = "Test";
         }
     }
 }
