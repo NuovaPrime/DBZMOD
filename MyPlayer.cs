@@ -111,6 +111,8 @@ namespace DBZMOD
         public int ImmortalityWishesLeft = 1;
         public int SkillWishesLeft = 3;
         public int AwakeningWishesLeft = 3;
+        public int ImmortalityRevivesLeft = 0;
+        public float PowerWishMulti = 1f;
 
 
         //unsorted vars
@@ -646,6 +648,35 @@ namespace DBZMOD
                     ExpandedSentriesEffects(player);
                 }
             }
+            if(PowerWishMulti > 1f)
+            {
+                player.meleeDamage *= PowerWishMulti;
+                player.rangedDamage *= PowerWishMulti;
+                player.magicDamage *= PowerWishMulti;
+                player.minionDamage *= PowerWishMulti;
+                player.thrownDamage *= PowerWishMulti;
+                KiDamage *= PowerWishMulti;
+                if (DBZMOD.instance.thoriumLoaded)
+                {
+                    ThoriumEffects(player);
+                }
+                if (DBZMOD.instance.tremorLoaded)
+                {
+                    TremorEffects(player);
+                }
+                if (DBZMOD.instance.enigmaLoaded)
+                {
+                    EnigmaEffects(player);
+                }
+                if (DBZMOD.instance.battlerodsLoaded)
+                {
+                    BattleRodEffects(player);
+                }
+                if (DBZMOD.instance.expandedSentriesLoaded)
+                {
+                    ExpandedSentriesEffects(player);
+                }
+            }
 
             if (!isAnyBossAlive)
             {
@@ -917,26 +948,28 @@ namespace DBZMOD
         {
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= blackFusionIncrease;
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= blackFusionIncrease;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= PowerWishMulti;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= PowerWishMulti;
         }
 
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= blackFusionIncrease;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= PowerWishMulti;
         }
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= blackFusionIncrease;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= PowerWishMulti;
         }
 
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= blackFusionIncrease;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= PowerWishMulti;
         }
 
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= blackFusionIncrease;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= PowerWishMulti;
         }
 
         #endregion
