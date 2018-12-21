@@ -27,6 +27,8 @@ namespace DBZMOD
 
         private TransMenu transMenu;
         private UserInterface TransMenuInterface;
+        private WishMenu wishMenu;
+        private UserInterface wishMenuInterface;
 
         private ProgressionMenu progressionMenu;
         private ResourceBar resourceBar;
@@ -60,6 +62,7 @@ namespace DBZMOD
             instance = null;
             TransMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
+            WishMenu.menuvisible = false;
             TransMenu.SSJ1On = false;
             TransMenu.SSJ2On = false;
             UIFlatPanel._backgroundTexture = null;
@@ -84,7 +87,7 @@ namespace DBZMOD
             MyPlayer.Transform = RegisterHotKey("Transform", "X");
             MyPlayer.PowerDown = RegisterHotKey("Power Down", "V");
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
-            //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
+            MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
@@ -98,6 +101,11 @@ namespace DBZMOD
                 transMenu.Activate();
                 TransMenuInterface = new UserInterface();
                 TransMenuInterface.SetState(transMenu);
+
+                wishMenu = new WishMenu();
+                wishMenu.Activate();
+                wishMenuInterface = new UserInterface();
+                wishMenuInterface.SetState(wishMenu);
 
                 progressionMenu = new ProgressionMenu();
                 progressionMenu.Activate();
@@ -171,7 +179,7 @@ namespace DBZMOD
             if (index2 != -1)
             {
                 layers.Insert(index2, new LegacyGameInterfaceLayer(
-                    "DBZMOD: Trans Menu",
+                    "DBZMOD: Menus",
                     delegate
                     {
                         if (TransMenu.menuvisible)
@@ -182,6 +190,10 @@ namespace DBZMOD
                         if (ProgressionMenu.menuvisible)
                         {
                             ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                        }
+                        if (WishMenu.menuvisible)
+                        {
+                            wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;

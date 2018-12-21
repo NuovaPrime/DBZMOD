@@ -1385,12 +1385,10 @@ namespace DBZMOD
 
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
-            /*if(QuickKi.JustPressed && traitChecked)
+            if(QuickKi.JustPressed)
             {
-                traitChecked = false;
-                ChooseTrait();
-                Main.NewText(playerTrait);
-            }*/
+                WishMenu.menuvisible = !WishMenu.menuvisible;
+            }
         }
 
         public void HandleChargeEffects()

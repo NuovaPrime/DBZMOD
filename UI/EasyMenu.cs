@@ -15,6 +15,7 @@ namespace DBZMOD.UI
     internal class EasyMenu : UIState
     {
         public UIPanel backPanel;
+        public UIPanel wishbackPanel;
         private Player player;
 
         public override void OnInitialize()
@@ -27,7 +28,17 @@ namespace DBZMOD.UI
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
             backPanel.OnMouseDown += new MouseEvent(DragStart);
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
-            base.Append(backPanel);
+            Append(backPanel);
+
+            wishbackPanel = new UIPanel();
+            wishbackPanel.Width.Set(364f, 0f);
+            wishbackPanel.Height.Set(192f, 0f);
+            wishbackPanel.Left.Set(Main.screenWidth / 2f - wishbackPanel.Width.Pixels / 2f, 0f);
+            wishbackPanel.Top.Set(Main.screenHeight / 2f - wishbackPanel.Height.Pixels / 2f, 0f);
+            wishbackPanel.BackgroundColor = new Color(0, 0, 0, 0);
+            Append(wishbackPanel);
+
+
             base.OnInitialize();
 
 
@@ -51,6 +62,10 @@ namespace DBZMOD.UI
             {
                 backPanel.Append(buttonToInitialise);
             }
+            if (parentElement == wishbackPanel)
+            {
+                wishbackPanel.Append(buttonToInitialise);
+            }
             else
             {
                 parentElement.Append(buttonToInitialise);
@@ -69,6 +84,10 @@ namespace DBZMOD.UI
             if (parentElement == null)
             {
                 backPanel.Append(imageToInitialise);
+            }
+            if (parentElement == wishbackPanel)
+            {
+                wishbackPanel.Append(imageToInitialise);
             }
             else
             {
@@ -90,6 +109,10 @@ namespace DBZMOD.UI
             {
                 backPanel.Append(TextToInitialise);
             }
+            /*if (parentElement == wishbackPanel)
+            {
+                wishbackPanel.Append(TextToInitialise);
+            }*/
             else
             {
                 parentElement.Append(TextToInitialise);
