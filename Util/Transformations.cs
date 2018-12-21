@@ -491,7 +491,7 @@ namespace Util
         public static bool IsTransformBlocked(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            return modPlayer.IsTransforming || player.channel || modPlayer.IsPlayerImmobilized();
+            return modPlayer.IsTransforming || modPlayer.IsPlayerImmobilized();
         }
         
         // handle all the conditions of a transformation which would prevent the player from reaching that state. Return false if you can't transform.
