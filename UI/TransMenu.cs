@@ -50,6 +50,8 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
+            base.OnInitialize();
+
             backPanel = new UIPanel();
             backPanel.Width.Set(306f, 0f);
             backPanel.Height.Set(128f, 0f);
@@ -72,7 +74,7 @@ namespace DBZMOD.UI
 
             Row1_OffsetX = PADDINGX;
             InitButton(ref ssjButtonTexture, GFX.SSJ1ButtonImage, new MouseEvent(TrySelectingSSJ1),
-                Row1_OffsetX - 2, 
+                Row1_OffsetX - 2,
                 PADDINGY - 20,
                 backPanelImage);
 
@@ -83,7 +85,7 @@ namespace DBZMOD.UI
 
             Row1_OffsetX = PADDINGX + GFX.SSJ1ButtonImage.Width;
             InitButton(ref ssj2ButtonTexture, GFX.SSJ2ButtonImage, new MouseEvent(TrySelectingSSJ2),
-                Row1_OffsetX + 14, 
+                Row1_OffsetX + 14,
                 PADDINGY - 20,
                 backPanelImage);
 
@@ -99,7 +101,7 @@ namespace DBZMOD.UI
 
             Row1_OffsetX = PADDINGX + GFX.SSJ2ButtonImage.Width * 2;
             InitButton(ref ssj3ButtonTexture, GFX.SSJ3ButtonImage, new MouseEvent(TrySelectingSSJ3),
-                Row1_OffsetX + 22, 
+                Row1_OffsetX + 22,
                 PADDINGY - 20,
                 backPanelImage);
 
@@ -113,27 +115,27 @@ namespace DBZMOD.UI
                 0,
                 ssj3ButtonTexture);
 
-            InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ), 
-                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width, 
+            InitButton(ref lssjButtonTexture, GFX.LSSJButtonImage, new MouseEvent(TrySelectingLSSJ),
+                PADDINGX + 14 + GFX.SSJ1ButtonImage.Width,
                 GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
                 backPanelImage);
-            
+
             InitImage(ref lockedImageL1, GFX.LockedImage,
-                0, 
+                0,
                 0,
                 lssjButtonTexture);
 
             InitImage(ref unknownImageL1, GFX.UnknownImage,
-                0, 
+                0,
                 0,
                 lssjButtonTexture);
 
             Row1_OffsetX = PADDINGX + GFX.SSJ3ButtonImage.Width * 3;
             InitButton(ref ssjgButtonTexture, GFX.SSJGButtonImage, new MouseEvent(TrySelectingSSJG),
-                Row1_OffsetX + 30, 
+                Row1_OffsetX + 30,
                 PADDINGY - 20,
                 backPanelImage);
-                            
+
             InitImage(ref lockedImageG, GFX.LockedImage,
                 0,
                 0,
@@ -143,19 +145,19 @@ namespace DBZMOD.UI
                 0,
                 0,
                 ssjgButtonTexture);
-            
-            InitButton(ref lssj2ButtonTexture, GFX.LSSJ2ButtonImage, new MouseEvent(TrySelectingLSSJ2), 
-                PADDINGX + 22 + GFX.SSJ1ButtonImage.Width * 2, 
+
+            InitButton(ref lssj2ButtonTexture, GFX.LSSJ2ButtonImage, new MouseEvent(TrySelectingLSSJ2),
+                PADDINGX + 22 + GFX.SSJ1ButtonImage.Width * 2,
                 GFX.SSJ1ButtonImage.Height + PADDINGY - 10,
                 backPanelImage);
 
             InitImage(ref lockedImageL2, GFX.LockedImage,
-                0, 
+                0,
                 0,
                 lssj2ButtonTexture);
 
             InitImage(ref unknownImageL2, GFX.UnknownImage,
-                0, 
+                0,
                 0,
                 lssj2ButtonTexture);
 
@@ -163,8 +165,6 @@ namespace DBZMOD.UI
                 PADDINGX + 14 + GFX.SSJ1ButtonImage.Width,
                 PADDINGY + 55,
                 backPanelImage);
-
-            base.OnInitialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -177,7 +177,7 @@ namespace DBZMOD.UI
 
             lockedImage1.ImageScale = !modplayer.SSJ1Achieved ? 1.0f : 0.0f;
 
-            if(player.name == "Nuova")
+            if (player.name == "Nuova")
             {
                 ssjSButtonTexture.SetVisibility(1.0f, 0.5f);
             }
@@ -223,7 +223,7 @@ namespace DBZMOD.UI
 
                 lockedImageL1.ImageScale = 1.0f;
                 lockedImageL2.ImageScale = 0.0f;
-                
+
             }
         }
 
@@ -242,7 +242,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJ1Achieved)
+            if (player.SSJ1Achieved)
             {
                 MenuSelection = MenuSelectionID.SSJ1;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
@@ -258,7 +258,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJ2Achieved && !player.IsPlayerLegendary())
+            if (player.SSJ2Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ2;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
@@ -273,7 +273,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ3(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJ3Achieved && !player.IsPlayerLegendary())
+            if (player.SSJ3Achieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJ3;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
@@ -317,7 +317,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJG(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(player.SSJGAchieved && !player.IsPlayerLegendary())
+            if (player.SSJGAchieved && !player.IsPlayerLegendary())
             {
                 MenuSelection = MenuSelectionID.SSJG;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);

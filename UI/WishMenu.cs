@@ -19,9 +19,9 @@ namespace DBZMOD.UI
         public static bool menuvisible = false;
         private UIText titleText;
         private UIText descText;
-        public UIImage wishbackPanelImage;
+        public UIImage backPanelImage;
         private UIImageButton WishButtonTest;
-        private string descTextValue;
+        private string descTextValue = "";
 
 
         public static MenuSelectionID MenuSelection;
@@ -29,6 +29,8 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
+            base.OnInitialize();
+
             backPanel = new UIPanel();
             backPanel.Width.Set(364f, 0f);
             backPanel.Height.Set(192f, 0f);
@@ -37,27 +39,25 @@ namespace DBZMOD.UI
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
             Append(backPanel);
 
-            wishbackPanelImage = new UIImage(GFX.WishBackPanel);
-            wishbackPanelImage.Width.Set(GFX.WishBackPanel.Width, 0f);
-            wishbackPanelImage.Height.Set(GFX.WishBackPanel.Height, 0f);
-            wishbackPanelImage.Left.Set(-12, 0f);
-            wishbackPanelImage.Top.Set(-12, 0f);
-            backPanel.Append(wishbackPanelImage);
+            backPanelImage = new UIImage(GFX.WishBackPanel);
+            backPanelImage.Width.Set(GFX.WishBackPanel.Width, 0f);
+            backPanelImage.Height.Set(GFX.WishBackPanel.Height, 0f);
+            backPanelImage.Left.Set(-12, 0f);
+            backPanelImage.Top.Set(-12, 0f);
+            backPanel.Append(backPanelImage);
 
-            descTextValue = "";
+            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, backPanelImage);
 
-            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, backPanel);
+            InitText(ref descText, descTextValue, 1, 10, 82, Color.Yellow, backPanelImage);
 
-            InitText(ref descText, descTextValue, 1, 10, 62, Color.Yellow, backPanel);
-
-            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, backPanel);
-
-            base.OnInitialize();
-
+            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, backPanelImage);
         }
-        public void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
+
+        
+        private void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
         {
             descTextValue = "Test";
+            Initialize();
         }
     }
 }

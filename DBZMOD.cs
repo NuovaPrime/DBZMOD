@@ -149,6 +149,11 @@ namespace DBZMOD
                 TransMenuInterface.Update(gameTime);
             }
 
+            if (wishMenuInterface != null && WishMenu.menuvisible)
+            {
+                wishMenuInterface.Update(gameTime);
+            }
+
             if (ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
             {
                 progressionMenu.Update(gameTime);
