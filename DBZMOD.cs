@@ -19,20 +19,24 @@ namespace DBZMOD
 {
     public class DBZMOD : Mod
     {
-        private UserInterface KiBarInterface;
-        private KiBar kibar;
-        private OverloadBar overloadbar;
-        private UserInterface OverloadBarInterface;
         private UIFlatPanel UIFlatPanel;
 
-        private TransMenu transMenu;
-        private UserInterface TransMenuInterface;
-        private WishMenu wishMenu;
-        private UserInterface wishMenuInterface;
+        private static TransMenu transMenu;
+        private static UserInterface TransMenuInterface;
 
-        private ProgressionMenu progressionMenu;
+        private static WishMenu wishMenu;
+        private static UserInterface wishMenuInterface;
+
+        private static KiBar kibar;
+        private static UserInterface KiBarInterface;
+
+        private static ProgressionMenu progressionMenu;
+        private static UserInterface ProgressionMenuInterface;
+
+        private static OverloadBar overloadbar;
+        private static UserInterface OverloadBarInterface;
+
         private ResourceBar resourceBar;
-        private UserInterface ProgressionMenuInterface;
 
         private DBZMOD mod;
         public bool thoriumLoaded;
@@ -97,36 +101,57 @@ namespace DBZMOD
                 GFX.LoadGFX(this);
                 KiBar.visible = true;
 
-                transMenu = new TransMenu();
-                transMenu.Activate();
-                TransMenuInterface = new UserInterface();
-                TransMenuInterface.SetState(transMenu);
-
-                wishMenu = new WishMenu();
-                wishMenu.Activate();
-                wishMenuInterface = new UserInterface();
-                wishMenuInterface.SetState(wishMenu);
-
-                progressionMenu = new ProgressionMenu();
-                progressionMenu.Activate();
-                ProgressionMenuInterface = new UserInterface();
-                ProgressionMenuInterface.SetState(progressionMenu);
-
-                kibar = new KiBar();
-                kibar.Activate();
-                KiBarInterface = new UserInterface();
-                KiBarInterface.SetState(kibar);
-
-                overloadbar = new OverloadBar();
-                overloadbar.Activate();
-                OverloadBarInterface = new UserInterface();
-                OverloadBarInterface.SetState(overloadbar);
+                ActivateTransMenu();
+                ActivateWishmenu();
+                ActivateProgressionMenu();
+                ActivateKiBar();
+                ActivateOverloadBar();
 
                 Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
 
                 Filters.Scene["DBZMOD:GodSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.9f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
             }
+        }
+
+        public static void ActivateTransMenu()
+        {
+            transMenu = new TransMenu();
+            transMenu.Activate();
+            TransMenuInterface = new UserInterface();
+            TransMenuInterface.SetState(transMenu);
+        }
+
+        public static void ActivateWishmenu()
+        {
+            wishMenu = new WishMenu();
+            wishMenu.Activate();
+            wishMenuInterface = new UserInterface();
+            wishMenuInterface.SetState(wishMenu);
+        }
+
+        public static void ActivateProgressionMenu()
+        {
+            progressionMenu = new ProgressionMenu();
+            progressionMenu.Activate();
+            ProgressionMenuInterface = new UserInterface();
+            ProgressionMenuInterface.SetState(progressionMenu);
+        }
+
+        public static void ActivateKiBar()
+        {
+            kibar = new KiBar();
+            kibar.Activate();
+            KiBarInterface = new UserInterface();
+            KiBarInterface.SetState(kibar);
+        }
+
+        public static void ActivateOverloadBar()
+        {
+            overloadbar = new OverloadBar();
+            overloadbar.Activate();
+            OverloadBarInterface = new UserInterface();
+            OverloadBarInterface.SetState(overloadbar);
         }
 
         public override void AddRecipeGroups()
@@ -158,7 +183,6 @@ namespace DBZMOD
             {
                 progressionMenu.Update(gameTime);
             }
-
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -196,6 +220,7 @@ namespace DBZMOD
                         {
                             ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
+
                         if (WishMenu.menuvisible)
                         {
                             wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
