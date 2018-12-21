@@ -130,6 +130,7 @@
     <Compile Include="Enums\ControlStates.cs" />
     <Compile Include="Enums\MenuSelectionID.cs" />
     <Compile Include="Enums\PlayerVarSyncEnum.cs" />
+    <Compile Include="Enums\WishSelectionID.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
