@@ -15,33 +15,11 @@ namespace DBZMOD.UI
     internal class EasyMenu : UIState
     {
         public UIPanel backPanel;
-        public UIPanel wishbackPanel;
         private Player player;
 
         public override void OnInitialize()
         {
-            backPanel = new UIPanel();
-            backPanel.Width.Set(306f, 0f);
-            backPanel.Height.Set(128f, 0f);
-            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
-            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
-            backPanel.OnMouseDown += new MouseEvent(DragStart);
-            backPanel.OnMouseUp += new MouseEvent(DragEnd);
-            Append(backPanel);
-
-            wishbackPanel = new UIPanel();
-            wishbackPanel.Width.Set(364f, 0f);
-            wishbackPanel.Height.Set(192f, 0f);
-            wishbackPanel.Left.Set(Main.screenWidth / 2f - wishbackPanel.Width.Pixels / 2f, 0f);
-            wishbackPanel.Top.Set(Main.screenHeight / 2f - wishbackPanel.Height.Pixels / 2f, 0f);
-            wishbackPanel.BackgroundColor = new Color(0, 0, 0, 0);
-            Append(wishbackPanel);
-
-
             base.OnInitialize();
-
-
         }
 
         /*public override void Update(GameTime gametime)
@@ -63,10 +41,6 @@ namespace DBZMOD.UI
             {
                 backPanel.Append(buttonToInitialise);
             }
-            if (parentElement == wishbackPanel)
-            {
-                wishbackPanel.Append(buttonToInitialise);
-            }
             else
             {
                 parentElement.Append(buttonToInitialise);
@@ -85,10 +59,6 @@ namespace DBZMOD.UI
             if (parentElement == null)
             {
                 backPanel.Append(imageToInitialise);
-            }
-            if (parentElement == wishbackPanel)
-            {
-                wishbackPanel.Append(imageToInitialise);
             }
             else
             {
@@ -123,13 +93,13 @@ namespace DBZMOD.UI
         Vector2 offset;
         public bool dragging = false;
 
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        protected void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
             dragging = true;
         }
 
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        protected void DragEnd(UIMouseEvent evt, UIElement listeningElement)
         {
             Vector2 end = evt.MousePosition;
             dragging = false;

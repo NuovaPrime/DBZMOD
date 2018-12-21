@@ -50,9 +50,16 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
-            base.OnInitialize();
-            //backPanel.BackgroundColor = new Color(100, 100, 100);
-            
+            backPanel = new UIPanel();
+            backPanel.Width.Set(306f, 0f);
+            backPanel.Height.Set(128f, 0f);
+            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
+            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
+            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
+            backPanel.OnMouseDown += new MouseEvent(DragStart);
+            backPanel.OnMouseUp += new MouseEvent(DragEnd);
+            Append(backPanel);
+
             backPanelImage = new UIImage(GFX.BackPanel);
             backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
             backPanelImage.Height.Set(GFX.BackPanel.Height, 0f);
@@ -156,6 +163,8 @@ namespace DBZMOD.UI
                 PADDINGX + 14 + GFX.SSJ1ButtonImage.Width,
                 PADDINGY + 55,
                 backPanelImage);
+
+            base.OnInitialize();
         }
 
         public override void Update(GameTime gameTime)

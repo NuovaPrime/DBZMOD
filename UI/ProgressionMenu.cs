@@ -27,8 +27,15 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
-            base.OnInitialize();
-            //backPanel.BackgroundColor = new Color(100, 1W00, 100);
+            backPanel = new UIPanel();
+            backPanel.Width.Set(306f, 0f);
+            backPanel.Height.Set(128f, 0f);
+            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
+            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
+            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
+            backPanel.OnMouseDown += new MouseEvent(DragStart);
+            backPanel.OnMouseUp += new MouseEvent(DragEnd);
+            Append(backPanel);
 
             backPanelImage = new UIImage(GFX.BackPanel);
             backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
@@ -41,6 +48,8 @@ namespace DBZMOD.UI
             InitText(ref titleText, "Progression Menu", 1, 55, -32, Color.White);
 
             InitText(ref kiExperienceText, "Ki Experience: ???", 1, 0, 0, Color.Cyan);
+
+            base.OnInitialize();
         }
 
         public static void ToggleVisibility()

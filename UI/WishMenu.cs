@@ -29,22 +29,30 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
-            base.OnInitialize();
+            backPanel = new UIPanel();
+            backPanel.Width.Set(364f, 0f);
+            backPanel.Height.Set(192f, 0f);
+            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
+            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
+            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
+            Append(backPanel);
 
             wishbackPanelImage = new UIImage(GFX.WishBackPanel);
             wishbackPanelImage.Width.Set(GFX.WishBackPanel.Width, 0f);
             wishbackPanelImage.Height.Set(GFX.WishBackPanel.Height, 0f);
             wishbackPanelImage.Left.Set(-12, 0f);
             wishbackPanelImage.Top.Set(-12, 0f);
-            wishbackPanel.Append(wishbackPanelImage);
+            backPanel.Append(wishbackPanelImage);
 
             descTextValue = "";
 
-            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, wishbackPanel);
+            InitText(ref titleText, "I Wish for...", 0.6f, 4, 6, Color.Yellow, backPanel);
 
-            InitText(ref descText, descTextValue, 1, 10, 62, Color.Yellow, wishbackPanel);
+            InitText(ref descText, descTextValue, 1, 10, 62, Color.Yellow, backPanel);
 
-            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, wishbackPanel);
+            InitButton(ref WishButtonTest, GFX.WishIconEmpty, new MouseEvent(SelectButtonTest), 10, 20, backPanel);
+
+            base.OnInitialize();
 
         }
         public void SelectButtonTest(UIMouseEvent evt, UIElement listeningelement)
