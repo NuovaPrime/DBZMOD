@@ -14,6 +14,7 @@ namespace Network
         public const byte SyncPlayer = 43;
         public const byte SyncTriggers = 44;
         public const byte RequestForSyncFromJoinedPlayer = 45;
+        public const byte RequestDragonBallKeySync = 46;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -34,7 +35,16 @@ namespace Network
                     //DebugUtil.Log(string.Format("I have received a request from {0} to send {1}'s info. Sending...", fromWho, whichPlayersDataNeedsRelay));
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
+                case (RequestDragonBallKeySync):
+                    SendDragonBallKeyToPlayer(fromWho);
+                    break;
             }
+        }
+
+        public void RequestServerSendDragonBallKey(int toWho, int fromWho)
+        {
+            ModPacket packet = GetPacket(RequestDragonBallKeySync, fromWho);
+            packet.Send(toWho, fromWho);
         }
 
         public void RequestPlayerSendTheirInfo(int toWho, int fromWho, int playerWhoseDataIneed)
@@ -69,6 +79,13 @@ namespace Network
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.IsFlying);
             SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.IsTransformationAnimationPlaying);
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
+        }
+
+        public void SendDragonBallKeyToPlayer(int toWho)
+        {
+            ModPacket packet = GetPacket(RequestDragonBallKeySync, 256);
+            packet.Write(DBZWorld.WorldDragonBallKey);
+            packet.Send(toWho, 256);
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)

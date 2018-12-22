@@ -1,10 +1,4 @@
-﻿using DBZMOD.Items.DragonBalls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBZMOD.Items.DragonBalls
+﻿namespace DBZMOD.Items.DragonBalls
 {
     public class StoneBall : DragonBallItem
     {
@@ -17,7 +11,7 @@ namespace DBZMOD.Items.DragonBalls
         public override void SetDefaults()
         {
             base.SetDefaults();
-            item.createTile = mod.TileType("StoneBallTile");
+            item.consumable = false;
         }
     }
 }

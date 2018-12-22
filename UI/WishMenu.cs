@@ -46,22 +46,18 @@ namespace DBZMOD.UI
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
-            Append(backPanel);
 
             backPanelImage = new UIImage(GFX.WishBackPanel);
             backPanelImage.Width.Set(GFX.WishBackPanel.Width, 0f);
             backPanelImage.Height.Set(GFX.WishBackPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
-            backPanel.Append(backPanelImage);
 
             InitText(ref titleText, "I Wish for...", 0.66f, 6, 6, Color.Yellow, backPanelImage);
 
             InitText(ref wishText, wishTextValue, 0.8f, 10, 82, new Color(244, 203, 39), backPanelImage);
 
             InitText(ref descText, descTextValue, 0.66f, 10, 100, Color.Yellow, backPanelImage);
-
-            InitText(ref grantText, "Grant Wish", 0.66f, 156, 150, Color.Yellow, backPanelImage);
 
             InitButton(ref WishButtonPower, GFX.WishforPower, new MouseEvent(SelectButtonPower), 10, 22, backPanelImage);
 
@@ -74,19 +70,21 @@ namespace DBZMOD.UI
             InitButton(ref WishButtonSkill, GFX.WishforSkill, new MouseEvent(SelectButtonSkill), 190, 22, backPanelImage);
 
             InitButton(ref WishButtonAwakening, GFX.WishforAwakening, new MouseEvent(SelectButtonAwakening), 235, 22, backPanelImage);
+            
+            InitButton(ref GrantButton, GFX.GrantButton, new MouseEvent(GrantWish), GFX.WishBackPanel.Width - GFX.GrantButton.Width - 12, GFX.WishBackPanel.Height - GFX.GrantButton.Height - 12, backPanelImage);
+            
+            InitText(ref grantText, "Grant Wish", 0.66f, 14, -12, Color.Yellow, GrantButton);
 
-            InitButton(ref GrantButton, GFX.GrantButton, new MouseEvent(GrantWish), 130, 130, backPanelImage);
+            backPanel.Append(backPanelImage);
+
+            Append(backPanel);
         }
-
         
         private void SelectButtonPower(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Power";
-            descTextValue = "Wish for a permanent increase in" +
-                "\nMaximum Health, Maximum Ki and Damage." +
-                "\nWish limit = 5" +
-                "\nWishes left = " + modplayer.PowerWishesLeft;
+            descTextValue = "Wish for a permanent increase in\nMaximum Health, Maximum Ki and Damage.\nWish limit = 5, Wishes left = " + modplayer.PowerWishesLeft;                
             WishSelection = WishSelectionID.Power;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -96,10 +94,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Wealth";
-            descTextValue = "Wish for money beyond your wildest dreams," +
-                "\n10 Platinum coins + lucky coin." +
-                "\nWish limit = ∞" +
-                "\nWishes left = ∞";
+            descTextValue = "Wish for money beyond your wildest dreams,\n10 Platinum coins + lucky coin.\nWish limit = ∞, Wishes left = ∞";
             WishSelection = WishSelectionID.Wealth;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -109,10 +104,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Immortality";
-            descTextValue = "Wish for infinite life," +
-                "\n100% chance to be fully healed from the next 3 deaths." +
-                "\nWish limit = 1" +
-                "\nWishes left = " + modplayer.ImmortalityWishesLeft;
+            descTextValue = "Wish for infinite life, reviving at full life\nfor the next 3 deaths.\nWish limit = 1, Wishes left = " + modplayer.ImmortalityWishesLeft;
             WishSelection = WishSelectionID.Immortality;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -122,11 +114,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Genetic Reroll";
-            descTextValue = "Wish for a new personality," +
-                "\nReroll's your genetic trait into something else." +
-                "\nIt is impossible to get nothing, all traits have the same chance with this wish" +
-                "\nWish limit = ∞" +
-                "\nWishes left = ∞";
+            descTextValue = "Wish for a new [guaranteed] genetic trait.\nAll traits have an equal chance of being rolled.\nWish limit = ∞, Wishes left = ∞";
             WishSelection = WishSelectionID.Genetic;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -136,10 +124,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Skill";
-            descTextValue = "Wish for powerful attacks," +
-                "\nGrants different skills based on how many times you have wished this." +
-                "\nWish limit = 3" +
-                "\nWishes left = " + modplayer.SkillWishesLeft;
+            descTextValue = "Wish for a powerful attack. What you get depends on\nhow many times you have wished this.\nWish limit = 3, Wishes left = " + modplayer.SkillWishesLeft;
             WishSelection = WishSelectionID.Skill;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -149,10 +134,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Awakening";
-            descTextValue = "Wish to awaken your latent power," +
-                "\nGrants you the next form available instantly." +
-                "\nWish limit = 3" +
-                "\nWishes left = " + modplayer.AwakeningWishesLeft;
+            descTextValue = "Wish to awaken your latent power,\n unlocks the next available form.\nWish limit = 3, Wishes left = " + modplayer.AwakeningWishesLeft;
             WishSelection = WishSelectionID.Awakening;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();

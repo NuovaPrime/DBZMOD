@@ -265,7 +265,6 @@
     <Compile Include="Items\DragonBalls\OneStarDB.cs" />
     <Compile Include="Items\DragonBalls\SevenStarDB.cs" />
     <Compile Include="Items\DragonBalls\SixStarDB.cs" />
-    <Compile Include="Items\DragonBalls\SleepingDragonBall.cs" />
     <Compile Include="Items\DragonBalls\StoneBall.cs" />
     <Compile Include="Items\DragonBalls\ThreeStarDB.cs" />
     <Compile Include="Items\DragonBalls\TwoStarDB.cs" />

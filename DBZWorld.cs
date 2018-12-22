@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using Util;
 using DBZMOD.Items.DragonBalls;
+using Network;
 
 namespace DBZMOD
 {
@@ -580,6 +581,11 @@ namespace DBZMOD
             
             // made up stuff.
             return new Point(-1, -1);
+        }
+
+        public static void SyncWorldDragonBallKey(Player player)
+        {
+            NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, player.whoAmI);
         }
 
         /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)

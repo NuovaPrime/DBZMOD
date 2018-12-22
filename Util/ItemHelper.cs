@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Util;
 
 namespace DBZMOD
 {
@@ -49,13 +51,13 @@ namespace DBZMOD
         ///     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
         /// </summary>
         /// <returns></returns>
-        public static int RemoveDragonBall(Player player, int dbKey, int whichDragonball)
+        public static int RemoveDragonBall(Item[] inventory, int dbKey, int whichDragonball)
         {
             string ballType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball);
             int ballTypeInt = GetItemTypeFromName(ballType);
-            for (var i = 0; i < player.inventory.Length; i++)
+            for (var i = 0; i < inventory.Length; i++)
             {
-                var item = player.inventory[i];
+                var item = inventory[i];
                 if (item == null)
                     continue;
 
@@ -70,7 +72,7 @@ namespace DBZMOD
                     var dBall = item.modItem as DragonBallItem;
                     if (dBall.WorldDragonBallKey == dbKey && dBall.WhichDragonBall == whichDragonball)
                     {
-                        player.inventory[i] = null;
+                        inventory[i] = null;
                         return i;
                     }
                 }
@@ -78,6 +80,77 @@ namespace DBZMOD
 
             // dragonball wasn't found, return an oob index.
             return -1;
+        }
+
+        public static void ScanPlayerForIllegitimateDragonballs(Player player)
+        {
+            ScanInventoryForIllegitimateDragonballs(player.inventory);
+            ScanInventoryForIllegitimateDragonballs(player.bank.item);
+            ScanInventoryForIllegitimateDragonballs(player.bank2.item);
+            ScanInventoryForIllegitimateDragonballs(player.bank3.item);
+        }
+
+        public static void ScanInventoryForIllegitimateDragonballs(Item[] inventory)
+        {
+            for (var i = 0; i < inventory.Length; i++)
+            {
+                var item = inventory[i];
+                if (item == null)
+                    continue;
+
+                if (item.modItem == null)
+                    continue;
+
+                if (!item.modItem.GetType().IsAssignableFrom(typeof(DragonBallItem)))
+                    continue;
+
+                var dbItem = item.modItem as DragonBallItem;
+
+                if (dbItem.WorldDragonBallKey != DBZWorld.WorldDragonBallKey)
+                {
+                    DebugUtil.Log("Illegitimate Dragon ball loaded.");
+                    SwapDragonBallWithStoneBall(inventory, dbItem.WorldDragonBallKey.Value, dbItem.WhichDragonBall);
+                }
+                else
+                {
+                    DebugUtil.Log("Dragon ball loaded and matches the world.");
+                    if (dbItem.item.type == GetItemTypeFromName("StoneBall"))
+                    {
+                        // this stone ball is being re-legitimized, which is not a word
+                        SwapStoneBallWithDragonBall(inventory, dbItem.WorldDragonBallKey.Value, dbItem.WhichDragonBall);
+                    }
+                }
+
+            }
+        }
+
+        public static void SwapStoneBallWithDragonBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
+        {
+            // this stone ball was pulled back into its world. Turn it into a dragon ball.
+            DebugUtil.Log("Stone ball loaded and matches the world key.");
+            int dbKey = WorldDragonBallKey;
+            int whichDball = WhichDragonBall;
+            int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);            
+            var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball);
+            var newDragonBall = Main.item[ItemHelper.GetItemTypeFromName(dbType)].DeepClone();
+            var dbData = newDragonBall.modItem as DragonBallItem;
+            dbData.WorldDragonBallKey = dbKey;
+            dbData.WhichDragonBall = whichDball;
+            inventory[dbSlot] = newDragonBall;
+        }
+
+        public static void SwapDragonBallWithStoneBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
+        {
+            // this dragon ball was pulled in from another world. Turn it into a rock.
+            DebugUtil.Log("Dragon ball loaded and does not match the world key.");
+            int dbKey = WorldDragonBallKey;
+            int whichDball = WhichDragonBall;
+            int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
+            var newStoneBall = Main.item[ItemHelper.GetItemTypeFromName("StoneBall")].DeepClone();
+            var dbData = newStoneBall.modItem as DragonBallItem;
+            dbData.WorldDragonBallKey = dbKey;
+            dbData.WhichDragonBall = whichDball;
+            inventory[dbSlot] = newStoneBall;
         }
     }
 }

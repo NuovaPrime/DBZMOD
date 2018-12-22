@@ -15,17 +15,22 @@ namespace DBZMOD.UI
     internal class EasyMenu : UIState
     {
         public UIPanel backPanel;
-        private Player player;
 
         public override void OnInitialize()
         {
             base.OnInitialize();
         }
 
-        /*public override void Update(GameTime gametime)
+        public override void Update(GameTime gameTime)
         {
-            backPanel.SetVisibility(0.0f);
-        }*/
+            base.Update(gameTime); // don't remove.
+
+            // Checking ContainsPoint and then setting mouseInterface to true is very common. This causes clicks on this UIElement to not cause the player to use current items. 
+            if (ContainsPoint(Main.MouseScreen))
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+        }
 
         public void InitButton(ref UIImageButton buttonToInitialise, Texture2D buttonTexture, MouseEvent buttonOnClick, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
@@ -46,7 +51,7 @@ namespace DBZMOD.UI
                 parentElement.Append(buttonToInitialise);
             }
         }
-
+        
         public void InitImage(ref UIImage imageToInitialise, Texture2D imageTexture, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
             imageToInitialise = new UIImage(imageTexture);
@@ -55,6 +60,7 @@ namespace DBZMOD.UI
             imageToInitialise.Height.Set(imageTexture.Height, 0.0f);
             imageToInitialise.Left.Set(offsetX, 0f);
             imageToInitialise.Top.Set(offsetY, 0f);
+
 
             if (parentElement == null)
             {
@@ -112,6 +118,7 @@ namespace DBZMOD.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            base.DrawSelf(spriteBatch);
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
             if (backPanel.ContainsPoint(MousePosition))
             {

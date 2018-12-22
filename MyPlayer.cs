@@ -15,6 +15,7 @@ using Config;
 using Util;
 using Enums;
 using Network;
+using DBZMOD.Items.DragonBalls;
 
 namespace DBZMOD
 {
@@ -268,6 +269,17 @@ namespace DBZMOD
         ProgressionSystem m_progressionSystem = new ProgressionSystem();
         FistSystem m_fistSystem = new FistSystem();
         #endregion
+
+        public override void OnEnterWorld(Player player)
+        {
+            base.OnEnterWorld(player);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                DBZWorld.SyncWorldDragonBallKey(player);
+            }
+            ItemHelper.ScanPlayerForIllegitimateDragonballs(player);
+        }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
