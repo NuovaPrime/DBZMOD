@@ -1197,13 +1197,13 @@ namespace DBZMOD
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             KiMax3 = tag.Get<int>("KiMax3");
             FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
-            PowerWishesLeft = tag.Get<int>("PowerWishesLeft");
-            SkillWishesLeft = tag.Get<int>("SkillWishesLeft");
-            ImmortalityWishesLeft = tag.Get<int>("ImmortalityWishesLeft");
-            AwakeningWishesLeft = tag.Get<int>("AwakeningWishesLeft");
-            PowerHealthBonus = tag.Get<int>("PowerHealthBonus");
-            PowerWishMulti = tag.Get<float>("PowerWishMulti");
-            ImmortalityRevivesLeft = tag.Get<int>("ImmortalityRevivesLeft");
+            PowerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
+            SkillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
+            ImmortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
+            AwakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
+            PowerHealthBonus = tag.ContainsKey("PowerHealthBonus") ? tag.Get<int>("PowerHealthBonus") : 0;
+            PowerWishMulti = tag.ContainsKey("PowerWishMulti") ? tag.Get<float>("PowerWishMulti") : 1f;
+            ImmortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
 
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
