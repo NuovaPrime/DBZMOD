@@ -125,12 +125,13 @@
     <Compile Include="Dusts\RadiantDust.cs" />
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
+    <Compile Include="Enums\WishSelectionID.cs" />
     <Compile Include="Enums\MenuSelectionID.cs" />
     <Compile Include="Enums\PlayerVarSyncEnum.cs" />
-    <Compile Include="Enums\WishSelectionID.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />
@@ -255,8 +256,10 @@
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
     <Compile Include="Items\DragonBalls\DragonBallItem.cs" />
-    <Compile Include="Items\DragonBalls\DragonRadar.cs" />
     <Compile Include="Items\DragonBalls\DBNote.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar1.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar3.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar2.cs" />
     <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
     <Compile Include="Items\DragonBalls\FourStarDB.cs" />
     <Compile Include="Items\DragonBalls\OneStarDB.cs" />
@@ -283,6 +286,7 @@
     <Compile Include="Items\RadiantFragmentBlockItem.cs" />
     <Compile Include="Items\DivineThreads.cs" />
     <Compile Include="Items\SatanicCloth.cs" />
+    <Compile Include="Items\RefinedMetal.cs" />
     <Compile Include="Items\ScrapMetal.cs" />
     <Compile Include="Items\SkeletalEssence.cs" />
     <Compile Include="Items\SoulofEntity.cs" />

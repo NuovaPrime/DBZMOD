@@ -111,6 +111,8 @@ namespace DBZMOD
 
                 Filters.Scene["DBZMOD:GodSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.9f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
+                Filters.Scene["DBZMOD:WishSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.1f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
+                SkyManager.Instance["DBZMOD:WishSky"] = new WishSky();
             }
         }
 

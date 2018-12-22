@@ -107,12 +107,13 @@ namespace DBZMOD
         public float MasteryLevelFlight = 0;
 
         //Wish vars
-        public int PowerWishesLeft = 3;
+        public int PowerWishesLeft = 5;
         public int ImmortalityWishesLeft = 1;
         public int SkillWishesLeft = 3;
         public int AwakeningWishesLeft = 3;
         public int ImmortalityRevivesLeft = 0;
         public float PowerWishMulti = 1f;
+        public int PowerHealthBonus = 0;
 
 
         //unsorted vars
@@ -686,6 +687,15 @@ namespace DBZMOD
             {
                 AllDBNearby = true;
             }
+            if(AllDBNearby)
+            {
+                Main.NewText("All DB Nearby");
+            }
+            if(WishActive)
+            {
+                Main.NewText("Wish is active");
+            }
+            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
 
             /*if(LSSJAchieved)
             {
@@ -1060,11 +1070,12 @@ namespace DBZMOD
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
 
-        /*public override void UpdateBiomeVisuals()
+        public override void UpdateBiomeVisuals()
         {
-            bool useGodSky = Transformations.IsGodlike(player);
-            player.ManageSpecialBiomeVisuals("DBZMOD:GodSky", useGodSky, player.Center);
-        }*/
+            //bool useGodSky = Transformations.IsGodlike(player);
+            //player.ManageSpecialBiomeVisuals("DBZMOD:GodSky", useGodSky, player.Center);
+            player.ManageSpecialBiomeVisuals("DBZMOD:WishSky", WishActive, player.Center);
+        }
 
         public override TagCompound Save()
         {
@@ -1117,7 +1128,14 @@ namespace DBZMOD
             tag.Add("ssjgAchieved", SSJGAchieved);
             tag.Add("LSSJ2Achieved", LSSJ2Achieved);
             tag.Add("KiMax3", KiMax3);
-            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);		            
+            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);
+            tag.Add("PowerWishesLeft", PowerWishesLeft);
+            tag.Add("SkillWishesLeft", SkillWishesLeft);
+            tag.Add("ImmortalityWishesLeft", ImmortalityWishesLeft);
+            tag.Add("AwakeningWishesLeft", AwakeningWishesLeft);
+            tag.Add("PowerHealthBonus", PowerHealthBonus);
+            tag.Add("PowerWishMulti", PowerWishMulti);
+            tag.Add("ImmortalityRevivesLeft", ImmortalityRevivesLeft);
             // added to store the player's original eye color if possible
             if (OriginalEyeColor != null)
             {
@@ -1179,6 +1197,14 @@ namespace DBZMOD
             LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
             KiMax3 = tag.Get<int>("KiMax3");
             FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
+            PowerWishesLeft = tag.Get<int>("PowerWishesLeft");
+            SkillWishesLeft = tag.Get<int>("SkillWishesLeft");
+            ImmortalityWishesLeft = tag.Get<int>("ImmortalityWishesLeft");
+            AwakeningWishesLeft = tag.Get<int>("AwakeningWishesLeft");
+            PowerHealthBonus = tag.Get<int>("PowerHealthBonus");
+            PowerWishMulti = tag.Get<float>("PowerWishMulti");
+            ImmortalityRevivesLeft = tag.Get<int>("ImmortalityRevivesLeft");
+
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
             {
