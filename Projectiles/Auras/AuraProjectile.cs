@@ -43,7 +43,11 @@ namespace Projectiles.Auras
             // don't run AI on the hidden projectile, this prevents sounds from playing, etc.
             return !projectile.hide;
         }
-
+		//flicker fix
+		public override Color? GetAlpha(Color lightColor)
+        {
+			return new Color(255, 255, 255, 0);
+        }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
