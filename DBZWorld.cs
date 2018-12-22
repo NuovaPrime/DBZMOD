@@ -10,12 +10,13 @@ using Terraria.ModLoader.IO;
 using System;
 using System.Linq;
 using Util;
+using DBZMOD.Items.DragonBalls;
 
 namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
-        private static Point[] DragonBallCoordinates = new Point[7];
+        public static Point[] DragonBallLocations = new Point[7];
         private static int? _worldDragonBallKey;
         public static int WorldDragonBallKey
         {
@@ -44,6 +45,7 @@ namespace DBZMOD
         {
             var dbKey = tag.GetInt("WorldDragonBallKey");
             WorldDragonBallKey = dbKey;
+            DebugUtil.Log(string.Format("World dragon ball key is set to {0}", dbKey));
             base.Load(tag);
         }
 
@@ -63,6 +65,7 @@ namespace DBZMOD
             modPlayer.SixStarDBNearby = false;
             modPlayer.SevenStarDBNearby = false;
         }
+
         #region Gohan House Bytes
 
         //18 tiles long, 16 tiles high (with dirt on the bottom)
@@ -142,8 +145,6 @@ namespace DBZMOD
         };
 
         #endregion
-
-
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
@@ -447,7 +448,7 @@ namespace DBZMOD
         public bool IsExistingDragonBall(int whichDragonball)
         {
             int dbIndex = whichDragonball - 1;
-            var coordinates = DragonBallCoordinates[dbIndex];
+            var coordinates = DragonBallLocations[dbIndex];
             if (coordinates == null)
                 return false;
             var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
@@ -473,29 +474,6 @@ namespace DBZMOD
                     return "SixStarDBTile";
                 case 7:
                     return "SevenStarDBTile";
-                default:
-                    return "";
-            }
-        }
-
-        public string GetDragonBallItemTypeFromNumber(int whichDragonBall)
-        {
-            switch (whichDragonBall)
-            {
-                case 1:
-                    return "OneStarDB";
-                case 2:
-                    return "TwoStarDB";
-                case 3:
-                    return "ThreeStarDB";
-                case 4:
-                    return "FourStarDB";
-                case 5:
-                    return "FiveStarDB";
-                case 6:
-                    return "SixStarDB";
-                case 7:
-                    return "SevenStarDB";
                 default:
                     return "";
             }
@@ -530,7 +508,7 @@ namespace DBZMOD
             for (var i = 0; i < inventory.Length; i++)
             {
                 var item = inventory[i];
-                if (item.type == mod.GetItem(GetDragonBallItemTypeFromNumber(whichDragonball)).item.type)
+                if (item.type == mod.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball)).item.type)
                     return true;
 
                 
@@ -569,7 +547,7 @@ namespace DBZMOD
             var dbTile = Framing.GetTileSafely(offsetX, offsetY);
             dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile");
             dbTile.active(true);
-            DragonBallCoordinates[dbIndex] = new Point(offsetX, offsetY);
+            DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
             return true;
         }
 
@@ -584,9 +562,24 @@ namespace DBZMOD
 
         public Point GetSafeDragonBallCoordinates()
         {
-            var underworldHeight = 4;
+            var underworldHeight = (int)Math.Ceiling(WorldGen.rockLayerLow / 16f);
+            var surfaceHeight = (int)Math.Ceiling(WorldGen.worldSurfaceLow / 16f);
+            DebugUtil.Log(string.Format("Trying to find safe dragon ball location. Underworld at {0}, surface at {1}.", underworldHeight, surfaceHeight));
+            bool IsSafeTile = false;
+            while (!IsSafeTile)
+            {                
+                var randX = Main.rand.Next(0, Main.maxTilesX);
+                var randY = Main.rand.Next(surfaceHeight, underworldHeight);
+                var tile = Main.tile[randX, randY];
+                if (tile.active() && (Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]) && !Main.tile[randX, randY - 1].active())
+                {
+                    IsSafeTile = true;
+                    return new Point(randX, randY);
+                }
+            }
+            
             // made up stuff.
-            return new Point();
+            return new Point(-1, -1);
         }
 
         /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
