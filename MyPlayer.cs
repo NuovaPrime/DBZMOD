@@ -49,7 +49,8 @@ namespace DBZMOD
         public float KiMaxMult = 1f;
 
         // made KiCurrent private forcing everyone to use a method that syncs to clients, centralizing ki increase/decrease logic.
-        private int KiCurrent;
+        // 12/24/2018 changed Ki current to a float so that you could do more elaborate ki draining things and ki drain rates can be more consistent.
+        private float KiCurrent;
 
         public int KiChargeRate = 1;
         public int OverloadMax = 100;
@@ -293,12 +294,12 @@ namespace DBZMOD
         }
 
         // all changes to Ki Current are now made through this method.
-        public void AddKi(int kiAmount)
+        public void AddKi(float kiAmount)
         {
             SetKi(KiCurrent + kiAmount);
         }
 
-        public void SetKi(int kiAmount, bool isSync = false)
+        public void SetKi(float kiAmount, bool isSync = false)
         {
             // this might seem weird, but remote clients aren't allowed to set eachothers ki. This prevents desync issues.
             if (player.whoAmI == Main.myPlayer || isSync)
@@ -308,7 +309,7 @@ namespace DBZMOD
         }
 
         // return the amount of ki the player has, readonly
-        public int GetKi()
+        public float GetKi()
         {
             return KiCurrent;
         }
@@ -784,7 +785,7 @@ namespace DBZMOD
         public string SyncPlayerTrait;
         public bool? SyncIsFlying;
         public bool? SyncIsTransformationAnimationPlaying;
-        public int? SyncKiCurrent;
+        public float? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
 
@@ -1176,7 +1177,8 @@ namespace DBZMOD
             tag.Add("ASSJAchieved", ASSJAchieved);
             tag.Add("USSJAchieved", USSJAchieved);
             tag.Add("SSJ3Achieved", SSJ3Achieved);
-            tag.Add("KiCurrent", KiCurrent);
+            // changed save routine to save to a float, orphaning the original KiCurrent.
+            tag.Add("KiCurrentFloat", KiCurrent);
             tag.Add("RageCurrent", RageCurrent);
             tag.Add("KiRegenRate", KiChargeRate);
             tag.Add("KiEssence1", KiEssence1);
@@ -1244,7 +1246,13 @@ namespace DBZMOD
             ASSJAchieved = tag.Get<bool>("ASSJAchieved");
             USSJAchieved = tag.Get<bool>("USSJAchieved");
             SSJ3Achieved = tag.Get<bool>("SSJ3Achieved");
-            KiCurrent = tag.Get<int>("KiCurrent");
+            if (tag.ContainsKey("KiCurrentFloat"))
+            {
+                KiCurrent = tag.Get<float>("KiCurrentFloat");
+            } else
+            {
+                KiCurrent = (float)tag.Get<int>("KiCurrent");
+            }            
             RageCurrent = tag.Get<int>("RageCurrent");
             KiChargeRate = tag.Get<int>("KiRegenRate");
             KiEssence1 = tag.Get<bool>("KiEssence1");

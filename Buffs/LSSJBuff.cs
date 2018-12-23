@@ -14,8 +14,8 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = false;
             DamageMulti = 2.30f;
             SpeedMulti = 2.30f;
-            KiDrainBuffMulti = 3f;
-            KiDrainRate = 6;
+            KiDrainBuffMulti = 2.1f;
+            KiDrainRate = 2.15f;
             BaseDefenceBonus = 30;
             Description.SetDefault(AssembleTransBuffDescription());
         }

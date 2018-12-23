@@ -340,7 +340,7 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, int kiCurrent)
+        public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, float kiCurrent)
         {
             // DebugUtil.Log(string.Format("Sending KiCurrent changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));            
             var packet = GetPacket(SyncPlayer, fromWho); ;
@@ -592,7 +592,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.KiCurrent:
-                    player.SetKi(reader.ReadInt32(), true);
+                    player.SetKi(reader.ReadSingle(), true);
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.GetKi());

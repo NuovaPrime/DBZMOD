@@ -15,7 +15,6 @@ namespace DBZMOD
 {
     public abstract class TransBuff : ModBuff
     {
-        public const int KI_DRAIN_TIMER_MAX = 3;
         public float DamageMulti;
         public float SpeedMulti;
         public float KaioLightValue;
@@ -23,9 +22,8 @@ namespace DBZMOD
         public float SSJLightValue;
         public int HealthDrainRate;
         public int OverallHealthDrainRate;
-        public int KiDrainRate;
-        public int KiDrainRateWithMastery;
-        private int KiDrainTimer;
+        public float KiDrainRate;
+        public float KiDrainRateWithMastery;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
@@ -74,13 +72,7 @@ namespace DBZMOD
                 }
                 else
                 {
-                    // player still has some ki, perform drain routine
-                    KiDrainTimer++;
-                    if (KiDrainTimer >= KI_DRAIN_TIMER_MAX)
-                    {
-                        modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
-                        KiDrainTimer = 0;
-                    }
+                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
                     KiDrainAddTimer++;
                     if (KiDrainAddTimer > 600)
                     {
@@ -184,8 +176,8 @@ namespace DBZMOD
         {
             int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
             int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
-            int kiDrainPerSecond = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRate;
-            int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
+            float kiDrainPerSecond = 60f * KiDrainRate;
+            float kiDrainPerSecondWithMastery = 60f * KiDrainRateWithMastery;
             int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
             string displayString = string.Empty;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
@@ -193,10 +185,10 @@ namespace DBZMOD
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, kiDrainPerSecond);
+                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, (int)Math.Round(kiDrainPerSecond, 0));
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}, {1}/s when mastered", displayString, kiDrainPerSecondWithMastery);
+                    displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
                 }
             }
             if (HealthDrainRate > 0)

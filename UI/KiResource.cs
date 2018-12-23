@@ -26,7 +26,6 @@ namespace DBZMOD.UI
             int width = (int)Math.Ceiling(dimensions.Width);
             int height = (int)Math.Ceiling(dimensions.Height);
             spriteBatch.Draw(_backgroundTexture, new Rectangle(point1.X, point1.Y, width, height), backgroundColor);
-        }
-        
+        }        
     }
 }

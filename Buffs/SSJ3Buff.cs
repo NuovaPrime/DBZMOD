@@ -12,11 +12,11 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2.0f;
-            SpeedMulti = 2.0f;
-            KiDrainBuffMulti = 2.1f;
-            KiDrainRate = 8;
-            KiDrainRateWithMastery = 4;
+            DamageMulti = 2.9f;
+            SpeedMulti = 2.9f;
+            KiDrainBuffMulti = 1.95f;
+            KiDrainRate = 2.65f;
+            KiDrainRateWithMastery = 1.325f;
             BaseDefenceBonus = 40;
             Description.SetDefault(AssembleTransBuffDescription() + "\n(Life drains when below 30% Max Ki)");
         }
@@ -26,7 +26,7 @@ namespace DBZMOD.Buffs
             bool isMastered = modPlayer.MasteryLevel3 >= 1f;
 
             KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
-            float kiQuotient = (float)modPlayer.GetKi() / modPlayer.OverallKiMax();
+            float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)
             {
                 HealthDrainRate = isMastered ? 10 : 20;

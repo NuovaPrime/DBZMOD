@@ -153,7 +153,7 @@ namespace DBZMOD.UI
 			
 		}
 
-        private static List<int> cleanAverageKi = new List<int>();
+        private static List<float> cleanAverageKi = new List<float>();
 		public override void Update(GameTime gameTime)
 		{            
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
