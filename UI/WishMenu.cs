@@ -53,7 +53,7 @@ namespace DBZMOD.UI
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
 
-            InitText(ref titleText, "I Wish for...", 0.66f, 6, 6, Color.Yellow, backPanelImage);
+            InitText(ref titleText, "I Wish for...", 0.66f, 8, 6, Color.Yellow, backPanelImage);
 
             InitText(ref wishText, wishTextValue, 0.8f, 10, 82, new Color(244, 203, 39), backPanelImage);
 
@@ -123,8 +123,10 @@ namespace DBZMOD.UI
         private void SelectButtonSkill(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            wishTextValue = "Skill";
-            descTextValue = "Wish for a powerful attack. What you get depends on\nhow many times you have wished this.\nWish limit = 3, Wishes left = " + modplayer.SkillWishesLeft;
+            wishTextValue = "Not Added Yet";
+            descTextValue = "";
+            //wishTextValue = "Skill";
+            //descTextValue = "Wish for a powerful attack. What you get depends on\nhow many times you have wished this.\nWish limit = 3, Wishes left = " + modplayer.SkillWishesLeft;
             WishSelection = WishSelectionID.Skill;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -134,7 +136,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Awakening";
-            descTextValue = "Wish to awaken your latent power,\n unlocks the next available form.\nWish limit = 3, Wishes left = " + modplayer.AwakeningWishesLeft;
+            descTextValue = "Wish to awaken your latent power,\nUnlocks the next available form.\nWish limit = 3, Wishes left = " + modplayer.AwakeningWishesLeft;
             WishSelection = WishSelectionID.Awakening;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -156,6 +158,40 @@ namespace DBZMOD.UI
                     Main.PlaySound(SoundID.MenuClose);
                 }
             }
+            if (WishSelection == WishSelectionID.Wealth)
+            {
+                DoWealthWish();
+                SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+            }
+            if (WishSelection == WishSelectionID.Immortality)
+            {
+                if(modplayer.ImmortalityWishesLeft > 0)
+                {
+                    DoImmortalityWish();
+                    SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                }
+                else
+                {
+                    Main.PlaySound(SoundID.MenuClose);
+                }
+            }
+            if (WishSelection == WishSelectionID.Genetic)
+            {
+                DoGeneticWish();
+                SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+            }
+            if (WishSelection == WishSelectionID.Awakening)
+            {
+                if (modplayer.AwakeningWishesLeft > 0)
+                {
+                    DoAwakeningWish();
+                    SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                }
+                else
+                {
+                    Main.PlaySound(SoundID.MenuClose);
+                }
+            }
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
@@ -167,6 +203,42 @@ namespace DBZMOD.UI
             modplayer.KiMax3 += 500;
             modplayer.PowerWishMulti += 1.10f;
             modplayer.PowerWishesLeft -= 1;
+            menuvisible = false;
+            modplayer.WishActive = false;
+        }
+        private void DoWealthWish()
+        {
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Player player = Main.LocalPlayer;
+            player.QuickSpawnItem(ItemID.PlatinumCoin, 10);
+            player.QuickSpawnItem(ItemID.LuckyCoin, 1);
+            menuvisible = false;
+            modplayer.WishActive = false;
+        }
+        private void DoImmortalityWish()
+        {
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Player player = Main.LocalPlayer;
+            modplayer.ImmortalityRevivesLeft += 3;
+            modplayer.ImmortalityWishesLeft -= 1;
+            menuvisible = false;
+            modplayer.WishActive = false;
+        }
+        private void DoGeneticWish()
+        {
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Player player = Main.LocalPlayer;
+            modplayer.playerTrait = null;
+            modplayer.ChooseTraitNoLimits();
+            menuvisible = false;
+            modplayer.WishActive = false;
+        }
+        private void DoAwakeningWish()
+        {
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Player player = Main.LocalPlayer;
+            modplayer.AwakeningWishesLeft -= 1;
+            modplayer.AwakeningFormUnlock();
             menuvisible = false;
             modplayer.WishActive = false;
         }
