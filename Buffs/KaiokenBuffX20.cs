@@ -15,7 +15,7 @@ namespace DBZMOD.Buffs
             KaioLightValue = 12f;
             DamageMulti = 1.8f;
             SpeedMulti = 1.8f;
-            HealthDrainRate = 64;
+            HealthDrainRate = 32;
             KiDrainBuffMulti = 1.8f;
             Description.SetDefault(AssembleTransBuffDescription());
         }
