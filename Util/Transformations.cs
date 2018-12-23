@@ -18,6 +18,7 @@ namespace Util
     public static class Transformations
     {
         public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
+        public const bool NO_COOLDOWN_MODE = false;
 
         private static Mod _modInstance;
         public static Mod modInstance
@@ -401,6 +402,9 @@ namespace Util
 
         public static bool BuffIsIn(BuffInfo buff, BuffInfo[] buffs) { return buffs.Contains(buff); }
 
+        public static bool IsAnySSJ(BuffInfo buff)
+        { return IsSSJ(buff) || IsLSSJ(buff) || IsAscended(buff); }
+
         // whether the buff Id is one of the "normal" SSJ States (1, 2, 3, G)
         public static bool IsSSJ(BuffInfo buff)
         { return SSJBuffs().Contains(buff); }
@@ -515,35 +519,35 @@ namespace Util
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (buff == SSJ1)
-                return !IsKaioken(player) && modPlayer.SSJ1Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.SSJ1Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ2)
-                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ3)
-                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJG)
-                return !IsKaioken(player) && !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ)
-                return !IsKaioken(player) && modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
-                return !IsKaioken(player) && modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             //if (buffId == SSJB)
             //  return !IsKaioken(player) && modPlayer.SSJBAchieved;
             if (buff == ASSJ)
-                return !IsKaioken(player) && (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == USSJ)
-                return !IsKaioken(player) && IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Kaioken)
-                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken3)
-                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment1 && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.KaioFragment1 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken10)
-                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment2 && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.KaioFragment2 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken20)
-                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken100)
-                return !IsSSJ(player) && !IsLSSJ(player) && !IsAscended(player) && modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
-            if (buff == SSJ1Kaioken)
-                return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
+            //if (buff == SSJ1Kaioken)
+               // return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == SPECTRUM)
                 return player.name == "Nuova";
             return false;
@@ -560,24 +564,38 @@ namespace Util
 
         public static void AddKaiokenExhaustion(Player player, int multiplier)
         {
+
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
+            if (!NO_COOLDOWN_MODE)
+            {
+                player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
+            }
             modPlayer.KaiokenTimer = 0f;
         }
 
-        public static void AddTransformationExhaustion(Player player) { player.AddBuff(TransformationExhaustion.GetBuffId(), 600); }
+        public static void AddTransformationExhaustion(Player player)
+        {
+            if(!NO_COOLDOWN_MODE)
+            {
+                player.AddBuff(TransformationExhaustion.GetBuffId(), 600);
+            }
+        }
 
         public static bool IsExhaustedFromTransformation(Player player) { return player.HasBuff(TransformationExhaustion.GetBuffId()); }
 
         public static bool IsTiredFromKaioken(Player player) { return player.HasBuff(KaiokenFatigue.GetBuffId()); }
 
         // wipes out all transformation buffs, requires them to be a part of the AllBuffs() union (it's a bunch of lists joined together).
-        public static void ClearAllTransformations(Player player, bool isPoweringDown, bool isOneStep)
+        public static void ClearAllTransformations(Player player, bool isPoweringDown, bool isOneStep, BuffInfo transformationToKeep = null)
         {
             foreach (BuffInfo buff in AllBuffs())
             {
                 // don't clear buffs the player doesn't have, obviously.
                 if (!player.HasBuff(buff.GetBuffId()))
+                    continue;
+
+                //dont clear the buff we want to keep
+                if (buff == transformationToKeep)
                     continue;
 
                 RemoveTransformation(player, buff.BuffKeyName, false);
@@ -595,6 +613,15 @@ namespace Util
             }
 
             player.ClearBuff(buff.GetBuffId());
+
+            if (IsAnySSJ(buff))
+            {
+                player.GetModPlayer<MyPlayer>().CurrentTransformations[0] = null;
+            }
+            else if (IsKaioken(buff))
+            {
+                player.GetModPlayer<MyPlayer>().CurrentTransformations[1] = null;
+            }
 
             // presumably if they're having their buff cleared, their audio needs killing.
             player.GetModPlayer<MyPlayer>().TransformationSoundInfo = SoundUtil.KillTrackedSound(player.GetModPlayer<MyPlayer>().TransformationSoundInfo);
@@ -632,29 +659,44 @@ namespace Util
         // actually handle transforming. Takes quite a few steps to clean up after itself and do all the things.
         public static void DoTransform(Player player, BuffInfo buff, Mod mod, bool isOneStep)
         {
-            BuffInfo currentTransformation = GetCurrentTransformation(player);
-
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            
-            bool isPoweringDown = buff == null || (currentTransformation == SSJ1Kaioken && buff.BuffKeyName == SSJ1.BuffKeyName);
+
+            bool isPoweringDown = buff == null;// || (currentTransformation == SSJ1Kaioken && buff.BuffKeyName == SSJ1.BuffKeyName);
 
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
-            if (buff == currentTransformation)
+            if (buff == modPlayer.CurrentTransformations[0] || buff == modPlayer.CurrentTransformations[1])
                 return;
+
+            BuffInfo transformationToKeep = null;
+
+            if (!isPoweringDown)
+            {
+                //if player tring to do a ssj transformation
+                if (IsAnySSJ(buff))
+                {
+                    //keep kaioken buff
+                    transformationToKeep = modPlayer.CurrentTransformations[1];
+                }
+                else if (IsKaioken(buff))//if player trying to do a kaioken transformation
+                {
+                    //keep ssj buff
+                    transformationToKeep = modPlayer.CurrentTransformations[0];
+                }
+            }
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
-            EndTransformations(player, isPoweringDown, isOneStep);
+            EndTransformations(player, isPoweringDown, isOneStep, transformationToKeep);
 
             // add whatever buff it is for a really long time.
             AddTransformation(player, buff.BuffKeyName, ABSURDLY_LONG_BUFF_DURATION, false);
         }
 
-        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep)
+        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep, BuffInfo transformationToKeep = null)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
-            ClearAllTransformations(player, isPoweringDown, isOneStep);
+            ClearAllTransformations(player, isPoweringDown, isOneStep, transformationToKeep);
             modPlayer.IsTransformationAnimationPlaying = false;
             modPlayer.TransformationFrameTimer = 0;
             modPlayer.TransformationSoundInfo = SoundUtil.KillTrackedSound(modPlayer.TransformationSoundInfo);             
@@ -665,6 +707,15 @@ namespace Util
         {
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
             player.AddBuff(buff.GetBuffId(), ABSURDLY_LONG_BUFF_DURATION, false);
+
+            if (IsAnySSJ(buff))
+            {
+                player.GetModPlayer<MyPlayer>().CurrentTransformations[0] = buff;
+            }
+            else if (IsKaioken(buff))
+            {
+                player.GetModPlayer<MyPlayer>().CurrentTransformations[1] = buff;
+            }
 
             if (!string.IsNullOrEmpty(buff.TransformationText))
                 CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
@@ -788,18 +839,18 @@ namespace Util
         // based on some conditions, figure out what the next "step" of kaioken should be.
         public static BuffInfo GetNextKaiokenStep(Player player)
         {
-            BuffInfo currentTransformation = GetCurrentTransformation(player);
+            BuffInfo currentTransformation = player.GetModPlayer<MyPlayer>().CurrentTransformations[1];
 
             // player is going into SSJ1 Kaioken, which is unique.
-            if (currentTransformation == SSJ1)
-                return SSJ1Kaioken;
+            //if (currentTransformation == SSJ1)
+                //return SSJ1Kaioken;
 
             // special handling for Kaioken from no transformed state.
             if (currentTransformation == null)
+            {
                 return Kaioken;
-
-            // the player is doing some kind of kaioken transformation step up.
-            if (IsKaioken(currentTransformation))
+            }
+            else //player in kaioken state
             {
                 for (int i = 0; i < KaiokenBuffs().Length; i++)
                 {
@@ -817,11 +868,11 @@ namespace Util
         // based on some conditions, figure out what the previous "step" of kaioken should be.
         public static BuffInfo GetPreviousKaiokenStep(Player player)
         {
-            BuffInfo currentTransformation = GetCurrentTransformation(player);
+            BuffInfo currentTransformation = player.GetModPlayer<MyPlayer>().CurrentTransformations[1];
 
             // player is going into SSJ1 Kaioken, which is unique.
-            if (currentTransformation == SSJ1Kaioken)
-                return SSJ1;
+            //if (currentTransformation == SSJ1Kaioken)
+                //return SSJ1;
 
             // the player is doing some kind of kaioken transformation step up.
             if (IsKaioken(currentTransformation))
