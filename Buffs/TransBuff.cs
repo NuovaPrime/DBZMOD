@@ -29,16 +29,21 @@ namespace DBZMOD
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
-        
+        public int BaseDefenceBonus;
+        public int PrecentDefenceBonus;
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-
+            
             KiDrainAdd(player);
             if(Transformations.IsKaioken(player))
             {
                 Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
             }
+
+            //give bonus base defense
+            player.statDefense += BaseDefenceBonus;
 
             // only neuter the life regen if this is a draining buff.
             if (HealthDrainRate > 0)
