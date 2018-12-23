@@ -1339,17 +1339,24 @@ namespace DBZMOD
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
-                // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-                if (IsAscendingTransformation())
+                if (Transformations.IsPlayerTransformed(player))
                 {
-                    if (CanAscend())
+                    // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
+                    if (IsAscendingTransformation())
                     {
-                        targetTransformation = Transformations.GetNextAscensionStep(player);
+                        if (CanAscend())
+                        {
+                            targetTransformation = Transformations.GetNextAscensionStep(player);
+                        }
+                    }
+                    else
+                    {
+                        targetTransformation = Transformations.GetNextTransformationStep(player);
                     }
                 }
-                else // player has just pressed the normal transform button one time, which serves two functions.
+                else
                 {
-                    targetTransformation = Transformations.GetNextTransformationStep(player);
+                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
                 }
             }
             else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
