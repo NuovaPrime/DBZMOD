@@ -14,6 +14,16 @@ namespace DBZMOD.Items.DragonBalls
     {
         public int WhichDragonBall = 0;
         public int? WorldDragonBallKey = null;
+
+        // the most important thing basically.
+        public override bool CloneNewInstances
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override void SetDefaults()
         {
             item.width = 20;
@@ -24,7 +34,7 @@ namespace DBZMOD.Items.DragonBalls
             item.useAnimation = 15;
             item.useTime = 10;
             item.useStyle = 1;
-            item.consumable = true;
+            item.consumable = true;            
         }
 
         public override TagCompound Save()
@@ -36,17 +46,30 @@ namespace DBZMOD.Items.DragonBalls
 
         public override bool OnPickup(Player player)
         {
+            SetDragonBallWorldKey(this, player);
+        }
+
+        public override void UpdateInventory(Player player)
+        {
+            SetDragonBallWorldKey(this, player);
+        }
+
+        public void SetDragonBallWorldKey(DragonBallItem item, Player player)
+        {
             // first thing's first, if this is a real dragon ball, we know it's legit cos it ain't a rock, and inerts don't spawn in world.
-            if (this.item.type != DBZMOD.instance.GetItem("StoneBall").item.type)
+            if (item.item.type != DBZMOD.instance.GetItem("StoneBall").item.type)
             {
+                // we already have a dragon ball key, abandon ship.
+                if (item.WorldDragonBallKey > 0)
+                    return;
                 // it's legit, set its dragon ball key
-                WorldDragonBallKey = DBZWorld.WorldDragonBallKey;
+                var world = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;                
+                
+                item.WorldDragonBallKey = world.WorldDragonBallKey;
 
                 // remove the dragon ball location from the world - it ain't there no more.            
-                DBZWorld.DragonBallLocations[WhichDragonBall] = new Point(-1, -1);
+                DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
             }
-
-            return base.OnPickup(player);
         }
 
         public override void Load(TagCompound tag)

@@ -17,28 +17,37 @@ namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
-        public static Point[] DragonBallLocations = new Point[7];
-        private static int? _worldDragonBallKey;
-        public static int WorldDragonBallKey
+        // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
+        public Point[] DragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
+
+        // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
+        // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
+        public int WorldDragonBallKey = 0;        
+
+        // helper utility method for snagging the currently loaded world.
+        public static DBZWorld GetWorld()
         {
-            get
-            {
-                if (!_worldDragonBallKey.HasValue)
-                {
-                    _worldDragonBallKey = Main.rand.Next(int.MaxValue);
-                }
-                return _worldDragonBallKey.Value;
-            }           
-            set
-            {
-                _worldDragonBallKey = value;
-            }
+            return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
         }
 
         public override TagCompound Save()
         {
             var dbtWorldTag = new TagCompound();
             dbtWorldTag.Add("WorldDragonBallKey", WorldDragonBallKey);
+            dbtWorldTag.Add("OneStarDragonBallX", DragonBallLocations[0].X);
+            dbtWorldTag.Add("OneStarDragonBallY", DragonBallLocations[0].Y);
+            dbtWorldTag.Add("TwoStarDragonBallX", DragonBallLocations[1].X);
+            dbtWorldTag.Add("TwoStarDragonBallY", DragonBallLocations[1].Y);
+            dbtWorldTag.Add("ThreeStarDragonBallX", DragonBallLocations[2].X);
+            dbtWorldTag.Add("ThreeStarDragonBallY", DragonBallLocations[2].Y);
+            dbtWorldTag.Add("FourStarDragonBallX", DragonBallLocations[3].X);
+            dbtWorldTag.Add("FourStarDragonBallY", DragonBallLocations[3].Y);
+            dbtWorldTag.Add("FiveStarDragonBallX", DragonBallLocations[4].X);
+            dbtWorldTag.Add("FiveStarDragonBallY", DragonBallLocations[4].Y);
+            dbtWorldTag.Add("SixStarDragonBallX", DragonBallLocations[5].X);
+            dbtWorldTag.Add("SixStarDragonBallY", DragonBallLocations[5].Y);
+            dbtWorldTag.Add("SevenStarDragonBallX", DragonBallLocations[6].X);
+            dbtWorldTag.Add("SevenStarDragonBallY", DragonBallLocations[6].Y);
             return dbtWorldTag;
         }
 
@@ -46,12 +55,26 @@ namespace DBZMOD
         {
             var dbKey = tag.GetInt("WorldDragonBallKey");
             WorldDragonBallKey = dbKey;
-            DebugUtil.Log(string.Format("World dragon ball key is set to {0}", dbKey));
+            var oneStarPoint = new Point(tag.GetInt("OneStarDragonBallX"), tag.GetInt("OneStarDragonBallY"));
+            var twoStarPoint = new Point(tag.GetInt("TwoStarDragonBallX"), tag.GetInt("TwoStarDragonBallY"));
+            var threeStarPoint = new Point(tag.GetInt("ThreeStarDragonBallX"), tag.GetInt("ThreeStarDragonBallY"));
+            var fourStarPoint = new Point(tag.GetInt("FourStarDragonBallX"), tag.GetInt("FourStarDragonBallY"));
+            var fiveStarPoint = new Point(tag.GetInt("FiveStarDragonBallX"), tag.GetInt("FiveStarDragonBallY"));
+            var sixStarPoint = new Point(tag.GetInt("SixStarDragonBallX"), tag.GetInt("SixStarDragonBallY"));
+            var sevenStarPoint = new Point(tag.GetInt("SevenStarDragonBallX"), tag.GetInt("SevenStarDragonBallY"));
+            DragonBallLocations[0] = oneStarPoint;
+            DragonBallLocations[1] = twoStarPoint;
+            DragonBallLocations[2] = threeStarPoint;
+            DragonBallLocations[3] = fourStarPoint;
+            DragonBallLocations[4] = fiveStarPoint;
+            DragonBallLocations[5] = sixStarPoint;
+            DragonBallLocations[6] = sevenStarPoint;
             base.Load(tag);
         }
 
         private static bool GenerateGohanHouse = false;
         private static bool IsGohanHouseCleaned = false;
+        public static bool IsDragonBallPlacementDone = false;
         public static int GohanHouseStartPositionX = 0;
         public static int GohanHouseStartPositionY = 0;
         public override void ResetNearbyTileEffects()
@@ -166,7 +189,7 @@ namespace DBZMOD
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House Validation", CleanupGohanHouse));
             }
 
-            tasks.Add(new PassLegacy("[DBZMOD] Placing dragon balls", PlaceDragonballs));
+            tasks.Insert(tasks.Count - 1, new PassLegacy("[DBZMOD] Placing dragon balls", PlaceDragonballs));
         }
 
         public void AddGohanHouse(GenerationProgress progress = null)
@@ -216,23 +239,32 @@ namespace DBZMOD
 
         public void PlaceDragonballs(GenerationProgress progress = null)
         {
-            string PlacingDragonballs = "Placing Dragon Balls";
-            if (progress != null)
+            try
             {
-                progress.Message = PlacingDragonballs;
-                progress.Set(0.25f);
+                bool Success = AttemptToPlaceDragonballsInWorld(progress);
+                if (Success)
+                {
+                    IsDragonBallPlacementDone = true;
+                }
             }
-            AttemptToPlaceDragonballsInWorld();
+            catch (Exception exception)
+            {
+                Main.NewText("Oh no, an error happened [PlacingDragonballs]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
+                ErrorLogger.Log(exception);
+            }
         }
 
         bool MakeGohanHouse(GenerationProgress progress)
-        {
+        {            
             string GohanHouseGen = "Creating the house of a legend.";
             if (progress != null)
             {
                 progress.Message = GohanHouseGen;
                 progress.Set(0.25f);
             }
+
+            // before we do anything, create a new World Key for this world
+            WorldDragonBallKey = Main.rand.Next(1, int.MaxValue);
 
             GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
             for (var Attempts = 0; Attempts < 10000; Attempts++)
@@ -251,21 +283,24 @@ namespace DBZMOD
                     }
                     if (Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].active())
                     {
-                        if (Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0)
+                        if (Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0) { 
                             GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
-                        goto GenerateBuild;
+                        }
+                        else
+                        {
+                            goto GenerateBuild;
+                        }                        
                     }
                 }
             }
             goto GenerateBuild;
-            return false;
 
         GenerateBuild:
-            GenerateGohanStructureWithByteArrays();
+            GenerateGohanStructureWithByteArrays(true);
             return true;
         }
 
-        public void GenerateGohanStructureWithByteArrays()
+        public void GenerateGohanStructureWithByteArrays(bool isFirstPass)
         {
 
             // if we're here it means we are ready to generate our structure
@@ -281,8 +316,11 @@ namespace DBZMOD
                     switch (GohanHouseTiles[Y, X])
                     {
                         case 0:
-                            tile.type = 0;
-                            tile.active(false);
+                            if (isFirstPass)
+                            {
+                                tile.type = 0;
+                                tile.active(false);
+                            }
                             break;
                         case 1:
                             tile.type = TileID.GrayStucco;
@@ -360,7 +398,6 @@ namespace DBZMOD
                         // nullify tiles?
                         WorldGen.KillTile(offsetX, offsetY);
                         tile = Framing.GetTileSafely(offsetX, offsetY);
-                        Main.NewText("Test");
                     }
                     switch (GohanHouseObjects[Y, X])
                     {
@@ -386,7 +423,10 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
                             break;
                         case 7:
-                            TryPlacingDragonball(4, offsetX, offsetY);
+                            if (!isFirstPass)
+                            {
+                                TryPlacingDragonball(4, offsetX, offsetY);
+                            }
                             break;
                     }
                 }
@@ -428,7 +468,7 @@ namespace DBZMOD
                 progress.Set(0.50f);
             }
 
-            GenerateGohanStructureWithByteArrays();
+            GenerateGohanStructureWithByteArrays(false);
             return true;
         }
 
@@ -450,7 +490,7 @@ namespace DBZMOD
         {
             int dbIndex = whichDragonball - 1;
             var coordinates = DragonBallLocations[dbIndex];
-            if (coordinates == null)
+            if (coordinates == new Point(-1, -1))
                 return false;
             var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
             if (dbTile.type == (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball)))
@@ -507,12 +547,20 @@ namespace DBZMOD
         public bool InventoryContainsDragonball(int whichDragonball, Item[] inventory)
         {
             for (var i = 0; i < inventory.Length; i++)
-            {
+            {                
                 var item = inventory[i];
-                if (item.type == mod.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball)).item.type)
-                    return true;
+                if (item == null)
+                    continue;
 
-                
+                if (item.modItem == null)
+                    continue;
+
+                if (!(item.modItem is DragonBallItem))
+                    continue;
+
+                var dbItem = item.modItem as DragonBallItem;
+                if (dbItem.WhichDragonBall == whichDragonball && dbItem.WorldDragonBallKey == WorldDragonBallKey)
+                    return true;                
             }
             return false;
         }
@@ -546,36 +594,47 @@ namespace DBZMOD
 
             int dbIndex = whichDragonball - 1;
             var dbTile = Framing.GetTileSafely(offsetX, offsetY);
-            dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile");
+            dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
             dbTile.active(true);
+            dbTile.halfBrick(false);
+            dbTile.slope(0);
             DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
             return true;
         }
 
-        public void AttemptToPlaceDragonballsInWorld()
+        public bool AttemptToPlaceDragonballsInWorld(GenerationProgress progress = null)
         {
+            string PlacingDragonballs = "Placing Dragon Balls";
+            if (progress != null)
+            {
+                progress.Message = PlacingDragonballs;
+                progress.Set(0.25f);
+            }
+
             for (int i = 1; i <= 7; i++)
             {
                 Point safeCoordinates = GetSafeDragonBallCoordinates();
                 TryPlacingDragonball(i, safeCoordinates.X, safeCoordinates.Y);
             }
+            return true;
         }
 
         public Point GetSafeDragonBallCoordinates()
         {
-            var underworldHeight = (int)Math.Ceiling(WorldGen.rockLayerLow / 16f);
-            var surfaceHeight = (int)Math.Ceiling(WorldGen.worldSurfaceLow / 16f);
+            var underworldHeight = (int)Math.Ceiling(WorldGen.rockLayerHigh);
+            var surfaceHeight = (int)Math.Ceiling(WorldGen.worldSurfaceLow);
             DebugUtil.Log(string.Format("Trying to find safe dragon ball location. Underworld at {0}, surface at {1}.", underworldHeight, surfaceHeight));
             bool IsSafeTile = false;
             while (!IsSafeTile)
             {                
                 var randX = Main.rand.Next(0, Main.maxTilesX);
                 var randY = Main.rand.Next(surfaceHeight, underworldHeight);
-                var tile = Main.tile[randX, randY];
-                if (tile.active() && (Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]) && !Main.tile[randX, randY - 1].active())
+                var tile = Framing.GetTileSafely(randX, randY);
+                var tileAbove = Framing.GetTileSafely(randX, randY - 1);
+                if (tile.active() && (Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]) && !tileAbove.active())
                 {
                     IsSafeTile = true;
-                    return new Point(randX, randY);
+                    return new Point(randX, randY - 1);
                 }
             }
             

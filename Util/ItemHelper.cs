@@ -101,12 +101,12 @@ namespace DBZMOD
                 if (item.modItem == null)
                     continue;
 
-                if (!item.modItem.GetType().IsAssignableFrom(typeof(DragonBallItem)))
+                if (!(item.modItem is DragonBallItem))
                     continue;
 
                 var dbItem = item.modItem as DragonBallItem;
-
-                if (dbItem.WorldDragonBallKey != DBZWorld.WorldDragonBallKey)
+                var dbWorld = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+                if (dbItem.WorldDragonBallKey != dbWorld.WorldDragonBallKey)
                 {
                     DebugUtil.Log("Illegitimate Dragon ball loaded.");
                     SwapDragonBallWithStoneBall(inventory, dbItem.WorldDragonBallKey.Value, dbItem.WhichDragonBall);
@@ -130,13 +130,16 @@ namespace DBZMOD
             DebugUtil.Log("Stone ball loaded and matches the world key.");
             int dbKey = WorldDragonBallKey;
             int whichDball = WhichDragonBall;
-            int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);            
+            int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
+            // something went wrong, abort.
+            if (dbSlot == -1)
+                return;
             var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball);
-            var newDragonBall = Main.item[ItemHelper.GetItemTypeFromName(dbType)].DeepClone();
-            var dbData = newDragonBall.modItem as DragonBallItem;
+            var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball)).Clone();
+            var dbData = newDragonBall as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
             dbData.WhichDragonBall = whichDball;
-            inventory[dbSlot] = newDragonBall;
+            inventory[dbSlot] = newDragonBall.item;
         }
 
         public static void SwapDragonBallWithStoneBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
@@ -146,11 +149,14 @@ namespace DBZMOD
             int dbKey = WorldDragonBallKey;
             int whichDball = WhichDragonBall;
             int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
-            var newStoneBall = Main.item[ItemHelper.GetItemTypeFromName("StoneBall")].DeepClone();
-            var dbData = newStoneBall.modItem as DragonBallItem;
+            // something went wrong, abort.
+            if (dbSlot == -1)
+                return;
+            var newStoneBall = DBZMOD.instance.GetItem("StoneBall").Clone();
+            var dbData = newStoneBall as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
             dbData.WhichDragonBall = whichDball;
-            inventory[dbSlot] = newStoneBall;
+            inventory[dbSlot] = newStoneBall.item;
         }
     }
 }

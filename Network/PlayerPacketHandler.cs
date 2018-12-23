@@ -84,7 +84,8 @@ namespace Network
         public void SendDragonBallKeyToPlayer(int toWho)
         {
             ModPacket packet = GetPacket(RequestDragonBallKeySync, 256);
-            packet.Write(DBZWorld.WorldDragonBallKey);
+            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            packet.Write(dbWorld.WorldDragonBallKey);
             packet.Send(toWho, 256);
         }
 
