@@ -1010,7 +1010,7 @@ namespace DBZMOD
             }
             if (Transformations.IsGodlike(player))
             {
-                drawInfo.hairColor = new Color(255, 10, 205);
+                drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
             }
