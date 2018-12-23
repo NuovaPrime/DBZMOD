@@ -596,10 +596,13 @@ namespace DBZMOD
             if (IsDragonBallInventoried(whichDragonball))
                 return true;
 
+
+            //var dbTile = Framing.GetTileSafely(offsetX, offsetY);
+            //dbTile.type = (ushort)DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
+            //dbTile.active(true);
+            WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
+
             int dbIndex = whichDragonball - 1;
-            var dbTile = Framing.GetTileSafely(offsetX, offsetY);
-            dbTile.type = (ushort)DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
-            dbTile.active(true);            
             DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
             return true;
         }
