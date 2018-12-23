@@ -18,6 +18,7 @@ namespace Util
     public static class Transformations
     {
         public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
+        public const bool NO_COOLDOWN_MODE = false;
 
         private static Mod _modInstance;
         public static Mod modInstance
@@ -563,12 +564,22 @@ namespace Util
 
         public static void AddKaiokenExhaustion(Player player, int multiplier)
         {
+
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
+            if (!NO_COOLDOWN_MODE)
+            {
+                player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
+            }
             modPlayer.KaiokenTimer = 0f;
         }
 
-        public static void AddTransformationExhaustion(Player player) { player.AddBuff(TransformationExhaustion.GetBuffId(), 600); }
+        public static void AddTransformationExhaustion(Player player)
+        {
+            if(!NO_COOLDOWN_MODE)
+            {
+                player.AddBuff(TransformationExhaustion.GetBuffId(), 600);
+            }
+        }
 
         public static bool IsExhaustedFromTransformation(Player player) { return player.HasBuff(TransformationExhaustion.GetBuffId()); }
 
