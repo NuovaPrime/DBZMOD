@@ -75,6 +75,7 @@ namespace DBZMOD
         public int FormUnlockChance;
         public int OverallFormUnlockChance;
         public bool IsOverloading;
+        public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -1239,7 +1240,7 @@ namespace DBZMOD
         // by default, traverses up a step in transform - but starts off at whatever you've selected (letting you go straight to SSJ2 or LSSJ2 for example) in menu
         public bool IsTransformingUpOneStep()
         {
-            return Transform.JustPressed && !EnergyCharge.Current;
+            return Transform.JustPressed;
         }
 
         // by default simply clears all transformation buffs from the user, including kaioken.
@@ -1274,24 +1275,18 @@ namespace DBZMOD
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
-                // if the player is already transformed, determine what the next step is.
-                if (Transformations.IsPlayerTransformed(player))
+                // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
+                if (IsAscendingTransformation())
+                {
+                    if (CanAscend())
+                    {
+                        targetTransformation = Transformations.GetNextAscensionStep(player);
+                    }
+                }
+                else // player has just pressed the normal transform button one time, which serves two functions.
                 {
                     targetTransformation = Transformations.GetNextTransformationStep(player);
                 }
-                else
-                {
-                    // otherwise set them to transform to whatever their selected transformation is.
-                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
-                }
-            }
-            // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-            else if (IsAscendingTransformation())
-            {
-                if (!CanAscend())
-                    return;
-
-                targetTransformation = Transformations.GetNextAscensionStep(player);
             }
             else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
             {
@@ -1316,8 +1311,8 @@ namespace DBZMOD
             if (KaiokenKey.JustPressed)
             {
                 // no possible combination of kaioken can be attained in your current state.
-                if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
-                    return;
+                //if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
+                    //return;
                 // otherwise get the next kaioken step (or the first one, if untransformed)
                 targetTransformation = Transformations.GetNextKaiokenStep(player);
             }
