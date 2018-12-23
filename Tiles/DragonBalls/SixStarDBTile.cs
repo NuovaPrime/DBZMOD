@@ -14,6 +14,9 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = false;
+            Main.tileSolidTop[Type] = false;
+            Main.tileNoAttach[Type] = true;
+            Main.tileTable[Type] = false;
             Main.tileSpelunker[Type] = true;
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
@@ -22,14 +25,14 @@ namespace DBZMOD.Tiles.DragonBalls
             Main.tileMergeDirt[Type] = false;
             Main.tileShine[Type] = 1150;
             Main.tileShine2[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.Origin = new Point16(0, 0);
-            TileObjectData.newTile.Style = 0;
-            TileObjectData.newTile.RandomStyleRange = 0;
-            TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
-            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.newTile.CoordinateWidth = 16;
+            TileObjectData.newTile.Width = 1;
+            TileObjectData.newTile.Height = 1;
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
+            TileObjectData.newTile.Origin = new Point16(0, 0);
+            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("6 Star Dragon Ball");

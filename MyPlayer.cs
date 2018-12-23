@@ -1035,6 +1035,70 @@ namespace DBZMOD
 
         }
 
+        public string ChooseTraitNoLimits()
+        {
+            var TraitChooser = new WeightedRandom<string>();
+            TraitChooser.Add("Prodigy", 1);
+            TraitChooser.Add("Legendary", 1);
+            return playerTrait = TraitChooser;
+
+        }
+
+        public void AwakeningFormUnlock()
+        {
+            if(!SSJ1Achieved)
+            {
+                Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
+                SSJ1Achieved = true;
+                IsTransforming = true;
+                SSJTransformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
+            {
+                Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
+                SSJ2Achieved = true;
+                IsTransforming = true;
+                SSJ2Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ1Achieved && IsPlayerLegendary())
+            {
+                Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
+                LSSJAchieved = true;
+                IsTransforming = true;
+                LSSJTransformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ2Achieved && !SSJ3Achieved)
+            {
+                Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
+                SSJ3Achieved = true;
+                IsTransforming = true;
+                SSJ3Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+
+            if(LSSJAchieved && !LSSJ2Achieved)
+            {
+                Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
+                LSSJ2Achieved = true;
+                IsTransforming = true;
+                LSSJ2Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
+                lssj2timer = 0;
+                Transformations.EndTransformations(player, true, false);
+            }
+        }
+
         public object LSSJ2TextSelect()
         {
             switch (Main.rand.Next((4)))
@@ -1700,11 +1764,16 @@ namespace DBZMOD
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             bool isAnyBossAlive = false;
+            bool isGolemAlive = false;
             foreach (NPC npc in Main.npc)
             {
                 if (npc.boss && npc.active)
                 {
                     isAnyBossAlive = true;
+                }
+                if(npc.type == NPCID.Golem)
+                {
+                    isGolemAlive = true;
                 }
             }
             if (zenkaiCharm && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
@@ -1768,7 +1837,7 @@ namespace DBZMOD
             }
 
 
-            if (isAnyBossAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
+            if (isGolemAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -1779,6 +1848,14 @@ namespace DBZMOD
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
+                return false;
+            }
+
+            if (ImmortalityRevivesLeft > 0)
+            {
+                int healamount = player.statLife + (player.statLifeMax + player.statLifeMax2);
+                player.HealEffect(healamount);
+                ImmortalityRevivesLeft -= 1;
                 return false;
             }
 
