@@ -13,10 +13,10 @@ namespace DBZMOD.Buffs
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
             KaioLightValue = 7f;
-            DamageMulti = 2f;
-            SpeedMulti = 2f;
+            DamageMulti = 1.4f;
+            SpeedMulti = 1.4f;
             HealthDrainRate = 32;
-            KiDrainBuffMulti = 1.5f;
+            KiDrainBuffMulti = 1.4f;
             Description.SetDefault(AssembleTransBuffDescription());
         }
     }

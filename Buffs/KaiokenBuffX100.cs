@@ -6,7 +6,6 @@ namespace DBZMOD.Buffs
 {
     public class KaiokenBuffX100 : TransBuff
     {
-        private Player player;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Kaioken x100");
@@ -14,10 +13,10 @@ namespace DBZMOD.Buffs
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
             KaioLightValue = 10f;
-            DamageMulti = 5f;
-            SpeedMulti = 5f;
-            HealthDrainRate = 380;
-            KiDrainBuffMulti = 4f;
+            DamageMulti = 2f;
+            SpeedMulti = 2f;
+            HealthDrainRate = 80;
+            KiDrainBuffMulti = 2f;
             Description.SetDefault(AssembleTransBuffDescription());
         }
     }
