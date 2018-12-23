@@ -1056,7 +1056,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            if(SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
+            else if (SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 SSJ2Achieved = true;
@@ -1066,7 +1066,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            if(SSJ1Achieved && IsPlayerLegendary())
+            else if (SSJ1Achieved && IsPlayerLegendary())
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 LSSJAchieved = true;
@@ -1076,7 +1076,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            if(SSJ2Achieved && !SSJ3Achieved)
+            else if (SSJ2Achieved && !SSJ3Achieved)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 SSJ3Achieved = true;
@@ -1086,8 +1086,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-
-            if(LSSJAchieved && !LSSJ2Achieved)
+            else if(LSSJAchieved && !LSSJ2Achieved)
             {
                 Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
                 LSSJ2Achieved = true;
