@@ -12,9 +12,9 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2.1f;
+            DamageMulti = 1.90f;
             SpeedMulti = 0.9f;
-            KiDrainRate = 7;
+            KiDrainRate = 5;
             KiDrainBuffMulti = 1.6f;
             Description.SetDefault(AssembleTransBuffDescription());
         }

@@ -12,8 +12,8 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 1.75f;
-            SpeedMulti = 1.75f;
+            DamageMulti = 1.50f;
+            SpeedMulti = 1.50f;
             KiDrainBuffMulti = 1.3f;
             KiDrainRate = 3;
             KiDrainRateWithMastery = 1;
