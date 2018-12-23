@@ -202,6 +202,8 @@
     <Compile Include="Items\Armor\ArmorSets\RadiantVisor.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanScoutPants.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanScoutScalemale.cs" />
     <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
     <Compile Include="Items\Armor\CobaltCrown.cs" />
     <Compile Include="Items\Armor\HallowedFedora.cs" />
