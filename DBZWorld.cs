@@ -580,6 +580,10 @@ namespace DBZMOD
 
         public bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY)
         {
+            // DEBUG REMOVE THIS - only spawn dragon ball #4 so it's easier to figure out why it's breaking.
+            if (whichDragonball != 4)
+                return true;
+
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonball))
                 return true;
@@ -594,10 +598,8 @@ namespace DBZMOD
 
             int dbIndex = whichDragonball - 1;
             var dbTile = Framing.GetTileSafely(offsetX, offsetY);
-            dbTile.type = (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
-            dbTile.active(true);
-            dbTile.halfBrick(false);
-            dbTile.slope(0);
+            dbTile.type = (ushort)DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
+            dbTile.active(true);            
             DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
             return true;
         }

@@ -47,6 +47,7 @@ namespace DBZMOD.Items.DragonBalls
         public override bool OnPickup(Player player)
         {
             SetDragonBallWorldKey(this, player);
+            return true;
         }
 
         public override void UpdateInventory(Player player)

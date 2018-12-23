@@ -11,6 +11,8 @@ namespace DBZMOD.Tiles.DragonBalls
 {
     public class FourStarDBTile : ModTile
     {
+        private int frameX = 0;
+        private int frameY = 0;
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = false;
@@ -26,12 +28,24 @@ namespace DBZMOD.Tiles.DragonBalls
             TileObjectData.newTile.Origin = new Point16(0, 0);
             TileObjectData.newTile.Style = 0;
             TileObjectData.newTile.RandomStyleRange = 0;
+            TileObjectData.newTile.Height = 1;
+            TileObjectData.newTile.Width = 1;
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
+            TileObjectData.newTile.CoordinateWidth = 16;
+            TileObjectData.newTile.StyleHorizontal = false;
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("4 Star Dragon Ball");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
+        }
+
+        public override bool CanPlace(int i, int j)
+        {
+            return base.CanPlace(i, j);
         }
 
         public override bool Drop(int i, int j)
