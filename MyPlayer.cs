@@ -750,12 +750,39 @@ namespace DBZMOD
             // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
             CheckSyncState();
 
+            // Handles nerfing player defense when in Kaioken States
+            HandleKaiokenDefenseDebuff();
+
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
 
             // try to update positional audio?
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+        }
+
+        public void HandleKaiokenDefenseDebuff()
+        {
+            if (player.HasBuff(Transformations.Kaioken100.GetBuffId()))
+            {
+                player.statDefense = (int)Math.Ceiling(player.statDefense * 0.25f);
+            }
+            else if (player.HasBuff(Transformations.Kaioken20.GetBuffId()))
+            {
+                player.statDefense = (int)Math.Ceiling(player.statDefense * 0.40f);
+            }
+            else if (player.HasBuff(Transformations.Kaioken10.GetBuffId()))
+            {
+                player.statDefense = (int)Math.Ceiling(player.statDefense * 0.55f);
+            }
+            else if (player.HasBuff(Transformations.Kaioken3.GetBuffId()))
+            {
+                player.statDefense = (int)Math.Ceiling(player.statDefense * 0.70f);
+            }
+            else if (player.HasBuff(Transformations.Kaioken.GetBuffId()))
+            {
+                player.statDefense = (int)Math.Ceiling(player.statDefense * 0.85f);
+            }            
         }
 
         public void ThrottleKi()
