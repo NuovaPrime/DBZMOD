@@ -16,6 +16,7 @@ using Util;
 using Enums;
 using Network;
 using DBZMOD.Items.DragonBalls;
+using System.Linq;
 
 namespace DBZMOD
 {
@@ -251,6 +252,9 @@ namespace DBZMOD
         public bool SevenStarDBNearby = false;
         public bool AllDBNearby = false;
         public bool WishActive = false;
+        public bool IsHoldingDragonRadarMk1 = false;
+        public bool IsHoldingDragonRadarMk2 = false;
+        public bool IsHoldingDragonRadarMk3 = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
@@ -351,7 +355,7 @@ namespace DBZMOD
         private bool WasFlying = false;
 
         public override void PostUpdate()
-        {            
+        {
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2timer++;
@@ -662,7 +666,7 @@ namespace DBZMOD
                     ExpandedSentriesEffects(player);
                 }
             }
-            if(PowerWishMulti > 1f)
+            if (PowerWishMulti > 1f)
             {
                 player.meleeDamage *= PowerWishMulti;
                 player.rangedDamage *= PowerWishMulti;
@@ -696,15 +700,15 @@ namespace DBZMOD
             {
                 blackFusionIncrease = 1f;
             }
-            if(OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
+            if (OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
             {
                 AllDBNearby = true;
             }
-            if(AllDBNearby)
+            if (AllDBNearby)
             {
                 Main.NewText("All DB Nearby");
             }
-            if(WishActive)
+            if (WishActive)
             {
                 Main.NewText("Wish is active");
             }
@@ -726,7 +730,7 @@ namespace DBZMOD
             {
                 IsFlying = false;
             }
-            
+
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
             FlightSystem.Update(player);
 
@@ -751,7 +755,7 @@ namespace DBZMOD
 
             // try to update positional audio?
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
-        }        
+        }
 
         public void ThrottleKi()
         {
@@ -910,7 +914,7 @@ namespace DBZMOD
                 NetworkHelper.playerSync.SendChangedIsTransformationAnimationPlaying(256, player.whoAmI, player.whoAmI, IsTransformationAnimationPlaying);
                 SyncIsTransformationAnimationPlaying = IsTransformationAnimationPlaying;
             }
-            
+
             if (SyncChargeMoveSpeed != chargeMoveSpeed)
             {
                 NetworkHelper.playerSync.SendChangedChargeMoveSpeed(256, player.whoAmI, player.whoAmI, chargeMoveSpeed);
@@ -1006,7 +1010,7 @@ namespace DBZMOD
             }
             if (Transformations.IsGodlike(player))
             {
-                drawInfo.hairColor = new Color(183, 25, 46);
+                drawInfo.hairColor = new Color(255, 10, 205);
                 drawInfo.hairShader = 1;
                 player.eyeColor = Color.Red;
             }
@@ -1046,7 +1050,7 @@ namespace DBZMOD
 
         public void AwakeningFormUnlock()
         {
-            if(!SSJ1Achieved)
+            if (!SSJ1Achieved)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                 SSJ1Achieved = true;
@@ -1086,7 +1090,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            else if(LSSJAchieved && !LSSJ2Achieved)
+            else if (LSSJAchieved && !LSSJ2Achieved)
             {
                 Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
                 LSSJ2Achieved = true;
@@ -1382,7 +1386,7 @@ namespace DBZMOD
             {
                 // no possible combination of kaioken can be attained in your current state.
                 //if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
-                    //return;
+                //return;
                 // otherwise get the next kaioken step (or the first one, if untransformed)
                 targetTransformation = Transformations.GetNextKaiokenStep(player);
             }
@@ -1427,8 +1431,8 @@ namespace DBZMOD
 
         public float GetNextSpeedMultiplier()
         {
-            if (bonusSpeedMultiplier == 0f)            
-                    return 0.25f;
+            if (bonusSpeedMultiplier == 0f)
+                return 0.25f;
             else if (bonusSpeedMultiplier == 0.25f)
                 return 0.5f;
             else if (bonusSpeedMultiplier == 0.5f)
@@ -1436,7 +1440,7 @@ namespace DBZMOD
             else if (bonusSpeedMultiplier == 0.75f)
                 return 1.0f;
             else
-                return 0f;            
+                return 0f;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -1528,7 +1532,7 @@ namespace DBZMOD
 
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
-            if(QuickKi.JustPressed)
+            if (QuickKi.JustPressed)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
@@ -1544,7 +1548,7 @@ namespace DBZMOD
                 // determine base regen rate and bonuses
                 AddKi(KiChargeRate + ScarabChargeRateAdd);
 
-                
+
                 // slow down the player a bunch - only when not flying
                 if ((IsLeftHeld || IsRightHeld) && !IsFlying)
                 {
@@ -1609,8 +1613,8 @@ namespace DBZMOD
             {
                 // check to see if an aura sound is playing and skip this if it would overlay.
                 // this handles killing other player's sounds if the local player has started any.
-                bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);              
-              
+                bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);
+
                 // DebugUtil.Log(string.Format("Player is charging and shouldPlaySound is {0}", shouldPlaySound));
                 if (shouldPlaySound)
                 {
@@ -1633,7 +1637,7 @@ namespace DBZMOD
             }
 
             if (IsCharging && !WasCharging)
-            { 
+            {
                 if (!Transformations.IsPlayerTransformed(player))
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
@@ -1641,7 +1645,7 @@ namespace DBZMOD
                 SoundUtil.PlayCustomSound("Sounds/EnergyChargeStart", player, .7f);
             }
         }
-    
+
         public MyPlayer() : base()
         {
         }
@@ -1758,6 +1762,9 @@ namespace DBZMOD
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
             AllDBNearby = false;
+            IsHoldingDragonRadarMk1 = false;
+            IsHoldingDragonRadarMk2 = false;
+            IsHoldingDragonRadarMk3 = false;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
@@ -1770,7 +1777,7 @@ namespace DBZMOD
                 {
                     isAnyBossAlive = true;
                 }
-                if(npc.type == NPCID.Golem)
+                if (npc.type == NPCID.Golem)
                 {
                     isGolemAlive = true;
                 }
@@ -1952,7 +1959,7 @@ namespace DBZMOD
 
                 tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
                 tDust.noGravity = true;
-            }            
+            }
         }
         public void FireAura()
         {
@@ -2067,9 +2074,73 @@ namespace DBZMOD
                 bool WasSSJKK = WasTransformed;
                 Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
             }
-            if (WasTransformed && !IsTransformed) { 
+            if (WasTransformed && !IsTransformed) {
                 Transformations.AddTransformationExhaustion(player);
             }
+        }
+
+        public static List<float> DragonRadarVarianceAbsorber = new List<float>();
+        public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate(PlayerDrawInfo drawInfo) {
+
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            Mod mod = DBZMOD.instance;
+            if (drawInfo.shadow != 0f)
+            {
+                return;
+            }
+            // 5 degrees, 25 degrees, and 125 degrees. The first dragon ball radar is real bad.
+            var radarAccuracy = modPlayer.IsHoldingDragonRadarMk3 ? 90f : (modPlayer.IsHoldingDragonRadarMk2 ? 180f : 360f);
+            var radarVariance = Main.rand.NextFloat(0, radarAccuracy) - (radarAccuracy / 2f);
+            DragonRadarVarianceAbsorber.Add(radarVariance);
+            if (DragonRadarVarianceAbsorber.Count > 15)
+            {
+                DragonRadarVarianceAbsorber.RemoveRange(0, DragonRadarVarianceAbsorber.Count - 15);
+            }
+            var averageVariance = DragonRadarVarianceAbsorber.Average();
+
+            Point closestLocation = new Point(-1, -1);
+            float closestDistance = float.MaxValue;
+            for(int i = 0; i < 7; i++)
+            {
+                var location = DBZWorld.GetWorld().DragonBallLocations[i];
+                if (location == new Point(-1, -1))
+                    continue;
+                var coordVector = location.ToVector2() * 16f;
+                var distance = Vector2.Distance(coordVector, drawPlayer.Center + Vector2.UnitY * -120f);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestLocation = location;
+                }
+            }
+
+            // player is too close to the dragon ball.
+            if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 2560f : (modPlayer.IsHoldingDragonRadarMk2 ? 1280f : 640f)))
+            {
+                averageVariance += (float)(Main.time % 360) * 20f;
+            }
+
+            // crappy variance just from having the thing because wiggling doesn't make it crappy enough
+            var qualityVariance = (modPlayer.IsHoldingDragonRadarMk3 ? 22.5f : (modPlayer.IsHoldingDragonRadarMk2 ? 45f : 90f));
+            averageVariance += Main.rand.NextFloat(-qualityVariance / 2f, qualityVariance / 2f);
+            Vector2 translationVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
+            float translationRadians = translationVector.ToRotation();
+            translationRadians += MathHelper.ToRadians(averageVariance);
+            var yOffset = -120;
+            Main.playerDrawData.Add(DragonRadarDrawData(drawInfo, "Items/DragonBalls/DragonRadarPointer", yOffset, translationRadians - 1.57f, closestDistance, closestLocation.ToVector2() * 16f));
+
+        });
+
+        public static DrawData DragonRadarDrawData(PlayerDrawInfo drawInfo, string dragonRadarSprite, int yOffset, float angleInRadians, float distance, Vector2 location)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = DBZMOD.instance;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
+            Texture2D texture = mod.GetTexture(dragonRadarSprite);
+            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+            int drawY = (int)(drawInfo.position.Y + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, angleInRadians, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
         }
 
         public int TransformationFrameTimer;
@@ -2179,6 +2250,16 @@ namespace DBZMOD
             // handle transformation animations
             TransformationEffects.visible = true;
             layers.Add(TransformationEffects);
+
+            // handle dragon radar drawing
+            if (IsHoldingDragonRadarMk1 || IsHoldingDragonRadarMk2 || IsHoldingDragonRadarMk3)
+            {
+                DragonRadarEffects.visible = true;
+                layers.Add(DragonRadarEffects);
+            } else
+            {
+                DragonRadarEffects.visible = false;
+            }
 
             // handle SSJ hair/etc.
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);

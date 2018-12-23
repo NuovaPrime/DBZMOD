@@ -14,6 +14,13 @@ namespace DBZMOD.Items.DragonBalls
                 "\nGetting too close to a dragon ball will overload the radar.");
         }
 
+        public override void HoldItem(Player player)
+        {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.IsHoldingDragonRadarMk1 = true;
+            base.HoldItem(player);
+        }
+
         public override void SetDefaults()
         {
             item.width = 20;
