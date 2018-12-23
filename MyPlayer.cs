@@ -75,6 +75,7 @@ namespace DBZMOD
         public int FormUnlockChance;
         public int OverallFormUnlockChance;
         public bool IsOverloading;
+        public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -1034,6 +1035,70 @@ namespace DBZMOD
 
         }
 
+        public string ChooseTraitNoLimits()
+        {
+            var TraitChooser = new WeightedRandom<string>();
+            TraitChooser.Add("Prodigy", 1);
+            TraitChooser.Add("Legendary", 1);
+            return playerTrait = TraitChooser;
+
+        }
+
+        public void AwakeningFormUnlock()
+        {
+            if(!SSJ1Achieved)
+            {
+                Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
+                SSJ1Achieved = true;
+                IsTransforming = true;
+                SSJTransformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
+            {
+                Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
+                SSJ2Achieved = true;
+                IsTransforming = true;
+                SSJ2Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ1Achieved && IsPlayerLegendary())
+            {
+                Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
+                LSSJAchieved = true;
+                IsTransforming = true;
+                LSSJTransformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+            if(SSJ2Achieved && !SSJ3Achieved)
+            {
+                Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
+                SSJ3Achieved = true;
+                IsTransforming = true;
+                SSJ3Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
+                Transformations.EndTransformations(player, true, false);
+                RageCurrent = 0;
+            }
+
+            if(LSSJAchieved && !LSSJ2Achieved)
+            {
+                Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
+                LSSJ2Achieved = true;
+                IsTransforming = true;
+                LSSJ2Transformation();
+                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
+                lssj2timer = 0;
+                Transformations.EndTransformations(player, true, false);
+            }
+        }
+
         public object LSSJ2TextSelect()
         {
             switch (Main.rand.Next((4)))
@@ -1239,7 +1304,7 @@ namespace DBZMOD
         // by default, traverses up a step in transform - but starts off at whatever you've selected (letting you go straight to SSJ2 or LSSJ2 for example) in menu
         public bool IsTransformingUpOneStep()
         {
-            return Transform.JustPressed && !EnergyCharge.Current;
+            return Transform.JustPressed;
         }
 
         // by default simply clears all transformation buffs from the user, including kaioken.
@@ -1274,24 +1339,18 @@ namespace DBZMOD
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
-                // if the player is already transformed, determine what the next step is.
-                if (Transformations.IsPlayerTransformed(player))
+                // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
+                if (IsAscendingTransformation())
+                {
+                    if (CanAscend())
+                    {
+                        targetTransformation = Transformations.GetNextAscensionStep(player);
+                    }
+                }
+                else // player has just pressed the normal transform button one time, which serves two functions.
                 {
                     targetTransformation = Transformations.GetNextTransformationStep(player);
                 }
-                else
-                {
-                    // otherwise set them to transform to whatever their selected transformation is.
-                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
-                }
-            }
-            // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-            else if (IsAscendingTransformation())
-            {
-                if (!CanAscend())
-                    return;
-
-                targetTransformation = Transformations.GetNextAscensionStep(player);
             }
             else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
             {
@@ -1316,8 +1375,8 @@ namespace DBZMOD
             if (KaiokenKey.JustPressed)
             {
                 // no possible combination of kaioken can be attained in your current state.
-                if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
-                    return;
+                //if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
+                    //return;
                 // otherwise get the next kaioken step (or the first one, if untransformed)
                 targetTransformation = Transformations.GetNextKaiokenStep(player);
             }
@@ -1698,11 +1757,16 @@ namespace DBZMOD
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             bool isAnyBossAlive = false;
+            bool isGolemAlive = false;
             foreach (NPC npc in Main.npc)
             {
                 if (npc.boss && npc.active)
                 {
                     isAnyBossAlive = true;
+                }
+                if(npc.type == NPCID.Golem)
+                {
+                    isGolemAlive = true;
                 }
             }
             if (zenkaiCharm && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
@@ -1766,7 +1830,7 @@ namespace DBZMOD
             }
 
 
-            if (isAnyBossAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
+            if (isGolemAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -1777,6 +1841,14 @@ namespace DBZMOD
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
+                return false;
+            }
+
+            if (ImmortalityRevivesLeft > 0)
+            {
+                int healamount = player.statLife + (player.statLifeMax + player.statLifeMax2);
+                player.HealEffect(healamount);
+                ImmortalityRevivesLeft -= 1;
                 return false;
             }
 
