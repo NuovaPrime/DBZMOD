@@ -634,6 +634,7 @@ namespace DBZMOD
                 {
                     Point safeCoordinates = GetSafeDragonBallCoordinates();
                     TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y);
+                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
                 }
             }
         }
