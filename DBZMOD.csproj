@@ -102,7 +102,6 @@
     <Compile Include="Buffs\ProdigyTrait.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJ1Buff.cs" />
-    <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJGBuff.cs" />

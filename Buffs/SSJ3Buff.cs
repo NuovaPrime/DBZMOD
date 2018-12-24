@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
             KiDrainBuffMulti = 1.95f;
             KiDrainRate = 2.65f;
             KiDrainRateWithMastery = 1.325f;
-            BaseDefenceBonus = 40;
+            BaseDefenceBonus = 12;
             Description.SetDefault(AssembleTransBuffDescription() + "\n(Life drains when below 30% Max Ki)");
         }
         public override void Update(Player player, ref int buffIndex)

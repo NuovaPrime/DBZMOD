@@ -64,7 +64,6 @@ namespace Util
             _buffInfoDict[Kaioken10.BuffKeyName] = Kaioken10;
             _buffInfoDict[Kaioken20.BuffKeyName] = Kaioken20;
             _buffInfoDict[Kaioken100.BuffKeyName] = Kaioken100;
-            _buffInfoDict[SSJ1Kaioken.BuffKeyName] = SSJ1Kaioken;
             _buffInfoDict[KaiokenFatigue.BuffKeyName] = KaiokenFatigue;
             _buffInfoDict[TransformationExhaustion.BuffKeyName] = TransformationExhaustion;
             _buffInfoDict[SPECTRUM.BuffKeyName] = SPECTRUM;
@@ -82,19 +81,6 @@ namespace Util
                         "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
                 }
                 return _SSJ1;
-            }
-        }
-        private static BuffInfo _SSJ1Kaioken;
-        public static BuffInfo SSJ1Kaioken
-        {
-            get
-            {
-                if (_SSJ1Kaioken == null)
-                {
-                    _SSJ1Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SSJ1Kaioken, 0.8f, "Sounds/KaioAuraAscend",
-                        null, DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj), typeof(KaiokenAuraProj) }, new string[] { "KaiokenAuraProj", "SSJ1AuraProj" });                    
-                }
-                return _SSJ1Kaioken;
             }
         }
 
@@ -407,45 +393,55 @@ namespace Util
 
         // whether the buff Id is one of the "normal" SSJ States (1, 2, 3, G)
         public static bool IsSSJ(BuffInfo buff)
-        { return SSJBuffs().Contains(buff); }
+        {
+            return SSJBuffs().Contains(buff);
+        }
 
         // whether the player is in *any* of the "normal" SSJ states (1, 2, 3, G)
         public static bool IsSSJ(Player player)
         {
             return PlayerHasBuffIn(player, SSJBuffs());
         }
+
 		// whether the player is in SSJ2
         public static bool IsSSJ2(Player player)
         {
             return player.HasBuff(SSJ2.GetBuffId());
         }
+
 		// whether the player is in long hair mode
 		 public static bool IsSSJ3(Player player)
         {
             return player.HasBuff(SSJ3.GetBuffId());
         }
+
         // FAIRY special state, whether the player is in Nuova's Dev form, SPECTRUM, which is fabulous.
         public static bool IsSpectrum(Player player)
         {
             return player.HasBuff(SPECTRUM.GetBuffId());
         }
 
-        // fairly special state, whether the player is in SSJ1 and Kaioken combined, which has some special behaviors.
-        public static bool IsSSJ1Kaioken(Player player)
-        {
-            return player.HasBuff(SSJ1Kaioken.GetBuffId());
-        }
-
-        // whether the buff ID is one of the Kaioken states, this excludes SSJ1Kaioken for Next/Previous behavior reasons.
+        // whether the buff ID is one of the Kaioken states
         public static bool IsKaioken(BuffInfo buff)
         {
             return KaiokenBuffs().Contains(buff);
         }
 
-        // whether the player is in one of the Kaioken states, this excludes SSJ1Kaioken for Next/Previous behavior reasons.
+        // whether the player is in one of the Kaioken states
         public static bool IsKaioken(Player player)
         {
             return PlayerHasBuffIn(player, KaiokenBuffs());
+        }
+
+        public static bool IsDevBuffed(Player player)
+        {
+            return IsSpectrum(player);
+        }
+
+        // a bool for whether the player is in a state other than Kaioken (a form)
+        public static bool IsAnythingOtherThanKaioken(Player player)
+        {
+            return IsLSSJ(player) || IsSSJ(player) || IsGodlike(player) || IsDevBuffed(player) || IsAscended(player);
         }
 
         // whether the buff ID is one of the legendary states; caution, this includes SSJ1 for "Next/Previous" behavior reasons.
@@ -530,8 +526,6 @@ namespace Util
                 return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
                 return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
-            //if (buffId == SSJB)
-            //  return !IsKaioken(player) && modPlayer.SSJBAchieved;
             if (buff == ASSJ)
                 return (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == USSJ)
@@ -546,8 +540,6 @@ namespace Util
                 return modPlayer.KaioFragment3 && !Transformations.IsTiredFromKaioken(player);
             if (buff == Kaioken100)
                 return modPlayer.KaioFragment4 && !Transformations.IsTiredFromKaioken(player);
-            //if (buff == SSJ1Kaioken)
-               // return IsSSJ1(player) && modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == SPECTRUM)
                 return player.name == "Nuova";
             return false;
@@ -661,7 +653,7 @@ namespace Util
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            bool isPoweringDown = buff == null;// || (currentTransformation == SSJ1Kaioken && buff.BuffKeyName == SSJ1.BuffKeyName);
+            bool isPoweringDown = buff == null;
 
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
             if (buff == modPlayer.CurrentTransformations[0] || buff == modPlayer.CurrentTransformations[1])
@@ -841,10 +833,6 @@ namespace Util
         {
             BuffInfo currentTransformation = player.GetModPlayer<MyPlayer>().CurrentTransformations[1];
 
-            // player is going into SSJ1 Kaioken, which is unique.
-            //if (currentTransformation == SSJ1)
-                //return SSJ1Kaioken;
-
             // special handling for Kaioken from no transformed state.
             if (currentTransformation == null)
             {
@@ -869,10 +857,6 @@ namespace Util
         public static BuffInfo GetPreviousKaiokenStep(Player player)
         {
             BuffInfo currentTransformation = player.GetModPlayer<MyPlayer>().CurrentTransformations[1];
-
-            // player is going into SSJ1 Kaioken, which is unique.
-            //if (currentTransformation == SSJ1Kaioken)
-                //return SSJ1;
 
             // the player is doing some kind of kaioken transformation step up.
             if (IsKaioken(currentTransformation))

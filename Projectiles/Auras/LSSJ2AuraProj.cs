@@ -30,7 +30,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            AuraOffset.Y = -30;
+            ScaledAuraOffset.Y = -30;
             IsSSJAura = true;
 			projectile.light = 1f;
         }

@@ -431,7 +431,7 @@ namespace DBZMOD
                 KiDrainAddition = 0;
             }
 
-            if (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
+            if (Transformations.IsKaioken(player))
             {
                 KaiokenTimer += 1.5f;
             }
@@ -1046,7 +1046,7 @@ namespace DBZMOD
             {
                 player.eyeColor = Color.Turquoise;
             }
-            else if (Transformations.IsSSJ1Kaioken(player))
+            else if (Transformations.IsKaioken(player))
             {
                 player.eyeColor = Color.Red;
             }
@@ -1397,7 +1397,7 @@ namespace DBZMOD
                     targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
                 }
             }
-            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
+            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player))
             {
                 // player is powering down a transformation state.
                 targetTransformation = Transformations.GetPreviousTransformationStep(player);
@@ -1425,7 +1425,7 @@ namespace DBZMOD
                 // otherwise get the next kaioken step (or the first one, if untransformed)
                 targetTransformation = Transformations.GetNextKaiokenStep(player);
             }
-            else if (IsPoweringDownOneStep() && (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)))
+            else if (IsPoweringDownOneStep() && Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
             {
                 // player is powering down their kaioken state, get the previous one.
                 targetTransformation = Transformations.GetPreviousKaiokenStep(player);
@@ -2101,8 +2101,8 @@ namespace DBZMOD
             WasKaioken = IsKaioken;
             WasTransformed = IsTransformed;
 
-            IsKaioken = Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player);
-            IsTransformed = Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player);
+            IsKaioken = Transformations.IsKaioken(player);
+            IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
             // this way, we can apply exhaustion debuffs correctly.
             if (WasKaioken && !IsKaioken)
             {
@@ -2380,7 +2380,7 @@ namespace DBZMOD
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
+                    else if (Transformations.IsKaioken(player) && Transformations.IsSSJ1(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }

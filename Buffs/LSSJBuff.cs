@@ -16,7 +16,7 @@ namespace DBZMOD.Buffs
             SpeedMulti = 2.30f;
             KiDrainBuffMulti = 2.1f;
             KiDrainRate = 2.15f;
-            BaseDefenceBonus = 30;
+            BaseDefenceBonus = 6;
             Description.SetDefault(AssembleTransBuffDescription());
         }
     }

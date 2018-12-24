@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
             KiDrainBuffMulti = 1.625f;
             KiDrainRate = 2;
             KiDrainRateWithMastery = 1;
-            BaseDefenceBonus = 25;
+            BaseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)

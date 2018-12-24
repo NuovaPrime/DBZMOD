@@ -54,7 +54,7 @@ namespace DBZMOD
 
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = ((Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)) && isKaioCrystalEquipped ? 0.5f : 1f);
+                float drainMult = (Transformations.IsKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount
                 OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
@@ -62,7 +62,7 @@ namespace DBZMOD
             }
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player))
+            if (Transformations.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())

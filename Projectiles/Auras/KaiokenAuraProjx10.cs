@@ -18,8 +18,8 @@ namespace DBZMOD.Projectiles.Auras
         }
         public override void SetDefaults()
         {
-            projectile.width = 97;
-            projectile.height = 102;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
             projectile.friendly = true;
@@ -29,19 +29,33 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             KaioAuraTimer = 240;
             IsKaioAura = true;
-            AuraOffset.Y = -20;
+            OriginalScale = 1.4f;
+            OriginalAuraOffset.Y = -20;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+
+            if (Transformations.IsAnythingOtherThanKaioken(player))
+            {
+                projectile.scale = OriginalScale * 1.5f;
+            }
+            else
+            {
+                projectile.scale = OriginalScale;
+            }
+
+            // correct scaling
+            if (ScaledAuraOffset != OriginalAuraOffset)
+                ScaledAuraOffset = OriginalAuraOffset * projectile.scale;
             projectile.netUpdate = true;
+
             if (!player.HasBuff(Transformations.Kaioken10.GetBuffId()))
             {
                 projectile.Kill();
             }
             if (KaioAuraTimer > 0)
             {
-                //projectile.scale = 2.5f + 3f * (KaioAuraTimer / 240f);
                 KaioAuraTimer--;
             }
             base.AI();

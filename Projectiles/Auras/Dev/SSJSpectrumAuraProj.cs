@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles.Auras.Dev
             projectile.penetrate = -1;
             projectile.damage = 0;
             projectile.netUpdate = true;
-            AuraOffset.Y = -30;
+            ScaledAuraOffset.Y = -30;
 			projectile.light = 1f;
         }
 		public override void PostAI()
@@ -75,7 +75,7 @@ namespace DBZMOD.Projectiles.Auras.Dev
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             projectile.scale = Main.GameZoomTarget;
-            AuraOffset.Y = -30 * Main.GameZoomTarget;            
+            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;            
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             return base.PreDraw(spriteBatch, lightColor);

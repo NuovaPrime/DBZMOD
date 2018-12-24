@@ -18,8 +18,8 @@ namespace DBZMOD.Projectiles.Auras
         }
         public override void SetDefaults()
         {
-            projectile.width = 97;
-            projectile.height = 102;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
             projectile.friendly = true;
@@ -29,30 +29,35 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             KaioAuraTimer = 240;
             IsKaioAura = true;
-            AuraOffset.Y = -20;
+            OriginalScale = 1f;
+            OriginalAuraOffset.Y = -20;
         }
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+
+            if (Transformations.IsAnythingOtherThanKaioken(player))
+            {
+                projectile.scale = OriginalScale * 1.5f;
+            }
+            else
+            {
+                projectile.scale = OriginalScale;
+            }
+
+            // correct scaling
+            if (ScaledAuraOffset != OriginalAuraOffset)
+                ScaledAuraOffset = OriginalAuraOffset * (projectile.scale * projectile.scale);
             projectile.netUpdate = true;
-            if (!player.HasBuff(Transformations.Kaioken.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
+
+            // remove the aura if the buff is removed.
+            if (!player.HasBuff(Transformations.Kaioken.GetBuffId()))
             {
                 projectile.Kill();
             }
             if (KaioAuraTimer > 0)
-            {
-                //projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
+            {            
                 KaioAuraTimer--;
-            }
-            if(player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
-            {
-                projectile.scale = 1.5f;
-                AuraOffset.Y = -40;
-            }
-            else
-            {
-                projectile.scale = 1.0f;
-                AuraOffset.Y = -20;
             }
             base.AI();
         }
