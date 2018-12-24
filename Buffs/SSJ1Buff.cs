@@ -14,12 +14,13 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = false;
             DamageMulti = 1.50f;
             SpeedMulti = 1.50f;
-            KiDrainBuffMulti = 1.3f;
-            KiDrainRate = 3;
-            KiDrainRateWithMastery = 1;
-            BaseDefenceBonus = 10;
+            KiDrainBuffMulti = 1.25f;
+            KiDrainRate = 1;
+            KiDrainRateWithMastery = 0.5f;
+            BaseDefenceBonus = 4;
             Description.SetDefault(AssembleTransBuffDescription());
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;

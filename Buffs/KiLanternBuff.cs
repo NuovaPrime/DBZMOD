@@ -17,12 +17,7 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            LanternTimer++;
-            if (LanternTimer > 5)
-            {
-                MyPlayer.ModPlayer(player).AddKi(1);
-                LanternTimer = 0;
-            }
+            MyPlayer.ModPlayer(player).AddKi(0.15f);
         }
     }
 }

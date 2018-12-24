@@ -14,10 +14,10 @@ namespace DBZMOD.Buffs
             Main.debuff[Type] = false;
             DamageMulti = 3.5f;
             SpeedMulti = 3.5f;
-            KiDrainRate = 10;
-            KiDrainRateWithMastery = 5;
+            KiDrainRate = 2.25f;
+            KiDrainRateWithMastery = 1.65f;
             KiDrainBuffMulti = 1.5f;
-            BaseDefenceBonus = 65;
+            BaseDefenceBonus = 16;
             Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
         }
         public override void Update(Player player, ref int buffIndex)

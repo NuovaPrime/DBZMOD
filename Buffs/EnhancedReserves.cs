@@ -17,12 +17,7 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            RegenTimer++;
-            if(RegenTimer > 4)
-            {
-                MyPlayer.ModPlayer(player).AddKi(1);
-                RegenTimer = 0;
-            }
+            MyPlayer.ModPlayer(player).AddKi(0.2f);
         }
     }
 }

@@ -55,11 +55,11 @@ namespace Network
                 // handle form removal if duration is 0
                 if (duration == 0)
                 {
-                    Transformations.RemoveTransformation(thePlayer, buffKeyName, true);                    
+                    Transformations.RemoveTransformation(thePlayer, buffKeyName);                    
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    Transformations.AddTransformation(thePlayer, buffKeyName, duration, true);                    
+                    Transformations.AddTransformation(thePlayer, buffKeyName, duration);                    
                 }
             }
         }

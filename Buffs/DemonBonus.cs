@@ -16,7 +16,7 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OverallKiMax());
+            MyPlayer.ModPlayer(player).SetKi(MyPlayer.ModPlayer(player).OverallKiMax());
         }
     }
 }

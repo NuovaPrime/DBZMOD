@@ -9,7 +9,7 @@ using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Projectiles.Auras
+namespace DBZMOD.Projectiles.Auras
 {
     public abstract class AuraProjectile : ModProjectile
     {
@@ -17,7 +17,10 @@ namespace Projectiles.Auras
         public bool IsKaioAura;
         public bool IsGodAura;
         public bool AuraActive;
-        public Vector2 AuraOffset;
+        public Vector2 ScaledAuraOffset;
+        public Vector2 OriginalAuraOffset;
+        public float OriginalScale;
+
         public override bool CloneNewInstances
         {
             get
@@ -27,7 +30,7 @@ namespace Projectiles.Auras
         }
 
         public override bool PreAI()
-        {
+        {            
             Player player = Main.player[projectile.owner];
 
             // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
@@ -43,19 +46,16 @@ namespace Projectiles.Auras
             // don't run AI on the hidden projectile, this prevents sounds from playing, etc.
             return !projectile.hide;
         }
+
 		//flicker fix
 		public override Color? GetAlpha(Color lightColor)
         {
 			return new Color(255, 255, 255, 240);
         }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.position.X = player.Center.X;
-            projectile.position.Y = player.Center.Y;
-            projectile.netUpdate = true;
-            projectile.netUpdate2 = true;
-            projectile.netImportant = true;
 
             // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -96,8 +96,8 @@ namespace Projectiles.Auras
                 // we can try to unify this code a bit.
                 bool isSSJ1Aura = projectile.modProjectile.GetType().IsAssignableFrom(typeof(SSJ1AuraProj));
                 double forwardOffset =  isSSJ1Aura ? 32 : 24;
-                double widthOffset = auraWidthRadius - (widthRadius + (AuraOffset.Y + forwardOffset));
-                double heightOffset = auraHeightRadius - (heightRadius + (AuraOffset.Y + forwardOffset));
+                double widthOffset = auraWidthRadius - (widthRadius + (ScaledAuraOffset.Y + forwardOffset));
+                double heightOffset = auraHeightRadius - (heightRadius + (ScaledAuraOffset.Y + forwardOffset));
                 double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
 
@@ -108,9 +108,13 @@ namespace Projectiles.Auras
             }
             else
             {
-                projectile.Center = player.Center + new Vector2(AuraOffset.X, (AuraOffset.Y));
+                projectile.Center = player.Center + new Vector2(ScaledAuraOffset.X, (ScaledAuraOffset.Y));
                 projectile.rotation = 0;
             }
+
+            projectile.netUpdate = true;
+            projectile.netUpdate2 = true;
+            projectile.netImportant = true;
         }
     }
 }

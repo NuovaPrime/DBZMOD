@@ -15,7 +15,6 @@ namespace DBZMOD
 {
     public abstract class TransBuff : ModBuff
     {
-        public const int KI_DRAIN_TIMER_MAX = 3;
         public float DamageMulti;
         public float SpeedMulti;
         public float KaioLightValue;
@@ -23,14 +22,16 @@ namespace DBZMOD
         public float SSJLightValue;
         public int HealthDrainRate;
         public int OverallHealthDrainRate;
-        public int KiDrainRate;
-        public int KiDrainRateWithMastery;
-        private int KiDrainTimer;
+        public float KiDrainRate;
+        public float KiDrainRateWithMastery;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
         public int BaseDefenceBonus;
         public int PrecentDefenceBonus;
+
+        // used to help track the Kaioken Level for tooltip related stuff as well as buff power
+        public int KaiokenLevel;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -56,7 +57,7 @@ namespace DBZMOD
 
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = ((Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)) && isKaioCrystalEquipped ? 0.5f : 1f);
+                float drainMult = (Transformations.IsKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount
                 OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
@@ -64,7 +65,7 @@ namespace DBZMOD
             }
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player))
+            if (Transformations.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
@@ -74,13 +75,7 @@ namespace DBZMOD
                 }
                 else
                 {
-                    // player still has some ki, perform drain routine
-                    KiDrainTimer++;
-                    if (KiDrainTimer >= KI_DRAIN_TIMER_MAX)
-                    {
-                        modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
-                        KiDrainTimer = 0;
-                    }
+                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
                     KiDrainAddTimer++;
                     if (KiDrainAddTimer > 600)
                     {
@@ -182,21 +177,40 @@ namespace DBZMOD
 
         public string AssembleTransBuffDescription()
         {
-            int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
-            int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
-            int kiDrainPerSecond = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRate;
-            int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
-            int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
-            string displayString = string.Empty;
+            string KaiokenName = string.Empty;
+            if (Type == Transformations.Kaioken.GetBuffId() || Type == Transformations.SuperKaioken.GetBuffId())
+            {
+                switch (KaiokenLevel)
+                {
+                    case 2:
+                        KaiokenName = "(x3)\n";
+                        break;
+                    case 3:
+                        KaiokenName = "(x10)\n";
+                        break;
+                    case 4:
+                        KaiokenName = "(x20)\n";
+                        break;
+                    case 5:
+                        KaiokenName = "(x100)\n";
+                        break;
+                }
+            }
+            int percentDamageMult = (int)Math.Round(DamageMulti * 100f, 0) - 100;
+            int percentSpeedMult = (int)Math.Round(SpeedMulti * 100f, 0) - 100;
+            float kiDrainPerSecond = 60f * KiDrainRate;
+            float kiDrainPerSecondWithMastery = 60f * KiDrainRateWithMastery;
+            int percentKiDrainMulti = (int)Math.Round(KiDrainBuffMulti * 100f, 0) - 100;
+            string displayString = KaiokenName;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
             displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, kiDrainPerSecond);
+                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, (int)Math.Round(kiDrainPerSecond, 0));
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}, {1}/s when mastered", displayString, kiDrainPerSecondWithMastery);
+                    displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
                 }
             }
             if (HealthDrainRate > 0)

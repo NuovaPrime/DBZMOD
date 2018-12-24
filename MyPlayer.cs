@@ -30,6 +30,7 @@ namespace DBZMOD
         public int KiCrit;
         public int KiRegenTimer;
         public int KiRegen;
+        public int KaiokenLevel = 0;
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
         // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
@@ -49,7 +50,8 @@ namespace DBZMOD
         public float KiMaxMult = 1f;
 
         // made KiCurrent private forcing everyone to use a method that syncs to clients, centralizing ki increase/decrease logic.
-        private int KiCurrent;
+        // 12/24/2018 changed Ki current to a float so that you could do more elaborate ki draining things and ki drain rates can be more consistent.
+        private float KiCurrent;
 
         public int KiChargeRate = 1;
         public int OverloadMax = 100;
@@ -76,7 +78,7 @@ namespace DBZMOD
         public int FormUnlockChance;
         public int OverallFormUnlockChance;
         public bool IsOverloading;
-        public BuffInfo[] CurrentTransformations = new BuffInfo[2];
+        // public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
         public static ModHotKey KaiokenKey;
@@ -294,12 +296,12 @@ namespace DBZMOD
         }
 
         // all changes to Ki Current are now made through this method.
-        public void AddKi(int kiAmount)
+        public void AddKi(float kiAmount)
         {
             SetKi(KiCurrent + kiAmount);
         }
 
-        public void SetKi(int kiAmount, bool isSync = false)
+        public void SetKi(float kiAmount, bool isSync = false)
         {
             // this might seem weird, but remote clients aren't allowed to set eachothers ki. This prevents desync issues.
             if (player.whoAmI == Main.myPlayer || isSync)
@@ -309,7 +311,7 @@ namespace DBZMOD
         }
 
         // return the amount of ki the player has, readonly
-        public int GetKi()
+        public float GetKi()
         {
             return KiCurrent;
         }
@@ -352,8 +354,38 @@ namespace DBZMOD
             return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
         }
 
-        // tracks whether a player was flying in the previous frame. Allows Flight System to apply Katchin Feet correctly
-        private bool WasFlying = false;
+        public void HandlePowerWishMultipliers()
+        {
+            if (PowerWishMulti > 1f)
+            {
+                player.meleeDamage *= PowerWishMulti;
+                player.rangedDamage *= PowerWishMulti;
+                player.magicDamage *= PowerWishMulti;
+                player.minionDamage *= PowerWishMulti;
+                player.thrownDamage *= PowerWishMulti;
+                KiDamage *= PowerWishMulti;
+                if (DBZMOD.instance.thoriumLoaded)
+                {
+                    ThoriumEffects(player);
+                }
+                if (DBZMOD.instance.tremorLoaded)
+                {
+                    TremorEffects(player);
+                }
+                if (DBZMOD.instance.enigmaLoaded)
+                {
+                    EnigmaEffects(player);
+                }
+                if (DBZMOD.instance.battlerodsLoaded)
+                {
+                    BattleRodEffects(player);
+                }
+                if (DBZMOD.instance.expandedSentriesLoaded)
+                {
+                    ExpandedSentriesEffects(player);
+                }
+            }
+        }
 
         public override void PostUpdate()
         {
@@ -381,6 +413,7 @@ namespace DBZMOD
                     }
                 }
             }
+
             if (kiLantern)
             {
                 player.AddBuff(mod.BuffType("KiLanternBuff"), 2);
@@ -389,29 +422,30 @@ namespace DBZMOD
             {
                 player.ClearBuff(mod.BuffType("KiLanternBuff"));
             }
+
             if (IsTransforming)
             {
                 SSJAuraBeamTimer++;
             }
-            if (OverloadCurrent < 0)
-            {
-                OverloadCurrent = 0;
-            }
+
             if (SSJ1Achieved)
             {
                 UI.TransMenu.SSJ1On = true;
             }
+
             if (SSJ2Achieved)
             {
                 UI.TransMenu.SSJ2On = true;
             }
+
             if (SSJ3Achieved)
             {
                 UI.TransMenu.SSJ3On = true;
             }
+
             if (Transformations.IsPlayerTransformed(player))
             {
-                if (!player.HasBuff(Transformations.Kaioken100.GetBuffId()) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
+                if (!(Transformations.IsKaioken(player) && KaiokenLevel == 5) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
                 {
                     LightningFrameTimer++;
                 }
@@ -431,7 +465,7 @@ namespace DBZMOD
                 KiDrainAddition = 0;
             }
 
-            if (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
+            if (Transformations.IsKaioken(player))
             {
                 KaiokenTimer += 1.5f;
             }
@@ -567,10 +601,95 @@ namespace DBZMOD
                 RageCurrent = 5;
             }
 
-            if (OverloadCurrent > OverloadMax)
+            HandleOverloadCounters();
+
+            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
+
+            /*if (!(playerTrait == null))
             {
-                OverloadCurrent = OverloadMax;
+                Main.NewText(playerTrait);
+            }*/
+
+            if (OverallFormUnlockChance < 2)
+            {
+                OverallFormUnlockChance = 2;
             }
+
+            if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
+            {
+                player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+            }
+
+            if (IsDashing)
+            {
+                player.invis = true;
+            }
+
+            HandleBlackFusionMultiplier();
+
+            HandlePowerWishMultipliers();
+
+            HandleWishAndDragonBallStates();
+
+            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
+
+            // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
+            if (IsPlayerImmobilized() && IsFlying)
+            {
+                IsFlying = false;
+            }
+
+            // flight system moved to PostUpdate so that it can benefit from not being client sided!
+            FlightSystem.Update(player);
+
+            // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
+            HandleChargeEffects();
+
+            HandleChargeVisualAndSoundEffects();
+
+            CheckPlayerForTransformationStateDebuffApplication();
+
+            // update WasCharging so we can ensure we're managing state each frame
+            WasCharging = IsCharging;
+
+            ThrottleKi();
+
+            // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
+            CheckSyncState();
+
+            // Handles nerfing player defense when in Kaioken States
+            HandleKaiokenDefenseDebuff();
+
+            // if the player is in mid-transformation, totally neuter horizontal velocity
+            if (IsTransformationAnimationPlaying)
+                player.velocity = new Vector2(0, player.velocity.Y);
+
+            // try to update positional audio?
+            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+        }
+
+        private void HandleWishAndDragonBallStates()
+        {
+            if (OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
+            {
+                AllDBNearby = true;
+            }
+
+            if (AllDBNearby)
+            {
+                Main.NewText("All DB Nearby");
+            }
+
+            if (WishActive)
+            {
+                Main.NewText("Wish is active");
+            }
+        }
+
+        private void HandleOverloadCounters()
+        {
+            // clamp overload current values to 0/max
+            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));            
 
             // does the player have the legendary trait
             if (IsPlayerLegendary())
@@ -597,19 +716,11 @@ namespace DBZMOD
                 }
             }
 
-            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
-
-            /*if (!(playerTrait == null))
+            /*if(LSSJAchieved)
             {
-                Main.NewText(playerTrait);
-            }*/
-
-            if (OverallFormUnlockChance < 2)
-            {
-                OverallFormUnlockChance = 2;
+                OverloadBar.visible = true;
             }
-
-            if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
+            else
             {
                 if(eliteSaiyanBonus)
                 {
@@ -620,12 +731,15 @@ namespace DBZMOD
                     player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
                 }
             }
+                OverloadBar.visible = false;
+            
+            }*/
+            OverloadBar.visible = false;
+            KiBar.visible = true;
+        }
 
-            if (IsDashing)
-            {
-                player.invis = true;
-            }
-
+        private void HandleBlackFusionMultiplier()
+        {
             bool isAnyBossAlive = false;
             foreach (NPC npc in Main.npc)
             {
@@ -674,95 +788,20 @@ namespace DBZMOD
                     ExpandedSentriesEffects(player);
                 }
             }
-            if (PowerWishMulti > 1f)
-            {
-                player.meleeDamage *= PowerWishMulti;
-                player.rangedDamage *= PowerWishMulti;
-                player.magicDamage *= PowerWishMulti;
-                player.minionDamage *= PowerWishMulti;
-                player.thrownDamage *= PowerWishMulti;
-                KiDamage *= PowerWishMulti;
-                if (DBZMOD.instance.thoriumLoaded)
-                {
-                    ThoriumEffects(player);
-                }
-                if (DBZMOD.instance.tremorLoaded)
-                {
-                    TremorEffects(player);
-                }
-                if (DBZMOD.instance.enigmaLoaded)
-                {
-                    EnigmaEffects(player);
-                }
-                if (DBZMOD.instance.battlerodsLoaded)
-                {
-                    BattleRodEffects(player);
-                }
-                if (DBZMOD.instance.expandedSentriesLoaded)
-                {
-                    ExpandedSentriesEffects(player);
-                }
-            }
 
             if (!isAnyBossAlive)
             {
                 blackFusionIncrease = 1f;
             }
-            if (OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
+        }
+
+        public void HandleKaiokenDefenseDebuff()
+        {
+            if (Transformations.IsKaioken(player))
             {
-                AllDBNearby = true;
-            }
-            if (AllDBNearby)
-            {
-                Main.NewText("All DB Nearby");
-            }
-            if (WishActive)
-            {
-                Main.NewText("Wish is active");
-            }
-            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
-
-            /*if(LSSJAchieved)
-            {
-                OverloadBar.visible = true;
-            }
-            else
-            {
-                OverloadBar.visible = false;
-            }*/
-            OverloadBar.visible = false;
-            KiBar.visible = true;
-
-            // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
-            if (IsPlayerImmobilized() && IsFlying)
-            {
-                IsFlying = false;
-            }
-
-            // flight system moved to PostUpdate so that it can benefit from not being client sided!
-            FlightSystem.Update(player);
-
-            // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
-            HandleChargeEffects();
-
-            HandleChargeVisualAndSoundEffects();
-
-            CheckPlayerForTransformationStateDebuffApplication();
-
-            // update WasCharging so we can ensure we're managing state each frame
-            WasCharging = IsCharging;
-
-            ThrottleKi();
-
-            // fires at the end of all the things and makes sure the user is synced to the server with current values, also handles initial state.
-            CheckSyncState();
-
-            // if the player is in mid-transformation, totally neuter horizontal velocity
-            if (IsTransformationAnimationPlaying)
-                player.velocity = new Vector2(0, player.velocity.Y);
-
-            // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+                float defenseMultiplier = 1f - (KaiokenLevel * 0.15f);
+                player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
+            }   
         }
 
         public void ThrottleKi()
@@ -792,7 +831,7 @@ namespace DBZMOD
         public string SyncPlayerTrait;
         public bool? SyncIsFlying;
         public bool? SyncIsTransformationAnimationPlaying;
-        public int? SyncKiCurrent;
+        public float? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
 
@@ -1026,7 +1065,7 @@ namespace DBZMOD
             {
                 player.eyeColor = Color.Turquoise;
             }
-            else if (Transformations.IsSSJ1Kaioken(player))
+            else if (Transformations.IsKaioken(player))
             {
                 player.eyeColor = Color.Red;
             }
@@ -1184,7 +1223,8 @@ namespace DBZMOD
             tag.Add("ASSJAchieved", ASSJAchieved);
             tag.Add("USSJAchieved", USSJAchieved);
             tag.Add("SSJ3Achieved", SSJ3Achieved);
-            tag.Add("KiCurrent", KiCurrent);
+            // changed save routine to save to a float, orphaning the original KiCurrent.
+            tag.Add("KiCurrentFloat", KiCurrent);
             tag.Add("RageCurrent", RageCurrent);
             tag.Add("KiRegenRate", KiChargeRate);
             tag.Add("KiEssence1", KiEssence1);
@@ -1252,7 +1292,13 @@ namespace DBZMOD
             ASSJAchieved = tag.Get<bool>("ASSJAchieved");
             USSJAchieved = tag.Get<bool>("USSJAchieved");
             SSJ3Achieved = tag.Get<bool>("SSJ3Achieved");
-            KiCurrent = tag.Get<int>("KiCurrent");
+            if (tag.ContainsKey("KiCurrentFloat"))
+            {
+                KiCurrent = tag.Get<float>("KiCurrentFloat");
+            } else
+            {
+                KiCurrent = (float)tag.Get<int>("KiCurrent");
+            }            
             RageCurrent = tag.Get<int>("RageCurrent");
             KiChargeRate = tag.Get<int>("KiRegenRate");
             KiEssence1 = tag.Get<bool>("KiEssence1");
@@ -1370,7 +1416,7 @@ namespace DBZMOD
                     targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
                 }
             }
-            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player) && !Transformations.IsSSJ1Kaioken(player))
+            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player))
             {
                 // player is powering down a transformation state.
                 targetTransformation = Transformations.GetPreviousTransformationStep(player);
@@ -1386,31 +1432,50 @@ namespace DBZMOD
                 Transformations.DoTransform(player, targetTransformation, mod, isPoweringDownOneStep);
         }
 
-        public void HandleKaioken()
+        public bool CanIncreaseKaiokenLevel()
         {
-            BuffInfo targetTransformation = null;
-            bool isPoweringDownOneStep = false;
+            switch (KaiokenLevel)
+            {
+                case 0:
+                    return KaioAchieved;
+                case 1:
+                    return KaioFragment1;
+                case 2:
+                    return KaioFragment2;
+                case 3:
+                    return KaioFragment3;
+                case 4:
+                    return KaioFragment4;
+            }
+            return false;
+        }
+
+        public void HandleKaioken()
+        {      
+            bool canIncreaseKaiokenLevel = false;
             if (KaiokenKey.JustPressed)
             {
-                // no possible combination of kaioken can be attained in your current state.
-                //if (Transformations.IsPlayerTransformed(player) && !Transformations.IsSSJ1(player) && !Transformations.IsKaioken(player))
-                //return;
-                // otherwise get the next kaioken step (or the first one, if untransformed)
-                targetTransformation = Transformations.GetNextKaiokenStep(player);
-            }
-            else if (IsPoweringDownOneStep() && (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)))
+                canIncreaseKaiokenLevel = CanIncreaseKaiokenLevel();
+                if (Transformations.IsKaioken(player))
+                {
+                    if (canIncreaseKaiokenLevel)
+                    {
+                        KaiokenLevel++;
+                    }
+                } else
+                {
+                    KaiokenLevel++;
+                    BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
+                    if (Transformations.CanTransform(player, transformation))
+                        Transformations.DoTransform(player, transformation, mod, false);
+                }
+            } else if (IsPoweringDownOneStep())
             {
-                // player is powering down their kaioken state, get the previous one.
-                targetTransformation = Transformations.GetPreviousKaiokenStep(player);
-                isPoweringDownOneStep = true;
-            }
-
-            if (targetTransformation == null)
-                return;
-
-            // finally, check the transformation is really valid and then do it.
-            if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation, mod, isPoweringDownOneStep);
+                if (Transformations.IsKaioken(player) && KaiokenLevel > 1)
+                {
+                    KaiokenLevel--;
+                }
+            }            
         }
 
         public void UpdateSynchronizedControls(TriggersSet triggerSet)
@@ -1536,8 +1601,15 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
-                Transformations.EndTransformations(player, true, false);
-
+                if (Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player))
+                {
+                    var keptTransformation = Transformations.GetCurrentTransformation(player, true, false);
+                    Transformations.EndTransformations(player, true, false, keptTransformation);
+                } else
+                {
+                    Transformations.EndTransformations(player, true, false);
+                }
+                KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
             if (QuickKi.JustPressed)
@@ -1831,6 +1903,7 @@ namespace DBZMOD
                     return false;
                 }
             }
+
             if (isAnyBossAlive && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
@@ -1956,6 +2029,7 @@ namespace DBZMOD
                 tDust.noGravity = true;
             }
         }
+
         public void FrostAura()
         {
             const float AURAWIDTH = 2f;
@@ -1979,6 +2053,7 @@ namespace DBZMOD
                 tDust.noGravity = true;
             }
         }
+
         public void FireAura()
         {
             const float AURAWIDTH = 2f;
@@ -2002,6 +2077,7 @@ namespace DBZMOD
                 tDust.noGravity = true;
             }
         }
+
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
@@ -2067,7 +2143,7 @@ namespace DBZMOD
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if (drawPlayer.HasBuff(Transformations.Kaioken100.GetBuffId()) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((Transformations.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().KaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
@@ -2078,22 +2154,26 @@ namespace DBZMOD
         public bool IsKaioken;
         public bool WasKaioken;
         public bool IsTransformed;
-        public bool WasTransformed;
+        public bool WasTransformed;        
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
-            WasKaioken = IsKaioken;
-            WasTransformed = IsTransformed;
-
-            IsKaioken = Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player);
-            IsTransformed = Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player);
-            // this way, we can apply exhaustion debuffs correctly.
-            if (WasKaioken && !IsKaioken)
+            if (!DebugUtil.isDebug)
             {
-                bool WasSSJKK = WasTransformed;
-                Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
-            }
-            if (WasTransformed && !IsTransformed) {
-                Transformations.AddTransformationExhaustion(player);
+                WasKaioken = IsKaioken;
+                WasTransformed = IsTransformed;
+
+                IsKaioken = Transformations.IsKaioken(player);
+                IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
+                // this way, we can apply exhaustion debuffs correctly.
+                if (WasKaioken && !IsKaioken)
+                {
+                    bool WasSSJKK = WasTransformed;
+                    Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
+                }
+                if (WasTransformed && !IsTransformed)
+                {
+                    Transformations.AddTransformationExhaustion(player);
+                }
             }
         }
 
@@ -2332,12 +2412,8 @@ namespace DBZMOD
             {
                 if (player.whoAmI != Main.myPlayer)
                 {
-                    //DebugUtil.Log(string.Format("I am player {0}", Main.myPlayer));
-
-                    //DebugUtil.Log(string.Format("I am requesting my information be sent to player {0}", player.whoAmI));
                     NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
 
-                    //DebugUtil.Log(string.Format("I am sending a request to the server to ship me that player's data."));
                     NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
                 }
             }
@@ -2363,7 +2439,7 @@ namespace DBZMOD
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
+                    else if (Transformations.IsKaioken(player) && Transformations.IsSSJ1(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }

@@ -85,11 +85,8 @@
     <Compile Include="Buffs\DemonBonus.cs" />
     <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
     <Compile Include="Buffs\DisgustingGoopBuff.cs" />
+    <Compile Include="Buffs\SuperKaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
-    <Compile Include="Buffs\KaiokenBuffX10.cs" />
-    <Compile Include="Buffs\KaiokenBuffX100.cs" />
-    <Compile Include="Buffs\KaiokenBuffX20.cs" />
-    <Compile Include="Buffs\KaiokenBuffX3.cs" />
     <Compile Include="Buffs\KatchinFeet.cs" />
     <Compile Include="Buffs\KiLanternBuff.cs" />
     <Compile Include="Buffs\KiPotionSickness.cs" />
@@ -102,7 +99,6 @@
     <Compile Include="Buffs\ProdigyTrait.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJ1Buff.cs" />
-    <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJGBuff.cs" />
@@ -366,11 +362,8 @@
     <Compile Include="Projectiles\Auras\BaseAuraProj.cs" />
     <Compile Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.cs" />
     <Compile Include="Projectiles\Auras\FalseUIAuraProj.cs" />
+    <Compile Include="Projectiles\Auras\SuperKaiokenAuraProj.cs" />
     <Compile Include="Projectiles\Auras\KaiokenAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\KaiokenAuraProjx10.cs" />
-    <Compile Include="Projectiles\Auras\KaiokenAuraProjx100.cs" />
-    <Compile Include="Projectiles\Auras\KaiokenAuraProjx20.cs" />
-    <Compile Include="Projectiles\Auras\KaiokenAuraProjx3.cs" />
     <Compile Include="Projectiles\Auras\LSSJ2AuraProj.cs" />
     <Compile Include="Projectiles\Auras\LSSJAuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJ1AuraProj.cs" />

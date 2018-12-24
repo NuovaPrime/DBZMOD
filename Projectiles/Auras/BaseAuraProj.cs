@@ -5,7 +5,6 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Projectiles.Auras;
 using Util;
 
 namespace DBZMOD.Projectiles.Auras
@@ -16,6 +15,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Main.projFrames[projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             projectile.width = 113;
@@ -28,9 +28,10 @@ namespace DBZMOD.Projectiles.Auras
             projectile.penetrate = -1;
             projectile.damage = 0;
             projectile.netUpdate = true;
-            AuraOffset.Y = -30;
+            ScaledAuraOffset.Y = -30;
 			projectile.light = 1f;
         }
+
         public override void PostAI()
         {
             for (int d = 0; d < 1; d++)
@@ -47,6 +48,7 @@ namespace DBZMOD.Projectiles.Auras
                 }
             }
         }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -68,7 +70,7 @@ namespace DBZMOD.Projectiles.Auras
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             projectile.scale = Main.GameZoomTarget;
-            AuraOffset.Y = -30 * Main.GameZoomTarget;
+            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             return base.PreDraw(spriteBatch, lightColor);
