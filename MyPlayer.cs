@@ -253,7 +253,6 @@ namespace DBZMOD
         public bool FiveStarDBNearby = false;
         public bool SixStarDBNearby = false;
         public bool SevenStarDBNearby = false;
-        public bool AllDBNearby = false;
         public bool WishActive = false;
         public bool IsHoldingDragonRadarMk1 = false;
         public bool IsHoldingDragonRadarMk2 = false;
@@ -627,8 +626,6 @@ namespace DBZMOD
 
             HandlePowerWishMultipliers();
 
-            HandleWishAndDragonBallStates();
-
             player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
 
             // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
@@ -666,22 +663,9 @@ namespace DBZMOD
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
         }
 
-        private void HandleWishAndDragonBallStates()
+        public bool AllDragonBallsNearby()
         {
-            if (!AllDBNearby && OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
-            {
-                AllDBNearby = true;
-            }
-
-            //if (AllDBNearby)
-            //{
-            //    Main.NewText("All DB Nearby");
-            //}
-
-            //if (WishActive)
-            //{
-            //    Main.NewText("Wish is active");
-            //}
+            return OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby;
         }
 
         private void HandleOverloadCounters()
@@ -1608,8 +1592,11 @@ namespace DBZMOD
                 KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
-            if (WishActive && WishMenu.menuvisible == false)
+
+            
+            if (WishActive && !WishMenu.menuvisible)
             {
+                DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
         }
@@ -1836,7 +1823,6 @@ namespace DBZMOD
             KiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
-            AllDBNearby = false;
             IsHoldingDragonRadarMk1 = false;
             IsHoldingDragonRadarMk2 = false;
             IsHoldingDragonRadarMk3 = false;
@@ -2172,7 +2158,6 @@ namespace DBZMOD
             }
         }
 
-        public static List<float> DragonRadarVarianceAbsorber = new List<float>();
         public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate(PlayerDrawInfo drawInfo) {
 
             Player drawPlayer = drawInfo.drawPlayer;
@@ -2182,15 +2167,6 @@ namespace DBZMOD
             {
                 return;
             }
-            // 5 degrees, 25 degrees, and 125 degrees. The first dragon ball radar is real bad.
-            var radarAccuracy = modPlayer.IsHoldingDragonRadarMk3 ? 90f : (modPlayer.IsHoldingDragonRadarMk2 ? 180f : 360f);
-            var radarVariance = Main.rand.NextFloat(0, radarAccuracy) - (radarAccuracy / 2f);
-            DragonRadarVarianceAbsorber.Add(radarVariance);
-            if (DragonRadarVarianceAbsorber.Count > 60)
-            {
-                DragonRadarVarianceAbsorber.RemoveRange(0, DragonRadarVarianceAbsorber.Count - 60);
-            }
-            var averageVariance = DragonRadarVarianceAbsorber.Average();
 
             Point closestLocation = new Point(-1, -1);
             float closestDistance = float.MaxValue;
@@ -2208,20 +2184,17 @@ namespace DBZMOD
                 }
             }
 
-            // player is too close to the dragon ball.
-            if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 2560f : (modPlayer.IsHoldingDragonRadarMk2 ? 1280f : 640f)))
-            {
-                averageVariance += (float)(Main.time % 360) * 20f;
-            }
+            Vector2 radarAngleVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
+            float radarAngle = radarAngleVector.ToRotation();
 
-            // crappy variance just from having the thing because wiggling doesn't make it crappy enough
-            var qualityVariance = (modPlayer.IsHoldingDragonRadarMk3 ? 22.5f : (modPlayer.IsHoldingDragonRadarMk2 ? 45f : 90f));
-            averageVariance += Main.rand.NextFloat(-qualityVariance / 2f, qualityVariance / 2f);
-            Vector2 translationVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
-            float translationRadians = translationVector.ToRotation();
-            translationRadians += MathHelper.ToRadians(averageVariance) - drawPlayer.fullRotation;
+            // player is too close to the dragon ball.
+            if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 1280f : (modPlayer.IsHoldingDragonRadarMk2 ? 640f : 320f)))
+            {
+                radarAngle += (float)(Main.time % 360) * 20f;
+            }
+            radarAngle += MathHelper.ToRadians(radarAngle) - drawPlayer.fullRotation;
             var yOffset = -120;
-            Main.playerDrawData.Add(DragonRadarDrawData(drawInfo, "Items/DragonBalls/DragonRadarPointer", yOffset, translationRadians - 1.57f, closestDistance, closestLocation.ToVector2() * 16f));
+            Main.playerDrawData.Add(DragonRadarDrawData(drawInfo, "Items/DragonBalls/DragonRadarPointer", yOffset, radarAngle - 1.57f, closestDistance, closestLocation.ToVector2() * 16f));
 
         });
 

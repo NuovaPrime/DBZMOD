@@ -11,6 +11,7 @@ namespace DBZMOD.Tiles.DragonBalls
 {
     public class FourStarDBTile : ModTile
     {
+        public int WhichDragonBallAmI = 4;
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = false;
@@ -40,9 +41,18 @@ namespace DBZMOD.Tiles.DragonBalls
             disableSmartCursor = true;
         }
 
-        public override bool CanPlace(int i, int j)
+        public override void NearbyEffects(int i, int j, bool closer)
         {
-            return base.CanPlace(i, j);
+            if (closer)
+            {
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+                modPlayer.FourStarDBNearby = true;
+            }
+        }
+
+        public override bool HasSmartInteract()
+        {
+            return true;
         }
 
         public override bool Drop(int i, int j)
@@ -63,22 +73,29 @@ namespace DBZMOD.Tiles.DragonBalls
             return false;
         }
 
-        public override void NearbyEffects(int i, int j, bool closer)
-        {
-            if (closer)
-            {
-                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-                modPlayer.FourStarDBNearby = true;
-            }
-        }
         public override void RightClick(int i, int j)
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-            if (modPlayer.AllDBNearby)
+            if (modPlayer.AllDragonBallsNearby())
             {
                 modPlayer.WishActive = true;
             }
         }
+
+        public override void PlaceInWorld(int i, int j, Item item)
+        {
+            base.PlaceInWorld(i, j, item);
+            if (DBZWorld.IsExistingDragonBall(WhichDragonBallAmI))
+            {
+                WorldGen.KillTile(i, j, false, false, true);
+                Main.NewText("Cheated Dragon Balls taste awful.");
+            }
+            else
+            {
+                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+            }
+        }
+
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;

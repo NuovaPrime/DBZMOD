@@ -11,6 +11,7 @@ namespace DBZMOD.Tiles.DragonBalls
 {
     public class TwoStarDBTile : ModTile
     {
+        public int WhichDragonBallAmI = 2;
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = false;
@@ -40,6 +41,7 @@ namespace DBZMOD.Tiles.DragonBalls
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (closer)
@@ -48,14 +50,35 @@ namespace DBZMOD.Tiles.DragonBalls
                 modPlayer.TwoStarDBNearby = true;
             }
         }
+
+        public override bool HasSmartInteract()
+        {
+            return true;
+        }
+
         public override void RightClick(int i, int j)
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-            if (modPlayer.AllDBNearby)
+            if (modPlayer.AllDragonBallsNearby())
             {
                 modPlayer.WishActive = true;
             }
         }
+
+        public override void PlaceInWorld(int i, int j, Item item)
+        {
+            base.PlaceInWorld(i, j, item);
+            if (DBZWorld.IsExistingDragonBall(WhichDragonBallAmI))
+            {
+                WorldGen.KillTile(i, j, false, false, true);
+                Main.NewText("Cheated Dragon Balls taste awful.");
+            }
+            else
+            {
+                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+            }
+        }
+
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
