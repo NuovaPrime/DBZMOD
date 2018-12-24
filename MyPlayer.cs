@@ -287,6 +287,10 @@ namespace DBZMOD
                 DBZWorld.SyncWorldDragonBallKey(player);
             }
             ItemHelper.ScanPlayerForIllegitimateDragonballs(player);
+
+            // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
+            // I'm not sure why worldgen doesn't always work, but this makes it recover from any issues it might have.
+            DBZWorld.DoDragonBallCleanupCheck();
         }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
@@ -2191,9 +2195,9 @@ namespace DBZMOD
             var radarAccuracy = modPlayer.IsHoldingDragonRadarMk3 ? 90f : (modPlayer.IsHoldingDragonRadarMk2 ? 180f : 360f);
             var radarVariance = Main.rand.NextFloat(0, radarAccuracy) - (radarAccuracy / 2f);
             DragonRadarVarianceAbsorber.Add(radarVariance);
-            if (DragonRadarVarianceAbsorber.Count > 15)
+            if (DragonRadarVarianceAbsorber.Count > 60)
             {
-                DragonRadarVarianceAbsorber.RemoveRange(0, DragonRadarVarianceAbsorber.Count - 15);
+                DragonRadarVarianceAbsorber.RemoveRange(0, DragonRadarVarianceAbsorber.Count - 60);
             }
             var averageVariance = DragonRadarVarianceAbsorber.Average();
 
@@ -2224,21 +2228,22 @@ namespace DBZMOD
             averageVariance += Main.rand.NextFloat(-qualityVariance / 2f, qualityVariance / 2f);
             Vector2 translationVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
             float translationRadians = translationVector.ToRotation();
-            translationRadians += MathHelper.ToRadians(averageVariance);
+            translationRadians += MathHelper.ToRadians(averageVariance) - drawPlayer.fullRotation;
             var yOffset = -120;
             Main.playerDrawData.Add(DragonRadarDrawData(drawInfo, "Items/DragonBalls/DragonRadarPointer", yOffset, translationRadians - 1.57f, closestDistance, closestLocation.ToVector2() * 16f));
 
         });
 
         public static DrawData DragonRadarDrawData(PlayerDrawInfo drawInfo, string dragonRadarSprite, int yOffset, float angleInRadians, float distance, Vector2 location)
-        {
+        {   
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = DBZMOD.instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
+            float radarArrowScale = (modPlayer.IsHoldingDragonRadarMk1 ? 1f : (modPlayer.IsHoldingDragonRadarMk2 ? 1.25f : 1.5f));
             Texture2D texture = mod.GetTexture(dragonRadarSprite);
             int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
             int drawY = (int)(drawInfo.position.Y + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, angleInRadians, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, angleInRadians, new Vector2(texture.Width / 2f, texture.Height / 2f), radarArrowScale, SpriteEffects.None, 0);
         }
 
         public int TransformationFrameTimer;

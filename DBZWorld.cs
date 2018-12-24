@@ -469,6 +469,8 @@ namespace DBZMOD
             }
 
             GenerateGohanStructureWithByteArrays(false);
+
+            DoDragonBallCleanupCheck();
             return true;
         }
 
@@ -486,10 +488,10 @@ namespace DBZMOD
             return false;
         }
 
-        public bool IsExistingDragonBall(int whichDragonball)
+        public static bool IsExistingDragonBall(int whichDragonball)
         {
             int dbIndex = whichDragonball - 1;
-            var coordinates = DragonBallLocations[dbIndex];
+            var coordinates = GetWorld().DragonBallLocations[dbIndex];
             if (coordinates == new Point(-1, -1))
                 return false;
             var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
@@ -498,7 +500,7 @@ namespace DBZMOD
             return false;
         }
 
-        public string GetDragonBallTileTypeFromNumber(int whichDragonBall)
+        public static string GetDragonBallTileTypeFromNumber(int whichDragonBall)
         {
             switch (whichDragonBall) {
                 case 1:
@@ -520,7 +522,7 @@ namespace DBZMOD
             }
         }
 
-        public bool IsDragonBallWithPlayers(int whichDragonball)
+        public static bool IsDragonBallWithPlayers(int whichDragonball)
         {
             for (var i = 0; i < Main.player.Length; i++)
             {
@@ -544,7 +546,7 @@ namespace DBZMOD
             return false;
         }
 
-        public bool InventoryContainsDragonball(int whichDragonball, Item[] inventory)
+        public static bool InventoryContainsDragonball(int whichDragonball, Item[] inventory)
         {
             for (var i = 0; i < inventory.Length; i++)
             {                
@@ -559,13 +561,13 @@ namespace DBZMOD
                     continue;
 
                 var dbItem = item.modItem as DragonBallItem;
-                if (dbItem.WhichDragonBall == whichDragonball && dbItem.WorldDragonBallKey == WorldDragonBallKey)
+                if (dbItem.WhichDragonBall == whichDragonball && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
                     return true;                
             }
             return false;
         }
 
-        public bool IsDragonBallInventoried(int whichDragonball)
+        public static bool IsDragonBallInventoried(int whichDragonball)
         {
             for (var i = 0; i < Main.chest.Length; i++)
             {
@@ -578,7 +580,7 @@ namespace DBZMOD
             return false;
         }
 
-        public bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY)
+        public static bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY)
         {
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonball))
@@ -596,14 +598,15 @@ namespace DBZMOD
             //var dbTile = Framing.GetTileSafely(offsetX, offsetY);
             //dbTile.type = (ushort)DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
             //dbTile.active(true);
+            
             WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
 
             int dbIndex = whichDragonball - 1;
-            DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
+            GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
             return true;
         }
 
-        public bool AttemptToPlaceDragonballsInWorld(GenerationProgress progress = null)
+        public static bool AttemptToPlaceDragonballsInWorld(GenerationProgress progress = null)
         {
             string PlacingDragonballs = "Placing Dragon Balls";
             if (progress != null)
@@ -620,10 +623,36 @@ namespace DBZMOD
             return true;
         }
 
-        public Point GetSafeDragonBallCoordinates()
+        public static void DoDragonBallCleanupCheck()
         {
-            var underworldHeight = (int)Math.Ceiling(WorldGen.rockLayerHigh);
-            var surfaceHeight = (int)Math.Ceiling(WorldGen.worldSurfaceLow);
+            // loop over the saved locations for each dragonball
+            for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
+            {
+                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);
+                if (shouldTryToSpawn)
+                {
+                    Point safeCoordinates = GetSafeDragonBallCoordinates();
+                    TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y);
+                }
+            }
+        }
+
+        public static bool IsInvalidTileForDragonBallPlacement(Tile tile)
+        {
+            return tile.type == TileID.SmallPiles
+                || tile.type == TileID.LargePiles
+                || tile.type == TileID.LargePiles2
+                || tile.type == TileID.Containers
+                || tile.type == TileID.Containers2
+                || tile.type == TileID.FakeContainers
+                || tile.type == TileID.FakeContainers;
+        }
+
+        public static Point GetSafeDragonBallCoordinates()
+        {
+            var underworldHeight = Main.maxTilesY - 220;
+            
+            var surfaceHeight = (int)Math.Floor(Main.worldSurface * 0.30f);
             DebugUtil.Log(string.Format("Trying to find safe dragon ball location. Underworld at {0}, surface at {1}.", underworldHeight, surfaceHeight));
             bool IsSafeTile = false;
             while (!IsSafeTile)
@@ -631,6 +660,10 @@ namespace DBZMOD
                 var randX = Main.rand.Next(0, Main.maxTilesX);
                 var randY = Main.rand.Next(surfaceHeight, underworldHeight);
                 var tile = Framing.GetTileSafely(randX, randY);
+                if (IsInvalidTileForDragonBallPlacement(tile))
+                {
+                    continue;
+                }
                 var tileAbove = Framing.GetTileSafely(randX, randY - 1);
                 if (tile.active() && (Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]) && !tileAbove.active())
                 {
