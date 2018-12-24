@@ -30,9 +30,6 @@ namespace DBZMOD
         public int BaseDefenceBonus;
         public int PrecentDefenceBonus;
 
-        // used to help track the Kaioken Level for tooltip related stuff as well as buff power
-        public int KaiokenLevel;
-
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
@@ -94,7 +91,9 @@ namespace DBZMOD
             player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
-            player.jumpSpeedBoost = 2f * GetModifiedSpeedMultiplier(modPlayer);
+            if (player.jumpSpeedBoost < 1f)
+                player.jumpSpeedBoost = 1f;
+            player.jumpSpeedBoost *= GetModifiedSpeedMultiplier(modPlayer);
             //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
@@ -176,6 +175,7 @@ namespace DBZMOD
             return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
+        public int KaiokenLevel = 0;
         public string AssembleTransBuffDescription()
         {
             string KaiokenName = string.Empty;

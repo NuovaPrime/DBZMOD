@@ -65,13 +65,14 @@ namespace DBZMOD
                 {
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     // for some reason flying up is way, way faster than flying down.
-                    player.velocity.Y -= (totalVerticalFlightSpeed / 4f);
+                    player.velocity.Y -= (totalVerticalFlightSpeed / 3.8f);
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
+                    player.maxFallSpeed = 20f;
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
-                    player.velocity.Y += totalVerticalFlightSpeed - (player.gravity * 5f);
+                    player.velocity.Y += totalVerticalFlightSpeed / 3.6f;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
