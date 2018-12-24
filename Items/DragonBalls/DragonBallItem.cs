@@ -44,6 +44,11 @@ namespace DBZMOD.Items.DragonBalls
             return dbTagCompound;
         }
 
+        public override void UpdateInventory(Player player)
+        {
+            DoDragonBallPickupCheck(this, player);
+        }
+
         public override bool OnPickup(Player player)
         {
             DoDragonBallPickupCheck(this, player);

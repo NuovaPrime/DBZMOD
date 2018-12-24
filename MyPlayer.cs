@@ -1594,7 +1594,7 @@ namespace DBZMOD
             }
 
             
-            if (WishActive && !WishMenu.menuvisible)
+            if ((WishActive || QuickKi.JustPressed) && !WishMenu.menuvisible)
             {
                 DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
