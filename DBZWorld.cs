@@ -594,16 +594,16 @@ namespace DBZMOD
             if (IsDragonBallInventoried(whichDragonball))
                 return true;
 
-
-            //var dbTile = Framing.GetTileSafely(offsetX, offsetY);
-            //dbTile.type = (ushort)DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball));
-            //dbTile.active(true);
-            
-            WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
-
-            int dbIndex = whichDragonball - 1;
-            GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
-            return true;
+            if (WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true))
+            {
+                int dbIndex = whichDragonball - 1;
+                GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
+                DebugUtil.Log(string.Format("Placing dragon ball {0} at coordinates {1} {2}", whichDragonball, offsetX, offsetY));
+                return true;
+            } else
+            {
+                return false;
+            }            
         }
 
         public static bool AttemptToPlaceDragonballsInWorld(GenerationProgress progress = null)

@@ -64,7 +64,7 @@ namespace DBZMOD.Tiles.DragonBalls
             if (DebugUtil.isDebug)
             {
                 var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
-                if (oldTile != new Point(-1, -1))
+                if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
                 {
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");

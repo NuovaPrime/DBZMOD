@@ -212,8 +212,18 @@ namespace DBZMOD.UI
             for (var i = 0; i < dbzWorld.DragonBallLocations.Length; i++)
             {
                 var location = dbzWorld.DragonBallLocations[i];
-                WorldGen.KillTile(location.X, location.Y, false, false, true);
+                WorldGen.KillTile(location.X, location.Y, false, false, true);                
             }
+
+            // nuke the original dragon ball locations
+            dbzWorld.DragonBallLocations[0] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[1] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[2] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[3] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[4] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[5] = new Point(-1, -1);
+            dbzWorld.DragonBallLocations[6] = new Point(-1, -1);
+
             // handles respawning all the dragon balls
             DBZWorld.DoDragonBallCleanupCheck();
         }

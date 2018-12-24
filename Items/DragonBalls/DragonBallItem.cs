@@ -50,11 +50,6 @@ namespace DBZMOD.Items.DragonBalls
             return true;
         }
 
-        public override void UpdateInventory(Player player)
-        {
-            DoDragonBallPickupCheck(this, player);
-        }
-
         public void DoDragonBallPickupCheck(DragonBallItem item, Player player)
         {
             // first thing's first, if this is a real dragon ball, we know it's legit cos it ain't a rock, and inerts don't spawn in world.
@@ -82,6 +77,9 @@ namespace DBZMOD.Items.DragonBalls
         public void DoDragonBallLegitimacyCheck(DragonBallItem item, Player player)
         {
             var dbLocation = DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1];
+            // something bad has happened, don't proceed
+            if (dbLocation == new Point(-1, -1))
+                return;
             var dbTile = Framing.GetTileSafely(dbLocation.X, dbLocation.Y);
             var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(item.WhichDragonBall));
             if (dbTile.type == dbTileType)
@@ -90,7 +88,7 @@ namespace DBZMOD.Items.DragonBalls
                 if (DebugUtil.isDebug)
                 {
                     Main.NewText("Debugged in a Dragon Ball, destroying the original.");
-                    WorldGen.KillTile(dbLocation.X, dbLocation.Y);
+                    WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
                     DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
                 }
                 else

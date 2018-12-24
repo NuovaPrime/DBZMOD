@@ -29,5 +29,24 @@ namespace DBZMOD.Tiles.DragonBalls
                 modPlayer.FourStarDBNearby = true;
             }
         }
+
+        // the four star is special, it has its own drop method
+        public override bool Drop(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+            MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
+
+            if (!modplayer.FirstFourStarDBPickup)
+            {
+                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("FourStarDB"));
+                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
+                modplayer.FirstFourStarDBPickup = true;
+            }
+            else
+            {
+                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("FourStarDB"));
+            }
+            return false;
+        }
     }
 }
