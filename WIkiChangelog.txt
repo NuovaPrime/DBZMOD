@@ -463,4 +463,8 @@ V1.0.9
 
 6. Current Ki is now a float instead of an integer. (Backend change shouldn't affect gameplay)
 
+7. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+
 == Fixes ==
+
+1. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
