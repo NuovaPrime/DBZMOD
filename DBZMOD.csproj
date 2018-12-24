@@ -101,6 +101,7 @@
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJGBuff.cs" />
+    <Compile Include="Buffs\SuperKaiokenBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Buffs\TransExhaustionBuff.cs" />
     <Compile Include="Buffs\UIOmenBuff.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="Projectiles\Auras\SSJ2AuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
+    <Compile Include="Projectiles\Auras\SuperKaiokenAuraProj.cs" />
     <Compile Include="Projectiles\BaldurShell.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
