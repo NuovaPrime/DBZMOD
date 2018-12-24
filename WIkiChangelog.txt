@@ -439,19 +439,19 @@ V1.0.9
 
 == Additions ==
 
-1. Added the [[Dragon Balls]]
+1. Added the [[Dragon Balls]].
 
-2. Added [[Grandpa Gohan's House]]
+2. Added [[Grandpa Gohan's House]].
 
 3. Added [[Saiyan Scout Armor]] and [[Saiyan Battle Armor]].
 
-4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]]
+4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
 
 5. Added [[Refined Metal]]
 
 == Changes ==
 
-1. Buffed the set bonuses of the [[Turtle Hermit Armor]] and [[Saiyan Armor]].
+1. Buffed [[Turtle Hermit Armor]], [[Saiyan Armor]] and [[Radiant Armor]].
 
 
 == Fixes ==

@@ -191,6 +191,7 @@
     <Compile Include="Items\Accessories\ZenkaiCharm.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\BlackFusionPants.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\BlackFusionShirt.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Items\Armor\ArmorSets\RadiantGreaves.cs" />
     <Compile Include="Items\Armor\ArmorSets\RadiantScalepiece.cs" />
     <Compile Include="Items\Armor\ArmorSets\RadiantVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanScoutPants.cs" />

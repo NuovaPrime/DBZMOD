@@ -240,6 +240,7 @@ namespace DBZMOD
         public bool goblinKiEnhancer;
         public bool mechanicalAmplifier;
         public bool blackFusionBonus;
+        public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool FirstFourStarDBPickup = false;
@@ -610,7 +611,14 @@ namespace DBZMOD
 
             if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
             {
-                player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+                if(eliteSaiyanBonus)
+                {
+                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 3600);
+                }
+                else
+                {
+                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
+                }
             }
 
             if (IsDashing)
@@ -1765,6 +1773,7 @@ namespace DBZMOD
             IsHoldingDragonRadarMk1 = false;
             IsHoldingDragonRadarMk2 = false;
             IsHoldingDragonRadarMk3 = false;
+            eliteSaiyanBonus = false;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
@@ -1787,6 +1796,14 @@ namespace DBZMOD
                 player.statLife = 50;
                 player.HealEffect(50);
                 player.AddBuff(mod.BuffType("ZenkaiBuff"), 300);
+                return false;
+            }
+            if (eliteSaiyanBonus && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
+            {
+                int healamount = (player.statLifeMax + player.statLifeMax2);
+                player.statLife += healamount;
+                player.HealEffect(healamount);
+                player.AddBuff(mod.BuffType("ZenkaiBuff"), 600);
                 return false;
             }
 
@@ -1859,7 +1876,8 @@ namespace DBZMOD
 
             if (ImmortalityRevivesLeft > 0)
             {
-                int healamount = player.statLife + (player.statLifeMax + player.statLifeMax2);
+                int healamount = (player.statLifeMax + player.statLifeMax2);
+                player.statLife += healamount;
                 player.HealEffect(healamount);
                 ImmortalityRevivesLeft -= 1;
                 return false;

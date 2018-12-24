@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             Tooltip.SetDefault("24% Increased Ki Damage"
                 + "\n16% Increased Ki knockback" +
-                               "\n+1000 Max Ki" +
+                               "\n+1500 Max Ki" +
                                "\n+4 Maximum Charges" +
                                "\nReduced flight ki usage");
             DisplayName.SetDefault("Radiant Scalepiece");
@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.height = 18;
             item.value = 68000;
             item.rare = 10;
-            item.defense = 20;
+            item.defense = 26;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -37,14 +37,17 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Hitting enemies heals a random amount of ki and fires off homing projectiles at nearby enemies.";
+            player.setBonus = "Hitting enemies heals a random amount of ki and fires off homing projectiles at nearby enemies." +
+                "\nIncreased Ki Regen and +200 Max Life";
+            player.statLifeMax2 += 200;
             MyPlayer.ModPlayer(player).radiantBonus = true;
+            MyPlayer.ModPlayer(player).KiRegen += 3;
         }
         public override void UpdateEquip(Player player)
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).KiKbAddition += 16;
-            MyPlayer.ModPlayer(player).KiMax2 += 1000;
+            MyPlayer.ModPlayer(player).KiMax2 += 1500;
             MyPlayer.ModPlayer(player).ChargeLimitAdd += 4;
             MyPlayer.ModPlayer(player).FlightUsageAdd += 1;
 
