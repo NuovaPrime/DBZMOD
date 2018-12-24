@@ -67,7 +67,6 @@ namespace DBZMOD
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
-                    // Main.NewText(string.Format("Player is out of ki??! {0} has {1} of {2} ki", player.whoAmI, modPlayer.GetKi(), modPlayer.OverallKiMax()));
                     Transformations.EndTransformations(player, true, false);
                 }
                 else
@@ -86,15 +85,13 @@ namespace DBZMOD
                 // the player isn't in a ki draining state anymore, reset KiDrainAddition
                 modPlayer.KiDrainAddition = 0;                
             }
-
-            //DebugUtil.Log(string.Format("Before: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
+            
             player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
             if (player.jumpSpeedBoost < 1f)
                 player.jumpSpeedBoost = 1f;
             player.jumpSpeedBoost *= GetModifiedSpeedMultiplier(modPlayer);
-            //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
             player.meleeDamage *= GetHalvedDamageBonus();

@@ -578,7 +578,6 @@ namespace DBZMOD
 
             if (KiRegenTimer > 2)
             {
-                // DebugUtil.Log(string.Format("I think my ki regen is {0}", KiRegen));
                 AddKi(KiRegen);
                 KiRegenTimer = 0;
             }
@@ -608,11 +607,6 @@ namespace DBZMOD
             HandleOverloadCounters();
 
             OverallFormUnlockChance = FormUnlockChance - RageCurrent;
-
-            /*if (!(playerTrait == null))
-            {
-                Main.NewText(playerTrait);
-            }*/
 
             if (OverallFormUnlockChance < 2)
             {
@@ -674,20 +668,20 @@ namespace DBZMOD
 
         private void HandleWishAndDragonBallStates()
         {
-            if (OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
+            if (!AllDBNearby && OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby)
             {
                 AllDBNearby = true;
             }
 
-            if (AllDBNearby)
-            {
-                Main.NewText("All DB Nearby");
-            }
+            //if (AllDBNearby)
+            //{
+            //    Main.NewText("All DB Nearby");
+            //}
 
-            if (WishActive)
-            {
-                Main.NewText("Wish is active");
-            }
+            //if (WishActive)
+            //{
+            //    Main.NewText("Wish is active");
+            //}
         }
 
         private void HandleOverloadCounters()
@@ -853,7 +847,6 @@ namespace DBZMOD
 
             // if this method is firing on a player who isn't me, abort. 
             // spammy af
-            // DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -871,7 +864,6 @@ namespace DBZMOD
 
             if (SyncKiMaxMult != KiMaxMult)
             {
-                // DebugUtil.Log(string.Format("Ki max sync: was {0} but should be {1}", SyncKiMaxMult, KiMaxMult));
                 NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, KiMaxMult);
                 SyncKiMaxMult = KiMaxMult;
             }
@@ -992,7 +984,6 @@ namespace DBZMOD
 
             // if this method is firing on a player who isn't me, abort. 
             // spammy af
-            // DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -1700,7 +1691,6 @@ namespace DBZMOD
                 // this handles killing other player's sounds if the local player has started any.
                 bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);
 
-                // DebugUtil.Log(string.Format("Player is charging and shouldPlaySound is {0}", shouldPlaySound));
                 if (shouldPlaySound)
                 {
                     ChargeSoundTimer++;

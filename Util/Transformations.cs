@@ -665,7 +665,6 @@ namespace Util
                 player.GetModPlayer<MyPlayer>().SSJDustAura();
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
-                // Main.NewText(string.Format("Syncing buff to server {0} for {1} frames", buffId, duration));
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
             }
 

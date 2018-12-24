@@ -166,8 +166,7 @@ namespace Util
             else
             {
                 var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);
-                // DebugUtil.Log(string.Format("Another Player is trying to play audio locally, allowed {0}, my charge {1}, my trans {2}, already playing audio {3}", shouldPlayAudio, myPlayer.ChargeSoundInfo.Value != null, myPlayer.TransformationSoundInfo.Value != null, myPlayer.IsAlreadyPlayingOtherPlayerAudio));
+                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
                 if (shouldPlayAudio)
                 {
                     myPlayer.PlayerIndexWithLocalAudio = player.whoAmI;

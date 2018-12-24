@@ -108,12 +108,10 @@ namespace DBZMOD
                 var dbWorld = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
                 if (dbItem.WorldDragonBallKey != dbWorld.WorldDragonBallKey)
                 {
-                    DebugUtil.Log("Illegitimate Dragon ball loaded.");
                     SwapDragonBallWithStoneBall(inventory, dbItem.WorldDragonBallKey.Value, dbItem.WhichDragonBall);
                 }
                 else
                 {
-                    DebugUtil.Log("Dragon ball loaded and matches the world.");
                     if (dbItem.item.type == GetItemTypeFromName("StoneBall"))
                     {
                         // this stone ball is being re-legitimized, which is not a word
@@ -127,7 +125,6 @@ namespace DBZMOD
         public static void SwapStoneBallWithDragonBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
         {
             // this stone ball was pulled back into its world. Turn it into a dragon ball.
-            DebugUtil.Log("Stone ball loaded and matches the world key.");
             int dbKey = WorldDragonBallKey;
             int whichDball = WhichDragonBall;
             int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
@@ -145,7 +142,6 @@ namespace DBZMOD
         public static void SwapDragonBallWithStoneBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
         {
             // this dragon ball was pulled in from another world. Turn it into a rock.
-            DebugUtil.Log("Dragon ball loaded and does not match the world key.");
             int dbKey = WorldDragonBallKey;
             int whichDball = WhichDragonBall;
             int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);

@@ -628,7 +628,8 @@ namespace DBZMOD
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
             {
-                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);
+                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);                
+
                 if (shouldTryToSpawn)
                 {
                     Point safeCoordinates = GetSafeDragonBallCoordinates();
@@ -653,11 +654,12 @@ namespace DBZMOD
             var underworldHeight = Main.maxTilesY - 220;
             
             var surfaceHeight = (int)Math.Floor(Main.worldSurface * 0.30f);
-            DebugUtil.Log(string.Format("Trying to find safe dragon ball location. Underworld at {0}, surface at {1}.", underworldHeight, surfaceHeight));
+
             bool IsSafeTile = false;
             while (!IsSafeTile)
-            {                
-                var randX = Main.rand.Next(0, Main.maxTilesX);
+            {
+                int thresholdX = (int)Math.Floor(Main.maxTilesX * 0.1f);
+                var randX = Main.rand.Next(thresholdX, Main.maxTilesX - thresholdX);
                 var randY = Main.rand.Next(surfaceHeight, underworldHeight);
                 var tile = Framing.GetTileSafely(randX, randY);
                 if (IsInvalidTileForDragonBallPlacement(tile))

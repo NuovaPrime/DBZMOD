@@ -412,6 +412,7 @@ namespace DBZMOD
             }
             return true;
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine Indicate = new TooltipLine(mod, "", "");

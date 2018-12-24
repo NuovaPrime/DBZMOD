@@ -33,13 +33,9 @@ namespace DBZMOD
 
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            //if (Math.Ceiling(Main.time % 60) == 0)
-            //DebugUtil.Log(string.Format("Update flight firing for player {0} whose controls are Up {1} Down {2} Left {3} Right {4}", player.whoAmI, modPlayer.IsUpHeld, modPlayer.IsDownHeld, modPlayer.IsLeftHeld, modPlayer.IsRightHeld));
-
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
-                // DebugUtil.Log(string.Format("Disabling flying on player {0} because ki is depleted or player is dead? Player was flying.", player.whoAmI));
                 modPlayer.IsFlying = false;
                 AddKatchinFeetBuff(player);
             }
@@ -63,7 +59,6 @@ namespace DBZMOD
 
                 if (modPlayer.IsUpHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     // for some reason flying up is way, way faster than flying down.
                     player.velocity.Y -= (totalVerticalFlightSpeed / 3.8f);
                     m_rotationDir = Vector2.UnitY;
@@ -71,20 +66,17 @@ namespace DBZMOD
                 else if (modPlayer.IsDownHeld)
                 {
                     player.maxFallSpeed = 20f;
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.Y += totalVerticalFlightSpeed / 3.6f;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X += totalHorizontalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X -= totalHorizontalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
@@ -124,11 +116,8 @@ namespace DBZMOD
                 player.velocity = player.velocity - (Vector2.UnitY * player.gravity);
                 player.fallStart = (int)(player.position.Y / 16f);
                 
-                // DebugUtil.Log(string.Format("Player gravity {0} gravDir {1}", player.gravity, player.gravDir));
-
                 //calculate rotation
                 float radRot = 0;
-                // DebugUtil.Log(string.Format("m_rotation is X: {0} Y: {1}", m_rotationDir.X, m_rotationDir.Y));
                 if (m_rotationDir != Vector2.Zero)
                 {
                     m_rotationDir.Normalize();
