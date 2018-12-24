@@ -58,31 +58,33 @@ namespace DBZMOD
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (modPlayer.IsCharging ? 1 : 0);
                 int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd);
-                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
+                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
+                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.FlightSpeedAdd;
 
                 if (modPlayer.IsUpHeld)
                 {
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
-                    player.velocity.Y -= totalFlightSpeed;
+                    // for some reason flying up is way, way faster than flying down.
+                    player.velocity.Y -= (totalVerticalFlightSpeed / 4f);
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
-                    player.velocity.Y += totalFlightSpeed;
+                    player.velocity.Y += totalVerticalFlightSpeed - (player.gravity * 5f);
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
-                    player.velocity.X += totalFlightSpeed;
+                    player.velocity.X += totalHorizontalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
                     //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
-                    player.velocity.X -= totalFlightSpeed;
+                    player.velocity.X -= totalHorizontalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
 
@@ -111,6 +113,7 @@ namespace DBZMOD
                 {
                     FlightDustType = 267;
                 }
+                
 
                 //calculate velocity
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);

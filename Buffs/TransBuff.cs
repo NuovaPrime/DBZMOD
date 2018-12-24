@@ -94,6 +94,7 @@ namespace DBZMOD
             player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
+            player.jumpSpeedBoost = 2f * GetModifiedSpeedMultiplier(modPlayer);
             //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
