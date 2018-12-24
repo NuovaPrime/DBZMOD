@@ -142,59 +142,82 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void GrantWish(UIMouseEvent evt, UIElement listeningelement)
         {
             Player player = Main.LocalPlayer;
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if(WishSelection == WishSelectionID.Power)
+            bool UsedWish = true;
+            switch (WishSelection)
             {
-                if(modplayer.PowerWishesLeft > 0)
-                {
-                    DoPowerWish();
+                case WishSelectionID.Power:
+                    if (modplayer.PowerWishesLeft > 0)
+                    {
+                        DoPowerWish();
+                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                    }
+                    else
+                    {
+                        Main.PlaySound(SoundID.MenuClose);
+                    }
+                    break;
+                case WishSelectionID.Wealth:
+                    DoWealthWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                }
-                else
-                {
-                    Main.PlaySound(SoundID.MenuClose);
-                }
-            }
-            if (WishSelection == WishSelectionID.Wealth)
-            {
-                DoWealthWish();
-                SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-            }
-            if (WishSelection == WishSelectionID.Immortality)
-            {
-                if(modplayer.ImmortalityWishesLeft > 0)
-                {
-                    DoImmortalityWish();
+                    break;
+                case WishSelectionID.Immortality:
+                    if (modplayer.ImmortalityWishesLeft > 0)
+                    {
+                        DoImmortalityWish();
+                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                    }
+                    else
+                    {
+                        Main.PlaySound(SoundID.MenuClose);
+                    }
+                    break;
+                case WishSelectionID.Genetic:
+                    DoGeneticWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                }
-                else
-                {
-                    Main.PlaySound(SoundID.MenuClose);
-                }
+                    break;
+                case WishSelectionID.Awakening:
+                    if (modplayer.AwakeningWishesLeft > 0)
+                    {
+                        DoAwakeningWish();
+                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                    }
+                    else
+                    {
+                        Main.PlaySound(SoundID.MenuClose);
+                    }
+                    break;
+                default:
+                    UsedWish = false;
+                    break;
             }
-            if (WishSelection == WishSelectionID.Genetic)
+
+            if (UsedWish)
             {
-                DoGeneticWish();
-                SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                DestroyAndRespawnDragonBalls();
+                modplayer.WishActive = false;
             }
-            if (WishSelection == WishSelectionID.Awakening)
-            {
-                if (modplayer.AwakeningWishesLeft > 0)
-                {
-                    DoAwakeningWish();
-                    SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                }
-                else
-                {
-                    Main.PlaySound(SoundID.MenuClose);
-                }
-            }
+
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
+        private void DestroyAndRespawnDragonBalls()
+        {
+            var dbzWorld = DBZWorld.GetWorld();
+            for (var i = 0; i < dbzWorld.DragonBallLocations.Length; i++)
+            {
+                var location = dbzWorld.DragonBallLocations[i];
+                WorldGen.KillTile(location.X, location.Y, false, false, true);
+            }
+            // handles respawning all the dragon balls
+            DBZWorld.DoDragonBallCleanupCheck();
+        }
+
         private void DoPowerWish()
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -206,6 +229,7 @@ namespace DBZMOD.UI
             menuvisible = false;
             modplayer.WishActive = false;
         }
+
         private void DoWealthWish()
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -215,6 +239,7 @@ namespace DBZMOD.UI
             menuvisible = false;
             modplayer.WishActive = false;
         }
+
         private void DoImmortalityWish()
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -224,6 +249,7 @@ namespace DBZMOD.UI
             menuvisible = false;
             modplayer.WishActive = false;
         }
+
         private void DoGeneticWish()
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -233,6 +259,7 @@ namespace DBZMOD.UI
             menuvisible = false;
             modplayer.WishActive = false;
         }
+
         private void DoAwakeningWish()
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();

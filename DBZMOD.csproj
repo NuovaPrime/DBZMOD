@@ -463,6 +463,7 @@
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
+    <Compile Include="Tiles\DragonBalls\DragonBallTile.cs" />
     <Compile Include="Tiles\DragonBalls\TwoStarDBTile.cs" />
     <Compile Include="Tiles\DragonBalls\ThreeStarDBTile.cs" />
     <Compile Include="Tiles\DragonBalls\SixStarDBTile.cs" />

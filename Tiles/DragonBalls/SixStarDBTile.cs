@@ -9,37 +9,17 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles.DragonBalls
 {
-    public class SixStarDBTile : ModTile
+    public class SixStarDBTile : DragonBallTile
     {
-        public int WhichDragonBallAmI = 6;
         public override void SetDefaults()
         {
-            Main.tileSolid[Type] = false;
-            Main.tileSolidTop[Type] = false;
-            Main.tileNoAttach[Type] = true;
-            Main.tileTable[Type] = false;
-            Main.tileSpelunker[Type] = true;
-            Main.tileLighted[Type] = true;
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoFail[Type] = true;
-            Main.tileLavaDeath[Type] = false;
-            Main.tileMergeDirt[Type] = false;
-            Main.tileShine[Type] = 1150;
-            Main.tileShine2[Type] = true;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table, TileObjectData.newTile.Width, 0);
-            TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.Width = 1;
-            TileObjectData.newTile.Height = 1;
-            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
-            TileObjectData.newTile.Origin = new Point16(0, 0);
-            TileObjectData.newTile.CoordinatePadding = 2;
-            TileObjectData.addTile(Type);
+            base.SetDefaults();
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("6 Star Dragon Ball");
             drop = mod.ItemType("SixStarDB");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
+            WhichDragonBallAmI = 6;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -49,42 +29,6 @@ namespace DBZMOD.Tiles.DragonBalls
                 MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
                 modPlayer.SixStarDBNearby = true;
             }
-        }
-
-        public override bool HasSmartInteract()
-        {
-            return true;
-        }
-
-        public override void RightClick(int i, int j)
-        {
-            MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-            if (modPlayer.AllDragonBallsNearby())
-            {
-                modPlayer.WishActive = true;
-            }
-        }
-
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-            base.PlaceInWorld(i, j, item);
-            if (DBZWorld.IsExistingDragonBall(WhichDragonBallAmI))
-            {
-                WorldGen.KillTile(i, j, false, false, true);
-                Main.NewText("Cheated Dragon Balls taste awful.");
-            }
-            else
-            {
-                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
-            }
-        }
-
-        public override void MouseOver(int i, int j)
-        {
-            Player player = Main.LocalPlayer;
-            player.noThrow = 2;
-            player.showItemIcon = true;
-            player.showItemIcon2 = mod.ItemType("SixStarDB");
         }
     }
 }
