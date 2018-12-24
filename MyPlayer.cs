@@ -1464,6 +1464,7 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
+                        SoundUtil.PlayCustomSound("Sounds/KaioAuraAscend", player, .7f, .1f);
                         KaiokenLevel++;
                     }
                 } else

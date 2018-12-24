@@ -92,7 +92,7 @@ namespace DBZMOD.Projectiles.Auras
             }
 
             // easy automatic aura offset.
-            OriginalAuraOffset.Y = (player.height / 2 - projectile.height / 2) * projectile.scale;
+            OriginalAuraOffset.Y = (player.height * 0.6f - projectile.height / 2) * projectile.scale;
 
             // correct scaling
             if (ScaledAuraOffset != OriginalAuraOffset)
