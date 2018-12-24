@@ -1608,7 +1608,7 @@ namespace DBZMOD
                 KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
-            if (QuickKi.JustPressed)
+            if (WishActive && WishMenu.menuvisible == false)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
