@@ -63,13 +63,13 @@ namespace DBZMOD.Tiles.DragonBalls
             // if in debug mode, the cheated dragon ball replaces the original location instead of anti-cheat.
             if (DebugUtil.isDebug)
             {
-                if (DBZWorld.IsExistingDragonBall(WhichDragonBallAmI))
+                var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
+                if (oldTile != new Point(-1, -1))
                 {
-                    var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");
-                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
-                }
+                }                
+                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
             }
             else
             {

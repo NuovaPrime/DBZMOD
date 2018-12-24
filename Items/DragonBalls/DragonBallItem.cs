@@ -46,28 +46,61 @@ namespace DBZMOD.Items.DragonBalls
 
         public override bool OnPickup(Player player)
         {
-            SetDragonBallWorldKey(this, player);
+            DoDragonBallPickupCheck(this, player);
             return true;
         }
 
         public override void UpdateInventory(Player player)
         {
-            SetDragonBallWorldKey(this, player);
+            DoDragonBallPickupCheck(this, player);
+        }
+
+        public void DoDragonBallPickupCheck(DragonBallItem item, Player player)
+        {
+            // first thing's first, if this is a real dragon ball, we know it's legit cos it ain't a rock, and inerts don't spawn in world.
+            SetDragonBallWorldKey(item, player);
+
+            // check to see if the dragon ball destroyed is actually the real one (the one that matches the world location)
+            // if not, eat this dragon ball, the player is cheating.
+            DoDragonBallLegitimacyCheck(item, player);
         }
 
         public void SetDragonBallWorldKey(DragonBallItem item, Player player)
         {
-            // first thing's first, if this is a real dragon ball, we know it's legit cos it ain't a rock, and inerts don't spawn in world.
             if (item.item.type != DBZMOD.instance.GetItem("StoneBall").item.type)
             {
                 // we already have a dragon ball key, abandon ship.
                 if (item.WorldDragonBallKey > 0)
                     return;
                 // it's legit, set its dragon ball key
-                var world = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;                
-                
-                item.WorldDragonBallKey = world.WorldDragonBallKey;
+                var world = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
 
+                item.WorldDragonBallKey = world.WorldDragonBallKey;
+            }
+        }
+
+        public void DoDragonBallLegitimacyCheck(DragonBallItem item, Player player)
+        {
+            var dbLocation = DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1];
+            var dbTile = Framing.GetTileSafely(dbLocation.X, dbLocation.Y);
+            var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(item.WhichDragonBall));
+            if (dbTile.type == dbTileType)
+            {
+                // the player is cheating. if we're in debug mode this is fine, but destroy that tile.
+                if (DebugUtil.isDebug)
+                {
+                    Main.NewText("Debugged in a Dragon Ball, destroying the original.");
+                    WorldGen.KillTile(dbLocation.X, dbLocation.Y);
+                    DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
+                }
+                else
+                {
+                    Main.NewText("Cheated Dragon Balls taste awful.");
+                    ItemHelper.RemoveDragonBall(player.inventory, item.WorldDragonBallKey.Value, item.WhichDragonBall);
+                }
+            }
+            else
+            {
                 // remove the dragon ball location from the world - it ain't there no more.            
                 DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
             }
