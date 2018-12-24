@@ -73,8 +73,26 @@ namespace DBZMOD.Projectiles.Auras
             // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
+            bool isKaiokenAura = projectile.modProjectile is KaiokenAuraProj;
+
+            // universal scale handling
+            // scale is based on kaioken level, which gets set to 0
+            OriginalScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (isKaiokenAura ? -0.1f : 0f);
+
+            float scaleMult = HasComplexBlendStates ? Main.GameZoomTarget : 1f;
+
+            // special scaling for Kaioken auras only
+            if (Transformations.IsAnythingOtherThanKaioken(player) && isKaiokenAura)
+            {
+                projectile.scale = OriginalScale * scaleMult * 1.2f;
+            }
+            else
+            {
+                projectile.scale = OriginalScale * scaleMult;
+            }
+
             // easy automatic aura offset.
-            OriginalAuraOffset.Y = player.height * 0.66f - (projectile.height / 2) * projectile.scale;
+            OriginalAuraOffset.Y = (player.height / 2 - projectile.height / 2) * projectile.scale;
 
             // correct scaling
             if (ScaledAuraOffset != OriginalAuraOffset)
@@ -84,22 +102,6 @@ namespace DBZMOD.Projectiles.Auras
 
             // normal frame progression
             projectile.frameCounter++;
-
-            bool isKaiokenAura = projectile.modProjectile is KaiokenAuraProj;
-
-            // universal scale handling
-            // scale is based on kaioken level, which gets set to 0
-            OriginalScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (isKaiokenAura ? -0.1f : 0f);
-
-            // special scaling for Kaioken auras only
-            if (Transformations.IsAnythingOtherThanKaioken(player) && isKaiokenAura)
-            {
-                projectile.scale = OriginalScale * Main.GameZoomTarget * 1.2f;
-            }
-            else
-            {
-                projectile.scale = OriginalScale * Main.GameZoomTarget;
-            }
 
             // double the frame counter speed if charging
             if (modPlayer.IsCharging)
