@@ -25,38 +25,26 @@ namespace DBZMOD.Projectiles.Auras
             projectile.penetrate = -1;
             projectile.damage = 0;
             KaioAuraTimer = 240;
-            IsKaioAura = true;   
+            IsKaioAura = true;
+            projectile.hide = true;
+            ProjectileID.Sets.DontAttachHideToAlpha[projectile.type] = true;
+        }
+
+        public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
+        {
+            // Add this projectile to the list of projectiles that will be drawn BEFORE tiles and NPC are drawn. This makes the projectile appear to be BEHIND the tiles and NPC.
+            drawCacheProjsBehindProjectiles.Add(index);
         }
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
 
-            // easy automatic aura offset.
-            OriginalAuraOffset.Y = player.height * 0.66f - (projectile.height / 2) * projectile.scale;
-
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             // kill the projectile if Kaioken is level 0
             if (modPlayer.KaiokenLevel == 0)
                 projectile.Kill();
-
-            // scale is based on kaioken level, which gets set to 0
-            OriginalScale = 0.9f + (0.1f * modPlayer.KaiokenLevel);
-
-            if (Transformations.IsAnythingOtherThanKaioken(player))
-            {
-                projectile.scale = OriginalScale * 1.2f;
-            }
-            else
-            {
-                projectile.scale = OriginalScale;
-            }
-
-            // correct scaling
-            if (ScaledAuraOffset != OriginalAuraOffset)
-                ScaledAuraOffset = OriginalAuraOffset;
-            projectile.netUpdate = true;
 
             // remove the aura if the buff is removed.
             if (!Transformations.IsKaioken(player))

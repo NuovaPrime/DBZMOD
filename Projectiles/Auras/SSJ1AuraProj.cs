@@ -29,9 +29,9 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            ScaledAuraOffset.Y = -30;
             IsSSJAura = true;
-			projectile.light = 1f;            
+			projectile.light = 1f;
+            HasComplexBlendStates = true;
         }
 
         public override void AI()
@@ -57,10 +57,9 @@ namespace DBZMOD.Projectiles.Auras
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            projectile.scale = Main.GameZoomTarget;
-            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);       
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);          
+            
             return true;
         }
 

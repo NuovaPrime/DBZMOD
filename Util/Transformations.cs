@@ -582,8 +582,13 @@ namespace Util
 
         // create the projectile(s) representing the transformation aura.
         public static void DoProjectileForBuff(Player player, List<BuffInfo> buffs)
-        {           
-            foreach (string projectileKey in buffs.SelectMany(x => x.ProjectileKeys).OrderBy(x => x.Equals("SuperKaiokenAuraProj") ? 0 : 1))
+        {
+            Comparison<BuffInfo> buffCompare = delegate (BuffInfo a, BuffInfo b)
+            {
+                return a.BuffKeyName.Equals("SuperKaiokenAuraProj") ? - 1 : a.BuffKeyName.CompareTo(b.BuffKeyName);
+            };
+            buffs.Sort(buffCompare);
+            foreach (string projectileKey in buffs.SelectMany(x => x.ProjectileKeys))
             {
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, DBZMOD.DBZMOD.instance.ProjectileType(projectileKey), 0, 0, player.whoAmI);
             }            

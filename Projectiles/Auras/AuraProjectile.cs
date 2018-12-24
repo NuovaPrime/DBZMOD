@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -20,6 +22,7 @@ namespace DBZMOD.Projectiles.Auras
         public Vector2 ScaledAuraOffset;
         public Vector2 OriginalAuraOffset;
         public float OriginalScale;
+        public bool HasComplexBlendStates = false;
 
         public override bool CloneNewInstances
         {
@@ -30,18 +33,28 @@ namespace DBZMOD.Projectiles.Auras
         }
 
         public override bool PreAI()
-        {            
-            Player player = Main.player[projectile.owner];
-
-            // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.hide = modPlayer.IsTransformationAnimationPlaying;
-
+        {
             // make sure behind the scenes we're still playing keep-alive.
             if (projectile.timeLeft < 2)
             {
                 projectile.timeLeft = 10;
             }
+
+            Player player = Main.player[projectile.owner];
+            return AuraProjectileAnimationShouldSkipAIWhenHidden(player);
+        }
+
+        public bool AuraProjectileAnimationShouldSkipAIWhenHidden(Player player)
+        {
+            // skip on auras that have special hide handling.
+            if (ProjectileID.Sets.DontAttachHideToAlpha[projectile.type])
+            {
+                return true;
+            }
+
+            // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            projectile.hide = modPlayer.IsTransformationAnimationPlaying;
 
             // don't run AI on the hidden projectile, this prevents sounds from playing, etc.
             return !projectile.hide;
@@ -60,10 +73,33 @@ namespace DBZMOD.Projectiles.Auras
             // if we're in the middle of aura animations, return until they're over, and keep the projectile hidden
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
+            // easy automatic aura offset.
+            OriginalAuraOffset.Y = player.height * 0.66f - (projectile.height / 2) * projectile.scale;
+
+            // correct scaling
+            if (ScaledAuraOffset != OriginalAuraOffset)
+                ScaledAuraOffset = OriginalAuraOffset;
+
             int frameCounterLimit = 3;
 
             // normal frame progression
             projectile.frameCounter++;
+
+            bool isKaiokenAura = projectile.modProjectile is KaiokenAuraProj;
+
+            // universal scale handling
+            // scale is based on kaioken level, which gets set to 0
+            OriginalScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (isKaiokenAura ? -0.1f : 0f);
+
+            // special scaling for Kaioken auras only
+            if (Transformations.IsAnythingOtherThanKaioken(player) && isKaiokenAura)
+            {
+                projectile.scale = OriginalScale * Main.GameZoomTarget * 1.2f;
+            }
+            else
+            {
+                projectile.scale = OriginalScale * Main.GameZoomTarget;
+            }
 
             // double the frame counter speed if charging
             if (modPlayer.IsCharging)
@@ -111,6 +147,12 @@ namespace DBZMOD.Projectiles.Auras
                 projectile.Center = player.Center + new Vector2(ScaledAuraOffset.X, (ScaledAuraOffset.Y));
                 projectile.rotation = 0;
             }
+
+            //// something weird happens to complex blend state auras when you're at the edge of the map, this is an attempt to combat that.
+            //if (projectile.Center.X < Main.screenPosition)
+            //{
+
+            //}
 
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

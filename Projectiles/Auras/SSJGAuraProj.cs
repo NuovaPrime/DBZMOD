@@ -33,6 +33,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.netUpdate = true;
             ScaledAuraOffset.Y = -30;
 			projectile.light = 1f;
+            HasComplexBlendStates = true;
         }
 
 		public override void PostAI()
@@ -76,8 +77,6 @@ namespace DBZMOD.Projectiles.Auras
 		
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            projectile.scale = Main.GameZoomTarget;
-            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             return base.PreDraw(spriteBatch, lightColor);

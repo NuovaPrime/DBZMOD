@@ -453,5 +453,14 @@ V1.0.9
 
 1. Buffed the set bonuses of the [[Turtle Hermit Armor]] and [[Saiyan Armor]].
 
+2. You can now combine Kaioken with forms.
+
+3. Kaioken level/size scaling reimplemented.
+
+4. Kaioken nerfed and buffed at the same time. 20% damage per Kaioken level. -15% defense per Kaioken level. Health drain drastically reduced.
+
+5. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+
+6. Current Ki is now a float instead of an integer. (Backend change shouldn't affect gameplay)
 
 == Fixes ==
