@@ -2095,22 +2095,26 @@ namespace DBZMOD
         public bool IsKaioken;
         public bool WasKaioken;
         public bool IsTransformed;
-        public bool WasTransformed;
+        public bool WasTransformed;        
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
-            WasKaioken = IsKaioken;
-            WasTransformed = IsTransformed;
-
-            IsKaioken = Transformations.IsKaioken(player);
-            IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
-            // this way, we can apply exhaustion debuffs correctly.
-            if (WasKaioken && !IsKaioken)
+            if (!DebugUtil.isDebug)
             {
-                bool WasSSJKK = WasTransformed;
-                Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
-            }
-            if (WasTransformed && !IsTransformed) {
-                Transformations.AddTransformationExhaustion(player);
+                WasKaioken = IsKaioken;
+                WasTransformed = IsTransformed;
+
+                IsKaioken = Transformations.IsKaioken(player);
+                IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
+                // this way, we can apply exhaustion debuffs correctly.
+                if (WasKaioken && !IsKaioken)
+                {
+                    bool WasSSJKK = WasTransformed;
+                    Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
+                }
+                if (WasTransformed && !IsTransformed)
+                {
+                    Transformations.AddTransformationExhaustion(player);
+                }
             }
         }
 
