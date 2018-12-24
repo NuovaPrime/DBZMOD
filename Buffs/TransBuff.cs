@@ -30,6 +30,9 @@ namespace DBZMOD
         public int BaseDefenceBonus;
         public int PrecentDefenceBonus;
 
+        // used to help track the Kaioken Level for tooltip related stuff as well as buff power
+        public int KaiokenLevel;
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
@@ -174,12 +177,31 @@ namespace DBZMOD
 
         public string AssembleTransBuffDescription()
         {
-            int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
-            int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
+            string KaiokenName = string.Empty;
+            if (Type == Transformations.Kaioken.GetBuffId() || Type == Transformations.SuperKaioken.GetBuffId())
+            {
+                switch (KaiokenLevel)
+                {
+                    case 2:
+                        KaiokenName = "(x3)\n";
+                        break;
+                    case 3:
+                        KaiokenName = "(x10)\n";
+                        break;
+                    case 4:
+                        KaiokenName = "(x20)\n";
+                        break;
+                    case 5:
+                        KaiokenName = "(x100)\n";
+                        break;
+                }
+            }
+            int percentDamageMult = (int)Math.Round(DamageMulti * 100f, 0) - 100;
+            int percentSpeedMult = (int)Math.Round(SpeedMulti * 100f, 0) - 100;
             float kiDrainPerSecond = 60f * KiDrainRate;
             float kiDrainPerSecondWithMastery = 60f * KiDrainRateWithMastery;
-            int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
-            string displayString = string.Empty;
+            int percentKiDrainMulti = (int)Math.Round(KiDrainBuffMulti * 100f, 0) - 100;
+            string displayString = KaiokenName;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
             displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);

@@ -29,13 +29,7 @@ namespace Buffs
 
         public static string Kaioken = "KaiokenBuff";
 
-        public static string Kaioken3 = "KaiokenBuffX3";
-
-        public static string Kaioken10 = "KaiokenBuffX10";
-
-        public static string Kaioken20 = "KaiokenBuffX20";
-
-        public static string Kaioken100 = "KaiokenBuffX100";
+        public static string SuperKaioken = "SuperKaiokenBuff";
 
         // the two debuffs from transforms
         public static string KaiokenFatigue = "TiredDebuff";

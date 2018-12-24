@@ -9,7 +9,7 @@ using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Projectiles.Auras
+namespace DBZMOD.Projectiles.Auras
 {
     public abstract class AuraProjectile : ModProjectile
     {

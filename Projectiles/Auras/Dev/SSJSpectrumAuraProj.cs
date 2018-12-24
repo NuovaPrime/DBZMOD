@@ -6,11 +6,10 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
-using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras.Dev
 {
-    public class SSJSpectrumAuraProj : AuraProjectile
+    public class SSJSpectrumAuraProj : KaiokenAuraProj
     {
         private int ChargeSoundTimer = 240;
         private int LightningTimer = 0;
