@@ -594,8 +594,10 @@ namespace DBZMOD
             if (IsDragonBallInventoried(whichDragonball))
                 return true;
 
-            if (WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true))
+            TileObject toBePlaced;
+            if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
             {
+                WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
                 int dbIndex = whichDragonball - 1;
                 GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
                 DebugUtil.Log(string.Format("Placing dragon ball {0} at coordinates {1} {2}", whichDragonball, offsetX, offsetY));
@@ -615,10 +617,19 @@ namespace DBZMOD
                 progress.Set(0.25f);
             }
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 0; i <= 6; i++)
             {
-                Point safeCoordinates = GetSafeDragonBallCoordinates();
-                TryPlacingDragonball(i, safeCoordinates.X, safeCoordinates.Y);
+                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);
+
+                if (shouldTryToSpawn)
+                {
+                    Point safeCoordinates = GetSafeDragonBallCoordinates();
+                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y))
+                    {
+                        safeCoordinates = GetSafeDragonBallCoordinates();
+                    }
+                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
+                }
             }
             return true;
         }
@@ -633,7 +644,10 @@ namespace DBZMOD
                 if (shouldTryToSpawn)
                 {
                     Point safeCoordinates = GetSafeDragonBallCoordinates();
-                    TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y);
+                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y))
+                    {
+                        safeCoordinates = GetSafeDragonBallCoordinates();
+                    }
                     DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
                 }
             }
