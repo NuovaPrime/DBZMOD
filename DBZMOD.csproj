@@ -85,8 +85,11 @@
     <Compile Include="Buffs\DemonBonus.cs" />
     <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
     <Compile Include="Buffs\DisgustingGoopBuff.cs" />
-    <Compile Include="Buffs\SuperKaiokenBuff.cs" />
     <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Buffs\KaiokenBuffX10.cs" />
+    <Compile Include="Buffs\KaiokenBuffX100.cs" />
+    <Compile Include="Buffs\KaiokenBuffX20.cs" />
+    <Compile Include="Buffs\KaiokenBuffX3.cs" />
     <Compile Include="Buffs\KatchinFeet.cs" />
     <Compile Include="Buffs\KiLanternBuff.cs" />
     <Compile Include="Buffs\KiPotionSickness.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Buffs\ProdigyTrait.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJ1Buff.cs" />
+    <Compile Include="Buffs\SSJ1KaiokenBuff.cs" />
     <Compile Include="Buffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJGBuff.cs" />
@@ -187,6 +191,7 @@
     <Compile Include="Items\Accessories\ZenkaiCharm.cs" />
     <Compile Include="Items\AngerKiCrystal.cs" />
     <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\BlackFusionPants.cs" />
     <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\BlackFusionShirt.cs" />
@@ -196,6 +201,7 @@
     <Compile Include="Items\Armor\ArmorSets\RadiantGreaves.cs" />
     <Compile Include="Items\Armor\ArmorSets\RadiantScalepiece.cs" />
     <Compile Include="Items\Armor\ArmorSets\RadiantVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
     <Compile Include="Items\Armor\ArmorSets\SaiyanScoutPants.cs" />
@@ -269,6 +275,7 @@
     <Compile Include="Items\EarthenShard.cs" />
     <Compile Include="Items\EmptyNecklace.cs" />
     <Compile Include="Items\KaiTableItem.cs" />
+    <Compile Include="Items\KatchinScale.cs" />
     <Compile Include="Items\KiLanternItem.cs" />
     <Compile Include="Items\KiOrb.cs" />
     <Compile Include="Items\KiOrb2.cs" />
@@ -360,8 +367,11 @@
     <Compile Include="Projectiles\Auras\BaseAuraProj.cs" />
     <Compile Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.cs" />
     <Compile Include="Projectiles\Auras\FalseUIAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SuperKaiokenAuraProj.cs" />
     <Compile Include="Projectiles\Auras\KaiokenAuraProj.cs" />
+    <Compile Include="Projectiles\Auras\KaiokenAuraProjx10.cs" />
+    <Compile Include="Projectiles\Auras\KaiokenAuraProjx100.cs" />
+    <Compile Include="Projectiles\Auras\KaiokenAuraProjx20.cs" />
+    <Compile Include="Projectiles\Auras\KaiokenAuraProjx3.cs" />
     <Compile Include="Projectiles\Auras\LSSJ2AuraProj.cs" />
     <Compile Include="Projectiles\Auras\LSSJAuraProj.cs" />
     <Compile Include="Projectiles\Auras\SSJ1AuraProj.cs" />

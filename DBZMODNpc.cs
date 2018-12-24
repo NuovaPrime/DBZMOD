@@ -720,6 +720,14 @@ namespace DBZMOD
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
                 }
             }
+            if (!Main.expertMode)
+            {
+                if (npc.type == NPCID.DukeFishron)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
+                        mod.ItemType("KatchinScale"), Main.rand.Next(12, 36));
+                }
+            }
             if (NPC.downedBoss2)
             {
                 if (Main.rand.Next(7) == 0)

@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             Tooltip.SetDefault("10% Increased Ki Damage"
                 + "\n6% Increased Ki Crit Chance" +
                                "\n+100 Max ki");
-            DisplayName.SetDefault("Saiyan Breastplate");
+            DisplayName.SetDefault("Saiyan Battle Breastplate");
         }
 
         public override void SetDefaults()
