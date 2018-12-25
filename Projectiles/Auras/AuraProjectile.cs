@@ -63,7 +63,7 @@ namespace DBZMOD.Projectiles.Auras
 		//flicker fix
 		public override Color? GetAlpha(Color lightColor)
         {
-			return new Color(255, 255, 255, 240);
+			return new Color(255, 255, 255, 255);
         }
 
         public override void AI()
