@@ -92,5 +92,13 @@ namespace DBZMOD.Tiles.DragonBalls
             player.showItemIcon = true;
             player.showItemIcon2 = mod.ItemType(DragonBallItem.GetDragonBallItemTypeFromNumber(WhichDragonBallAmI));
         }
+
+        // the four star is special, it has its own drop method
+        public override bool Drop(int i, int j)
+        {            
+            DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
+            Item.NewItem(i * 16, j * 16, 32, 48, drop);
+            return false;
+        }
     }
 }

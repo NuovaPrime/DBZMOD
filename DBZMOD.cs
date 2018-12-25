@@ -114,7 +114,7 @@ namespace DBZMOD
                 Filters.Scene["DBZMOD:WishSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.1f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:WishSky"] = new WishSky();
             }
-        }
+        }        
 
         public static void ActivateTransMenu()
         {

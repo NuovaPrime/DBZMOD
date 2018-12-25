@@ -22,7 +22,7 @@ namespace DBZMOD
 
         // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
         // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
-        public int WorldDragonBallKey = 0;        
+        public int WorldDragonBallKey = 0;
 
         // helper utility method for snagging the currently loaded world.
         public static DBZWorld GetWorld()
@@ -72,11 +72,20 @@ namespace DBZMOD
             base.Load(tag);
         }
 
-        private static bool GenerateGohanHouse = false;
-        private static bool IsGohanHouseCleaned = false;
-        public static bool IsDragonBallPlacementDone = false;
-        public static int GohanHouseStartPositionX = 0;
-        public static int GohanHouseStartPositionY = 0;
+        public override void PostWorldGen()
+        {
+            base.PostWorldGen();
+            GenerateGohanHouse = false;
+            IsGohanHouseCleaned = false;
+            IsDragonBallPlacementDone = false;
+            IsGohanHouseOffsetSet = false;
+        }
+
+        private bool GenerateGohanHouse = false;
+        private bool IsGohanHouseCleaned = false;
+        public bool IsDragonBallPlacementDone = false;
+        public int GohanHouseStartPositionX = 0;
+        public int GohanHouseStartPositionY = 0;
         public override void ResetNearbyTileEffects()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
@@ -300,8 +309,15 @@ namespace DBZMOD
             return true;
         }
 
+        // flag tracking whether the initial house creation point has been offset by the building's height, should only occur once.
+        public bool IsGohanHouseOffsetSet = false;
         public void GenerateGohanStructureWithByteArrays(bool isFirstPass)
         {
+            if (!IsGohanHouseOffsetSet)
+            {
+                GohanHouseStartPositionY -= GohanHouseTiles.GetLength(0);
+                IsGohanHouseOffsetSet = true;
+            }
 
             // if we're here it means we are ready to generate our structure
 
@@ -311,7 +327,7 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseTiles.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseTiles.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseTiles[Y, X])
                     {
@@ -350,7 +366,7 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseSlopes.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseSlopes.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     tile.slope(GohanHouseSlopes[Y, X]);
                 }
@@ -361,7 +377,7 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseWalls.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseWalls.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseWalls[Y, X])
                     {
@@ -390,7 +406,7 @@ namespace DBZMOD
                 for (var Y = GohanHouseObjects.GetLength(0) - 1; Y >= 0; Y--)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseObjects.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     // break rocks!
                     if (tile.type == TileID.SmallPiles || tile.type == TileID.LargePiles || tile.type == TileID.LargePiles2 || tile.type == TileID.Dirt || tile.type == TileID.Stone)
@@ -446,7 +462,7 @@ namespace DBZMOD
                 for (var X = -1 - (Y * 2); X < GohanHouseTiles.GetLength(1) + 1 + (Y * 2); X++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y;
+                    int offsetY = GohanHouseStartPositionY + GohanHouseTiles.GetLength(0) + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     bool isEdge = IsAnySideExposed(offsetX, offsetY);
                     tile.type = isSnowBiome ? TileID.SnowBlock : (isEdge ? TileID.Grass : TileID.Dirt);
@@ -520,15 +536,17 @@ namespace DBZMOD
                 default:
                     return "";
             }
-        }
+        }               
 
-        public static bool IsDragonBallWithPlayers(int whichDragonball)
+        public static bool IsDragonBallWithPlayers(int whichDragonball, Player ignorePlayer = null)
         {
             for (var i = 0; i < Main.player.Length; i++)
             {
                 if (Main.player[i] == null)
                     continue;
                 if (Main.player[i].whoAmI != i)
+                    continue;
+                if (ignorePlayer != null && Main.player[i].whoAmI == ignorePlayer.whoAmI)
                     continue;
                 var player = Main.player[i];                
                 if (InventoryContainsDragonball(whichDragonball, player.inventory))
@@ -580,14 +598,14 @@ namespace DBZMOD
             return false;
         }
 
-        public static bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY)
+        public static bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY, Player ignorePlayer = null)
         {
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonball))
                 return true;
 
             // dragon ball is in a connected player's inventory. This isn't fool proof.
-            if (IsDragonBallWithPlayers(whichDragonball))
+            if (IsDragonBallWithPlayers(whichDragonball, ignorePlayer))
                 return true;
 
             // dragon ball is in a chest somewhere. This also isn't fool proof.
@@ -634,7 +652,7 @@ namespace DBZMOD
             return true;
         }
 
-        public static void DoDragonBallCleanupCheck()
+        public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)
         {
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
@@ -644,7 +662,7 @@ namespace DBZMOD
                 if (shouldTryToSpawn)
                 {
                     Point safeCoordinates = GetSafeDragonBallCoordinates();
-                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y))
+                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y, ignorePlayer))
                     {
                         safeCoordinates = GetSafeDragonBallCoordinates();
                     }

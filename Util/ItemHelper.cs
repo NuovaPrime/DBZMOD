@@ -72,7 +72,7 @@ namespace DBZMOD
                     var dBall = item.modItem as DragonBallItem;
                     if (dBall.WorldDragonBallKey == dbKey && dBall.WhichDragonBall == whichDragonball)
                     {
-                        inventory[i] = null;
+                        inventory[i].TurnToAir();
                         return i;
                     }
                 }
@@ -132,11 +132,11 @@ namespace DBZMOD
             if (dbSlot == -1)
                 return;
             var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball);
-            var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball)).Clone();
-            var dbData = newDragonBall as DragonBallItem;
+            var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball)).item.DeepClone();
+            var dbData = newDragonBall.modItem as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
             dbData.WhichDragonBall = whichDball;
-            inventory[dbSlot] = newDragonBall.item;
+            inventory[dbSlot] = newDragonBall;
         }
 
         public static void SwapDragonBallWithStoneBall(Item[] inventory, int WorldDragonBallKey, int WhichDragonBall)
@@ -148,11 +148,11 @@ namespace DBZMOD
             // something went wrong, abort.
             if (dbSlot == -1)
                 return;
-            var newStoneBall = DBZMOD.instance.GetItem("StoneBall").Clone();
-            var dbData = newStoneBall as DragonBallItem;
+            var newStoneBall = DBZMOD.instance.GetItem("StoneBall").item.DeepClone();
+            var dbData = newStoneBall.modItem as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
             dbData.WhichDragonBall = whichDball;
-            inventory[dbSlot] = newStoneBall.item;
+            inventory[dbSlot] = newStoneBall;
         }
     }
 }

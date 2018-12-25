@@ -41,6 +41,7 @@ namespace DBZMOD.Items.DragonBalls
         {
             var dbTagCompound = new TagCompound();
             dbTagCompound.Add("WorldDragonBallKey", WorldDragonBallKey);
+            dbTagCompound.Add("WhichDragonBall", WhichDragonBall);
             return dbTagCompound;
         }
 
@@ -57,11 +58,12 @@ namespace DBZMOD.Items.DragonBalls
 
         public void DoDragonBallPickupCheck(DragonBallItem item, Player player)
         {
-            // first thing's first, if this is a real dragon ball, we know it's legit cos it ain't a rock, and inerts don't spawn in world.
+            // If this ball doesn't already have a world key, make sure it's set. If it does leave it alone.
             SetDragonBallWorldKey(item, player);
 
             // check to see if the dragon ball destroyed is actually the real one (the one that matches the world location)
             // if not, eat this dragon ball, the player is cheating.
+            // this also handles whether or not the ball becomes inert because it's from another world.
             DoDragonBallLegitimacyCheck(item, player);
         }
 
@@ -77,41 +79,73 @@ namespace DBZMOD.Items.DragonBalls
 
                 item.WorldDragonBallKey = world.WorldDragonBallKey;
             }
+            return;
         }
 
         public void DoDragonBallLegitimacyCheck(DragonBallItem item, Player player)
         {
-            var dbLocation = DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1];
-            // something bad has happened, don't proceed
-            if (dbLocation == new Point(-1, -1))
-                return;
-            var dbTile = Framing.GetTileSafely(dbLocation.X, dbLocation.Y);
-            var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(item.WhichDragonBall));
-            if (dbTile.type == dbTileType)
+            // if the keys match, check to see if this dragon ball is cheated in.
+            if (DBZWorld.GetWorld().WorldDragonBallKey == item.WorldDragonBallKey.Value)
             {
-                // the player is cheating. if we're in debug mode this is fine, but destroy that tile.
-                if (DebugUtil.isDebug)
+                bool isStoneBallTakingPlaceOfExistingDragonBall = false;
+                bool isStoneBallStale = false;
+                // check if this is an inert ball that needs to be restored to its glory.
+                if (item.item.type == mod.ItemType("StoneBall"))
                 {
-                    Main.NewText("Debugged in a Dragon Ball, destroying the original.");
-                    WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
-                    DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
+                    if (!DBZWorld.IsDragonBallWithPlayers(item.WorldDragonBallKey.Value))
+                    {
+                        ItemHelper.SwapStoneBallWithDragonBall(player.inventory, item.WorldDragonBallKey.Value, item.WhichDragonBall);
+                        isStoneBallTakingPlaceOfExistingDragonBall = true;
+                    } else
+                    {
+                        // the player is bringing a dragon ball back legitimately, but someone else found the replacement while they were gone. Tough luck.
+                        isStoneBallStale = true;
+                    }
                 }
-                else
+                var dbLocation = DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1];
+                // something bad has happened, don't proceed
+                if (dbLocation == new Point(-1, -1))
+                    return;
+                var dbTile = Framing.GetTileSafely(dbLocation.X, dbLocation.Y);
+                var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(item.WhichDragonBall));
+                // strange: the tile is still where the server thinks it is. this means the player probably cheated in a dragon ball.
+                if (dbTile.type == dbTileType)
                 {
-                    Main.NewText("Cheated Dragon Balls taste awful.");
-                    ItemHelper.RemoveDragonBall(player.inventory, item.WorldDragonBallKey.Value, item.WhichDragonBall);
-                }
+                    // the player is cheating. if we're in debug mode this is fine, but destroy that tile.
+                    if (DebugUtil.isDebug || isStoneBallTakingPlaceOfExistingDragonBall)
+                    {
+                        // Main.NewText("Debugged in a Dragon Ball, destroying the original.");
+                        WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
+                        DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
+                        return;
+                    }
+                    else
+                    {
+                        if (isStoneBallStale)
+                        {
+                            Main.NewText(string.Format("{0} lost the {1} Star Dragonball because they left and someone else found it.", player.name, WhichDragonBall));
+                        }
+                        else
+                        {
+                            Main.NewText("Cheated Dragon Balls taste awful.");
+                        }
+                        ItemHelper.RemoveDragonBall(player.inventory, item.WorldDragonBallKey.Value, item.WhichDragonBall);
+                        return;
+                    }
+                }                
             }
             else
             {
-                // remove the dragon ball location from the world - it ain't there no more.            
-                DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
+                // the keys don't match.. what we have here is a different world's dragon ball.
+                ItemHelper.SwapDragonBallWithStoneBall(player.inventory, item.WorldDragonBallKey.Value, item.WhichDragonBall);
+                return;
             }
         }
 
         public override void Load(TagCompound tag)
         {
             WorldDragonBallKey = tag.GetInt("WorldDragonBallKey");
+            WhichDragonBall = tag.GetInt("WhichDragonBall");
             base.Load(tag);
         }
 

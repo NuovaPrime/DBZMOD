@@ -277,6 +277,13 @@ namespace DBZMOD
         FistSystem m_fistSystem = new FistSystem();
         #endregion
 
+        public override void PlayerDisconnect(Player player)
+        {
+            base.PlayerDisconnect(player);
+            // make sure if the player is leaving with a dragon ball we spawn a new one. This might not work.
+            DBZWorld.DoDragonBallCleanupCheck(player);
+        }
+
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
@@ -290,7 +297,7 @@ namespace DBZMOD
             // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
             // I'm not sure why worldgen doesn't always work, but this makes it recover from any issues it might have.
             DBZWorld.DoDragonBallCleanupCheck();
-        }
+        }        
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
