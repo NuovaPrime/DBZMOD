@@ -404,7 +404,7 @@ namespace Util
         // a bool for whether the player is in a state other than Kaioken (a form)
         public static bool IsAnythingOtherThanKaioken(BuffInfo buff)
         {
-            return IsLSSJ(buff) || IsSSJ(buff) || IsGodlike(buff) || IsDevBuffed(buff) || IsAscended(buff);
+            return IsLSSJ(buff) || IsSSJ(buff) || IsGodlikeBuff(buff) || IsDevBuffed(buff) || IsAscended(buff);
         }
 
         // a bool for whether the player is in a state other than Kaioken (a form)
@@ -426,7 +426,7 @@ namespace Util
         }
 
         // whether the buff is SSJG, specifically
-        public static bool IsGodlike(BuffInfo buff)
+        public static bool IsGodlikeBuff(BuffInfo buff)
         {
             return SSJG.GetBuffId() == buff.GetBuffId();
         }

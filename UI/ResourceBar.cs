@@ -36,6 +36,8 @@ namespace DBZMOD.UI
         private Color gradientA;
 		private Color gradientB;
         public Texture2D texture;
+        private Color gradientAColor;
+        private Color gradientBColor;
 
         public override void OnInitialize()
 		{
@@ -156,10 +158,11 @@ namespace DBZMOD.UI
         private static List<float> cleanAverageKi = new List<float>();
 		public override void Update(GameTime gameTime)
 		{            
-            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Player player = Main.LocalPlayer;
 
             // the point of this is to get a one second average of the ki changes. This makes the ki bar stabilize instead of flickering so goddamn much.
-            cleanAverageKi.Add(player.GetKi());
+            cleanAverageKi.Add(modplayer.GetKi());
             if (cleanAverageKi.Count > 15)
             {
                 cleanAverageKi.RemoveRange(0, cleanAverageKi.Count - 15);
@@ -170,16 +173,46 @@ namespace DBZMOD.UI
             switch (stat)
 			{
 				case ResourceBarMode.KI:
-                    text.SetText("Ki:" + averageKi + " / " + player.OverallKiMax());
+                    text.SetText("Ki:" + averageKi + " / " + modplayer.OverallKiMax());
 					break;
 
                 case ResourceBarMode.OVERLOAD:
-                    text.SetText("Overload:" + player.OverloadCurrent + " / " + player.OverloadMax);
+                    text.SetText("Overload:" + modplayer.OverloadCurrent + " / " + modplayer.OverloadMax);
                     break;
 
                 default:
 					break;
 			}
+            if(modplayer.playerTrait == "Legendary")
+            {
+                gradientAColor = new Color(0, 122, 91);
+                gradientBColor = new Color(0, 254, 0);
+            }
+            else if (modplayer.playerTrait == "Prodigy")
+            {
+                gradientAColor = new Color(63, 89, 219);
+                gradientBColor = new Color(150, 112, 255);
+            }
+            else if (modplayer.playerTrait == "Divine")
+            {
+                gradientAColor = new Color(15, 0, 24);
+                gradientBColor = new Color(106, 62, 183);
+            }
+            else if (modplayer.playerTrait == "Primal")
+            {
+                gradientAColor = new Color(198, 19, 46);
+                gradientBColor = new Color(255, 151, 0);
+            }
+            else if (Transformations.IsGodlike(player))
+            {
+                gradientAColor = new Color(175, 45, 63);
+                gradientBColor = new Color(255, 116, 48);
+            }
+            else
+            {
+                gradientAColor = new Color(0, 208, 255);
+                gradientBColor = new Color(0, 80, 255);
+            }
 			base.Update(gameTime);
 		}
 
