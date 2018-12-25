@@ -82,6 +82,41 @@ namespace DBZMOD
             return -1;
         }
 
+        /// <summary>
+        ///     Return the slot of the inventory a dragon ball was in after deleting it.
+        ///     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
+        /// </summary>
+        /// <returns></returns>
+        public static int RemoveStoneBall(Item[] inventory, int dbKey, int whichDragonball)
+        {
+            int ballTypeInt = GetItemTypeFromName("StoneBall");
+            for (var i = 0; i < inventory.Length; i++)
+            {
+                var item = inventory[i];
+                if (item == null)
+                    continue;
+
+                if (item.modItem == null)
+                    continue;
+
+                if (item.type != ballTypeInt)
+                    continue;
+
+                if (item.modItem is DragonBallItem)
+                {
+                    var dBall = item.modItem as DragonBallItem;
+                    if (dBall.WorldDragonBallKey == dbKey && dBall.WhichDragonBall == whichDragonball)
+                    {
+                        inventory[i].TurnToAir();
+                        return i;
+                    }
+                }
+            }
+
+            // dragonball wasn't found, return an oob index.
+            return -1;
+        }
+
         public static void ScanPlayerForIllegitimateDragonballs(Player player)
         {
             ScanInventoryForIllegitimateDragonballs(player.inventory);
@@ -127,7 +162,7 @@ namespace DBZMOD
             // this stone ball was pulled back into its world. Turn it into a dragon ball.
             int dbKey = WorldDragonBallKey;
             int whichDball = WhichDragonBall;
-            int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
+            int dbSlot = ItemHelper.RemoveStoneBall(inventory, WorldDragonBallKey, WhichDragonBall);
             // something went wrong, abort.
             if (dbSlot == -1)
                 return;

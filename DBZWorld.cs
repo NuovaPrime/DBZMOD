@@ -369,6 +369,7 @@ namespace DBZMOD
                     int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     tile.slope(GohanHouseSlopes[Y, X]);
+                    tile.halfBrick(false);
                 }
             }
             // walls
