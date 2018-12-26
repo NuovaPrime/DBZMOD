@@ -823,6 +823,7 @@ namespace DBZMOD
         public float? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
+        public bool? SyncWishActive;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetLeft;
@@ -960,6 +961,13 @@ namespace DBZMOD
                 NetworkHelper.playerSync.SendChangedBonusSpeedMultiplier(256, player.whoAmI, player.whoAmI, bonusSpeedMultiplier);
                 SyncBonusSpeedMultiplier = bonusSpeedMultiplier;
             }
+
+            if (SyncWishActive != WishActive)
+            {
+                NetworkHelper.playerSync.SendChangedWishActive(256, player.whoAmI, player.whoAmI, WishActive);
+                SyncWishActive = WishActive;
+            }
+
             if (SyncKiCurrent != GetKi())
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());

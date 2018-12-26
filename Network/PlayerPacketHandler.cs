@@ -313,6 +313,15 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedWishActive(int toWho, int fromWho, int whichPlayer, bool WishActive)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.WishActive);
+            packet.Write(whichPlayer);
+            packet.Write(WishActive);
+            packet.Send(toWho, fromWho);
+        }
+
         public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, float kiCurrent)
         {          
             var packet = GetPacket(SyncPlayer, fromWho); ;
@@ -555,6 +564,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.bonusSpeedMultiplier);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.WishActive:
+                    player.WishActive = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.WishActive);
                         packet.Send(-1, fromWho);
                     }
                     break;

@@ -51,10 +51,27 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void RightClick(int i, int j)
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-            if (modPlayer.AllDragonBallsNearby())
+            if (modPlayer.AllDragonBallsNearby() && NobodyHasWishActive();)
             {
                 modPlayer.WishActive = true;
             }
+        }
+
+        public bool NobodyHasWishActive()
+        {
+            for (int i = 0; i < Main.player.Length; i++)
+            {
+                if (Main.player[i] == null)
+                    continue;
+
+                if (Main.player[i].whoAmI != i)
+                    continue;
+
+                if (Main.player[i].GetModPlayer<MyPlayer>().WishActive)
+                    return false;
+            }
+
+            return true;
         }
 
         public override void PlaceInWorld(int i, int j, Item item)
