@@ -47,7 +47,16 @@ namespace DBZMOD.Items.DragonBalls
 
         public override void UpdateInventory(Player player)
         {
-            DoDragonBallPickupCheck(this, player);
+            if (!WorldDragonBallKey.HasValue) {             
+                WorldDragonBallKey = 0;
+                WhichDragonBall = 0;
+                if (item.type == DBZMOD.instance.ItemType("StoneBall"))
+                {
+                    ItemHelper.RemoveStoneBall(player.inventory, 0, 0);
+                } else {
+                    ItemHelper.RemoveDragonBall(player.inventory, 0, 0);
+                }
+            }            
         }
 
         public override bool OnPickup(Player player)
@@ -74,6 +83,7 @@ namespace DBZMOD.Items.DragonBalls
                 // we already have a dragon ball key, abandon ship.
                 if (item.WorldDragonBallKey > 0)
                     return;
+
                 // it's legit, set its dragon ball key
                 var world = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
 
