@@ -336,7 +336,7 @@ namespace DBZMOD.Projectiles
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
             return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire)
-                && (modPlayer.IsMouseLeftHeld || ((IsSustainingFire || IsBeamOriginTracking) && CurrentFireTime < MinimumFireFrames));
+                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
         }
 
         private float GetBeamPowerMultiplier()
@@ -374,6 +374,9 @@ namespace DBZMOD.Projectiles
 
                     // fire the laser!
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
+
+                    // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
+                    MyProjectile.ai[1] = MinimumFireFrames;
 
                     // set the cooldown
                     BeamCooldown = InitialBeamCooldown;

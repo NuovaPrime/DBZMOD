@@ -165,6 +165,11 @@ namespace Util
             return (int)Math.Min(Main.maxTilesY - 1, Math.Max(1, yCoord / 16f));
         }
 
+        public static bool IsInWorldBounds(Vector2 hitVector)
+        {
+            return hitVector.X >= 0 && hitVector.X <= Main.maxTilesX * 16f && hitVector.Y >= 0 && hitVector.Y <= Main.maxTilesY * 16f;
+        }
+
         // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
         public static bool CanHitLine(Vector2 Position1, Vector2 Position2)
         {
@@ -173,7 +178,7 @@ namespace Util
             // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
             if (step.X < 0)
             {
-                while (Position1.X >= Position2.X)
+                while (Position1.X >= Position2.X && IsInWorldBounds(Position1))
                 {
                     Position1 += step;
                     isColliding = IsPositionInTile(Position1);
@@ -182,7 +187,7 @@ namespace Util
                 }
             } else if (step.X > 0)
             {
-                while (Position1.X <= Position2.X)
+                while (Position1.X <= Position2.X && IsInWorldBounds(Position1))
                 {
                     Position1 += step;
                     isColliding = IsPositionInTile(Position1);
@@ -191,7 +196,7 @@ namespace Util
                 }
             } else if (step.Y < 0)
             {
-                while (Position1.Y >= Position2.Y)
+                while (Position1.Y >= Position2.Y && IsInWorldBounds(Position1))
                 {
                     Position1 += step;
                     isColliding = IsPositionInTile(Position1);
@@ -200,7 +205,7 @@ namespace Util
                 }
             } else if (step.Y > 0)
             {
-                while (Position1.Y <= Position2.Y)
+                while (Position1.Y <= Position2.Y && IsInWorldBounds(Position1))
                 {
                     Position1 += step;
                     isColliding = IsPositionInTile(Position1);

@@ -119,6 +119,26 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public float FiringTime
+        {
+            get
+            {
+                return projectile.ai[1];
+            }
+            set
+            {
+                projectile.ai[1] = value;
+            }
+        }
+
+        public bool IsDetached
+        {
+            get
+            {
+                return projectile.localAI[0] > 0f;
+            }
+        }
+
         public float DetachmentTimer
         {
             get
@@ -296,6 +316,7 @@ namespace DBZMOD.Projectiles
 
         // used to trakc the original mouse vector for beams that don't track at all.
         private Vector2 OriginalMouseVector = Vector2.Zero;
+        private Vector2 OriginalScreenPosition = Vector2.Zero;
 
         private const float BEAM_TILE_DISTANCE_GRADIENT = 8f;
         // The AI of the projectile
@@ -303,29 +324,56 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
 
-            ProcessKillRoutine(player);            
+            ProcessKillRoutine(player);
+
+            // stationary beams are instantaneously "detached", they behave weirdly.
+            if (IsStationaryBeam && !IsDetached)
+            {
+                DetachmentTimer = 1;
+            }
 
             // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
-            Vector2 mouseVector = Main.MouseWorld;
-            Vector2 screenPosition = Main.screenPosition;
-            if (OldMouseVector != Vector2.Zero)
+            if (projectile.owner == Main.myPlayer)
             {
-                Vector2 mouseMovementVector = (mouseVector - OldMouseVector) / RotationSlowness;
-                Vector2 screenChange = screenPosition - OldScreenPosition;
-                mouseVector = OldMouseVector + mouseMovementVector + screenChange;
+                Vector2 mouseVector = Main.MouseWorld;
+
+                if (OriginalMouseVector == Vector2.Zero)
+                {
+                    OriginalMouseVector = mouseVector;
+                }
+
+                if (IsStationaryBeam && OriginalMouseVector != Vector2.Zero)
+                {
+                    mouseVector = OriginalMouseVector;
+                }
+
+                Vector2 screenPosition = Main.screenPosition;
+
+                if (OriginalScreenPosition == Vector2.Zero)
+                {
+                    OriginalScreenPosition = screenPosition;
+                }
+
+                if (IsStationaryBeam && OriginalScreenPosition != Vector2.Zero)
+                {
+                    screenPosition = OriginalScreenPosition;
+                }
+
+                if (OldMouseVector != Vector2.Zero && !IsStationaryBeam)
+                {
+                    Vector2 mouseMovementVector = (mouseVector - OldMouseVector) / RotationSlowness;
+                    Vector2 screenChange = screenPosition - OldScreenPosition;
+                    mouseVector = OldMouseVector + mouseMovementVector + screenChange;
+                }
+
+                UpdateBeamTailLocationAndDirection(player, mouseVector);
+
+                OldMouseVector = mouseVector;
+
+                OldScreenPosition = screenPosition;
             }
 
-            if (OriginalMouseVector == Vector2.Zero)
-            {
-                OriginalMouseVector = mouseVector;
-            }
-
-            if (IsStationaryBeam && OriginalMouseVector != Vector2.Zero)
-            {
-                mouseVector = OriginalMouseVector;
-            }
-
-            UpdateBeamTailLocationAndDirection(player, mouseVector);
+            UpdateBeamPlayerItemUse(player);
 
             // handle whether the beam should be visible, and how visible.
             HandleBeamVisibility();
@@ -391,27 +439,25 @@ namespace DBZMOD.Projectiles
             //Add lights
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
             Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), BeamSize.Y, DelegateMethods.CastLight);
-
-            OldMouseVector = mouseVector;
-            OldScreenPosition = screenPosition;
         }
 
-        //public Vector2 GetTopLeftCollisionPoint(Vector2 beamEnding)
-        //{            
-        //    var beamEndingOffset = beamEnding - BeamSize.ToVector2() * projectile.velocity;
-
-        //    return new Vector2(Math.Min(beamEnding.X, beamEndingOffset.X), Math.Min(beamEnding.Y, beamEndingOffset.Y));
-        //}
-
-        //public Vector2 GetBottomRightCollisionPoint(Vector2 beamEnding)
-        //{
-        //    var beamEndingOffset = beamEnding + BeamSize.ToVector2() * projectile.velocity;
-
-        //    return new Vector2(Math.Max(beamEnding.X, beamEndingOffset.X), Math.Max(beamEnding.Y, beamEndingOffset.Y));
-        //}
+        public void UpdateBeamTailLocationAndDirection(Player player, Vector2 mouseVector)
+        {
+            // Multiplayer support here, only run this code if the client running it is the owner of the projectile
+            if (projectile.owner == Main.myPlayer && (!IsDetached || IsStationaryBeam))
+            {
+                Vector2 diff = mouseVector - projectile.position;
+                diff.Normalize();
+                projectile.velocity = diff;
+                projectile.direction = mouseVector.X > projectile.position.X ? 1 : -1;
+                projectile.netUpdate = true;
+            }
+        }
 
         public void ProcessKillRoutine(Player player)
         {
+            projectile.timeLeft = 2;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             if (!modPlayer.IsMouseLeftHeld)
@@ -419,11 +465,16 @@ namespace DBZMOD.Projectiles
                 ProjectileUtil.StartKillRoutine(projectile);
             }
 
-            if (DetachmentTimer > 0)
+            if (IsDetached && FiringTime == 0)
             {
                 DetachmentTimer++;
                 TailDistance += BeamSpeed;
                 Distance -= BeamSpeed;
+            }
+
+            if (FiringTime > 0)
+            {
+                FiringTime--;
             }
 
             if (player.dead || DetachmentTimer >= BeamFadeOutTime || (DetachmentTimer > 0 && Distance <= 0))
@@ -432,24 +483,13 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public void UpdateBeamTailLocationAndDirection(Player player, Vector2 mouseVector)
+        public void UpdateBeamPlayerItemUse(Player player)
         {
-            projectile.timeLeft = 2;
-
             // skip this entire routine if the detachment timer is greater than 0
-            if (DetachmentTimer > 0)
+            if (IsDetached)
                 return;
 
-            // Multiplayer support here, only run this code if the client running it is the owner of the projectile
-            if (projectile.owner == Main.myPlayer)
-            {
-                Vector2 diff = mouseVector - player.Center;
-                diff.Normalize();
-                projectile.velocity = diff;
-                projectile.direction = mouseVector.X > player.position.X ? 1 : -1;
-                projectile.netUpdate = true;
-            }
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();            
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.position = player.Center;
             int dir = projectile.direction;
             player.ChangeDir(dir);
