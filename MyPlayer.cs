@@ -233,6 +233,8 @@ namespace DBZMOD
         // helper bool tracks whether my local player is playing other player's audio or not
         // useful for preventing the mod from playing too many sounds
         public bool IsAlreadyPlayingOtherPlayerAudio;
+        public int MouseWorldOctant = -1;
+
         #endregion
 
         #region Syncable Controls
@@ -724,6 +726,7 @@ namespace DBZMOD
         public int? SyncKiCurrent;
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
+        public int? SyncMouseWorldOctant;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetMouseLeft;
@@ -865,6 +868,13 @@ namespace DBZMOD
                 NetworkHelper.playerSync.SendChangedBonusSpeedMultiplier(256, player.whoAmI, player.whoAmI, bonusSpeedMultiplier);
                 SyncBonusSpeedMultiplier = bonusSpeedMultiplier;
             }
+
+            if (SyncMouseWorldOctant != MouseWorldOctant)
+            {
+                NetworkHelper.playerSync.SendChangedMouseWorldOctant(256, player.whoAmI, player.whoAmI, MouseWorldOctant);
+                SyncMouseWorldOctant = MouseWorldOctant;
+            }
+
             if (SyncKiCurrent != GetKi())
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
@@ -1285,6 +1295,8 @@ namespace DBZMOD
                 IsMouseLeftHeld = true;
             else
                 IsMouseLeftHeld = false;
+
+
         }
 
         public float GetNextSpeedMultiplier()

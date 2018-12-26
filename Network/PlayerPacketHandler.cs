@@ -332,6 +332,15 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedMouseWorldOctant(int toWho, int fromWho, int whichPlayer, int mouseWorldOctant)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.MouseWorldOctant);
+            packet.Write(whichPlayer);
+            packet.Write(mouseWorldOctant);
+            packet.Send(toWho, fromWho);
+        }
+
         public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, int kiCurrent)
         {
             // DebugUtil.Log(string.Format("Sending KiCurrent changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));            
@@ -598,6 +607,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.bonusSpeedMultiplier);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.MouseWorldOctant:
+                    player.MouseWorldOctant = reader.ReadInt32();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.MouseWorldOctant);
                         packet.Send(-1, fromWho);
                     }
                     break;

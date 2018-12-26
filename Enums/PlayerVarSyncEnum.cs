@@ -35,6 +35,7 @@ namespace Enums
         TriggerUp,
         TriggerDown,
         ChargeMoveSpeed,
-        BonusSpeedMultiplier
+        BonusSpeedMultiplier,
+        MouseWorldOctant
     }
 }

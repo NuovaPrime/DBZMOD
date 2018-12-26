@@ -240,7 +240,6 @@ namespace DBZMOD.Projectiles
         public void DrawChargeBall(SpriteBatch spriteBatch, Texture2D texture, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color))
         {
             float r = projectile.velocity.ToRotation() + rotation;
-            // DebugUtil.Log(string.Format("Trying to draw charge ball, transparency is {0}", GetTransparency()));
             spriteBatch.Draw(texture, GetChargeBallPosition() - Main.screenPosition,
                 new Rectangle(0, 0, ChargeSize.X, ChargeSize.Y), color * GetTransparency(), r, new Vector2(ChargeSize.X * .5f, ChargeSize.Y * .5f), scale, 0, 0.99f);
         }
@@ -283,7 +282,6 @@ namespace DBZMOD.Projectiles
                 }
                 else
                 {
-                    DebugUtil.Log("Being killed because player isn't channeling and let go of right mouse and is not sustaining fire.");
                     // the charge level zeroed out, kill the projectile.
                     projectile.Kill();
                 }
@@ -332,7 +330,9 @@ namespace DBZMOD.Projectiles
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
+            return (
+                (ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) 
+                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
         }
 
         private float GetBeamPowerMultiplier()
@@ -414,7 +414,6 @@ namespace DBZMOD.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            DebugUtil.Log(string.Format("I am being killed and I don't know why. Time left is {0}", timeLeft));
             base.Kill(timeLeft);
         }
 
@@ -433,7 +432,6 @@ namespace DBZMOD.Projectiles
                 {
                     ProjectileUtil.StartKillRoutine(MyProjectile);
                 }
-                DebugUtil.Log("Being killed because player weapon is null?");
                 projectile.Kill();
                 return false;
             }
@@ -455,7 +453,6 @@ namespace DBZMOD.Projectiles
                     {
                         ProjectileUtil.StartKillRoutine(MyProjectile);
                     }
-                    DebugUtil.Log("Being killed because player changed weapons?");
                     projectile.Kill();
                     return false;
                 }
@@ -479,9 +476,7 @@ namespace DBZMOD.Projectiles
             if (OldMouseVector != Vector2.Zero)
             {
                 Vector2 mouseMovementVector = (mouseVector - OldMouseVector) / RotationSlowness;
-                //DebugUtil.Log(string.Format("Mouse Movement Vector {0} {1}", mouseMovementVector.X, mouseMovementVector.Y));
                 Vector2 screenChange = screenPosition - OldScreenPosition;
-                //DebugUtil.Log(string.Format("Weirdness with vectors. Mouse Vector {0} {1} Old Mouse Vector {2} {3}", mouseVector.X, mouseVector.Y, OldMouseVector.X, OldMouseVector.Y));
                 mouseVector = OldMouseVector + mouseMovementVector + screenChange;
             }
 

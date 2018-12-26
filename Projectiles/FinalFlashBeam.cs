@@ -53,9 +53,6 @@ namespace DBZMOD.Projectiles
             // how many particles per frame fire when the beam collides with something
             CollisionParticleDensity = 8;
 
-            // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
-            ImmunityFrameOverride = 2;
-
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
             BeamSoundKey = "Sounds/FinalFlashFire";
 

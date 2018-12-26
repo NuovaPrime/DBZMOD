@@ -55,7 +55,7 @@ namespace DBZMOD.Projectiles
         public int CollisionParticleDensity = 8;
 
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
-        public int ImmunityFrameOverride = 2;
+        public int ImmunityFrameOverride = 15;
 
         // Flag for whether the beam segment is animated (meaning it has its own movement protocol), defaults to false.
         public bool IsBeamSegmentAnimated = false;
@@ -69,6 +69,12 @@ namespace DBZMOD.Projectiles
         // I'm not sure this ever needs to be changed, but we can always change it later.
         //The distance charge particle from the player center
         protected float TailHeldDistance = 30f;
+
+        // Beam can't be moved when rotating the mouse, it can only stay in its original position
+        public bool IsStationaryBeam = false;
+
+        // Beam doesn't penetrate targets until they're dead (it doesn't penetrate at all, really)
+        public bool IsEntityColliding = false;
         
         // controls what sections of the beam segment we're drawing at any given point in time (assumes two or more beam segments tile correctly)
         private int BeamSegmentAnimation = 0;
@@ -205,7 +211,7 @@ namespace DBZMOD.Projectiles
 
         public Vector2 TailPositionEnd()
         {
-            return TailPositionStart() + (TailSize.Y * projectile.velocity) + (IsBeamSegmentAnimated ? ((BeamSize.Y / 2f) - (TailSize.Y / 2f)) : 0f) * projectile.velocity;
+            return TailPositionStart() + (TailSize.Y * projectile.velocity) + ((BeamSize.Y / 2f) - (TailSize.Y / 2f)) * projectile.velocity;
         }
 
         public Vector2 BodyPositionEnd()
@@ -218,30 +224,54 @@ namespace DBZMOD.Projectiles
             return BodyPositionEnd() + (HeadSize.Y * 0.66f) * projectile.velocity;
         }
 
+        public Vector2 HeadPositionCollisionEnd()
+        {
+            return BodyPositionEnd() + (HeadSize.Y * 0.2f) * projectile.velocity;
+        }
+
+        private const float BEAM_ENTITY_DISTANCE_GRADIENT = 1f;
         // This collision check is for living entities, not tiles. This is what determines damage is being dealt.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            bool isAnyCollision = DoCollisionCheck(targetHitbox);
+            if (IsEntityColliding && (isAnyCollision))
+            {
+                while (DoCollisionCheck(targetHitbox))
+                {
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
+                }
+            }
+            return isAnyCollision;
+        }
+
+        public bool DoCollisionCheck(Rectangle targetHitbox)
         {
             Player player = Main.player[projectile.owner];
             Vector2 unit = projectile.velocity;
             float tailPoint = 0f;
             float bodyPoint = 0f;
             float headPoint = 0f;
-            
+
             bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionStart(), TailPositionEnd(), TailSize.X, ref tailPoint);
 
             bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionEnd(), BodyPositionEnd(), BeamSize.X, ref bodyPoint);
 
-            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionEnd(), HeadSize.X, ref headPoint);
+            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionCollisionEnd(), HeadSize.X, ref headPoint);
+
+            bool isAnyCollision = tailCollision || headCollision || bodyCollision;
 
             // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
             // It will look for collisions on the given line using AABB
-            return tailCollision || headCollision || bodyCollision;
+            return isAnyCollision;
         }
 
         // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.immune[projectile.owner] = ImmunityFrameOverride;
+            base.OnHitNPC(target, damage, knockback, crit);
+            target.immune[projectile.owner] = ImmunityFrameOverride;            
         }
 
         public void HandleBeamVisibility()
@@ -264,6 +294,10 @@ namespace DBZMOD.Projectiles
         // Just fired bool is true the moment the beam comes into existence, to process audio, and then immediately set to false afterwards to prevent sound from looping.
         private bool JustFired = true;
 
+        // used to trakc the original mouse vector for beams that don't track at all.
+        private Vector2 OriginalMouseVector = Vector2.Zero;
+
+        private const float BEAM_TILE_DISTANCE_GRADIENT = 8f;
         // The AI of the projectile
         public override void AI()
         {
@@ -281,6 +315,16 @@ namespace DBZMOD.Projectiles
                 mouseVector = OldMouseVector + mouseMovementVector + screenChange;
             }
 
+            if (OriginalMouseVector == Vector2.Zero)
+            {
+                OriginalMouseVector = mouseVector;
+            }
+
+            if (IsStationaryBeam && OriginalMouseVector != Vector2.Zero)
+            {
+                mouseVector = OriginalMouseVector;
+            }
+
             UpdateBeamTailLocationAndDirection(player, mouseVector);
 
             // handle whether the beam should be visible, and how visible.
@@ -291,14 +335,14 @@ namespace DBZMOD.Projectiles
             // tracked distance is with collision, and resets distance if it's too high.
             Distance += BeamSpeed;
             float TrackedDistance;
-            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += (BeamSpeed / 3f))
+            for (TrackedDistance = 0f; TrackedDistance <= MaxBeamDistance; TrackedDistance += BEAM_TILE_DISTANCE_GRADIENT)
             {
                 Vector2 origin = TailPositionStart() + projectile.velocity * (TrackedDistance + HeadSize.Y - StepLength());
                 
                 if (!ProjectileUtil.CanHitLine(TailPositionStart(), origin))
                 {
                     // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
-                    TrackedDistance -= (BeamSpeed / 3f);
+                    TrackedDistance -= BEAM_TILE_DISTANCE_GRADIENT;
                     if (TrackedDistance <= 0)
                     {
                         TrackedDistance = 0;
@@ -321,7 +365,6 @@ namespace DBZMOD.Projectiles
             if (Distance >= TrackedDistance)
             {
                 var dustVector = TailPositionStart() + (TrackedDistance + HeadSize.Y - StepLength()) * projectile.velocity;
-                // DebugUtil.Log(string.Format("Projectile tile collision should be happening at {0} {1}", dustVector.X, dustVector.Y));
                 ProjectileUtil.DoBeamCollisionDust(DustType, CollisionDustFrequency, projectile.velocity, dustVector);                    
             }
 
