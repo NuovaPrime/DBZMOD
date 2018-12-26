@@ -92,6 +92,9 @@ namespace DBZMOD.Projectiles
         // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
         protected int InitialBeamCooldown = 180;
 
+        // this field determines whether the beam tracks the player, "rooting" the tail origin to the player.
+        protected bool IsBeamOriginTracking = true;
+
         // the rate at which charge level increases while channeling
         private float ChargeRate() { return ChargeRatePerSecond / 60f; }
 
@@ -210,7 +213,7 @@ namespace DBZMOD.Projectiles
         {
             return projectile.alpha / 255f;
         }
-        
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             // don't draw the ball when firing.
@@ -307,7 +310,7 @@ namespace DBZMOD.Projectiles
 
                     // slow down the player while charging.
                     ProjectileUtil.ApplyChannelingSlowdown(player);
-                    
+
                     // shoot some dust into the ball to show it's charging, and to look cool.
                     if (!IsSustainingFire)
                         ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, ChargeDustFrequency, false, ChargeSize.ToVector2());
@@ -315,11 +318,13 @@ namespace DBZMOD.Projectiles
             }
 
             // play the sound if the player just started charging and the audio is "off cooldown"
-            if (!WasCharging && IsCharging && ChargeSoundCooldown == 0f) {             
+            if (!WasCharging && IsCharging && ChargeSoundCooldown == 0f)
+            {
                 if (!Main.dedServ)
                     ChargeSoundSlotId = SoundUtil.PlayCustomSound(ChargeSoundKey, projectile.Center);
                 ChargeSoundCooldown = ChargeSoundDelay;
-            } else
+            }
+            else
             {
                 ChargeSoundCooldown = Math.Max(0f, ChargeSoundCooldown - 1);
             }
@@ -330,9 +335,8 @@ namespace DBZMOD.Projectiles
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            return (
-                (ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire) 
-                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
+            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire)
+                && (modPlayer.IsMouseLeftHeld || ((IsSustainingFire || IsBeamOriginTracking) && CurrentFireTime < MinimumFireFrames));
         }
 
         private float GetBeamPowerMultiplier()
@@ -356,7 +360,7 @@ namespace DBZMOD.Projectiles
             if (ShouldFireBeam(modPlayer))
             {
                 // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
-                if (!modPlayer.IsMouseLeftHeld)
+                if (!modPlayer.IsMouseLeftHeld && IsBeamOriginTracking)
                 {
                     modPlayer.IsMouseLeftHeld = true;
                 }
@@ -382,13 +386,14 @@ namespace DBZMOD.Projectiles
                 {
                     ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
                 }
-                else if(!modPlayer.IsKiDepleted())
+                else if (!modPlayer.IsKiDepleted())
                 {
                     if (Main.time > 0 && Main.time % FIRE_KI_DRAIN_WINDOW == 0)
                     {
                         modPlayer.AddKi(-FireKiDrainRate());
                     }
-                } else
+                }
+                else
                 {
                     IsSustainingFire = false;
 

@@ -73,6 +73,8 @@ namespace DBZMOD.Projectiles
             // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
             NotChannelingOffset = new Vector2(-15, 20f);
 
+            IsBeamOriginTracking = false;
+
             base.SetDefaults();
         }
 
