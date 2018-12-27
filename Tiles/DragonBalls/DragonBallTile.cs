@@ -51,7 +51,7 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void RightClick(int i, int j)
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-            if (modPlayer.AllDragonBallsNearby() && NobodyHasWishActive();)
+            if (modPlayer.AllDragonBallsNearby() && NobodyHasWishActive())
             {
                 modPlayer.WishActive = true;
             }
