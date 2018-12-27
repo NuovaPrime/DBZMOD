@@ -127,9 +127,6 @@ namespace DBZMOD.Projectiles
         // the maximum ChargeLimit of the attack after bonuses from gear (etc) are applied
         public float FinalChargeLimit = 4;
 
-        // the charge level of the projectile currently, increases with channeling and decays without it.
-        public float ChargeLevel = 0.0f;
-
         // the distance charge particle from the player center, as a factor of its size plus some padding.
         public float ChargeBallHeldDistance
         {
@@ -149,6 +146,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[0] = value;
+                projectile.netUpdate = true;
             }
         }
 
@@ -162,6 +160,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[1] = value;
+                projectile.netUpdate = true;
             }
         }
 
@@ -175,6 +174,21 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.localAI[0] = value;
+                projectile.netUpdate = true;
+            }
+        }
+
+        // Any nonzero number is on cooldown
+        public float ChargeLevel
+        {
+            get
+            {
+                return projectile.localAI[1];
+            }
+            set
+            {
+                projectile.localAI[1] = value;
+                projectile.netUpdate = true;
             }
         }
 

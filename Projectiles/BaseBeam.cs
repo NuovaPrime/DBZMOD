@@ -116,6 +116,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[0] = value;
+                projectile.netUpdate = true;
             }
         }
 
@@ -128,6 +129,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.ai[1] = value;
+                projectile.netUpdate = true;
             }
         }
 
@@ -148,6 +150,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.localAI[0] = value;
+                projectile.netUpdate = true;
             }
         }
 
@@ -160,6 +163,7 @@ namespace DBZMOD.Projectiles
             set
             {
                 projectile.localAI[1] = value;
+                projectile.netUpdate = true;
             }
         }
         

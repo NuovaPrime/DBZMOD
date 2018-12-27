@@ -914,11 +914,13 @@ namespace DBZMOD
                 NetworkHelper.playerSync.SendChangedTriggerDown(256, player.whoAmI, player.whoAmI, IsDownHeld);
                 SyncTriggerSetDown = IsDownHeld;
             }
+
             if (SyncTriggerSetMouseRight != IsMouseRightHeld)
             {
                 NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseRightHeld);
                 SyncTriggerSetMouseRight = IsMouseRightHeld;
             }
+
             if (SyncTriggerSetMouseLeft != IsMouseLeftHeld)
             {
                 NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseLeftHeld);
