@@ -558,7 +558,10 @@ namespace DBZMOD.Projectiles
                 if (player.heldProj != projectile.whoAmI)
                 {
                     player.heldProj = projectile.whoAmI;
-                    NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, projectile.whoAmI);
+
+                    // unsure if this is even necessary, syncing held projectile
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, projectile.whoAmI);
                 }
                 Vector2 diff = mouseVector - player.Center;
                 diff.Normalize();
