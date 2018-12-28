@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
 using Util;
 using Terraria.Enums;
+using Network;
 
 namespace DBZMOD.Projectiles
 {
@@ -150,8 +151,8 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        // Any nonzero number is on cooldown
-        public float BeamCooldown
+        // the amount of charge currently in the ball, handles how long the player can fire and how much damage it deals
+        public float ChargeLevel
         {
             get
             {
@@ -161,6 +162,23 @@ namespace DBZMOD.Projectiles
             {
                 projectile.ai[1] = value;
                 projectile.netUpdate = true;
+            }
+        }
+
+        public bool IsSustainingFire
+        {
+            get
+            {
+                return CurrentFireTime > 0;
+            }
+        }
+
+        // Any nonzero number is on cooldown
+        public bool IsOnCooldown
+        {
+            get
+            {
+                return CurrentFireTime != 0;
             }
         }
 
@@ -178,26 +196,9 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        // Any nonzero number is on cooldown
-        public float ChargeLevel
-        {
-            get
-            {
-                return projectile.localAI[1];
-            }
-            set
-            {
-                projectile.localAI[1] = value;
-                projectile.netUpdate = true;
-            }
-        }
-
         // responsible for tracking if the player changed weapons in use, nullifying their charge immediately.
         private int weaponBinding = -1;
-
-        // whether or not the ball is actively firing a blast. When this switches from true to false, the beam dissipates.
-        public bool IsSustainingFire = false;
-
+        
         private Rectangle _chargeRectangle;
         public Rectangle ChargeRectangle
         {
@@ -349,8 +350,9 @@ namespace DBZMOD.Projectiles
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            return ((ChargeLevel >= MinimumChargeLevel && BeamCooldown == 0) || IsSustainingFire)
-                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && CurrentFireTime < MinimumFireFrames));
+            // DebugUtil.Log(string.Format("Charge level: {0} Cooldown? {1} SustainingFire? {2} FireTime: {3} MouseLeftHeld {4}", ChargeLevel, IsOnCooldown, IsSustainingFire, CurrentFireTime, modPlayer.IsMouseLeftHeld));
+            return ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
+                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < MinimumFireFrames)));
         }
 
         private float GetBeamPowerMultiplier()
@@ -373,28 +375,20 @@ namespace DBZMOD.Projectiles
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
             if (ShouldFireBeam(modPlayer))
             {
-                // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
-                if (!modPlayer.IsMouseLeftHeld && IsBeamOriginTracking)
-                {
-                    modPlayer.IsMouseLeftHeld = true;
-                }
-
                 // kill the charge sound if we're firing
                 ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
 
                 if (!WasSustainingFire)
                 {
-                    IsSustainingFire = true;
-
                     // fire the laser!
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
 
                     // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
                     MyProjectile.ai[1] = MinimumFireFrames;
-
-                    // set the cooldown
-                    BeamCooldown = InitialBeamCooldown;
                 }
+
+                // increment the fire time, this handles "IsSustainingFire" as well as stating the beam is no longer firable (it is already being fired)
+                CurrentFireTime++;
 
                 MyProjectile.velocity = projectile.velocity;
 
@@ -412,31 +406,28 @@ namespace DBZMOD.Projectiles
                 }
                 else
                 {
-                    IsSustainingFire = false;
-
-                    if (MyProjectile != null)
-                    {
-                        ProjectileUtil.StartKillRoutine(MyProjectile);
-                    }
+                    // beam is no longer sustainable
+                    KillBeam();
                 }
-                CurrentFireTime++;
             }
             else
             {
-                IsSustainingFire = false;
-                CurrentFireTime = 0;
-                if (MyProjectile != null)
-                {
-                    ProjectileUtil.StartKillRoutine(MyProjectile);
-                }
+                // player has stopped firing or something else has stopped them
+                KillBeam();
             }
 
             WasSustainingFire = IsSustainingFire;
         }
 
-        public override void Kill(int timeLeft)
+        public void KillBeam()
         {
-            base.Kill(timeLeft);
+            // set the cooldown
+            CurrentFireTime = -InitialBeamCooldown;
+
+            if (MyProjectile != null)
+            {
+                ProjectileUtil.StartKillRoutine(MyProjectile);
+            }
         }
 
         public void HandleChargeBallVisibility()
@@ -513,8 +504,7 @@ namespace DBZMOD.Projectiles
                 return;
 
             // decrease the beam cooldown if it's not zero
-            if (BeamCooldown > 0)
-                BeamCooldown--;
+            HandleBeamFireCooldown();
 
             // handle.. handling the charge.
             UpdateChargeBallLocationAndDirection(player, mouseVector);
@@ -545,6 +535,13 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public void HandleBeamFireCooldown()
+        {
+            // less than 0 fire time means on cooldown, try to "decrease" cooldown by 1, stopping at 0 if applicable.
+            if (CurrentFireTime < 0)
+                CurrentFireTime = Math.Max(0, CurrentFireTime + 1f);
+        }
+
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)
         {
             // custom channeling handler
@@ -554,6 +551,11 @@ namespace DBZMOD.Projectiles
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer)
             {
+                if (player.heldProj != projectile.whoAmI)
+                {
+                    player.heldProj = projectile.whoAmI;
+                    NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, projectile.whoAmI);
+                }
                 Vector2 diff = mouseVector - player.Center;
                 diff.Normalize();
                 projectile.velocity = diff;
@@ -562,7 +564,6 @@ namespace DBZMOD.Projectiles
             }
             projectile.position = player.Center - new Vector2(0, ChargeSize.Y / 2f) + projectile.velocity * ChargeBallHeldDistance;
             projectile.timeLeft = 10;
-            player.heldProj = projectile.whoAmI;
             if (player.channel)
             {
                 player.itemTime = 10;

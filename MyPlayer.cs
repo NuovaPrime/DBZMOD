@@ -923,7 +923,7 @@ namespace DBZMOD
 
             if (SyncTriggerSetMouseLeft != IsMouseLeftHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseLeftHeld);
+                NetworkHelper.playerSync.SendChangedTriggerMouseLeft(256, player.whoAmI, player.whoAmI, IsMouseLeftHeld);
                 SyncTriggerSetMouseLeft = IsMouseLeftHeld;
             }
         }

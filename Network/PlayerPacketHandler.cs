@@ -78,7 +78,15 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
-            //DebugUtil.Log(string.Format("Sending Trigger {0} changes from {1} to {2} for player {3} - {4}", PlayerVarSyncEnum.TriggerLeft.ToString(), fromWho, toWho, whichPlayer, isHeld));
+        }
+
+        public void SendChangedTriggerMouseLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
+        {
+            var packet = GetPacket(SyncTriggers, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.TriggerMouseLeft);
+            packet.Write(whichPlayer);
+            packet.Write(isHeld);
+            packet.Send(toWho, fromWho);
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -342,12 +350,20 @@ namespace Network
         }
 
         public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, int kiCurrent)
-        {
-            // DebugUtil.Log(string.Format("Sending KiCurrent changes from {0} to {1} for player {2}", fromWho, toWho, whichPlayer));            
+        {         
             var packet = GetPacket(SyncPlayer, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.KiCurrent);
             packet.Write(whichPlayer);
             packet.Write(kiCurrent);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void SendChangedHeldProjectile(int toWho, int fromWho, int whichPlayer, int projHeld)
+        {            
+            var packet = GetPacket(SyncPlayer, fromWho); ;
+            packet.Write((int)PlayerVarSyncEnum.HeldProjectile);
+            packet.Write(whichPlayer);
+            packet.Write(projHeld);
             packet.Send(toWho, fromWho);
         }
 
@@ -615,6 +631,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.MouseWorldOctant);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.HeldProjectile:
+                    player.player.heldProj = reader.ReadInt32();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.player.heldProj);
                         packet.Send(-1, fromWho);
                     }
                     break;
