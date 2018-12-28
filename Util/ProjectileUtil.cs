@@ -219,7 +219,9 @@ namespace Util
         public static bool IsPositionInTile(Vector2 position)
         {
             var tilePoint = new Point(GetTileX(position.X), GetTileY(position.Y));
-            var tile = Main.tile[tilePoint.X, tilePoint.Y];
+            var tile = Framing.GetTileSafely(tilePoint.X, tilePoint.Y);
+            if (tile == null)
+                return false;
             if (tile.active() && Main.tileSolid[tile.type])
             {
                 return true;

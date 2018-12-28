@@ -375,6 +375,12 @@ namespace DBZMOD.Projectiles
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
             if (ShouldFireBeam(modPlayer))
             {
+                // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
+                if (!modPlayer.IsMouseLeftHeld && IsBeamOriginTracking)
+                {
+                    modPlayer.IsMouseLeftHeld = true;
+                }
+
                 // kill the charge sound if we're firing
                 ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
 
@@ -389,8 +395,6 @@ namespace DBZMOD.Projectiles
 
                 // increment the fire time, this handles "IsSustainingFire" as well as stating the beam is no longer firable (it is already being fired)
                 CurrentFireTime++;
-
-                MyProjectile.velocity = projectile.velocity;
 
                 // if the player has charge left, drain the ball
                 if (ChargeLevel > 0f)

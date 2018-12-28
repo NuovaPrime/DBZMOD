@@ -447,6 +447,10 @@ namespace DBZMOD.Projectiles
 
         public void UpdateBeamTailLocationAndDirection(Player player, Vector2 mouseVector)
         {
+            // server has no business running this code.
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer && (!IsDetached || IsStationaryBeam))
             {
