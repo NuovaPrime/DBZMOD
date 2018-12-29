@@ -69,23 +69,23 @@ namespace DBZMOD.Projectiles
 
         #region Things you probably should not mess with
 
-        private const float MAX_DISTANCE = 1000f;
-        private const float STEP_LENGTH = 10f;
+        protected const float MAX_DISTANCE = 1000f;
+        protected const float STEP_LENGTH = 10f;
 
         // vector to reposition the charge ball if it feels too low or too high on the character sprite
         public Vector2 ChannelingOffset = new Vector2(0, 4f);
 
         // rate at which decaying produces dust
-        private float DecayDustFrequency = 0.6f;
+        protected float DecayDustFrequency = 0.6f;
 
         // rate at which charging produces dust
-        private float ChargeDustFrequency = 0.4f;
+        protected float ChargeDustFrequency = 0.4f;
 
         // rate at which dispersal of the charge ball (from weapon swapping) produces dust
-        private float DisperseDustFrequency = 1.0f;
+        protected float DisperseDustFrequency = 1.0f;
 
         // the amount of dust that tries to spawn when the charge orb disperses from weapon swapping.
-        private int DisperseDustQuantity = 40;
+        protected int DisperseDustQuantity = 40;
 
         // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
         protected float RotationSlowness = 15f;
@@ -97,29 +97,22 @@ namespace DBZMOD.Projectiles
         protected bool IsBeamOriginTracking = true;
 
         // the rate at which charge level increases while channeling
-        private float ChargeRate() { return ChargeRatePerSecond / 60f; }
+        protected float ChargeRate() { return ChargeRatePerSecond / 60f; }
 
         // Rate at which Ki is drained while channeling
-        private int ChargeKiDrainRate() { return ChargeKiDrainPerSecond / (60 / CHARGE_KI_DRAIN_WINDOW); }
+        protected int ChargeKiDrainRate() { return ChargeKiDrainPerSecond / (60 / CHARGE_KI_DRAIN_WINDOW); }
 
         // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
-        private const int CHARGE_KI_DRAIN_WINDOW = 2;
-
-        // Rate at which Ki is drained while firing the beam *without a charge*
-        // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        private int FireKiDrainRate() { return (int)Math.Ceiling(GetBeamPowerMultiplier() * (FireKiDrainPerSecond / (60f / FIRE_KI_DRAIN_WINDOW))); }
+        protected const int CHARGE_KI_DRAIN_WINDOW = 2;
 
         // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
-        private const int FIRE_KI_DRAIN_WINDOW = 2;
-
-        // the rate at which firing drains the charge level of the ball, play with this for balance.
-        private float FireDecayRate() { return GetBeamPowerMultiplier() * FireChargeDrainPerSecond / 60f; }
+        protected const int FIRE_KI_DRAIN_WINDOW = 2;
 
         // the rate at which the charge decays when not channeling
-        private float DecayRate() { return DecayChargeLevelPerSecond / 60f; }
+        protected float DecayRate() { return DecayChargeLevelPerSecond / 60f; }
 
         // The sound slot used by the projectile to kill the sounds it's making
-        private KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
+        protected KeyValuePair<uint, SoundEffectInstance> ChargeSoundSlotId;
 
         #endregion
 
@@ -348,90 +341,7 @@ namespace DBZMOD.Projectiles
             WasCharging = IsCharging;
         }
 
-        private bool ShouldFireBeam(MyPlayer modPlayer)
-        {
-            return ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
-                && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < MinimumFireFrames)));
-        }
-
-        private float GetBeamPowerMultiplier()
-        {
-            return (1f + ChargeLevel / 10f);
-        }
-
-        private int GetBeamDamage()
-        {
-            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier());
-        }
-
-        private bool WasSustainingFire = false;
-
-        Projectile MyProjectile = null;
-        public void HandleFiring(Player player, Vector2 mouseVector)
-        {
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-
-            // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
-            if (ShouldFireBeam(modPlayer))
-            {
-                // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
-                if (!modPlayer.IsMouseLeftHeld && IsBeamOriginTracking)
-                {
-                    modPlayer.IsMouseLeftHeld = true;
-                }
-
-                // kill the charge sound if we're firing
-                ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
-
-                if (!WasSustainingFire)
-                {
-                    // fire the laser!
-                    MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
-
-                    // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
-                    MyProjectile.ai[1] = MinimumFireFrames;
-                }
-
-                // increment the fire time, this handles "IsSustainingFire" as well as stating the beam is no longer firable (it is already being fired)
-                CurrentFireTime++;
-
-                // if the player has charge left, drain the ball
-                if (ChargeLevel > 0f)
-                {
-                    ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
-                }
-                else if (!modPlayer.IsKiDepleted())
-                {
-                    if (Main.time > 0 && Main.time % FIRE_KI_DRAIN_WINDOW == 0)
-                    {
-                        modPlayer.AddKi(-FireKiDrainRate());
-                    }
-                }
-                else
-                {
-                    // beam is no longer sustainable
-                    KillBeam();
-                }
-            }
-            else
-            {
-                // player has stopped firing or something else has stopped them
-                KillBeam();
-            }
-
-            WasSustainingFire = IsSustainingFire;
-        }
-
-        public void KillBeam()
-        {
-            // set the cooldown
-            CurrentFireTime = -InitialBeamCooldown;
-
-            if (MyProjectile != null)
-            {
-                ProjectileUtil.StartKillRoutine(MyProjectile);
-            }
-        }
+        protected bool WasSustainingFire = false;
 
         public void HandleChargeBallVisibility()
         {
@@ -444,10 +354,6 @@ namespace DBZMOD.Projectiles
         {
             if (player.HeldItem == null)
             {
-                if (MyProjectile != null)
-                {
-                    ProjectileUtil.StartKillRoutine(MyProjectile);
-                }
                 projectile.Kill();
                 return false;
             }
@@ -465,10 +371,6 @@ namespace DBZMOD.Projectiles
                     {
                         ProjectileUtil.DoChargeDust(GetChargeBallPosition(), DustType, DisperseDustFrequency, true, ChargeSize.ToVector2());
                     }
-                    if (MyProjectile != null)
-                    {
-                        ProjectileUtil.StartKillRoutine(MyProjectile);
-                    }
                     projectile.Kill();
                     return false;
                 }
@@ -483,8 +385,16 @@ namespace DBZMOD.Projectiles
         // the old screen position helps us offset the MouseWorld vector by our screen position so it's more stable.
         private Vector2 OldScreenPosition = Vector2.Zero;
 
-        // The AI of the projectile
-        public override void AI()
+        public override bool PreAI()
+        {
+            // capture the player instance so we can toss it around.
+            Player player = Main.player[projectile.owner];
+
+            // handles the initial binding to a weapon and determines if the player has changed items, which should kill the projectile.
+            return ShouldHandleWeaponChangesAndContinue(player);
+        }
+
+        public virtual Vector2 DoControl(Player player)
         {
             // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
             Vector2 mouseVector = Main.MouseWorld;
@@ -496,39 +406,28 @@ namespace DBZMOD.Projectiles
                 mouseVector = OldMouseVector + mouseMovementVector + screenChange;
             }
 
-            // capture the player instance so we can toss it around.
-            Player player = Main.player[projectile.owner];
-
-            // track whether charge level has changed by snapshotting it.
-            float oldChargeLevel = ChargeLevel;
-
-            // handles the initial binding to a weapon and determines if the player has changed items, which should kill the projectile.
-            if (!ShouldHandleWeaponChangesAndContinue(player))
-                return;
-
-            // decrease the beam cooldown if it's not zero
-            HandleBeamFireCooldown();
-
             // handle.. handling the charge.
             UpdateChargeBallLocationAndDirection(player, mouseVector);
-
-            // handle pouring ki into the ball (or decaying if not channeling)
-            HandleChargingKi(player);
-
-            // handle whether the ball should be visible, and how visible.
-            HandleChargeBallVisibility();
-
-            // figure out if the player is shooting and fire the laser
-            HandleFiring(player, mouseVector);
-
-            // Handle Audio
-            SoundUtil.UpdateTrackedSound(ChargeSoundSlotId, projectile.Center);
 
             // capture the current mouse vector as the previous mouse vector.
             OldMouseVector = mouseVector;
 
             // capture the current screen position as the previous screen position.
             OldScreenPosition = screenPosition;
+
+            return mouseVector;
+        }
+
+        public void DoCharge(Player player)
+        {
+            // track whether charge level has changed by snapshotting it.
+            float oldChargeLevel = ChargeLevel;
+
+            // handle pouring ki into the ball (or decaying if not channeling)
+            HandleChargingKi(player);
+
+            // handle whether the ball should be visible, and how visible.
+            HandleChargeBallVisibility();
 
             // If we just crossed a threshold, display combat text for the charge level increase.
             if (Math.Floor(oldChargeLevel) != Math.Floor(ChargeLevel) && oldChargeLevel != ChargeLevel)
@@ -538,17 +437,27 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public void HandleBeamFireCooldown()
+        // The AI of the projectile
+        public override void AI()
         {
-            // less than 0 fire time means on cooldown, try to "decrease" cooldown by 1, stopping at 0 if applicable.
-            if (CurrentFireTime < 0)
-                CurrentFireTime = Math.Max(0, CurrentFireTime + 1f);
+            // capture the player instance so we can toss it around.
+            Player player = Main.player[projectile.owner];
+
+            // handle mouse movement and 
+            DoControl(player);
+
+            // handle charging (or not charging)
+            DoCharge(player);
+
+            // Handle Audio
+            SoundUtil.UpdateTrackedSound(ChargeSoundSlotId, projectile.Center);
         }
 
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)
         {
+            var modPlayer = player.GetModPlayer<MyPlayer>();
             // custom channeling handler
-            if (player.GetModPlayer<MyPlayer>().IsMouseRightHeld)
+            if (modPlayer.IsMouseRightHeld)
                 player.channel = true;
 
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
@@ -574,9 +483,13 @@ namespace DBZMOD.Projectiles
             {
                 player.itemTime = 10;
                 player.itemAnimation = 10;
-                int dir = projectile.direction;
-                player.ChangeDir(dir);
-                player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
+                // don't do this if the player is flying, we let the flight code handle it "manually" because it looks weird as shit
+                if (!modPlayer.IsFlying)
+                {
+                    int dir = projectile.direction;
+                    player.ChangeDir(dir);
+                    player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
+                }
             }
         }
 

@@ -122,7 +122,7 @@ namespace DBZMOD.Projectiles.Auras
             if (projectile.frame >= Main.projFrames[projectile.type])
             {
                 projectile.frame = 0;
-            }			
+            }
 
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

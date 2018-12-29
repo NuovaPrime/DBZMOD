@@ -155,7 +155,23 @@ namespace DBZMOD
 
         public static bool IsPlayerUsingKiWeapon(MyPlayer modPlayer)
         {
-            return modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld);
+            // try to figure out if the player is using a beam weapon actively.
+            // the reason we have to do this is because the IsMouseLeftHeld call isn't quite on time
+            // for the beam routine updates - we need to know if the charge ball is firing earlier than that.
+            bool isExistingBeamFiring = false;
+            if (modPlayer.player.heldProj > 0)
+            {
+                var proj = Main.projectile[modPlayer.player.heldProj];
+                if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
+                {
+                    var beamCharge = proj.modProjectile as BaseBeamCharge;
+                    if (beamCharge.IsSustainingFire)
+                    {
+                        isExistingBeamFiring = true;
+                    }
+                }
+            }
+            return modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld || isExistingBeamFiring);
         }
 
         public static float GetFlightSystemOctantDegrees(MyPlayer modPlayer)
@@ -191,6 +207,22 @@ namespace DBZMOD
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             float leanThrottle = 180;
+            // make sure if the player is using a ki weapon during flight, we're facing a way that doesn't make it look extremely goofy
+            if (IsPlayerUsingKiWeapon(modPlayer))
+            {
+                // get flight rotation from octant
+                leanThrottle = GetFlightSystemOctantDegrees(modPlayer);
+
+                bool isPlayerHorizontal = m_rotationDir.X != 0;
+                bool isMouseAbove = leanThrottle < 0;
+                int horizontalDirection = m_rotationDir.X < 0 ? -1 : (m_rotationDir.X > 0 ? 1 : player.direction);
+                int dir = isPlayerHorizontal ? (isMouseAbove ? -horizontalDirection : horizontalDirection) : horizontalDirection;
+                if (dir != player.direction)
+                {
+                    player.ChangeDir(dir);
+                }                
+            }
+
             if (m_rotationDir != Vector2.Zero)
             {
                 m_rotationDir.Normalize();
@@ -212,9 +244,7 @@ namespace DBZMOD
             }
             else if (IsPlayerUsingKiWeapon(modPlayer))
             {
-                // get flight rotation from octant
-                leanThrottle = GetFlightSystemOctantDegrees(modPlayer);
-
+                // we already got the lean throttle from above, and set the direction we needed to not look stupid
                 if (player.direction == 1)
                     radRot = MathHelper.ToRadians(leanThrottle);
                 else if (player.direction == -1)
