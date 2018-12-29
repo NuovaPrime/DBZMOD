@@ -1066,6 +1066,16 @@ namespace DBZMOD
             }
         }
 
+        public void ChangeEyeColor(Color eyeColor)
+        {
+            // only fire this when attempting to change the eye color.
+            if (OriginalEyeColor == null)
+            {
+                OriginalEyeColor = player.eyeColor;
+            }
+            player.eyeColor = eyeColor;
+        }
+
         public string ChooseTrait()
         {
             var TraitChooser = new WeightedRandom<string>();
