@@ -36,8 +36,6 @@ namespace DBZMOD.UI
         private Color gradientA;
 		private Color gradientB;
         public Texture2D texture;
-        private Color gradientAColor = new Color(0, 208, 255);
-        private Color gradientBColor = new Color(0, 80, 255);
 
         public override void OnInitialize()
 		{
@@ -48,9 +46,9 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-					gradientA = gradientAColor; //light blue
-					gradientB = gradientBColor; // dark blue
-					break;
+                    gradientA = new Color(0, 208, 255); // light blue
+                    gradientB = new Color(0, 80, 255); // dark blue
+                    break;
                 case ResourceBarMode.OVERLOAD:
                     gradientA = new Color(1, 168, 1); //dark green
                     gradientB = new Color(35, 237, 35); // light green
@@ -167,45 +165,49 @@ namespace DBZMOD.UI
 			{
 				case ResourceBarMode.KI:
                     text.SetText("Ki:" + averageKi + " / " + modplayer.OverallKiMax());
-					break;
+                    if (modplayer.playerTrait == "Legendary")
+                    {
+                        gradientA = new Color(0, 254, 0);
+                        gradientB = new Color(0, 122, 91);
+                    }
+                    else if (modplayer.playerTrait == "Prodigy")
+                    {
+                        gradientA = new Color(0, 150, 255);
+                        gradientB = new Color(0, 20, 255);
+                    }
+                    else if (modplayer.playerTrait == "Divine")
+                    {
+                        gradientA = new Color(15, 0, 24);
+                        gradientB = new Color(106, 62, 183);
+                    }
+                    else if (modplayer.playerTrait == "Primal")
+                    {
+                        gradientA = new Color(198, 19, 46);
+                        gradientB = new Color(255, 151, 0);
+                    }
+                    else if (Transformations.IsGodlike(player))
+                    {
+                        gradientA = new Color(175, 45, 63);
+                        gradientB = new Color(255, 116, 48);
+                    }
+                    else
+                    {
+                        gradientA = new Color(0, 208, 255);
+                        gradientB = new Color(0, 80, 255);
+                    }
+                    break;
 
                 case ResourceBarMode.OVERLOAD:
                     text.SetText("Overload:" + modplayer.OverloadCurrent + " / " + modplayer.OverloadMax);
+                    gradientA = new Color(1, 168, 1); //dark green
+                    gradientB = new Color(35, 237, 35); // light green
+                    break;
                     break;
 
                 default:
 					break;
 			}
-            if(modplayer.playerTrait == "Legendary")
-            {
-                gradientAColor = new Color(0, 122, 91);
-                gradientBColor = new Color(0, 254, 0);
-            }
-            else if (modplayer.playerTrait == "Prodigy")
-            {
-                gradientAColor = new Color(63, 89, 219);
-                gradientBColor = new Color(150, 112, 255);
-            }
-            else if (modplayer.playerTrait == "Divine")
-            {
-                gradientAColor = new Color(15, 0, 24);
-                gradientBColor = new Color(106, 62, 183);
-            }
-            else if (modplayer.playerTrait == "Primal")
-            {
-                gradientAColor = new Color(198, 19, 46);
-                gradientBColor = new Color(255, 151, 0);
-            }
-            else if (Transformations.IsGodlike(player))
-            {
-                gradientAColor = new Color(175, 45, 63);
-                gradientBColor = new Color(255, 116, 48);
-            }
-            else
-            {
-                gradientAColor = new Color(0, 208, 255);
-                gradientBColor = new Color(0, 80, 255);
-            }
+            
 			base.Update(gameTime);
 		}
 
