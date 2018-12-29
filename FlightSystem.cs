@@ -247,7 +247,7 @@ namespace DBZMOD
 
             // update handler to reorient the charge up aura after the aura offsets are defined.
             bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary && !IsPlayerUsingKiWeapon(player.GetModPlayer<MyPlayer>()))
+            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
             {
                 double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
                 projectile.rotation = (float)(player.fullRotation + rotationOffset);
