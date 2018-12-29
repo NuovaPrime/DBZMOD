@@ -216,7 +216,6 @@ namespace DBZMOD.UI
             }
 
             // nuke the original dragon ball locations
-            DebugUtil.Log("Wiping all the original Dragon Ball locations.");
             dbzWorld.DragonBallLocations[0] = new Point(-1, -1);
             dbzWorld.DragonBallLocations[1] = new Point(-1, -1);
             dbzWorld.DragonBallLocations[2] = new Point(-1, -1);
@@ -226,7 +225,6 @@ namespace DBZMOD.UI
             dbzWorld.DragonBallLocations[6] = new Point(-1, -1);
 
             // handles respawning all the dragon balls
-            DebugUtil.Log("Spawning new Dragon Ball set.");
             DBZWorld.DoDragonBallCleanupCheck();
         }
 

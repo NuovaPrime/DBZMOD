@@ -125,13 +125,8 @@ namespace DBZMOD
                 }                
 
                 //calculate rotation
-                float radRot = 0;
-                if (m_rotationDir != Vector2.Zero)
-                {
-                    m_rotationDir.Normalize();
-                    radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
-                    radRot = GetPlayerFlightRotation(m_rotationDir, radRot, player);
-                }
+                float radRot = GetPlayerFlightRotation(m_rotationDir, player);
+
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
 
                 //drain ki
@@ -163,41 +158,69 @@ namespace DBZMOD
             return modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld);
         }
 
-        public static float GetPlayerFlightRotation(Vector2 m_rotationDir, float radRot, Player player)
+        public static float GetFlightSystemOctantDegrees(MyPlayer modPlayer)
         {
+            var octantMirrorQuadrant = 0;
+            // since the player is mirrored, there's really only 3 ordinal positions we care about
+            // up angle, no angle and down angle
+            // we don't go straight up or down cos it looks weird as shit
+            switch (modPlayer.MouseWorldOctant)
+            {
+                case -3:
+                case -2:
+                case -1:
+                    octantMirrorQuadrant = -1;
+                    break;
+                case 0:
+                case 4:
+                    octantMirrorQuadrant = 0;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    octantMirrorQuadrant = 1;
+                    break;
+            }
+
+            return octantMirrorQuadrant * 45f;
+        }
+
+        public static float GetPlayerFlightRotation(Vector2 m_rotationDir, Player player)
+        {
+            float radRot = 0f;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             float leanThrottle = 180;
-            if (IsPlayerUsingKiWeapon(modPlayer))            
+            if (m_rotationDir != Vector2.Zero)
+            {
+                m_rotationDir.Normalize();
+                radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
+                if (m_rotationDir.Y < 0)
+                {
+                    if (m_rotationDir.X > 0)
+                        radRot += MathHelper.ToRadians(leanThrottle);
+                    else if (m_rotationDir.X < 0)
+                        radRot -= MathHelper.ToRadians(leanThrottle);
+                    else
+                    {
+                        if (player.velocity.X >= 0)
+                            radRot = MathHelper.ToRadians(leanThrottle);
+                        else if (player.velocity.X < 0)
+                            radRot = MathHelper.ToRadians(-leanThrottle);
+                    }
+                }
+            }
+            else if (IsPlayerUsingKiWeapon(modPlayer))
             {
                 // get flight rotation from octant
+                leanThrottle = GetFlightSystemOctantDegrees(modPlayer);
 
-                leanThrottle = modPlayer.MouseWorldOctant * 45f;
+                if (player.direction == 1)
+                    radRot = MathHelper.ToRadians(leanThrottle);
+                else if (player.direction == -1)
+                    radRot = MathHelper.ToRadians(-leanThrottle);
             }
 
-            if (m_rotationDir.Y < 0)
-            {
-                if (m_rotationDir.X > 0)
-                    radRot += MathHelper.ToRadians(leanThrottle);
-                else if (m_rotationDir.X < 0)
-                    radRot -= MathHelper.ToRadians(leanThrottle);
-                else
-                {
-                    if (player.velocity.X >= 0)
-                        radRot = MathHelper.ToRadians(leanThrottle);
-                    else if (player.velocity.X < 0)
-                        radRot = MathHelper.ToRadians(-leanThrottle);
-                }
-            } else
-            {
-                // if the player is channeling, throttle direction turn and make it their facing direction.
-                if (leanThrottle == 45)
-                {
-                    if (player.direction == 1)
-                        radRot = MathHelper.ToRadians(leanThrottle);
-                    else if (player.direction == -1)
-                        radRot = MathHelper.ToRadians(-leanThrottle);
-                }
-            }
             return radRot;
         }
 

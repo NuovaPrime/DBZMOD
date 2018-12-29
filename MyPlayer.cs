@@ -638,6 +638,8 @@ namespace DBZMOD
                 IsFlying = false;
             }
 
+            HandleMouseOctantAndSyncTracking();
+
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
             FlightSystem.Update(player);
 
@@ -1679,7 +1681,6 @@ namespace DBZMOD
             
             if ((WishActive || QuickKi.JustPressed) && !WishMenu.menuvisible)
             {
-                DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
         }

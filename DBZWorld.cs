@@ -619,7 +619,6 @@ namespace DBZMOD
                 WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
                 int dbIndex = whichDragonball - 1;
                 GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
-                DebugUtil.Log(string.Format("Placing dragon ball {0} at coordinates {1} {2}", whichDragonball, offsetX, offsetY));
                 return true;
             } else
             {
@@ -647,7 +646,6 @@ namespace DBZMOD
                     {
                         safeCoordinates = GetSafeDragonBallCoordinates();
                     }
-                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
                 }
             }
             return true;
@@ -667,7 +665,6 @@ namespace DBZMOD
                     {
                         safeCoordinates = GetSafeDragonBallCoordinates();
                     }
-                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
                 }
             }
         }
