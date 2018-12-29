@@ -72,7 +72,7 @@ namespace DBZMOD.Projectiles.Auras
 
             HandleFrameAnimation(player);
 
-            FlightSystem.HandleFlightAuraRotation(player, projectile, AuraOffset);
+            FlightSystem.HandleFlightAuraRotation(player, projectile, ScaledAuraOffset);
         }
 
         public void HandleFrameAnimation(Player player)

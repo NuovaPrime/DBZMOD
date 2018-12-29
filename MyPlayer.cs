@@ -467,8 +467,6 @@ namespace DBZMOD
                 }
             }
 
-            HandleLightningFrames();
-
             if (!Transformations.IsPlayerTransformed(player))
             {
                 KiDrainAddition = 0;
