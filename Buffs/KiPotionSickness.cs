@@ -12,7 +12,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Ki Potion Sickness");
             Description.SetDefault("You feel sick at the thought of another ki potion.");
             Main.buffNoTimeDisplay[Type] = false;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
         }
     }
 }

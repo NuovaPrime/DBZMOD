@@ -11,7 +11,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Ultra Instinct -Sign-");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
+            Main.debuff[Type] = false;
             DamageMulti = 2f;
             SpeedMulti = 7f;
             KiDrainRate = 10;

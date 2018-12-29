@@ -11,11 +11,13 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Super Saiyan God");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
-            DamageMulti = 5f;
-            SpeedMulti = 5f;
-            KiDrainRate = 8;
+            Main.debuff[Type] = false;
+            DamageMulti = 3.5f;
+            SpeedMulti = 3.5f;
+            KiDrainRate = 2.25f;
+            KiDrainRateWithMastery = 1.65f;
             KiDrainBuffMulti = 1.5f;
+            BaseDefenceBonus = 16;
             Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
         }
         public override void Update(Player player, ref int buffIndex)

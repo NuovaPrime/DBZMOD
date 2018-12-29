@@ -44,7 +44,6 @@ namespace Network
             int whichPlayer = reader.ReadInt32();
             string buffKeyName = reader.ReadString();
             int duration = reader.ReadInt32();
-            // Main.NewText(string.Format("Receiving sync signal for forms for player {0} for buff {1} for {2} frames", whichPlayer, buffId, duration));
             if (Main.netMode == NetmodeID.Server)
             {
                 SendFormChanges(-1, fromWho, whichPlayer, buffKeyName, duration);
@@ -55,11 +54,11 @@ namespace Network
                 // handle form removal if duration is 0
                 if (duration == 0)
                 {
-                    Transformations.RemoveTransformation(thePlayer, buffKeyName, true);                    
+                    Transformations.RemoveTransformation(thePlayer, buffKeyName);                    
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    Transformations.AddTransformation(thePlayer, buffKeyName, duration, true);                    
+                    Transformations.AddTransformation(thePlayer, buffKeyName, duration);                    
                 }
             }
         }

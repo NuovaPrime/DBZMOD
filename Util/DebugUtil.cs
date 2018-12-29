@@ -9,7 +9,7 @@ namespace Util
 {
     static class DebugUtil
     {
-        static bool isDebug = true;
+        public static bool isDebug = false;
         public static void Log(string someString)
         {
             if (!isDebug)

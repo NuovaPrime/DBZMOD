@@ -7,7 +7,6 @@ namespace DBZMOD.Buffs
 {
     public class ChlorophyteRegen : ModBuff
     {
-        private int RegenTimer;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Chlorophyte Regen");
@@ -18,12 +17,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.lifeRegen += 3;
-            RegenTimer++;
-            if(RegenTimer > 10)
-            {
-                MyPlayer.ModPlayer(player).AddKi(1);
-                RegenTimer = 0;
-            }
+            MyPlayer.ModPlayer(player).AddKi(0.1f);
         }
     }
 }

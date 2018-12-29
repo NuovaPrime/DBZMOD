@@ -14,8 +14,8 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("14% Increased Ki Damage"
-                + "\n16% Increased Ki Crit Chance" +
-                               "\n+500 Max Ki" +
+                + "\n24% Increased Ki Crit Chance" +
+                               "\n+750 Max Ki" +
                                "\nIncreased Ki Regen" +
                                "\n26% Increased movement speed");
             DisplayName.SetDefault("Radiant Greaves");
@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.14f;
             MyPlayer.ModPlayer(player).KiCrit += 16;
-            MyPlayer.ModPlayer(player).KiMax2 += 500;
+            MyPlayer.ModPlayer(player).KiMax2 += 750;
             MyPlayer.ModPlayer(player).KiRegen += 3;
             player.moveSpeed += 0.26f;
 

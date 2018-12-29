@@ -140,6 +140,11 @@ namespace Util
             }
         }
 
+        public static bool CanPlayOtherPlayerAudio(MyPlayer myPlayer, Player otherPlayer)
+        {
+            return myPlayer.PlayerIndexWithLocalAudio == otherPlayer.whoAmI || myPlayer.PlayerIndexWithLocalAudio == -1;
+        }
+
         // tries to settle ties when trying to play aura and charge effects - the local player always wins, otherwise it's first come first serve. Only one at a time.
         public static bool ShouldPlayPlayerAudio(Player player, bool isTransformation)
         {
@@ -147,8 +152,13 @@ namespace Util
             var modPlayer = player.GetModPlayer<MyPlayer>();            
             if (player.whoAmI == Main.myPlayer)
             {
-                shouldPlayAudio = (modPlayer.ChargeSoundInfo.Value == null || isTransformation);
-                if (modPlayer.IsAlreadyPlayingOtherPlayerAudio)
+                shouldPlayAudio = modPlayer.TransformationSoundInfo.Value == null || isTransformation;
+                if (modPlayer.ChargeSoundInfo.Value != null && isTransformation)
+                {
+                    modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
+                }
+                
+                if (modPlayer.PlayerIndexWithLocalAudio != -1)
                 {
                     KillOtherPlayerAudio(player);
                 }
@@ -156,10 +166,10 @@ namespace Util
             else
             {
                 var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && !myPlayer.IsAlreadyPlayingOtherPlayerAudio;        
+                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
                 if (shouldPlayAudio)
                 {
-                    myPlayer.IsAlreadyPlayingOtherPlayerAudio = true;
+                    myPlayer.PlayerIndexWithLocalAudio = player.whoAmI;
                 }
             }
             return shouldPlayAudio;
@@ -180,7 +190,7 @@ namespace Util
                 modPlayer.TransformationSoundInfo = KillTrackedSound(modPlayer.TransformationSoundInfo);
             }
             var myModPlayer = myPlayer.GetModPlayer<MyPlayer>();
-            myModPlayer.IsAlreadyPlayingOtherPlayerAudio = false;
+            myModPlayer.PlayerIndexWithLocalAudio = -1;
         }
     }
 }

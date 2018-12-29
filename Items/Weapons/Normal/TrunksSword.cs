@@ -11,7 +11,7 @@ namespace DBZMOD.Items.Weapons.Normal
         {
             Tooltip.SetDefault("Has some armour penetration."
         + "\n-Tier 4-");
-            DisplayName.SetDefault("Trunk's Sword");
+            DisplayName.SetDefault("Trunks' Sword");
         }
 
         public override void SetDefaults()

@@ -18,23 +18,19 @@ namespace DBZMOD.UI
 
         public override void OnInitialize()
         {
-            backPanel = new UIPanel();
-            backPanel.Width.Set(306f, 0f);
-            backPanel.Height.Set(128f, 0f);
-            backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
-            backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
-            backPanel.BackgroundColor = new Color(0, 0, 0, 0);
-            backPanel.OnMouseDown += new MouseEvent(DragStart);
-            backPanel.OnMouseUp += new MouseEvent(DragEnd);
-            base.Append(backPanel);
             base.OnInitialize();
-
-
         }
-        /*public override void Update(GameTime gametime)
+
+        public override void Update(GameTime gameTime)
         {
-            backPanel.SetVisibility(0.0f);
-        }*/
+            base.Update(gameTime); // don't remove.
+
+            // Checking ContainsPoint and then setting mouseInterface to true is very common. This causes clicks on this UIElement to not cause the player to use current items. 
+            if (ContainsPoint(Main.MouseScreen))
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+        }
 
         public void InitButton(ref UIImageButton buttonToInitialise, Texture2D buttonTexture, MouseEvent buttonOnClick, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
@@ -55,7 +51,7 @@ namespace DBZMOD.UI
                 parentElement.Append(buttonToInitialise);
             }
         }
-
+        
         public void InitImage(ref UIImage imageToInitialise, Texture2D imageTexture, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
             imageToInitialise = new UIImage(imageTexture);
@@ -64,6 +60,7 @@ namespace DBZMOD.UI
             imageToInitialise.Height.Set(imageTexture.Height, 0.0f);
             imageToInitialise.Left.Set(offsetX, 0f);
             imageToInitialise.Top.Set(offsetY, 0f);
+
 
             if (parentElement == null)
             {
@@ -75,9 +72,9 @@ namespace DBZMOD.UI
             }
         }
 
-        public void InitText(ref UIText TextToInitialise, string text, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
+        public void InitText(ref UIText TextToInitialise, string text, float scale = 1, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
         {
-            TextToInitialise = new UIText(text);
+            TextToInitialise = new UIText(text, scale);
 
             TextToInitialise.Width.Set(16f, 0f);
             TextToInitialise.Height.Set(16f, 0f);
@@ -89,23 +86,26 @@ namespace DBZMOD.UI
             {
                 backPanel.Append(TextToInitialise);
             }
+            /*if (parentElement == wishbackPanel)
+            {
+                wishbackPanel.Append(TextToInitialise);
+            }*/
             else
             {
                 parentElement.Append(TextToInitialise);
             }
         }
 
-
         Vector2 offset;
         public bool dragging = false;
 
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        protected void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
             dragging = true;
         }
 
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        protected void DragEnd(UIMouseEvent evt, UIElement listeningElement)
         {
             Vector2 end = evt.MousePosition;
             dragging = false;
@@ -115,8 +115,10 @@ namespace DBZMOD.UI
 
             Recalculate();
         }
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            base.DrawSelf(spriteBatch);
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
             if (backPanel.ContainsPoint(MousePosition))
             {
@@ -129,7 +131,5 @@ namespace DBZMOD.UI
                 Recalculate();
             }
         }
-
-
     }
 }

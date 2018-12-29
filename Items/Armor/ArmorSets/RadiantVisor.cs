@@ -14,8 +14,8 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("18% Increased Ki Damage"
-                + "\n10% Increased Ki crit" +
-                               "\n+500 Max Ki" +
+                + "\n24% Increased Ki crit" +
+                               "\n+750 Max Ki" +
                                "\nIncreased flight speed");
             DisplayName.SetDefault("Radiant Visor");
         }
@@ -26,14 +26,14 @@ namespace DBZMOD.Items.Armor.ArmorSets
             item.height = 18;
             item.value = 52000;
             item.rare = 10;
-            item.defense = 14;
+            item.defense = 16;
         }
 
         public override void UpdateEquip(Player player)
         {
             MyPlayer.ModPlayer(player).KiDamage += 0.18f;
             MyPlayer.ModPlayer(player).KiCrit += 10;
-            MyPlayer.ModPlayer(player).KiMax2 += 500;
+            MyPlayer.ModPlayer(player).KiMax2 += 750;
             MyPlayer.ModPlayer(player).FlightSpeedAdd += 0.3f;
 
         }

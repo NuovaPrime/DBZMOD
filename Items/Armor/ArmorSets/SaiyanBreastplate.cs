@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             Tooltip.SetDefault("10% Increased Ki Damage"
                 + "\n6% Increased Ki Crit Chance" +
                                "\n+100 Max ki");
-            DisplayName.SetDefault("Saiyan Breastplate");
+            DisplayName.SetDefault("Saiyan Battle Breastplate");
         }
 
         public override void SetDefaults()
@@ -31,8 +31,11 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Drastically increased pickup range for ki orbs.";
+            player.setBonus = "Drastically increased pickup range for ki orbs." +
+                "\n+500 Max Ki and 8% Reduced Ki Usage";
             MyPlayer.ModPlayer(player).OrbGrabRange += 9;
+            MyPlayer.ModPlayer(player).KiMax2 += 500;
+            MyPlayer.ModPlayer(player).KiDrainMulti -= 0.08f;
         }
         public override void UpdateEquip(Player player)
         {

@@ -1,10 +1,6 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Projectiles.Auras;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Util;
 
 namespace DBZMOD.Projectiles.Auras
@@ -16,10 +12,11 @@ namespace DBZMOD.Projectiles.Auras
         {
             Main.projFrames[projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
-            projectile.width = 97;
-            projectile.height = 102;
+            projectile.width = 113;
+            projectile.height = 115;
             projectile.aiStyle = 0;
             projectile.timeLeft = 10;
             projectile.friendly = true;
@@ -29,29 +26,36 @@ namespace DBZMOD.Projectiles.Auras
             projectile.damage = 0;
             KaioAuraTimer = 240;
             IsKaioAura = true;
-            AuraOffset.Y = -20;
+            projectile.hide = true;
+            ProjectileID.Sets.DontAttachHideToAlpha[projectile.type] = true;
         }
+
+        public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
+        {
+            // Add this projectile to the list of projectiles that will be drawn BEFORE tiles and NPC are drawn. This makes the projectile appear to be BEHIND the tiles and NPC.
+            drawCacheProjsBehindProjectiles.Add(index);
+        }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            projectile.netUpdate = true;
-            if (!player.HasBuff(Transformations.Kaioken.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
+
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            // kill the projectile if Kaioken is level 0
+            if (modPlayer.KaiokenLevel == 0)
+                projectile.Kill();
+
+            // remove the aura if the buff is removed.
+            if (!Transformations.IsKaioken(player))
             {
                 projectile.Kill();
             }
+
+            // I don't know what this does.
             if (KaioAuraTimer > 0)
-            {
-                //projectile.scale = 1f + 2f * (KaioAuraTimer / 240f);
+            {            
                 KaioAuraTimer--;
-            }
-            if(player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()))
-            {
-                projectile.scale = 1.5f * Main.GameZoomTarget;
-                AuraOffset.Y = -40 * projectile.scale;
-            }
-            else
-            {
-                AuraOffset.Y = -20 * projectile.scale;
             }
             base.AI();
         }

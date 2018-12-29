@@ -9,36 +9,39 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles.DragonBalls
 {
-    public class FourStarDBTile : ModTile
+    public class FourStarDBTile : DragonBallTile
     {
         public override void SetDefaults()
         {
-            Main.tileSolid[Type] = false;
-            Main.tileSpelunker[Type] = true;
-            Main.tileLighted[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.Origin = new Point16(0, 0);
-            TileObjectData.addTile(Type);
+            base.SetDefaults();
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("4 Star Dragon Ball");
+            drop = mod.ItemType("FourStarDB");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
+            WhichDragonBallAmI = 4;
         }
 
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (closer)
+            {
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+                modPlayer.FourStarDBNearby = true;
+            }
+        }
+
+        // the four star is special, it has its own drop method
         public override bool Drop(int i, int j)
         {
+            base.Drop(i, j);
             Player player = Main.LocalPlayer;
             MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
 
             if (!modplayer.FirstFourStarDBPickup)
             {
-                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("FourStarDB"));
                 Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
                 modplayer.FirstFourStarDBPickup = true;
-            }
-            else
-            {
-                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("FourStarDB"));
             }
             return false;
         }

@@ -34,7 +34,6 @@ namespace DBZMOD
 
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
@@ -56,27 +55,30 @@ namespace DBZMOD
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (modPlayer.IsCharging ? 1 : 0);
                 int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd);
-                float totalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
+                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
+                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.FlightSpeedAdd;
 
                 if (modPlayer.IsUpHeld)
                 {
-                    player.velocity.Y -= totalFlightSpeed;
+                    // for some reason flying up is way, way faster than flying down.
+                    player.velocity.Y -= (totalVerticalFlightSpeed / 3.8f);
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
-                    player.velocity.Y += totalFlightSpeed;
+                    player.maxFallSpeed = 20f;
+                    player.velocity.Y += totalVerticalFlightSpeed / 3.6f;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
-                    player.velocity.X += totalFlightSpeed;
+                    player.velocity.X += totalHorizontalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
-                    player.velocity.X -= totalFlightSpeed;
+                    player.velocity.X -= totalHorizontalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
 
@@ -97,7 +99,7 @@ namespace DBZMOD
                 {
                     FlightDustType = 174;
                 }
-                else if (Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player))
+                else if (Transformations.IsKaioken(player))
                 {
                     FlightDustType = 182;
                 }
@@ -105,6 +107,7 @@ namespace DBZMOD
                 {
                     FlightDustType = 267;
                 }
+                
 
                 //calculate velocity
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);

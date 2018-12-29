@@ -11,12 +11,13 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Super Saiyan 2");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
-            DamageMulti = 2.5f;
-            SpeedMulti = 2.5f;
-            KiDrainBuffMulti = 1.7f;
-            KiDrainRateWithMastery = 2;
-            KiDrainRate = 4;
+            Main.debuff[Type] = false;
+            DamageMulti = 2.25f;
+            SpeedMulti = 2.25f;
+            KiDrainBuffMulti = 1.625f;
+            KiDrainRate = 2;
+            KiDrainRateWithMastery = 1;
+            BaseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
         public override void Update(Player player, ref int buffIndex)

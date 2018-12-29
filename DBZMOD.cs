@@ -19,18 +19,24 @@ namespace DBZMOD
 {
     public class DBZMOD : Mod
     {
-        private UserInterface KiBarInterface;
-        private KiBar kibar;
-        private OverloadBar overloadbar;
-        private UserInterface OverloadBarInterface;
         private UIFlatPanel UIFlatPanel;
 
-        private TransMenu transMenu;
-        private UserInterface TransMenuInterface;
+        private static TransMenu transMenu;
+        private static UserInterface TransMenuInterface;
 
-        private ProgressionMenu progressionMenu;
+        private static WishMenu wishMenu;
+        private static UserInterface wishMenuInterface;
+
+        private static KiBar kibar;
+        private static UserInterface KiBarInterface;
+
+        private static ProgressionMenu progressionMenu;
+        private static UserInterface ProgressionMenuInterface;
+
+        private static OverloadBar overloadbar;
+        private static UserInterface OverloadBarInterface;
+
         private ResourceBar resourceBar;
-        private UserInterface ProgressionMenuInterface;
 
         public bool thoriumLoaded;
         public bool tremorLoaded;
@@ -59,6 +65,7 @@ namespace DBZMOD
             instance = null;
             TransMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
+            WishMenu.menuvisible = false;
             TransMenu.SSJ1On = false;
             TransMenu.SSJ2On = false;
             UIFlatPanel._backgroundTexture = null;
@@ -83,7 +90,7 @@ namespace DBZMOD
             MyPlayer.Transform = RegisterHotKey("Transform", "X");
             MyPlayer.PowerDown = RegisterHotKey("Power Down", "V");
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
-            //MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
+            MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
@@ -93,31 +100,59 @@ namespace DBZMOD
                 GFX.LoadGFX(this);
                 KiBar.visible = true;
 
-                transMenu = new TransMenu();
-                transMenu.Activate();
-                TransMenuInterface = new UserInterface();
-                TransMenuInterface.SetState(transMenu);
-
-                progressionMenu = new ProgressionMenu();
-                progressionMenu.Activate();
-                ProgressionMenuInterface = new UserInterface();
-                ProgressionMenuInterface.SetState(progressionMenu);
-
-                kibar = new KiBar();
-                kibar.Activate();
-                KiBarInterface = new UserInterface();
-                KiBarInterface.SetState(kibar);
-
-                overloadbar = new OverloadBar();
-                overloadbar.Activate();
-                OverloadBarInterface = new UserInterface();
-                OverloadBarInterface.SetState(overloadbar);
+                ActivateTransMenu();
+                ActivateWishmenu();
+                ActivateProgressionMenu();
+                ActivateKiBar();
+                ActivateOverloadBar();
 
                 Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
 
                 Filters.Scene["DBZMOD:GodSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.9f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
+                Filters.Scene["DBZMOD:WishSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.1f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
+                SkyManager.Instance["DBZMOD:WishSky"] = new WishSky();
             }
+        }        
+
+        public static void ActivateTransMenu()
+        {
+            transMenu = new TransMenu();
+            transMenu.Activate();
+            TransMenuInterface = new UserInterface();
+            TransMenuInterface.SetState(transMenu);
+        }
+
+        public static void ActivateWishmenu()
+        {
+            wishMenu = new WishMenu();
+            wishMenu.Activate();
+            wishMenuInterface = new UserInterface();
+            wishMenuInterface.SetState(wishMenu);
+        }
+
+        public static void ActivateProgressionMenu()
+        {
+            progressionMenu = new ProgressionMenu();
+            progressionMenu.Activate();
+            ProgressionMenuInterface = new UserInterface();
+            ProgressionMenuInterface.SetState(progressionMenu);
+        }
+
+        public static void ActivateKiBar()
+        {
+            kibar = new KiBar();
+            kibar.Activate();
+            KiBarInterface = new UserInterface();
+            KiBarInterface.SetState(kibar);
+        }
+
+        public static void ActivateOverloadBar()
+        {
+            overloadbar = new OverloadBar();
+            overloadbar.Activate();
+            OverloadBarInterface = new UserInterface();
+            OverloadBarInterface.SetState(overloadbar);
         }
 
         public override void AddRecipeGroups()
@@ -140,11 +175,15 @@ namespace DBZMOD
                 TransMenuInterface.Update(gameTime);
             }
 
+            if (wishMenuInterface != null && WishMenu.menuvisible)
+            {
+                wishMenuInterface.Update(gameTime);
+            }
+
             if (ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
             {
                 progressionMenu.Update(gameTime);
             }
-
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -170,7 +209,7 @@ namespace DBZMOD
             if (index2 != -1)
             {
                 layers.Insert(index2, new LegacyGameInterfaceLayer(
-                    "DBZMOD: Trans Menu",
+                    "DBZMOD: Menus",
                     delegate
                     {
                         if (TransMenu.menuvisible)
@@ -181,6 +220,11 @@ namespace DBZMOD
                         if (ProgressionMenu.menuvisible)
                         {
                             ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                        }
+
+                        if (WishMenu.menuvisible)
+                        {
+                            wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;

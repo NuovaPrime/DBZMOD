@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             Tooltip.SetDefault("7% Increased Ki Damage"
                 + "\n5% Increased Ki Crit Chance" +
                                "\n16% Increased movement speed");
-            DisplayName.SetDefault("Saiyan Leggings");
+            DisplayName.SetDefault("Saiyan Battle Leggings");
         }
 
         public override void SetDefaults()

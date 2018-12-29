@@ -15,7 +15,6 @@ namespace DBZMOD
 {
     public abstract class TransBuff : ModBuff
     {
-        public const int KI_DRAIN_TIMER_MAX = 3;
         public float DamageMulti;
         public float SpeedMulti;
         public float KaioLightValue;
@@ -23,22 +22,26 @@ namespace DBZMOD
         public float SSJLightValue;
         public int HealthDrainRate;
         public int OverallHealthDrainRate;
-        public int KiDrainRate;
-        public int KiDrainRateWithMastery;
-        private int KiDrainTimer;
+        public float KiDrainRate;
+        public float KiDrainRateWithMastery;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
         public int MasteryTimer;
-        
+        public int BaseDefenceBonus;
+        public int PrecentDefenceBonus;
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-
+            
             KiDrainAdd(player);
             if(Transformations.IsKaioken(player))
             {
                 Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
             }
+
+            //give bonus base defense
+            player.statDefense += BaseDefenceBonus;
 
             // only neuter the life regen if this is a draining buff.
             if (HealthDrainRate > 0)
@@ -51,7 +54,7 @@ namespace DBZMOD
 
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = ((Transformations.IsKaioken(player) || Transformations.IsSSJ1Kaioken(player)) && isKaioCrystalEquipped ? 0.5f : 1f);
+                float drainMult = (Transformations.IsKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount
                 OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
@@ -59,23 +62,16 @@ namespace DBZMOD
             }
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsSSJ1Kaioken(player) || Transformations.IsAscended(player))
+            if (Transformations.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
-                    // Main.NewText(string.Format("Player is out of ki??! {0} has {1} of {2} ki", player.whoAmI, modPlayer.GetKi(), modPlayer.OverallKiMax()));
                     Transformations.EndTransformations(player, true, false);
                 }
                 else
                 {
-                    // player still has some ki, perform drain routine
-                    KiDrainTimer++;
-                    if (KiDrainTimer >= KI_DRAIN_TIMER_MAX)
-                    {
-                        modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
-                        KiDrainTimer = 0;
-                    }
+                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
                     KiDrainAddTimer++;
                     if (KiDrainAddTimer > 600)
                     {
@@ -89,17 +85,20 @@ namespace DBZMOD
                 // the player isn't in a ki draining state anymore, reset KiDrainAddition
                 modPlayer.KiDrainAddition = 0;                
             }
-
-            player.moveSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
-            player.maxRunSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
-            player.runAcceleration *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
+            
+            player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
+            player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
+            player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
+            if (player.jumpSpeedBoost < 1f)
+                player.jumpSpeedBoost = 1f;
+            player.jumpSpeedBoost *= GetModifiedSpeedMultiplier(modPlayer);
 
             // set player damage  mults
-            player.meleeDamage *= DamageMulti * 0.5f;
-            player.rangedDamage *= DamageMulti * 0.5f;
-            player.magicDamage *= DamageMulti * 0.5f;
-            player.minionDamage *= DamageMulti * 0.5f;
-            player.thrownDamage *= DamageMulti * 0.5f;
+            player.meleeDamage *= GetHalvedDamageBonus();
+            player.rangedDamage *= GetHalvedDamageBonus();
+            player.magicDamage *= GetHalvedDamageBonus();
+            player.minionDamage *= GetHalvedDamageBonus();
+            player.thrownDamage *= GetHalvedDamageBonus();
             modPlayer.KiDamage *= DamageMulti;
 
             // cross mod support stuff
@@ -125,30 +124,40 @@ namespace DBZMOD
             }
         }
 
+        public float GetModifiedSpeedMultiplier(MyPlayer modPlayer)
+        {
+            return 1f + ((SpeedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
+        }
+
+        public float GetHalvedDamageBonus()
+        {
+            return 1f + ((DamageMulti - 1f) * 0.5f);
+        }
+
         public void ThoriumEffects(Player player)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= DamageMulti * 0.5f;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= DamageMulti * 0.5f;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= GetHalvedDamageBonus();
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= GetHalvedDamageBonus();
         }
 
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= GetHalvedDamageBonus();
         }
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= GetHalvedDamageBonus();
         }
 
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= GetHalvedDamageBonus();
         }
 
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= DamageMulti * 0.5f;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= GetHalvedDamageBonus();
         }
 
         private void KiDrainAdd(Player player)
@@ -163,23 +172,43 @@ namespace DBZMOD
             return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
+        public int KaiokenLevel = 0;
         public string AssembleTransBuffDescription()
         {
-            int percentDamageMult = (int)Math.Ceiling(DamageMulti * 100f) - 100;
-            int percentSpeedMult = (int)Math.Ceiling(SpeedMulti * 100f) - 100;
-            int kiDrainPerSecond = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRate;
-            int kiDrainPerSecondWithMastery = (60 / KI_DRAIN_TIMER_MAX) * KiDrainRateWithMastery;
-            int percentKiDrainMulti = (int)Math.Ceiling(KiDrainBuffMulti * 100f) - 100;
-            string displayString = string.Empty;
+            string KaiokenName = string.Empty;
+            if (Type == Transformations.Kaioken.GetBuffId() || Type == Transformations.SuperKaioken.GetBuffId())
+            {
+                switch (KaiokenLevel)
+                {
+                    case 2:
+                        KaiokenName = "(x3)\n";
+                        break;
+                    case 3:
+                        KaiokenName = "(x10)\n";
+                        break;
+                    case 4:
+                        KaiokenName = "(x20)\n";
+                        break;
+                    case 5:
+                        KaiokenName = "(x100)\n";
+                        break;
+                }
+            }
+            int percentDamageMult = (int)Math.Round(DamageMulti * 100f, 0) - 100;
+            int percentSpeedMult = (int)Math.Round(SpeedMulti * 100f, 0) - 100;
+            float kiDrainPerSecond = 60f * KiDrainRate;
+            float kiDrainPerSecondWithMastery = 60f * KiDrainRateWithMastery;
+            int percentKiDrainMulti = (int)Math.Round(KiDrainBuffMulti * 100f, 0) - 100;
+            string displayString = KaiokenName;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
             displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, kiDrainPerSecond);
+                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, (int)Math.Round(kiDrainPerSecond, 0));
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}, {1}/s when mastered", displayString, kiDrainPerSecondWithMastery);
+                    displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
                 }
             }
             if (HealthDrainRate > 0)

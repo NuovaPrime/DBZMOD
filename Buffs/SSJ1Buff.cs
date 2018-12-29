@@ -11,19 +11,21 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Super Saiyan");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
-            DamageMulti = 1.75f;
-            SpeedMulti = 1.75f;
-            KiDrainBuffMulti = 1.3f;
-            KiDrainRate = 3;
-            KiDrainRateWithMastery = 1;
+            Main.debuff[Type] = false;
+            DamageMulti = 1.50f;
+            SpeedMulti = 1.50f;
+            KiDrainBuffMulti = 1.25f;
+            KiDrainRate = 1;
+            KiDrainRateWithMastery = 0.5f;
+            BaseDefenceBonus = 4;
             Description.SetDefault(AssembleTransBuffDescription());
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
             
-            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;         
+            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
 
             MasteryTimer++;
             if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)

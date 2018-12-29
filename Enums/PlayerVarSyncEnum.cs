@@ -37,6 +37,7 @@ namespace Enums
         ChargeMoveSpeed,
         BonusSpeedMultiplier,
         MouseWorldOctant,
-        HeldProjectile
+        HeldProjectile,
+        WishActive
     }
 }

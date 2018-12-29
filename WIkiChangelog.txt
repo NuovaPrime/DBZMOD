@@ -396,3 +396,75 @@ V1.0.8.1
 == Secrets ==
 
 1. Added a dev form for NuovaPrime
+
+
+V1.0.8.2
+
+== Additions ==
+
+1. Added small animations for transforming into various forms.
+
+2. Added [[Goblin Ki Enhancer]].
+
+== Changes ==
+
+1. Drastically increased the time before [[Massive Blast]] type weapons disappear.
+
+2. Changed the behavior of the rocks with [[Spirit Bomb]] and [[Super Spirit Bomb]].
+
+3. Reworked how speed toggle works.
+
+4. Adjusted the tooltips on various form buffs.
+
+== Fixes ==
+
+1. Fixed a weird bug where you would sometimes end up with the wrong forms or buffs when transforming.
+
+2. Fixed sounds being heard across the map.
+
+3. Fixed bug where you could fly while petrified.
+
+4. Fixed bug where [[Katchin Feet]] activated too late and killed people.
+
+5. Fixed bug where equipping multiple crystallites gave way too much speed.
+
+6. Fixed a few occasions where your [[Charging Aura]] wouldn't disappear.
+
+7. Fixed a bug where your eye color wouldn't change back after transforming.
+
+8. Fixed a bug where you'd take alot of damage after flying.
+
+
+V1.0.9
+
+== Additions ==
+
+1. Added the [[Dragon Balls]].
+
+2. Added [[Grandpa Gohan's House]].
+
+3. Added [[Saiyan Scout Armor]] and [[Elite Saiyan Armor]].
+
+4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
+
+5. Added [[Refined Metal]], [[Katchin Scale]]
+
+== Changes ==
+
+1. Buffed [[Turtle Hermit Armor]], [[Saiyan Armor]] and [[Radiant Armor]].
+
+2. You can now combine Kaioken with forms.
+
+3. Kaioken level/size scaling reimplemented.
+
+4. Kaioken nerfed and buffed at the same time. 20% damage per Kaioken level. -15% defense per Kaioken level. Health drain drastically reduced.
+
+5. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+
+6. Current Ki is now a float instead of an integer. (Backend change shouldn't affect gameplay)
+
+7. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+
+== Fixes ==
+
+1. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).

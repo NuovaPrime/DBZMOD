@@ -10,20 +10,95 @@ using Terraria.ModLoader.IO;
 using System;
 using System.Linq;
 using Util;
+using DBZMOD.Items.DragonBalls;
+using Network;
 
 namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
-        private static bool GenerateGohanHouse = false;
-        private static bool IsGohanHouseCleaned = false;
-        public static int GohanHouseStartPositionX = 0;
-        public static int GohanHouseStartPositionY = 0;
+        // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
+        public Point[] DragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
+
+        // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
+        // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
+        public int WorldDragonBallKey = 0;
+
+        // helper utility method for snagging the currently loaded world.
+        public static DBZWorld GetWorld()
+        {
+            return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+        }
+
+        public override TagCompound Save()
+        {
+            var dbtWorldTag = new TagCompound();
+            dbtWorldTag.Add("WorldDragonBallKey", WorldDragonBallKey);
+            dbtWorldTag.Add("OneStarDragonBallX", DragonBallLocations[0].X);
+            dbtWorldTag.Add("OneStarDragonBallY", DragonBallLocations[0].Y);
+            dbtWorldTag.Add("TwoStarDragonBallX", DragonBallLocations[1].X);
+            dbtWorldTag.Add("TwoStarDragonBallY", DragonBallLocations[1].Y);
+            dbtWorldTag.Add("ThreeStarDragonBallX", DragonBallLocations[2].X);
+            dbtWorldTag.Add("ThreeStarDragonBallY", DragonBallLocations[2].Y);
+            dbtWorldTag.Add("FourStarDragonBallX", DragonBallLocations[3].X);
+            dbtWorldTag.Add("FourStarDragonBallY", DragonBallLocations[3].Y);
+            dbtWorldTag.Add("FiveStarDragonBallX", DragonBallLocations[4].X);
+            dbtWorldTag.Add("FiveStarDragonBallY", DragonBallLocations[4].Y);
+            dbtWorldTag.Add("SixStarDragonBallX", DragonBallLocations[5].X);
+            dbtWorldTag.Add("SixStarDragonBallY", DragonBallLocations[5].Y);
+            dbtWorldTag.Add("SevenStarDragonBallX", DragonBallLocations[6].X);
+            dbtWorldTag.Add("SevenStarDragonBallY", DragonBallLocations[6].Y);
+            return dbtWorldTag;
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            var dbKey = tag.GetInt("WorldDragonBallKey");
+            WorldDragonBallKey = dbKey;
+            var oneStarPoint = new Point(tag.GetInt("OneStarDragonBallX"), tag.GetInt("OneStarDragonBallY"));
+            var twoStarPoint = new Point(tag.GetInt("TwoStarDragonBallX"), tag.GetInt("TwoStarDragonBallY"));
+            var threeStarPoint = new Point(tag.GetInt("ThreeStarDragonBallX"), tag.GetInt("ThreeStarDragonBallY"));
+            var fourStarPoint = new Point(tag.GetInt("FourStarDragonBallX"), tag.GetInt("FourStarDragonBallY"));
+            var fiveStarPoint = new Point(tag.GetInt("FiveStarDragonBallX"), tag.GetInt("FiveStarDragonBallY"));
+            var sixStarPoint = new Point(tag.GetInt("SixStarDragonBallX"), tag.GetInt("SixStarDragonBallY"));
+            var sevenStarPoint = new Point(tag.GetInt("SevenStarDragonBallX"), tag.GetInt("SevenStarDragonBallY"));
+            DragonBallLocations[0] = oneStarPoint;
+            DragonBallLocations[1] = twoStarPoint;
+            DragonBallLocations[2] = threeStarPoint;
+            DragonBallLocations[3] = fourStarPoint;
+            DragonBallLocations[4] = fiveStarPoint;
+            DragonBallLocations[5] = sixStarPoint;
+            DragonBallLocations[6] = sevenStarPoint;
+            base.Load(tag);
+        }
+
+        public override void PostWorldGen()
+        {
+            base.PostWorldGen();
+            GenerateGohanHouse = false;
+            IsGohanHouseCleaned = false;
+            IsDragonBallPlacementDone = false;
+            IsGohanHouseOffsetSet = false;
+        }
+
+        private bool GenerateGohanHouse = false;
+        private bool IsGohanHouseCleaned = false;
+        public bool IsDragonBallPlacementDone = false;
+        public int GohanHouseStartPositionX = 0;
+        public int GohanHouseStartPositionY = 0;
         public override void ResetNearbyTileEffects()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
             modPlayer.kiLantern = false;
+            modPlayer.OneStarDBNearby = false;
+            modPlayer.TwoStarDBNearby = false;
+            modPlayer.ThreeStarDBNearby = false;
+            modPlayer.FourStarDBNearby = false;
+            modPlayer.FiveStarDBNearby = false;
+            modPlayer.SixStarDBNearby = false;
+            modPlayer.SevenStarDBNearby = false;
         }
+
         #region Gohan House Bytes
 
         //18 tiles long, 16 tiles high (with dirt on the bottom)
@@ -95,16 +170,14 @@ namespace DBZMOD
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,4,0,0,0,0,0,5,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,2,0,0,0,6,0,0,1,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
 
         #endregion
-
-
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
@@ -124,6 +197,8 @@ namespace DBZMOD
             {
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House Validation", CleanupGohanHouse));
             }
+
+            tasks.Insert(tasks.Count - 1, new PassLegacy("[DBZMOD] Placing dragon balls", PlaceDragonballs));
         }
 
         public void AddGohanHouse(GenerationProgress progress = null)
@@ -168,17 +243,37 @@ namespace DBZMOD
             {
                 Main.NewText("Oh no, an error happened [CleanupGohanHouse]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
                 ErrorLogger.Log(exception);
-            }            
+            }
+        }
+
+        public void PlaceDragonballs(GenerationProgress progress = null)
+        {
+            try
+            {
+                bool Success = AttemptToPlaceDragonballsInWorld(progress);
+                if (Success)
+                {
+                    IsDragonBallPlacementDone = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                Main.NewText("Oh no, an error happened [PlacingDragonballs]! Report this to NuovaPrime or MercuriusXeno and send them the file Terraria/ModLoader/Logs/Logs.txt");
+                ErrorLogger.Log(exception);
+            }
         }
 
         bool MakeGohanHouse(GenerationProgress progress)
-        {
+        {            
             string GohanHouseGen = "Creating the house of a legend.";
             if (progress != null)
             {
                 progress.Message = GohanHouseGen;
                 progress.Set(0.25f);
             }
+
+            // before we do anything, create a new World Key for this world
+            WorldDragonBallKey = Main.rand.Next(1, int.MaxValue);
 
             GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
             for (var Attempts = 0; Attempts < 10000; Attempts++)
@@ -197,22 +292,32 @@ namespace DBZMOD
                     }
                     if (Main.tile[GohanHouseStartPositionX + i, GohanHouseStartPositionY].active())
                     {
-                        if (Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0)
+                        if (Main.tile[GohanHouseStartPositionX, GohanHouseStartPositionY].liquid > 0) { 
                             GohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
-                        goto GenerateBuild;
+                        }
+                        else
+                        {
+                            goto GenerateBuild;
+                        }                        
                     }
                 }
             }
             goto GenerateBuild;
-            return false;
 
         GenerateBuild:
-            GenerateGohanStructureWithByteArrays();
+            GenerateGohanStructureWithByteArrays(true);
             return true;
         }
 
-        public void GenerateGohanStructureWithByteArrays()
+        // flag tracking whether the initial house creation point has been offset by the building's height, should only occur once.
+        public bool IsGohanHouseOffsetSet = false;
+        public void GenerateGohanStructureWithByteArrays(bool isFirstPass)
         {
+            if (!IsGohanHouseOffsetSet)
+            {
+                GohanHouseStartPositionY -= GohanHouseTiles.GetLength(0);
+                IsGohanHouseOffsetSet = true;
+            }
 
             // if we're here it means we are ready to generate our structure
 
@@ -222,13 +327,16 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseTiles.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseTiles.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseTiles[Y, X])
                     {
                         case 0:
-                            tile.type = 0;
-                            tile.active(false);
+                            if (isFirstPass)
+                            {
+                                tile.type = 0;
+                                tile.active(false);
+                            }
                             break;
                         case 1:
                             tile.type = TileID.GrayStucco;
@@ -258,9 +366,10 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseSlopes.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseSlopes.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     tile.slope(GohanHouseSlopes[Y, X]);
+                    tile.halfBrick(false);
                 }
             }
             // walls
@@ -269,7 +378,7 @@ namespace DBZMOD
                 for (var Y = 0; Y < GohanHouseWalls.GetLength(0); Y++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseWalls.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     switch (GohanHouseWalls[Y, X])
                     {
@@ -298,7 +407,7 @@ namespace DBZMOD
                 for (var Y = GohanHouseObjects.GetLength(0) - 1; Y >= 0; Y--)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y - GohanHouseObjects.GetLength(0);
+                    int offsetY = GohanHouseStartPositionY + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     // break rocks!
                     if (tile.type == TileID.SmallPiles || tile.type == TileID.LargePiles || tile.type == TileID.LargePiles2 || tile.type == TileID.Dirt || tile.type == TileID.Stone)
@@ -306,7 +415,6 @@ namespace DBZMOD
                         // nullify tiles?
                         WorldGen.KillTile(offsetX, offsetY);
                         tile = Framing.GetTileSafely(offsetX, offsetY);
-                        Main.NewText("Test");
                     }
                     switch (GohanHouseObjects[Y, X])
                     {
@@ -332,7 +440,10 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
                             break;
                         case 7:
-                            WorldGen.PlaceObject(GohanHouseStartPositionX + X, GohanHouseStartPositionY + 2 - Y, (ushort)ModLoader.GetMod("DBZMOD").TileType("FourStarDBTile"), false);
+                            if (!isFirstPass)
+                            {
+                                TryPlacingDragonball(4, offsetX, offsetY);
+                            }
                             break;
                     }
                 }
@@ -352,7 +463,7 @@ namespace DBZMOD
                 for (var X = -1 - (Y * 2); X < GohanHouseTiles.GetLength(1) + 1 + (Y * 2); X++)
                 {
                     int offsetX = GohanHouseStartPositionX + X;
-                    int offsetY = GohanHouseStartPositionY + Y;
+                    int offsetY = GohanHouseStartPositionY + GohanHouseTiles.GetLength(0) + Y;
                     var tile = Framing.GetTileSafely(offsetX, offsetY);
                     bool isEdge = IsAnySideExposed(offsetX, offsetY);
                     tile.type = isSnowBiome ? TileID.SnowBlock : (isEdge ? TileID.Grass : TileID.Dirt);
@@ -374,7 +485,9 @@ namespace DBZMOD
                 progress.Set(0.50f);
             }
 
-            GenerateGohanStructureWithByteArrays();
+            GenerateGohanStructureWithByteArrays(false);
+
+            DoDragonBallCleanupCheck();
             return true;
         }
 
@@ -390,6 +503,218 @@ namespace DBZMOD
                 }
             }
             return false;
+        }
+
+        public static bool IsExistingDragonBall(int whichDragonball)
+        {
+            int dbIndex = whichDragonball - 1;
+            var coordinates = GetWorld().DragonBallLocations[dbIndex];
+            if (coordinates == new Point(-1, -1))
+                return false;
+            var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
+            if (dbTile.type == (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball)))
+                return true;
+            return false;
+        }
+
+        public static string GetDragonBallTileTypeFromNumber(int whichDragonBall)
+        {
+            switch (whichDragonBall) {
+                case 1:
+                    return "OneStarDBTile";
+                case 2:
+                    return "TwoStarDBTile";
+                case 3:
+                    return "ThreeStarDBTile";
+                case 4:
+                    return "FourStarDBTile";
+                case 5:
+                    return "FiveStarDBTile";
+                case 6:
+                    return "SixStarDBTile";
+                case 7:
+                    return "SevenStarDBTile";
+                default:
+                    return "";
+            }
+        }               
+
+        public static bool IsDragonBallWithPlayers(int whichDragonball, Player ignorePlayer = null)
+        {
+            for (var i = 0; i < Main.player.Length; i++)
+            {
+                if (Main.player[i] == null)
+                    continue;
+                if (Main.player[i].whoAmI != i)
+                    continue;
+                if (ignorePlayer != null && Main.player[i].whoAmI == ignorePlayer.whoAmI)
+                    continue;
+                var player = Main.player[i];                
+                if (InventoryContainsDragonball(whichDragonball, player.inventory))
+                    return true;
+                // bank, bank2 and bank3 are player safes (piggy banks)
+                if (InventoryContainsDragonball(whichDragonball, player.bank.item))
+                    return true;
+
+                if (InventoryContainsDragonball(whichDragonball, player.bank2.item))
+                    return true;
+
+                if (InventoryContainsDragonball(whichDragonball, player.bank3.item))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool InventoryContainsDragonball(int whichDragonball, Item[] inventory)
+        {
+            for (var i = 0; i < inventory.Length; i++)
+            {                
+                var item = inventory[i];
+                if (item == null)
+                    continue;
+
+                if (item.modItem == null)
+                    continue;
+
+                if (!(item.modItem is DragonBallItem))
+                    continue;
+
+                var dbItem = item.modItem as DragonBallItem;
+                if (dbItem.WhichDragonBall == whichDragonball && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
+                    return true;                
+            }
+            return false;
+        }
+
+        public static bool IsDragonBallInventoried(int whichDragonball)
+        {
+            for (var i = 0; i < Main.chest.Length; i++)
+            {
+                if (Main.chest[i] == null)
+                    continue;
+                var inventory = Main.chest[i].item;
+                if (InventoryContainsDragonball(whichDragonball, inventory))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY, Player ignorePlayer = null)
+        {
+            // dragon ball already exists, bail out.
+            if (IsExistingDragonBall(whichDragonball))
+                return true;
+
+            // dragon ball is in a connected player's inventory. This isn't fool proof.
+            if (IsDragonBallWithPlayers(whichDragonball, ignorePlayer))
+                return true;
+
+            // dragon ball is in a chest somewhere. This also isn't fool proof.
+            if (IsDragonBallInventoried(whichDragonball))
+                return true;
+
+            TileObject toBePlaced;
+            if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
+            {
+                WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
+                int dbIndex = whichDragonball - 1;
+                GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
+                DebugUtil.Log(string.Format("Placing dragon ball {0} at coordinates {1} {2}", whichDragonball, offsetX, offsetY));
+                return true;
+            } else
+            {
+                return false;
+            }            
+        }
+
+        public static bool AttemptToPlaceDragonballsInWorld(GenerationProgress progress = null)
+        {
+            string PlacingDragonballs = "Placing Dragon Balls";
+            if (progress != null)
+            {
+                progress.Message = PlacingDragonballs;
+                progress.Set(0.25f);
+            }
+
+            for (int i = 0; i <= 6; i++)
+            {
+                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);
+
+                if (shouldTryToSpawn)
+                {
+                    Point safeCoordinates = GetSafeDragonBallCoordinates();
+                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y))
+                    {
+                        safeCoordinates = GetSafeDragonBallCoordinates();
+                    }
+                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
+                }
+            }
+            return true;
+        }
+
+        public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)
+        {
+            // loop over the saved locations for each dragonball
+            for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
+            {
+                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);                
+
+                if (shouldTryToSpawn)
+                {
+                    Point safeCoordinates = GetSafeDragonBallCoordinates();
+                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y, ignorePlayer))
+                    {
+                        safeCoordinates = GetSafeDragonBallCoordinates();
+                    }
+                    DebugUtil.Log(string.Format("Spawned new Dragon Ball {0} at {1} {2}", i + 1, safeCoordinates.X, safeCoordinates.Y));
+                }
+            }
+        }
+
+        public static bool IsInvalidTileForDragonBallPlacement(Tile tile)
+        {
+            return tile.type == TileID.SmallPiles
+                || tile.type == TileID.LargePiles
+                || tile.type == TileID.LargePiles2
+                || tile.type == TileID.Containers
+                || tile.type == TileID.Containers2
+                || tile.type == TileID.FakeContainers
+                || tile.type == TileID.FakeContainers;
+        }
+
+        public static Point GetSafeDragonBallCoordinates()
+        {
+            var underworldHeight = Main.maxTilesY - 220;
+            
+            var surfaceHeight = (int)Math.Floor(Main.worldSurface * 0.30f);
+
+            bool IsSafeTile = false;
+            while (!IsSafeTile)
+            {
+                int thresholdX = (int)Math.Floor(Main.maxTilesX * 0.1f);
+                var randX = Main.rand.Next(thresholdX, Main.maxTilesX - thresholdX);
+                var randY = Main.rand.Next(surfaceHeight, underworldHeight);
+                var tile = Framing.GetTileSafely(randX, randY);
+                if (IsInvalidTileForDragonBallPlacement(tile))
+                {
+                    continue;
+                }
+                var tileAbove = Framing.GetTileSafely(randX, randY - 1);
+                if (tile.active() && (Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]) && !tileAbove.active())
+                {
+                    IsSafeTile = true;
+                    return new Point(randX, randY - 1);
+                }
+            }
+            
+            // made up stuff.
+            return new Point(-1, -1);
+        }
+
+        public static void SyncWorldDragonBallKey(Player player)
+        {
+            NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, player.whoAmI);
         }
 
         /*public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)

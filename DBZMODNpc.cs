@@ -210,13 +210,13 @@ namespace DBZMOD
             {
                 if (firstButton)
                 {
-
                     Player player = Main.LocalPlayer;
-                    int kihealvalue = MyPlayer.ModPlayer(player).OverallKiMax() - MyPlayer.ModPlayer(player).GetKi();
-                    MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OverallKiMax());
-                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kihealvalue, false, false);
-                    SoundUtil.PlayVanillaSound(SoundID.MaxMana, player);
-                    
+                    MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+                    Transformations.EndTransformations(player, true, false);
+                    float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
+                    modPlayer.AddKi(modPlayer.OverallKiMax());
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
+                    SoundUtil.PlayVanillaSound(SoundID.MaxMana, player);                    
                 }
             }
         }
@@ -346,8 +346,8 @@ namespace DBZMOD
             {
                 return;
             }
-            if (isDisplayingJungleMe
-                ssage)
+
+            if (isDisplayingJungleMessage)
             {
                 if (Main.netMode != 2)
                 {
@@ -708,6 +708,14 @@ namespace DBZMOD
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
                 }
             }
+            if (!Main.expertMode)
+            {
+                if (npc.type == NPCID.DukeFishron)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
+                        mod.ItemType("KatchinScale"), Main.rand.Next(12, 36));
+                }
+            }
             if (NPC.downedBoss2)
             {
                 if (Main.rand.Next(7) == 0)
@@ -780,6 +788,20 @@ namespace DBZMOD
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodstainedBandana"));
                 }
             }
+            if (npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinWarrior || npc.type == NPCID.GoblinThief)
+            {
+                if (Main.rand.Next(50) == 0)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
+                }
+            }
+            if (npc.type == NPCID.GoblinSummoner)
+            {
+                if (Main.rand.Next(4) == 0)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
+                }
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
@@ -842,6 +864,12 @@ namespace DBZMOD
             if (type == NPCID.Clothier)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
+                nextSlot++;
+            }
+            if (type == NPCID.Mechanic)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
+                shop.item[nextSlot].value = 200000;
                 nextSlot++;
             }
 

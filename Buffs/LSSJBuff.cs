@@ -11,11 +11,12 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Legendary Super Saiyan");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
-            DamageMulti = 2.8f;
-            SpeedMulti = 2.8f;
-            KiDrainBuffMulti = 3f;
-            KiDrainRate = 5;
+            Main.debuff[Type] = false;
+            DamageMulti = 2.30f;
+            SpeedMulti = 2.30f;
+            KiDrainBuffMulti = 2.1f;
+            KiDrainRate = 2.15f;
+            BaseDefenceBonus = 6;
             Description.SetDefault(AssembleTransBuffDescription());
         }
     }

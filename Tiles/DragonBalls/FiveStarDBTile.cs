@@ -1,27 +1,36 @@
-﻿﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Items.DragonBalls;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Util;
 
 namespace DBZMOD.Tiles.DragonBalls
 {
-    public class FiveStarDBTile : ModTile
+    public class FiveStarDBTile : DragonBallTile
     {
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.Origin = new Point16(0, 0);
-            TileObjectData.addTile(Type);
+            base.SetDefaults();
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("5 Star Dragon Ball");
             drop = mod.ItemType("FiveStarDB");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
-            Main.tileLighted[Type] = true;
+            WhichDragonBallAmI = 5;
+        }
+
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (closer)
+            {
+                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
+                modPlayer.FiveStarDBNearby = true;
+            }
         }
     }
 }

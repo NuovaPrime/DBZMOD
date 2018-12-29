@@ -18,7 +18,7 @@ namespace DBZMOD.Items.Armor.Vanity
             item.width = 24;
             item.height = 16;
             item.value = 30000;
-            item.rare = 8;
+            item.rare = 7;
             item.expert = true;
             item.vanity = true;
         }

@@ -14,6 +14,7 @@ namespace Network
         public const byte SyncPlayer = 43;
         public const byte SyncTriggers = 44;
         public const byte RequestForSyncFromJoinedPlayer = 45;
+        public const byte RequestDragonBallKeySync = 46;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -33,7 +34,16 @@ namespace Network
                     int whichPlayersDataNeedsRelay = reader.ReadInt32();
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
+                case (RequestDragonBallKeySync):
+                    SendDragonBallKeyToPlayer(fromWho);
+                    break;
             }
+        }
+
+        public void RequestServerSendDragonBallKey(int toWho, int fromWho)
+        {
+            ModPacket packet = GetPacket(RequestDragonBallKeySync, fromWho);
+            packet.Send(toWho, fromWho);
         }
 
         public void RequestPlayerSendTheirInfo(int toWho, int fromWho, int playerWhoseDataIneed)
@@ -86,6 +96,14 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
+        }
+
+        public void SendDragonBallKeyToPlayer(int toWho)
+        {
+            ModPacket packet = GetPacket(RequestDragonBallKeySync, 256);
+            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            packet.Write(dbWorld.WorldDragonBallKey);
+            packet.Send(toWho, 256);
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
@@ -313,6 +331,15 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedWishActive(int toWho, int fromWho, int whichPlayer, bool WishActive)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.WishActive);
+            packet.Write(whichPlayer);
+            packet.Write(WishActive);
+            packet.Send(toWho, fromWho);
+        }
+
         public void SendChangedMouseWorldOctant(int toWho, int fromWho, int whichPlayer, int mouseWorldOctant)
         {
             var packet = GetPacket(SyncPlayer, fromWho);
@@ -322,8 +349,8 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, int kiCurrent)
-        {         
+        public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, float kiCurrent)
+        {          
             var packet = GetPacket(SyncPlayer, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.KiCurrent);
             packet.Write(whichPlayer);
@@ -608,8 +635,16 @@ namespace Network
                         packet.Send(-1, fromWho);
                     }
                     break;
+                case PlayerVarSyncEnum.WishActive:
+                    player.WishActive = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.WishActive);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
                 case PlayerVarSyncEnum.KiCurrent:
-                    player.SetKi(reader.ReadInt32(), true);
+                    player.SetKi(reader.ReadSingle(), true);
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.GetKi());

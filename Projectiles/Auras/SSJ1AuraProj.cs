@@ -6,7 +6,6 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
-using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -18,6 +17,7 @@ namespace DBZMOD.Projectiles.Auras
         {
             Main.projFrames[projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             projectile.width = 113;
@@ -29,20 +29,18 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            AuraOffset.Y = -30;
             IsSSJAura = true;
-			projectile.light = 1f;            
+			projectile.light = 1f;
+            HasComplexBlendStates = true;
         }
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJ1.GetBuffId()) && !player.HasBuff(Transformations.SSJ1Kaioken.GetBuffId()) && !player.HasBuff(Transformations.ASSJ.GetBuffId()) && !player.HasBuff(Transformations.USSJ.GetBuffId()))
+            if (!player.HasBuff(Transformations.SSJ1.GetBuffId()) && !player.HasBuff(Transformations.ASSJ.GetBuffId()) && !player.HasBuff(Transformations.USSJ.GetBuffId()))
             {
-                // Main.NewText(string.Format("Player is missing a buff! Aura proj died for {0}", player.whoAmI));
                 projectile.Kill();
             }
-
 
             bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, true);
             if (shouldPlayAudio)
@@ -56,19 +54,20 @@ namespace DBZMOD.Projectiles.Auras
             }
             base.AI();
         }
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		//glow stuff
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             projectile.scale = Main.GameZoomTarget;
-            AuraOffset.Y = -30 * Main.GameZoomTarget;
+            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);       
-            return true;
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            return base.PreDraw(spriteBatch, lightColor);
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             spriteBatch.End();
             spriteBatch.Begin();
-		}
+        }
     }
 }

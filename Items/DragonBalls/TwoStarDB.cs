@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.DragonBalls
 {
-    public class TwoStarDB : ModItem
+    public class TwoStarDB : DragonBallItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,11 +14,9 @@ namespace DBZMOD.Items.DragonBalls
 
         public override void SetDefaults()
         {
-            item.width = 20;
-            item.height = 20;
-            item.maxStack = 1;
-            item.value = 0;
-            item.rare = -12;
+            base.SetDefaults();
+            WhichDragonBall = 2;
+            item.createTile = mod.TileType("TwoStarDBTile");
         }
     }
 }

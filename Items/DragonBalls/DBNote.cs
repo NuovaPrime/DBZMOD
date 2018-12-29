@@ -10,9 +10,9 @@ namespace DBZMOD.Items.DragonBalls
         {
             DisplayName.SetDefault("Tattered Note");
             Tooltip.SetDefault("An old note attached to the dragon ball." +
-                "\n'This dragon ball is _~kきけんだｓda a very powerful item, " +
-                "\n'collect the ;41aたｓけてkdk other 6 scattered around the world" +
-                "\n'for a chance to grant your　むだ deepest wishes.'");
+                "\n'This dragon ball is a very 強力な item, " +
+                "\n'集める the other 6 散在 around the world" +
+                "\n'for チャンス to grant your 最も深い wishes.'");
         }
 
         public override void SetDefaults()

@@ -7,7 +7,6 @@ namespace DBZMOD.Buffs
 {
     public class DisgustingGoopBuff : ModBuff
     {
-        private int GoopTimer;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Disgusting Goop");
@@ -18,12 +17,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.statLifeMax2 -= 25;
-            GoopTimer++;
-            if (GoopTimer > 3)
-            {
-                MyPlayer.ModPlayer(player).AddKi(1);
-                GoopTimer = 0;
-            }
+            MyPlayer.ModPlayer(player).AddKi(0.25f);
         }
     }
 }

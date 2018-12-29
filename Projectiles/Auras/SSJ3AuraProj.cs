@@ -6,7 +6,6 @@ using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Util;
-using Projectiles.Auras;
 
 namespace DBZMOD.Projectiles.Auras
 {
@@ -29,7 +28,7 @@ namespace DBZMOD.Projectiles.Auras
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            AuraOffset.Y = -30;
+            ScaledAuraOffset.Y = -30;
             IsSSJAura = true;
             projectile.light = 1f;
         }
@@ -53,6 +52,21 @@ namespace DBZMOD.Projectiles.Auras
                 }
             }
             base.AI();
+        }
+		//glow stuff
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            projectile.scale = Main.GameZoomTarget;
+            ScaledAuraOffset.Y = -30 * Main.GameZoomTarget;
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            return base.PreDraw(spriteBatch, lightColor);
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin();
         }
     }
 }
