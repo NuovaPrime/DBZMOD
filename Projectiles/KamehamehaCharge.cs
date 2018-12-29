@@ -11,7 +11,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class KamehamehaCharge : BaseCharge
+    public class KamehamehaCharge : BaseBeamCharge
     {
         public override void SetDefaults()
         {

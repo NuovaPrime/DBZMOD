@@ -122,46 +122,7 @@ namespace DBZMOD.Projectiles.Auras
             if (projectile.frame >= Main.projFrames[projectile.type])
             {
                 projectile.frame = 0;
-            }
-			
-            // update handler to reorient the charge up aura after the aura offsets are defined.
-            bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
-            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
-            {
-                double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
-                projectile.rotation = (float)(player.fullRotation + rotationOffset);
-
-                // using the angle of attack, construct the cartesian offsets of the aura based on the height of both things
-                double widthRadius = player.width / 4;
-                double heightRadius = player.height / 4;
-                double auraWidthRadius = projectile.width / 4;
-                double auraHeightRadius = projectile.height / 4;
-
-                // for right now, I'm just doing this with some hard coding. When we get more aura work done
-                // we can try to unify this code a bit.
-                bool isSSJ1Aura = projectile.modProjectile.GetType().IsAssignableFrom(typeof(SSJ1AuraProj));
-                double forwardOffset =  isSSJ1Aura ? 32 : 24;
-                double widthOffset = auraWidthRadius - (widthRadius + (ScaledAuraOffset.Y + forwardOffset));
-                double heightOffset = auraHeightRadius - (heightRadius + (ScaledAuraOffset.Y + forwardOffset));
-                double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
-                double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
-
-                Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
-
-                // offset the aura
-                projectile.Center = cartesianOffset;
-            }
-            else
-            {
-                projectile.Center = player.Center + new Vector2(ScaledAuraOffset.X, (ScaledAuraOffset.Y));
-                projectile.rotation = 0;
-            }
-
-            //// something weird happens to complex blend state auras when you're at the edge of the map, this is an attempt to combat that.
-            //if (projectile.Center.X < Main.screenPosition)
-            //{
-
-            //}
+            }			
 
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

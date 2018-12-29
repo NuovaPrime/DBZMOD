@@ -11,7 +11,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-	public class EnergyWaveCharge : BaseCharge
+	public class EnergyWaveCharge : BaseBeamCharge
 	{
         public override void SetDefaults()
         {            

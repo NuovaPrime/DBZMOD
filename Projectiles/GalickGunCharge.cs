@@ -12,7 +12,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class GalickGunCharge : BaseCharge
+    public class GalickGunCharge : BaseBeamCharge
     {
         public override void SetDefaults()
         {

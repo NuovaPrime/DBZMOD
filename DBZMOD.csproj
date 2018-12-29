@@ -376,7 +376,8 @@
     <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
     <Compile Include="Projectiles\Auras\SuperKaiokenAuraProj.cs" />
     <Compile Include="Projectiles\BaldurShell.cs" />
-    <Compile Include="Projectiles\BaseCharge.cs" />
+    <Compile Include="Projectiles\BaseBeamCharge.cs" />
+    <Compile Include="Projectiles\AbstractChargeBall.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile.cs" />
     <Compile Include="Projectiles\BigBangAttackProjectile2.cs" />
     <Compile Include="Projectiles\BigBangKamehamehaBall.cs" />

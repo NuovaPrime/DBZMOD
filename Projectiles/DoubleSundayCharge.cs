@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
-    public class DoubleSundayCharge : BaseCharge
+    public class DoubleSundayCharge : BaseBeamCharge
     {
     	public override void SetStaticDefaults()
 		{

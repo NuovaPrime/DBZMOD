@@ -14,7 +14,7 @@ using Network;
 namespace DBZMOD.Projectiles
 {
     // unabashedly stolen from blushie's laser example, and then customized WIP
-    public abstract class BaseCharge : ModProjectile
+    public abstract class AbstractChargeBall : ModProjectile
     {
         // CHARGE/BEAM SETTINGS, these are the things you can change to affect charge appearance behavior!
 

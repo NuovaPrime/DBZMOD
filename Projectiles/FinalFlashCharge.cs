@@ -11,7 +11,7 @@ using Util;
 
 namespace DBZMOD.Projectiles
 {
-    public class FinalFlashCharge : BaseCharge
+    public class FinalFlashCharge : BaseBeamCharge
     {
         public override void SetDefaults()
         {
