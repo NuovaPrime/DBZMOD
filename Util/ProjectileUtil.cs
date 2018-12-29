@@ -83,7 +83,6 @@ namespace Util
                 // float hypotenuse = chargeSize.LengthSquared();
                 Vector2 offsetPosition = chargeBallPosition + position * (10f + 2.0f);
                 Vector2 spawnPosition = isDecaying ? chargeBallPosition : offsetPosition;
-                // DebugUtil.Log(string.Format("Trying to spawn charge particles at {0}, {1} - Decaying? {2}", spawnPosition.X, spawnPosition.Y, isDecaying));
                 Vector2 velocity = isDecaying ? Vector2.Normalize(spawnPosition - offsetPosition) : Vector2.Normalize(chargeBallPosition - spawnPosition);
                 Dust tDust = Dust.NewDustDirect(spawnPosition, (int)chargeSize.X, (int)chargeSize.Y, dustId, 0f, 0f, 213, default(Color), 1.0f);
                 tDust.velocity = velocity;

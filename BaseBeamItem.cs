@@ -50,7 +50,6 @@ namespace DBZMOD
             player.channel = true;
             if (!ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
             {
-                DebugUtil.Log(string.Format("Player {0} is using alt function", player.whoAmI));
                 var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, item.damage, item.knockBack, player.whoAmI);
                 player.heldProj = proj.whoAmI;
             }

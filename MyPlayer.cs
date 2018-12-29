@@ -518,7 +518,6 @@ namespace DBZMOD
 
             if (KiRegenTimer > 2)
             {
-                // DebugUtil.Log(string.Format("I think my ki regen is {0}", KiRegen));
                 AddKi(KiRegen);
                 KiRegenTimer = 0;
             }
@@ -667,6 +666,9 @@ namespace DBZMOD
             {
                 IsFlying = false;
             }
+
+            // mouse octant tracking occurs immediately before flight system updates because that's what it's for
+            HandleMouseOctantAndSyncTracking();
             
             // flight system moved to PostUpdate so that it can benefit from not being client sided!
             FlightSystem.Update(player);
@@ -694,7 +696,43 @@ namespace DBZMOD
 
             // try to update positional audio?
             SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
-        }        
+        }       
+        
+        public void HandleMouseOctantAndSyncTracking()
+        {
+            // we only handle the local player's controls.
+            if (Main.myPlayer != player.whoAmI)
+                return;
+
+            // this is why :p
+            float mouseRadians = Vector2.Normalize(Main.MouseWorld  - player.Center).ToRotation();
+
+            MouseWorldOctant = GetMouseWorldOctantFromRadians(mouseRadians);
+        }
+
+        public int GetMouseWorldOctantFromRadians(float mouseRadians)
+        {
+            // threshold values for octants are 22.5 degrees in either direction of a 45 degree mark on a circle (perpendicular 90s, 180s and each midway point, in 22.5 degrees either direction).
+            // to make this clear, we're setting up some offset vars to make the numbers a bit more obvious.
+            float thresholdDegrees = 22.5f;
+            float octantCircumference = 45f;
+            // the 8 octants, starting at the north mark and, presumably, rotating clockwise.
+            // note that 4 and -4 are the same thing. It doesn't matter which you use, radian outcome is the same.
+            int[] octants = { -4, -3, -2, -1, 0, 1, 2, 3, 4 };
+            foreach(int octant in octants)
+            {
+                float minRad = MathHelper.ToRadians((octant * octantCircumference) - thresholdDegrees);
+                float maxRad = MathHelper.ToRadians((octant * octantCircumference) + thresholdDegrees);
+                if (mouseRadians >= minRad && mouseRadians <= maxRad)
+                {
+                    // normalize octant -4 to 4, for sanity reasons. They really are the same octant, but this formula isn't good enough to figure that out for some reason.
+                    return octant == -4 ? 4 : octant;
+                }
+            }
+
+            // this shouldn't happen, who knows.
+            return 0;
+        }
 
         public void ThrottleKi()
         {
@@ -744,7 +782,6 @@ namespace DBZMOD
 
             // if this method is firing on a player who isn't me, abort. 
             // spammy af
-            // DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -762,7 +799,6 @@ namespace DBZMOD
 
             if (SyncKiMaxMult != KiMaxMult)
             {
-                // DebugUtil.Log(string.Format("Ki max sync: was {0} but should be {1}", SyncKiMaxMult, KiMaxMult));
                 NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, KiMaxMult);
                 SyncKiMaxMult = KiMaxMult;
             }
@@ -890,7 +926,6 @@ namespace DBZMOD
 
             // if this method is firing on a player who isn't me, abort. 
             // spammy af
-            // DebugUtil.Log(string.Format("Player is {0}, I am {1}. If different, abort.", player.whoAmI, Main.myPlayer));
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -2066,12 +2101,9 @@ namespace DBZMOD
             {
                 if (player.whoAmI != Main.myPlayer)
                 {
-                    //DebugUtil.Log(string.Format("I am player {0}", Main.myPlayer));
 
-                    //DebugUtil.Log(string.Format("I am requesting my information be sent to player {0}", player.whoAmI));
                     NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
 
-                    //DebugUtil.Log(string.Format("I am sending a request to the server to ship me that player's data."));
                     NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
                 }
             }

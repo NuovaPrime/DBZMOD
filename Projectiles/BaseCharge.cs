@@ -350,7 +350,6 @@ namespace DBZMOD.Projectiles
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            // DebugUtil.Log(string.Format("Charge level: {0} Cooldown? {1} SustainingFire? {2} FireTime: {3} MouseLeftHeld {4}", ChargeLevel, IsOnCooldown, IsSustainingFire, CurrentFireTime, modPlayer.IsMouseLeftHeld));
             return ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
                 && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < MinimumFireFrames)));
         }

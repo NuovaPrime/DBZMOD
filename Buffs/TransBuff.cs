@@ -90,11 +90,9 @@ namespace DBZMOD
                 modPlayer.KiDrainAddition = 0;                
             }
 
-            //DebugUtil.Log(string.Format("Before: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
             player.moveSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
             player.maxRunSpeed *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
             player.runAcceleration *= 1f + (SpeedMulti * modPlayer.bonusSpeedMultiplier);
-            //DebugUtil.Log(string.Format("After: Player moveSpeed {0} maxRunSpeed {1} runAcceleration {2} bonusSpeedMultiplier {3} speedMult {4}", player.moveSpeed, player.maxRunSpeed, player.runAcceleration, modPlayer.bonusSpeedMultiplier, SpeedMulti));
 
             // set player damage  mults
             player.meleeDamage *= DamageMulti * 0.5f;

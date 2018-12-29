@@ -34,13 +34,10 @@ namespace DBZMOD
 
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            //if (Math.Ceiling(Main.time % 60) == 0)
-            //DebugUtil.Log(string.Format("Update flight firing for player {0} whose controls are Up {1} Down {2} Left {3} Right {4}", player.whoAmI, modPlayer.IsUpHeld, modPlayer.IsDownHeld, modPlayer.IsLeftHeld, modPlayer.IsRightHeld));
 
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
             {
-                // DebugUtil.Log(string.Format("Disabling flying on player {0} because ki is depleted or player is dead? Player was flying.", player.whoAmI));
                 modPlayer.IsFlying = false;
                 AddKatchinFeetBuff(player);
             }
@@ -63,26 +60,22 @@ namespace DBZMOD
 
                 if (modPlayer.IsUpHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.Y -= totalFlightSpeed;
                     m_rotationDir = Vector2.UnitY;
                 }
                 else if (modPlayer.IsDownHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.Y += totalFlightSpeed;
                     m_rotationDir = -Vector2.UnitY;
                 }
 
                 if (modPlayer.IsRightHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X += totalFlightSpeed;
                     m_rotationDir += Vector2.UnitX;
                 }
                 else if (modPlayer.IsLeftHeld)
                 {
-                    //DebugUtil.Log(string.Format("Player {0} is moving because my client thinks their button is pushed!", modPlayer.player.whoAmI));
                     player.velocity.X -= totalFlightSpeed;
                     m_rotationDir -= Vector2.UnitX;
                 }
@@ -130,7 +123,6 @@ namespace DBZMOD
 
                 //calculate rotation
                 float radRot = 0;
-                // DebugUtil.Log(string.Format("m_rotation is X: {0} Y: {1}", m_rotationDir.X, m_rotationDir.Y));
                 if (m_rotationDir != Vector2.Zero)
                 {
                     m_rotationDir.Normalize();
@@ -174,7 +166,9 @@ namespace DBZMOD
             float leanThrottle = 180;
             if (IsPlayerUsingKiWeapon(modPlayer))            
             {
-                leanThrottle = 45;
+                // get flight rotation from octant
+
+                leanThrottle = modPlayer.MouseWorldOctant * 45f;
             }
 
             if (m_rotationDir.Y < 0)

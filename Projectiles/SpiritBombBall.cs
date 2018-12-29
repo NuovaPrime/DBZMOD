@@ -125,7 +125,6 @@ namespace DBZMOD.Projectiles
             {
                 projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 400;
                 IsReleased = true;
-                // DebugUtil.Log(string.Format("Spirit bomb thinks it's being let go by player {0}", player.whoAmI));
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 3.5f;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
