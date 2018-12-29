@@ -259,6 +259,9 @@ namespace DBZMOD
         public bool IsHoldingDragonRadarMk1 = false;
         public bool IsHoldingDragonRadarMk2 = false;
         public bool IsHoldingDragonRadarMk3 = false;
+        public bool IsInstantTransmission1Unlocked = false;
+        public bool IsInstantTransmission2Unlocked = false;
+        public bool IsInstantTransmission3Unlocked = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
@@ -1047,28 +1050,34 @@ namespace DBZMOD
         public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (OriginalEyeColor == null)
-            {
-                OriginalEyeColor = player.eyeColor;
-            }
             if (Transformations.IsGodlike(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
             else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
-                player.eyeColor = Color.Turquoise;
+                ChangeEyeColor(Color.Turquoise);
             }
             else if (Transformations.IsKaioken(player))
             {
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
-            else
+            else if (OriginalEyeColor.HasValue && player.eyeColor != OriginalEyeColor.Value)
             {
                 player.eyeColor = OriginalEyeColor.Value;
             }
+        }
+
+        public void ChangeEyeColor(Color eyeColor)
+        {
+            // only fire this when attempting to change the eye color.
+            if (OriginalEyeColor == null)
+            {
+                OriginalEyeColor = player.eyeColor;
+            }
+            player.eyeColor = eyeColor;
         }
 
         public string ChooseTrait()
@@ -1267,6 +1276,9 @@ namespace DBZMOD
             tag.Add("PowerHealthBonus", PowerHealthBonus);
             tag.Add("PowerWishMulti", PowerWishMulti);
             tag.Add("ImmortalityRevivesLeft", ImmortalityRevivesLeft);
+            tag.Add("IsInstantTransmission1Unlocked", IsInstantTransmission1Unlocked);
+            tag.Add("IsInstantTransmission2Unlocked", IsInstantTransmission2Unlocked);
+            tag.Add("IsInstantTransmission3Unlocked", IsInstantTransmission3Unlocked);
             // added to store the player's original eye color if possible
             if (OriginalEyeColor != null)
             {
@@ -1341,7 +1353,9 @@ namespace DBZMOD
             PowerHealthBonus = tag.ContainsKey("PowerHealthBonus") ? tag.Get<int>("PowerHealthBonus") : 0;
             PowerWishMulti = tag.ContainsKey("PowerWishMulti") ? tag.Get<float>("PowerWishMulti") : 1f;
             ImmortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
-
+            IsInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
+            IsInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
+            IsInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
             {
@@ -1623,10 +1637,12 @@ namespace DBZMOD
                 DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
+
+            HandleInstantTransmissionFreeform();
         }
 
         // constants to do with instant transmission range/speed/ki cost.
-        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 10f;
+        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 0.3f;
         protected const float INSTANT_TRANSMISSION_CAMERA_PAN_SPEED = 20f;
         protected float InstantTransmissionBaseMaxRange
         {
@@ -1643,9 +1659,11 @@ namespace DBZMOD
             return INSTANT_TRANSMISSION_CAMERA_PAN_SPEED;
         }
 
-        public float GetInstantTransmissionKiCost()
+        // intensity is the camera pan power being used in this frame, distance is how far the camera is from the player using the power.
+        public float GetInstantTransmissionKiCost(float intensity, float distance)
         {
-            return INSTANT_TRANSMISSION_FRAME_KI_COST;
+            // INSERT THINGS THAT REDUCE INSTANT TRANSMISSION COST HERE
+            return INSTANT_TRANSMISSION_FRAME_KI_COST * (float)Math.Sqrt(intensity) * (float)Math.Sqrt(distance);
         }
 
         public float GetInstantTransmissionMaximumRange()
@@ -1653,27 +1671,37 @@ namespace DBZMOD
             return InstantTransmissionBaseMaxRange;
         }
 
-        public override void ModifyZoom(ref float zoom)
-        {
-            zoom = GetInstantTransmissionZoomForce();            
-        }
+        //public override void ModifyZoom(ref float zoom)
+        //{
+        //    zoom = GetInstantTransmissionZoomForce();            
+        //}
 
-        public float GetInstantTransmissionZoomForce()
+        public void HandleInstantTransmissionFreeform()
         {            
             if (InstantTransmission.Current)
-            {
-                if (HasKi(GetInstantTransmissionKiCost()))
+            {                
+                Vector2 screenMiddle = Main.screenPosition + (new Vector2(Main.screenWidth, Main.screenHeight) / 2f);
+                Vector2 direction = Vector2.Normalize(Main.MouseWorld - screenMiddle);
+                float distance = Vector2.Distance(Main.MouseWorld, player.Center);
+                float intensity = (float)Vector2.Distance(Main.MouseWorld, screenMiddle) / 8f;
+                float kiCost = GetInstantTransmissionKiCost(intensity, distance);
+                if (HasKi(kiCost))
                 {
-                    AddKi(-GetInstantTransmissionKiCost());
-                    Vector2 direction = Vector2.Normalize(Main.MouseWorld - player.Center);
-                    InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
-                    InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
-                    Main.zoomX = (direction * InstantTransmissionZoomDistance).X;
-                    Main.zoomY = (direction * InstantTransmissionZoomDistance).Y;
+                    AddKi(-kiCost);
+
+                    //InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
+                    //InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
+                    Main.zoomX += (direction * intensity).X;
+                    if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
+                        Main.zoomX = (Main.maxTilesX * 16f) - player.Center.X;
+                    if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
+                        Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
+                    Main.zoomY += (direction * intensity).Y;
                     //Main.SetCameraLerp(0.999f, 120);
                     //return InstantTransmissionZoomDistance;
-                    return 0f;
+                    return;
                 }
+                
             }
             else if (InstantTransmission.JustReleased)
             {
@@ -1681,14 +1709,13 @@ namespace DBZMOD
                 //Main.SetCameraLerp(0.999f, 120);
             } else
             {
-                Vector2 direction = Vector2.Normalize(Main.MouseWorld - player.Center);
+                // Vector2 direction = Vector2.Normalize(Main.MouseWorld - Main.screenPosition);
                 // InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
                 // InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
+                InstantTransmissionZoomDistance = 0;
                 Main.zoomX = 0f;
                 Main.zoomY = 0f;
             }
-            
-            return 0f;
         }
 
         public bool HandleInstantTransmissionExitRoutine()
