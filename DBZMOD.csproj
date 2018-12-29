@@ -138,6 +138,7 @@
     <Compile Include="Items\Accessories\BloodstainedBandana.cs" />
     <Compile Include="Items\Accessories\EndlessKi.cs" />
     <Compile Include="Items\Accessories\GoblinKiEnhancer.cs" />
+    <Compile Include="Items\Accessories\MetamoranSash.cs" />
     <Compile Include="Items\Accessories\PureEnergyCirclet.cs" />
     <Compile Include="Items\Accessories\IceTalisman.cs" />
     <Compile Include="Items\Accessories\BurningEnergyAmulet.cs" />
@@ -526,7 +527,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
+      <HintPath>Lib\Terraria.exe</HintPath>
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>

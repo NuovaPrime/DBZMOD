@@ -36,8 +36,8 @@ namespace DBZMOD.UI
         private Color gradientA;
 		private Color gradientB;
         public Texture2D texture;
-        private Color gradientAColor;
-        private Color gradientBColor;
+        private Color gradientAColor = new Color(0, 208, 255);
+        private Color gradientBColor = new Color(0, 80, 255);
 
         public override void OnInitialize()
 		{
@@ -48,8 +48,8 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-					gradientA = new Color(0, 208, 255); //light blue
-					gradientB = new Color(0, 80, 255); // dark blue
+					gradientA = gradientAColor; //light blue
+					gradientB = gradientBColor; // dark blue
 					break;
                 case ResourceBarMode.OVERLOAD:
                     gradientA = new Color(1, 168, 1); //dark green
@@ -60,18 +60,11 @@ namespace DBZMOD.UI
 					break;
 			}
 
-			text = new UIText("0/0"); //text to show current hp or mana
+			text = new UIText("0/0"); //text to show stat
 			text.Width.Set(width, 0f);
 			text.Height.Set(height, 0f);
 			text.Top.Set(height / 2 + 10, 0f); //center the UIText
 			text.Left.Set(width - 60, 0f);
-
-			/* var BarTexture = GFX.KiBar;
-			UIImage ki = new UIImage(BarTexture);
-			ki.Top.Set(-8, 0f);
-			ki.Width.Set(80, 0f);
-			ki.Height.Set(18, 0f);
-			Append(ki);*/
 
 			Append(text);
 

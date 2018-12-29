@@ -266,6 +266,13 @@ namespace DBZMOD
                 npc.AddBuff(BuffID.Frostburn, 180);
 
             }
+            if (MyPlayer.ModPlayer(player).metamoranSash)
+            {
+                if (Main.rand.Next(15) == 0)
+                {
+                    damage *= 2;
+                }
+            }
         }
     }    
 

@@ -31,6 +31,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.1f;
 				player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.3f;
+                player.GetModPlayer<MyPlayer>(mod).metamoranSash = true;
             }
         }
     }

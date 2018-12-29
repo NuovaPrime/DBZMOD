@@ -241,6 +241,7 @@ namespace DBZMOD
         public bool bloodstainedBandana;
         public bool goblinKiEnhancer;
         public bool mechanicalAmplifier;
+        public bool metamoranSash;
         public bool blackFusionBonus;
         public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
@@ -1173,6 +1174,13 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
+            if (metamoranSash)
+            {
+                if (Main.rand.NextBool(15))
+                {
+                    damage *= 2;
+                }
+            }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
 
@@ -1835,6 +1843,7 @@ namespace DBZMOD
             bloodstainedBandana = false;
             goblinKiEnhancer = false;
             mechanicalAmplifier = false;
+            metamoranSash = false;
             KiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
@@ -2386,7 +2395,6 @@ namespace DBZMOD
 
                 m_progressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
-
             base.OnHitAnything(x, y, victim);
         }
 
