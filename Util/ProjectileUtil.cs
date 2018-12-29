@@ -99,8 +99,10 @@ namespace Util
             {
                 float randomLengthOnBeam = Main.rand.NextFloat(TailHeldDistance, travelDistance + TailHeldDistance);
                 Vector2 beamWidthVariance = tailSize / 2f;
-                Vector2 variance = new Vector2(Main.rand.NextFloat(-beamWidthVariance.X, beamWidthVariance.X), Main.rand.NextFloat(beamWidthVariance.Y, beamWidthVariance.Y));
-                Vector2 randomPositionOnBeam = TailPosition + variance * velocity + randomLengthOnBeam * velocity;
+                float xVar = Math.Abs(beamWidthVariance.X);
+                float yVar = Math.Abs(beamWidthVariance.Y);
+                Vector2 variance = new Vector2(Main.rand.NextFloat(-xVar, xVar), Main.rand.NextFloat(-yVar, yVar));
+                Vector2 randomPositionOnBeam = TailPosition - (tailSize / 2f) + variance * velocity + randomLengthOnBeam * velocity;
                 Dust tDust = Dust.NewDustDirect(randomPositionOnBeam, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
                 float angleVariance = Main.rand.NextFloat() < 0.5f ? -90 : 90f;
                 tDust.velocity = DegreesToVector(VectorToDegrees(velocity) + angleVariance) * (tailSize.Y / 40f);
