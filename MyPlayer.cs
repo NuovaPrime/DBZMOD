@@ -1046,25 +1046,21 @@ namespace DBZMOD
         public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (OriginalEyeColor == null)
-            {
-                OriginalEyeColor = player.eyeColor;
-            }
             if (Transformations.IsGodlike(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
             else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
-                player.eyeColor = Color.Turquoise;
+                ChangeEyeColor(Color.Turquoise);
             }
             else if (Transformations.IsKaioken(player))
             {
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
-            else
+            else if (OriginalEyeColor.HasValue && player.eyeColor != OriginalEyeColor.Value)
             {
                 player.eyeColor = OriginalEyeColor.Value;
             }
