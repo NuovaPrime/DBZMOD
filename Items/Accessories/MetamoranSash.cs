@@ -24,6 +24,7 @@ namespace DBZMOD.Items.Accessories
             item.rare = -12;
             item.defense = 3;
             item.accessory = true;
+            PatreonName = "Chese780";
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
