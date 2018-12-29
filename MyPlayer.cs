@@ -88,6 +88,7 @@ namespace DBZMOD
         public static ModHotKey SpeedToggle;
         public static ModHotKey QuickKi;
         public static ModHotKey TransMenu;
+        public static ModHotKey InstantTransmission;
         //public static ModHotKey ProgressionMenuKey;
         public static ModHotKey FlyToggle;
         public static ModHotKey ArmorBonus;
@@ -332,7 +333,7 @@ namespace DBZMOD
             return KiCurrent <= 0;
         }
 
-        public bool HasKi(int kiAmount)
+        public bool HasKi(float kiAmount)
         {
             return KiCurrent >= kiAmount;
         }
@@ -1622,6 +1623,79 @@ namespace DBZMOD
                 DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
+        }
+
+        // constants to do with instant transmission range/speed/ki cost.
+        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 10f;
+        protected const float INSTANT_TRANSMISSION_CAMERA_PAN_SPEED = 20f;
+        protected float InstantTransmissionBaseMaxRange
+        {
+            get
+            {
+                return Main.maxTilesX * 16f;
+            }
+        }
+
+        public float InstantTransmissionZoomDistance = 0f;
+
+        public float GetInstantTransmissionRangeSpeed()
+        {
+            return INSTANT_TRANSMISSION_CAMERA_PAN_SPEED;
+        }
+
+        public float GetInstantTransmissionKiCost()
+        {
+            return INSTANT_TRANSMISSION_FRAME_KI_COST;
+        }
+
+        public float GetInstantTransmissionMaximumRange()
+        {
+            return InstantTransmissionBaseMaxRange;
+        }
+
+        public override void ModifyZoom(ref float zoom)
+        {
+            zoom = GetInstantTransmissionZoomForce();            
+        }
+
+        public float GetInstantTransmissionZoomForce()
+        {            
+            if (InstantTransmission.Current)
+            {
+                if (HasKi(GetInstantTransmissionKiCost()))
+                {
+                    AddKi(-GetInstantTransmissionKiCost());
+                    Vector2 direction = Vector2.Normalize(Main.MouseWorld - player.Center);
+                    InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
+                    InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
+                    Main.zoomX = (direction * InstantTransmissionZoomDistance).X;
+                    Main.zoomY = (direction * InstantTransmissionZoomDistance).Y;
+                    //Main.SetCameraLerp(0.999f, 120);
+                    //return InstantTransmissionZoomDistance;
+                    return 0f;
+                }
+            }
+            else if (InstantTransmission.JustReleased)
+            {
+                HandleInstantTransmissionExitRoutine();
+                //Main.SetCameraLerp(0.999f, 120);
+            } else
+            {
+                Vector2 direction = Vector2.Normalize(Main.MouseWorld - player.Center);
+                // InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
+                // InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
+                Main.zoomX = 0f;
+                Main.zoomY = 0f;
+            }
+            
+            return 0f;
+        }
+
+        public bool HandleInstantTransmissionExitRoutine()
+        {
+            // find a suitable place to IT to, reversing the camera pan direction if necessary.            
+            // for now assume failure
+            return false;
         }
 
         public void HandleChargeEffects()
