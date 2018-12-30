@@ -404,18 +404,6 @@ namespace DBZMOD
             }
         }
 
-        public override void UpdateBadLifeRegen()
-        {
-            base.UpdateBadLifeRegen();
-
-            HandlePowerWishPlayerHealth();
-        }
-
-        public void HandlePowerWishPlayerHealth()
-        {
-            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
-        }
-
         public override void PostUpdate()
         {
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
