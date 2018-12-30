@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class DivineTestItem : ModItem
+    public class PrimalTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -26,13 +26,13 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Divine Test Item");
-            Tooltip.SetDefault("Gives the divine trait");
+            DisplayName.SetDefault("Primal Test Item");
+            Tooltip.SetDefault("Gives the primal trait");
         }
 		
 		public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).playerTrait = "Divine";
+            MyPlayer.ModPlayer(player).playerTrait = "Primal";
             return true;
         }
     }
