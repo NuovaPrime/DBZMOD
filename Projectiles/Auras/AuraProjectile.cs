@@ -79,7 +79,7 @@ namespace DBZMOD.Projectiles.Auras
             // scale is based on kaioken level, which gets set to 0
             OriginalScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (isKaiokenAura ? -0.1f : 0f);
 
-            float scaleMult = HasComplexBlendStates ? Main.GameZoomTarget : 1f;
+            float scaleMult = Main.GameZoomTarget;
 
             // special scaling for Kaioken auras only
             if (Transformations.IsAnythingOtherThanKaioken(player) && isKaiokenAura)

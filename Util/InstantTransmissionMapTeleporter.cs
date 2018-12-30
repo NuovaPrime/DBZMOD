@@ -69,11 +69,14 @@ namespace DBZMOD.Util
                             if (Main.netMode == 0) // single
                             {
                                 Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);                                
-                                player.Teleport(cursorWorldPosition);
+                                player.Teleport(cursorWorldPosition, -1);
                                 Projectile.NewProjectile(cursorWorldPosition.X, cursorWorldPosition.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
                                 player.position = cursorWorldPosition;
                                 player.velocity = Vector2.Zero;
                                 player.fallStart = (int)(player.position.Y / 16f);
+                                // dunno if either of these works
+                                //player.mapFullScreen = false;
+                                Main.mapFullscreen = false;
                             }
                             else
                             {
