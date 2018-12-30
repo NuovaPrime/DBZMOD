@@ -257,6 +257,9 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="Items\Consumables\TransmissionTeleport.cs" />
+    <Compile Include="Items\Consumables\TransmissionPura.cs" />
+    <Compile Include="Items\Consumables\TransmissionVanish.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
     <Compile Include="Items\DragonBalls\DragonBallItem.cs" />
     <Compile Include="Items\DragonBalls\DBNote.cs" />
