@@ -85,45 +85,35 @@ namespace DBZMOD.Util
 
         public NPC SeekNPCTarget(Vector2 cursorWorldPosition)
         {
+            float mapScale = Main.mapMinimapScale;
             for (int npcIndex = 0; npcIndex < 200; npcIndex++)
             {
-                if (Main.npc[npcIndex] != null && Main.npc[npcIndex].active && Main.npc[npcIndex].townNPC)
+                NPC npc = Main.npc[npcIndex];
+                if (npc == null)
+                    continue;
+                if (!npc.active)
+                    continue;
+                if (!npc.townNPC)
+                    continue;                
+                
+                float npcWidth = npc.width;
+                float npcHeight = npc.height;
+                float npcPosX = npc.position.X;
+                float npcPosY = npc.position.Y;
+                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
+                float leftMargin = npcWidth * (1f + (0.5f * mapScale));
+                float rightMargin = npcWidth * (2f + (0.5f * mapScale));
+                float topMargin = npcHeight * (1f + (0.5f * mapScale));
+                float bottomMargin = npcHeight * (2f + (0.5f * mapScale));
+                float npcLowerXBound = npcPosX - leftMargin;
+                float npcLowerYBound = npcPosY - topMargin;
+                float npcUpperXBound = npcPosX + rightMargin;
+                float npcUpperYBound = npcPosY + bottomMargin;
+                if (cursorWorldPosition.X >= npcLowerXBound && cursorWorldPosition.X <= npcUpperXBound && cursorWorldPosition.Y >= npcLowerYBound && cursorWorldPosition.Y <= npcUpperYBound)
                 {
-                    var mapScale = Main.mapMinimapScale;
-                    var mapAlphaThing = (byte)(255f * Main.mapMinimapAlpha);
-                    var mapX = (float)Main.miniMapX;
-                    var mapY = (float)Main.miniMapY;
-                    float mapScreenPosX = (Main.screenPosition.X + (float)(PlayerInput.RealScreenWidth / 2)) / 16f;
-                    float mapScreenPosY = (Main.screenPosition.Y + (float)(PlayerInput.RealScreenHeight / 2)) / 16f;
-                    // var mapOffsetX = -(mapScreenPosX - (float)((int)((Main.screenPosition.X + (float)(PlayerInput.RealScreenWidth / 2)) / 16f))) * mapScale;
-                    // var mapOffsetY = -(mapScreenPosY - (float)((int)((Main.screenPosition.Y + (float)(PlayerInput.RealScreenHeight / 2)) / 16f))) * mapScale;
-                    var widthRatio = (float)Main.miniMapWidth / mapScale;
-                    var heightRatio = (float)Main.miniMapHeight / mapScale;
-                    var widthOffsetByRatio = (float)((int)mapScreenPosX) - widthRatio / 2f;
-                    var heightOffsetByRatio = (float)((int)mapScreenPosY) - heightRatio / 2f;
-                    // float uiScale = (mapScale * 0.25f * 2f + 1f) / 3f; // what is this spaghetti shit
-                    float uiScale = Main.UIScale;
-                    float npcPosX = ((Main.npc[npcIndex].position.X + (float)(Main.npc[npcIndex].width / 2)) / 16f - widthOffsetByRatio) * mapScale;
-                    float npcPosY = ((Main.npc[npcIndex].position.Y + Main.npc[npcIndex].gfxOffY + (float)(Main.npc[npcIndex].height / 2)) / 16f - heightOffsetByRatio) * mapScale;
-                    npcPosX += mapX;
-                    npcPosY += mapY;
-                    npcPosX -= 6f;
-                    npcPosY -= 2f;
-                    npcPosY -= 2f - mapScale / 5f * 2f;
-                    npcPosX -= 10f * mapScale;
-                    npcPosY -= 10f * mapScale;
-                    float npcLowerXBound = npcPosX + 4f - 14f * uiScale;
-                    float npcLowerYBound = npcPosY + 2f - 14f * uiScale;
-                    float npcUpperXBound = npcLowerXBound + 28f * uiScale;
-                    float npcUpperYBound = npcLowerYBound + 28f * uiScale;
-                    if (!Main.player[npcIndex].dead)
-                    {
-                        if ((float)Main.mouseX >= npcLowerXBound && (float)Main.mouseX <= npcUpperXBound && (float)Main.mouseY >= npcLowerYBound && (float)Main.mouseY <= npcUpperYBound)
-                        {
-                            return Main.npc[npcIndex];
-                        }
-                    }
+                    return Main.npc[npcIndex];
                 }
+                
             }
 
             return null;
@@ -133,54 +123,43 @@ namespace DBZMOD.Util
         {
             for (int playerIndex = 0; playerIndex < 255; playerIndex++)
             {
+                Player player = Main.player[playerIndex];
                 // no nulls
-                if (Main.player[playerIndex] == null)
+                if (player == null)
                     continue;
                 // no weird shit
-                if (Main.player[playerIndex].whoAmI != playerIndex)
+                if (player.whoAmI != playerIndex)
                     continue;
                 // no hostiles
-                bool isSameTeam = Main.player[Main.myPlayer].team == Main.player[playerIndex].team && Main.player[playerIndex].team != 0;
-                if ((Main.player[Main.myPlayer].hostile || !Main.player[playerIndex].hostile) && !isSameTeam)
+                bool isSameTeam = Main.player[Main.myPlayer].team == player.team && player.team != 0;
+                if ((Main.player[Main.myPlayer].hostile || !player.hostile) && !isSameTeam)
                     continue;
                 // no dead bodies
-                if (!Main.player[playerIndex].active || Main.player[playerIndex].dead)
+                if (!player.active || player.dead)
                     continue;
                 // why would you do this
-                if (Main.player[playerIndex].whoAmI == Main.myPlayer)
+                if (player.whoAmI == Main.myPlayer)
                     continue;
                 var mapScale = Main.mapMinimapScale;
-                var mapAlphaThing = (byte)(255f * Main.mapMinimapAlpha);
-                var mapX = (float)Main.miniMapX;
-                var mapY = (float)Main.miniMapY;
-                float mapScreenPosX = (Main.screenPosition.X + (float)(PlayerInput.RealScreenWidth / 2)) / 16f;
-                float mapScreenPosY = (Main.screenPosition.Y + (float)(PlayerInput.RealScreenHeight / 2)) / 16f;
-                // var mapOffsetX = -(mapScreenPosX - (float)((int)((Main.screenPosition.X + (float)(PlayerInput.RealScreenWidth / 2)) / 16f))) * mapScale;
-                // var mapOffsetY = -(mapScreenPosY - (float)((int)((Main.screenPosition.Y + (float)(PlayerInput.RealScreenHeight / 2)) / 16f))) * mapScale;
-                var widthRatio = (float)Main.miniMapWidth / mapScale;
-                var heightRatio = (float)Main.miniMapHeight / mapScale;
-                var widthOffsetByRatio = (float)((int)mapScreenPosX) - widthRatio / 2f;
-                var heightOffsetByRatio = (float)((int)mapScreenPosY) - heightRatio / 2f;
-                // float uiScale = (mapScale * 0.25f * 2f + 1f) / 3f; // what is this spaghetti shit
-                float uiScale = Main.UIScale;
-                float playerPosX = ((Main.player[playerIndex].position.X + (float)(Main.player[playerIndex].width / 2)) / 16f - widthOffsetByRatio) * mapScale;
-                float playerPosY = ((Main.player[playerIndex].position.Y + Main.player[playerIndex].gfxOffY + (float)(Main.player[playerIndex].height / 2)) / 16f - heightOffsetByRatio) * mapScale;
-                playerPosX += mapX;
-                playerPosY += mapY;
-                playerPosX -= 6f;
-                playerPosY -= 2f;
-                playerPosY -= 2f - mapScale / 5f * 2f;
-                playerPosX -= 10f * mapScale;
-                playerPosY -= 10f * mapScale;
-                float playerLowerXBound = playerPosX + 4f - 14f * uiScale;
-                float playerLowerYBound = playerPosY + 2f - 14f * uiScale;
-                float playerUpperXBound = playerLowerXBound + 28f * uiScale;
-                float playerUpperYBound = playerLowerYBound + 28f * uiScale;
-                if (!Main.player[playerIndex].dead)
+
+                float playerWidth = player.width;
+                float playerHeight = player.height;
+                float playerPosX = player.position.X;
+                float playerPosY = player.position.Y;
+                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
+                float leftMargin = playerWidth * (1f + (0.5f * mapScale));
+                float rightMargin = playerWidth * (2f + (0.5f * mapScale));
+                float topMargin = playerHeight * (1f + (0.5f * mapScale)); // for some reason the heighest point of the sprite is a bit misleading, so give this some padding
+                float bottomMargin = playerHeight * (2f + (0.5f * mapScale));
+                float playerLowerXBound = playerPosX - leftMargin;
+                float playerLowerYBound = playerPosY - topMargin;
+                float playerUpperXBound = playerPosX + rightMargin;
+                float playerUpperYBound = playerPosY + bottomMargin;
+                if (!player.dead)
                 {
-                    if ((float)Main.mouseX >= playerLowerXBound && (float)Main.mouseX <= playerUpperXBound && (float)Main.mouseY >= playerLowerYBound && (float)Main.mouseY <= playerUpperYBound)
+                    if (cursorWorldPosition.X >= playerLowerXBound && cursorWorldPosition.X <= playerUpperXBound && cursorWorldPosition.Y >= playerLowerYBound && cursorWorldPosition.Y <= playerUpperYBound)
                     {
-                        return Main.player[playerIndex];
+                        return player;
                     }
                 }
             }
