@@ -1748,6 +1748,7 @@ namespace DBZMOD
 
         public bool TryTransmission(float distance)
         {
+            Vector2 originalPosition = player.Center;
             if (!HandleInstantTransmissionExitRoutine(distance))
             {
                 AddKi(trackedInstantTransmissionKiLoss);
@@ -1756,6 +1757,9 @@ namespace DBZMOD
             }
             else
             {
+                Projectile.NewProjectile(originalPosition.X, originalPosition.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                
                 AddKi(-GetInstantTransmissionTeleportKiCost());
                 return true;
             }
@@ -1783,7 +1787,7 @@ namespace DBZMOD
                 int tileY = (int)(target.Y / 16f);
                 if ((Main.tile[tileX, tileY].wall != 87 || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
                 {
-                    player.Teleport(target, 1, 0);
+                    player.Teleport(target, -1);
                     NetMessage.SendData(65, -1, -1, null, 0, (float)player.whoAmI, target.X, target.Y, 1, 0, 0);
                     if (player.chaosState)
                     {

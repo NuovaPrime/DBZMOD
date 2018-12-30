@@ -68,7 +68,9 @@ namespace DBZMOD.Util
                             modPlayer.AddInstantTransmissionChaosDebuff(Vector2.Distance(cursorWorldPosition, player.Center));
                             if (Main.netMode == 0) // single
                             {
-                                player.Teleport(cursorWorldPosition, 1, 0);
+                                Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);                                
+                                player.Teleport(cursorWorldPosition);
+                                Projectile.NewProjectile(cursorWorldPosition.X, cursorWorldPosition.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
                                 player.position = cursorWorldPosition;
                                 player.velocity = Vector2.Zero;
                                 player.fallStart = (int)(player.position.Y / 16f);
