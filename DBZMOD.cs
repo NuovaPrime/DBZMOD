@@ -14,6 +14,7 @@ using Terraria.Graphics.Effects;
 using System.IO;
 using Network;
 using Enums;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {
@@ -35,6 +36,8 @@ namespace DBZMOD
 
         private static OverloadBar overloadbar;
         private static UserInterface OverloadBarInterface;
+
+        private static InstantTransmissionMapTeleporter InstantTransmissionMapTeleporter;
 
         private ResourceBar resourceBar;
 
@@ -92,6 +95,7 @@ namespace DBZMOD
             MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
             MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
             MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
+            MyPlayer.InstantTransmission = RegisterHotKey("Instant Transmission", "I");
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
             MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
             MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
@@ -105,6 +109,8 @@ namespace DBZMOD
                 ActivateProgressionMenu();
                 ActivateKiBar();
                 ActivateOverloadBar();
+
+                InstantTransmissionMapTeleporter = new InstantTransmissionMapTeleporter();
 
                 Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
 
@@ -249,7 +255,14 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-        }        
+        }
+
+
+        // unabashedly stolen from Jopo with love, responsible for the instant transmission functionality we want out of book 1 with some assembly required
+        public override void PostDrawFullscreenMap(ref string mouseText)
+        {
+            InstantTransmissionMapTeleporter.instance.PostDrawFullScreenMap();
+        }
 
         // packet handling goes here
         public override void HandlePacket(BinaryReader reader, int whoAmI)

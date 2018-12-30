@@ -404,10 +404,7 @@ namespace DBZMOD
                 if (!Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneBeach && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDungeon && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneHoly && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneOldOneArmy && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneSandstorm && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerNebula && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerSolar && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerStardust && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneTowerVortex && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUndergroundDesert && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneRockLayerHeight && !Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneDirtLayerHeight)
                 {
                     if (Main.rand.Next(2) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(1, 2));
-
-                    }
                 }
 
                 if (NPC.downedBoss2)
@@ -415,19 +412,16 @@ namespace DBZMOD
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneJungle)
                     {
                         if (Main.rand.Next(2) == 0)
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(1, 3));
-                        }
                     }
                 }
+
                 if (NPC.downedBoss3)
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneUnderworldHeight)
                     {
                         if (Main.rand.Next(2) == 0)
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PridefulKiCrystal"), Main.rand.Next(1, 3));
-                        }
                     }
                 }
                 if (Main.hardMode)
@@ -435,304 +429,238 @@ namespace DBZMOD
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCrimson)
                     {
                         if (Main.rand.Next(2) == 0)
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(1, 3));
-                        }
                     }
                 }
+
                 if (Main.hardMode)
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneCorrupt)
                     {
                         if (Main.rand.Next(2) == 0)
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(1, 3));
-                        }
                     }
                 }
+
                 if (Main.hardMode && NPC.downedPlantBoss)
                 {
                     if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneGlowshroom)
                     {
                         if (Main.rand.Next(2) == 0)
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(1, 5));
-                        }
                     }
                 }
             }
+
             if (npc.boss)
             {
                 if (Main.rand.Next(4) == 0)
-                {
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SenzuBean"), Main.rand.Next(1, 3));
-                    }
-                }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment1"), 1);
-                        }
-                    }
-
                 }
 
                 if (npc.type == NPCID.SkeletronHead)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment2"), 1);
-                        }
-                    }
                 }
+
                 if (npc.type == NPCID.SkeletronPrime)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment3"), 1);
-                        }
-                    }
                 }
+
                 if (npc.type == NPCID.Plantera)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment4"), 1);
-                        }
-                    }
                 }
+
                 if (npc.type == NPCID.CultistBoss)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiFragment5"), 1);
-                        }
-                    }
                 }
+
                 if (npc.type == NPCID.WallofFlesh)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SpiritualEmblem"), 1);
-                        }
-                    }
+
+                    if (Main.rand.Next(4) < 3)
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("TransmissionVanish"), 1);
                 }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragmentFirst"), 1);
-
-                    }
-
                 }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.SkeletronHead)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment1"), 1);
-                        }
-                    }
                 }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.SkeletronPrime)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment2"), 1);
-                        }
-                    }
                 }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.Golem)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment3"), 1);
-                        }
-                    }
                 }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.MoonLordCore)
                 {
                     if (Main.rand.Next(4) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment4"), 1);
-                        }
-                    }
                 }
             }
+
             if (NPC.downedQueenBee)
             {
                 if (npc.type == NPCID.Harpy)
                 {
                     if (Main.rand.Next(3) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AstralEssentia"), Main.rand.Next(1, 3));
-                        }
-                    }
                 }
             }
+
             if (NPC.downedBoss3)
             {
                 if (npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle || npc.type == NPCID.DarkCaster)
                 {
                     if (Main.rand.Next(5) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SkeletalEssence"), Main.rand.Next(1, 3));
-                        }
-                    }
                 }
             }
+
             if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3)
             {
                 if (npc.type == NPCID.CrimsonAxe || npc.type == NPCID.PossessedArmor || npc.type == NPCID.EnchantedSword || npc.type == NPCID.CursedHammer)
                 {
                     if (Main.rand.Next(3) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SoulofEntity"), Main.rand.Next(1, 6));
-                        }
-                    }
                 }
             }
+
             if (NPC.downedGolemBoss)
             {
                 if (npc.type == NPCID.RedDevil || npc.type == NPCID.Demon || npc.type == NPCID.VoodooDemon)
                 {
                     if (Main.rand.Next(3) == 0)
-                    {
-                        {
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DemonicSoul"), Main.rand.Next(1, 3));
-                        }
-                    }
                 }
             }
 
             if (!NPC.downedBoss1)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedBoss2)
             {
                 if (npc.type == NPCID.BrainofCthulhu || (npc.type == NPCID.EaterofWorldsHead && npc.boss))
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("StableKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedBoss3)
             {
                 if (npc.type == NPCID.SkeletronHead)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedQueenBee)
             {
                 if (npc.type == NPCID.QueenBee)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("CalmKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!Main.hardMode)
             {
                 if (npc.type == NPCID.WallofFlesh)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PridefulKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedMechBossAny)
             {
                 if (npc.type == NPCID.SkeletronPrime || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer || npc.type == NPCID.TheDestroyer)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedPlantBoss)
             {
                 if (npc.type == NPCID.Plantera)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AngerKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedGolemBoss)
             {
                 if (npc.type == NPCID.Golem)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedFishron)
             {
                 if (npc.type == NPCID.DukeFishron)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!NPC.downedAncientCultist)
             {
                 if (npc.type == NPCID.CultistBoss)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("PureKiCrystal"), Main.rand.Next(6, 18));
-                }
             }
+
             if (!Main.expertMode)
             {
                 if (npc.type == NPCID.DukeFishron)
-                {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
-                        mod.ItemType("KatchinScale"), Main.rand.Next(12, 36));
-                }
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KatchinScale"), Main.rand.Next(12, 36));
             }
+
             if (NPC.downedBoss2)
             {
                 if (Main.rand.Next(7) == 0)
-                {
-                    Item.NewItem((int) npc.position.X, (int) npc.position.Y, npc.width, npc.height,
-                        mod.ItemType("EarthenShard"), Main.rand.Next(1, 3));
-                }
+                    Item.NewItem((int) npc.position.X, (int) npc.position.Y, npc.width, npc.height, mod.ItemType("EarthenShard"), Main.rand.Next(1, 3));
             }
+
             if (Main.hardMode)
             {
                 if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
                 {
                     int stacks = Main.rand.Next(6, 12) / 2;
                     if (Main.expertMode)
-                    {
                         stacks = (int)(stacks * 1.5f);
-                    }
+
                     for (int i = 0; i < stacks; i++)
                     {
                         Item.NewItem((int)npc.position.X + Main.rand.Next(npc.width), (int)npc.position.Y + Main.rand.Next(npc.height), 2, 2, mod.ItemType("RadiantFragment"), Main.rand.Next(1, 4));
@@ -744,9 +672,7 @@ namespace DBZMOD
                 if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
                 {
                     if (Main.rand.Next(10) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SSJGUnlockItem"));
-                    }
                 }
             }
             if (NPC.downedBoss3)
@@ -754,9 +680,7 @@ namespace DBZMOD
                 if (npc.type == NPCID.GraniteGolem)
                 {
                     if (Main.rand.Next(5) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BaldurEssentia"));
-                    }
                 }
             }
             if (NPC.downedBoss2)
@@ -764,9 +688,7 @@ namespace DBZMOD
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor)
                 {
                     if (Main.rand.Next(100) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BurningEnergyAmulet"));
-                    }
                 }
             }
             if (NPC.downedBoss2)
@@ -774,9 +696,7 @@ namespace DBZMOD
                 if (npc.type == NPCID.IceBat || npc.type == NPCID.IceSlime || npc.type == NPCID.SpikedIceSlime)
                 {
                     if (Main.rand.Next(20) == 0)
-                    {
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("IceTalisman"));
-                    }
                 }
             }
                         
@@ -784,23 +704,17 @@ namespace DBZMOD
                 npc.type == NPCID.BloodFeeder || npc.type == NPCID.Corruptor || npc.type == NPCID.Slimer)
             {
                 if (Main.rand.Next(10) == 0)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodstainedBandana"));
-                }
             }
             if (npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinWarrior || npc.type == NPCID.GoblinThief)
             {
                 if (Main.rand.Next(50) == 0)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
-                }
             }
             if (npc.type == NPCID.GoblinSummoner)
             {
                 if (Main.rand.Next(4) == 0)
-                {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
-                }
             }
         }
 
@@ -818,12 +732,14 @@ namespace DBZMOD
                     shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.ArmCannon>());
                     nextSlot++;
                 }
+
                 if (Main.rand.Next(3) == 0)
                 {
                     shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Consumables.MRE>());
                     nextSlot++;
                 }
             }
+
             if (type == NPCID.SkeletonMerchant)
             {
                 if (Main.rand.Next(3) == 0)
@@ -832,23 +748,27 @@ namespace DBZMOD
                     nextSlot++;
                 }
             }
+
             if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
                 nextSlot++;
             }
+
             if (type == NPCID.Dryad && NPC.downedBoss1)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.SuspiciousLookingEye);
                 shop.item[nextSlot].value = 30000;
                 nextSlot++;
             }
+
             if (type == NPCID.Dryad && NPC.downedBoss3)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.ClothierVoodooDoll);
                 shop.item[nextSlot].value = 150000;
                 nextSlot++;
             }
+
             if (type == NPCID.Dryad && NPC.downedGolemBoss)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.LihzahrdPowerCell);
@@ -861,11 +781,13 @@ namespace DBZMOD
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.LuminousSectum>());
                 nextSlot++;
             }
+
             if (type == NPCID.Clothier)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
                 nextSlot++;
             }
+
             if (type == NPCID.Mechanic)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());

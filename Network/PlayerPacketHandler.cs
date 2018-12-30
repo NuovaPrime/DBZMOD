@@ -1,5 +1,6 @@
 ﻿using DBZMOD;
 using Enums;
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -15,6 +16,7 @@ namespace Network
         public const byte SyncTriggers = 44;
         public const byte RequestForSyncFromJoinedPlayer = 45;
         public const byte RequestDragonBallKeySync = 46;
+        public const byte RequestTeleportMessage = 47;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -37,6 +39,9 @@ namespace Network
                 case (RequestDragonBallKeySync):
                     SendDragonBallKeyToPlayer(fromWho);
                     break;
+                case (RequestTeleportMessage):
+                    ProcessRequestTeleport(reader, fromWho);
+                    break;
             }
         }
 
@@ -51,6 +56,21 @@ namespace Network
             ModPacket packet = GetPacket(RequestForSyncFromJoinedPlayer, fromWho);
             packet.Write(playerWhoseDataIneed);
             packet.Send(toWho, fromWho);
+        }
+
+        public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
+        {
+            ModPacket packet = GetPacket(RequestTeleportMessage, fromWho);
+            packet.WriteVector2(mapPosition);
+            packet.Send();
+        }
+
+        public void ProcessRequestTeleport(BinaryReader reader, int fromWho)
+        {
+            Vector2 destination = reader.ReadVector2();
+            Main.player[fromWho].Teleport(destination, 1, 0);
+            RemoteClient.CheckSection(fromWho, destination, 1);
+            NetMessage.SendData(65, -1, -1, null, 0, fromWho, destination.X, destination.Y, 1, 0, 0);
         }
 
         // should always be to server, from joining player

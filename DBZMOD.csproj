@@ -138,6 +138,7 @@
     <Compile Include="Items\Accessories\BloodstainedBandana.cs" />
     <Compile Include="Items\Accessories\EndlessKi.cs" />
     <Compile Include="Items\Accessories\GoblinKiEnhancer.cs" />
+    <Compile Include="Items\Accessories\MetamoranSash.cs" />
     <Compile Include="Items\Accessories\PureEnergyCirclet.cs" />
     <Compile Include="Items\Accessories\IceTalisman.cs" />
     <Compile Include="Items\Accessories\BurningEnergyAmulet.cs" />
@@ -256,6 +257,9 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="Items\Consumables\TransmissionTeleport.cs" />
+    <Compile Include="Items\Consumables\TransmissionPura.cs" />
+    <Compile Include="Items\Consumables\TransmissionVanish.cs" />
     <Compile Include="Items\DemonicSoul.cs" />
     <Compile Include="Items\DragonBalls\DragonBallItem.cs" />
     <Compile Include="Items\DragonBalls\DBNote.cs" />
@@ -486,6 +490,7 @@
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
+    <Compile Include="Util\InstantTransmissionMapTeleporter.cs" />
     <Compile Include="Util\ProjectileUtil.cs" />
     <Compile Include="Util\SoundUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
@@ -523,7 +528,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
+      <HintPath>Lib\Terraria.exe</HintPath>
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>

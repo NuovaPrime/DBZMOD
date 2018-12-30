@@ -88,6 +88,7 @@ namespace DBZMOD
         public static ModHotKey SpeedToggle;
         public static ModHotKey QuickKi;
         public static ModHotKey TransMenu;
+        public static ModHotKey InstantTransmission;
         //public static ModHotKey ProgressionMenuKey;
         public static ModHotKey FlyToggle;
         public static ModHotKey ArmorBonus;
@@ -241,6 +242,7 @@ namespace DBZMOD
         public bool bloodstainedBandana;
         public bool goblinKiEnhancer;
         public bool mechanicalAmplifier;
+        public bool metamoranSash;
         public bool blackFusionBonus;
         public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
@@ -257,6 +259,9 @@ namespace DBZMOD
         public bool IsHoldingDragonRadarMk1 = false;
         public bool IsHoldingDragonRadarMk2 = false;
         public bool IsHoldingDragonRadarMk3 = false;
+        public bool IsInstantTransmission1Unlocked = false;
+        public bool IsInstantTransmission2Unlocked = false;
+        public bool IsInstantTransmission3Unlocked = false;
         public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
@@ -299,7 +304,7 @@ namespace DBZMOD
             // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
             // I'm not sure why worldgen doesn't always work, but this makes it recover from any issues it might have.
             DBZWorld.DoDragonBallCleanupCheck();
-        }        
+        }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
@@ -333,7 +338,7 @@ namespace DBZMOD
             return KiCurrent <= 0;
         }
 
-        public bool HasKi(int kiAmount)
+        public bool HasKi(float kiAmount)
         {
             return KiCurrent >= kiAmount;
         }
@@ -677,7 +682,7 @@ namespace DBZMOD
         private void HandleOverloadCounters()
         {
             // clamp overload current values to 0/max
-            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));            
+            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));
 
             // does the player have the legendary trait
             if (IsPlayerLegendary())
@@ -1103,28 +1108,34 @@ namespace DBZMOD
         public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (OriginalEyeColor == null)
-            {
-                OriginalEyeColor = player.eyeColor;
-            }
             if (Transformations.IsGodlike(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
             else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
             {
-                player.eyeColor = Color.Turquoise;
+                ChangeEyeColor(Color.Turquoise);
             }
             else if (Transformations.IsKaioken(player))
             {
-                player.eyeColor = Color.Red;
+                ChangeEyeColor(Color.Red);
             }
-            else
+            else if (OriginalEyeColor.HasValue && player.eyeColor != OriginalEyeColor.Value)
             {
                 player.eyeColor = OriginalEyeColor.Value;
             }
+        }
+
+        public void ChangeEyeColor(Color eyeColor)
+        {
+            // only fire this when attempting to change the eye color.
+            if (OriginalEyeColor == null)
+            {
+                OriginalEyeColor = player.eyeColor;
+            }
+            player.eyeColor = eyeColor;
         }
 
         public string ChooseTrait()
@@ -1231,6 +1242,13 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
+            if (metamoranSash)
+            {
+                if (Main.rand.NextBool(15))
+                {
+                    damage *= 2;
+                }
+            }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
 
@@ -1316,6 +1334,9 @@ namespace DBZMOD
             tag.Add("PowerHealthBonus", PowerHealthBonus);
             tag.Add("PowerWishMulti", PowerWishMulti);
             tag.Add("ImmortalityRevivesLeft", ImmortalityRevivesLeft);
+            tag.Add("IsInstantTransmission1Unlocked", IsInstantTransmission1Unlocked);
+            tag.Add("IsInstantTransmission2Unlocked", IsInstantTransmission2Unlocked);
+            tag.Add("IsInstantTransmission3Unlocked", IsInstantTransmission3Unlocked);
             // added to store the player's original eye color if possible
             if (OriginalEyeColor != null)
             {
@@ -1350,7 +1371,7 @@ namespace DBZMOD
             } else
             {
                 KiCurrent = (float)tag.Get<int>("KiCurrent");
-            }            
+            }
             RageCurrent = tag.Get<int>("RageCurrent");
             KiChargeRate = tag.Get<int>("KiRegenRate");
             KiEssence1 = tag.Get<bool>("KiEssence1");
@@ -1390,7 +1411,9 @@ namespace DBZMOD
             PowerHealthBonus = tag.ContainsKey("PowerHealthBonus") ? tag.Get<int>("PowerHealthBonus") : 0;
             PowerWishMulti = tag.ContainsKey("PowerWishMulti") ? tag.Get<float>("PowerWishMulti") : 1f;
             ImmortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
-
+            IsInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
+            IsInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
+            IsInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
             {
@@ -1503,7 +1526,7 @@ namespace DBZMOD
         }
 
         public void HandleKaioken()
-        {      
+        {
             bool canIncreaseKaiokenLevel = false;
             if (KaiokenKey.JustPressed)
             {
@@ -1528,7 +1551,7 @@ namespace DBZMOD
                 {
                     KaiokenLevel--;
                 }
-            }            
+            }
         }
 
         public void UpdateSynchronizedControls(TriggersSet triggerSet)
@@ -1678,11 +1701,175 @@ namespace DBZMOD
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
 
-            
+
             if ((WishActive || QuickKi.JustPressed) && !WishMenu.menuvisible)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
+
+            // freeform instant transmission requires book 2.
+            if (IsInstantTransmission2Unlocked)
+            {
+                HandleInstantTransmissionFreeform();
+            }
+        }
+
+        // constants to do with instant transmission range/speed/ki cost.
+        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 0.3f;
+        protected const float INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST = 200f;
+
+        // intensity is the camera pan power being used in this frame, distance is how far the camera is from the player using the power.
+        public float GetInstantTransmissionFrameKiCost(float intensity, float distance)
+        {
+            // INSERT THINGS THAT REDUCE INSTANT TRANSMISSION COST HERE
+            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            return INSTANT_TRANSMISSION_FRAME_KI_COST * (float)Math.Sqrt(intensity) * (float)Math.Sqrt(distance) * costCoefficient;
+        }
+
+        public float GetInstantTransmissionTeleportKiCost()
+        {
+            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            return INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST;
+        }
+
+        protected const int INSTANT_TRANSMISSION_BASE_CHAOS_DURATION = 120;
+        public int GetBaseChaosDuration()
+        {
+            int durationReduction = IsInstantTransmission3Unlocked ? 2 : 1;
+            return INSTANT_TRANSMISSION_BASE_CHAOS_DURATION / durationReduction;
+        }
+
+        public int GetChaosDurationByDistance(float distance)
+        {
+            int baseDurationOfDebuff = GetBaseChaosDuration();
+            float debuffDurationCoefficient = IsInstantTransmission2Unlocked ? 0.5f : 1f;
+            int debuffIncrease = (int)Math.Ceiling(distance * debuffDurationCoefficient / 2000f);
+            
+            return baseDurationOfDebuff + debuffIncrease;
+        }
+
+        public void AddInstantTransmissionChaosDebuff(float distance) {
+            // instant transmission 3 bypasses the debuff
+            if (!IsInstantTransmission3Unlocked)
+                player.AddBuff(BuffID.ChaosState, GetChaosDurationByDistance(distance), true);
+        }
+
+        private bool isReturningFromInstantTransmission = false;
+        private float trackedInstantTransmissionKiLoss = 0f;
+        // bool handles the game feel of instant transmission by being a limbo flag.
+        // the first time you press the IT key, this is set to true, but it can be set to false in mid swing to prevent further processing on the same trigger/keypress.
+        private bool isHandlingInstantTransmissionTriggers = false;
+        public void HandleInstantTransmissionFreeform()
+        {
+            // don't mess with stuff if the map is open
+            if (Main.mapFullscreen)
+                return;
+
+            // sadly this routine has to run outside the checks, because we don't know if we're allowed to IT to a spot unless we do this first.
+            Vector2 screenMiddle = Main.screenPosition + (new Vector2(Main.screenWidth, Main.screenHeight) / 2f);
+            Vector2 direction = Vector2.Normalize(Main.MouseWorld - screenMiddle);
+            float distance = Vector2.Distance(Main.MouseWorld, player.Center);
+            float intensity = (float)Vector2.Distance(Main.MouseWorld, screenMiddle) / 8f;
+            float kiCost = GetInstantTransmissionFrameKiCost(intensity, distance);
+
+            // the one frame delay on handling instant transmission is to set up the limbo var.
+            if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
+                isHandlingInstantTransmissionTriggers = true;
+                DebugUtil.Log("Transmission triggers are being set to true for some reason :(");
+            }
+            if (isHandlingInstantTransmissionTriggers && InstantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
+            {
+                // player is trying to IT and has the ki to do so.
+                // set the limbo var to true until we stop handling
+                isReturningFromInstantTransmission = true;
+
+                trackedInstantTransmissionKiLoss += kiCost;
+                AddKi(-kiCost);
+
+                Main.zoomX += (direction * intensity).X;
+                if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
+                    Main.zoomX = (Main.maxTilesX * 16f) - player.Center.X;
+                if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
+                    Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
+                Main.zoomY += (direction * intensity).Y;
+            } else if (isHandlingInstantTransmissionTriggers && (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))))
+            {
+                // player has either let go of the instant transmission key or run out of ki. either way, disable further processing and try to teleport
+                // if we fail, the player gets some ki back but the processing is still canceled.
+                isReturningFromInstantTransmission = true;
+                isHandlingInstantTransmissionTriggers = false;
+                if (TryTransmission(distance))
+                {
+                    // there's no need to "return" from IT, you succeeded.
+                    // make sure we don't try to give the player back their ki
+                    trackedInstantTransmissionKiLoss = 0f;
+                }
+            } else if (isReturningFromInstantTransmission)
+            {
+                AddKi(trackedInstantTransmissionKiLoss);
+                trackedInstantTransmissionKiLoss = 0f;
+                isReturningFromInstantTransmission = false;
+                isHandlingInstantTransmissionTriggers = false;
+                Main.zoomX = 0f;
+                Main.zoomY = 0f;
+            }
+        }
+
+        public bool TryTransmission(float distance)
+        {
+            if (!HandleInstantTransmissionExitRoutine(distance))
+            {
+                AddKi(trackedInstantTransmissionKiLoss);
+                trackedInstantTransmissionKiLoss = 0f;
+                return false;
+            }
+            else
+            {
+                AddKi(-GetInstantTransmissionTeleportKiCost());
+                return true;
+            }
+        }
+
+        public bool HandleInstantTransmissionExitRoutine(float distance)
+        {
+            // unabashedly stolen from decompiled source for rod of discord.
+            // find a suitable place to IT to, reversing the camera pan direction if necessary.            
+            // try a normal game teleport, maybe it handles safety
+            Vector2 target;
+            target.X = (float)Main.mouseX + Main.screenPosition.X;
+            if (player.gravDir == 1f)
+            {
+                target.Y = (float)Main.mouseY + Main.screenPosition.Y - (float)player.height;
+            }
+            else
+            {
+                target.Y = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
+            }            
+            target.X -= (float)(player.width / 2);
+            if (target.X > 50f && target.X < (float)(Main.maxTilesX * 16 - 50) && target.Y > 50f && target.Y < (float)(Main.maxTilesY * 16 - 50))
+            {
+                int tileX = (int)(target.X / 16f);
+                int tileY = (int)(target.Y / 16f);
+                if ((Main.tile[tileX, tileY].wall != 87 || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
+                {
+                    player.Teleport(target, 1, 0);
+                    NetMessage.SendData(65, -1, -1, null, 0, (float)player.whoAmI, target.X, target.Y, 1, 0, 0);
+                    if (player.chaosState)
+                    {
+                        player.statLife -= player.statLife / 7;
+                        PlayerDeathReason damageSource = PlayerDeathReason.ByOther(13);
+                        if (Main.rand.Next(2) == 0)
+                        {
+                            damageSource = PlayerDeathReason.ByOther(player.Male ? 14 : 15);
+                        }
+                        player.lifeRegenCount = 0;
+                        player.lifeRegenTime = 0;
+                    }
+                    AddInstantTransmissionChaosDebuff(distance);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void HandleChargeEffects()
@@ -1904,6 +2091,7 @@ namespace DBZMOD
             bloodstainedBandana = false;
             goblinKiEnhancer = false;
             mechanicalAmplifier = false;
+            metamoranSash = false;
             KiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
             KiMaxMult = hasLegendaryBuff ? 2f : 1f;
@@ -2455,7 +2643,6 @@ namespace DBZMOD
 
                 m_progressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
-
             base.OnHitAnything(x, y, victim);
         }
 

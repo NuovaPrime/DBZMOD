@@ -447,7 +447,7 @@ V1.0.9
 
 4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
 
-5. Added [[Refined Metal]], [[Katchin Scale]]
+5. Added [[Refined Metal]], [[Katchin Scale]].
 
 == Changes ==
 
@@ -468,3 +468,7 @@ V1.0.9
 == Fixes ==
 
 1. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
+
+== Patreon Items ==
+
+1. Added [[Metamoran Sash]].
