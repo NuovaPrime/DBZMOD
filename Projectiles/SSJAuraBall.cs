@@ -103,6 +103,8 @@ namespace DBZMOD.Projectiles
             else
             {
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
+                // this being set to false prior to the aura ball dying tells it to go LSSJ instead of LSSJ2 - weird choice, but I'm not going to argue with it.
+                MyPlayer.ModPlayer(player).IsTransforming = false;
             }
         }
     }
