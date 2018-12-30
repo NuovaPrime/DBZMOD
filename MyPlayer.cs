@@ -1706,6 +1706,7 @@ namespace DBZMOD
             // the one frame delay on handling instant transmission is to set up the limbo var.
             if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
                 isHandlingInstantTransmissionTriggers = true;
+                DebugUtil.Log("Transmission triggers are being set to true for some reason :(");
             }
             if (isHandlingInstantTransmissionTriggers && InstantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
             {
@@ -1722,8 +1723,10 @@ namespace DBZMOD
                 if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
                     Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
                 Main.zoomY += (direction * intensity).Y;
-            } else if (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost())))
+            } else if (isHandlingInstantTransmissionTriggers && (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))))
             {
+                // player has either let go of the instant transmission key or run out of ki. either way, disable further processing and try to teleport
+                // if we fail, the player gets some ki back but the processing is still canceled.
                 isReturningFromInstantTransmission = true;
                 isHandlingInstantTransmissionTriggers = false;
                 if (TryTransmission(distance))
