@@ -1,10 +1,8 @@
 ﻿using Enums;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using Terraria.ModLoader;
 
-namespace Util
+namespace DBZMOD.Models
 {
     // helper class for storing all the details about a transformation that need to be referenced later.
     public class BuffInfo
@@ -32,7 +30,7 @@ namespace Util
 
         public int GetBuffId()
         {
-            return DBZMOD.DBZMOD.instance.BuffType(this.BuffKeyName);
+            return DBZMOD.instance.BuffType(this.BuffKeyName);
         }
     }
 }

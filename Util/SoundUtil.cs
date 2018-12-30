@@ -1,26 +1,23 @@
 ﻿using DBZMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Util
+namespace DBZMOD.Util
 {
     public static class SoundUtil
     {
         public static uint InvalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
-        public static DBZMOD.DBZMOD _mod;
-        public static DBZMOD.DBZMOD mod
+        public static DBZMOD _mod;
+        public static DBZMOD mod
         {
             get
             {
                 if (_mod == null)
                 {
-                    _mod = DBZMOD.DBZMOD.instance;
+                    _mod = DBZMOD.instance;
                 }
 
                 return _mod;

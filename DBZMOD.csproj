@@ -493,6 +493,7 @@
     <Compile Include="UI\WishMenu.cs" />
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
+    <Compile Include="Util\AnimationHelper.cs" />
     <Compile Include="Util\DebugUtil.cs" />
     <Compile Include="Util\InstantTransmissionMapTeleporter.cs" />
     <Compile Include="Util\SoundUtil.cs" />
@@ -625,6 +626,8 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Effects\Animations\Aura\" />
+    <Folder Include="Effects\Animations\Transform\" />
     <Folder Include="Projectiles\Auras\Patron\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using Buffs;
 using DBZMOD;
+using DBZMOD.Models;
 using DBZMOD.Projectiles.Auras;
 using DBZMOD.Projectiles.Auras.Dev;
 using Enums;
@@ -12,7 +13,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Util
+namespace DBZMOD.Util
 {
     // class for helping out with all the buff integers, lists of buffs in order, presence of buffs/abstraction
     public static class Transformations
@@ -26,7 +27,7 @@ namespace Util
             {
                 if (_modInstance == null)
                 {
-                    _modInstance = DBZMOD.DBZMOD.instance;
+                    _modInstance = DBZMOD.instance;
                 }
                 return _modInstance;
             }
@@ -590,7 +591,7 @@ namespace Util
             buffs.Sort(buffCompare);
             foreach (string projectileKey in buffs.SelectMany(x => x.ProjectileKeys))
             {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, DBZMOD.DBZMOD.instance.ProjectileType(projectileKey), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, DBZMOD.instance.ProjectileType(projectileKey), 0, 0, player.whoAmI);
             }            
         }
 

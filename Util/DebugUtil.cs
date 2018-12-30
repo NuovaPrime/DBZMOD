@@ -5,7 +5,7 @@ using System.Text;
 using Terraria;
 using Terraria.ID;
 
-namespace Util
+namespace DBZMOD.Util
 {
     static class DebugUtil
     {

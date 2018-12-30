@@ -1,15 +1,9 @@
-﻿using DBZMOD;
-using DBZMOD.Projectiles.Auras;
+﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Util;
 
 namespace DBZMOD.Projectiles.Auras
 {

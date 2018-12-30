@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Terraria;
 
-namespace Util
+namespace DBZMOD.Util
 {
     public static class HomingHelper
     {
