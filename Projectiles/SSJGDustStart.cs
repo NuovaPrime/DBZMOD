@@ -25,6 +25,7 @@ namespace DBZMOD.Projectiles
             projectile.damage = 0;
             SizeTimer = 0f;
         }
+
         public override void AI()
         {
             projectile.ai[1] += 3;
@@ -59,12 +60,11 @@ namespace DBZMOD.Projectiles
                 projectile.Kill();
             }
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJG.GetBuffId()))
-                player.AddBuff(Transformations.SSJG.GetBuffId(), 3600000);
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGAuraProj"), 0, 0, player.whoAmI);
+            Transformations.DoTransform(player, Transformations.SSJG, DBZMOD.instance, false);
             MyPlayer.ModPlayer(player).IsTransforming = false;
             SoundUtil.PlayCustomSound("Sounds/SSJAscension");
         }

@@ -31,6 +31,7 @@ namespace DBZMOD.Projectiles
             yoffset = -200f;
             xoffset = 0f;
         }
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -84,24 +85,19 @@ namespace DBZMOD.Projectiles
 
                 }
             }
-
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            SoundUtil.PlayCustomSound("Sounds/SSJAscension");
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
-                if (!player.HasBuff(Transformations.LSSJ2.GetBuffId()))
-                    player.AddBuff(Transformations.LSSJ2.GetBuffId(), 360000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJ2AuraProj"), 0, 0, player.whoAmI);
+                Transformations.DoTransform(player, Transformations.LSSJ2, DBZMOD.instance, false);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
-                if (!player.HasBuff(Transformations.LSSJ.GetBuffId()))
-                    player.AddBuff(Transformations.LSSJ.GetBuffId(), 360000);
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraProj"), 0, 0, player.whoAmI);
+                Transformations.DoTransform(player, Transformations.LSSJ, DBZMOD.instance, false);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
         }

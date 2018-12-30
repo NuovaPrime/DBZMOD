@@ -55,6 +55,7 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
