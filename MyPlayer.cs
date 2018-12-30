@@ -638,8 +638,6 @@ namespace DBZMOD
 
             HandlePowerWishMultipliers();
 
-            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
-
             // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
             if (IsPlayerImmobilized() && IsFlying)
             {
@@ -2592,6 +2590,11 @@ namespace DBZMOD
                     NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
                 }
             }
+        }
+
+        public void HandlePowerWishPlayerHealth()
+        {
+            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
         }
 
         public Texture2D Hair;
