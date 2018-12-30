@@ -2673,6 +2673,18 @@ namespace DBZMOD
             }
         }
 
+        public override void UpdateBadLifeRegen()
+        {
+            base.UpdateBadLifeRegen();
+
+            HandlePowerWishPlayerHealth();
+        }
+
+        public void HandlePowerWishPlayerHealth()
+        {
+            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
+        }
+
         public Texture2D Hair;
 
         public override void PreUpdate()
