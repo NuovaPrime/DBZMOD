@@ -76,6 +76,7 @@ namespace DBZMOD.Projectiles
                 {
                     // fire the laser!
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
+                                        
 
                     // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
                     MyProjectile.ai[1] = MinimumFireFrames;

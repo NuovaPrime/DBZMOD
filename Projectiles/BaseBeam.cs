@@ -170,7 +170,7 @@ namespace DBZMOD.Projectiles
         // the length of a "step" of the body, defined loosely as the body's Y length minus an arbitrary cluster of pixels to overlap cleanly.
         public float StepLength()
         {
-            return BeamSize.Y;
+            return BeamSize.Y - 1;
         }
 
         public override void SetDefaults()
@@ -209,7 +209,7 @@ namespace DBZMOD.Projectiles
             spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(TailSize.X * .5f, TailSize.Y * .5f), 1f, 0, 0f);
                         
             // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
-            for (float i = 0; i < Distance - StepLength(); i += StepLength())
+            for (float i = -1f; i < Distance - StepLength(); i += StepLength())
             {
                 Vector2 origin = TailPositionEnd() + i * projectile.velocity;
                 
