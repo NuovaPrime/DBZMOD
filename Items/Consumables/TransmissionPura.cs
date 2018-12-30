@@ -44,7 +44,8 @@ namespace DBZMOD.Items.Consumables
 
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).IsInstantTransmission3Unlocked)
+            // no if book 3 is unlocked, no if book 2 isn't read yet.
+            if (MyPlayer.ModPlayer(player).IsInstantTransmission3Unlocked || !MyPlayer.ModPlayer(player).IsInstantTransmission2Unlocked)
             {
                 return false;
             }

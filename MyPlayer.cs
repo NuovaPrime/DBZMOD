@@ -302,7 +302,7 @@ namespace DBZMOD
             // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
             // I'm not sure why worldgen doesn't always work, but this makes it recover from any issues it might have.
             DBZWorld.DoDragonBallCleanupCheck();
-        }        
+        }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
@@ -683,7 +683,7 @@ namespace DBZMOD
         private void HandleOverloadCounters()
         {
             // clamp overload current values to 0/max
-            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));            
+            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));
 
             // does the player have the legendary trait
             if (IsPlayerLegendary())
@@ -795,7 +795,7 @@ namespace DBZMOD
             {
                 float defenseMultiplier = 1f - (KaiokenLevel * 0.15f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
-            }   
+            }
         }
 
         public void ThrottleKi()
@@ -1313,7 +1313,7 @@ namespace DBZMOD
             } else
             {
                 KiCurrent = (float)tag.Get<int>("KiCurrent");
-            }            
+            }
             RageCurrent = tag.Get<int>("RageCurrent");
             KiChargeRate = tag.Get<int>("KiRegenRate");
             KiEssence1 = tag.Get<bool>("KiEssence1");
@@ -1468,7 +1468,7 @@ namespace DBZMOD
         }
 
         public void HandleKaioken()
-        {      
+        {
             bool canIncreaseKaiokenLevel = false;
             if (KaiokenKey.JustPressed)
             {
@@ -1493,7 +1493,7 @@ namespace DBZMOD
                 {
                     KaiokenLevel--;
                 }
-            }            
+            }
         }
 
         public void UpdateSynchronizedControls(TriggersSet triggerSet)
@@ -1631,97 +1631,172 @@ namespace DBZMOD
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
 
-            
+
             if ((WishActive || QuickKi.JustPressed) && !WishMenu.menuvisible)
             {
                 DebugUtil.Log("Should be opening wish menu...");
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
 
-            HandleInstantTransmissionFreeform();
+            // freeform instant transmission requires book 2.
+            if (IsInstantTransmission2Unlocked)
+            {
+                HandleInstantTransmissionFreeform();
+            }
         }
 
         // constants to do with instant transmission range/speed/ki cost.
         protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 0.3f;
-        protected const float INSTANT_TRANSMISSION_CAMERA_PAN_SPEED = 20f;
-        protected float InstantTransmissionBaseMaxRange
-        {
-            get
-            {
-                return Main.maxTilesX * 16f;
-            }
-        }
-
-        public float InstantTransmissionZoomDistance = 0f;
-
-        public float GetInstantTransmissionRangeSpeed()
-        {
-            return INSTANT_TRANSMISSION_CAMERA_PAN_SPEED;
-        }
+        protected const float INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST = 200f;
 
         // intensity is the camera pan power being used in this frame, distance is how far the camera is from the player using the power.
-        public float GetInstantTransmissionKiCost(float intensity, float distance)
+        public float GetInstantTransmissionFrameKiCost(float intensity, float distance)
         {
             // INSERT THINGS THAT REDUCE INSTANT TRANSMISSION COST HERE
-            return INSTANT_TRANSMISSION_FRAME_KI_COST * (float)Math.Sqrt(intensity) * (float)Math.Sqrt(distance);
+            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            return INSTANT_TRANSMISSION_FRAME_KI_COST * (float)Math.Sqrt(intensity) * (float)Math.Sqrt(distance) * costCoefficient;
         }
 
-        public float GetInstantTransmissionMaximumRange()
+        public float GetInstantTransmissionTeleportKiCost()
         {
-            return InstantTransmissionBaseMaxRange;
+            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            return INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST;
         }
 
-        //public override void ModifyZoom(ref float zoom)
-        //{
-        //    zoom = GetInstantTransmissionZoomForce();            
-        //}
+        protected const int INSTANT_TRANSMISSION_BASE_CHAOS_DURATION = 120;
+        public int GetBaseChaosDuration()
+        {
+            int durationReduction = IsInstantTransmission3Unlocked ? 2 : 1;
+            return INSTANT_TRANSMISSION_BASE_CHAOS_DURATION / durationReduction;
+        }
 
+        public int GetChaosDurationByDistance(float distance)
+        {
+            int baseDurationOfDebuff = GetBaseChaosDuration();
+            float debuffDurationCoefficient = IsInstantTransmission2Unlocked ? 0.5f : 1f;
+            int debuffIncrease = (int)Math.Ceiling(distance * debuffDurationCoefficient / 2000f);
+            
+            return baseDurationOfDebuff + debuffIncrease;
+        }
+
+        public void AddInstantTransmissionChaosDebuff(float distance) {
+            // instant transmission 3 bypasses the debuff
+            if (!IsInstantTransmission3Unlocked)
+                player.AddBuff(BuffID.ChaosState, GetChaosDurationByDistance(distance), true);
+        }
+
+        private bool isReturningFromInstantTransmission = false;
+        private float trackedInstantTransmissionKiLoss = 0f;
+        // bool handles the game feel of instant transmission by being a limbo flag.
+        // the first time you press the IT key, this is set to true, but it can be set to false in mid swing to prevent further processing on the same trigger/keypress.
+        private bool isHandlingInstantTransmissionTriggers = false;
         public void HandleInstantTransmissionFreeform()
-        {            
-            if (InstantTransmission.Current)
-            {                
-                Vector2 screenMiddle = Main.screenPosition + (new Vector2(Main.screenWidth, Main.screenHeight) / 2f);
-                Vector2 direction = Vector2.Normalize(Main.MouseWorld - screenMiddle);
-                float distance = Vector2.Distance(Main.MouseWorld, player.Center);
-                float intensity = (float)Vector2.Distance(Main.MouseWorld, screenMiddle) / 8f;
-                float kiCost = GetInstantTransmissionKiCost(intensity, distance);
-                if (HasKi(kiCost))
-                {
-                    AddKi(-kiCost);
+        {
+            // don't mess with stuff if the map is open
+            if (Main.mapFullscreen)
+                return;
 
-                    //InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
-                    //InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
-                    Main.zoomX += (direction * intensity).X;
-                    if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
-                        Main.zoomX = (Main.maxTilesX * 16f) - player.Center.X;
-                    if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
-                        Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
-                    Main.zoomY += (direction * intensity).Y;
-                    //Main.SetCameraLerp(0.999f, 120);
-                    //return InstantTransmissionZoomDistance;
-                    return;
-                }
-                
+            // sadly this routine has to run outside the checks, because we don't know if we're allowed to IT to a spot unless we do this first.
+            Vector2 screenMiddle = Main.screenPosition + (new Vector2(Main.screenWidth, Main.screenHeight) / 2f);
+            Vector2 direction = Vector2.Normalize(Main.MouseWorld - screenMiddle);
+            float distance = Vector2.Distance(Main.MouseWorld, player.Center);
+            float intensity = (float)Vector2.Distance(Main.MouseWorld, screenMiddle) / 8f;
+            float kiCost = GetInstantTransmissionFrameKiCost(intensity, distance);
+
+            // the one frame delay on handling instant transmission is to set up the limbo var.
+            if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
+                isHandlingInstantTransmissionTriggers = true;
             }
-            else if (InstantTransmission.JustReleased)
+            if (isHandlingInstantTransmissionTriggers && InstantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
             {
-                HandleInstantTransmissionExitRoutine();
-                //Main.SetCameraLerp(0.999f, 120);
-            } else
+                // player is trying to IT and has the ki to do so.
+                // set the limbo var to true until we stop handling
+                isReturningFromInstantTransmission = true;
+
+                trackedInstantTransmissionKiLoss += kiCost;
+                AddKi(-kiCost);
+
+                Main.zoomX += (direction * intensity).X;
+                if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
+                    Main.zoomX = (Main.maxTilesX * 16f) - player.Center.X;
+                if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
+                    Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
+                Main.zoomY += (direction * intensity).Y;
+            } else if (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost())))
             {
-                // Vector2 direction = Vector2.Normalize(Main.MouseWorld - Main.screenPosition);
-                // InstantTransmissionZoomDistance += GetInstantTransmissionRangeSpeed();
-                // InstantTransmissionZoomDistance = Math.Min(InstantTransmissionZoomDistance, GetInstantTransmissionMaximumRange());
-                InstantTransmissionZoomDistance = 0;
+                isReturningFromInstantTransmission = true;
+                isHandlingInstantTransmissionTriggers = false;
+                if (TryTransmission(distance))
+                {
+                    // there's no need to "return" from IT, you succeeded.
+                    // make sure we don't try to give the player back their ki
+                    trackedInstantTransmissionKiLoss = 0f;
+                }
+            } else if (isReturningFromInstantTransmission)
+            {
+                AddKi(trackedInstantTransmissionKiLoss);
+                trackedInstantTransmissionKiLoss = 0f;
+                isReturningFromInstantTransmission = false;
+                isHandlingInstantTransmissionTriggers = false;
                 Main.zoomX = 0f;
                 Main.zoomY = 0f;
             }
         }
 
-        public bool HandleInstantTransmissionExitRoutine()
+        public bool TryTransmission(float distance)
         {
+            if (!HandleInstantTransmissionExitRoutine(distance))
+            {
+                AddKi(trackedInstantTransmissionKiLoss);
+                trackedInstantTransmissionKiLoss = 0f;
+                return false;
+            }
+            else
+            {
+                AddKi(-GetInstantTransmissionTeleportKiCost());
+                return true;
+            }
+        }
+
+        public bool HandleInstantTransmissionExitRoutine(float distance)
+        {
+            // unabashedly stolen from decompiled source for rod of discord.
             // find a suitable place to IT to, reversing the camera pan direction if necessary.            
-            // for now assume failure
+            // try a normal game teleport, maybe it handles safety
+            Vector2 target;
+            target.X = (float)Main.mouseX + Main.screenPosition.X;
+            if (player.gravDir == 1f)
+            {
+                target.Y = (float)Main.mouseY + Main.screenPosition.Y - (float)player.height;
+            }
+            else
+            {
+                target.Y = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
+            }            
+            target.X -= (float)(player.width / 2);
+            if (target.X > 50f && target.X < (float)(Main.maxTilesX * 16 - 50) && target.Y > 50f && target.Y < (float)(Main.maxTilesY * 16 - 50))
+            {
+                int tileX = (int)(target.X / 16f);
+                int tileY = (int)(target.Y / 16f);
+                if ((Main.tile[tileX, tileY].wall != 87 || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
+                {
+                    player.Teleport(target, 1, 0);
+                    NetMessage.SendData(65, -1, -1, null, 0, (float)player.whoAmI, target.X, target.Y, 1, 0, 0);
+                    if (player.chaosState)
+                    {
+                        player.statLife -= player.statLife / 7;
+                        PlayerDeathReason damageSource = PlayerDeathReason.ByOther(13);
+                        if (Main.rand.Next(2) == 0)
+                        {
+                            damageSource = PlayerDeathReason.ByOther(player.Male ? 14 : 15);
+                        }
+                        player.lifeRegenCount = 0;
+                        player.lifeRegenTime = 0;
+                    }
+                    AddInstantTransmissionChaosDebuff(distance);
+                    return true;
+                }
+            }
             return false;
         }
 

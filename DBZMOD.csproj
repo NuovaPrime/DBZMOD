@@ -494,6 +494,7 @@
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
     <Compile Include="Util\DebugUtil.cs" />
+    <Compile Include="Util\InstantTransmissionMapTeleporter.cs" />
     <Compile Include="Util\SoundUtil.cs" />
     <Compile Include="Util\Transformations.cs" />
     <Compile Include="Util\ControlHelper.cs" />
