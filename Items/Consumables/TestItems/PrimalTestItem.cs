@@ -1,11 +1,12 @@
-﻿using DBZMOD.Enums;
+using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class SSJ2TestItem : ModItem
+    public class PrimalTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -25,19 +26,14 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SSJ2 Test Item");
-            Tooltip.SetDefault("Manually activates the ssj2 transformation cutscene and unlocks it.");
+            DisplayName.SetDefault("Primal Test Item");
+            Tooltip.SetDefault("Gives the primal trait");
         }
-
-
-        public override bool UseItem(Player player)
+		
+		public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).SSJ2Transformation();
-            UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
-            MyPlayer.ModPlayer(player).SSJ2Achieved = true;
-            MyPlayer.ModPlayer(player).IsTransforming = true;
+            MyPlayer.ModPlayer(player).playerTrait = "Primal";
             return true;
-
         }
     }
 }

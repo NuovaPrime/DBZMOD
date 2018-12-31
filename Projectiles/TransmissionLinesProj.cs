@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Terraria;
 using Terraria.ModLoader;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {

@@ -1,12 +1,7 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -55,6 +50,7 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];

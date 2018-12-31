@@ -29,5 +29,11 @@ namespace DBZMOD.Items.Consumables.TestItems
             DisplayName.SetDefault("Divine Test Item");
             Tooltip.SetDefault("Gives the divine trait");
         }
+		
+		public override bool UseItem(Player player)
+        {
+            MyPlayer.ModPlayer(player).playerTrait = "Divine";
+            return true;
+        }
     }
 }

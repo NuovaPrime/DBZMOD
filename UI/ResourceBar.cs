@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.UI
 {
@@ -46,12 +45,12 @@ namespace DBZMOD.UI
 			switch (stat)
 			{
 				case ResourceBarMode.KI:
-                    gradientA = new Color(0, 208, 255); // light blue
-                    gradientB = new Color(0, 80, 255); // dark blue
+                    gradientA = new Color(86, 238, 242); // light blue
+                    gradientB = new Color(53, 146, 183); // dark blue
                     break;
                 case ResourceBarMode.OVERLOAD:
-                    gradientA = new Color(1, 168, 1); //dark green
-                    gradientB = new Color(35, 237, 35); // light green
+                    gradientA = new Color(201, 255, 86); //light green
+                    gradientB = new Color(22, 147, 93); // dark green
                     break;
 
                 default:
@@ -164,36 +163,36 @@ namespace DBZMOD.UI
             switch (stat)
 			{
 				case ResourceBarMode.KI:
-                    text.SetText("Ki:" + averageKi + " / " + modplayer.OverallKiMax());
+                    text.SetText("Ki:" + averageKi + " / " + modplayer.OverallKiMax()); //a is light b is dark
                     if (modplayer.playerTrait == "Legendary")
                     {
-                        gradientA = new Color(0, 254, 0);
-                        gradientB = new Color(0, 122, 91);
+						gradientA = new Color(201, 255, 86);
+						gradientB = new Color(22, 147, 93);
                     }
                     else if (modplayer.playerTrait == "Prodigy")
                     {
-                        gradientA = new Color(0, 150, 255);
-                        gradientB = new Color(0, 20, 255);
+                        gradientA = new Color(0, 104, 249);
+                        gradientB = new Color(7, 28, 76);
                     }
                     else if (modplayer.playerTrait == "Divine")
                     {
-                        gradientA = new Color(15, 0, 24);
-                        gradientB = new Color(106, 62, 183);
+                        gradientA = new Color(163, 57, 136);
+                        gradientB = new Color(31, 0, 47);
                     }
                     else if (modplayer.playerTrait == "Primal")
                     {
-                        gradientA = new Color(198, 19, 46);
-                        gradientB = new Color(255, 151, 0);
+                        gradientA = new Color(255, 182, 0);
+                        gradientB = new Color(255, 92, 78);
                     }
-                    else if (Transformations.IsGodlike(player))
+                    else if (Transformations.IsSSJG(player))
                     {
-                        gradientA = new Color(175, 45, 63);
-                        gradientB = new Color(255, 116, 48);
+                        gradientA = new Color(255, 140, 48);
+                        gradientB = new Color(175, 45, 63);
                     }
                     else
                     {
-                        gradientA = new Color(0, 208, 255);
-                        gradientB = new Color(0, 80, 255);
+                        gradientA = new Color(86, 238, 242);
+						gradientB = new Color(53, 146, 183);
                     }
                     break;
 

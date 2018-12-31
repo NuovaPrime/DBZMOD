@@ -6,7 +6,7 @@ using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Items.DragonBalls
 {

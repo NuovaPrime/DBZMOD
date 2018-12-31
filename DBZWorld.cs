@@ -9,9 +9,9 @@ using Terraria.GameContent.Generation;
 using Terraria.ModLoader.IO;
 using System;
 using System.Linq;
-using Util;
 using DBZMOD.Items.DragonBalls;
 using Network;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {

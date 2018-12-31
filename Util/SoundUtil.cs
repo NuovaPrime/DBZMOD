@@ -1,26 +1,23 @@
 ﻿using DBZMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Util
+namespace DBZMOD.Util
 {
     public static class SoundUtil
     {
         public static uint InvalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
-        public static DBZMOD.DBZMOD _mod;
-        public static DBZMOD.DBZMOD mod
+        public static DBZMOD _mod;
+        public static DBZMOD mod
         {
             get
             {
                 if (_mod == null)
                 {
-                    _mod = DBZMOD.DBZMOD.instance;
+                    _mod = DBZMOD.instance;
                 }
 
                 return _mod;
@@ -152,11 +149,7 @@ namespace Util
             var modPlayer = player.GetModPlayer<MyPlayer>();            
             if (player.whoAmI == Main.myPlayer)
             {
-                shouldPlayAudio = modPlayer.TransformationSoundInfo.Value == null || isTransformation;
-                if (modPlayer.ChargeSoundInfo.Value != null && isTransformation)
-                {
-                    modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
-                }
+                shouldPlayAudio = modPlayer.AuraSoundInfo.Value == null || isTransformation;
                 
                 if (modPlayer.PlayerIndexWithLocalAudio != -1)
                 {
@@ -166,7 +159,7 @@ namespace Util
             else
             {
                 var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
+                shouldPlayAudio = myPlayer.AuraSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
                 if (shouldPlayAudio)
                 {
                     myPlayer.PlayerIndexWithLocalAudio = player.whoAmI;
@@ -186,8 +179,7 @@ namespace Util
                 if (player.whoAmI == Main.myPlayer)
                     continue;
                 var modPlayer = player.GetModPlayer<MyPlayer>();
-                modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
-                modPlayer.TransformationSoundInfo = KillTrackedSound(modPlayer.TransformationSoundInfo);
+                modPlayer.AuraSoundInfo = KillTrackedSound(modPlayer.AuraSoundInfo);
             }
             var myModPlayer = myPlayer.GetModPlayer<MyPlayer>();
             myModPlayer.PlayerIndexWithLocalAudio = -1;

@@ -1,16 +1,7 @@
 ﻿using DBZMOD.Items.DragonBalls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Util;
 
-namespace DBZMOD
+namespace DBZMOD.Util
 {
     // I built these as extension methods, so they require a using statement in classes that want to consume them outside of the DBZMOD namespace.
     public static class ItemHelper

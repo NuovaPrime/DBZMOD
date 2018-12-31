@@ -1,5 +1,5 @@
 ﻿﻿using System;
-using Enums;
+using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

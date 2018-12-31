@@ -1,16 +1,11 @@
-﻿using DBZMOD;
-using DBZMOD.Items.DragonBalls;
+﻿using DBZMOD.Items.DragonBalls;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Util;
 
 namespace DBZMOD.Tiles.DragonBalls
 {

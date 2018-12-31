@@ -1,7 +1,4 @@
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
-using Util;
 
 namespace DBZMOD.Buffs
 {

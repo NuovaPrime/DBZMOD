@@ -5,7 +5,7 @@ using Terraria;
 using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -62,14 +62,12 @@ namespace DBZMOD.Projectiles
             Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
             Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!player.HasBuff(Transformations.SSJ3.GetBuffId()))
-                player.AddBuff(Transformations.SSJ3.GetBuffId(), 360000);
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJ3AuraProj"), 0, 0, player.whoAmI);
+            Transformations.DoTransform(player, Transformations.SSJ3, DBZMOD.instance, false);
             MyPlayer.ModPlayer(player).IsTransforming = false;
-            SoundUtil.PlayCustomSound("Sounds/SSJAscension");
         }
     }
 }

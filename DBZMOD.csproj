@@ -120,9 +120,12 @@
     <Compile Include="Dusts\MetalDust.cs" />
     <Compile Include="Dusts\RadiantDust.cs" />
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
+    <Compile Include="Effects\Animations\Aura\AuraAnimations.cs" />
+    <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
     <Compile Include="Effects\CircleShader.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
+    <Compile Include="Enums\AuraID.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
     <Compile Include="Enums\WishSelectionID.cs" />
@@ -342,6 +345,7 @@
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="DBZWorld.cs" />
+    <Compile Include="Models\AuraAnimationInfo.cs" />
     <Compile Include="KiProjectile.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
@@ -367,18 +371,6 @@
     <Compile Include="Prefixes\TranscendedPrefix.cs" />
     <Compile Include="Prefixes\UnstablePrefix.cs" />
     <Compile Include="ProgressionSystem.cs" />
-    <Compile Include="Projectiles\Auras\AuraProjectile.cs" />
-    <Compile Include="Projectiles\Auras\BaseAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\FalseUIAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\KaiokenAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\LSSJ2AuraProj.cs" />
-    <Compile Include="Projectiles\Auras\LSSJAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SSJ1AuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SSJ2AuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SSJ3AuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SSJGAuraProj.cs" />
-    <Compile Include="Projectiles\Auras\SuperKaiokenAuraProj.cs" />
     <Compile Include="Projectiles\BaldurShell.cs" />
     <Compile Include="Projectiles\BaseBeamCharge.cs" />
     <Compile Include="Projectiles\AbstractChargeBall.cs" />
@@ -489,6 +481,7 @@
     <Compile Include="UI\WishMenu.cs" />
     <Compile Include="UI\TransMenu.cs" />
     <Compile Include="Models\BuffInfo.cs" />
+    <Compile Include="Util\AnimationHelper.cs" />
     <Compile Include="Util\DebugUtil.cs" />
     <Compile Include="Util\InstantTransmissionMapTeleporter.cs" />
     <Compile Include="Util\ProjectileUtil.cs" />
@@ -570,7 +563,6 @@
     <Content Include="Lib\ThoriumMod.dll" />
     <Content Include="Lib\Tremor.dll" />
     <Content Include="Lib\UnuBattleRods.dll" />
-    <Content Include="Projectiles\Auras\Dev\SSJSpectrumAuraProj.png" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.wav" />
     <Content Include="Sounds\DiscFire.wav" />
@@ -622,7 +614,7 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Projectiles\Auras\Patron\" />
+    <Folder Include="Effects\Animations\Transform\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>

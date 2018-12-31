@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Effects;
 using Config;
-using Util;
 using Terraria.Graphics.Effects;
 using System.IO;
 using Network;
-using Enums;
 using DBZMOD.Util;
 
 namespace DBZMOD

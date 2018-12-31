@@ -12,11 +12,12 @@ using Terraria.ID;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
 using Config;
-using Util;
-using Enums;
 using Network;
-using DBZMOD.Items.DragonBalls;
+using DBZMOD.Util;
+using DBZMOD.Models;
+using DBZMOD.Enums;
 using System.Linq;
+using DBZMOD.Effects.Animations.Aura;
 
 namespace DBZMOD
 {
@@ -121,7 +122,6 @@ namespace DBZMOD
         public float PowerWishMulti = 1f;
         public int PowerHealthBonus = 0;
 
-
         //unsorted vars
         public int drawX;
         public int drawY;
@@ -165,8 +165,7 @@ namespace DBZMOD
         public bool IsCharging;
         // bool used internally to handle managing effects
         public bool WasCharging;
-        public int ChargeSoundTimer;
-        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundInfo;
+        public int AuraSoundTimer;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -262,11 +261,26 @@ namespace DBZMOD
         public bool IsInstantTransmission1Unlocked = false;
         public bool IsInstantTransmission2Unlocked = false;
         public bool IsInstantTransmission3Unlocked = false;
-        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
+        public KeyValuePair<uint, SoundEffectInstance> AuraSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
         // useful for preventing the mod from playing too many sounds
         public int PlayerIndexWithLocalAudio = -1;
+
+        // animation helper fields
+        public int LightningFrameTimer;
+        public int TransformationFrameTimer;
+        public bool IsTransformationAnimationPlaying = false;
+
+        // animation of auras is handled as a list of Aura Info instances that get read each frame.
+        public List<AuraAnimationInfo> ActiveAuraAnimations = new List<AuraAnimationInfo>(); // initialized on startup.
+
+        // bools used to apply transformation debuffs appropriately
+        public bool IsKaioken;
+        public bool WasKaioken;
+        public bool IsTransformed;
+        public bool WasTransformed;
+
         public int MouseWorldOctant = -1;
         #endregion
 
@@ -290,7 +304,7 @@ namespace DBZMOD
             // make sure if the player is leaving with a dragon ball we spawn a new one. This might not work.
             DBZWorld.DoDragonBallCleanupCheck(player);
         }
-
+        
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
@@ -472,6 +486,11 @@ namespace DBZMOD
                 }
             }
 
+            if (LightningFrameTimer >= 15)
+            {
+                LightningFrameTimer = 0;
+            }
+
             if (!Transformations.IsPlayerTransformed(player))
             {
                 KiDrainAddition = 0;
@@ -649,7 +668,11 @@ namespace DBZMOD
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
 
-            HandleChargeVisualAndSoundEffects();
+            // Handle adding auras to the.. handler (of animations)
+            HandleAuras();
+
+            // Handle playing any sounds we're supposed to be playing for auras/charging up.
+            HandleAuraSounds();
 
             CheckPlayerForTransformationStateDebuffApplication();
 
@@ -667,9 +690,103 @@ namespace DBZMOD
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
+        }
+
+        public bool IsAuraActive(AuraID auraId)
+        {
+            return ActiveAuraAnimations.Count(x => x.ID == (int)auraId) > 0;
+        }
+
+        public void HandleAuraSounds()
+        {
+            foreach (var aura in ActiveAuraAnimations)
+            {
+                bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
+                if (shouldPlayAudio)
+                {
+                    if (AuraSoundTimer == 0)                    
+                        AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, .2f);                                            
+                    AuraSoundTimer++;
+                    if (AuraSoundTimer > aura.LoopSoundDuration)
+                        AuraSoundTimer = 0;
+                }
+            }
 
             // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
+        }
+
+        public void AddAura(AuraAnimationInfo aura)
+        {
+            if (aura.StartupSoundName != null)
+            {
+                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
+            }
+
+            if (aura.ID != (int)AuraID.Charge && IsAuraActive(AuraID.Charge))
+            {
+                RemoveAura(AuraID.Charge);
+            }
+
+            AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
+            AuraSoundTimer = 0;
+            ActiveAuraAnimations.Add(aura);
+        }
+
+        public void RemoveAura(AuraID auraId)
+        {
+            int index = -1;
+            for (int i = 0; i < ActiveAuraAnimations.Count; i++)
+            {
+                if (ActiveAuraAnimations[i].ID == (int)auraId)
+                    index = i;
+            }
+
+            if (index > -1)
+                ActiveAuraAnimations.RemoveAt(index);
+        }
+
+        // delegate responsible for the calling process actually creating a player aura when needed, and not every frame.
+        public delegate AuraAnimationInfo CreateAura(MyPlayer modPlayer);
+
+        public void HandleAuras()
+        {
+
+            // injecting kaioken auras first to see what happens
+            HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
+            HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
+            HandleAura(Transformations.IsSSJ1(player), AuraID.SSJ1, AuraAnimations.CreateSSJ1Aura);
+            HandleAura(Transformations.IsASSJ(player), AuraID.ASSJ, AuraAnimations.CreateASSJAura);
+            HandleAura(Transformations.IsUSSJ(player), AuraID.USSJ, AuraAnimations.CreateUSSJAura);
+            HandleAura(Transformations.IsSSJ2(player), AuraID.SSJ2, AuraAnimations.CreateSSJ2Aura);
+            HandleAura(Transformations.IsSSJ3(player), AuraID.SSJ3, AuraAnimations.CreateSSJ3Aura);
+            HandleAura(Transformations.IsSSJG(player), AuraID.SSJG, AuraAnimations.CreateSSJGAura);
+            HandleAura(Transformations.IsLSSJ1(player), AuraID.LSSJ, AuraAnimations.CreateLSSJAura);
+            HandleAura(Transformations.IsLSSJ2(player), AuraID.LSSJ2, AuraAnimations.CreateLSSJ2Aura);
+            HandleAura(Transformations.IsSpectrum(player), AuraID.Spectrum, AuraAnimations.CreateSpectrumAura);
+            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
+            if (ActiveAuraAnimations.Count == 0)
+                HandleAura(IsCharging, AuraID.Charge, AuraAnimations.CreateChargeAura);
+
+            // a special handler for removing the charge aura when we're no longer charging
+            if (!IsCharging && IsAuraActive(AuraID.Charge))
+            {
+                RemoveAura(AuraID.Charge);
+            }
+        }
+
+        public void HandleAura(bool condition, AuraID auraId, CreateAura AuraDelegate)
+        {
+            if (condition)
+            {
+                if (!IsAuraActive(auraId))
+                    AddAura(AuraDelegate(this));
+            }
+            else
+            {
+                if (IsAuraActive(auraId))
+                    RemoveAura(auraId);
+            }
         }
 
         public bool AllDragonBallsNearby()
@@ -1106,7 +1223,7 @@ namespace DBZMOD
         public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (Transformations.IsGodlike(player))
+            if (Transformations.IsSSJG(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
@@ -1942,45 +2059,6 @@ namespace DBZMOD
             }
         }
 
-        public void HandleChargeVisualAndSoundEffects()
-        {
-            // sound effects during rapid flight or while charging are the same.
-            if (IsCharging)
-            {
-                // check to see if an aura sound is playing and skip this if it would overlay.
-                // this handles killing other player's sounds if the local player has started any.
-                bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);
-
-                if (shouldPlaySound)
-                {
-                    ChargeSoundTimer++;
-                    if (ChargeSoundTimer > 22)
-                    {
-                        ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .4f);
-                        ChargeSoundTimer = 0;
-                    }
-                }
-                else
-                {
-                    // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
-                    ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
-                }
-            } else
-            {
-                // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
-                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
-            }
-
-            if (IsCharging && !WasCharging)
-            {
-                if (!Transformations.IsPlayerTransformed(player))
-                {
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
-                }
-                SoundUtil.PlayCustomSound("Sounds/EnergyChargeStart", player, .7f);
-            }
-        }
-
         public MyPlayer() : base()
         {
         }
@@ -2261,30 +2339,6 @@ namespace DBZMOD
             return true;
         }
 
-        public void SSJDustAura()
-        {
-            const float AURAWIDTH = 3.0f;
-
-            for (int i = 0; i < 20; i++)
-            {
-                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
-                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
-
-                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 87, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
-
-                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
-                {
-                    tDust.scale *= 0.75f;
-                }
-
-                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
-                dir.Normalize();
-
-                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
-                tDust.noGravity = true;
-            }
-        }
-
         public void FrostAura()
         {
             const float AURAWIDTH = 2f;
@@ -2377,39 +2431,6 @@ namespace DBZMOD
             items.Add(item8);
         }
 
-        public int LightningFrameTimer;
-        public static readonly PlayerLayer LightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
-        {
-            Mod mod = DBZMOD.instance;
-            if (drawInfo.shadow != 0f)
-            {
-                return;
-            }
-            Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.HasBuff(Transformations.SSJ2.GetBuffId()))
-            {
-                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
-            }
-            if (drawPlayer.HasBuff(Transformations.LSSJ.GetBuffId()) || drawPlayer.HasBuff(Transformations.LSSJ2.GetBuffId()))
-            {
-                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
-            }
-            if (drawPlayer.HasBuff(Transformations.SSJ3.GetBuffId()))
-            {
-                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
-            }
-            if ((Transformations.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().KaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
-            {
-                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
-            }
-        });
-
-
-        // bools used to apply transformation debuffs appropriately
-        public bool IsKaioken;
-        public bool WasKaioken;
-        public bool IsTransformed;
-        public bool WasTransformed;        
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
             if (!DebugUtil.isDebug)
@@ -2431,175 +2452,32 @@ namespace DBZMOD
                 }
             }
         }
-
-        public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate(PlayerDrawInfo drawInfo) {
-
-            Player drawPlayer = drawInfo.drawPlayer;
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            Mod mod = DBZMOD.instance;
-            if (drawInfo.shadow != 0f)
-            {
-                return;
-            }
-
-            Point closestLocation = new Point(-1, -1);
-            float closestDistance = float.MaxValue;
-            for(int i = 0; i < 7; i++)
-            {
-                var location = DBZWorld.GetWorld().DragonBallLocations[i];
-                if (location == new Point(-1, -1))
-                    continue;
-                var coordVector = location.ToVector2() * 16f;
-                var distance = Vector2.Distance(coordVector, drawPlayer.Center + Vector2.UnitY * -120f);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestLocation = location;
-                }
-            }
-
-            Vector2 radarAngleVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
-            float radarAngle = radarAngleVector.ToRotation();
-
-            // player is too close to the dragon ball.
-            if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 1280f : (modPlayer.IsHoldingDragonRadarMk2 ? 640f : 320f)))
-            {
-                radarAngle += (float)(Main.time % 59) * 6f;
-            }
-            radarAngle += MathHelper.ToRadians(radarAngle) - drawPlayer.fullRotation;
-            var yOffset = -120;
-            Main.playerDrawData.Add(DragonRadarDrawData(drawInfo, "Items/DragonBalls/DragonRadarPointer", yOffset, radarAngle - 1.57f, closestDistance, closestLocation.ToVector2() * 16f));
-
-        });
-
-        public static DrawData DragonRadarDrawData(PlayerDrawInfo drawInfo, string dragonRadarSprite, int yOffset, float angleInRadians, float distance, Vector2 location)
-        {   
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            float radarArrowScale = (modPlayer.IsHoldingDragonRadarMk1 ? 1f : (modPlayer.IsHoldingDragonRadarMk2 ? 1.25f : 1.5f));
-            Texture2D texture = mod.GetTexture(dragonRadarSprite);
-            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-            int drawY = (int)(drawInfo.position.Y + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, angleInRadians, new Vector2(texture.Width / 2f, texture.Height / 2f), radarArrowScale, SpriteEffects.None, 0);
-        }
-
-        public int TransformationFrameTimer;
-        public bool IsTransformationAnimationPlaying = false;
-        public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            Mod mod = DBZMOD.instance;
-            if (drawInfo.shadow != 0f)
-            {
-                return;
-            }
-            if (!modPlayer.IsTransformationAnimationPlaying)
-            {
-                modPlayer.TransformationFrameTimer = 0;
-                return;
-            }
-
-            modPlayer.TransformationFrameTimer++;
-
-            bool isAnyAnimationPlaying = false;
-            // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (Transformations.IsSSJ(drawPlayer) && !Transformations.IsGodlike(drawPlayer) && !Transformations.IsSSJ3(drawPlayer))
-            {
-                var frameCounterLimit = 4;
-                var numberOfFrames = 4;
-                var yOffset = -18;
-                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJTransformStart", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
-            }
-			if (Transformations.IsSSJ3(drawPlayer) && !Transformations.IsGodlike(drawPlayer))
-            {
-				var frameCounterLimit = 4;
-                var numberOfFrames = 4;
-                var yOffset = -18;
-				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJ3TransformStart", frameCounterLimit, numberOfFrames, yOffset));
-				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
-            }
-            if (Transformations.IsGodlike(drawPlayer))
-            {
-                var frameCounterLimit = 6;
-                var numberOfFrames = 6;
-                var yOffset = 35;
-                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJGTransformStart", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
-            }
-            /*if (Transformations.IsLSSJ(drawPlayer))
-            {
-				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/LSSJWhateverHere", frameCounterLimit, numberOfFrames, yOffset));
-				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
-            }*/
-            if (Transformations.IsSpectrum(drawPlayer))
-            {
-                var frameCounterLimit = 4;
-                var numberOfFrames = 7;
-                var yOffset = -18;
-                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Projectiles/SSJSPECTRUMTransformStart", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
-            }
-            
-            // if we made it this far, we don't want to get stuck in a transformation animation state just because one doesn't exist
-            // cancel it so we can move on and show auras.
-            if (!isAnyAnimationPlaying)
-            {
-                modPlayer.IsTransformationAnimationPlaying = false;
-            }
-        });
-
-        public static DrawData TransformationAnimationDrawData(PlayerDrawInfo drawInfo, string transformationSpriteSheet, int frameCounterLimit, int numberOfFrames, int yOffset)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = modPlayer.TransformationFrameTimer / frameCounterLimit;
-            Texture2D texture = mod.GetTexture(transformationSpriteSheet);
-            int frameSize = texture.Height / numberOfFrames;
-            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-            int drawY = (int)(drawInfo.position.Y + frameSize + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-            // we've hit the frame limit, so kill the animation
-            if (frame == numberOfFrames)
-            {
-                modPlayer.IsTransformationAnimationPlaying = false;
-            }
-            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-        }
-
-        public static DrawData LightningEffectDrawData(PlayerDrawInfo drawInfo, string lightningTexture)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = modPlayer.LightningFrameTimer / 5;
-            Texture2D texture = mod.GetTexture(lightningTexture);
-            int frameSize = texture.Height / 3;
-            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-            int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-        }
+        
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             //handle lightning effects
-            LightningEffects.visible = true;
-            layers.Add(LightningEffects);
+            AnimationHelper.LightningEffects.visible = true;
+            layers.Add(AnimationHelper.LightningEffects);
 
             // handle transformation animations
-            TransformationEffects.visible = true;
-            layers.Add(TransformationEffects);
+            AnimationHelper.TransformationEffects.visible = true;
+            layers.Add(AnimationHelper.TransformationEffects);
 
             // handle dragon radar drawing
             if (IsHoldingDragonRadarMk1 || IsHoldingDragonRadarMk2 || IsHoldingDragonRadarMk3)
             {
-                DragonRadarEffects.visible = true;
-                layers.Add(DragonRadarEffects);
-            } else
+                AnimationHelper.DragonRadarEffects.visible = true;
+                layers.Add(AnimationHelper.DragonRadarEffects);
+            }
+
+            foreach (var aura in ActiveAuraAnimations.OrderBy(x => x.Priority))
             {
-                DragonRadarEffects.visible = false;
+                var auraEffect = AnimationHelper.AuraEffect(aura, IsCharging, KaiokenLevel);
+                auraEffect.visible = true;
+                // capture the back layer index, which should always exist before the hook fires.
+                var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
+                layers.Insert(index, auraEffect);
             }
 
             // handle SSJ hair/etc.
@@ -2713,7 +2591,7 @@ namespace DBZMOD
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.SPECTRUM.GetBuffId()))
+                    else if (player.HasBuff(Transformations.Spectrum.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }

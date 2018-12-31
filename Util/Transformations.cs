@@ -1,8 +1,7 @@
 ﻿using Buffs;
 using DBZMOD;
-using DBZMOD.Projectiles.Auras;
-using DBZMOD.Projectiles.Auras.Dev;
-using Enums;
+using DBZMOD.Enums;
+using DBZMOD.Models;
 using Microsoft.Xna.Framework;
 using Network;
 using System;
@@ -12,7 +11,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Util
+namespace DBZMOD.Util
 {
     // class for helping out with all the buff integers, lists of buffs in order, presence of buffs/abstraction
     public static class Transformations
@@ -26,7 +25,7 @@ namespace Util
             {
                 if (_modInstance == null)
                 {
-                    _modInstance = DBZMOD.DBZMOD.instance;
+                    _modInstance = DBZMOD.instance;
                 }
                 return _modInstance;
             }
@@ -62,7 +61,7 @@ namespace Util
             _buffInfoDict[SuperKaioken.BuffKeyName] = SuperKaioken;
             _buffInfoDict[KaiokenFatigue.BuffKeyName] = KaiokenFatigue;
             _buffInfoDict[TransformationExhaustion.BuffKeyName] = TransformationExhaustion;
-            _buffInfoDict[SPECTRUM.BuffKeyName] = SPECTRUM;
+            _buffInfoDict[Spectrum.BuffKeyName] = Spectrum;
         }
 
         // the following are cached info classes that get passed around for all sorts of things.
@@ -72,10 +71,7 @@ namespace Util
             get
             {
                 if (_SSJ1 == null)
-                {
-                    _SSJ1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.SSJ1, 0.6f, "Sounds/SSJAscension",
-                        "Super Saiyan 1", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
-                }
+                    _SSJ1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.SSJ1, "Super Saiyan 1", DefaultTransformationTextColor);
                 return _SSJ1;
             }
         }
@@ -86,10 +82,7 @@ namespace Util
             get
             {
                 if (_SSJ2 == null)
-                {
-                    _SSJ2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.SSJ2, 0.7f, "Sounds/SSJAscension",
-                         "Super Saiyan 2", DefaultTransformationTextColor, new Type[] { typeof(SSJ2AuraProj) }, new string[] { "SSJ2AuraProj" });
-                }
+                    _SSJ2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.SSJ2, "Super Saiyan 2", DefaultTransformationTextColor);
                 return _SSJ2;
             }
         }
@@ -100,10 +93,7 @@ namespace Util
             get
             {
                 if (_SSJ3 == null)
-                {
-                    _SSJ3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.SSJ3, 0.7f, "Sounds/SSJAscension",
-                         "Super Saiyan 3", DefaultTransformationTextColor, new Type[] { typeof(SSJ3AuraProj) }, new string[] { "SSJ3AuraProj" });
-                }
+                    _SSJ3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.SSJ3, "Super Saiyan 3", DefaultTransformationTextColor);
                 return _SSJ3;
             }
         }
@@ -114,10 +104,7 @@ namespace Util
             get
             {
                 if (_SSJG == null)
-                {
-                    _SSJG = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.SSJG, 0.7f, "Sounds/SSJAscension",
-                         "Super Saiyan God", DefaultTransformationTextColor, new Type[] { typeof(SSJGAuraProj) }, new string[] { "SSJGAuraProj" });
-                }
+                    _SSJG = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.SSJG, "Super Saiyan God", DefaultTransformationTextColor);
                 return _SSJG;
             }
         }
@@ -128,10 +115,7 @@ namespace Util
             get
             {
                 if (_SSJB == null)
-                {
-                    _SSJB = new BuffInfo(MenuSelectionID.SSJB, BuffKeyNames.SSJB, 0.7f, "Sounds/SSJAscension",
-                         null, DefaultTransformationTextColor, new Type[] { }, new string[] { });
-                }
+                    _SSJB = new BuffInfo(MenuSelectionID.SSJB, BuffKeyNames.SSJB, null, DefaultTransformationTextColor);
                 return _SSJB;
             }
         }
@@ -142,10 +126,7 @@ namespace Util
             get
             {
                 if (_LSSJ == null)
-                {
-                    _LSSJ = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.LSSJ, 0.7f, "Sounds/SSJAscension",
-                         "Legendary Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(LSSJAuraProj) }, new string[] { "LSSJAuraProj" });
-                }
+                    _LSSJ = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.LSSJ, "Legendary Super Saiyan", DefaultTransformationTextColor);
                 return _LSSJ;
             }
         }
@@ -156,10 +137,7 @@ namespace Util
             get
             {
                 if (_LSSJ2 == null)
-                {
-                    _LSSJ2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.LSSJ2, 0.7f, "Sounds/SSJAscension",
-                         "Legendary Super Saiyan 2", DefaultTransformationTextColor, new Type[] { typeof(LSSJ2AuraProj) }, new string[] { "LSSJ2AuraProj" });
-                }
+                    _LSSJ2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.LSSJ2, "Legendary Super Saiyan 2", DefaultTransformationTextColor);
                 return _LSSJ2;
             }
         }
@@ -170,10 +148,7 @@ namespace Util
             get
             {
                 if (_ASSJ == null)
-                {
-                    _ASSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ASSJ, 1.0f, "Sounds/SSJAscension",
-                         "Ascended Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
-                }
+                    _ASSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ASSJ, "Ascended Super Saiyan", DefaultTransformationTextColor);
                 return _ASSJ;
             }
         }
@@ -184,10 +159,7 @@ namespace Util
             get
             {
                 if (_USSJ == null)
-                {
-                    _USSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.USSJ, 0.7f, "Sounds/SSJAscension",
-                         "Ultra Super Saiyan", DefaultTransformationTextColor, new Type[] { typeof(SSJ1AuraProj) }, new string[] { "SSJ1AuraProj" });
-                }
+                    _USSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.USSJ, "Ultra Super Saiyan", DefaultTransformationTextColor);
                 return _USSJ;
             }
         }
@@ -198,10 +170,7 @@ namespace Util
             get
             {
                 if (_Kaioken == null)
-                {
-                    _Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.Kaioken, 0.5f, "Sounds/KaioAuraStart",
-                         null, DefaultTransformationTextColor, new Type[] { typeof(KaiokenAuraProj) }, new string[] { "KaiokenAuraProj" });
-                }
+                    _Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.Kaioken, null, DefaultTransformationTextColor);
                 return _Kaioken;
             }
         }
@@ -213,10 +182,7 @@ namespace Util
             get
             {
                 if (_SuperKaioken == null)
-                {
-                    _SuperKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SuperKaioken, 0.5f, "Sounds/KaioAuraStart",
-                         null, DefaultTransformationTextColor, new Type[] { typeof(SuperKaiokenAuraProj) }, new string[] { "SuperKaiokenAuraProj" });
-                }
+                    _SuperKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SuperKaioken, null, DefaultTransformationTextColor);
                 return _SuperKaioken;
             }
         }
@@ -228,10 +194,7 @@ namespace Util
             get
             {
                 if (_KaiokenFatigue == null)
-                {
-                    _KaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.KaiokenFatigue, 0.0f, null,
-                         null, DefaultTransformationTextColor, new Type[] { }, new string[] { });
-                }
+                    _KaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.KaiokenFatigue, null, DefaultTransformationTextColor);
                 return _KaiokenFatigue;
             }
         }
@@ -241,24 +204,18 @@ namespace Util
             get
             {
                 if (_TransformationExhaustion == null)
-                {
-                    _TransformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.TransformationExhaustion, 0.0f, null,
-                         null, DefaultTransformationTextColor, new Type[] { }, new string[] { });
-                }
+                    _TransformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.TransformationExhaustion, null, DefaultTransformationTextColor);
                 return _TransformationExhaustion;
             }
         }
-        public static BuffInfo _SPECTRUM;
-        public static BuffInfo SPECTRUM
+        public static BuffInfo _Spectrum;
+        public static BuffInfo Spectrum
         {
             get
             {
-                if (_SPECTRUM == null)
-                {
-                    _SPECTRUM = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.Spectrum, 0.7f, "Sounds/SSJAscension",
-                         "Super Saiyan Spectrum", DefaultTransformationTextColor, new Type[] { typeof(SSJSpectrumAuraProj) }, new string[] { "SSJSpectrumAuraProj" });
-                }
-                return _SPECTRUM;
+                if (_Spectrum == null)
+                    _Spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.Spectrum, "Super Saiyan Spectrum", DefaultTransformationTextColor);
+                return _Spectrum;
             }
         }
 
@@ -370,13 +327,13 @@ namespace Util
         // FAIRY special state, whether the player is in Nuova's Dev form, SPECTRUM, which is fabulous.
         public static bool IsSpectrum(Player player)
         {
-            return player.HasBuff(SPECTRUM.GetBuffId());
+            return player.HasBuff(Spectrum.GetBuffId());
         }
 
         // FAIRY special state, whether the player is in Nuova's Dev form, SPECTRUM, which is fabulous.
         public static bool IsSpectrum(BuffInfo buff)
         {
-            return SPECTRUM.GetBuffId() == buff.GetBuffId();
+            return Spectrum.GetBuffId() == buff.GetBuffId();
         }
 
         // whether the buff ID is one of the Kaioken states
@@ -404,13 +361,13 @@ namespace Util
         // a bool for whether the player is in a state other than Kaioken (a form)
         public static bool IsAnythingOtherThanKaioken(BuffInfo buff)
         {
-            return IsLSSJ(buff) || IsSSJ(buff) || IsGodlikeBuff(buff) || IsDevBuffed(buff) || IsAscended(buff);
+            return IsLSSJ(buff) || IsSSJ(buff) || IsSSJG(buff) || IsDevBuffed(buff) || IsAscended(buff);
         }
 
         // a bool for whether the player is in a state other than Kaioken (a form)
         public static bool IsAnythingOtherThanKaioken(Player player)
         {
-            return IsLSSJ(player) || IsSSJ(player) || IsGodlike(player) || IsDevBuffed(player) || IsAscended(player);
+            return IsLSSJ(player) || IsSSJ(player) || IsSSJG(player) || IsDevBuffed(player) || IsAscended(player);
         }
 
         // whether the buff ID is one of the legendary states; caution, this includes SSJ1 for "Next/Previous" behavior reasons.
@@ -425,14 +382,26 @@ namespace Util
             return PlayerHasBuffIn(player, LegendaryBuffs());
         }
 
+        // whether the player is in legendary 1, specifically
+        public static bool IsLSSJ1(Player player)
+        {
+            return player.HasBuff(LSSJ.GetBuffId());
+        }
+
+        // whether the player is in legendary 2, specifically
+        public static bool IsLSSJ2(Player player)
+        {
+            return player.HasBuff(LSSJ2.GetBuffId());
+        }
+
         // whether the buff is SSJG, specifically
-        public static bool IsGodlikeBuff(BuffInfo buff)
+        public static bool IsSSJG(BuffInfo buff)
         {
             return SSJG.GetBuffId() == buff.GetBuffId();
         }
 
         // whether the player is in SSJG, specifically, for now.
-        public static bool IsGodlike(Player player)
+        public static bool IsSSJG(Player player)
         {
             return player.HasBuff(SSJG.GetBuffId());
         }
@@ -507,7 +476,7 @@ namespace Util
                 return IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Kaioken || buff == SuperKaioken)
                 return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
-            if (buff == SPECTRUM)
+            if (buff == Spectrum)
                 return player.name == "Nuova";
             return false;
         }
@@ -550,48 +519,12 @@ namespace Util
         {
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
 
-            foreach (Type auraType in buff.AuraProjectileTypes)
-            {
-                FindAndKillPlayerAurasOfType(player, auraType);
-            }
-
             player.ClearBuff(buff.GetBuffId());
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
             {                
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, 0);                
             }
-        }
-
-        // enforces the prevention of superimposed auras on a given player
-        public static void FindAndKillPlayerAurasOfType(Player player, Type auraType)
-        {
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (Main.player[proj.owner] != player)
-                    continue;
-
-                if (proj.modProjectile == null)
-                    continue;
-
-                // if it's an instance of an aura projectile kill it.
-                if (proj.modProjectile.GetType().Equals(auraType))
-                    proj.Kill();
-            }
-        }
-
-        // create the projectile(s) representing the transformation aura.
-        public static void DoProjectileForBuff(Player player, List<BuffInfo> buffs)
-        {
-            Comparison<BuffInfo> buffCompare = delegate (BuffInfo a, BuffInfo b)
-            {
-                return a.BuffKeyName.Equals("SuperKaiokenAuraProj") ? - 1 : a.BuffKeyName.CompareTo(b.BuffKeyName);
-            };
-            buffs.Sort(buffCompare);
-            foreach (string projectileKey in buffs.SelectMany(x => x.ProjectileKeys))
-            {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, DBZMOD.DBZMOD.instance.ProjectileType(projectileKey), 0, 0, player.whoAmI);
-            }            
         }
 
         // actually handle transforming. Takes quite a few steps to clean up after itself and do all the things.
@@ -647,7 +580,10 @@ namespace Util
 
             // don't kill sounds if the only thing being removed is kaioken.
             if (!isOnlyRemovingKaioken)
-                modPlayer.TransformationSoundInfo = SoundUtil.KillTrackedSound(modPlayer.TransformationSoundInfo); 
+            {
+                modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo);
+                modPlayer.AuraSoundTimer = 0;
+            }
             
             modPlayer.IsTransforming = false;
         }
@@ -660,10 +596,6 @@ namespace Util
             if (!string.IsNullOrEmpty(buff.TransformationText))
                 CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
 
-            // if the buff needs dust aura, do that.
-            if (SSJBuffs().Contains(buff) || buff == ASSJ || buff == USSJ)
-                player.GetModPlayer<MyPlayer>().SSJDustAura();
-
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
             }
@@ -672,21 +604,8 @@ namespace Util
             bool isKaioken = IsKaioken(buff);
             bool isPlayerCurrentlyTransformed = IsAnythingOtherThanKaioken(player);
 
-            if (isKaioken && isPlayerCurrentlyTransformed)
-            {
-                List<BuffInfo> buffList = new List<BuffInfo> { buff, SuperKaioken };
-                DoProjectileForBuff(player, buffList);
-            } else
-            {
-                // create the projectile starter if applicable.
-                DoProjectileForBuff(player, new List<BuffInfo> { buff });
-            }
-
             // start the transformation animation, if one exists. This auto cancels if nothing is there to play.
             player.GetModPlayer<MyPlayer>().IsTransformationAnimationPlaying = true;
-
-            if (buff.SoundKey != null)
-                SoundUtil.PlayCustomSound(buff.SoundKey, player, buff.Volume);
         }
 
         // return the first located transformation of a given player. Assumes there should only ever be one, returns the first it finds.
