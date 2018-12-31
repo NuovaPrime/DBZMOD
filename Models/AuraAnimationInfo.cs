@@ -21,7 +21,7 @@ namespace DBZMOD.Models
         public int FrameTimer = 0;
         public int Owner;
         public int Priority;
-        public bool IsAdditiveBlend;
+        public BlendState BlendState;
         public string StartupSoundName;
         public string LoopSoundName;
         public int LoopSoundDuration;
@@ -38,13 +38,13 @@ namespace DBZMOD.Models
         {
         }
 
-        public AuraAnimationInfo(AuraID id, MyPlayer owner, string spriteName, int frames, int frameTimer, bool isBlendStateWeird, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
+        public AuraAnimationInfo(AuraID id, MyPlayer owner, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
             ID = (int)id;
             AuraAnimationSpriteName = spriteName;
             Frames = frames;
             FrameTimerLimit = frameTimer;
-            IsAdditiveBlend = isBlendStateWeird;
+            BlendState = blendState;
             StartupSoundName = startupSound;
             LoopSoundName = loopSoundName;
             LoopSoundDuration = loopSoundDuration;
