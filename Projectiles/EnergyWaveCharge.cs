@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace DBZMOD.Projectiles
 {
@@ -49,5 +50,5 @@ namespace DBZMOD.Projectiles
 
             base.SetDefaults();
         }
-	}
+    }
 }

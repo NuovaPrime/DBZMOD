@@ -203,11 +203,10 @@ namespace DBZMOD.Projectiles
         {
             projectile.width = ChargeSize.X;
             projectile.height = ChargeSize.Y;
-            projectile.friendly = false;
+            projectile.friendly = true;
             projectile.hostile = false;
             projectile.penetrate = -1;
-            projectile.tileCollide = false;
-            projectile.hide = false;
+            projectile.tileCollide = false;   
         }
 
         public float GetTransparency()
@@ -482,64 +481,6 @@ namespace DBZMOD.Projectiles
         public override bool ShouldUpdatePosition()
         {
             return false;
-        }
-
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            damage = 0;
-            crit = false;
-        }
-
-        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
-        {
-            damage = 0;
-            crit = false;
-        }
-
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-        {
-            damage = 0;
-            crit = false;
-        }
-
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            return false;
-        }
-
-        public override bool CanDamage()
-        {
-            return false;
-        }
-
-        public override bool? CanHitNPC(NPC target)
-        {
-            return false;
-        }
-
-        public override bool CanHitPlayer(Player target)
-        {
-            return false;
-        }
-
-        public override bool CanHitPvp(Player target)
-        {
-            return false;
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            // base.OnHitNPC(target, damage, knockback, crit);
-        }
-
-        public override void OnHitPlayer(Player target, int damage, bool crit)
-        {
-            // base.OnHitPlayer(target, damage, crit);
-        }
-
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            // base.OnHitPvp(target, damage, crit);
         }
     }
 }
