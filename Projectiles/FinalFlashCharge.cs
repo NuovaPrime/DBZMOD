@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {

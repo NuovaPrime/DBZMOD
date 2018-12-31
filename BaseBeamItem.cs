@@ -7,7 +7,7 @@ using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {

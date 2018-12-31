@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using DBZMOD.Util;
+using DBZMOD.Projectiles;
 
 namespace DBZMOD
 {
