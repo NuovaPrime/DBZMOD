@@ -15,9 +15,8 @@ namespace DBZMOD
     {
         public override void SetDefaults()
         {
-            item.shoot = mod.ProjectileType("BaseCharge");
             item.shootSpeed = 0f;
-            item.damage = 50;
+            item.damage = 0;
             item.knockBack = 2f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item12;

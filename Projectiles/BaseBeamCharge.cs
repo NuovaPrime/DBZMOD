@@ -10,12 +10,7 @@ namespace DBZMOD.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = ChargeSize.X;
-            projectile.height = ChargeSize.Y;
-            projectile.friendly = true;
-            projectile.penetrate = -1;
-            projectile.tileCollide = false;
-            projectile.hide = false;
+            base.SetDefaults();
         }
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
