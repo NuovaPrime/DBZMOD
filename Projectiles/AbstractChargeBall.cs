@@ -125,7 +125,7 @@ namespace DBZMOD.Projectiles
         {
             get
             {
-                return (float)Math.Sqrt(Math.Pow(ChargeSize.X, 2) + Math.Pow(ChargeSize.Y, 2));
+                return (ChargeSize.Y / 2f) + 10f;
             }
         }
 
@@ -219,12 +219,6 @@ namespace DBZMOD.Projectiles
         public float GetTransparency()
         {
             return projectile.alpha / 255f;
-        }
-
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            // the ball doesn't collide anymore
-            return false;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -382,6 +376,21 @@ namespace DBZMOD.Projectiles
             }
             // weapon's correct, keep doing what you're doing.
             return true;
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPvp(Player target)
+        {
+            return false;
         }
 
         // helper field lets us limit mouse movement's impact on the charge ball rotation.

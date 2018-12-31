@@ -67,7 +67,13 @@ namespace DBZMOD.Projectiles
 
         // I'm not sure this ever needs to be changed, but we can always change it later.
         //The distance charge particle from the player center
-        protected float TailHeldDistance = 30f;
+        public float TailHeldDistance
+        {
+            get
+            {
+                return (TailSize.Y / 2f) + 10f;
+            }
+        }
 
         // Beam can't be moved when rotating the mouse, it can only stay in its original position
         public bool IsStationaryBeam = false;

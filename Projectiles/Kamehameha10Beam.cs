@@ -48,8 +48,6 @@ namespace DBZMOD.Projectiles
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
             BeamSoundKey = "Sounds/BasicBeamFire";
 
-            TailHeldDistance = 50f;
-
             IsEntityColliding = true;
 
             base.SetDefaults();
