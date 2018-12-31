@@ -84,7 +84,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             wishTextValue = "Power";
-            descTextValue = "Wish for a permanent increase in\nMaximum Health, Maximum Ki and Damage.\nWish limit = 5, Wishes left = " + modplayer.PowerWishesLeft;                
+            descTextValue = "Wish for a permanent increase in\nMaximum Health, Maximum Ki and Damage.\nWish limit = " + MyPlayer.POWER_WISH_MAXIMUM + ", Wishes left = " + modplayer.PowerWishesLeft;                
             WishSelection = WishSelectionID.Power;
             Main.PlaySound(SoundID.MenuTick);
             Initialize();
@@ -232,9 +232,7 @@ namespace DBZMOD.UI
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             Player player = Main.LocalPlayer;
-            modplayer.PowerHealthBonus += 20;
             modplayer.KiMax3 += 500;
-            modplayer.PowerWishMulti += 1.10f;
             modplayer.PowerWishesLeft -= 1;
             menuvisible = false;
             modplayer.WishActive = false;

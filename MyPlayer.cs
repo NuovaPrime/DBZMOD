@@ -115,13 +115,12 @@ namespace DBZMOD
         public float MasteryLevelFlight = 0;
 
         //Wish vars
+        public const int POWER_WISH_MAXIMUM = 5;
         public int PowerWishesLeft = 5;
         public int ImmortalityWishesLeft = 1;
         public int SkillWishesLeft = 3;
         public int AwakeningWishesLeft = 3;
         public int ImmortalityRevivesLeft = 0;
-        public float PowerWishMulti = 1f;
-        public int PowerHealthBonus = 0;
 
         //unsorted vars
         public int drawX;
@@ -386,36 +385,44 @@ namespace DBZMOD
             return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
         }
 
+        public int GetPowerWishesUsed()
+        {
+            return POWER_WISH_MAXIMUM - PowerWishesLeft;
+        }
+
+        public float PowerWishMulti()
+        {
+            // 10% per level
+            return 1f + (GetPowerWishesUsed() / 10f);
+        }
+
         public void HandlePowerWishMultipliers()
         {
-            if (PowerWishMulti > 1f)
+            player.meleeDamage *= PowerWishMulti();
+            player.rangedDamage *= PowerWishMulti();
+            player.magicDamage *= PowerWishMulti();
+            player.minionDamage *= PowerWishMulti();
+            player.thrownDamage *= PowerWishMulti();
+            KiDamage *= PowerWishMulti();
+            if (DBZMOD.instance.thoriumLoaded)
             {
-                player.meleeDamage *= PowerWishMulti;
-                player.rangedDamage *= PowerWishMulti;
-                player.magicDamage *= PowerWishMulti;
-                player.minionDamage *= PowerWishMulti;
-                player.thrownDamage *= PowerWishMulti;
-                KiDamage *= PowerWishMulti;
-                if (DBZMOD.instance.thoriumLoaded)
-                {
-                    ThoriumEffects(player);
-                }
-                if (DBZMOD.instance.tremorLoaded)
-                {
-                    TremorEffects(player);
-                }
-                if (DBZMOD.instance.enigmaLoaded)
-                {
-                    EnigmaEffects(player);
-                }
-                if (DBZMOD.instance.battlerodsLoaded)
-                {
-                    BattleRodEffects(player);
-                }
-                if (DBZMOD.instance.expandedSentriesLoaded)
-                {
-                    ExpandedSentriesEffects(player);
-                }
+                ThoriumEffects(player);
+            }
+            if (DBZMOD.instance.tremorLoaded)
+            {
+                TremorEffects(player);
+            }
+            if (DBZMOD.instance.enigmaLoaded)
+            {
+                EnigmaEffects(player);
+            }
+            if (DBZMOD.instance.battlerodsLoaded)
+            {
+                BattleRodEffects(player);
+            }
+            if (DBZMOD.instance.expandedSentriesLoaded)
+            {
+                ExpandedSentriesEffects(player);
             }
         }
 
@@ -652,8 +659,6 @@ namespace DBZMOD
             }
 
             HandleBlackFusionMultiplier();
-
-            HandlePowerWishMultipliers();
 
             // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
             if (IsPlayerImmobilized() && IsFlying)
@@ -1217,28 +1222,28 @@ namespace DBZMOD
         {
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= blackFusionIncrease;
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= blackFusionIncrease;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= PowerWishMulti;
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= PowerWishMulti;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= PowerWishMulti();
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= PowerWishMulti();
         }
 
         public void TremorEffects(Player player)
         {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= PowerWishMulti;
+            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= PowerWishMulti();
         }
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= PowerWishMulti;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= PowerWishMulti();
         }
 
         public void BattleRodEffects(Player player)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= PowerWishMulti;
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= PowerWishMulti();
         }
 
         public void ExpandedSentriesEffects(Player player)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= PowerWishMulti;
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= PowerWishMulti();
         }
 
         #endregion
@@ -1469,8 +1474,6 @@ namespace DBZMOD
             tag.Add("SkillWishesLeft", SkillWishesLeft);
             tag.Add("ImmortalityWishesLeft", ImmortalityWishesLeft);
             tag.Add("AwakeningWishesLeft", AwakeningWishesLeft);
-            tag.Add("PowerHealthBonus", PowerHealthBonus);
-            tag.Add("PowerWishMulti", PowerWishMulti);
             tag.Add("ImmortalityRevivesLeft", ImmortalityRevivesLeft);
             tag.Add("IsInstantTransmission1Unlocked", IsInstantTransmission1Unlocked);
             tag.Add("IsInstantTransmission2Unlocked", IsInstantTransmission2Unlocked);
@@ -1546,8 +1549,6 @@ namespace DBZMOD
             SkillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
             ImmortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
             AwakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
-            PowerHealthBonus = tag.ContainsKey("PowerHealthBonus") ? tag.Get<int>("PowerHealthBonus") : 0;
-            PowerWishMulti = tag.ContainsKey("PowerWishMulti") ? tag.Get<float>("PowerWishMulti") : 1f;
             ImmortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
             IsInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
             IsInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
@@ -2580,9 +2581,14 @@ namespace DBZMOD
             HandlePowerWishPlayerHealth();
         }
 
+        public override void PreUpdateBuffs()
+        {
+            HandlePowerWishMultipliers();
+        }
+
         public void HandlePowerWishPlayerHealth()
         {
-            player.statLifeMax2 = player.statLifeMax2 + PowerHealthBonus;
+            player.statLifeMax2 = player.statLifeMax2 + GetPowerWishesUsed() * 20;
         }
 
         public Texture2D Hair;

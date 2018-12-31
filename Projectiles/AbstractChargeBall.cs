@@ -206,7 +206,8 @@ namespace DBZMOD.Projectiles
         {
             projectile.width = ChargeSize.X;
             projectile.height = ChargeSize.Y;
-            projectile.friendly = true;
+            projectile.friendly = false;
+            projectile.hostile = false;
             projectile.penetrate = -1;
             projectile.tileCollide = false;
             projectile.hide = false;
