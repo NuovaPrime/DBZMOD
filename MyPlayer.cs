@@ -1657,10 +1657,12 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        KaiokenLevel++;
                         BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
                         if (Transformations.CanTransform(player, transformation))
+                        {
+                            KaiokenLevel++;
                             Transformations.DoTransform(player, transformation, mod, false);
+                        }
                     }
                 }
             } else if (IsPoweringDownOneStep())
@@ -1784,7 +1786,7 @@ namespace DBZMOD
             // most of the forms have a default light value, but charging isn't a buff. Let there be light
             if (IsCharging && !Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
             {
-                Lighting.AddLight(player.Center, 3f, 3f, 3f);
+                Lighting.AddLight(player.Center, 1.5f, 1.5f, 1.5f);
             }
 
             // calls to handle transformation or kaioken powerups per frame

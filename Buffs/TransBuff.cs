@@ -28,17 +28,17 @@ namespace DBZMOD
             KiDrainAdd(player);
             if(Transformations.IsKaioken(player) || Transformations.IsSSJG(player))
             {
-                Lighting.AddLight(player.Center + player.velocity * 8f, 1f, 0f, 0f);
+                Lighting.AddLight(player.Center + player.velocity * 8f, 1.5f, 0f, 0f);
             } else if (Transformations.IsLSSJ1(player) || Transformations.IsLSSJ2(player))
             {                
-                Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 1f, 0f);
+                Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 1.5f, 0f);
             } else if (Transformations.IsSSJ1(player) || Transformations.IsSSJ2(player) || Transformations.IsSSJ2(player) || Transformations.IsASSJ(player) || Transformations.IsUSSJ(player))
             {
-                Lighting.AddLight(player.Center + player.velocity * 8f, 1f, 1f, 0f);
+                Lighting.AddLight(player.Center + player.velocity * 8f, 1.5f, 1.5f, 0f);
             } else if (Transformations.IsSpectrum(player))
             {
                 var rainbow = Main.DiscoColor;
-                Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R, rainbow.G, rainbow.B);
+                Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 192f, rainbow.G / 192f, rainbow.B / 192f);
             }
 
             //give bonus base defense
