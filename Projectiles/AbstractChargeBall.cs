@@ -221,6 +221,12 @@ namespace DBZMOD.Projectiles
             return projectile.alpha / 255f;
         }
 
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            // the ball doesn't collide anymore
+            return false;
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             // don't draw the ball when firing.
