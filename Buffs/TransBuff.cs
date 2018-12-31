@@ -9,7 +9,6 @@ namespace DBZMOD
     {
         public float DamageMulti;
         public float SpeedMulti;
-        public float KaioLightValue;
         public float KiDrainBuffMulti;
         public float SSJLightValue;
         public int HealthDrainRate;
@@ -27,9 +26,19 @@ namespace DBZMOD
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(Transformations.IsKaioken(player))
+            if(Transformations.IsKaioken(player) || Transformations.IsSSJG(player))
             {
-                Lighting.AddLight(player.Center, KaioLightValue, 0f, 0f);
+                Lighting.AddLight(player.Center + player.velocity * 8f, 1f, 0f, 0f);
+            } else if (Transformations.IsLSSJ1(player) || Transformations.IsLSSJ2(player))
+            {                
+                Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 1f, 0f);
+            } else if (Transformations.IsSSJ1(player) || Transformations.IsSSJ2(player) || Transformations.IsSSJ2(player) || Transformations.IsASSJ(player) || Transformations.IsUSSJ(player))
+            {
+                Lighting.AddLight(player.Center + player.velocity * 8f, 1f, 1f, 0f);
+            } else if (Transformations.IsSpectrum(player))
+            {
+                var rainbow = Main.DiscoColor;
+                Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R, rainbow.G, rainbow.B);
             }
 
             //give bonus base defense

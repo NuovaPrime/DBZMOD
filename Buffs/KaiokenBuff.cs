@@ -66,7 +66,6 @@ namespace DBZMOD.Buffs
 
             DamageMulti = 1f + (0.2f * KaiokenLevel);
             SpeedMulti = 1f + (0.2f * KaiokenLevel);
-            KaioLightValue = 6f + (1f * KaiokenLevel);
             HealthDrainRate = 8 * KaiokenLevel;
             KiDrainBuffMulti = 1f + (0.2f * KaiokenLevel);
             

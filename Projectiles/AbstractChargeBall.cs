@@ -30,8 +30,6 @@ namespace DBZMOD.Projectiles
         // made to humanize some of the variables in the beam routine and make balance a bit simpler.
         public int ChargeKiDrainPerSecond = 40;
 
-        public int FireKiDrainPerSecond = 80;
-
         public float FireChargeDrainPerSecond = 1.2f;
 
         public float ChargeRatePerSecond = 1f;
