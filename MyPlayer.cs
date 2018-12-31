@@ -1655,10 +1655,13 @@ namespace DBZMOD
                     }
                 } else
                 {
-                    KaiokenLevel++;
-                    BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
-                    if (Transformations.CanTransform(player, transformation))
-                        Transformations.DoTransform(player, transformation, mod, false);
+                    if (canIncreaseKaiokenLevel)
+                    {
+                        KaiokenLevel++;
+                        BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
+                        if (Transformations.CanTransform(player, transformation))
+                            Transformations.DoTransform(player, transformation, mod, false);
+                    }
                 }
             } else if (IsPoweringDownOneStep())
             {
