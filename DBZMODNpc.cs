@@ -790,11 +790,10 @@ namespace DBZMOD
 
             if (type == NPCID.Mechanic)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Accessories.Vanity.GreenPotara>());
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.DragonBalls.DragonRadar1>());
                 shop.item[nextSlot].value = 200000;
                 nextSlot++;
             }
-
         }
     }
 

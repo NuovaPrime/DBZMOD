@@ -367,21 +367,6 @@ namespace DBZMOD.Projectiles
             return true;
         }
 
-        public override bool? CanHitNPC(NPC target)
-        {
-            return false;
-        }
-
-        public override bool CanHitPlayer(Player target)
-        {
-            return false;
-        }
-
-        public override bool CanHitPvp(Player target)
-        {
-            return false;
-        }
-
         // helper field lets us limit mouse movement's impact on the charge ball rotation.
         private Vector2 OldMouseVector = Vector2.Zero;
 
@@ -499,6 +484,24 @@ namespace DBZMOD.Projectiles
         public override bool ShouldUpdatePosition()
         {
             return false;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            damage = 0;
+        }
+
+        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+        {
+            base.ModifyHitPlayer(target, ref damage, ref crit);
+            damage = 0;
+        }
+
+        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        {
+            base.ModifyHitPvp(target, ref damage, ref crit);
+            damage = 0;
         }
     }
 }

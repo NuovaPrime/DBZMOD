@@ -237,7 +237,15 @@ namespace DBZMOD
                 }                
             }
 
-            if (m_rotationDir != Vector2.Zero)
+            if (IsPlayerUsingKiWeapon(modPlayer))
+            {
+                // we already got the lean throttle from above, and set the direction we needed to not look stupid
+                if (player.direction == 1)
+                    radRot = MathHelper.ToRadians(leanThrottle);
+                else if (player.direction == -1)
+                    radRot = MathHelper.ToRadians(-leanThrottle);
+            }
+            else if (m_rotationDir != Vector2.Zero)
             {
                 m_rotationDir.Normalize();
                 radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
@@ -255,14 +263,6 @@ namespace DBZMOD
                             radRot = MathHelper.ToRadians(-leanThrottle);
                     }
                 }
-            }
-            else if (IsPlayerUsingKiWeapon(modPlayer))
-            {
-                // we already got the lean throttle from above, and set the direction we needed to not look stupid
-                if (player.direction == 1)
-                    radRot = MathHelper.ToRadians(leanThrottle);
-                else if (player.direction == -1)
-                    radRot = MathHelper.ToRadians(-leanThrottle);
             }
 
             return radRot;

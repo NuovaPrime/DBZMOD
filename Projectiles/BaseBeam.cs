@@ -526,5 +526,22 @@ namespace DBZMOD.Projectiles
         {
             return false;
         }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+        }
+
+        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+        {
+            base.ModifyHitPlayer(target, ref damage, ref crit);
+            damage /= 2;
+        }
+
+        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        {
+            base.ModifyHitPvp(target, ref damage, ref crit);
+            damage /= 2;
+        }
     }
 }
