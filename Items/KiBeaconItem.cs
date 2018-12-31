@@ -4,12 +4,12 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items
 {
-    public class KaiTableItem : ModItem
+    public class KiBeaconItem : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kai Table");
-            Tooltip.SetDefault("'It pulses with divine pressure, it seems to entrance you.'");
+            DisplayName.SetDefault("Ki Beacon");
+            Tooltip.SetDefault("'Radiates Ki you can lock on to with Instant Transmission.'");
         }
 
         public override void SetDefaults()
@@ -25,18 +25,7 @@ namespace DBZMOD.Items
             item.consumable = true;
             item.rare = 7;
             item.value = 120000;
-            item.createTile = mod.TileType("KaiTable");
-        }
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "ZTableItem", 1);
-            recipe.AddIngredient(null, "PureKiCrystal", 15);
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 12);
-            recipe.AddIngredient(ItemID.Pearlwood, 20);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            item.createTile = mod.TileType("KiBeaconTile");
         }
     }
 }

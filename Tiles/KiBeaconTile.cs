@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace DBZMOD.Tiles
 {
-    public class KaiTable : ModTile
+    public class KiBeaconTile : ModTile
     {
         public override void SetDefaults()
         {
@@ -20,17 +20,16 @@ namespace DBZMOD.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.Width = 2;
-            TileObjectData.newTile.Height = 2;
+            TileObjectData.newTile.Width = 3;
+            TileObjectData.newTile.Height = 1;
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
             TileObjectData.newTile.Origin = new Point16(1, 0);
             TileObjectData.newTile.CoordinatePadding = 2;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Kai Table");
+            name.SetDefault("Ki Beacon");
             AddMapEntry(new Color(223, 245, 255), name);
             dustType = mod.DustType("MetalDust");
             disableSmartCursor = true;
-            adjTiles = new int[] { mod.TileType("ZTable") };
             TileObjectData.addTile(Type);
         }
 
@@ -41,7 +40,7 @@ namespace DBZMOD.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("KaiTableItem"));
+            Item.NewItem(i * 16, j * 16, 32, 16, mod.ItemType("KiBeaconItem"));
         }
     }
 }
