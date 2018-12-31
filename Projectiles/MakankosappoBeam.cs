@@ -28,7 +28,7 @@ namespace DBZMOD.Projectiles
             MaxBeamDistance = 2000f;
 
             // the speed at which the beam head travels through space
-            BeamSpeed = 15f;
+            BeamSpeed = 30f;
 
             // the type of dust to spawn when the beam is firing
             DustType = 169;
