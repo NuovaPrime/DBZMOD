@@ -1,5 +1,6 @@
 ﻿using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Enums;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -19,6 +20,7 @@ namespace DBZMOD.Models
         public int CurrentFrame = 0;
         public int FrameTimer = 0;
         public int Owner;
+        public int Priority;
         public bool IsAdditiveBlend;
         public string StartupSoundName;
         public string LoopSoundName;
@@ -36,7 +38,7 @@ namespace DBZMOD.Models
         {
         }
 
-        public AuraAnimationInfo(AuraID id, MyPlayer owner, string spriteName, int frames, int frameTimer, bool isBlendStateWeird, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate)
+        public AuraAnimationInfo(AuraID id, MyPlayer owner, string spriteName, int frames, int frameTimer, bool isBlendStateWeird, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
             ID = (int)id;
             AuraAnimationSpriteName = spriteName;
@@ -53,6 +55,7 @@ namespace DBZMOD.Models
             StartingFrames = startingFrames;
             StartingFrameCounter = 0;
             DoStartingDust = startingDustDelegate;
+            Priority = priority;
         }
 
         public Texture2D GetTexture()
@@ -150,16 +153,15 @@ namespace DBZMOD.Models
             // scale is based on kaioken level, which gets set to 0
             var baseScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (IsKaiokenAura ? -0.1f : 0f);
 
-            //// special scaling for Kaioken auras only
-            //if (Transformations.IsAnythingOtherThanKaioken(modPlayer.player) && animationInfo.IsKaiokenAura)
-            //{
-            //    return baseScale * scaleMult * 1.2f;
-            //}
-            //else
-            //{
-            //    return baseScale * scaleMult;
-            //}
-            return baseScale;
+            // special scaling for Kaioken auras only
+            if (Transformations.IsAnythingOtherThanKaioken(modPlayer.player) && IsKaiokenAura)
+            {
+                return baseScale * 1.2f;
+            }
+            else
+            {
+                return baseScale;
+            }
         }
     }
 }

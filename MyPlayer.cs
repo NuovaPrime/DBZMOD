@@ -700,12 +700,11 @@ namespace DBZMOD
                 bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
                 if (shouldPlayAudio)
                 {
+                    if (AuraSoundTimer == 0)                    
+                        AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, .2f);                                            
                     AuraSoundTimer++;
                     if (AuraSoundTimer > aura.LoopSoundDuration)
-                    {
-                        player.GetModPlayer<MyPlayer>().AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, .2f);
                         AuraSoundTimer = 0;
-                    }
                 }
             }
 
@@ -726,6 +725,7 @@ namespace DBZMOD
             }
 
             AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
+            AuraSoundTimer = 0;
             ActiveAuraAnimations.Add(aura);
         }
 
@@ -748,6 +748,9 @@ namespace DBZMOD
         public void HandleAuras()
         {
 
+            // injecting kaioken auras first to see what happens
+            HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
+            HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
             HandleAura(Transformations.IsSSJ1(player), AuraID.SSJ1, AuraAnimations.CreateSSJ1Aura);
             HandleAura(Transformations.IsASSJ(player), AuraID.ASSJ, AuraAnimations.CreateASSJAura);
             HandleAura(Transformations.IsUSSJ(player), AuraID.USSJ, AuraAnimations.CreateUSSJAura);
@@ -757,12 +760,15 @@ namespace DBZMOD
             HandleAura(Transformations.IsLSSJ1(player), AuraID.LSSJ, AuraAnimations.CreateLSSJAura);
             HandleAura(Transformations.IsLSSJ2(player), AuraID.LSSJ2, AuraAnimations.CreateLSSJ2Aura);
             HandleAura(Transformations.IsSpectrum(player), AuraID.Spectrum, AuraAnimations.CreateSpectrumAura);
-            // waiting until the end to inject kaioken inserts them *before* other crap, it's important that they go last.
-            HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
-            HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
             // save the charging aura for last, and only add it to the draw layer if no other auras are firing
             if (ActiveAuraAnimations.Count == 0)
                 HandleAura(IsCharging, AuraID.Charge, AuraAnimations.CreateChargeAura);
+
+            // a special handler for removing the charge aura when we're no longer charging
+            if (!IsCharging && IsAuraActive(AuraID.Charge))
+            {
+                RemoveAura(AuraID.Charge);
+            }
         }
 
         public void HandleAura(bool condition, AuraID auraId, CreateAura AuraDelegate)
@@ -2391,7 +2397,7 @@ namespace DBZMOD
                 layers.Add(AnimationHelper.DragonRadarEffects);
             }
 
-            foreach(var aura in ActiveAuraAnimations)
+            foreach (var aura in ActiveAuraAnimations.OrderBy(x => x.Priority))
             {
                 var auraEffect = AnimationHelper.AuraEffect(aura, IsCharging, KaiokenLevel);
                 auraEffect.visible = true;

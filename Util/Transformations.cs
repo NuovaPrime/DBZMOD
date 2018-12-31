@@ -580,7 +580,10 @@ namespace DBZMOD.Util
 
             // don't kill sounds if the only thing being removed is kaioken.
             if (!isOnlyRemovingKaioken)
-                modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo); 
+            {
+                modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo);
+                modPlayer.AuraSoundTimer = 0;
+            }
             
             modPlayer.IsTransforming = false;
         }
