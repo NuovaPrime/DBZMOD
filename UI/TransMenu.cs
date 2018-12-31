@@ -1,16 +1,10 @@
-﻿using System;
-using System.Linq;
-using DBZMOD.Buffs;
-using DBZMOD;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Enums;
-using Util;
+using DBZMOD.Enums;
+using DBZMOD.Util;
 
 namespace DBZMOD.UI
 {

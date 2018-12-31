@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
-using Util;
+using DBZMOD.Util;
 using DBZMOD.Destruction;
 
 namespace DBZMOD.Projectiles

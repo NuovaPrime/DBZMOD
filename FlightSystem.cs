@@ -76,7 +76,7 @@ namespace DBZMOD
                     SpawnFlightDust(player, boostSpeed, FlightDustType, 0f);
                 }
 
-                if (Transformations.IsSSJ(player) && !Transformations.IsGodlike(player))
+                if (Transformations.IsSSJ(player) && !Transformations.IsSSJG(player))
                 {
                     FlightDustType = 170;
                 }
@@ -84,7 +84,7 @@ namespace DBZMOD
                 {
                     FlightDustType = 107;
                 }
-                else if (Transformations.IsGodlike(player))
+                else if (Transformations.IsSSJG(player))
                 {
                     FlightDustType = 174;
                 }

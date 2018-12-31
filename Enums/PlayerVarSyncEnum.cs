@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Enums
+namespace DBZMOD.Enums
 {
     // monolith of player vars that might need syncing, making it slightly easier to sync for specific objects.
     public enum PlayerVarSyncEnum

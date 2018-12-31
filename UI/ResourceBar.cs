@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.UI
 {
@@ -185,7 +184,7 @@ namespace DBZMOD.UI
                         gradientA = new Color(198, 19, 46);
                         gradientB = new Color(255, 151, 0);
                     }
-                    else if (Transformations.IsGodlike(player))
+                    else if (Transformations.IsSSJG(player))
                     {
                         gradientA = new Color(175, 45, 63);
                         gradientB = new Color(255, 116, 48);

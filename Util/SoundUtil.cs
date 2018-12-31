@@ -149,11 +149,7 @@ namespace DBZMOD.Util
             var modPlayer = player.GetModPlayer<MyPlayer>();            
             if (player.whoAmI == Main.myPlayer)
             {
-                shouldPlayAudio = modPlayer.TransformationSoundInfo.Value == null || isTransformation;
-                if (modPlayer.ChargeSoundInfo.Value != null && isTransformation)
-                {
-                    modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
-                }
+                shouldPlayAudio = modPlayer.AuraSoundInfo.Value == null || isTransformation;
                 
                 if (modPlayer.PlayerIndexWithLocalAudio != -1)
                 {
@@ -163,7 +159,7 @@ namespace DBZMOD.Util
             else
             {
                 var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-                shouldPlayAudio = myPlayer.ChargeSoundInfo.Value == null && myPlayer.TransformationSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
+                shouldPlayAudio = myPlayer.AuraSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
                 if (shouldPlayAudio)
                 {
                     myPlayer.PlayerIndexWithLocalAudio = player.whoAmI;
@@ -183,8 +179,7 @@ namespace DBZMOD.Util
                 if (player.whoAmI == Main.myPlayer)
                     continue;
                 var modPlayer = player.GetModPlayer<MyPlayer>();
-                modPlayer.ChargeSoundInfo = KillTrackedSound(modPlayer.ChargeSoundInfo);
-                modPlayer.TransformationSoundInfo = KillTrackedSound(modPlayer.TransformationSoundInfo);
+                modPlayer.AuraSoundInfo = KillTrackedSound(modPlayer.AuraSoundInfo);
             }
             var myModPlayer = myPlayer.GetModPlayer<MyPlayer>();
             myModPlayer.PlayerIndexWithLocalAudio = -1;

@@ -1,15 +1,7 @@
 ﻿﻿using Terraria.ModLoader;
-using Terraria.World.Generation;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent.Generation;
-using Terraria.ModLoader.IO;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
-using DBZMOD;
 using Terraria;
 using System;
-using DBZMOD.Items.Accessories;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {

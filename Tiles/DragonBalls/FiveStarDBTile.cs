@@ -7,7 +7,7 @@ using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD.Tiles.DragonBalls
 {

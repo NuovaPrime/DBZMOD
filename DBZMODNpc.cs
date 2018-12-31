@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Util;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Util;
 
 namespace DBZMOD
 {

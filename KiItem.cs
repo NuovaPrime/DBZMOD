@@ -15,7 +15,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using DBZMOD;
 using System;
-using Util;
+using DBZMOD.Util;
 using Network;
 
 namespace DBZMOD

@@ -12,7 +12,7 @@ using DBZMOD.Projectiles;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using DBZMOD;
-using Util;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {

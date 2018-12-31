@@ -1,11 +1,11 @@
 ﻿using DBZMOD;
-using Enums;
+using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Util;
+using DBZMOD.Util;
 
 namespace Network
 {    

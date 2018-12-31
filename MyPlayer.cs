@@ -12,10 +12,12 @@ using Terraria.ID;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
 using Config;
-using Enums;
 using Network;
 using DBZMOD.Util;
 using DBZMOD.Models;
+using DBZMOD.Enums;
+using System.Linq;
+using DBZMOD.Effects.Animations.Aura;
 
 namespace DBZMOD
 {
@@ -120,7 +122,6 @@ namespace DBZMOD
         public float PowerWishMulti = 1f;
         public int PowerHealthBonus = 0;
 
-
         //unsorted vars
         public int drawX;
         public int drawY;
@@ -164,8 +165,7 @@ namespace DBZMOD
         public bool IsCharging;
         // bool used internally to handle managing effects
         public bool WasCharging;
-        public int ChargeSoundTimer;
-        public KeyValuePair<uint, SoundEffectInstance> ChargeSoundInfo;
+        public int AuraSoundTimer;
         public int ChargeLimitAdd;
         //public static bool RealismMode = false;
         public bool JungleMessage = false;
@@ -261,11 +261,26 @@ namespace DBZMOD
         public bool IsInstantTransmission1Unlocked = false;
         public bool IsInstantTransmission2Unlocked = false;
         public bool IsInstantTransmission3Unlocked = false;
-        public KeyValuePair<uint, SoundEffectInstance> TransformationSoundInfo;
+        public KeyValuePair<uint, SoundEffectInstance> AuraSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
         // useful for preventing the mod from playing too many sounds
         public int PlayerIndexWithLocalAudio = -1;
+
+        // animation helper fields
+        public int LightningFrameTimer;
+        public int TransformationFrameTimer;
+        public bool IsTransformationAnimationPlaying = false;
+
+        // animation of auras is handled as a list of Aura Info instances that get read each frame.
+        public List<AuraAnimationInfo> ActiveAuraAnimations = new List<AuraAnimationInfo>(); // initialized on startup.
+
+        // bools used to apply transformation debuffs appropriately
+        public bool IsKaioken;
+        public bool WasKaioken;
+        public bool IsTransformed;
+        public bool WasTransformed;
+
         #endregion
 
         #region Syncable Controls
@@ -287,7 +302,7 @@ namespace DBZMOD
             // make sure if the player is leaving with a dragon ball we spawn a new one. This might not work.
             DBZWorld.DoDragonBallCleanupCheck(player);
         }
-
+        
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
@@ -649,7 +664,11 @@ namespace DBZMOD
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
 
-            HandleChargeVisualAndSoundEffects();
+            // Handle adding auras to the.. handler (of animations)
+            HandleAuras();
+
+            // Handle playing any sounds we're supposed to be playing for auras/charging up.
+            HandleAuraSounds();
 
             CheckPlayerForTransformationStateDebuffApplication();
 
@@ -667,9 +686,97 @@ namespace DBZMOD
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
+        }
+
+        public bool IsAuraActive(AuraID auraId)
+        {
+            return ActiveAuraAnimations.Count(x => x.ID == (int)auraId) > 0;
+        }
+
+        public void HandleAuraSounds()
+        {
+            foreach (var aura in ActiveAuraAnimations)
+            {
+                bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
+                if (shouldPlayAudio)
+                {
+                    AuraSoundTimer++;
+                    if (AuraSoundTimer > aura.LoopSoundDuration)
+                    {
+                        player.GetModPlayer<MyPlayer>().AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, .2f);
+                        AuraSoundTimer = 0;
+                    }
+                }
+            }
 
             // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(TransformationSoundInfo, player.position);
+            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
+        }
+
+        public void AddAura(AuraAnimationInfo aura)
+        {
+            if (aura.StartupSoundName != null)
+            {
+                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
+            }
+
+            if (aura.ID != (int)AuraID.Charge && IsAuraActive(AuraID.Charge))
+            {
+                RemoveAura(AuraID.Charge);
+            }
+
+            AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
+            ActiveAuraAnimations.Add(aura);
+        }
+
+        public void RemoveAura(AuraID auraId)
+        {
+            int index = -1;
+            for (int i = 0; i < ActiveAuraAnimations.Count; i++)
+            {
+                if (ActiveAuraAnimations[i].ID == (int)auraId)
+                    index = i;
+            }
+
+            if (index > -1)
+                ActiveAuraAnimations.RemoveAt(index);
+        }
+
+        // delegate responsible for the calling process actually creating a player aura when needed, and not every frame.
+        public delegate AuraAnimationInfo CreateAura(MyPlayer modPlayer);
+
+        public void HandleAuras()
+        {
+
+            HandleAura(Transformations.IsSSJ1(player), AuraID.SSJ1, AuraAnimations.CreateSSJ1Aura);
+            HandleAura(Transformations.IsASSJ(player), AuraID.ASSJ, AuraAnimations.CreateASSJAura);
+            HandleAura(Transformations.IsUSSJ(player), AuraID.USSJ, AuraAnimations.CreateUSSJAura);
+            HandleAura(Transformations.IsSSJ2(player), AuraID.SSJ2, AuraAnimations.CreateSSJ2Aura);
+            HandleAura(Transformations.IsSSJ3(player), AuraID.SSJ3, AuraAnimations.CreateSSJ3Aura);
+            HandleAura(Transformations.IsSSJG(player), AuraID.SSJG, AuraAnimations.CreateSSJGAura);
+            HandleAura(Transformations.IsLSSJ1(player), AuraID.LSSJ, AuraAnimations.CreateLSSJAura);
+            HandleAura(Transformations.IsLSSJ2(player), AuraID.LSSJ2, AuraAnimations.CreateLSSJ2Aura);
+            HandleAura(Transformations.IsSpectrum(player), AuraID.Spectrum, AuraAnimations.CreateSpectrumAura);
+            // waiting until the end to inject kaioken inserts them *before* other crap, it's important that they go last.
+            HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
+            HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
+            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
+            if (ActiveAuraAnimations.Count == 0)
+                HandleAura(IsCharging, AuraID.Charge, AuraAnimations.CreateChargeAura);
+        }
+
+        public void HandleAura(bool condition, AuraID auraId, CreateAura AuraDelegate)
+        {
+            if (condition)
+            {
+                if (!IsAuraActive(auraId))
+                    AddAura(AuraDelegate(this));
+            }
+            else
+            {
+                if (IsAuraActive(auraId))
+                    RemoveAura(auraId);
+            }
         }
 
         public bool AllDragonBallsNearby()
@@ -1047,7 +1154,7 @@ namespace DBZMOD
         public Color? OriginalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (Transformations.IsGodlike(player))
+            if (Transformations.IsSSJG(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
@@ -1872,45 +1979,6 @@ namespace DBZMOD
             }
         }
 
-        public void HandleChargeVisualAndSoundEffects()
-        {
-            // sound effects during rapid flight or while charging are the same.
-            if (IsCharging)
-            {
-                // check to see if an aura sound is playing and skip this if it would overlay.
-                // this handles killing other player's sounds if the local player has started any.
-                bool shouldPlaySound = SoundUtil.ShouldPlayPlayerAudio(player, false);
-
-                if (shouldPlaySound)
-                {
-                    ChargeSoundTimer++;
-                    if (ChargeSoundTimer > 22)
-                    {
-                        ChargeSoundInfo = SoundUtil.PlayCustomSound("Sounds/EnergyCharge", player, .4f);
-                        ChargeSoundTimer = 0;
-                    }
-                }
-                else
-                {
-                    // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
-                    ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
-                }
-            } else
-            {
-                // assuming this is either the local player, or the current player monopolizing local player's audio, go ahead and term their sound.
-                ChargeSoundInfo = SoundUtil.KillTrackedSound(ChargeSoundInfo);
-            }
-
-            if (IsCharging && !WasCharging)
-            {
-                if (!Transformations.IsPlayerTransformed(player))
-                {
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaseAuraProj"), 0, 0, player.whoAmI);
-                }
-                SoundUtil.PlayCustomSound("Sounds/EnergyChargeStart", player, .7f);
-            }
-        }
-
         public MyPlayer() : base()
         {
         }
@@ -2191,30 +2259,6 @@ namespace DBZMOD
             return true;
         }
 
-        public void SSJDustAura()
-        {
-            const float AURAWIDTH = 3.0f;
-
-            for (int i = 0; i < 20; i++)
-            {
-                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
-                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
-
-                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 87, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
-
-                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
-                {
-                    tDust.scale *= 0.75f;
-                }
-
-                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
-                dir.Normalize();
-
-                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
-                tDust.noGravity = true;
-            }
-        }
-
         public void FrostAura()
         {
             const float AURAWIDTH = 2f;
@@ -2307,14 +2351,6 @@ namespace DBZMOD
             items.Add(item8);
         }
 
-        public int LightningFrameTimer;
-
-
-        // bools used to apply transformation debuffs appropriately
-        public bool IsKaioken;
-        public bool WasKaioken;
-        public bool IsTransformed;
-        public bool WasTransformed;        
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
             if (!DebugUtil.isDebug)
@@ -2336,9 +2372,6 @@ namespace DBZMOD
                 }
             }
         }
-
-        public int TransformationFrameTimer;
-        public bool IsTransformationAnimationPlaying = false;
         
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
@@ -2356,6 +2389,15 @@ namespace DBZMOD
             {
                 AnimationHelper.DragonRadarEffects.visible = true;
                 layers.Add(AnimationHelper.DragonRadarEffects);
+            }
+
+            foreach(var aura in ActiveAuraAnimations)
+            {
+                var auraEffect = AnimationHelper.AuraEffect(aura, IsCharging, KaiokenLevel);
+                auraEffect.visible = true;
+                // capture the back layer index, which should always exist before the hook fires.
+                var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
+                layers.Insert(index, auraEffect);
             }
 
             // handle SSJ hair/etc.
@@ -2469,7 +2511,7 @@ namespace DBZMOD
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.SPECTRUM.GetBuffId()))
+                    else if (player.HasBuff(Transformations.Spectrum.GetBuffId()))
                     {
                         Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }

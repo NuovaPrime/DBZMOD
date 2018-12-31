@@ -1,6 +1,6 @@
 ﻿﻿using System;
 using DBZMOD.UI;
-using Enums;
+using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
