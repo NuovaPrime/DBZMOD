@@ -1809,7 +1809,7 @@ namespace DBZMOD
             // most of the forms have a default light value, but charging isn't a buff. Let there be light
             if (IsCharging && !Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
             {
-                Lighting.AddLight(player.Center, 1.5f, 1.5f, 1.5f);
+                Lighting.AddLight(player.Center, 1.2f, 1.2f, 1.2f);
             }
 
             // calls to handle transformation or kaioken powerups per frame
