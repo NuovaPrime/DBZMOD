@@ -164,9 +164,10 @@ namespace DBZMOD
             return modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld || isExistingBeamFiring);
         }
 
-        public static float GetFlightSystemOctantDegrees(MyPlayer modPlayer)
+        public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)
         {
-            var octantMirrorQuadrant = 0;
+            int octantDirection = 0;
+            int octantMirrorQuadrant = 0;
             // since the player is mirrored, there's really only 3 ordinal positions we care about
             // up angle, no angle and down angle
             // we don't go straight up or down cos it looks weird as shit
@@ -188,7 +189,27 @@ namespace DBZMOD
                     break;
             }
 
-            return octantMirrorQuadrant * 45f;
+            switch (modPlayer.MouseWorldOctant)
+            {
+                case -2:
+                    octantDirection = 0;
+                    break;
+                case -1:
+                case 0:
+                case 1:
+                    octantDirection = 1;
+                    break;
+                case -3:
+                case 4:
+                case 3:
+                    octantDirection = -1;
+                    break;
+                case 2:
+                    octantDirection = 0;
+                    break;
+            }
+
+            return new Tuple<int, float>(octantDirection, octantMirrorQuadrant * 45f);
         }
 
         public static float GetPlayerFlightRotation(Vector2 m_rotationDir, Player player)
@@ -200,15 +221,18 @@ namespace DBZMOD
             // make sure if the player is using a ki weapon during flight, we're facing a way that doesn't make it look extremely goofy
             if (IsPlayerUsingKiWeapon(modPlayer))
             {
+                var directionInfo = GetFlightFacingDirectionAndPitchDirection(modPlayer);
                 // get flight rotation from octant
-                leanThrottle = GetFlightSystemOctantDegrees(modPlayer);
+                var octantDirection = directionInfo.Item1;
+                leanThrottle = directionInfo.Item2;
 
                 bool isPlayerHorizontal = m_rotationDir.X != 0;
                 bool isMouseAbove = leanThrottle < 0;
-                int horizontalDirection = m_rotationDir.X < 0 ? -1 : (m_rotationDir.X > 0 ? 1 : player.direction);
+                int horizontalDirection = m_rotationDir.X < 0 ? -1 : (m_rotationDir.X > 0 ? 1 : octantDirection);
                 int dir = isPlayerHorizontal ? (isMouseAbove ? -horizontalDirection : horizontalDirection) : horizontalDirection;
                 if (dir != player.direction)
                 {
+                    // DebugUtil.Log("Player direction should be " + dir);
                     player.ChangeDir(dir);
                 }                
             }

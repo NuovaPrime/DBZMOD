@@ -47,7 +47,7 @@ namespace DBZMOD.Projectiles
         // the rate at which firing drains the charge level of the ball, play with this for balance.
         protected float FireDecayRate() { return GetBeamPowerMultiplier() * FireChargeDrainPerSecond / 60f; }
 
-        Projectile MyProjectile = null;
+        public Projectile MyProjectile = null;
         public void HandleFiring(Player player, Vector2 mouseVector)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();

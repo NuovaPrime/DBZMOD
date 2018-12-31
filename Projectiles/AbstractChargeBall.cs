@@ -60,10 +60,6 @@ namespace DBZMOD.Projectiles
         // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
         public int ChargeSoundDelay = 120;
 
-        // EXPERIMENTAL, UNUSED - needs adjustment
-        // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
-        public Vector2 NotChannelingOffset = new Vector2(-15, 20f);
-
         #endregion
 
         #region Things you probably should not mess with
@@ -232,17 +228,10 @@ namespace DBZMOD.Projectiles
             return false;
         }
 
-        public Vector2 GetPlayerHandPosition(Player drawPlayer)
-        {
-            var Position = drawPlayer.position;
-            var handVector = new Vector2((float)((int)(Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2));
-            return handVector;
-        }
-
         public Vector2 GetChargeBallPosition()
         {
             Player player = Main.player[projectile.owner];
-            Vector2 positionOffset = player.channel ? ChannelingOffset + projectile.velocity * ChargeBallHeldDistance : NotChannelingOffset + GetPlayerHandPosition(player);
+            Vector2 positionOffset = ChannelingOffset + projectile.velocity * ChargeBallHeldDistance;
             return Main.player[projectile.owner].Center + positionOffset;
         }
 
@@ -490,7 +479,7 @@ namespace DBZMOD.Projectiles
                 projectile.velocity = diff;
                 projectile.direction = mouseVector.X > player.position.X ? 1 : -1;
                 projectile.netUpdate = true;
-            }
+            }            
             projectile.position = player.Center - new Vector2(0, ChargeSize.Y / 2f) + projectile.velocity * ChargeBallHeldDistance;
             projectile.timeLeft = 10;
             if (player.channel)

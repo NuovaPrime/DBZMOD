@@ -66,10 +66,6 @@ namespace DBZMOD.Projectiles
             // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
             ChargeSoundDelay = 120;
 
-            // EXPERIMENTAL, UNUSED - needs adjustment
-            // vector to reposition the charge ball when the player *isn't* charging it (or firing the beam) - held to the side kinda.
-            NotChannelingOffset = new Vector2(-15, 20f);
-
             base.SetDefaults();
         }
 

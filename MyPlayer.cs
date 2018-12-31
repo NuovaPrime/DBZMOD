@@ -18,6 +18,7 @@ using DBZMOD.Models;
 using DBZMOD.Enums;
 using System.Linq;
 using DBZMOD.Effects.Animations.Aura;
+using DBZMOD.Projectiles;
 
 namespace DBZMOD
 {
@@ -920,6 +921,28 @@ namespace DBZMOD
 
             // this is why :p
             float mouseRadians = Vector2.Normalize(Main.MouseWorld - player.Center).ToRotation();
+
+            if (player.heldProj > -1)
+            {
+                // player has a projectile, check to see if it's a charge ball or beam, that hijacks the octant for style.
+                var proj = Main.projectile[player.heldProj];
+                if (proj != null)
+                {
+                    if (proj.modProjectile != null && (proj.modProjectile is BaseBeamCharge))
+                    {
+                        var charge = proj.modProjectile as BaseBeamCharge;
+                        if (charge.IsSustainingFire)
+                        {
+                            mouseRadians = charge.MyProjectile.velocity.ToRotation();
+                        }
+                        else
+                        {
+                            mouseRadians = proj.velocity.ToRotation();
+                        }
+                    }
+                }
+            }
+            
 
             MouseWorldOctant = GetMouseWorldOctantFromRadians(mouseRadians);
         }
