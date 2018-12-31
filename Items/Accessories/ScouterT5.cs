@@ -24,19 +24,29 @@ namespace DBZMOD.Items.Accessories
             item.defense = 0;
         }
 
+        public override void UpdateEquip(Player player)
+        {
+            GivePlayerBonuses(player);
+        }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            {
-                player.detectCreature = true;
-                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.15f;
-                player.GetModPlayer<MyPlayer>(mod).scouterT5 = true;
-            }
+            GivePlayerBonuses(player);
         }
+
+        public void GivePlayerBonuses(Player player)
+        {
+            player.detectCreature = true;
+            player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.15f;
+            player.GetModPlayer<MyPlayer>(mod).scouterT5 = true;            
+        }
+
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = true;
             drawAltHair = true;
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
