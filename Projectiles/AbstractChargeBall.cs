@@ -420,7 +420,7 @@ namespace DBZMOD.Projectiles
                 Color chargeColor = oldChargeLevel < ChargeLevel ? new Color(51, 224, 255) : new Color(251, 74, 55);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), chargeColor, (int)ChargeLevel, false, false);
             }
-        }
+        }        
 
         // The AI of the projectile
         public override void AI()

@@ -73,5 +73,20 @@ namespace DBZMOD.Projectiles
         {
             DisplayName.SetDefault("Kamehameha Ball");
         }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPvp(Player target)
+        {
+            return false;
+        }
     }
 }

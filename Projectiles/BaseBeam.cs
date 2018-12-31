@@ -262,6 +262,7 @@ namespace DBZMOD.Projectiles
         // This collision check is for living entities, not tiles. This is what determines damage is being dealt.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
+            
             bool isAnyCollision = DoCollisionCheck(targetHitbox);
             if (IsEntityColliding && (isAnyCollision))
             {
@@ -272,6 +273,9 @@ namespace DBZMOD.Projectiles
                     Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
                 }
             }
+
+            if (isAnyCollision)
+                DebugUtil.Log("Beam colliding");
             return isAnyCollision;
         }
 

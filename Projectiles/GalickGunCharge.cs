@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace DBZMOD.Projectiles
 {
@@ -58,6 +59,21 @@ namespace DBZMOD.Projectiles
             ChargeSoundDelay = 120;
 
             base.SetDefaults();
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+            return false;
+        }
+
+        public override bool CanHitPvp(Player target)
+        {
+            return false;
         }
     }
 }
