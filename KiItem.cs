@@ -129,6 +129,15 @@ namespace DBZMOD
             damage = (int)(damage * MyPlayer.ModPlayer(player).KiDamage);
         }
 
+        public override bool? CanHitNPC(Player player, NPC target)
+        {
+            if (this is BaseBeamItem)
+            {
+                return false;
+            }
+            return base.CanHitNPC(player, target);
+        }
+
         public override void GetWeaponCrit(Player player, ref int crit)
         {
             crit = crit + MyPlayer.ModPlayer(player).KiCrit;

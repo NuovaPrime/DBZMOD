@@ -1009,6 +1009,7 @@ namespace DBZMOD
         public float? SyncBonusSpeedMultiplier;
         public bool? SyncWishActive;
         public int? SyncMouseWorldOctant;
+        public int? SyncPowerWishesLeft;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetMouseLeft;
@@ -1155,11 +1156,16 @@ namespace DBZMOD
                 SyncWishActive = WishActive;
             }
 
-
             if (SyncMouseWorldOctant != MouseWorldOctant)
             {
                 NetworkHelper.playerSync.SendChangedMouseWorldOctant(256, player.whoAmI, player.whoAmI, MouseWorldOctant);
                 SyncMouseWorldOctant = MouseWorldOctant;
+            }
+
+            if (SyncPowerWishesLeft != PowerWishesLeft)
+            {
+                NetworkHelper.playerSync.SnedChangedPowerWishesLeft(256, player.whoAmI, player.whoAmI, PowerWishesLeft);
+                SyncPowerWishesLeft = PowerWishesLeft;
             }
 
             if (SyncKiCurrent != GetKi())
@@ -1925,7 +1931,6 @@ namespace DBZMOD
             // the one frame delay on handling instant transmission is to set up the limbo var.
             if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
                 isHandlingInstantTransmissionTriggers = true;
-                DebugUtil.Log("Transmission triggers are being set to true for some reason :(");
             }
             if (isHandlingInstantTransmissionTriggers && InstantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
             {
@@ -2581,7 +2586,7 @@ namespace DBZMOD
             HandlePowerWishPlayerHealth();
         }
 
-        public override void PreUpdateBuffs()
+        public override void PostUpdateEquips()
         {
             HandlePowerWishMultipliers();
         }

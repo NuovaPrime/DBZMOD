@@ -232,7 +232,6 @@ namespace DBZMOD
                 int dir = isPlayerHorizontal ? (isMouseAbove ? -horizontalDirection : horizontalDirection) : horizontalDirection;
                 if (dir != player.direction)
                 {
-                    // DebugUtil.Log("Player direction should be " + dir);
                     player.ChangeDir(dir);
                 }                
             }

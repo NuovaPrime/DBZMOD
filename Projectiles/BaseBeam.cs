@@ -274,8 +274,6 @@ namespace DBZMOD.Projectiles
                 }
             }
 
-            if (isAnyCollision)
-                DebugUtil.Log("Beam colliding");
             return isAnyCollision;
         }
 

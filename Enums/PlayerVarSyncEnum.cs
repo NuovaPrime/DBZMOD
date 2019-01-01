@@ -37,6 +37,7 @@ namespace DBZMOD.Enums
         ChargeMoveSpeed,
         BonusSpeedMultiplier,
         MouseWorldOctant,
+        PowerWishesLeft,
         HeldProjectile,
         WishActive
     }

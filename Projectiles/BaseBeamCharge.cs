@@ -73,7 +73,7 @@ namespace DBZMOD.Projectiles
                 CurrentFireTime++;
 
                 // if the player has charge left, drain the ball
-                if (ChargeLevel > 0f)
+                if (ChargeLevel >= FireDecayRate())
                 {
                     ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
                 }
@@ -141,6 +141,11 @@ namespace DBZMOD.Projectiles
             // less than 0 fire time means on cooldown, try to "decrease" cooldown by 1, stopping at 0 if applicable.
             if (CurrentFireTime < 0)
                 CurrentFireTime = Math.Max(0, CurrentFireTime + 1f);
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }

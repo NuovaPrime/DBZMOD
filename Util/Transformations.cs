@@ -31,37 +31,13 @@ namespace DBZMOD.Util
             }
         }
 
-        private static Dictionary<string, BuffInfo> _buffInfoDict;
-        // Using the buff internal name as the key. The BuffId is inside.
-        public static Dictionary<string, BuffInfo> BuffInfoDict
+        public static List<BuffInfo> BuffInfoList
         {
-            get
-            {
-                if (_buffInfoDict == null)
-                {
-                    SeedBuffInfoDictionary();
-                }
-                return _buffInfoDict;
+            get {
+                return new List<BuffInfo>() {
+                    SSJ1, SSJ2, SSJ3, SSJG, LSSJ, LSSJ2, ASSJ, USSJ, Kaioken, SuperKaioken, KaiokenFatigue, TransformationExhaustion, Spectrum
+                };
             }
-        }
-
-        // called on startup to cache the values of the mod's buffs in our own internal dictionary for faster lookups.
-        public static void SeedBuffInfoDictionary()
-        {
-            _buffInfoDict = new Dictionary<string, BuffInfo>();
-            _buffInfoDict[SSJ1.BuffKeyName] = SSJ1;
-            _buffInfoDict[SSJ2.BuffKeyName] = SSJ2;
-            _buffInfoDict[SSJ3.BuffKeyName] = SSJ3;
-            _buffInfoDict[SSJG.BuffKeyName] = SSJG;
-            _buffInfoDict[LSSJ.BuffKeyName] = LSSJ;
-            _buffInfoDict[LSSJ2.BuffKeyName] = LSSJ2;
-            _buffInfoDict[ASSJ.BuffKeyName] = ASSJ;
-            _buffInfoDict[USSJ.BuffKeyName] = USSJ;
-            _buffInfoDict[Kaioken.BuffKeyName] = Kaioken;
-            _buffInfoDict[SuperKaioken.BuffKeyName] = SuperKaioken;
-            _buffInfoDict[KaiokenFatigue.BuffKeyName] = KaiokenFatigue;
-            _buffInfoDict[TransformationExhaustion.BuffKeyName] = TransformationExhaustion;
-            _buffInfoDict[Spectrum.BuffKeyName] = Spectrum;
         }
 
         // the following are cached info classes that get passed around for all sorts of things.
@@ -226,7 +202,7 @@ namespace DBZMOD.Util
             if (menuId == MenuSelectionID.None)
                 return null;
 
-            return BuffInfoDict.Values.Where(x => x.MenuId == menuId).FirstOrDefault();
+            return BuffInfoList.Where(x => x.MenuId == menuId).FirstOrDefault();
         }
 
         // the typical color used for super saiyan transformation Text, except God
@@ -236,7 +212,7 @@ namespace DBZMOD.Util
 
         public static BuffInfo GetBuffByKeyName(string keyName)
         {
-            return BuffInfoDict[keyName];
+            return BuffInfoList.Find(x => x.BuffKeyName == keyName);
         }
 
         // returns a list of transformation steps specific to non-legendary SSJ players
@@ -272,7 +248,7 @@ namespace DBZMOD.Util
         // (Union() excludes duplicates automatically)
         public static List<BuffInfo> AllBuffs()
         {
-            return BuffInfoDict.Values.Where(x => x.BuffKeyName != BuffKeyNames.KaiokenFatigue && x.BuffKeyName != BuffKeyNames.TransformationExhaustion).ToList();
+            return BuffInfoList.Where(x => x.BuffKeyName != BuffKeyNames.KaiokenFatigue && x.BuffKeyName != BuffKeyNames.TransformationExhaustion).ToList();
         }
 
         // whether the player is in any of the transformation states. Relies on AllBuffs() containing every possible transformation buff.

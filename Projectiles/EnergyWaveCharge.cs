@@ -65,5 +65,10 @@ namespace DBZMOD.Projectiles
         {
             return false;
         }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            base.OnHitNPC(target, damage, knockback, crit);
+        }
     }
 }

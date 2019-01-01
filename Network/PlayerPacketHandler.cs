@@ -96,6 +96,7 @@ namespace Network
             SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
             SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.IsFlying);
+            SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.PowerWishesLeft);
             SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.IsTransformationAnimationPlaying);
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
         }
@@ -366,6 +367,15 @@ namespace Network
             packet.Write((int)PlayerVarSyncEnum.MouseWorldOctant);
             packet.Write(whichPlayer);
             packet.Write(mouseWorldOctant);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void SnedChangedPowerWishesLeft(int toWho, int fromWho, int whichPlayer, int powerWishesLeft)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.PowerWishesLeft);
+            packet.Write(whichPlayer);
+            packet.Write(powerWishesLeft);
             packet.Send(toWho, fromWho);
         }
 
@@ -644,6 +654,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.MouseWorldOctant);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.PowerWishesLeft:
+                    player.PowerWishesLeft = reader.ReadInt32();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.PowerWishesLeft);
                         packet.Send(-1, fromWho);
                     }
                     break;

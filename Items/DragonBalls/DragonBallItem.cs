@@ -124,7 +124,6 @@ namespace DBZMOD.Items.DragonBalls
                     // the player is cheating. if we're in debug mode this is fine, but destroy that tile.
                     if (DebugUtil.isDebug || isStoneBallTakingPlaceOfExistingDragonBall)
                     {
-                        // Main.NewText("Debugged in a Dragon Ball, destroying the original.");
                         WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
                         DBZWorld.GetWorld().DragonBallLocations[item.WhichDragonBall - 1] = new Point(-1, -1);
                         return;
