@@ -144,7 +144,7 @@ namespace DBZMOD.Projectiles
             {
                 return projectile.localAI[0] > 0f;
             }
-        }
+        }        
 
         public float DetachmentTimer
         {
@@ -532,18 +532,44 @@ namespace DBZMOD.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPlayer(target, ref damage, ref crit);
-            damage /= 2;
+            damage = GetPVPDamageReduction(damage);
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPvp(target, ref damage, ref crit);
-            damage /= 2;
+            damage = GetPVPDamageReduction(damage);
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
+
+        public int GetPVPDamageReduction(int damage)
+        {
+            return (int)Math.Ceiling(damage / 2f);
+        }
+
+        public MyPlayer GetPlayerOwner()
+        {
+            var player = Main.player[projectile.owner];
+            if (player != null)
+            {
+                return player.GetModPlayer<MyPlayer>();
+            }
+            return null;
+        }
+
+        //public int GetPlayerKiDamageAfterMultipliers(int damage)
+        //{
+        //    if (GetPlayerOwner() == null)
+        //        return damage;
+        //    float kiMultiplier = GetPlayerOwner().KiDamage;
+        //    return (int)Math.Ceiling(damage * kiMultiplier);
+        //}
     }
 }

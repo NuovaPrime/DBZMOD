@@ -228,8 +228,7 @@ namespace DBZMOD
 
                 bool isPlayerHorizontal = m_rotationDir.X != 0;
                 bool isMouseAbove = leanThrottle < 0;
-                int horizontalDirection = m_rotationDir.X < 0 ? -1 : (m_rotationDir.X > 0 ? 1 : octantDirection);
-                int dir = isPlayerHorizontal ? (isMouseAbove ? -horizontalDirection : horizontalDirection) : horizontalDirection;
+                int dir = octantDirection;
                 if (dir != player.direction)
                 {
                     player.ChangeDir(dir);
