@@ -88,7 +88,7 @@ namespace DBZMOD.Models
             var modPlayer = player.GetModPlayer<MyPlayer>();
             float scale = GetAuraScale();
             int auraOffsetY = GetAuraOffsetY();
-            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary)
+            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
                 double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
                 rotation = (float)(player.fullRotation + rotationOffset);
