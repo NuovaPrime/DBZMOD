@@ -333,8 +333,6 @@ namespace DBZMOD.Projectiles
         // The AI of the projectile
         public override void AI()
         {
-            if (DebugUtil.IsSecondElapsed())
-                DebugUtil.Log(string.Format("Beam routine says damage is {0}", projectile.damage));
             Player player = Main.player[projectile.owner];
 
             ProcessKillRoutine(player);
