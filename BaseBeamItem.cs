@@ -49,7 +49,9 @@ namespace DBZMOD
             player.channel = true;
             if (!ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
             {
-                var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, item.damage, item.knockBack, player.whoAmI);
+                int weaponDamage = item.damage;
+                GetWeaponDamage(player, ref weaponDamage);
+                var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, weaponDamage, item.knockBack, player.whoAmI);
                 player.heldProj = proj.whoAmI;
             }
             return base.AltFunctionUse(player);

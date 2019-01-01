@@ -133,6 +133,9 @@ namespace DBZMOD.Projectiles
             // decrease the beam cooldown if it's not zero
             HandleBeamFireCooldown();
 
+            if (DebugUtil.IsSecondElapsed())
+                DebugUtil.Log(string.Format("Beam charge routine says damage is {0}", GetBeamDamage()));
+
             return mouseVector;
         }
 

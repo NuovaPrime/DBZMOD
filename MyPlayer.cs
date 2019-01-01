@@ -1552,6 +1552,11 @@ namespace DBZMOD
             KiMax3 = tag.Get<int>("KiMax3");
             FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
             PowerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
+            // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
+            if (DebugUtil.isDebug)
+            {
+                PowerWishesLeft = POWER_WISH_MAXIMUM;
+            }
             SkillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
             ImmortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
             AwakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
@@ -1858,7 +1863,7 @@ namespace DBZMOD
             }
 
 
-            if ((WishActive || QuickKi.JustPressed) && !WishMenu.menuvisible)
+            if (WishActive || (DebugUtil.isDebug && QuickKi.JustPressed))
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }

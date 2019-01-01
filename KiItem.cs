@@ -125,8 +125,10 @@ namespace DBZMOD
         }
 
         public override void GetWeaponDamage(Player player, ref int damage)
-        {
-            damage = (int)(damage * MyPlayer.ModPlayer(player).KiDamage);
+        {            
+            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).KiDamage);
+            if (DebugUtil.IsSecondElapsed())
+                DebugUtil.Log(string.Format("Weapon damage routine says damage is {0}", damage));
         }
 
         public override bool? CanHitNPC(Player player, NPC target)
