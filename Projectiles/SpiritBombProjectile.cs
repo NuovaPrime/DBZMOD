@@ -86,7 +86,7 @@ namespace DBZMOD.Projectiles
              float dustSpeed = 10;
              Vector2 offset = Vector2.UnitX.RotateRandom(MathHelper.Pi) * dustDistance;
              Vector2 velocity = -offset.SafeNormalize(-Vector2.UnitY) * dustSpeed;
-             Dust dust = Dust.NewDustPerfect(projectile.Center + offset, 87, velocity, 0, default(Color), 1.5f);
+             Dust dust = Dust.NewDustPerfect(projectile.Center + offset, 230, velocity, 0, default(Color), 1.5f);
 		    }
         }
 	}

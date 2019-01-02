@@ -63,7 +63,7 @@ namespace DBZMOD.Projectiles
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 230, 0f, 0f, 213, default(Color), 2.0f);
                     tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
