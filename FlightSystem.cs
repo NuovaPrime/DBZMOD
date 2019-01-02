@@ -161,13 +161,13 @@ namespace DBZMOD
                     }
                 }
             }
-            return modPlayer.IsHoldingKiWeapon && (modPlayer.IsMouseLeftHeld || modPlayer.IsMouseRightHeld || isExistingBeamFiring);
+            return modPlayer.IsHoldingKiWeapon && ((modPlayer.IsMouseLeftHeld && isExistingBeamFiring) || modPlayer.IsMouseRightHeld);
         }
 
         public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)
         {
             int octantDirection = 0;
-            int octantMirrorQuadrant = 0;
+            int octantPitch = 0;
             // since the player is mirrored, there's really only 3 ordinal positions we care about
             // up angle, no angle and down angle
             // we don't go straight up or down cos it looks weird as shit
@@ -176,23 +176,23 @@ namespace DBZMOD
                 case -3:
                 case -2:
                 case -1:
-                    octantMirrorQuadrant = -1;
+                    octantPitch = -1;
                     break;
                 case 0:
                 case 4:
-                    octantMirrorQuadrant = 0;
+                    octantPitch = 0;
                     break;
                 case 1:
                 case 2:
                 case 3:
-                    octantMirrorQuadrant = 1;
+                    octantPitch = 1;
                     break;
             }
 
             switch (modPlayer.MouseWorldOctant)
             {
                 case -2:
-                    octantDirection = 0;
+                    octantDirection = Main.MouseWorld.X < modPlayer.player.Center.X ? -1 : 1;
                     break;
                 case -1:
                 case 0:
@@ -205,11 +205,11 @@ namespace DBZMOD
                     octantDirection = -1;
                     break;
                 case 2:
-                    octantDirection = 0;
+                    octantDirection = Main.MouseWorld.X < modPlayer.player.Center.X ? -1 : 1;
                     break;
             }
 
-            return new Tuple<int, float>(octantDirection, octantMirrorQuadrant * 45f);
+            return new Tuple<int, float>(octantDirection, octantPitch * 45f);
         }
 
         public static float GetPlayerFlightRotation(Vector2 m_rotationDir, Player player)

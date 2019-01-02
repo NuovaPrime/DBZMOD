@@ -961,14 +961,14 @@ namespace DBZMOD
             // threshold values for octants are 22.5 degrees in either direction of a 45 degree mark on a circle (perpendicular 90s, 180s and each midway point, in 22.5 degrees either direction).
             // to make this clear, we're setting up some offset vars to make the numbers a bit more obvious.
             float thresholdDegrees = 22.5f;
-            float octantCircumference = 45f;
+            float circumferenceSpan = 45f;
             // the 8 octants, starting at the north mark and, presumably, rotating clockwise.
             // note that 4 and -4 are the same thing. It doesn't matter which you use, radian outcome is the same.
             int[] octants = { -4, -3, -2, -1, 0, 1, 2, 3, 4 };
             foreach (int octant in octants)
             {
-                float minRad = MathHelper.ToRadians((octant * octantCircumference) - thresholdDegrees);
-                float maxRad = MathHelper.ToRadians((octant * octantCircumference) + thresholdDegrees);
+                float minRad = MathHelper.ToRadians((octant * circumferenceSpan) - thresholdDegrees);
+                float maxRad = MathHelper.ToRadians((octant * circumferenceSpan) + thresholdDegrees);
                 if (mouseRadians >= minRad && mouseRadians <= maxRad)
                 {
                     // normalize octant -4 to 4, for sanity reasons. They really are the same octant, but this formula isn't good enough to figure that out for some reason.
