@@ -511,7 +511,7 @@ namespace DBZMOD
 
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.SkeletronHead)
+                if ((npc.type == NPCID.EaterofWorldsHead && npc.boss) || npc.type == NPCID.BrainofCthulhu)
                 {
                     if (Main.rand.Next(4) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment1"), 1);
@@ -520,7 +520,7 @@ namespace DBZMOD
 
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.SkeletronPrime)
+                if (npc.type == NPCID.QueenBee)
                 {
                     if (Main.rand.Next(4) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment2"), 1);
@@ -529,7 +529,7 @@ namespace DBZMOD
 
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.Golem)
+                if (npc.type == NPCID.SkeletronHead)
                 {
                     if (Main.rand.Next(4) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment3"), 1);
@@ -538,7 +538,7 @@ namespace DBZMOD
 
             if (!Main.expertMode)
             {
-                if (npc.type == NPCID.MoonLordCore)
+                if (npc.type == NPCID.WallofFlesh)
                 {
                     if (Main.rand.Next(4) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KaioFragment4"), 1);

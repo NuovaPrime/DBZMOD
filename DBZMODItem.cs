@@ -117,28 +117,28 @@ namespace DBZMOD
             }
             if(Main.rand.Next(4) == 0)
             {
-                if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
+                if (context == "bossBag" && (arg == ItemID.EaterOfWorldsBossBag || arg == ItemID.BrainOfCthulhuBossBag))
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment1"));
                 }
             }
             if (Main.rand.Next(4) == 0)
             {
-                if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
+                if (context == "bossBag" && arg == ItemID.QueenBeeBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment2"));
                 }
             }
             if (Main.rand.Next(4) == 0)
             {
-                if (context == "bossBag" && arg == ItemID.GolemBossBag)
+                if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment3"));
                 }
             }
             if (Main.rand.Next(4) == 0)
             {
-                if (context == "bossBag" && arg == ItemID.MoonLordBossBag)
+                if (context == "bossBag" && arg == ItemID.WallOfFleshBossBag)
                 {
                     player.QuickSpawnItem(mod.ItemType("KaioFragment4"));
                 }
