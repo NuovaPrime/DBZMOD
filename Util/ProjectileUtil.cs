@@ -223,6 +223,9 @@ namespace DBZMOD.Util
             var tile = Framing.GetTileSafely(tilePoint.X, tilePoint.Y);
             if (tile == null)
                 return false;
+            // dunno if this works.
+            if (Main.tileSolidTop[tile.type])
+                return false;
             if (tile.active() && Main.tileSolid[tile.type])
             {
                 return true;
