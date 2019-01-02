@@ -346,6 +346,12 @@ namespace DBZMOD.Util
             return IsLSSJ(player) || IsSSJ(player) || IsSSJG(player) || IsDevBuffed(player) || IsAscended(player);
         }
 
+        // bool returning whether the player is in a form that is valid for kaioken combo.
+        public static bool IsValidKaiokenForm(Player player)
+        {
+            return IsSSJ1(player); // || IsSSJB(player) || IsSSJR(player)
+        }
+
         // whether the buff ID is one of the legendary states; caution, this includes SSJ1 for "Next/Previous" behavior reasons.
         public static bool IsLSSJ(BuffInfo buff)
         {

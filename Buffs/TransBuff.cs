@@ -185,13 +185,13 @@ namespace DBZMOD
                         KaiokenName = "(x3)\n";
                         break;
                     case 3:
-                        KaiokenName = "(x10)\n";
+                        KaiokenName = "(x4)\n";
                         break;
                     case 4:
-                        KaiokenName = "(x20)\n";
+                        KaiokenName = "(x10)\n";
                         break;
                     case 5:
-                        KaiokenName = "(x100)\n";
+                        KaiokenName = "(x20)\n";
                         break;
                 }
             }
