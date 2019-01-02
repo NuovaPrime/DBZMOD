@@ -222,13 +222,6 @@ namespace DBZMOD.Util
             return buffs;
         }
 
-        // a list of transformation steps specific to kaioken usage
-        public static BuffInfo[] KaiokenBuffs()
-        {
-            BuffInfo[] buffs = { Kaioken, SuperKaioken };
-            return buffs;
-        }
-
         // a list of transformation steps specific to legendary SSJ players
         public static BuffInfo[] LegendaryBuffs()
         {
@@ -312,16 +305,40 @@ namespace DBZMOD.Util
             return Spectrum.GetBuffId() == buff.GetBuffId();
         }
 
-        // whether the buff ID is one of the Kaioken states
+        // whether the buff ID is Kaioken
         public static bool IsKaioken(BuffInfo buff)
         {
-            return KaiokenBuffs().Contains(buff);
+            return buff.GetBuffId() == Kaioken.GetBuffId();
         }
 
-        // whether the player is in one of the Kaioken states
+        // whether the player is Kaioken
         public static bool IsKaioken(Player player)
         {
-            return PlayerHasBuffIn(player, KaiokenBuffs());
+            return player.HasBuff(Kaioken.GetBuffId());
+        }
+
+        // whether the buff ID is Kaioken
+        public static bool IsAnyKaioken(BuffInfo buff)
+        {
+            return IsKaioken(buff) || IsSuperKaioken(buff);
+        }
+
+        // whether the player is Kaioken
+        public static bool IsAnyKaioken(Player player)
+        {
+            return IsKaioken(player) || IsSuperKaioken(player);
+        }
+
+        // whether the player is Kaioken
+        public static bool IsSuperKaioken(Player player)
+        {
+            return player.HasBuff(SuperKaioken.GetBuffId());
+        }
+
+        // whether the buff ID is Kaioken
+        public static bool IsSuperKaioken(BuffInfo buff)
+        {
+            return buff.GetBuffId() == SuperKaioken.GetBuffId();
         }
 
         public static bool IsDevBuffed(BuffInfo buff)
@@ -343,7 +360,7 @@ namespace DBZMOD.Util
         // a bool for whether the player is in a state other than Kaioken (a form)
         public static bool IsAnythingOtherThanKaioken(Player player)
         {
-            return IsLSSJ(player) || IsSSJ(player) || IsSSJG(player) || IsDevBuffed(player) || IsAscended(player);
+            return IsLSSJ(player) || IsSSJ(player) || IsSSJG(player) || IsDevBuffed(player) || IsAscended(player) || IsSuperKaioken(player);
         }
 
         // bool returning whether the player is in a form that is valid for kaioken combo.
@@ -528,20 +545,21 @@ namespace DBZMOD.Util
 
             BuffInfo transformationToKeep = null;
 
-            if (!isPoweringDown)
-            {
-                //if player tring to do a ssj transformation
-                if (IsAnythingOtherThanKaioken(buff))
-                {
-                    //keep kaioken buff
-                    transformationToKeep = GetCurrentTransformation(player, false, true);
-                }
-                else if (IsKaioken(buff))//if player trying to do a kaioken transformation
-                {
-                    //keep ssj buff
-                    transformationToKeep = GetCurrentTransformation(player, true, false);
-                }
-            }
+            // no keeping transforms.
+            //if (!isPoweringDown)
+            //{
+            //    //if player tring to do a ssj transformation
+            //    if (IsAnythingOtherThanKaioken(buff))
+            //    {
+            //        //keep kaioken buff
+            //        transformationToKeep = GetCurrentTransformation(player, false, true);
+            //    }
+            //    else if (IsKaioken(buff))//if player trying to do a kaioken transformation
+            //    {
+            //        //keep ssj buff
+            //        transformationToKeep = GetCurrentTransformation(player, true, false);
+            //    }
+            //}
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
@@ -554,18 +572,10 @@ namespace DBZMOD.Util
         public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep, BuffInfo transformationToKeep = null)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            // automatically applies debuffs.
-            bool isOnlyRemovingKaioken = IsKaioken(player) && IsAnythingOtherThanKaioken(player);
+            // automatically applies debuffs.            
             ClearAllTransformations(player, isPoweringDown, isOneStep, transformationToKeep);
             modPlayer.IsTransformationAnimationPlaying = false;
             modPlayer.TransformationFrameTimer = 0;
-
-            // don't kill sounds if the only thing being removed is kaioken.
-            if (!isOnlyRemovingKaioken)
-            {
-                modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo);
-                modPlayer.AuraSoundTimer = 0;
-            }
             
             modPlayer.IsTransforming = false;
         }
@@ -614,7 +624,21 @@ namespace DBZMOD.Util
         // based on some conditions, figure out what the next "step" of transformation should be.
         public static BuffInfo GetNextTransformationStep(Player player)
         {
-            BuffInfo currentTransformation = GetCurrentTransformation(player, true, false);
+            BuffInfo currentTransformation = GetCurrentTransformation(player, false, false);
+            BuffInfo currentNonKaioTransformation = GetCurrentTransformation(player, true, false);
+            if (IsKaioken(currentTransformation))
+            {
+                // player was in kaioken, trying to power up. Go to super kaioken but set the player's kaioken level to 1 because that's how things are now.
+                if (currentNonKaioTransformation == null)
+                {
+                    player.GetModPlayer<MyPlayer>().KaiokenLevel = 1;
+                    return SuperKaioken;
+                }
+
+                // insert handler for SSJBK here
+
+                // insert handler for SSJRK here
+            }
 
             // SSJ1 is always the starting point if there isn't a current form tree to step through.
             if (currentTransformation == null)

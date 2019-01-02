@@ -89,7 +89,7 @@ namespace DBZMOD
                 {
                     FlightDustType = 174;
                 }
-                else if (Transformations.IsKaioken(player))
+                else if (Transformations.IsAnyKaioken(player))
                 {
                     FlightDustType = 182;
                 }

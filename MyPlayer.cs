@@ -504,7 +504,7 @@ namespace DBZMOD
                 KiDrainAddition = 0;
             }
 
-            if (Transformations.IsKaioken(player))
+            if (Transformations.IsAnyKaioken(player))
             {
                 KaiokenTimer += 1.5f;
             }
@@ -705,18 +705,8 @@ namespace DBZMOD
 
         public void HandleAuraSounds()
         {
-            bool isSkippingKaiokenAudio = false;
-            if (Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player))
-            {
-                isSkippingKaiokenAudio = true;
-            }
             foreach (var aura in ActiveAuraAnimations)
             {
-                if (isSkippingKaiokenAudio && (aura.ID == (int)AuraID.Kaioken || aura.ID == (int)AuraID.SuperKaioken))
-                {
-                    continue;
-                }
-
                 bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
                 if (shouldPlayAudio)
                 {
@@ -773,8 +763,8 @@ namespace DBZMOD
                 return;
             }
             // injecting kaioken auras first to see what happens
-            HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
-            HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
+            HandleAura(Transformations.IsKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
+            HandleAura(Transformations.IsSuperKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
             HandleAura(Transformations.IsSSJ1(player), AuraID.SSJ1, AuraAnimations.CreateSSJ1Aura);
             HandleAura(Transformations.IsASSJ(player), AuraID.ASSJ, AuraAnimations.CreateASSJAura);
             HandleAura(Transformations.IsUSSJ(player), AuraID.USSJ, AuraAnimations.CreateUSSJAura);
@@ -925,7 +915,7 @@ namespace DBZMOD
 
         public void HandleKaiokenDefenseDebuff()
         {
-            if (Transformations.IsKaioken(player))
+            if (Transformations.IsAnyKaioken(player))
             {
                 float defenseMultiplier = 1f - (KaiokenLevel * 0.05f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
@@ -1281,7 +1271,7 @@ namespace DBZMOD
             {
                 ChangeEyeColor(Color.Turquoise);
             }
-            else if (Transformations.IsKaioken(player))
+            else if (Transformations.IsAnyKaioken(player))
             {
                 ChangeEyeColor(Color.Red);
             }
@@ -1673,6 +1663,10 @@ namespace DBZMOD
 
         public bool CanIncreaseKaiokenLevel()
         {
+            // immediately handle aborts from super kaioken states
+            if (Transformations.IsSuperKaioken(player))
+                return false;
+
             if (Transformations.IsAnythingOtherThanKaioken(player))
             {
                 return Transformations.IsValidKaiokenForm(player) && KaiokenLevel == 0 && KaioAchieved;
@@ -1869,14 +1863,7 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
-                if (Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player))
-                {
-                    var keptTransformation = Transformations.GetCurrentTransformation(player, true, false);
-                    Transformations.EndTransformations(player, true, false, keptTransformation);
-                } else
-                {
-                    Transformations.EndTransformations(player, true, false);
-                }
+                Transformations.EndTransformations(player, true, false);
                 KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
@@ -2502,7 +2489,7 @@ namespace DBZMOD
                 WasKaioken = IsKaioken;
                 WasTransformed = IsTransformed;
 
-                IsKaioken = Transformations.IsKaioken(player);
+                IsKaioken = Transformations.IsAnyKaioken(player);
                 IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
                 // this way, we can apply exhaustion debuffs correctly.
                 if (WasKaioken && !IsKaioken)

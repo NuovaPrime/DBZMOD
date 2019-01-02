@@ -26,7 +26,7 @@ namespace DBZMOD
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(Transformations.IsKaioken(player) || Transformations.IsSSJG(player))
+            if(Transformations.IsAnyKaioken(player) || Transformations.IsSSJG(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
             } else if (Transformations.IsLSSJ1(player) || Transformations.IsLSSJ2(player))
@@ -55,7 +55,7 @@ namespace DBZMOD
 
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = (Transformations.IsKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
+                float drainMult = (Transformations.IsAnyKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
 
                 // recalculate the final health drain rate and reduce regen by that amount
                 OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
