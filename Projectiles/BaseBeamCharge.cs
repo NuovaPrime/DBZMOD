@@ -8,6 +8,9 @@ namespace DBZMOD.Projectiles
     // unabashedly stolen from blushie's laser example, and then customized WIP
     public abstract class BaseBeamCharge : AbstractChargeBall
     {
+        // used to offset the beam so that its origin is different from the charge ball, used for special instances like the Makankosappo
+        public Vector2 BeamCreationOffset = Vector2.Zero;
+
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -62,8 +65,7 @@ namespace DBZMOD.Projectiles
                 if (!WasSustainingFire)
                 {
                     // fire the laser!
-                    MyProjectile = Projectile.NewProjectileDirect(projectile.position, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
-                                        
+                    MyProjectile = Projectile.NewProjectileDirect(projectile.position + BeamCreationOffset, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);                                        
 
                     // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
                     MyProjectile.ai[1] = MinimumFireFrames;

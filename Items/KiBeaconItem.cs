@@ -27,5 +27,17 @@ namespace DBZMOD.Items
             item.value = 120000;
             item.createTile = mod.TileType("KiBeaconTile");
         }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Teleporter, 1);
+            recipe.AddIngredient(ItemID.SoulofSight, 1);
+            recipe.AddIngredient(ItemID.HallowedBar, 3);
+            recipe.AddIngredient(null, "AstralEssentia", 1);
+            recipe.AddTile(null, "ZTable");
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }

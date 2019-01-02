@@ -22,7 +22,7 @@ namespace DBZMOD.Projectiles
             RotationSlowness = 60f;
 
             // vector to reposition the beam tail down if it feels too low or too high on the character sprite
-            OffsetY = new Vector2(0, -14f);
+            OffsetY = new Vector2(0, 4f);            
 
             // the maximum travel distance the beam can go
             MaxBeamDistance = 2000f;

@@ -498,11 +498,20 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        // helper flag  used to set the initial position of a detached beam once and only once before removing it from the player "anchor point"
+        private bool IsAttachedOnce = false;
         public void UpdateBeamPlayerItemUse(Player player)
         {
             // skip this entire routine if the detachment timer is greater than 0
             if (IsDetached)
+            {
+                if (!IsAttachedOnce)
+                {
+                    projectile.position = player.Center;
+                    IsAttachedOnce = true;
+                }
                 return;
+            }
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.position = player.Center;

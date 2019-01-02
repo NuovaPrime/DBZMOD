@@ -705,8 +705,18 @@ namespace DBZMOD
 
         public void HandleAuraSounds()
         {
+            bool isSkippingKaiokenAudio = false;
+            if (Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player))
+            {
+                isSkippingKaiokenAudio = true;
+            }
             foreach (var aura in ActiveAuraAnimations)
             {
+                if (isSkippingKaiokenAudio && (aura.ID == (int)AuraID.Kaioken || aura.ID == (int)AuraID.SuperKaioken))
+                {
+                    continue;
+                }
+
                 bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
                 if (shouldPlayAudio)
                 {
@@ -913,7 +923,7 @@ namespace DBZMOD
         {
             if (Transformations.IsKaioken(player))
             {
-                float defenseMultiplier = 1f - (KaiokenLevel * 0.15f);
+                float defenseMultiplier = 1f - (KaiokenLevel * 0.05f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
             }
         }

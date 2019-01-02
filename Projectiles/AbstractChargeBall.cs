@@ -57,6 +57,9 @@ namespace DBZMOD.Projectiles
         // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
         public int ChargeSoundDelay = 120;
 
+        // whether to try to put the player hand at their head when charging (eg. not firing)
+        public bool IsChargeAtHeadHeight = false;
+
         #endregion
 
         #region Things you probably should not mess with
@@ -461,19 +464,30 @@ namespace DBZMOD.Projectiles
                 projectile.velocity = diff;
                 projectile.direction = mouseVector.X > player.position.X ? 1 : -1;
                 projectile.netUpdate = true;
-            }            
-            projectile.position = player.Center - new Vector2(0, ChargeSize.Y / 2f) + projectile.velocity * ChargeBallHeldDistance;
+            }
+            if (IsChargeAtHeadHeight)
+            {
+                projectile.position = player.Center;
+            } else
+            {
+                projectile.position = player.Center + projectile.velocity * ChargeBallHeldDistance;
+            }
             projectile.timeLeft = 10;
             if (player.channel)
             {
                 player.itemTime = 10;
                 player.itemAnimation = 10;
+                int dir = projectile.direction;
+                Vector2 rotationVector = projectile.velocity * dir;
+                if (IsChargeAtHeadHeight) {
+                    rotationVector = new Vector2(0, dir * -Main.screenHeight);
+                }
+                float itemRotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X);
+                player.itemRotation = itemRotation;
                 // don't do this if the player is flying, we let the flight code handle it "manually" because it looks weird as shit
                 if (!modPlayer.IsFlying)
                 {
-                    int dir = projectile.direction;
                     player.ChangeDir(dir);
-                    player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
                 }
             }
         }

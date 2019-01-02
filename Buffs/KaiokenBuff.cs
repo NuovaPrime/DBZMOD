@@ -24,11 +24,11 @@ namespace DBZMOD.Buffs
                 case 2:
                     return "Kaioken x3";
                 case 3:
-                    return "Kaioken x10";
+                    return "Kaioken x4";
                 case 4:
-                    return "Kaioken x20";
+                    return "Kaioken x10";
                 case 5:
-                    return "Kaioken x100";
+                    return "Kaioken x20";
             }
             return string.Empty;
         }
@@ -64,10 +64,10 @@ namespace DBZMOD.Buffs
                 }
             }
 
-            DamageMulti = 1f + (0.2f * KaiokenLevel);
-            SpeedMulti = 1f + (0.2f * KaiokenLevel);
-            HealthDrainRate = 8 * KaiokenLevel;
-            KiDrainBuffMulti = 1f + (0.2f * KaiokenLevel);
+            DamageMulti = 1f + (0.1f * KaiokenLevel);
+            SpeedMulti = 1f + (0.1f * KaiokenLevel);
+            HealthDrainRate = 8 + (8 * KaiokenLevel);
+            KiDrainBuffMulti = 1f + (0.1f * KaiokenLevel);
             
             base.Update(player, ref buffIndex);
         }

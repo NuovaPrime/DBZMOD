@@ -51,6 +51,7 @@ namespace DBZMOD.Projectiles
 
             // vector to reposition the charge ball if it feels too low or too high on the character sprite
             ChannelingOffset = new Vector2(0, -14f);
+            BeamCreationOffset = new Vector2(0, 14f); // put the beam back to the hand position, roughly.
 
             // The sound effect used by the projectile when charging up.
             ChargeSoundKey = "Sounds/SBCCharge";
@@ -59,6 +60,8 @@ namespace DBZMOD.Projectiles
             ChargeSoundDelay = 120;
 
             IsBeamOriginTracking = false;
+
+            IsChargeAtHeadHeight = true;
 
             base.SetDefaults();
         }
