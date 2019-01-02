@@ -36,6 +36,15 @@ namespace DBZMOD.Items.Accessories.Infusers
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
+
+            // alternate anti-crimson recipe
+            ModRecipe recipe1 = new ModRecipe(mod);
+            recipe1.AddIngredient(null, "AngerKiCrystal", 25);
+            recipe1.AddIngredient(null, "ScrapMetal", 12);
+            recipe1.AddIngredient(ItemID.CursedFlame, 5);
+            recipe1.AddTile(TileID.Anvils);
+            recipe1.SetResult(this);
+            recipe1.AddRecipe();
         }
     }
 }

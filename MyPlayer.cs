@@ -1673,9 +1673,9 @@ namespace DBZMOD
 
         public bool CanIncreaseKaiokenLevel()
         {
-            if (Transformations.IsAnythingOtherThanKaioken(player) && !Transformations.IsValidKaiokenForm(player))
+            if (Transformations.IsAnythingOtherThanKaioken(player))
             {
-                return KaiokenLevel == 0 && KaioAchieved;
+                return Transformations.IsValidKaiokenForm(player) && KaiokenLevel == 0 && KaioAchieved;
             }
 
             switch (KaiokenLevel)
