@@ -767,7 +767,11 @@ namespace DBZMOD
 
         public void HandleAuras()
         {
-
+            if (player.dead)
+            {
+                ActiveAuraAnimations.Clear();
+                return;
+            }
             // injecting kaioken auras first to see what happens
             HandleAura(Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
             HandleAura(Transformations.IsKaioken(player) && Transformations.IsAnythingOtherThanKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
