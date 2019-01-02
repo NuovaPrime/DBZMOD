@@ -189,25 +189,9 @@ namespace DBZMOD
                     break;
             }
 
-            switch (modPlayer.MouseWorldOctant)
-            {
-                case -2:
-                    octantDirection = Main.MouseWorld.X < modPlayer.player.Center.X ? -1 : 1;
-                    break;
-                case -1:
-                case 0:
-                case 1:
-                    octantDirection = 1;
-                    break;
-                case -3:
-                case 4:
-                case 3:
-                    octantDirection = -1;
-                    break;
-                case 2:
-                    octantDirection = Main.MouseWorld.X < modPlayer.player.Center.X ? -1 : 1;
-                    break;
-            }
+            // for direction we have to do things a bit different.
+            Vector2 mouseVector = modPlayer.GetMouseVectorOrDefault();
+            octantDirection = mouseVector.X < 0 ? -1 : 1;
 
             return new Tuple<int, float>(octantDirection, octantPitch * 45f);
         }

@@ -929,8 +929,17 @@ namespace DBZMOD
                 return;
 
             // this is why :p
-            float mouseRadians = Vector2.Normalize(Main.MouseWorld - player.Center).ToRotation();
+            MouseWorldOctant = GetMouseWorldOctantFromRadians(GetMouseRadiansOrDefault());
+        }
 
+        public float GetMouseRadiansOrDefault()
+        {
+            return GetMouseVectorOrDefault().ToRotation();
+        }
+
+        public Vector2 GetMouseVectorOrDefault()
+        {
+            Vector2 mouseVector = Vector2.Normalize(Main.MouseWorld - player.Center);
             if (player.heldProj > -1)
             {
                 // player has a projectile, check to see if it's a charge ball or beam, that hijacks the octant for style.
@@ -942,18 +951,16 @@ namespace DBZMOD
                         var charge = proj.modProjectile as BaseBeamCharge;
                         if (charge.IsSustainingFire)
                         {
-                            mouseRadians = charge.MyProjectile.velocity.ToRotation();
+                            mouseVector = charge.MyProjectile.velocity;
                         }
                         else
                         {
-                            mouseRadians = proj.velocity.ToRotation();
+                            mouseVector = proj.velocity;
                         }
                     }
                 }
             }
-            
-
-            MouseWorldOctant = GetMouseWorldOctantFromRadians(mouseRadians);
+            return mouseVector;
         }
 
         public int GetMouseWorldOctantFromRadians(float mouseRadians)
@@ -962,7 +969,7 @@ namespace DBZMOD
             // to make this clear, we're setting up some offset vars to make the numbers a bit more obvious.
             float thresholdDegrees = 22.5f;
             float circumferenceSpan = 45f;
-            // the 8 octants, starting at the north mark and, presumably, rotating clockwise.
+            // the 8 octants, starting at the EAST mark (0) and, presumably, rotating clockwise (positive) or counter clockwise (negative).
             // note that 4 and -4 are the same thing. It doesn't matter which you use, radian outcome is the same.
             int[] octants = { -4, -3, -2, -1, 0, 1, 2, 3, 4 };
             foreach (int octant in octants)
