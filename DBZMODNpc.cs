@@ -212,6 +212,7 @@ namespace DBZMOD
                 {
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+                    modPlayer.KaiokenLevel = 0;
                     Transformations.EndTransformations(player, true, false);
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax());
