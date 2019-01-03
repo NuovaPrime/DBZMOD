@@ -19,7 +19,7 @@ namespace DBZMOD
     {
         // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
         public Point[] DragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
-
+        public List<Vector2> KiBeacons = new List<Vector2>();
         // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
         // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
         public int WorldDragonBallKey = 0;
@@ -48,6 +48,7 @@ namespace DBZMOD
             dbtWorldTag.Add("SixStarDragonBallY", DragonBallLocations[5].Y);
             dbtWorldTag.Add("SevenStarDragonBallX", DragonBallLocations[6].X);
             dbtWorldTag.Add("SevenStarDragonBallY", DragonBallLocations[6].Y);
+            dbtWorldTag.Add("KiBeacons", KiBeacons);
             return dbtWorldTag;
         }
 
@@ -69,6 +70,7 @@ namespace DBZMOD
             DragonBallLocations[4] = fiveStarPoint;
             DragonBallLocations[5] = sixStarPoint;
             DragonBallLocations[6] = sevenStarPoint;
+            KiBeacons = tag.ContainsKey("KiBeacons") ? (List<Vector2>)tag.GetList<Vector2>("KiBeacons") : new List<Vector2>();
             base.Load(tag);
         }
 

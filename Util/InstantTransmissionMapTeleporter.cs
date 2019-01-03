@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Network;
 using ReLogic.Graphics;
 using System;
@@ -19,8 +20,27 @@ namespace DBZMOD.Util
             instance = this;
         }
 
+        public void HandleDrawingKiBeacons()
+        {
+            Texture2D texture = DBZMOD.instance.GetTexture("UI/KiBeaconMap");
+
+            // desperation starts here
+            foreach (var beaconLocation in DBZWorld.GetWorld().KiBeacons)
+            {
+                // map coordinates represent the map tile being placed at *the center* of the screen.
+                var mapX = Main.mapFullscreenPos.X;
+                var mapY = Main.mapFullscreenPos.Y;
+
+                // drawing, thus, is relative to the center, offset by the scaled distance between the target to render and the current map display "center".
+                var mapOffsetX = Main.screenWidth / 2 + ((beaconLocation.X + 8f) - (mapX * 16f)) / (16 / Main.mapFullscreenScale);
+                var mapOffsetY = Main.screenHeight / 2 + ((beaconLocation.Y - 8f) - (mapY * 16f)) / (16 / Main.mapFullscreenScale);
+                Main.spriteBatch.Draw(texture, new Vector2(mapOffsetX, mapOffsetY), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0f, texture.Size() * 0.5f, 1f, SpriteEffects.None, 0f);
+            }
+        }
+
         public void PostDrawFullScreenMap()
         {
+            HandleDrawingKiBeacons();
             var modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             var player = modPlayer.player;
             if (modPlayer.IsInstantTransmission1Unlocked)
@@ -57,12 +77,12 @@ namespace DBZMOD.Util
                         if (cursorWorldPosition.Y < 0) cursorWorldPosition.Y = 0;
                         else if (cursorWorldPosition.Y + player.height > mapHeight) cursorWorldPosition.Y = mapHeight - player.height;
 
+                        // DebugUtil.Log(string.Format("Cursor world position: {0} {1}", cursorWorldPosition.X, cursorWorldPosition.Y));
                         // loop over non-hostile players and npcs
                         NPC npcTarget = SeekNPCTarget(cursorWorldPosition);
-                        Player playerTarget = SeekPlayerTarget(cursorWorldPosition);
-                        // temp disabled beacon targets until they have a tile/sprite, then more work done
-                        // Tile beaconTarget = SeekBeaconTarget(cursorWorldPosition);
-                        if (npcTarget != null || playerTarget != null)
+                        Player playerTarget = SeekPlayerTarget(cursorWorldPosition);                        
+                        Vector2 beaconTarget = SeekBeaconTarget(cursorWorldPosition);
+                        if (npcTarget != null || playerTarget != null || beaconTarget != Vector2.Zero)
                         {
                             modPlayer.AddKi(-modPlayer.GetInstantTransmissionTeleportKiCost());
                             modPlayer.AddInstantTransmissionChaosDebuff(Vector2.Distance(cursorWorldPosition, player.Center));
@@ -88,9 +108,37 @@ namespace DBZMOD.Util
             }
         }
 
+        public Vector2 SeekBeaconTarget(Vector2 cursorWorldPosition)
+        {
+            float mapScale = Main.mapFullscreenScale;
+            foreach (var beaconLocation in DBZWorld.GetWorld().KiBeacons)
+            {
+                float beaconWidth = 48;
+                float beaconHeight = 48;
+                float beaconPosX = beaconLocation.X;
+                float beaconLocationY = beaconLocation.Y - 32f;
+
+                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
+                float leftMargin = beaconWidth * (1f + (0.5f * mapScale));
+                float rightMargin = beaconWidth * (2f + (0.5f * mapScale));
+                float topMargin = beaconHeight * (1f + (0.5f * mapScale));
+                float bottomMargin = beaconHeight * (2f + (0.5f * mapScale));
+                float beaconLowerXBound = beaconPosX - leftMargin;
+                float beaconLowerYBound = beaconLocationY - topMargin;
+                float beaconUpperXBound = beaconPosX + rightMargin;
+                float beaconUpperYBound = beaconLocationY + bottomMargin;
+                if (cursorWorldPosition.X >= beaconLowerXBound && cursorWorldPosition.X <= beaconUpperXBound && cursorWorldPosition.Y >= beaconLowerYBound && cursorWorldPosition.Y <= beaconUpperYBound)
+                {
+                    return beaconLocation;
+                }
+            }
+
+            return Vector2.Zero;
+        }
+
         public NPC SeekNPCTarget(Vector2 cursorWorldPosition)
         {
-            float mapScale = Main.mapMinimapScale;
+            float mapScale = Main.mapFullscreenScale;
             for (int npcIndex = 0; npcIndex < 200; npcIndex++)
             {
                 NPC npc = Main.npc[npcIndex];
@@ -126,6 +174,7 @@ namespace DBZMOD.Util
 
         public Player SeekPlayerTarget(Vector2 cursorWorldPosition)
         {
+            var mapScale = Main.mapFullscreenScale;
             for (int playerIndex = 0; playerIndex < 255; playerIndex++)
             {
                 Player player = Main.player[playerIndex];
@@ -145,8 +194,6 @@ namespace DBZMOD.Util
                 // why would you do this
                 if (player.whoAmI == Main.myPlayer)
                     continue;
-                var mapScale = Main.mapMinimapScale;
-
                 float playerWidth = player.width;
                 float playerHeight = player.height;
                 float playerPosX = player.position.X;

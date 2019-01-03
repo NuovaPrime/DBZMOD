@@ -1,6 +1,9 @@
 ﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -14,7 +17,7 @@ namespace DBZMOD.Tiles
     {
         public override void SetDefaults()
         {
-            Main.tileSolidTop[Type] = true;
+            Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileTable[Type] = false;
@@ -77,26 +80,45 @@ namespace DBZMOD.Tiles
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = Main.tileFrame[Type] * animationFrameHeight;
             
-            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(mod.GetTexture("Tiles/KiBeaconTileGlowmask"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(mod.GetTexture("Tiles/KiBeaconTileGlowmask"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            DebugUtil.Log(string.Format("FrameX {0}", tile.frameX));
+            //DebugUtil.Log(string.Format("FrameX {0}", tile.frameX));
             if (tile.frameX == 36)
             {
                 
-                Texture2D lightTexture = mod.GetTexture("Tiles/KiBeaconTileLight2");
+                Texture2D lightTexture = mod.GetTexture("Tiles/KiBeaconTileLight");
+                Texture2D lightTexture2 = mod.GetTexture("Tiles/KiBeaconTileLight2");
                 Vector2 spritePosition = new Vector2(i * 16f - Main.screenPosition.X - 8, (j * 16f - Main.screenPosition.Y) - 14) + zero;
                 spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-                spriteBatch.Draw(lightTexture, spritePosition, new Rectangle(0, 0, lightTexture.Width, lightTexture.Height), Color.White, 0f, lightTexture.Size() * 0.5f, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.Default, Main.instance.Rasterizer);
+                int shiftAlpha = (int)(Main.time % 65);
+                if (shiftAlpha >= 32)
+                {
+                    shiftAlpha = 32 - (shiftAlpha - 32);
+                }
+                shiftAlpha = shiftAlpha * 3 + 64;
+                Color transparencyColor = new Color(255, 255, 255, shiftAlpha);
+                spriteBatch.Draw(lightTexture, spritePosition, new Rectangle(0, 0, lightTexture.Width, lightTexture.Height), transparencyColor, 0f, lightTexture.Size() * 0.5f, 2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(lightTexture2, spritePosition + new Vector2(0, -11), new Rectangle(0, 0, lightTexture2.Width, lightTexture2.Height), transparencyColor, 0f, lightTexture2.Size() * 0.5f, 2f, SpriteEffects.None, 0f);
                 spriteBatch.End();
                 spriteBatch.Begin();
 
             }
             return false;
-        }        
+        }
+
+        public override void PlaceInWorld(int i, int j, Item item)
+        {
+            DBZWorld.GetWorld().KiBeacons.Add(new Vector2(i * 16f, j * 16f));
+        }
+
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        {            
+            DBZWorld.GetWorld().KiBeacons.Remove(new Vector2(i * 16f, j * 16f));
+        }
     }
 }
