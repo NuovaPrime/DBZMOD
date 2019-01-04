@@ -658,6 +658,7 @@ namespace DBZMOD
             // only fire this server side or single player.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
+            DebugUtil.ServerLog("Players changed - refreshing dragon ball locations.");
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
             {

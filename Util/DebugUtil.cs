@@ -20,6 +20,12 @@ namespace DBZMOD.Util
                 Main.NewText(someString);
         }
 
+        public static void ServerLog(string someString)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                Console.WriteLine(someString);
+        }
+
         // helper utils to throttle output spam by only displaying things on a per-time basis.
         public static bool IsSecondElapsed()
         {

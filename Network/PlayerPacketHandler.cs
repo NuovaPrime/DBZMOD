@@ -11,7 +11,6 @@ namespace Network
 {    
     internal class PlayerPacketHandler : PacketHandler
     {
-        // this timer keeps the ki sync from firing *every frame* which really hurts performance.
         public const byte SyncPlayer = 43;
         public const byte SyncTriggers = 44;
         public const byte RequestForSyncFromJoinedPlayer = 45;
@@ -51,6 +50,7 @@ namespace Network
 
         public void ReceiveDragonBallKeySyncRequest(int toWho)
         {
+            DebugUtil.Log(string.Format("Receiving DB Sync request from {0} (server)", toWho));
             ModPacket packet = GetPacket(SendDragonBallKeySync, 256);
             var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
             packet.Write(dbWorld.WorldDragonBallKey);
@@ -76,20 +76,28 @@ namespace Network
         {
             var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
             var dbKey = reader.ReadInt32();
-            Point db1 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db2 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db3 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db4 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db5 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db6 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            Point db7 = new Point(reader.ReadInt32(), reader.ReadInt32());
-            dbWorld.DragonBallLocations[0] = db1;
-            dbWorld.DragonBallLocations[1] = db2;
-            dbWorld.DragonBallLocations[2] = db3;
-            dbWorld.DragonBallLocations[3] = db4;
-            dbWorld.DragonBallLocations[4] = db5;
-            dbWorld.DragonBallLocations[5] = db6;
-            dbWorld.DragonBallLocations[6] = db7;
+            var db1X = reader.ReadInt32();
+            var db1Y = reader.ReadInt32();
+            var db2X = reader.ReadInt32();
+            var db2Y = reader.ReadInt32();
+            var db3X = reader.ReadInt32();
+            var db3Y = reader.ReadInt32();
+            var db4X = reader.ReadInt32();
+            var db4Y = reader.ReadInt32();
+            var db5X = reader.ReadInt32();
+            var db5Y = reader.ReadInt32();
+            var db6X = reader.ReadInt32();
+            var db6Y = reader.ReadInt32();
+            var db7X = reader.ReadInt32();
+            var db7Y = reader.ReadInt32();
+            dbWorld.DragonBallLocations[0] = new Point(db1X, db1Y);
+            dbWorld.DragonBallLocations[1] = new Point(db2X, db2Y);
+            dbWorld.DragonBallLocations[2] = new Point(db3X, db3Y);
+            dbWorld.DragonBallLocations[3] = new Point(db4X, db4Y);
+            dbWorld.DragonBallLocations[4] = new Point(db5X, db5Y);
+            dbWorld.DragonBallLocations[5] = new Point(db6X, db6Y);
+            dbWorld.DragonBallLocations[6] = new Point(db7X, db7Y);
+            dbWorld.WorldDragonBallKey = dbKey;
         }
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
