@@ -14,14 +14,9 @@ namespace DBZMOD.Effects.Animations.Aura
             return string.Format("Effects/Animations/Aura/{0}", spriteName);
         }
 
-        public static AuraAnimationInfo CreateChargeAura(MyPlayer modPlayer)
+        public static void DoChargeDust(MyPlayer modPlayer, AuraAnimationInfo auraInfo)
         {
-            return new AuraAnimationInfo(AuraID.Charge, modPlayer, GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        }
-
-        public static void DoChargeDust(AuraAnimationInfo auraInfo)
-        {
-            var position = auraInfo.GetAuraRotationAndPosition().Item2;
+            var position = auraInfo.GetAuraRotationAndPosition(modPlayer).Item2;
 
             for (int d = 0; d < 1; d++)
             {
@@ -38,39 +33,37 @@ namespace DBZMOD.Effects.Animations.Aura
             }
         }
 
-        public static AuraAnimationInfo CreateSSJ1Aura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.SSJ1, modPlayer, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
-        }
+        public static AuraAnimationInfo SSJ1Aura = new AuraAnimationInfo(AuraID.SSJ1, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);        
+        public static AuraAnimationInfo ASSJAura = new AuraAnimationInfo(AuraID.ASSJ, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);        
+        public static AuraAnimationInfo USSJAura = new AuraAnimationInfo(AuraID.USSJ, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
+        public static AuraAnimationInfo CreateFalseUIAura = new AuraAnimationInfo(AuraID.FalseUI, GetAnimationSpriteName("FalseUIAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoFalseUIDust), 0, null, 1);
+        public static AuraAnimationInfo CreateKaiokenAura = new AuraAnimationInfo(AuraID.Kaioken, GetAnimationSpriteName("KaiokenAura"), 4, 3, BlendState.AlphaBlend, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
+        public static AuraAnimationInfo CreateSuperKaiokenAura = new AuraAnimationInfo(AuraID.SuperKaioken, GetAnimationSpriteName("SuperKaiokenAura"), 4, 3, BlendState.AlphaBlend, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
+        public static AuraAnimationInfo LSSJ2Aura = new AuraAnimationInfo(AuraID.LSSJ2, GetAnimationSpriteName("LSSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1);
+        public static AuraAnimationInfo LSSJAura = new AuraAnimationInfo(AuraID.LSSJ, GetAnimationSpriteName("LSSJAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
+        public static AuraAnimationInfo SSJ2Aura = new AuraAnimationInfo(AuraID.SSJ2, GetAnimationSpriteName("SSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
+        public static AuraAnimationInfo SSJ3Aura = new AuraAnimationInfo(AuraID.SSJ3, GetAnimationSpriteName("SSJ3Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1);
+        public static AuraAnimationInfo SSJGAura = new AuraAnimationInfo(AuraID.SSJG, GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+        public static AuraAnimationInfo SpectrumAura = new AuraAnimationInfo(AuraID.Spectrum, GetAnimationSpriteName("SSJSpectrumAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoFabulousDust), 0, null, 1);
+        public static AuraAnimationInfo CreateChargeAura = new AuraAnimationInfo(AuraID.Charge, GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
-        public static AuraAnimationInfo CreateASSJAura(MyPlayer modPlayer)
+        public static void DoSSJ1Dust(MyPlayer modPlayer, AuraAnimationInfo aura)
         {
-            return new AuraAnimationInfo(AuraID.ASSJ, modPlayer, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
-        }
-
-        public static AuraAnimationInfo CreateUSSJAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.USSJ, modPlayer, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
-        }
-
-        public static void DoSSJ1Dust(AuraAnimationInfo aura)
-        {
-            var player = aura.GetPlayerOwner();
             const float AURAWIDTH = 3.0f;
 
             for (int i = 0; i < 20; i++)
             {
                 float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
-                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
+                float yPos = ((Vector2.UnitY * modPlayer.player.height) - (Vector2.UnitY * Main.rand.Next(0, modPlayer.player.height))).Y - 0.5f;
 
-                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 87, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+                Dust tDust = Dust.NewDustDirect(modPlayer.player.position + new Vector2(xPos, yPos), 1, 1, 87, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
 
-                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
+                if ((Math.Abs((tDust.position - (modPlayer.player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
                 {
                     tDust.scale *= 0.75f;
                 }
 
-                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
+                Vector2 dir = -(tDust.position - ((modPlayer.player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * modPlayer.player.height)));
                 dir.Normalize();
 
                 tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
@@ -78,18 +71,13 @@ namespace DBZMOD.Effects.Animations.Aura
             }
         }
 
-        public static AuraAnimationInfo CreateFalseUIAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.FalseUI, modPlayer, GetAnimationSpriteName("FalseUIAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoFalseUIDust), 0, null, 1);
-        }
-
-        public static void DoFalseUIDust(AuraAnimationInfo aura)
+        public static void DoFalseUIDust(MyPlayer modPlayer, AuraAnimationInfo aura)
         {
             //blue dust
             if (Main.rand.NextFloat() < 1f)
             {
                 Dust dust;
-                Vector2 center = aura.GetCenter();
+                Vector2 center = aura.GetCenter(modPlayer);
                 Vector2 position = center + new Vector2(-15, -20);
                 dust = Terraria.Dust.NewDustDirect(position, 42, 58, 187, 0f, -5.526316f, 0, new Color(255, 255, 255), 0.8552632f);
                 dust.noGravity = true;
@@ -99,7 +87,7 @@ namespace DBZMOD.Effects.Animations.Aura
             if (Main.rand.NextFloat() < 0.5263158f)
             {
                 Dust dust;
-                Vector2 center = aura.GetCenter();
+                Vector2 center = aura.GetCenter(modPlayer);
                 Vector2 position = center + new Vector2(-17, -10);
                 dust = Terraria.Dust.NewDustDirect(position, 26, 52, 63, 0f, -7.368421f, 0, new Color(255, 255, 255), 0.8552632f);
                 dust.noGravity = true;
@@ -107,49 +95,9 @@ namespace DBZMOD.Effects.Animations.Aura
             }
         }
 
-        public static AuraAnimationInfo CreateKaiokenAura(MyPlayer modPlayer)
+        public static void DoFabulousDust(MyPlayer modPlayer, AuraAnimationInfo aura)
         {
-            return new AuraAnimationInfo(AuraID.Kaioken, modPlayer, GetAnimationSpriteName("KaiokenAura"), 4, 3, BlendState.AlphaBlend, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
-        }
-
-        public static AuraAnimationInfo CreateSuperKaiokenAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.SuperKaioken, modPlayer, GetAnimationSpriteName("SuperKaiokenAura"), 4, 3, BlendState.AlphaBlend, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
-        }
-
-        public static AuraAnimationInfo CreateLSSJ2Aura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.LSSJ2, modPlayer, GetAnimationSpriteName("LSSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1);
-        }
-
-        public static AuraAnimationInfo CreateLSSJAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.LSSJ, modPlayer, GetAnimationSpriteName("LSSJAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
-        }
-
-        public static AuraAnimationInfo CreateSSJ2Aura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.SSJ2, modPlayer, GetAnimationSpriteName("SSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
-        }
-
-        public static AuraAnimationInfo CreateSSJ3Aura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.SSJ3, modPlayer, GetAnimationSpriteName("SSJ3Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1);
-        }
-
-        public static AuraAnimationInfo CreateSSJGAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.SSJG, modPlayer, GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        }
-
-        public static AuraAnimationInfo CreateSpectrumAura(MyPlayer modPlayer)
-        {
-            return new AuraAnimationInfo(AuraID.Spectrum, modPlayer, GetAnimationSpriteName("SSJSpectrumAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoFabulousDust), 0, null, 1);
-        }
-
-        public static void DoFabulousDust(AuraAnimationInfo aura)
-        {
-            var position = aura.GetAuraRotationAndPosition().Item2;
+            var position = aura.GetAuraRotationAndPosition(modPlayer).Item2;
             if (Main.rand.NextFloat() < 0.5f)
             {
                 Dust dust = Dust.NewDustDirect(position, aura.GetWidth(), aura.GetHeight(), 91, 0f, 0f, 0, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B), 0.75f);

@@ -17,6 +17,7 @@ namespace Network
         public const byte RequestForSyncFromJoinedPlayer = 45;
         public const byte RequestDragonBallKeySync = 46;
         public const byte RequestTeleportMessage = 47;
+        public const byte SendDragonBallKeySync = 48;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -37,12 +38,58 @@ namespace Network
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
                 case (RequestDragonBallKeySync):
-                    SendDragonBallKeyToPlayer(fromWho);
+                    ReceiveDragonBallKeySyncRequest(fromWho);                    
                     break;
                 case (RequestTeleportMessage):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
+                case (SendDragonBallKeySync):
+                    ReceiveDragonBallKeySync(reader, fromWho);
+                    break;
             }
+        }
+
+        public void ReceiveDragonBallKeySyncRequest(int toWho)
+        {
+            ModPacket packet = GetPacket(SendDragonBallKeySync, 256);
+            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            packet.Write(dbWorld.WorldDragonBallKey);
+            // new stuff, send the player all the dragon ball points.
+            packet.Write(dbWorld.DragonBallLocations[0].X);
+            packet.Write(dbWorld.DragonBallLocations[0].Y);
+            packet.Write(dbWorld.DragonBallLocations[1].X);
+            packet.Write(dbWorld.DragonBallLocations[1].Y);
+            packet.Write(dbWorld.DragonBallLocations[2].X);
+            packet.Write(dbWorld.DragonBallLocations[2].Y);
+            packet.Write(dbWorld.DragonBallLocations[3].X);
+            packet.Write(dbWorld.DragonBallLocations[3].Y);
+            packet.Write(dbWorld.DragonBallLocations[4].X);
+            packet.Write(dbWorld.DragonBallLocations[4].Y);
+            packet.Write(dbWorld.DragonBallLocations[5].X);
+            packet.Write(dbWorld.DragonBallLocations[5].Y);
+            packet.Write(dbWorld.DragonBallLocations[6].X);
+            packet.Write(dbWorld.DragonBallLocations[6].Y);
+            packet.Send(toWho, 256);
+        }
+
+        public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
+        {
+            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            var dbKey = reader.ReadInt32();
+            Point db1 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db2 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db3 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db4 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db5 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db6 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Point db7 = new Point(reader.ReadInt32(), reader.ReadInt32());
+            dbWorld.DragonBallLocations[0] = db1;
+            dbWorld.DragonBallLocations[1] = db2;
+            dbWorld.DragonBallLocations[2] = db3;
+            dbWorld.DragonBallLocations[3] = db4;
+            dbWorld.DragonBallLocations[4] = db5;
+            dbWorld.DragonBallLocations[5] = db6;
+            dbWorld.DragonBallLocations[6] = db7;
         }
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
@@ -117,14 +164,6 @@ namespace Network
             packet.Write(whichPlayer);
             packet.Write(isHeld);
             packet.Send(toWho, fromWho);
-        }
-
-        public void SendDragonBallKeyToPlayer(int toWho)
-        {
-            ModPacket packet = GetPacket(RequestDragonBallKeySync, 256);
-            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
-            packet.Write(dbWorld.WorldDragonBallKey);
-            packet.Send(toWho, 256);
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)

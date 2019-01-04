@@ -17,9 +17,6 @@ namespace DBZMOD.Models
         public string AuraAnimationSpriteName;
         public int Frames;
         public int FrameTimerLimit;
-        public int CurrentFrame = 0;
-        public int FrameTimer = 0;
-        public int Owner;
         public int Priority;
         public BlendState BlendState;
         public string StartupSoundName;
@@ -32,13 +29,13 @@ namespace DBZMOD.Models
         public int StartingFrameCounter;
         public DustDelegate DoStartingDust;        
         public DustDelegate DoDust;
-        public delegate void DustDelegate(AuraAnimationInfo info);
+        public delegate void DustDelegate(MyPlayer modPlayer, AuraAnimationInfo info);
 
         public AuraAnimationInfo()
         {
         }
 
-        public AuraAnimationInfo(AuraID id, MyPlayer owner, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
+        public AuraAnimationInfo(AuraID id, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
             ID = (int)id;
             AuraAnimationSpriteName = spriteName;
@@ -51,7 +48,6 @@ namespace DBZMOD.Models
             IsKaiokenAura = isKaioken;
             IsFormAura = isForm;
             DoDust = dustDelegate;
-            Owner = owner.player.whoAmI;
             StartingFrames = startingFrames;
             StartingFrameCounter = 0;
             DoStartingDust = startingDustDelegate;
@@ -73,29 +69,22 @@ namespace DBZMOD.Models
             return GetTexture().Width;
         }
 
-        public Player GetPlayerOwner()
+        public Tuple<float, Vector2> GetAuraRotationAndPosition(MyPlayer modPlayer)
         {
-            return Main.player[Owner];
-        }
-
-        public Tuple<float, Vector2> GetAuraRotationAndPosition()
-        {
-            var player = GetPlayerOwner();
             // update handler to reorient the charge up aura after the aura offsets are defined.
-            bool isPlayerMostlyStationary = Math.Abs(player.velocity.X) <= 6F && Math.Abs(player.velocity.Y) <= 6F;
+            bool isPlayerMostlyStationary = Math.Abs(modPlayer.player.velocity.X) <= 6F && Math.Abs(modPlayer.player.velocity.Y) <= 6F;
             float rotation = 0f;
             Vector2 position = Vector2.Zero;
-            var modPlayer = player.GetModPlayer<MyPlayer>();
-            float scale = GetAuraScale();
-            int auraOffsetY = GetAuraOffsetY();
-            if (MyPlayer.ModPlayer(player).IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
+            float scale = GetAuraScale(modPlayer);
+            int auraOffsetY = GetAuraOffsetY(modPlayer);
+            if (modPlayer.IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
-                double rotationOffset = player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
-                rotation = (float)(player.fullRotation + rotationOffset);
+                double rotationOffset = modPlayer.player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
+                rotation = (float)(modPlayer.player.fullRotation + rotationOffset);
 
                 // using the angle of attack, construct the cartesian offsets of the aura based on the height of both things
-                double widthRadius = player.width / 4;
-                double heightRadius = player.height / 4;
+                double widthRadius = modPlayer.player.width / 4;
+                double heightRadius = modPlayer.player.height / 4;
                 double auraWidthRadius = GetWidth() / 4;
                 double auraHeightRadius = GetHeight() / 4;
 
@@ -104,51 +93,49 @@ namespace DBZMOD.Models
                 double forwardOffset = 32;
                 double widthOffset = auraWidthRadius - (widthRadius + (auraOffsetY + forwardOffset));
                 double heightOffset = auraHeightRadius - (heightRadius + (auraOffsetY + forwardOffset));
-                double cartesianOffsetX = widthOffset * Math.Cos(player.fullRotation);
-                double cartesianOffsetY = heightOffset * Math.Sin(player.fullRotation);
+                double cartesianOffsetX = widthOffset * Math.Cos(modPlayer.player.fullRotation);
+                double cartesianOffsetY = heightOffset * Math.Sin(modPlayer.player.fullRotation);
 
-                Vector2 cartesianOffset = player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
+                Vector2 cartesianOffset = modPlayer.player.Center + new Vector2((float)-cartesianOffsetY, (float)cartesianOffsetX);
 
                 // offset the aura
                 position = cartesianOffset;
             }
             else
             {
-                position = player.Center + new Vector2(0f, auraOffsetY);
+                position = modPlayer.player.Center + new Vector2(0f, auraOffsetY);
                 rotation = 0f;
             }
             return new Tuple<float, Vector2>(rotation, position);
         }
 
-        public void ProcessDust()
+        public void ProcessDust(MyPlayer modPlayer)
         {
             if (DoDust != null)
-                DoDust(this);
+                DoDust(modPlayer, this);
         }
 
-        public void ProcessStartingDust()
+        public void ProcessStartingDust(MyPlayer modPlayer)
         {
             if (DoStartingDust != null)
-                DoStartingDust(this);
+                DoStartingDust(modPlayer, this);
         }
 
-        public Vector2 GetCenter()
+        public Vector2 GetCenter(MyPlayer modPlayer)
         {
-            return GetAuraRotationAndPosition().Item2 + new Vector2(GetWidth(), GetHeight()) * 0.5f;
+            return GetAuraRotationAndPosition(modPlayer).Item2 + new Vector2(GetWidth(), GetHeight()) * 0.5f;
         }
 
-        public int GetAuraOffsetY()
+        public int GetAuraOffsetY(MyPlayer modPlayer)
         {
-            var player = GetPlayerOwner();
             var frameHeight = GetHeight();
-            var scale = GetAuraScale();
+            var scale = GetAuraScale(modPlayer);
             // easy automatic aura offset.
-            return (int)((player.height * 0.6f - frameHeight / 2) * scale);
+            return (int)((modPlayer.player.height * 0.6f - frameHeight / 2) * scale);
         }
 
-        public float GetAuraScale()
+        public float GetAuraScale(MyPlayer modPlayer)
         {
-            var modPlayer = GetPlayerOwner().GetModPlayer<MyPlayer>();
             // universal scale handling
             // scale is based on kaioken level, which gets set to 0
             var baseScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (IsKaiokenAura ? -0.1f : 0f);

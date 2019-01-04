@@ -543,37 +543,21 @@ namespace DBZMOD.Util
                 RemoveTransformation(player, Kaioken.BuffKeyName);
             }
 
-            BuffInfo transformationToKeep = null;
-
-            // no keeping transforms.
-            //if (!isPoweringDown)
-            //{
-            //    //if player tring to do a ssj transformation
-            //    if (IsAnythingOtherThanKaioken(buff))
-            //    {
-            //        //keep kaioken buff
-            //        transformationToKeep = GetCurrentTransformation(player, false, true);
-            //    }
-            //    else if (IsKaioken(buff))//if player trying to do a kaioken transformation
-            //    {
-            //        //keep ssj buff
-            //        transformationToKeep = GetCurrentTransformation(player, true, false);
-            //    }
-            //}
-
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
-            EndTransformations(player, isPoweringDown, isOneStep, transformationToKeep);
+            EndTransformations(player, isPoweringDown, isOneStep);
 
             // add whatever buff it is for a really long time.
             AddTransformation(player, buff.BuffKeyName, ABSURDLY_LONG_BUFF_DURATION);
         }
 
-        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep, BuffInfo transformationToKeep = null)
+        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            // automatically applies debuffs.            
-            ClearAllTransformations(player, isPoweringDown, isOneStep, transformationToKeep);
+            // automatically applies debuffs.
+            // skk qualifies as "non" kaioken.
+            var currentBuff = GetCurrentTransformation(player, false, true);
+            ClearAllTransformations(player, isPoweringDown, isOneStep);
             modPlayer.IsTransformationAnimationPlaying = false;
             modPlayer.TransformationFrameTimer = 0;
             
@@ -581,7 +565,7 @@ namespace DBZMOD.Util
         }
 
         public static void AddTransformation(Player player, string buffKeyName, int duration)
-        {
+        {            
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
             player.AddBuff(buff.GetBuffId(), ABSURDLY_LONG_BUFF_DURATION, false);
 
@@ -591,10 +575,6 @@ namespace DBZMOD.Util
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
             }
-
-            // find out if the player is already transformed - and if so, are we stacking Kaioken? If we are, we need to reapply some projectiles in a particular order.
-            bool isKaioken = IsKaioken(buff);
-            bool isPlayerCurrentlyTransformed = IsAnythingOtherThanKaioken(player);
 
             // start the transformation animation, if one exists. This auto cancels if nothing is there to play.
             player.GetModPlayer<MyPlayer>().IsTransformationAnimationPlaying = true;

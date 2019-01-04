@@ -272,9 +272,6 @@ namespace DBZMOD
         public int TransformationFrameTimer;
         public bool IsTransformationAnimationPlaying = false;
 
-        // animation of auras is handled as a list of Aura Info instances that get read each frame.
-        public List<AuraAnimationInfo> ActiveAuraAnimations = new List<AuraAnimationInfo>(); // initialized on startup.
-
         // bools used to apply transformation debuffs appropriately
         public bool IsKaioken;
         public bool WasKaioken;
@@ -282,6 +279,10 @@ namespace DBZMOD
         public bool WasTransformed;
 
         public int MouseWorldOctant = -1;
+
+        // Aura tracking to play audio and stuff.
+        public AuraAnimationInfo PreviousAura;
+        public AuraAnimationInfo CurrentAura;
         #endregion
 
         #region Syncable Controls
@@ -313,6 +314,7 @@ namespace DBZMOD
             {
                 DBZWorld.SyncWorldDragonBallKey(player);
             }
+
             ItemHelper.ScanPlayerForIllegitimateDragonballs(player);
 
             // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
@@ -674,16 +676,7 @@ namespace DBZMOD
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
 
-            // Handle adding auras to the.. handler (of animations)
-            HandleAuras();
-
-            // Handle playing any sounds we're supposed to be playing for auras/charging up.
-            HandleAuraSounds();
-
             CheckPlayerForTransformationStateDebuffApplication();
-
-            // update WasCharging so we can ensure we're managing state each frame
-            WasCharging = IsCharging;
 
             ThrottleKi();
 
@@ -696,107 +689,6 @@ namespace DBZMOD
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
-        }
-
-        public bool IsAuraActive(AuraID auraId)
-        {
-            return ActiveAuraAnimations.Count(x => x.ID == (int)auraId) > 0;
-        }
-
-        public void HandleAuraSounds()
-        {
-            foreach (var aura in ActiveAuraAnimations)
-            {
-                bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
-                if (shouldPlayAudio)
-                {
-                    if (AuraSoundTimer == 0)                    
-                        AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, .2f);                                            
-                    AuraSoundTimer++;
-                    if (AuraSoundTimer > aura.LoopSoundDuration)
-                        AuraSoundTimer = 0;
-                }
-            }
-
-            // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
-        }
-
-        public void AddAura(AuraAnimationInfo aura)
-        {
-            if (aura.StartupSoundName != null)
-            {
-                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
-            }
-
-            if (aura.ID != (int)AuraID.Charge && IsAuraActive(AuraID.Charge))
-            {
-                RemoveAura(AuraID.Charge);
-            }
-
-            AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
-            AuraSoundTimer = 0;
-            ActiveAuraAnimations.Add(aura);
-        }
-
-        public void RemoveAura(AuraID auraId)
-        {
-            int index = -1;
-            for (int i = 0; i < ActiveAuraAnimations.Count; i++)
-            {
-                if (ActiveAuraAnimations[i].ID == (int)auraId)
-                    index = i;
-            }
-
-            if (index > -1)
-                ActiveAuraAnimations.RemoveAt(index);
-        }
-
-        // delegate responsible for the calling process actually creating a player aura when needed, and not every frame.
-        public delegate AuraAnimationInfo CreateAura(MyPlayer modPlayer);
-
-        public void HandleAuras()
-        {
-            if (player.dead)
-            {
-                ActiveAuraAnimations.Clear();
-                return;
-            }
-            // injecting kaioken auras first to see what happens
-            HandleAura(Transformations.IsKaioken(player), AuraID.Kaioken, AuraAnimations.CreateKaiokenAura);
-            HandleAura(Transformations.IsSuperKaioken(player), AuraID.SuperKaioken, AuraAnimations.CreateSuperKaiokenAura);
-            HandleAura(Transformations.IsSSJ1(player), AuraID.SSJ1, AuraAnimations.CreateSSJ1Aura);
-            HandleAura(Transformations.IsASSJ(player), AuraID.ASSJ, AuraAnimations.CreateASSJAura);
-            HandleAura(Transformations.IsUSSJ(player), AuraID.USSJ, AuraAnimations.CreateUSSJAura);
-            HandleAura(Transformations.IsSSJ2(player), AuraID.SSJ2, AuraAnimations.CreateSSJ2Aura);
-            HandleAura(Transformations.IsSSJ3(player), AuraID.SSJ3, AuraAnimations.CreateSSJ3Aura);
-            HandleAura(Transformations.IsSSJG(player), AuraID.SSJG, AuraAnimations.CreateSSJGAura);
-            HandleAura(Transformations.IsLSSJ1(player), AuraID.LSSJ, AuraAnimations.CreateLSSJAura);
-            HandleAura(Transformations.IsLSSJ2(player), AuraID.LSSJ2, AuraAnimations.CreateLSSJ2Aura);
-            HandleAura(Transformations.IsSpectrum(player), AuraID.Spectrum, AuraAnimations.CreateSpectrumAura);
-            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
-            if (ActiveAuraAnimations.Count == 0)
-                HandleAura(IsCharging, AuraID.Charge, AuraAnimations.CreateChargeAura);
-
-            // a special handler for removing the charge aura when we're no longer charging
-            if (!IsCharging && IsAuraActive(AuraID.Charge))
-            {
-                RemoveAura(AuraID.Charge);
-            }
-        }
-
-        public void HandleAura(bool condition, AuraID auraId, CreateAura AuraDelegate)
-        {
-            if (condition)
-            {
-                if (!IsAuraActive(auraId))
-                    AddAura(AuraDelegate(this));
-            }
-            else
-            {
-                if (IsAuraActive(auraId))
-                    RemoveAura(auraId);
-            }
         }
 
         public bool AllDragonBallsNearby()
@@ -1870,7 +1762,12 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
+                var playerWasSuperKaioken = Transformations.IsSuperKaioken(player);
                 Transformations.EndTransformations(player, true, false);
+                if (playerWasSuperKaioken)
+                {
+                    Transformations.DoTransform(player, Transformations.SSJ1, mod, false);
+                }
                 KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
@@ -1947,6 +1844,7 @@ namespace DBZMOD
             float kiCost = GetInstantTransmissionFrameKiCost(intensity, distance);
 
             // the one frame delay on handling instant transmission is to set up the limbo var.
+            // this should also theoretically prevent fullscreen map transmission from double-firing ITs.
             if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
                 isHandlingInstantTransmissionTriggers = true;
             }
@@ -1971,7 +1869,19 @@ namespace DBZMOD
                 // if we fail, the player gets some ki back but the processing is still canceled.
                 isReturningFromInstantTransmission = true;
                 isHandlingInstantTransmissionTriggers = false;
-                if (TryTransmission(distance))
+
+                Vector2 target;
+                target.X = Main.mouseX + Main.screenPosition.X;
+                if (player.gravDir == 1f)
+                {
+                    target.Y = Main.mouseY + Main.screenPosition.Y - player.height;
+                }
+                else
+                {
+                    target.Y = Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
+                }
+
+                if (TryTransmission(target, distance))
                 {
                     // there's no need to "return" from IT, you succeeded.
                     // make sure we don't try to give the player back their ki
@@ -1988,10 +1898,10 @@ namespace DBZMOD
             }
         }
 
-        public bool TryTransmission(float distance)
+        public bool TryTransmission(Vector2 target, float distance)
         {
             Vector2 originalPosition = player.Center;
-            if (!HandleInstantTransmissionExitRoutine(distance))
+            if (!HandleInstantTransmissionExitRoutine(target, distance))
             {
                 AddKi(trackedInstantTransmissionKiLoss);
                 trackedInstantTransmissionKiLoss = 0f;
@@ -2007,21 +1917,10 @@ namespace DBZMOD
             }
         }
 
-        public bool HandleInstantTransmissionExitRoutine(float distance)
+        public bool HandleInstantTransmissionExitRoutine(Vector2 target, float distance)
         {
             // unabashedly stolen from decompiled source for rod of discord.
-            // find a suitable place to IT to, reversing the camera pan direction if necessary.            
-            // try a normal game teleport, maybe it handles safety
-            Vector2 target;
-            target.X = (float)Main.mouseX + Main.screenPosition.X;
-            if (player.gravDir == 1f)
-            {
-                target.Y = (float)Main.mouseY + Main.screenPosition.Y - (float)player.height;
-            }
-            else
-            {
-                target.Y = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
-            }            
+            // find a suitable place to IT to, reversing the camera pan direction if necessary.
             target.X -= (float)(player.width / 2);
             if (target.X > 50f && target.X < (float)(Main.maxTilesX * 16 - 50) && target.Y > 50f && target.Y < (float)(Main.maxTilesY * 16 - 50))
             {
@@ -2125,34 +2024,17 @@ namespace DBZMOD
         {
             KiDamage = 1f;
             KiKbAddition = 0f;
-            if (KiEssence1)
-            {
-                KiChargeRate = 2;
-
-                if (KiEssence2)
-                {
-                    KiChargeRate = 3;
-
-                    if (KiEssence3)
-                    {
-                        KiChargeRate = 5;
-
-                        if (KiEssence4)
-                        {
-                            KiChargeRate = 7;
-
-                            if (KiEssence5)
-                            {
-                                KiChargeRate = 10;
-                            }
-                        }
-                    }
-                }
-            }
-            if (!KiEssence1 && !KiEssence2 && !KiEssence3 && !KiEssence4 && !KiEssence5)
-            {
-                KiChargeRate = 1;
-            }
+            KiChargeRate = 1;
+            if (KiEssence1)            
+                KiChargeRate += 1;
+            if (KiEssence2)
+                KiChargeRate += 1;
+            if (KiEssence3)
+                KiChargeRate += 2;
+            if (KiEssence4)
+                KiChargeRate += 2;
+            if (KiEssence5)
+                KiChargeRate += 3;
             scouterT2 = false;
             scouterT3 = false;
             scouterT4 = false;
@@ -2510,7 +2392,27 @@ namespace DBZMOD
                 }
             }
         }
-        
+
+
+        public int AuraFrameTimer = 0;
+        public int AuraCurrentFrame = 0;
+        public void IncrementAuraFrameTimers(AuraAnimationInfo aura)
+        {
+            // doubled frame timer while charging.
+            if (IsCharging && aura.ID != (int)AuraID.Charge)
+                AuraFrameTimer++;
+
+            AuraFrameTimer++;
+            if (AuraFrameTimer >= aura.FrameTimerLimit)
+            {
+                AuraFrameTimer = 0;
+                AuraCurrentFrame++;
+            }
+            if (AuraCurrentFrame >= aura.Frames)
+            {
+                AuraCurrentFrame = 0;
+            }
+        }
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
@@ -2528,15 +2430,11 @@ namespace DBZMOD
                 AnimationHelper.DragonRadarEffects.visible = true;
                 layers.Add(AnimationHelper.DragonRadarEffects);
             }
-
-            foreach (var aura in ActiveAuraAnimations.OrderBy(x => x.Priority))
-            {
-                var auraEffect = AnimationHelper.AuraEffect(aura, IsCharging, KaiokenLevel);
-                auraEffect.visible = true;
-                // capture the back layer index, which should always exist before the hook fires.
-                var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
-                layers.Insert(index, auraEffect);
-            }
+            
+            AnimationHelper.AuraEffect.visible = true;
+            // capture the back layer index, which should always exist before the hook fires.
+            var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
+            layers.Insert(index, AnimationHelper.AuraEffect);
 
             // handle SSJ hair/etc.
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);

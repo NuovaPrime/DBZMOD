@@ -655,6 +655,9 @@ namespace DBZMOD
 
         public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)
         {
+            // only fire this server side or single player.
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
             {

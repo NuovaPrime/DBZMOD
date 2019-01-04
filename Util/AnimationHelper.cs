@@ -1,4 +1,5 @@
 ﻿using DBZMOD.Effects.Animations.Aura;
+using DBZMOD.Enums;
 using DBZMOD.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,53 +9,124 @@ using System.Linq;
 using System.Text;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Util
 {
     public static class AnimationHelper
     {
-        public static AuraDrawLayer AuraEffect(AuraAnimationInfo aura, bool isCharging, int kaiokenLevel)
+        public static void HandleAuraLoopSound(MyPlayer modPlayer, AuraAnimationInfo aura)
         {
-            return new AuraDrawLayer("DBZMOD", "AuraEffects", PlayerLayer.MiscEffectsBack, aura, delegate (PlayerDrawInfo drawInfo)
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(modPlayer.player, aura.IsFormAura);
+            if (shouldPlayAudio)
             {
-                Player drawPlayer = drawInfo.drawPlayer;
-                MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-                Mod mod = DBZMOD.instance;
-                if (drawInfo.shadow != 0f)
-                {
-                    return;
-                }
+                if (modPlayer.AuraSoundTimer == 0)
+                    modPlayer.AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, modPlayer.player, .7f, .2f);
+                modPlayer.AuraSoundTimer++;
+                if (modPlayer.AuraSoundTimer > aura.LoopSoundDuration)
+                    modPlayer.AuraSoundTimer = 0;
+            }
 
-                // doubled frame timer while charging.
-                if (isCharging)
-                    aura.FrameTimer++;
-
-                aura.FrameTimer++;
-                if (aura.FrameTimer >= aura.FrameTimerLimit)
-                {
-                    aura.FrameTimer = 0;
-                    aura.CurrentFrame++;
-                }
-                if (aura.CurrentFrame >= aura.Frames)
-                {
-                    aura.CurrentFrame = 0;
-                }
-
-                // we don't do player draw data, we do a custom draw.
-                // Main.playerDrawData.Add(AuraAnimationDrawData(drawInfo, aura));
-                DrawAura(modPlayer, aura, isCharging, kaiokenLevel);
-            });
+            // try to update positional audio?
+            SoundUtil.UpdateTrackedSound(modPlayer.AuraSoundInfo, modPlayer.player.position);
         }
 
-        public static void DrawAura(MyPlayer modPlayer, AuraAnimationInfo aura, bool isCharging, int kaiokenLevel)
-        {            
+        public static void HandleAuraStartupSound(MyPlayer modPlayer, AuraAnimationInfo aura, bool isCharging)
+        {
+            if (aura.StartupSoundName != null)
+            {
+                SoundUtil.PlayCustomSound(aura.StartupSoundName, modPlayer.player, 0.7f, 0.1f);
+            }
+        }
+        
+        public static AuraAnimationInfo GetAuraEffectOnPlayer(MyPlayer modPlayer)
+        {
+            if (Transformations.IsKaioken(modPlayer.player))
+                return AuraAnimations.CreateKaiokenAura;
+            if (Transformations.IsSuperKaioken(modPlayer.player))
+                return AuraAnimations.CreateSuperKaiokenAura;
+            if (Transformations.IsSSJ1(modPlayer.player))
+                return AuraAnimations.SSJ1Aura;
+            if (Transformations.IsASSJ(modPlayer.player))
+                return AuraAnimations.ASSJAura;
+            if (Transformations.IsUSSJ(modPlayer.player))
+                return AuraAnimations.USSJAura;
+            if (Transformations.IsSSJ2(modPlayer.player))
+                return AuraAnimations.SSJ2Aura;
+            if (Transformations.IsSSJ3(modPlayer.player))
+                return AuraAnimations.SSJ3Aura;
+            if (Transformations.IsSSJG(modPlayer.player))
+                return AuraAnimations.SSJGAura;
+            if (Transformations.IsLSSJ1(modPlayer.player))
+                return AuraAnimations.LSSJAura;
+            if (Transformations.IsLSSJ2(modPlayer.player))
+                return AuraAnimations.LSSJ2Aura;
+            if (Transformations.IsSpectrum(modPlayer.player))
+                return AuraAnimations.SpectrumAura;
+            return null;
+        }
+
+        public static readonly PlayerLayer AuraEffect = new PlayerLayer("DBZMOD", "AuraEffects", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            var player = drawInfo.drawPlayer;
+            var modPlayer = player.GetModPlayer<MyPlayer>();
+
             Mod mod = DBZMOD.instance;
+            if (drawInfo.shadow != 0f)
+            {
+                return;
+            }
+
+            var aura = GetAuraEffectOnPlayer(modPlayer);
+            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
+            if (modPlayer.IsCharging)
+            {
+                var chargeAura = AuraAnimations.CreateChargeAura;
+                if (!modPlayer.WasCharging)
+                {                    
+                    HandleAuraStartupSound(modPlayer, chargeAura, true);
+                }
+                if (aura == null)
+                {
+                    aura = chargeAura;
+                }
+            }
+            modPlayer.PreviousAura = modPlayer.CurrentAura;
+            modPlayer.CurrentAura = aura;
+
+            if (aura != null)
+            {
+                if (modPlayer.CurrentAura != modPlayer.PreviousAura)
+                {
+                    modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo);
+                    HandleAuraStartupSound(modPlayer, aura, false);
+                }
+                modPlayer.IncrementAuraFrameTimers(aura);
+
+                HandleAuraLoopSound(modPlayer, aura);
+
+                // we don't do player draw data, we do a custom draw.                
+                DrawAura(modPlayer, aura);
+            } else
+            {
+                modPlayer.AuraSoundInfo = SoundUtil.KillTrackedSound(modPlayer.AuraSoundInfo);
+            }
+
+            modPlayer.WasCharging = modPlayer.IsCharging;
+        });
+
+
+        public static void DrawAura(MyPlayer modPlayer, AuraAnimationInfo aura)
+        {
             Player player = modPlayer.player;
             Texture2D texture = aura.GetTexture();
-            Rectangle textureRectangle = new Rectangle(0, aura.GetHeight() * aura.CurrentFrame, texture.Width, aura.GetHeight());
-            float scale = aura.GetAuraScale();
-            Tuple<float, Vector2> rotationAndPosition = aura.GetAuraRotationAndPosition();
+            Rectangle textureRectangle = new Rectangle(0, aura.GetHeight() * modPlayer.AuraCurrentFrame, texture.Width, aura.GetHeight());
+            float scale = aura.GetAuraScale(modPlayer);
+            Tuple<float, Vector2> rotationAndPosition = aura.GetAuraRotationAndPosition(modPlayer);
             float rotation = rotationAndPosition.Item1;
             Vector2 position = rotationAndPosition.Item2;
 
@@ -76,6 +148,8 @@ namespace DBZMOD.Util
 
         public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
+            if (Main.netMode == NetmodeID.Server)
+                return;
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             Mod mod = DBZMOD.instance;
@@ -172,6 +246,8 @@ namespace DBZMOD.Util
 
         public static readonly PlayerLayer LightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
+            if (Main.netMode == NetmodeID.Server)
+                return;
             Mod mod = DBZMOD.instance;
             if (drawInfo.shadow != 0f)
             {
@@ -196,7 +272,11 @@ namespace DBZMOD.Util
             }
         });
 
-        public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo) {
+        public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
+        {
+            // ragon radar effects only show up for the player holding it.
+            if (drawInfo.drawPlayer.whoAmI != Main.myPlayer)
+                return;
 
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
