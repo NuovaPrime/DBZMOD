@@ -271,10 +271,16 @@
     <Compile Include="Items\DragonBalls\DragonRadar2.cs" />
     <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
     <Compile Include="Items\DragonBalls\FourStarDB.cs" />
+    <Compile Include="Items\DragonBalls\FiveStarStoneBall.cs" />
     <Compile Include="Items\DragonBalls\OneStarDB.cs" />
+    <Compile Include="Items\DragonBalls\FourStarStoneBall.cs" />
+    <Compile Include="Items\DragonBalls\SixStarStoneBall.cs" />
+    <Compile Include="Items\DragonBalls\SevenStarStoneBall.cs" />
+    <Compile Include="Items\DragonBalls\ThreeStarStoneBall.cs" />
+    <Compile Include="Items\DragonBalls\TwoStarStoneBall.cs" />
     <Compile Include="Items\DragonBalls\SevenStarDB.cs" />
     <Compile Include="Items\DragonBalls\SixStarDB.cs" />
-    <Compile Include="Items\DragonBalls\StoneBall.cs" />
+    <Compile Include="Items\DragonBalls\OneStarStoneBall.cs" />
     <Compile Include="Items\DragonBalls\ThreeStarDB.cs" />
     <Compile Include="Items\DragonBalls\TwoStarDB.cs" />
     <Compile Include="Items\EarthenShard.cs" />

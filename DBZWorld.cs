@@ -582,7 +582,7 @@ namespace DBZMOD
                     continue;
 
                 var dbItem = item.modItem as DragonBallItem;
-                if (dbItem.WhichDragonBall == whichDragonball && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
+                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(GetDragonBallTileTypeFromNumber(whichDragonball)) && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
                     return true;                
             }
             return false;

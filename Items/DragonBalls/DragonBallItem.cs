@@ -13,7 +13,6 @@ namespace DBZMOD.Items.DragonBalls
 {
     public abstract class DragonBallItem : ModItem
     {
-        public int WhichDragonBall = 0;
         public int? WorldDragonBallKey = null;
 
         // the most important thing basically.
@@ -42,24 +41,27 @@ namespace DBZMOD.Items.DragonBalls
         {
             var dbTagCompound = new TagCompound();
             dbTagCompound.Add("WorldDragonBallKey", WorldDragonBallKey);
-            dbTagCompound.Add("WhichDragonBall", WhichDragonBall);
             return dbTagCompound;
         }
 
         public override void Load(TagCompound tag)
         {
             WorldDragonBallKey = tag.GetInt("WorldDragonBallKey");
-            WhichDragonBall = tag.GetInt("WhichDragonBall");
             base.Load(tag);
         }
 
         public override void UpdateInventory(Player player)
         {
+            // world isn't loaded yet.
+            if (DBZWorld.GetWorld().WorldDragonBallKey == 0)
+                return;
             if (!RemoveThisDragonBallIfUnkeyed(player))
             {
                 DoDragonBallLegitimacyCheck(player);
             }
         }
+
+        public abstract int GetWhichDragonBall();
 
         public bool RemoveThisDragonBallIfUnkeyed(Player player)
         {
@@ -70,15 +72,14 @@ namespace DBZMOD.Items.DragonBalls
             if (!WorldDragonBallKey.HasValue)
             {
                 WorldDragonBallKey = 0;
-                WhichDragonBall = 0;
-                if (item.type == DBZMOD.instance.ItemType("StoneBall"))
+                if (IsItemStoneBall(item.type))
                 {
-                    ItemHelper.RemoveStoneBall(player.inventory, 0, 0);
+                    ItemHelper.RemoveStoneBall(player.inventory, 0, GetWhichDragonBall());
                     return true;
                 }
                 else
                 {
-                    ItemHelper.RemoveDragonBall(player.inventory, 0, 0);
+                    ItemHelper.RemoveDragonBall(player.inventory, 0, GetWhichDragonBall());
                     return true;
                 }
             }
@@ -104,7 +105,7 @@ namespace DBZMOD.Items.DragonBalls
 
         public void SetDragonBallWorldKey(Player player)
         {
-            if (item.type != DBZMOD.instance.GetItem("StoneBall").item.type)
+            if (!IsItemStoneBall(item.type))
             {
                 // we already have a dragon ball key, abandon ship.
                 if (WorldDragonBallKey > 0)
@@ -126,7 +127,7 @@ namespace DBZMOD.Items.DragonBalls
                 return;
             if (DebugUtil.IsTimeElapsed(300))
             {
-                DebugUtil.Log(string.Format("Dragon ball legitimacy check running on player {0} for dragon ball {1} world key {2} against item key {3}", player.whoAmI, WhichDragonBall, DBZWorld.GetWorld().WorldDragonBallKey, WorldDragonBallKey.Value));
+                DebugUtil.Log(string.Format("Dragon ball legitimacy check running on player {0} for dragon ball {1} world key {2} against item key {3}", player.whoAmI, GetWhichDragonBall(), DBZWorld.GetWorld().WorldDragonBallKey, WorldDragonBallKey.Value));
             }
             // if the keys match, check to see if this dragon ball is cheated in.
             if (DBZWorld.GetWorld().WorldDragonBallKey == WorldDragonBallKey.Value)
@@ -134,12 +135,12 @@ namespace DBZMOD.Items.DragonBalls
                 bool isStoneBallTakingPlaceOfExistingDragonBall = false;
                 bool isStoneBallStale = false;
                 // check if this is an inert ball that needs to be restored to its glory.
-                if (item.type == mod.ItemType("StoneBall"))
+                if (IsItemStoneBall(item.type))
                 {
                     if (!DBZWorld.IsDragonBallWithPlayers(WorldDragonBallKey.Value))
                     {
-                        DebugUtil.Log(string.Format("Stone ball {0} with player {1} has a valid key and is being restored", player.whoAmI, WhichDragonBall));
-                        ItemHelper.SwapStoneBallWithDragonBall(player.inventory, WorldDragonBallKey.Value, WhichDragonBall);
+                        DebugUtil.Log(string.Format("Stone ball {0} with player {1} has a valid key and is being restored", player.whoAmI, GetWhichDragonBall()));
+                        ItemHelper.SwapStoneBallWithDragonBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
                         isStoneBallTakingPlaceOfExistingDragonBall = true;
                     } else
                     {
@@ -147,12 +148,12 @@ namespace DBZMOD.Items.DragonBalls
                         isStoneBallStale = true;
                     }
                 }
-                var dbLocation = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBall - 1];
+                var dbLocation = DBZWorld.GetWorld().DragonBallLocations[GetWhichDragonBall() - 1];
                 // something bad has happened, don't proceed
                 if (dbLocation == new Point(-1, -1))
                     return;
                 var dbTile = Framing.GetTileSafely(dbLocation.X, dbLocation.Y);
-                var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(WhichDragonBall));
+                var dbTileType = DBZMOD.instance.TileType(DBZWorld.GetDragonBallTileTypeFromNumber(GetWhichDragonBall()));
                 // strange: the tile is still where the server thinks it is. this means the player probably cheated in a dragon ball.
                 if (dbTile.type == dbTileType)
                 {
@@ -160,20 +161,20 @@ namespace DBZMOD.Items.DragonBalls
                     if (DebugUtil.isDebug || isStoneBallTakingPlaceOfExistingDragonBall)
                     {
                         WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
-                        DBZWorld.GetWorld().DragonBallLocations[WhichDragonBall - 1] = new Point(-1, -1);
+                        DBZWorld.GetWorld().DragonBallLocations[GetWhichDragonBall() - 1] = new Point(-1, -1);
                         return;
                     }
                     else
                     {
                         if (isStoneBallStale)
                         {
-                            Main.NewText(string.Format("{0} lost the {1} Star Dragonball because they left and someone else found it.", player.name, WhichDragonBall));
+                            Main.NewText(string.Format("{0} lost the {1} Star Dragonball because they left and someone else found it.", player.name, GetWhichDragonBall()));
                         }
                         else
                         {
                             Main.NewText("Cheated Dragon Balls taste awful.");
                         }
-                        ItemHelper.RemoveDragonBall(player.inventory, WorldDragonBallKey.Value, WhichDragonBall);
+                        ItemHelper.RemoveDragonBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
                         return;
                     }
                 }                
@@ -181,7 +182,7 @@ namespace DBZMOD.Items.DragonBalls
             else
             {
                 // the keys don't match.. what we have here is a different world's dragon ball.
-                ItemHelper.SwapDragonBallWithStoneBall(player.inventory, WorldDragonBallKey.Value, WhichDragonBall);
+                ItemHelper.SwapDragonBallWithStoneBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
                 return;
             }
         }
@@ -207,6 +208,39 @@ namespace DBZMOD.Items.DragonBalls
                 default:
                     return "";
             }
+        }
+        public static string GetStoneBallFromNumber(int whichDragonBall)
+        {
+            switch (whichDragonBall)
+            {
+                case 1:
+                    return "OneStarStoneBall";
+                case 2:
+                    return "TwoStarStoneBall";
+                case 3:
+                    return "ThreeStarStoneBall";
+                case 4:
+                    return "FourStarStoneBall";
+                case 5:
+                    return "FiveStarStoneBall";
+                case 6:
+                    return "SixStarStoneBall";
+                case 7:
+                    return "SevenStarStoneBall";
+                default:
+                    return "";
+            }
+        }
+
+        public static bool IsItemStoneBall(int type)
+        {
+            return type == DBZMOD.instance.ItemType("OneStarStoneBall")
+                || type == DBZMOD.instance.ItemType("TwoStarStoneBall")
+                || type == DBZMOD.instance.ItemType("ThreeStarStoneBall")
+                || type == DBZMOD.instance.ItemType("FourStarStoneBall")
+                || type == DBZMOD.instance.ItemType("FiveStarStoneBall")
+                || type == DBZMOD.instance.ItemType("SixStarStoneBall")
+                || type == DBZMOD.instance.ItemType("SevenStarStoneBall");                
         }
     }
 }

@@ -15,8 +15,12 @@ namespace DBZMOD.Items.DragonBalls
         public override void SetDefaults()
         {
             base.SetDefaults();
-            WhichDragonBall = 6;
             item.createTile = mod.TileType("SixStarDBTile");
+        }
+
+        public override int GetWhichDragonBall()
+        {
+            return 6;
         }
     }
 }
