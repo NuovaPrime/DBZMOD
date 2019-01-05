@@ -114,13 +114,15 @@ namespace DBZMOD.Tiles.DragonBalls
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            // if we're in multiplayer let the server handle this?
+            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
+            // make sure the MP client still gets the signal that the tile was killed.
+            if (!fail)            
+                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
+            // if we're in multiplayer let the server handle item drops.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
-            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
             noItem = true; // kill tile behavior overrides typical drops.
             Item.NewItem(i * 16, j * 16, 32, 48, drop);
-            DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
         }
     }
 }
