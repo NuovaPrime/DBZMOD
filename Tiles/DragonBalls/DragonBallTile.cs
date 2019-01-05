@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -108,13 +109,17 @@ namespace DBZMOD.Tiles.DragonBalls
         // the four star is special, it has its own drop method
         public override bool Drop(int i, int j)
         {
-            Item.NewItem(i * 16, j * 16, 32, 48, drop);
             return false;
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {            
+        {
+            // if we're in multiplayer let the server handle this?
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
             base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
+            noItem = true; // kill tile behavior overrides typical drops.
+            Item.NewItem(i * 16, j * 16, 32, 48, drop);
             DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
         }
     }

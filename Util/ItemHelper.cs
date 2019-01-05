@@ -152,16 +152,15 @@ namespace DBZMOD.Util
         {
             // this stone ball was pulled back into its world. Turn it into a dragon ball.
             int dbKey = WorldDragonBallKey;
-            int whichDball = WhichDragonBall;
             int dbSlot = ItemHelper.RemoveStoneBall(inventory, WorldDragonBallKey, WhichDragonBall);
             // something went wrong, abort.
             if (dbSlot == -1)
                 return;
-            var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball);
-            var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDball)).item.DeepClone();
+            var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(WhichDragonBall);
+            var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(WhichDragonBall)).item.DeepClone();
             var dbData = newDragonBall.modItem as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
-            dbData.WhichDragonBall = whichDball;
+            dbData.WhichDragonBall = WhichDragonBall;
             inventory[dbSlot] = newDragonBall;
         }
 

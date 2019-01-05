@@ -602,7 +602,7 @@ namespace DBZMOD
         }
 
         public static bool TryPlacingDragonball(int whichDragonball, int offsetX, int offsetY, Player ignorePlayer = null)
-        {
+        {            
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonball))
                 return true;
@@ -615,15 +615,18 @@ namespace DBZMOD
             if (IsDragonBallInventoried(whichDragonball))
                 return true;
 
+            DebugUtil.Log(string.Format("Trying to place a new dragon ball {0}", whichDragonball));
             TileObject toBePlaced;
             if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
             {
                 WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
                 int dbIndex = whichDragonball - 1;
                 GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
+                DebugUtil.Log(string.Format("Trying to place a new dragon ball {0} succeeded.", whichDragonball));
                 return true;
             } else
             {
+                DebugUtil.Log(string.Format("Trying to place a new dragon ball {0} failed.", whichDragonball));
                 return false;
             }            
         }

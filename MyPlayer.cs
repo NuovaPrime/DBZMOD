@@ -312,6 +312,7 @@ namespace DBZMOD
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
+                DebugUtil.Log(string.Format("Requesting dragon ball key sync from server from player {0}", player.whoAmI));
                 DBZWorld.SyncWorldDragonBallKey(player);
             }
 

@@ -31,10 +31,10 @@ namespace DBZMOD.Tiles.DragonBalls
             }
         }
 
-        // the four star is special, it has its own drop method
-        public override bool Drop(int i, int j)
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            base.Drop(i, j);
+            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
+
             Player player = Main.LocalPlayer;
             MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
 
@@ -43,7 +43,6 @@ namespace DBZMOD.Tiles.DragonBalls
                 Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
                 modplayer.FirstFourStarDBPickup = true;
             }
-            return false;
         }
     }
 }

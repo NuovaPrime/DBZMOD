@@ -36,11 +36,11 @@ namespace Network
                     int whichPlayersDataNeedsRelay = reader.ReadInt32();
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
-                case (RequestDragonBallKeySync):
-                    ReceiveDragonBallKeySyncRequest(fromWho);                    
-                    break;
                 case (RequestTeleportMessage):
                     ProcessRequestTeleport(reader, fromWho);
+                    break;
+                case (RequestDragonBallKeySync):
+                    ReceiveDragonBallKeySyncRequest(fromWho);                    
                     break;
                 case (SendDragonBallKeySync):
                     ReceiveDragonBallKeySync(reader, fromWho);
@@ -69,11 +69,12 @@ namespace Network
             packet.Write(dbWorld.DragonBallLocations[5].Y);
             packet.Write(dbWorld.DragonBallLocations[6].X);
             packet.Write(dbWorld.DragonBallLocations[6].Y);
-            packet.Send(toWho, 256);
+            packet.Send(toWho, -1);
         }
 
         public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
         {
+            DebugUtil.Log(string.Format("Receiving dragon ball sync key packet from {0}", fromWho));
             var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
             var dbKey = reader.ReadInt32();
             var db1X = reader.ReadInt32();
@@ -102,6 +103,7 @@ namespace Network
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
         {
+            DebugUtil.Log(string.Format("Requesting dragon ball sync key packet from {0} - I'm {1}", toWho, fromWho));
             ModPacket packet = GetPacket(RequestDragonBallKeySync, fromWho);
             packet.Send(toWho, fromWho);
         }
