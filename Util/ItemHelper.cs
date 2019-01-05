@@ -42,9 +42,9 @@ namespace DBZMOD.Util
         ///     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
         /// </summary>
         /// <returns></returns>
-        public static int RemoveDragonBall(Item[] inventory, int dbKey, int whichDragonball)
+        public static int RemoveDragonBall(Item[] inventory, int dbKey, int whichDragonBall)
         {
-            string ballType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball);
+            string ballType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBall);
             int ballTypeInt = GetItemTypeFromName(ballType);
             for (var i = 0; i < inventory.Length; i++)
             {
@@ -61,7 +61,7 @@ namespace DBZMOD.Util
                 if (item.modItem is DragonBallItem)
                 {
                     var dBall = item.modItem as DragonBallItem;
-                    if (dBall.WorldDragonBallKey == dbKey && dBall.GetWhichDragonBall() == whichDragonball)
+                    if (dBall.WorldDragonBallKey == dbKey)
                     {
                         inventory[i].TurnToAir();
                         return i;
@@ -78,8 +78,10 @@ namespace DBZMOD.Util
         ///     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
         /// </summary>
         /// <returns></returns>
-        public static int RemoveStoneBall(Item[] inventory, int dbKey, int dragonBallType)
+        public static int RemoveStoneBall(Item[] inventory, int dbKey, int whichDragonBall)
         {
+            string ballType = DragonBallItem.GetStoneBallFromNumber(whichDragonBall);
+            int ballTypeInt = GetItemTypeFromName(ballType);
             for (var i = 0; i < inventory.Length; i++)
             {
                 var item = inventory[i];
@@ -89,7 +91,7 @@ namespace DBZMOD.Util
                 if (item.modItem == null)
                     continue;
 
-                if (item.type != dragonBallType)
+                if (item.type != ballTypeInt)
                     continue;
 
                 if (item.modItem is DragonBallItem)
@@ -169,8 +171,8 @@ namespace DBZMOD.Util
             int dbSlot = ItemHelper.RemoveDragonBall(inventory, WorldDragonBallKey, WhichDragonBall);
             // something went wrong, abort.
             if (dbSlot == -1)
-                return;
-            var newStoneBall = DragonBallItem.GetStoneBallFromNumber(WhichDragonBall).item.DeepClone();
+                return;            
+            var newStoneBall = DBZMOD.instance.GetItem(DragonBallItem.GetStoneBallFromNumber(WhichDragonBall)).item.DeepClone();
             var dbData = newStoneBall.modItem as DragonBallItem;
             dbData.WorldDragonBallKey = dbKey;
             inventory[dbSlot] = newStoneBall;

@@ -582,7 +582,10 @@ namespace DBZMOD
                     continue;
 
                 var dbItem = item.modItem as DragonBallItem;
-                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(GetDragonBallTileTypeFromNumber(whichDragonball)) && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
+                // assume this runs before the inventory loop that turns stone balls into real ones - we don't care which it is, if it's legit, we don't want to spawn dragonballs replacing it.
+                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetStoneBallFromNumber(whichDragonball)) && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
+                    return true;
+                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball)) && dbItem.WorldDragonBallKey == GetWorld().WorldDragonBallKey)
                     return true;                
             }
             return false;
