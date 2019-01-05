@@ -302,6 +302,12 @@ namespace DBZMOD.Util
                 }
             }
 
+            if (closestLocation == new Point(-1, -1))
+            {
+                // not a valid location, abort.
+                return;
+            }
+
             Vector2 radarAngleVector = Vector2.Normalize((drawPlayer.Center + Vector2.UnitY * -120f) - (closestLocation.ToVector2() * 16f));
             float radarAngle = radarAngleVector.ToRotation();
 
