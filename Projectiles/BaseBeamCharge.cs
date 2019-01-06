@@ -18,8 +18,15 @@ namespace DBZMOD.Projectiles
 
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            return ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
+            var shouldFire = ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
                 && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < MinimumFireFrames)));
+
+            if (shouldFire)
+            {
+                DebugUtil.Log(string.Format("Charge level: {0} Min Charge: {1} OnCooldown: {2}", ChargeLevel, MinimumChargeLevel, IsOnCooldown));
+                DebugUtil.Log(string.Format("Mouse Left: {0} Sustaining Fire: {1} CurrentFireTime: {2} MinimumFireFrames: {3}", modPlayer.IsMouseLeftHeld, IsSustainingFire, CurrentFireTime, MinimumFireFrames));
+            }
+            return shouldFire;
         }
 
         private float GetBeamPowerMultiplier()
@@ -53,12 +60,6 @@ namespace DBZMOD.Projectiles
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
             if (ShouldFireBeam(modPlayer))
             {
-                // force the mouse state - this indicates that the player hasn't achieved the minimum fire time set on the beam; we should treat it like it's still firing so it renders.
-                if (!modPlayer.IsMouseLeftHeld && IsBeamOriginTracking)
-                {
-                    modPlayer.IsMouseLeftHeld = true;
-                }
-
                 // kill the charge sound if we're firing
                 ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
 
