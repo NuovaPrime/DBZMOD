@@ -1819,8 +1819,8 @@ namespace DBZMOD
         }
 
         // constants to do with instant transmission range/speed/ki cost.
-        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 0.3f;
-        protected const float INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST = 200f;
+        protected const float INSTANT_TRANSMISSION_FRAME_KI_COST = 0.01f;
+        protected const float INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST = 1000f;
 
         // intensity is the camera pan power being used in this frame, distance is how far the camera is from the player using the power.
         public float GetInstantTransmissionFrameKiCost(float intensity, float distance)
