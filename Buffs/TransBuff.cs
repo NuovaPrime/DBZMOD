@@ -17,7 +17,6 @@ namespace DBZMOD
         public float KiDrainRateWithMastery;
         private int KiDrainAddTimer;
         public bool RealismModeOn;
-        public int MasteryTimer;
         public int BaseDefenceBonus;
         public int PrecentDefenceBonus;
 

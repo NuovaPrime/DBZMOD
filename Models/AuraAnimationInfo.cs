@@ -79,6 +79,8 @@ namespace DBZMOD.Models
             int auraOffsetY = GetAuraOffsetY(modPlayer);
             if (modPlayer.IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
+                // ever so slightly shift the aura down a tad.
+                auraOffsetY -= (int)Math.Floor(modPlayer.player.height * 0.05f);
                 double rotationOffset = modPlayer.player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
                 rotation = (float)(modPlayer.player.fullRotation + rotationOffset);
 
@@ -131,19 +133,19 @@ namespace DBZMOD.Models
             var frameHeight = GetHeight();
             var scale = GetAuraScale(modPlayer);
             // easy automatic aura offset.
-            return (int)((modPlayer.player.height * 0.6f - frameHeight / 2) * scale);
+            return (int)(-((frameHeight / 2) * scale - (modPlayer.player.height * 0.6f)));
         }
 
         public float GetAuraScale(MyPlayer modPlayer)
         {
             // universal scale handling
             // scale is based on kaioken level, which gets set to 0
-            var baseScale = 1.0f + (0.1f * modPlayer.KaiokenLevel) - (IsKaiokenAura ? -0.1f : 0f);
+            var baseScale = 0.8f;
 
             // special scaling for Kaioken auras only
             if (Transformations.IsAnythingOtherThanKaioken(modPlayer.player) && IsKaiokenAura)
             {
-                return baseScale * 1.2f;
+                return baseScale * 0.9f;
             }
             else
             {

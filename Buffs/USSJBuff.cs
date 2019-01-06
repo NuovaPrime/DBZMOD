@@ -28,17 +28,6 @@ namespace DBZMOD.Buffs
 
             KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
 
-            MasteryTimer++;
-            if (!(MyPlayer.ModPlayer(player).playerTrait == "Prodigy") && MasteryTimer >= 300 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)
-            {
-                MyPlayer.ModPlayer(player).MasteryLevel1 += 0.01f;
-                MasteryTimer = 0;
-            }
-            else if (MyPlayer.ModPlayer(player).playerTrait == "Prodigy" && MasteryTimer >= 150 && MyPlayer.ModPlayer(player).MasteryMax1 <= 1)
-            {
-                MyPlayer.ModPlayer(player).MasteryLevel1 += 0.01f;
-                MasteryTimer = 0;
-            }
             base.Update(player, ref buffIndex);
         }
     }

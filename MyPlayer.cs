@@ -97,19 +97,14 @@ namespace DBZMOD
 
         //mastery vars
         public float MasteryLevel1 = 0;
-        public float MasteryMax1 = 1;
         public bool MasteredMessage1 = false;
         public float MasteryLevel2 = 0;
-        public float MasteryMax2 = 1;
         public bool MasteredMessage2 = false;
         public float MasteryLevel3 = 0;
-        public float MasteryMax3 = 1;
         public bool MasteredMessage3 = false;
         public float MasteryLevelGod = 0;
-        public float MasteryMaxGod = 1;
         public bool MasteredMessageGod = false;
         public float MasteryLevelBlue = 0;
-        public float MasteryMaxBlue = 1;
         public bool MasteredMessageBlue = false;
         public float MasteryMaxFlight = 1;
         public float MasteryLevelFlight = 0;
@@ -330,38 +325,89 @@ namespace DBZMOD
             return (int)Math.Ceiling(KiMax() * KiMaxMult + KiMax2 + KiMax3);
         }
 
+        public const float FORM_MASTERY_GAIN_PER_TICK = 0.0000058f;
+
         // all changes to Ki Current are now made through this method.
         public void AddKi(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
+            HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
+            SetKi(KiCurrent + kiAmount);
+        }
+
+        public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
+        {
             if (isFormDrain)
             {
-                if (Transformations.IsSSJ1(player))
+                if (Transformations.IsSSJ1(player) && MasteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 += 0.00058f;
+                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
                 }
-                if (Transformations.IsASSJ(player))
+                if (Transformations.IsASSJ(player) && MasteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 += 0.00058f;
+                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
                 }
-                if (Transformations.IsUSSJ(player))
+                if (Transformations.IsUSSJ(player) && MasteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 += 0.00058f;
+                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
                 }
-                if (Transformations.IsSSJ2(player))
+                if (Transformations.IsSSJ2(player) && MasteryLevel2 < 1.0f)
                 {
-                    MasteryLevel2 += 0.00058f;
+                    MasteryLevel2 = GetMasteryIncreaseFromFormDrain(MasteryLevel2);
                 }
-                if (Transformations.IsSSJ3(player))
+                if (Transformations.IsSSJ3(player) && MasteryLevel3 < 1.0f)
                 {
-                    MasteryLevel3 += 0.00058f;
+                    MasteryLevel3 = GetMasteryIncreaseFromFormDrain(MasteryLevel3);
                 }
             }
 
-            if (isWeaponDrain)
+            if (isWeaponDrain && kiAmount < 0)
             {
-
+                if (Transformations.IsSSJ1(player) && MasteryLevel1 < 1.0f)
+                {
+                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                }
+                if (Transformations.IsASSJ(player) && MasteryLevel1 < 1.0f)
+                {
+                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                }
+                if (Transformations.IsUSSJ(player) && MasteryLevel1 < 1.0f)
+                {
+                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                }
+                if (Transformations.IsSSJ2(player) && MasteryLevel2 < 1.0f)
+                {
+                    MasteryLevel2 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel2, kiAmount);
+                }
+                if (Transformations.IsSSJ3(player) && MasteryLevel3 < 1.0f)
+                {
+                    MasteryLevel3 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel3, kiAmount);
+                }
             }
-            SetKi(KiCurrent + kiAmount);
+        }
+
+        public float GetMasteryIncreaseFromWeaponDrain(float currentMastery, float kiAmount)
+        {
+            return Math.Min(1.0f, currentMastery + GetWeaponDrainFormMasteryContribution(kiAmount));
+        }
+
+        public float GetMasteryIncreaseFromFormDrain(float currentMastery)
+        {
+            return Math.Min(1.0f, currentMastery + FORM_MASTERY_GAIN_PER_TICK) * GetProdigyMasteryMultiplier();
+        }
+
+        public float GetWeaponDrainFormMasteryContribution(float kiAmount)
+        {
+            return (0.000001f * -kiAmount) * GetProdigyMasteryMultiplier();
+        }
+
+        public float GetProdigyMasteryMultiplier()
+        {
+            return IsProdigy() ? 2f : 1f;
+        }
+
+        public bool IsProdigy()
+        {
+            return playerTrait == "Prodigy";
         }
 
         public void SetKi(float kiAmount, bool isSync = false)
@@ -583,27 +629,6 @@ namespace DBZMOD
                     MasteredMessageBlue = true;
                     Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
                 }
-            }
-
-            if (MasteryLevel1 > MasteryMax1)
-            {
-                MasteryLevel1 = MasteryMax1;
-            }
-            else if (MasteryLevel2 > MasteryMax2)
-            {
-                MasteryLevel2 = MasteryMax2;
-            }
-            else if (MasteryLevel3 > MasteryMax3)
-            {
-                MasteryLevel3 = MasteryMax3;
-            }
-            else if (MasteryLevelGod > MasteryMaxGod)
-            {
-                MasteryLevelGod = MasteryMaxGod;
-            }
-            else if (MasteryLevelBlue > MasteryMaxBlue)
-            {
-                MasteryLevelBlue = MasteryMaxBlue;
             }
 
             #endregion            

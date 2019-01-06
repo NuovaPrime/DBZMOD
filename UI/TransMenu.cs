@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
 using DBZMOD.Util;
+using System;
 
 namespace DBZMOD.UI
 {
@@ -239,7 +240,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = MenuSelectionID.SSJ1;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText("SSJ1 Mastery = " + player.MasteryLevel1 + "/" + player.MasteryMax1);
+                Main.NewText(string.Format("Super Saiyan Mastery: {0}%", Math.Round(100f * player.MasteryLevel1, 2)));
             }
             else
             {
@@ -255,7 +256,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = MenuSelectionID.SSJ2;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText("SSJ2 Mastery = " + player.MasteryLevel2 + "/" + player.MasteryMax2);
+                Main.NewText(string.Format("Super Saiyan 2 Mastery: {0}%", Math.Round(100f * player.MasteryLevel2, 2)));
             }
             else if (!player.LSSJAchieved)
             {
@@ -270,7 +271,7 @@ namespace DBZMOD.UI
             {
                 MenuSelection = MenuSelectionID.SSJ3;
                 SoundUtil.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText("SSJ3 Mastery = " + player.MasteryLevel3 + "/" + player.MasteryMax3);
+                Main.NewText(string.Format("Super Saiyan 3 Mastery: {0}%", Math.Round(100f * player.MasteryLevel3, 2)));
             }
             else if (!player.LSSJAchieved)
             {
