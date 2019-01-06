@@ -51,7 +51,7 @@ namespace DBZMOD.Util
                 }
                 else
                 {
-                    Main.spriteBatch.DrawString(Main.fontMouseText, "Press the Instant Transmission key an NPC, beacon or player icon to teleport using Ki.", new Vector2(15, Main.screenHeight - 120), Color.White);
+                    Main.spriteBatch.DrawString(Main.fontMouseText, "Press the Instant Transmission key on an NPC, beacon or player icon to teleport using Ki.", new Vector2(15, Main.screenHeight - 120), Color.White);
 
                     if (MyPlayer.InstantTransmission.JustPressed)
                     {

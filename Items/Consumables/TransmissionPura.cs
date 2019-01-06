@@ -35,7 +35,8 @@ namespace DBZMOD.Items.Consumables
             if (player.whoAmI == Main.myPlayer)
             {
                 Main.NewText("You have unlocked Instant Transmission Lv3."
-                + "\nInstant Transmission free roaming costs are significantly reduced.");
+                + "\nInstant Transmission free roaming costs " +
+                "\nare significantly reduced.");
                 return true;
             }
             return true;

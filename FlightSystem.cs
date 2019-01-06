@@ -25,7 +25,7 @@ namespace DBZMOD
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
             //check for ki or death lol
-            if ((modPlayer.IsKiDepleted() || player.dead) && modPlayer.IsFlying)
+            if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.IsFlying)
             {
                 modPlayer.IsFlying = false;
                 AddKatchinFeetBuff(player);
