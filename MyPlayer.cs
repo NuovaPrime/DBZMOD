@@ -856,11 +856,16 @@ namespace DBZMOD
 
         public float GetMouseRadiansOrDefault()
         {
-            return GetMouseVectorOrDefault().ToRotation();
+            var mouseVector = GetMouseVectorOrDefault();
+            if (mouseVector == Vector2.Zero)
+                return 0f;
+            return mouseVector.ToRotation();
         }
 
         public Vector2 GetMouseVectorOrDefault()
         {
+            if (Main.myPlayer != player.whoAmI)
+                return Vector2.Zero;
             Vector2 mouseVector = Vector2.Normalize(Main.MouseWorld - player.Center);
             if (player.heldProj > -1)
             {
@@ -1683,8 +1688,6 @@ namespace DBZMOD
                 IsMouseLeftHeld = true;
             else
                 IsMouseLeftHeld = false;
-
-
         }
 
         public float GetNextSpeedMultiplier()

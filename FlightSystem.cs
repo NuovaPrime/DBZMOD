@@ -191,7 +191,15 @@ namespace DBZMOD
 
             // for direction we have to do things a bit different.
             Vector2 mouseVector = modPlayer.GetMouseVectorOrDefault();
-            octantDirection = mouseVector.X < 0 ? -1 : 1;
+            if (mouseVector == Vector2.Zero)
+            {
+                // we're probably trying to run direction on a player who isn't ours, don't do this. They can control their own dir.
+                octantDirection = 0;
+            }
+            else
+            {
+                octantDirection = mouseVector.X < 0 ? -1 : 1;
+            }
 
             return new Tuple<int, float>(octantDirection, octantPitch * 45f);
         }
@@ -213,8 +221,9 @@ namespace DBZMOD
                 bool isPlayerHorizontal = m_rotationDir.X != 0;
                 bool isMouseAbove = leanThrottle < 0;
                 int dir = octantDirection;
-                if (dir != player.direction)
+                if (dir != player.direction && player.whoAmI == Main.myPlayer)
                 {
+                    DebugUtil.Log(string.Format("Player direction {0} should be {1}", player.direction, dir));
                     player.ChangeDir(dir);
                 }                
             }
