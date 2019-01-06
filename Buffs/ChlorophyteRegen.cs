@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.lifeRegen += 3;
-            MyPlayer.ModPlayer(player).AddKi(0.1f);
+            MyPlayer.ModPlayer(player).AddKi(0.1f, false, false);
         }
     }
 }

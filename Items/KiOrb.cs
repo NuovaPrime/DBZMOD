@@ -42,7 +42,7 @@ namespace DBZMOD.Items
         public override bool OnPickup(Player player)
         {
             SoundUtil.PlayVanillaSound(SoundID.NPCDeath7, player);
-            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OrbHealAmount);
+            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OrbHealAmount, false, false);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), 50, false, false);
             return false;
         }

@@ -124,14 +124,14 @@ namespace DBZMOD
                 {
                     if (Main.time > 0 && Main.time % 2 == 0)
                     {
-                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1);                        
+                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1, false, false);                        
                     }
                 }
                 else
                 {
                     if (Main.time > 0 && Main.time % 4 == 0)
                     {
-                        modPlayer.AddKi(-1);                        
+                        modPlayer.AddKi(-1, false, false);                        
                     }
                 }
             }

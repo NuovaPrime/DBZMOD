@@ -17,7 +17,7 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer.ModPlayer(player).AddKi(0.2f);
+            MyPlayer.ModPlayer(player).AddKi(0.2f, false, false);
         }
     }
 }

@@ -215,7 +215,7 @@ namespace DBZMOD
                     modPlayer.KaiokenLevel = 0;
                     Transformations.EndTransformations(player, true, false);
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
-                    modPlayer.AddKi(modPlayer.OverallKiMax());
+                    modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
                     SoundUtil.PlayVanillaSound(SoundID.MaxMana, player);                    
                 }

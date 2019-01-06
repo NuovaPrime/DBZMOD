@@ -72,7 +72,7 @@ namespace DBZMOD
                 }
                 else
                 {
-                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1);
+                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1, false, true);
                     KiDrainAddTimer++;
                     if (KiDrainAddTimer > 600)
                     {

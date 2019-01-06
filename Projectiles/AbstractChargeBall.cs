@@ -298,7 +298,7 @@ namespace DBZMOD.Projectiles
                     // drain ki from the player when charging
                     if (Main.time > 0 && Math.Ceiling(Main.time % CHARGE_KI_DRAIN_WINDOW) == 0)
                     {
-                        MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate());
+                        MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate(), false, false);
                     }
 
                     // increase the charge

@@ -83,7 +83,7 @@ namespace DBZMOD.Projectiles
                 {
                     if (Main.time > 0 && Main.time % FIRE_KI_DRAIN_WINDOW == 0)
                     {
-                        modPlayer.AddKi(-FireKiDrainRate());
+                        modPlayer.AddKi(-FireKiDrainRate(), true, false);
                     }
                 }
                 else

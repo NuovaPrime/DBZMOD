@@ -443,31 +443,51 @@ V1.0.9
 
 2. Added [[Grandpa Gohan's House]].
 
+3. Added [[Instant Transmission]]
+
 3. Added [[Saiyan Scout Armor]] and [[Elite Saiyan Armor]].
 
 4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
 
-5. Added [[Refined Metal]], [[Katchin Scale]].
+5. Added [[Refined Metal]], [[Katchin Scale]], [[I.T. Tome Vol 1]], [[I.T. Tome Vol 2]], [[I.T. Tome Vol 3]] and [[Ki Beacon]].
+
+
+== Beam rework ==
+
+1. Beams now work by charging with right click and firing with left click. You can stop charging at any time and you will slowly lose charge levels.
+
+2. Beams are now not multi-segmented, making them much more optimized and making them sync better.
+
+3. Beams rebalanced to adjust to new systems.
+
 
 == Changes ==
 
 1. Buffed [[Turtle Hermit Armor]], [[Saiyan Armor]] and [[Radiant Armor]].
 
-2. You can now combine Kaioken with forms.
+2. You can now combine [[Kaioken Technique|Kaioken]] with forms.
 
-3. Kaioken level/size scaling reimplemented.
+3. [[Kaioken Technique|Kaioken]] level/size scaling reimplemented.
 
-4. Kaioken nerfed and buffed at the same time. 20% damage per Kaioken level. -15% defense per Kaioken level. Health drain drastically reduced.
+4. [[Kaioken Technique|Kaioken]] nerfed and buffed at the same time. 20% damage per Kaioken level. -15% defense per Kaioken level. Health drain drastically reduced.
 
-5. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+5a. Changed when all [[Kaioken Technique|Kaioken levels]] are obtained.
 
-6. Current Ki is now a float instead of an integer. (Backend change shouldn't affect gameplay)
+5b. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
 
-7. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+6. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+
+7. The ki bar color now changes depending on [[Genetics]].
+
+8. [[Spirit Bomb]] and [[Super Spirit Bomb]] now fire relative to the player, instead of the cursor.
+
+9. Reworked mastery to make it more based on your activity.
 
 == Fixes ==
 
 1. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
+
+2. Fixed bug where you could get ssj3 before golem.
 
 == Patreon Items ==
 

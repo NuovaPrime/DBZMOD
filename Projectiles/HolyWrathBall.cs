@@ -106,7 +106,7 @@ namespace DBZMOD.Projectiles
                         projectile.Kill();
                     }
 
-                    MyPlayer.ModPlayer(player).AddKi(-2);
+                    MyPlayer.ModPlayer(player).AddKi(-2, true, false);
                     ProjectileUtil.ApplyChannelingSlowdown(player);
 
                     //Rock effect

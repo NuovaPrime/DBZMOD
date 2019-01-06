@@ -107,7 +107,7 @@ namespace DBZMOD
                 }
                 if (Main.time > 0 && Math.Ceiling(Main.time % 2) == 0 && !MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    MyPlayer.ModPlayer(player).AddKi(-KiDrainRate);
+                    MyPlayer.ModPlayer(player).AddKi(-KiDrainRate, true, false);
                 }
                 for (int d = 0; d < 4; d++)
                 {

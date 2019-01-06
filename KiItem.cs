@@ -157,7 +157,7 @@ namespace DBZMOD
         {
             if (MyPlayer.ModPlayer(player).HasKi(RealKiDrain(player)))
             {
-                MyPlayer.ModPlayer(player).AddKi(-RealKiDrain(player));
+                MyPlayer.ModPlayer(player).AddKi(-RealKiDrain(player), true, false);
                 return true;
             }
             return false;
@@ -216,7 +216,7 @@ namespace DBZMOD
         }
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).AddKi(KiHeal);
+            MyPlayer.ModPlayer(player).AddKi(KiHeal, false, false);
             player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), KiHeal, false, false);
             return true;

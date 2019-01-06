@@ -25,14 +25,14 @@ namespace DBZMOD.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "ScrapMetal", 1);
             recipe.AddIngredient(ItemID.CobaltBar, 1);
-            recipe.AddTile(ItemID.Hellforge);
+            recipe.AddTile(TileID.Hellforge);
             recipe.SetResult(this, 2);
             recipe.AddRecipe();
 
             ModRecipe recipe2 = new ModRecipe(mod);
             recipe2.AddIngredient(null, "ScrapMetal", 1);
             recipe2.AddIngredient(ItemID.PalladiumBar, 1);
-            recipe2.AddTile(ItemID.Hellforge);
+            recipe2.AddTile(TileID.Hellforge);
             recipe2.SetResult(this, 2);
             recipe2.AddRecipe();
         }

@@ -113,6 +113,7 @@ namespace DBZMOD
         public bool MasteredMessageBlue = false;
         public float MasteryMaxFlight = 1;
         public float MasteryLevelFlight = 0;
+        public int MasteryTimer = 0;
 
         //Wish vars
         public const int POWER_WISH_MAXIMUM = 5;
@@ -330,8 +331,36 @@ namespace DBZMOD
         }
 
         // all changes to Ki Current are now made through this method.
-        public void AddKi(float kiAmount)
+        public void AddKi(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
+            if (isFormDrain)
+            {
+                if (Transformations.IsSSJ1(player))
+                {
+                    MasteryLevel1 += 0.00058f;
+                }
+                if (Transformations.IsASSJ(player))
+                {
+                    MasteryLevel1 += 0.00058f;
+                }
+                if (Transformations.IsUSSJ(player))
+                {
+                    MasteryLevel1 += 0.00058f;
+                }
+                if (Transformations.IsSSJ2(player))
+                {
+                    MasteryLevel2 += 0.00058f;
+                }
+                if (Transformations.IsSSJ3(player))
+                {
+                    MasteryLevel3 += 0.00058f;
+                }
+            }
+
+            if (isWeaponDrain)
+            {
+
+            }
             SetKi(KiCurrent + kiAmount);
         }
 
@@ -616,7 +645,7 @@ namespace DBZMOD
 
             if (KiRegenTimer > 2)
             {
-                AddKi(KiRegen);
+                AddKi(KiRegen, false, false);
                 KiRegenTimer = 0;
             }
 
@@ -1288,7 +1317,7 @@ namespace DBZMOD
             if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
-                AddKi(i);
+                AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(2) == 0)
                 {
@@ -1310,7 +1339,7 @@ namespace DBZMOD
             if (radiantBonus && KiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
-                AddKi(i);
+                AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(3) == 0)
                 {
@@ -1856,7 +1885,7 @@ namespace DBZMOD
                 isReturningFromInstantTransmission = true;
 
                 trackedInstantTransmissionKiLoss += kiCost;
-                AddKi(-kiCost);
+                AddKi(-kiCost, false, false);
 
                 Main.zoomX += (direction * intensity).X;
                 if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
@@ -1890,7 +1919,7 @@ namespace DBZMOD
                 }
             } else if (isReturningFromInstantTransmission)
             {
-                AddKi(trackedInstantTransmissionKiLoss);
+                AddKi(trackedInstantTransmissionKiLoss, false, false);
                 trackedInstantTransmissionKiLoss = 0f;
                 isReturningFromInstantTransmission = false;
                 isHandlingInstantTransmissionTriggers = false;
@@ -1904,7 +1933,7 @@ namespace DBZMOD
             Vector2 originalPosition = player.Center;
             if (!HandleInstantTransmissionExitRoutine(target, distance))
             {
-                AddKi(trackedInstantTransmissionKiLoss);
+                AddKi(trackedInstantTransmissionKiLoss, false, false);
                 trackedInstantTransmissionKiLoss = 0f;
                 return false;
             }
@@ -1913,7 +1942,7 @@ namespace DBZMOD
                 Projectile.NewProjectile(originalPosition.X, originalPosition.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
                 Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
                 
-                AddKi(-GetInstantTransmissionTeleportKiCost());
+                AddKi(-GetInstantTransmissionTeleportKiCost(), false, false);
                 return true;
             }
         }
@@ -1957,7 +1986,7 @@ namespace DBZMOD
             if (IsCharging && (GetKi() < OverallKiMax()) && (!IsFlying || !isAnyKeyHeld))
             {
                 // determine base regen rate and bonuses
-                AddKi(KiChargeRate + ScarabChargeRateAdd);
+                AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
 
 
                 // slow down the player a bunch - only when not flying
@@ -2273,8 +2302,33 @@ namespace DBZMOD
             if (blackDiamondShell)
             {
                 int i = Main.rand.Next(10, 100);
-                AddKi(i);
+                AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
+                return true;
+            }
+            if (Transformations.IsSSJ1(player))
+            {
+                MasteryLevel1 += 0.00232f;
+                return true;
+            }
+            if (Transformations.IsASSJ(player))
+            {
+                MasteryLevel1 += 0.00232f;
+                return true;
+            }
+            if (Transformations.IsUSSJ(player))
+            {
+                MasteryLevel1 += 0.00232f;
+                return true;
+            }
+            if (Transformations.IsSSJ2(player))
+            {
+                MasteryLevel2 += 0.00232f;
+                return true;
+            }
+            if (Transformations.IsSSJ3(player))
+            {
+                MasteryLevel3 += 0.00232f;
                 return true;
             }
             return true;

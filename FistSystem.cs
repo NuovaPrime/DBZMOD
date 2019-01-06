@@ -415,7 +415,7 @@ namespace DBZMOD
 
         private void DeductKiForZanzoken(Player player)
         {
-            MyPlayer.ModPlayer(player).AddKi(-GetZanzokenKiCost(player));
+            MyPlayer.ModPlayer(player).AddKi(-GetZanzokenKiCost(player), false, false);
         }
 
         private Rectangle GetProjectedHitboxForSafeDistance(Vector2 vector, Player player)
