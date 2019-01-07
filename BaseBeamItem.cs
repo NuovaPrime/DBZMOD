@@ -47,7 +47,7 @@ namespace DBZMOD
         public override bool AltFunctionUse(Player player)
         {
             player.channel = true;
-            if (!ProjectileUtil.RecapturePlayerProjectile(player, item.shoot))
+            if (!ProjectileUtil.RecapturePlayerChargeBall(player, item.shoot))
             {
                 int weaponDamage = item.damage;
                 GetWeaponDamage(player, ref weaponDamage);

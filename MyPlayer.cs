@@ -973,6 +973,7 @@ namespace DBZMOD
         public bool? SyncWishActive;
         public int? SyncMouseWorldOctant;
         public int? SyncPowerWishesLeft;
+        public int? SyncHeldProj;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetMouseLeft;
@@ -991,7 +992,6 @@ namespace DBZMOD
                 return;
 
             // if this method is firing on a player who isn't me, abort. 
-            // spammy af
             if (Main.myPlayer != player.whoAmI)
                 return;
 
@@ -1143,6 +1143,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedDirection(256, player.whoAmI, player.whoAmI, player.direction);
                 SyncDir = player.direction;
+            }
+
+            if (SyncHeldProj != player.heldProj)
+            {
+                NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, player.heldProj);
+                SyncHeldProj = player.heldProj;
             }
         }
 

@@ -431,6 +431,9 @@ namespace DBZMOD.Projectiles
             // capture the player instance so we can toss it around.
             Player player = Main.player[projectile.owner];
 
+            // trying to debug phantom beams in MP
+            DebugUtil.Log(string.Format("Charge ball: {0} belongs to {1} whose held proj is {2}", projectile.whoAmI, projectile.owner, player.heldProj));
+
             // handle mouse movement and 
             DoControl(player);
 
@@ -454,10 +457,6 @@ namespace DBZMOD.Projectiles
                 if (player.heldProj != projectile.whoAmI)
                 {
                     player.heldProj = projectile.whoAmI;
-
-                    // unsure if this is even necessary, syncing held projectile
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, projectile.whoAmI);
                 }
                 Vector2 diff = mouseVector - player.Center;
                 diff.Normalize();

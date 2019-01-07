@@ -1,4 +1,5 @@
 ﻿using DBZMOD;
+using DBZMOD.Projectiles;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -58,8 +59,19 @@ namespace DBZMOD.Util
             return closestProjectile == -1 ? null : Main.projectile[closestProjectile];
         }
 
-        public static bool RecapturePlayerProjectile(Player player, int type)
-        {            
+        public static bool RecapturePlayerChargeBall(Player player, int type)
+        {   
+            // assume first that the player's already holding a proj
+            if (player.heldProj != -1)
+            {
+                var heldProj = Main.projectile[player.heldProj];
+                if (heldProj.modProjectile != null && heldProj.modProjectile is AbstractChargeBall)
+                {
+                    return true;
+                }
+            }
+
+            // otherwise try to recapture the held projectile if possible.
             var proj = FindNearestOwnedProjectileOfType(player, type);
             if (proj != null)
             {
