@@ -222,8 +222,7 @@ namespace DBZMOD
                 bool isMouseAbove = leanThrottle < 0;
                 int dir = octantDirection;
                 if (dir != player.direction && player.whoAmI == Main.myPlayer)
-                {
-                    DebugUtil.Log(string.Format("Player direction {0} should be {1}", player.direction, dir));
+                {                    
                     player.ChangeDir(dir);
                 }                
             }

@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using DBZMOD.Util;
 
 namespace Network
-{    
+{
     internal class PlayerPacketHandler : PacketHandler
     {
         public const byte SyncPlayer = 43;
@@ -17,11 +17,15 @@ namespace Network
         public const byte RequestDragonBallKeySync = 46;
         public const byte RequestTeleportMessage = 47;
         public const byte SendDragonBallKeySync = 48;
+        public const byte RequestKiBeaconInitialSync = 49;
+        public const byte SendKiBeaconInitialSync = 50;
+        public const byte SyncKiBeaconAdd = 51;
+        public const byte SyncKiBeaconRemove = 52;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
         }
-        
+
         public override void HandlePacket(BinaryReader reader, int fromWho)
         {
             switch (reader.ReadByte())
@@ -32,6 +36,18 @@ namespace Network
                 case (SyncTriggers):
                     ReceiveSyncTriggers(reader, fromWho);
                     break;
+                case (SyncKiBeaconAdd):
+                    ReceiveKiBeaconAdd(reader, fromWho);
+                    break;
+                case (SyncKiBeaconRemove):
+                    ReceiveKiBeaconRemove(reader, fromWho);
+                    break;
+                case (RequestKiBeaconInitialSync):
+                    ReceiveKiBeaconInitialSyncRequest(fromWho);
+                    break;
+                case (SendKiBeaconInitialSync):
+                    ReceiveKiBeaconInitialSync(reader, fromWho);
+                    break;
                 case (RequestForSyncFromJoinedPlayer):
                     int whichPlayersDataNeedsRelay = reader.ReadInt32();
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
@@ -40,7 +56,7 @@ namespace Network
                     ProcessRequestTeleport(reader, fromWho);
                     break;
                 case (RequestDragonBallKeySync):
-                    ReceiveDragonBallKeySyncRequest(fromWho);                    
+                    ReceiveDragonBallKeySyncRequest(fromWho);
                     break;
                 case (SendDragonBallKeySync):
                     ReceiveDragonBallKeySync(reader, fromWho);
@@ -48,11 +64,102 @@ namespace Network
             }
         }
 
+        public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
+        {
+            DebugUtil.Log("Sending ki beacon addition.");
+            ModPacket packet = GetPacket(SyncKiBeaconAdd, fromWho);
+            packet.Write(kiBeaconLocation.X);
+            packet.Write(kiBeaconLocation.Y);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void SendKiBeaconRemove(int toWho, int fromWho, Vector2 kiBeaconLocation)
+        {
+            DebugUtil.Log("Sending ki beacon removal.");
+            ModPacket packet = GetPacket(SyncKiBeaconRemove, fromWho);
+            packet.Write(kiBeaconLocation.X);
+            packet.Write(kiBeaconLocation.Y);
+            packet.Send(toWho, fromWho);
+        }
+
+        // handle a single ki beacon update (including removals)
+        public void ReceiveKiBeaconAdd(BinaryReader reader, int fromWho)
+        {
+            DebugUtil.Log("Receiving ki beacon add request.");
+            var coordX = reader.ReadSingle();
+            var coordY = reader.ReadSingle();
+            var location = new Vector2(coordX, coordY);
+            var dbWorld = DBZWorld.GetWorld();
+            if (!dbWorld.KiBeacons.Contains(location))
+                dbWorld.KiBeacons.Add(location);
+            if (Main.netMode == NetmodeID.Server)
+                SendKiBeaconAdd(-1, fromWho, location);
+        }
+
+        // handle a single ki beacon update (including removals)
+        public void ReceiveKiBeaconRemove(BinaryReader reader, int fromWho)
+        {
+            DebugUtil.Log("Receiving ki beacon removal request.");
+            var coordX = reader.ReadSingle();
+            var coordY = reader.ReadSingle();
+            var location = new Vector2(coordX, coordY);
+            var dbWorld = DBZWorld.GetWorld();
+            if (dbWorld.KiBeacons.Contains(location))
+                dbWorld.KiBeacons.Remove(location);
+            if (Main.netMode == NetmodeID.Server)
+                SendKiBeaconRemove(-1, fromWho, location);
+        }
+
+        public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
+        {
+            DebugUtil.Log("Requesting ki beacon initial sync.");
+            ModPacket packet = GetPacket(RequestKiBeaconInitialSync, fromWho);
+            packet.Send(toWho, fromWho);
+        }
+
+        // handle a request to receive ki beacon sync from server
+        public void ReceiveKiBeaconInitialSyncRequest(int toWho)
+        {
+            DebugUtil.Log("Receiving ki beacon initial sync request.");
+            var dbWorld = DBZWorld.GetWorld();
+            var numIndexes = dbWorld.KiBeacons.Count;
+            // if there aren't any, no sync needed, skip this.
+            if (numIndexes == 0)
+                return;
+            ModPacket packet = GetPacket(SendKiBeaconInitialSync, 256);
+            // attach the number of indexes to be unpacked so the client knows when to stop reading on the other side.
+            packet.Write(numIndexes);
+            // loop over beacon locations and write each to the packet.
+            foreach (var kiBeacon in dbWorld.KiBeacons)
+            {
+                // each beacon position coordinate is two floats.
+                packet.Write(kiBeacon.X);
+                packet.Write(kiBeacon.Y);
+            }
+            packet.Send(toWho, -1);
+        }
+
+        // handle receiving ki beacon sync from the server.
+        public void ReceiveKiBeaconInitialSync(BinaryReader reader, int toWho)
+        {
+            DebugUtil.Log("Receiving ki beacon initial sync results.");
+            var dbWorld = DBZWorld.GetWorld();
+            var numIndexes = reader.ReadInt32();
+            // presume whatever we have in ours is wrong and wipe it out.
+            dbWorld.KiBeacons.Clear();
+            for (var i = 0; i < numIndexes; i++)
+            {
+                var coordX = reader.ReadSingle();
+                var coordY = reader.ReadSingle();
+                dbWorld.KiBeacons.Add(new Vector2(coordX, coordY));
+            }
+        }
+
         public void ReceiveDragonBallKeySyncRequest(int toWho)
         {
             DebugUtil.Log(string.Format("Receiving DB Sync request from {0} (server)", toWho));
             ModPacket packet = GetPacket(SendDragonBallKeySync, 256);
-            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            var dbWorld = DBZWorld.GetWorld();
             packet.Write(dbWorld.WorldDragonBallKey);
             // new stuff, send the player all the dragon ball points.
             packet.Write(dbWorld.DragonBallLocations[0].X);
@@ -75,7 +182,7 @@ namespace Network
         public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
         {
             DebugUtil.Log(string.Format("Receiving dragon ball sync key packet from {0}", fromWho));
-            var dbWorld = DBZMOD.DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            var dbWorld = DBZWorld.GetWorld();
             var dbKey = reader.ReadInt32();
             var db1X = reader.ReadInt32();
             var db1Y = reader.ReadInt32();
@@ -177,7 +284,7 @@ namespace Network
         }
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
-        {            
+        {
             var packet = GetPacket(SyncTriggers, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerLeft);
             packet.Write(whichPlayer);
@@ -384,7 +491,7 @@ namespace Network
         }
 
         public void SendChangedChargeMoveSpeed(int toWho, int fromWho, int whichPlayer, float chargeMoveSpeed)
-        {            
+        {
             var packet = GetPacket(SyncPlayer, fromWho);
             packet.Write((int)PlayerVarSyncEnum.ChargeMoveSpeed);
             packet.Write(whichPlayer);
@@ -393,9 +500,9 @@ namespace Network
         }
 
         public void SendChangedBonusSpeedMultiplier(int toWho, int fromWho, int whichPlayer, float bonusSpeedMultiplier)
-        {            
+        {
             var packet = GetPacket(SyncPlayer, fromWho);
-            packet.Write((int) PlayerVarSyncEnum.BonusSpeedMultiplier);
+            packet.Write((int)PlayerVarSyncEnum.BonusSpeedMultiplier);
             packet.Write(whichPlayer);
             packet.Write(bonusSpeedMultiplier);
             packet.Send(toWho, fromWho);
@@ -428,8 +535,17 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedDirection(int toWho, int fromWho, int whichPlayer, int direction)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho); ;
+            packet.Write((int)PlayerVarSyncEnum.FacingDirection);
+            packet.Write(whichPlayer);
+            packet.Write(direction);
+            packet.Send(toWho, fromWho);
+        }
+
         public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, float kiCurrent)
-        {          
+        {
             var packet = GetPacket(SyncPlayer, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.KiCurrent);
             packet.Write(whichPlayer);
@@ -438,7 +554,7 @@ namespace Network
         }
 
         public void SendChangedHeldProjectile(int toWho, int fromWho, int whichPlayer, int projHeld)
-        {            
+        {
             var packet = GetPacket(SyncPlayer, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.HeldProjectile);
             packet.Write(whichPlayer);
@@ -447,7 +563,7 @@ namespace Network
         }
 
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
-        {            
+        {
             PlayerVarSyncEnum syncEnum = (PlayerVarSyncEnum)reader.ReadInt32();
             int playerNum = reader.ReadInt32();
             MyPlayer player = Main.player[playerNum].GetModPlayer<MyPlayer>();
@@ -461,7 +577,7 @@ namespace Network
                 packet.Write(playerNum);
             }
 
-            switch(syncEnum)
+            switch (syncEnum)
             {
                 case PlayerVarSyncEnum.TriggerMouseLeft:
                     player.IsMouseLeftHeld = isHeld;
@@ -481,7 +597,8 @@ namespace Network
                     break;
                 case PlayerVarSyncEnum.TriggerLeft:
                     player.IsLeftHeld = isHeld;
-                    if (Main.netMode == NetmodeID.Server)                    {
+                    if (Main.netMode == NetmodeID.Server)
+                    {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
@@ -514,7 +631,7 @@ namespace Network
         }
 
         public void ReceiveChangedPlayerData(BinaryReader reader, int fromWho)
-        {            
+        {
             //Console.WriteLine("Receiving player sync change packet!");
             PlayerVarSyncEnum syncEnum = (PlayerVarSyncEnum)reader.ReadInt32();
             int playerNum = reader.ReadInt32();
@@ -727,6 +844,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.WishActive);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.FacingDirection:
+                    player.player.ChangeDir(reader.ReadInt32());
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.player.direction);
                         packet.Send(-1, fromWho);
                     }
                     break;

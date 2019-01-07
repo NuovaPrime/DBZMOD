@@ -1,6 +1,7 @@
 ﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +87,6 @@ namespace DBZMOD.Tiles
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(mod.GetTexture("Tiles/KiBeaconTileGlowmask"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero, new Rectangle(tile.frameX, tile.frameY + animate, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            //DebugUtil.Log(string.Format("FrameX {0}", tile.frameX));
             if (tile.frameX == 36)
             {
                 
@@ -113,12 +113,18 @@ namespace DBZMOD.Tiles
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            DBZWorld.GetWorld().KiBeacons.Add(new Vector2(i * 16f, j * 16f));
+            var kiBeaconLocation = new Vector2(i * 16f, j * 16f);
+            DBZWorld.GetWorld().KiBeacons.Add(kiBeaconLocation);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetworkHelper.playerSync.SendKiBeaconAdd(256, Main.myPlayer, kiBeaconLocation);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {            
-            DBZWorld.GetWorld().KiBeacons.Remove(new Vector2(i * 16f, j * 16f));
+        {
+            var kiBeaconLocation = new Vector2(i * 16f, j * 16f);
+            DBZWorld.GetWorld().KiBeacons.Remove(kiBeaconLocation);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetworkHelper.playerSync.SendKiBeaconRemove(256, Main.myPlayer, kiBeaconLocation);
         }
     }
 }

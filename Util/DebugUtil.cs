@@ -9,7 +9,7 @@ namespace DBZMOD.Util
 {
     static class DebugUtil
     {
-        public static bool isDebug = false;
+        public static bool isDebug = true;
         public static void Log(string someString)
         {
             if (!isDebug)
@@ -20,11 +20,11 @@ namespace DBZMOD.Util
                 Main.NewText(someString);
         }
 
-        public static void ServerLog(string someString)
-        {
-            if (Main.netMode == NetmodeID.Server)
-                Console.WriteLine(someString);
-        }
+        //public static void ServerLog(string someString)
+        //{
+        //    if (Main.netMode == NetmodeID.Server)
+        //        Console.WriteLine(someString);
+        //}
 
         // helper utils to throttle output spam by only displaying things on a per-time basis.
         public static bool IsSecondElapsed()

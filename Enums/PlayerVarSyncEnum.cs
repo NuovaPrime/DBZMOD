@@ -39,6 +39,7 @@ namespace DBZMOD.Enums
         MouseWorldOctant,
         PowerWishesLeft,
         HeldProjectile,
-        WishActive
+        WishActive,
+        FacingDirection
     }
 }

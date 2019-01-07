@@ -618,18 +618,15 @@ namespace DBZMOD
             if (IsDragonBallInventoried(whichDragonball))
                 return true;
 
-            DebugUtil.Log(string.Format("Trying to place a new dragon ball {0}", whichDragonball));
             TileObject toBePlaced;
             if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
             {
                 WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
                 int dbIndex = whichDragonball - 1;
                 GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
-                DebugUtil.Log(string.Format("Trying to place a new dragon ball {0} succeeded.", whichDragonball));
                 return true;
             } else
             {
-                DebugUtil.Log(string.Format("Trying to place a new dragon ball {0} failed.", whichDragonball));
                 return false;
             }            
         }
@@ -664,7 +661,6 @@ namespace DBZMOD
             // only fire this server side or single player.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
-            DebugUtil.ServerLog("Players changed - refreshing dragon ball locations.");
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
             {

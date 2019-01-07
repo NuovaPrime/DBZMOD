@@ -308,8 +308,8 @@ namespace DBZMOD
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                DebugUtil.Log(string.Format("Requesting dragon ball key sync from server from player {0}", player.whoAmI));
                 DBZWorld.SyncWorldDragonBallKey(player);
+                NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
             }
 
             ItemHelper.ScanPlayerForIllegitimateDragonballs(player);
@@ -982,6 +982,8 @@ namespace DBZMOD
         public bool? SyncTriggerSetUp;
         public bool? SyncTriggerSetDown;
 
+        public int? SyncDir;
+
         public void CheckSyncState()
         {
             // if we're not in network mode, do nothing.            
@@ -1135,6 +1137,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
                 SyncKiCurrent = GetKi();
+            }
+
+            if (SyncDir != player.direction)
+            {
+                NetworkHelper.playerSync.SendChangedDirection(256, player.whoAmI, player.whoAmI, player.direction);
+                SyncDir = player.direction;
             }
         }
 
@@ -1918,9 +1926,15 @@ namespace DBZMOD
                 Main.zoomX += (direction * intensity).X;
                 if (Main.zoomX + player.Center.X >= Main.maxTilesX * 16f)
                     Main.zoomX = (Main.maxTilesX * 16f) - player.Center.X;
-                if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
-                    Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;
+                if (Main.zoomX + player.Center.X <= 0)                
+                    Main.zoomX = -player.Center.X;                
+
                 Main.zoomY += (direction * intensity).Y;
+                if (Main.zoomY + player.Center.Y >= Main.maxTilesY * 16f)
+                    Main.zoomY = (Main.maxTilesY * 16f) - player.Center.Y;                
+                if (Main.zoomY + player.Center.Y <= 0)                
+                    Main.zoomY = -player.Center.Y;
+                
             } else if (isHandlingInstantTransmissionTriggers && (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))))
             {
                 // player has either let go of the instant transmission key or run out of ki. either way, disable further processing and try to teleport
@@ -1986,6 +2000,10 @@ namespace DBZMOD
                 int tileY = (int)(target.Y / 16f);
                 if ((Main.tile[tileX, tileY].wall != 87 || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
                 {
+                    if (target.X < player.Center.X)
+                        player.ChangeDir(-1);
+                    else
+                        player.ChangeDir(1);
                     player.Teleport(target, -1);
                     NetMessage.SendData(65, -1, -1, null, 0, (float)player.whoAmI, target.X, target.Y, 1, 0, 0);
                     if (player.chaosState)

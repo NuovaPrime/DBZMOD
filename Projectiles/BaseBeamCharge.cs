@@ -20,12 +20,6 @@ namespace DBZMOD.Projectiles
         {
             var shouldFire = ((ChargeLevel >= MinimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
                 && (modPlayer.IsMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < MinimumFireFrames)));
-
-            if (shouldFire)
-            {
-                DebugUtil.Log(string.Format("Charge level: {0} Min Charge: {1} OnCooldown: {2}", ChargeLevel, MinimumChargeLevel, IsOnCooldown));
-                DebugUtil.Log(string.Format("Mouse Left: {0} Sustaining Fire: {1} CurrentFireTime: {2} MinimumFireFrames: {3}", modPlayer.IsMouseLeftHeld, IsSustainingFire, CurrentFireTime, MinimumFireFrames));
-            }
             return shouldFire;
         }
 
@@ -63,7 +57,7 @@ namespace DBZMOD.Projectiles
                 // kill the charge sound if we're firing
                 ChargeSoundSlotId = SoundUtil.KillTrackedSound(ChargeSoundSlotId);
 
-                if (!WasSustainingFire)
+                if (!WasSustainingFire && MyProjectile == null)
                 {
                     // fire the laser!
                     MyProjectile = Projectile.NewProjectileDirect(projectile.position + BeamCreationOffset, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);                                        
@@ -122,6 +116,7 @@ namespace DBZMOD.Projectiles
             if (MyProjectile != null)
             {
                 ProjectileUtil.StartKillRoutine(MyProjectile);
+                MyProjectile = null;
             }
         }
 
