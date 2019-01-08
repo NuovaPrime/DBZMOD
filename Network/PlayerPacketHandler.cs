@@ -66,7 +66,6 @@ namespace Network
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
         {
-            DebugUtil.Log("Sending ki beacon addition.");
             ModPacket packet = GetPacket(SyncKiBeaconAdd, fromWho);
             packet.Write(kiBeaconLocation.X);
             packet.Write(kiBeaconLocation.Y);
@@ -75,7 +74,6 @@ namespace Network
 
         public void SendKiBeaconRemove(int toWho, int fromWho, Vector2 kiBeaconLocation)
         {
-            DebugUtil.Log("Sending ki beacon removal.");
             ModPacket packet = GetPacket(SyncKiBeaconRemove, fromWho);
             packet.Write(kiBeaconLocation.X);
             packet.Write(kiBeaconLocation.Y);
@@ -85,7 +83,6 @@ namespace Network
         // handle a single ki beacon update (including removals)
         public void ReceiveKiBeaconAdd(BinaryReader reader, int fromWho)
         {
-            DebugUtil.Log("Receiving ki beacon add request.");
             var coordX = reader.ReadSingle();
             var coordY = reader.ReadSingle();
             var location = new Vector2(coordX, coordY);
@@ -99,7 +96,6 @@ namespace Network
         // handle a single ki beacon update (including removals)
         public void ReceiveKiBeaconRemove(BinaryReader reader, int fromWho)
         {
-            DebugUtil.Log("Receiving ki beacon removal request.");
             var coordX = reader.ReadSingle();
             var coordY = reader.ReadSingle();
             var location = new Vector2(coordX, coordY);
@@ -112,7 +108,6 @@ namespace Network
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
         {
-            DebugUtil.Log("Requesting ki beacon initial sync.");
             ModPacket packet = GetPacket(RequestKiBeaconInitialSync, fromWho);
             packet.Send(toWho, fromWho);
         }
@@ -120,7 +115,6 @@ namespace Network
         // handle a request to receive ki beacon sync from server
         public void ReceiveKiBeaconInitialSyncRequest(int toWho)
         {
-            DebugUtil.Log("Receiving ki beacon initial sync request.");
             var dbWorld = DBZWorld.GetWorld();
             var numIndexes = dbWorld.KiBeacons.Count;
             // if there aren't any, no sync needed, skip this.
@@ -142,7 +136,6 @@ namespace Network
         // handle receiving ki beacon sync from the server.
         public void ReceiveKiBeaconInitialSync(BinaryReader reader, int toWho)
         {
-            DebugUtil.Log("Receiving ki beacon initial sync results.");
             var dbWorld = DBZWorld.GetWorld();
             var numIndexes = reader.ReadInt32();
             // presume whatever we have in ours is wrong and wipe it out.
@@ -157,7 +150,6 @@ namespace Network
 
         public void ReceiveDragonBallKeySyncRequest(int toWho)
         {
-            DebugUtil.Log(string.Format("Receiving DB Sync request from {0} (server)", toWho));
             ModPacket packet = GetPacket(SendDragonBallKeySync, 256);
             var dbWorld = DBZWorld.GetWorld();
             packet.Write(dbWorld.WorldDragonBallKey);
@@ -181,7 +173,6 @@ namespace Network
 
         public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
         {
-            DebugUtil.Log(string.Format("Receiving dragon ball sync key packet from {0}", fromWho));
             var dbWorld = DBZWorld.GetWorld();
             var dbKey = reader.ReadInt32();
             var db1X = reader.ReadInt32();
@@ -210,7 +201,6 @@ namespace Network
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
         {
-            DebugUtil.Log(string.Format("Requesting dragon ball sync key packet from {0} - I'm {1}", toWho, fromWho));
             ModPacket packet = GetPacket(RequestDragonBallKeySync, fromWho);
             packet.Send(toWho, fromWho);
         }

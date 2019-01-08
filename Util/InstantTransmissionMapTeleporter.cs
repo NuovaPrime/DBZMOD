@@ -77,7 +77,6 @@ namespace DBZMOD.Util
                         if (cursorWorldPosition.Y < 0) cursorWorldPosition.Y = 0;
                         else if (cursorWorldPosition.Y + player.height > mapHeight) cursorWorldPosition.Y = mapHeight - player.height;
 
-                        // DebugUtil.Log(string.Format("Cursor world position: {0} {1}", cursorWorldPosition.X, cursorWorldPosition.Y));
                         // loop over non-hostile players and npcs
                         NPC npcTarget = SeekNPCTarget(cursorWorldPosition);
                         Player playerTarget = SeekPlayerTarget(cursorWorldPosition);                        
