@@ -712,6 +712,14 @@ namespace DBZMOD
                 if (Main.rand.Next(4) == 0)
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GoblinKiEnhancer"));
             }
+            if (Main.expertMode)
+            {
+                if (npc.type == NPCID.CultistBoss)
+                {
+                    if (Main.rand.Next(10) == 0)
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("MetamoranSash"));
+                }
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
