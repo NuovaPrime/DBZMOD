@@ -1240,7 +1240,7 @@ namespace DBZMOD
                 drawInfo.hairShader = 1;
                 ChangeEyeColor(Color.Red);
             }
-            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player))
+            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsASSJ(player) || Transformations.IsUSSJ(player))
             {
                 ChangeEyeColor(Color.Turquoise);
             }
@@ -1944,7 +1944,7 @@ namespace DBZMOD
                 if (Main.zoomY + player.Center.Y <= 0)                
                     Main.zoomY = -player.Center.Y;
                 
-            } else if (isHandlingInstantTransmissionTriggers && (InstantTransmission.JustReleased || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))))
+            } else if (isHandlingInstantTransmissionTriggers && ((InstantTransmission.JustReleased  || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))) && HasKi(GetInstantTransmissionTeleportKiCost())))
             {
                 // player has either let go of the instant transmission key or run out of ki. either way, disable further processing and try to teleport
                 // if we fail, the player gets some ki back but the processing is still canceled.
