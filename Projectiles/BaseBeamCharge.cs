@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using DBZMOD.Util;
+using Terraria.ID;
 
 namespace DBZMOD.Projectiles
 {
@@ -59,11 +60,14 @@ namespace DBZMOD.Projectiles
 
                 if (!WasSustainingFire && MyProjectile == null)
                 {
-                    // fire the laser!
-                    MyProjectile = Projectile.NewProjectileDirect(projectile.position + BeamCreationOffset, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);                                        
+                    if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
+                    {
+                        // fire the laser!
+                        MyProjectile = Projectile.NewProjectileDirect(projectile.position + BeamCreationOffset, projectile.velocity, mod.ProjectileType(BeamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
 
-                    // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
-                    MyProjectile.ai[1] = MinimumFireFrames;
+                        // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
+                        MyProjectile.ai[1] = MinimumFireFrames;
+                    }
                 }
 
                 // increment the fire time, this handles "IsSustainingFire" as well as stating the beam is no longer firable (it is already being fired)

@@ -47,12 +47,15 @@ namespace DBZMOD
         public override bool AltFunctionUse(Player player)
         {
             player.channel = true;
-            if (!ProjectileUtil.RecapturePlayerChargeBall(player, item.shoot))
+            if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
             {
-                int weaponDamage = item.damage;
-                GetWeaponDamage(player, ref weaponDamage);
-                var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, weaponDamage, item.knockBack, player.whoAmI);
-                player.heldProj = proj.whoAmI;
+                if (!ProjectileUtil.RecapturePlayerChargeBall(player, item.shoot))
+                {
+                    int weaponDamage = item.damage;
+                    GetWeaponDamage(player, ref weaponDamage);
+                    var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, weaponDamage, item.knockBack, player.whoAmI);
+                    player.heldProj = proj.whoAmI;
+                }
             }
             return base.AltFunctionUse(player);
         }
