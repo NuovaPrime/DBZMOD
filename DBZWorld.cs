@@ -71,7 +71,25 @@ namespace DBZMOD
             DragonBallLocations[5] = sixStarPoint;
             DragonBallLocations[6] = sevenStarPoint;
             KiBeacons = tag.ContainsKey("KiBeacons") ? (List<Vector2>)tag.GetList<Vector2>("KiBeacons") : new List<Vector2>();
+
+            // cleanup ki beacon list, not sure why this is necessary.
+            CleanupKiBeaconList();
+
             base.Load(tag);
+        }
+
+        public void CleanupKiBeaconList()
+        {
+            var listToRemove = new List<Vector2>();
+            foreach (var location in KiBeacons)
+            {
+                var tile = Framing.GetTileSafely((int)location.X / 16, (int)location.Y / 16);
+                if (tile.type == mod.TileType("KiBeaconTile"))
+                    continue;
+                listToRemove.Add(location);
+            }
+
+            KiBeacons = KiBeacons.Except(listToRemove).ToList();
         }
 
         public override void PostWorldGen()
@@ -654,6 +672,15 @@ namespace DBZMOD
                 }
             }
             return true;
+        }
+
+        private bool KiBeaconCleanupCheck = false;
+        public override void PreUpdate()
+        {
+            if (!KiBeaconCleanupCheck)
+            {
+                KiBeaconCleanupCheck = true;
+            }
         }
 
         public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)

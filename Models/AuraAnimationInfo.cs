@@ -80,7 +80,7 @@ namespace DBZMOD.Models
             if (modPlayer.IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
                 // ever so slightly shift the aura down a tad.
-                auraOffsetY -= (int)Math.Floor(modPlayer.player.height * 0.05f);
+                var forwardOffset = (int)Math.Floor(modPlayer.player.height * 0.75f);
                 double rotationOffset = modPlayer.player.fullRotation <= 0f ? (float)Math.PI : -(float)Math.PI;
                 rotation = (float)(modPlayer.player.fullRotation + rotationOffset);
 
@@ -91,10 +91,9 @@ namespace DBZMOD.Models
                 double auraHeightRadius = GetHeight() / 4;
 
                 // for right now, I'm just doing this with some hard coding. When we get more aura work done
-                // we can try to unify this code a bit.                
-                double forwardOffset = 32;
-                double widthOffset = auraWidthRadius - (widthRadius + (auraOffsetY + forwardOffset));
-                double heightOffset = auraHeightRadius - (heightRadius + (auraOffsetY + forwardOffset));
+                // we can try to unify this code a bit.
+                double widthOffset = auraWidthRadius - (widthRadius + auraOffsetY + forwardOffset);
+                double heightOffset = auraHeightRadius - (heightRadius + auraOffsetY + forwardOffset);
                 double cartesianOffsetX = widthOffset * Math.Cos(modPlayer.player.fullRotation);
                 double cartesianOffsetY = heightOffset * Math.Sin(modPlayer.player.fullRotation);
 
@@ -140,12 +139,12 @@ namespace DBZMOD.Models
         {
             // universal scale handling
             // scale is based on kaioken level, which gets set to 0
-            var baseScale = 0.8f;
+            var baseScale = 1.0f;
 
             // special scaling for Kaioken auras only
-            if (Transformations.IsAnythingOtherThanKaioken(modPlayer.player) && IsKaiokenAura)
+            if (IsKaiokenAura)
             {
-                return baseScale * 0.9f;
+                return baseScale * (0.9f + 0.1f * modPlayer.KaiokenLevel);
             }
             else
             {
