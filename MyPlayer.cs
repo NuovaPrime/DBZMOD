@@ -2630,43 +2630,43 @@ namespace DBZMOD
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (player.HasBuff(Transformations.SSJ1.GetBuffId()))
+                    if (Transformations.IsSSJ1(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                     }
-                    else if (player.HasBuff(Transformations.ASSJ.GetBuffId()))
+                    else if (Transformations.IsASSJ(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
                     }
-                    else if (player.HasBuff(Transformations.USSJ.GetBuffId()))
+                    else if (Transformations.IsUSSJ(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (Transformations.IsKaioken(player) && Transformations.IsSSJ1(player))
+                    else if (Transformations.IsSuperKaioken(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ2.GetBuffId()))
+                    else if (Transformations.IsSSJ2(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.SSJ3.GetBuffId()))
+                    else if (Transformations.IsSSJ3(player))
                     {
                         Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                     }
-                    else if (player.HasBuff(Transformations.LSSJ.GetBuffId()))
+                    else if (Transformations.IsLSSJ1(player))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                     }
-                    else if (player.HasBuff(Transformations.LSSJ2.GetBuffId()))
+                    else if (Transformations.IsLSSJ2(player))
                     {
                         Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
-                    else if (player.HasBuff(Transformations.Spectrum.GetBuffId()))
+                    else if (Transformations.IsSpectrum(player))
                     {
                         Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }
-                    if(player.HasBuff(Transformations.SSJG.GetBuffId()))
+                    if(Transformations.IsSSJG(player))
                     {
                         Hair = null;
                     }
