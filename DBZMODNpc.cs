@@ -654,27 +654,22 @@ namespace DBZMOD
                     Item.NewItem((int) npc.position.X, (int) npc.position.Y, npc.width, npc.height, mod.ItemType("EarthenShard"), Main.rand.Next(1, 3));
             }
 
-            if (Main.hardMode)
+            if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
             {
-                if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
-                {
-                    int stacks = Main.rand.Next(6, 12) / 2;
-                    if (Main.expertMode)
-                        stacks = (int)(stacks * 1.5f);
+                int stacks = Main.rand.Next(6, 12) / 2;
+                if (Main.expertMode)
+                    stacks = (int)(stacks * 1.5f);
 
-                    for (int i = 0; i < stacks; i++)
-                    {
-                        Item.NewItem((int)npc.position.X + Main.rand.Next(npc.width), (int)npc.position.Y + Main.rand.Next(npc.height), 2, 2, mod.ItemType("RadiantFragment"), Main.rand.Next(1, 4));
-                    }
+                for (int i = 0; i < stacks; i++)
+                {
+                    Item.NewItem((int)npc.position.X + Main.rand.Next(npc.width), (int)npc.position.Y + Main.rand.Next(npc.height), 2, 2, mod.ItemType("RadiantFragment"), Main.rand.Next(1, 4));
                 }
             }
-            if (Main.hardMode)
+
+            if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
             {
-                if (npc.type == NPCID.LunarTowerSolar || npc.type == NPCID.LunarTowerNebula || npc.type == NPCID.LunarTowerVortex || npc.type == NPCID.LunarTowerStardust)
-                {
-                    if (Main.rand.Next(10) == 0)
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SSJGUnlockItem"));
-                }
+                if (Main.rand.Next(10) == 0)
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("SSJGUnlockItem"));
             }
             if (NPC.downedBoss3)
             {
