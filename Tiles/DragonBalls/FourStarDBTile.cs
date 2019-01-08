@@ -38,7 +38,7 @@ namespace DBZMOD.Tiles.DragonBalls
             Player player = Main.LocalPlayer;
             MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
 
-            if (!modplayer.FirstFourStarDBPickup)
+            if (!modplayer.FirstFourStarDBPickup && !noItem)
             {
                 Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
                 modplayer.FirstFourStarDBPickup = true;

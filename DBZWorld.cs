@@ -529,7 +529,7 @@ namespace DBZMOD
         {
             int dbIndex = whichDragonball - 1;
             var coordinates = GetWorld().DragonBallLocations[dbIndex];
-            if (coordinates == new Point(-1, -1))
+            if (coordinates.Equals(new Point(-1, -1)))
                 return false;
             var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
             if (dbTile.type == (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball)))

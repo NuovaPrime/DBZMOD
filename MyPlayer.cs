@@ -1845,7 +1845,10 @@ namespace DBZMOD
             }
 
 
-            if (WishActive || (DebugUtil.isDebug && QuickKi.JustPressed))
+            if (WishActive)
+            {
+                WishMenu.menuvisible = true;
+            } else if (DebugUtil.isDebug && QuickKi.JustPressed)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }

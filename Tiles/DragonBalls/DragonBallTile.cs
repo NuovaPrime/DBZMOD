@@ -73,7 +73,6 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void PlaceInWorld(int i, int j, Item item)
         {
             base.PlaceInWorld(i, j, item);
-            // if in debug mode, the cheated dragon ball replaces the original location instead of anti-cheat.
             if (DebugUtil.isDebug)
             {
                 var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
@@ -121,8 +120,9 @@ namespace DBZMOD.Tiles.DragonBalls
             // if we're in multiplayer let the server handle item drops.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
+            if (!noItem)
+                Item.NewItem(i * 16, j * 16, 32, 48, drop);
             noItem = true; // kill tile behavior overrides typical drops.
-            Item.NewItem(i * 16, j * 16, 32, 48, drop);
         }
     }
 }
