@@ -90,6 +90,7 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void SelectButtonWealth(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -100,6 +101,7 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void SelectButtonImmortality(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -110,6 +112,7 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void SelectButtonGenetics(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -120,6 +123,7 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void SelectButtonSkill(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -132,6 +136,7 @@ namespace DBZMOD.UI
             Initialize();
             DBZMOD.ActivateWishmenu();
         }
+
         private void SelectButtonAwakening(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
@@ -153,9 +158,9 @@ namespace DBZMOD.UI
                 case WishSelectionID.Power:
                     if (modplayer.PowerWishesLeft > 0)
                     {
+                        UsedWish = true;
                         DoPowerWish();
                         SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                        UsedWish = true;
                     }
                     else
                     {
@@ -165,14 +170,13 @@ namespace DBZMOD.UI
                 case WishSelectionID.Wealth:
                     DoWealthWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                    UsedWish = true;
                     break;
                 case WishSelectionID.Immortality:
                     if (modplayer.ImmortalityWishesLeft > 0)
                     {
+                        UsedWish = true;
                         DoImmortalityWish();
                         SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                        UsedWish = true;
                     }
                     else
                     {
@@ -182,14 +186,13 @@ namespace DBZMOD.UI
                 case WishSelectionID.Genetic:
                     DoGeneticWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                    UsedWish = true;
                     break;
                 case WishSelectionID.Awakening:
                     if (modplayer.AwakeningWishesLeft > 0)
                     {
+                        UsedWish = true;
                         DoAwakeningWish();
                         SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
-                        UsedWish = true;
                     }
                     else
                     {
@@ -197,7 +200,6 @@ namespace DBZMOD.UI
                     }
                     break;
                 default:
-                    UsedWish = false;
                     break;
             }
 
@@ -206,6 +208,7 @@ namespace DBZMOD.UI
                 WishSelection = WishSelectionID.None;
                 DestroyAndRespawnDragonBalls();
                 modplayer.WishActive = false;
+                Main.PlaySound(SoundID.MenuClose);
             }
 
             Initialize();
