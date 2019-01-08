@@ -203,8 +203,7 @@ V1.0.9.0
 17. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
 18. The ki bar color now changes depending on Genetics.
 19. Spirit Bomb and Super Spirit Bomb now fire relative to the player, instead of the cursor.
-20. Reworked mastery to make it more based on your activity.
-21. Renamed Blighted Fang to Blood Thief and made it Tier 3. It is also now obtained from the Dryad instead of the Arms Dealer after Skeletron is dead.
-22. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
-23. Fixed bug where you could get ssj3 before golem.
-24. Added Metamoran Sash.
+20. Renamed Blighted Fang to Blood Thief and made it Tier 3. It is also now obtained from the Dryad instead of the Arms Dealer after Skeletron is dead.
+21. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
+22. Fixed bug where you could get ssj3 before golem.
+23. Added Metamoran Sash.
