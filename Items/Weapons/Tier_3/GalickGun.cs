@@ -35,7 +35,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Maximum Charges = 7/nRight Click Hold to Charge/nLeft Click to Fire");
+            Tooltip.SetDefault("Maximum Charges = 7\nRight Click Hold to Charge\nLeft Click to Fire");
             DisplayName.SetDefault("Galick Gun");
         }
 

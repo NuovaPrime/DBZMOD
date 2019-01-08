@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 12/nRight Click Hold to Charge/nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 12\nRight Click Hold to Charge\nLeft Click to Fire");
             DisplayName.SetDefault("Final Shine");
 		}
 

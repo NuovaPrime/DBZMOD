@@ -34,7 +34,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 
 	    public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Maximum Charges = 4/nRight Click Hold to Charge/nLeft Click to Fire");
+            Tooltip.SetDefault("Maximum Charges = 4\nRight Click Hold to Charge\nLeft Click to Fire");
             DisplayName.SetDefault("Double Sunday");
 		}
 
