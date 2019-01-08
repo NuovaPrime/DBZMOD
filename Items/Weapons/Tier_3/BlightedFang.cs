@@ -38,7 +38,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            type = mod.ProjectileType("BloodthiefBlast");
+            type = mod.ProjectileType("BlightedFangProj");
             int numberProjectiles = 2 + Main.rand.Next(2);
             for (int i = 0; i < numberProjectiles; i++)
             {
