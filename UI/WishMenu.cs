@@ -198,6 +198,7 @@ namespace DBZMOD.UI
 
             if (UsedWish)
             {
+                WishSelection = WishSelectionID.None;
                 DestroyAndRespawnDragonBalls();
                 modplayer.WishActive = false;
             }
