@@ -180,3 +180,31 @@ V1.0.8.0
 21. Fixed Dragon Crystal Infuser's rarity and value.
 22. Fixed issue where the Dryad's summoning items had no value.
 23. Added Time Ring and Potara Earrings.
+
+V1.0.9.0
+
+1. Added the Dragon Balls.
+2. Added Grandpa Gohan's House.
+3. Added Instant Transmission
+4. Added Saiyan Scout Armor and Elite Saiyan Armor.
+5. Added Dragon Radar MK1, Dragon Radar MK2 and Dragon Radar MK3.
+6. Added Refined Metal, Katchin Scale, I.T. Tome Vol 1, I.T. Tome Vol 2, I.T. Tome Vol 3, Ki Beacon and Energy Shot.
+7. Beams now work by charging with right click and firing with left click. You can stop charging at any time and you will slowly lose charge levels.
+8. Beams are now not multi-segmented, making them much more optimized and making them sync better.
+9. Beams rebalanced to adjust to new systems.
+10. Mastery is now listed as a percent instead of a normal number.
+11. Mastery is now obtained through taking damage while in the form, using ki attacks while in the form and just being in the form.
+12. Ambient form mastery speed has been drastically reduced.
+13. Buffed Turtle Hermit Armor, Saiyan Armor and Radiant Armor.
+14. Kaioken level/size scaling reimplemented.
+15. Kaioken nerfed and buffed at the same time. 10% damage per Kaioken level. -5% defense per Kaioken level. Health drain drastically reduced.
+16a. Changed when all Kaioken Kaioken levels are obtained.
+16b. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+17. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+18. The ki bar color now changes depending on Genetics.
+19. Spirit Bomb and Super Spirit Bomb now fire relative to the player, instead of the cursor.
+20. Reworked mastery to make it more based on your activity.
+21. Renamed Blighted Fang to Blood Thief and made it Tier 3. It is also now obtained from the Dryad instead of the Arms Dealer after Skeletron is dead.
+22. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
+23. Fixed bug where you could get ssj3 before golem.
+24. Added Metamoran Sash.

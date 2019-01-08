@@ -435,7 +435,7 @@ V1.0.8.2
 8. Fixed a bug where you'd take alot of damage after flying.
 
 
-V1.0.9
+V1.0.9.0
 
 == Additions ==
 
@@ -445,11 +445,11 @@ V1.0.9
 
 3. Added [[Instant Transmission]]
 
-3. Added [[Saiyan Scout Armor]] and [[Elite Saiyan Armor]].
+4. Added [[Saiyan Scout Armor]] and [[Elite Saiyan Armor]].
 
-4. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
+5. Added [[Dragon Radar MK1]], [[Dragon Radar MK2]] and [[Dragon Radar MK3]].
 
-5. Added [[Refined Metal]], [[Katchin Scale]], [[I.T. Tome Vol 1]], [[I.T. Tome Vol 2]], [[I.T. Tome Vol 3]] and [[Ki Beacon]].
+6. Added [[Refined Metal]], [[Katchin Scale]], [[I.T. Tome Vol 1]], [[I.T. Tome Vol 2]], [[I.T. Tome Vol 3]], [[Ki Beacon]] and [[Energy Shot]].
 
 
 == Beam rework ==
@@ -460,28 +460,35 @@ V1.0.9
 
 3. Beams rebalanced to adjust to new systems.
 
+== Mastery changes ==
+
+1. Mastery is now listed as a percent instead of a normal number.
+
+2. Mastery is now obtained through taking damage while in the form, using ki attacks while in the form and just being in the form.
+
+3. Ambient form mastery speed has been drastically reduced.
 
 == Changes ==
 
 1. Buffed [[Turtle Hermit Armor]], [[Saiyan Armor]] and [[Radiant Armor]].
 
-2. You can now combine [[Kaioken Technique|Kaioken]] with forms.
+2. [[Kaioken Technique|Kaioken]] level/size scaling reimplemented.
 
-3. [[Kaioken Technique|Kaioken]] level/size scaling reimplemented.
+3. [[Kaioken Technique|Kaioken]] nerfed and buffed at the same time. 10% damage per Kaioken level. -5% defense per Kaioken level. Health drain drastically reduced.
 
-4. [[Kaioken Technique|Kaioken]] nerfed and buffed at the same time. 20% damage per Kaioken level. -15% defense per Kaioken level. Health drain drastically reduced.
+4a. Changed when all [[Kaioken Technique|Kaioken levels]] are obtained.
 
-5a. Changed when all [[Kaioken Technique|Kaioken levels]] are obtained.
+4b. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
 
-5b. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+5. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
 
-6. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+6. The ki bar color now changes depending on [[Genetics]].
 
-7. The ki bar color now changes depending on [[Genetics]].
+7. [[Spirit Bomb]] and [[Super Spirit Bomb]] now fire relative to the player, instead of the cursor.
 
-8. [[Spirit Bomb]] and [[Super Spirit Bomb]] now fire relative to the player, instead of the cursor.
+8. Reworked mastery to make it more based on your activity.
 
-9. Reworked mastery to make it more based on your activity.
+9. Renamed Blighted Fang to [[Blood Thief]] and made it [[Tier 3]]. It is also now obtained from the [[Dryad]] instead of the [[Arms Dealer]] after [[Skeletron]] is dead.
 
 == Fixes ==
 

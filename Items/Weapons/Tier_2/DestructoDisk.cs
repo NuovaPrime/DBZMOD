@@ -36,7 +36,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 	    }
 	    public override void SetStaticDefaults()
 		{
-		Tooltip.SetDefault("'Its a frizbee I swear.'");
+		Tooltip.SetDefault("'Its a frizbee, I swear.'");
 		DisplayName.SetDefault("Destructo Disk");
 		}
 

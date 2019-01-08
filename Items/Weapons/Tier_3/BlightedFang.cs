@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Weapons.Tier_4
+namespace DBZMOD.Items.Weapons.Tier_3
 {
     public class BlightedFang : KiItem
     {
@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         {
             item.shoot = mod.ProjectileType("BlightedFangProj");
             item.shootSpeed = 16f;
-            item.damage = 74;
+            item.damage = 51;
             item.knockBack = 4f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item1;
@@ -25,23 +25,27 @@ namespace DBZMOD.Items.Weapons.Tier_4
             item.noUseGraphic = true;
             item.height = 40;
             item.autoReuse = false;
-            item.value = 10000;
-            item.rare = 4;
-            KiDrain = 120;
+            item.value = 8000;
+            item.rare = 3;
+            KiDrain = 75;
             WeaponType = "Blast";
         }
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blighted Fang");
+            DisplayName.SetDefault("Blood Thief");
             Tooltip.SetDefault("Fires a Life-Stealing ki blast.");
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
-            speedX = perturbedSpeed.X;
-            speedY = perturbedSpeed.Y;
-            return true;
+            type = mod.ProjectileType("BloodthiefBlast");
+            int numberProjectiles = 2 + Main.rand.Next(2);
+            for (int i = 0; i < numberProjectiles; i++)
+            {
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
+                Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+            }
+            return false;
         }
 
     }

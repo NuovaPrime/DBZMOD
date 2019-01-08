@@ -16,8 +16,8 @@ namespace DBZMOD.Projectiles
         }
         public override void SetDefaults()
         {
-            projectile.width = 54;
-            projectile.height = 54;
+            projectile.width = 74;
+            projectile.height = 74;
             projectile.timeLeft = 100;
             projectile.penetrate = 200;
             projectile.tileCollide = false;
@@ -25,13 +25,16 @@ namespace DBZMOD.Projectiles
             projectile.friendly = true;
             projectile.hostile = false;
             projectile.aiStyle = 56; //perfect ai for gravless and rotation, useful for disks 
-            projectile.light = 3f;
-            projectile.stepSpeed = 13; ;
+            projectile.light = 1f;
+            projectile.stepSpeed = 13;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             projectile.netUpdate = true;
         }
-
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return new Color(255, 255, 255, 100);
+        }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Vector2 drawOrigin = new Vector2(Main.projectileTexture[projectile.type].Width * 0.5f, projectile.height * 0.5f);
@@ -49,7 +52,7 @@ namespace DBZMOD.Projectiles
             {
                 if (Main.rand.NextFloat() < 1f)
                 {
-                    Dust dust = Dust.NewDustDirect(projectile.position, 52, 52, 222, 0f, 0f, 0, new Color(255, 255, 255), 0.7236842f);
+                    Dust dust = Dust.NewDustDirect(projectile.position, 72, 72, 169, 0f, 0f, 0, new Color(255, 255, 255), 1.5f);
                     dust.noGravity = true;
                 }
 

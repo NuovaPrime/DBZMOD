@@ -750,9 +750,9 @@ namespace DBZMOD
                 }
             }
 
-            if (type == NPCID.ArmsDealer && Main.bloodMoon && Main.hardMode)
+            if (type == NPCID.Dryad && Main.bloodMoon && NPC.downedBoss3)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_4.BlightedFang>());
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Weapons.Tier_3.BlightedFang>());
                 nextSlot++;
             }
 
