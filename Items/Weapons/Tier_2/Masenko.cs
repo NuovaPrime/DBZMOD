@@ -35,8 +35,8 @@ namespace DBZMOD.Items.Weapons.Tier_2
 
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 5");
-		    DisplayName.SetDefault("Masenko");
+		    Tooltip.SetDefault("Maximum Charges = 5/nRight Click Hold to Charge/nLeft Click to Fire");
+            DisplayName.SetDefault("Masenko");
 		}
 
 		public override void AddRecipes()

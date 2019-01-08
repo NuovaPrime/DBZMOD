@@ -33,8 +33,8 @@ namespace DBZMOD.Items.Weapons.Tier_3
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 6");
-		    DisplayName.SetDefault("Kamehameha");
+		    Tooltip.SetDefault("Maximum Charges = 6/nRight Click Hold to Charge/nLeft Click to Fire");
+            DisplayName.SetDefault("Kamehameha");
 		}
 
 		public override void AddRecipes()

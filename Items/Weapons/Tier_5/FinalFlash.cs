@@ -32,8 +32,8 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 9");
-		    DisplayName.SetDefault("Final Flash");
+		    Tooltip.SetDefault("Maximum Charges = 9/nRight Click Hold to Charge/nLeft Click to Fire");
+            DisplayName.SetDefault("Final Flash");
 		}
         
 		public override void AddRecipes()

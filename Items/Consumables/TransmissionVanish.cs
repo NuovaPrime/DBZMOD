@@ -34,9 +34,7 @@ namespace DBZMOD.Items.Consumables
             MyPlayer.ModPlayer(player).IsInstantTransmission1Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked Instant Transmission Lv1."
-                + "\nClick an NPC, player or " +
-                "\nKi Beacon on the map to use it.");
+                Main.NewText("You have unlocked Instant Transmission Lv1. Open your map to learn how to use it.");
                 return true;
             }
             return true;
