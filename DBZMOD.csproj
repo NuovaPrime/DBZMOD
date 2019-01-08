@@ -322,13 +322,14 @@
     <Compile Include="Items\Weapons\Tier_2\EnergyBlastBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_2\Masenko.cs" />
     <Compile Include="Items\Weapons\Tier_2\SpiritBall.cs" />
+    <Compile Include="Items\Weapons\Tier_3\BlightedFang.cs" />
     <Compile Include="Items\Weapons\Tier_3\DirtyFireworks.cs" />
     <Compile Include="Items\Weapons\Tier_3\EnergyWaveVolley.cs" />
     <Compile Include="Items\Weapons\Tier_3\GalickGun.cs" />
     <Compile Include="Items\Weapons\Tier_3\HellzoneGrenade.cs" />
     <Compile Include="Items\Weapons\Tier_3\Kamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_4\BigBangAttack.cs" />
-    <Compile Include="Items\Weapons\Tier_4\BlightedFang.cs" />
+    <Compile Include="Items\Weapons\Tier_4\EnergyShot.cs" />
     <Compile Include="Items\Weapons\Tier_4\Scattershot.cs" />
     <Compile Include="Items\Weapons\Tier_4\SpecialBeamCannon.cs" />
     <Compile Include="Items\Weapons\Tier_4\SpiritBomb.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Projectiles\DoubleSundayBeam.cs" />
     <Compile Include="Projectiles\DoubleSundayCharge.cs" />
     <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
+    <Compile Include="Projectiles\EnergyShotBlast.cs" />
     <Compile Include="Projectiles\EnergyWaveCharge.cs" />
     <Compile Include="Projectiles\EnergyWaveBeam.cs" />
     <Compile Include="Projectiles\EnergyWaveVolleyBlast.cs" />
