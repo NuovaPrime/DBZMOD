@@ -47,7 +47,7 @@ namespace DBZMOD.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Dust dust = Main.dust[Terraria.Dust.NewDust(projectile.position, 26, 26, 86, projectile.velocity.X, projectile.velocity.Y, 0, new Color(255, 255, 255), 1f)];
                 dust.noGravity = true;

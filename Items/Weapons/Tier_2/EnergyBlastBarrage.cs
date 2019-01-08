@@ -41,7 +41,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            type = mod.ProjectileType("BarrageBlast");
+            type = mod.ProjectileType("EnergyBlastBarrageProjectile");
             int numberProjectiles = 1 + Main.rand.Next(2);
             for (int i = 0; i < numberProjectiles; i++)
             {
