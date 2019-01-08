@@ -106,10 +106,10 @@ namespace DBZMOD.Util
                 float beaconLocationY = beaconLocation.Y - 32f;
 
                 // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
-                float leftMargin = beaconWidth * (1f + (0.5f * mapScale));
-                float rightMargin = beaconWidth * (2f + (0.5f * mapScale));
+                float leftMargin = beaconWidth * (0.5f * mapScale);
+                float rightMargin = beaconWidth * (1f + (0.5f * mapScale));
                 float topMargin = beaconHeight * (1f + (0.5f * mapScale));
-                float bottomMargin = beaconHeight * (2f + (0.5f * mapScale));
+                float bottomMargin = beaconHeight * (0.5f * mapScale);
                 float beaconLowerXBound = beaconPosX - leftMargin;
                 float beaconLowerYBound = beaconLocationY - topMargin;
                 float beaconUpperXBound = beaconPosX + rightMargin;
