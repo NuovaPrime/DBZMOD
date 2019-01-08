@@ -324,7 +324,6 @@
     <Compile Include="Items\Weapons\Tier_2\SpiritBall.cs" />
     <Compile Include="Items\Weapons\Tier_3\BlightedFang.cs" />
     <Compile Include="Items\Weapons\Tier_3\DirtyFireworks.cs" />
-    <Compile Include="Items\Weapons\Tier_3\EnergyWaveVolley.cs" />
     <Compile Include="Items\Weapons\Tier_3\GalickGun.cs" />
     <Compile Include="Items\Weapons\Tier_3\HellzoneGrenade.cs" />
     <Compile Include="Items\Weapons\Tier_3\Kamehameha.cs" />
@@ -340,7 +339,6 @@
     <Compile Include="Items\Weapons\Tier_5\Kamehamehax10.cs" />
     <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
     <Compile Include="Items\Weapons\Tier_5\Supernova.cs" />
-    <Compile Include="Items\Weapons\Tier_6\BigBangKamehameha.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlackBlitz.cs" />
     <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
     <Compile Include="BaseBeamItem.cs" />
