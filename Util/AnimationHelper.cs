@@ -46,7 +46,7 @@ namespace DBZMOD.Util
             return null;
         }
 
-        public static readonly PlayerLayer AuraEffect = new PlayerLayer("DBZMOD", "AuraEffects", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer AuraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -96,7 +96,7 @@ namespace DBZMOD.Util
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
-        public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
