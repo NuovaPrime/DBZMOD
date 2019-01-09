@@ -2637,7 +2637,6 @@ namespace DBZMOD
                 PlayerLayer.HairBack.visible = false;
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
-                PlayerLayer.Arms.visible = false;
             }
         }
 
