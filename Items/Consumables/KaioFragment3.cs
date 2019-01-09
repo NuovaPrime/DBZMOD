@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kaioken 20x");
+            DisplayName.SetDefault("Kaioken 10x");
             Tooltip.SetDefault("Unlocks the next level of kaioken.");
         }
 
