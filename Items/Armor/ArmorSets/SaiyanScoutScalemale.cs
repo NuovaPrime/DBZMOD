@@ -12,7 +12,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             Tooltip.SetDefault("3% Increased Ki Damage"
                 + "\n2% Increased Ki Crit Chance" +
                                "\n5% reduced ki usage");
-            DisplayName.SetDefault("Saiyan Scout Scalemale");
+            DisplayName.SetDefault("Saiyan Scout Scalemail");
         }
 
         public override void SetDefaults()
