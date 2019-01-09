@@ -67,6 +67,10 @@ namespace DBZMOD
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
+                    if (Transformations.IsSuperKaioken(player))
+                    {
+                        modPlayer.KaiokenLevel = 0;
+                    }
                     Transformations.EndTransformations(player, true, false);
                 }
                 else
