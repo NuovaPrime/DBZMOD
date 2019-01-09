@@ -2095,7 +2095,7 @@ namespace DBZMOD
                 }
             }
             return false;
-        }
+        }              
 
         public void HandleChargeEffects()
         {
@@ -2559,6 +2559,7 @@ namespace DBZMOD
                 {
                     bool WasSSJKK = WasTransformed;
                     Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
+                    KaiokenLevel = 0; // make triple sure the Kaio level gets reset.
                 }
                 if (WasTransformed && !IsTransformed)
                 {
@@ -2675,6 +2676,25 @@ namespace DBZMOD
             base.UpdateBadLifeRegen();
 
             HandlePowerWishPlayerHealth();
+
+            // Kaioken neuters regen and drains the player
+            if (Transformations.IsAnyKaioken(player))
+            {
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+
+                player.lifeRegenTime = 0;
+
+                // only apply the kaio crystal benefit if this is kaioken
+                bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
+                float drainMult = isKaioCrystalEquipped ? 0.5f : 1f;
+
+                // recalculate the final health drain rate and reduce regen by that amount
+                var healthDrain = (int)Math.Ceiling(TransBuff.GetTotalHealthDrain(player) * drainMult);
+                player.lifeRegen -= healthDrain;
+            }
         }
 
         public override void PostUpdateEquips()

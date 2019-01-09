@@ -1,3 +1,4 @@
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -18,16 +19,24 @@ namespace DBZMOD.Buffs
             KiDrainRate = 2;
             KiDrainRateWithMastery = 1;
             KaiokenLevel = 1;
-            HealthDrainRate = 16;
             BaseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
 
             KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
+            HealthDrainRate = GetHealthDrain(player);
             base.Update(player, ref buffIndex);
+        }
+
+        public static int GetHealthDrain(Player player)
+        {
+            if (!Transformations.IsSuperKaioken(player))
+                return 0;
+            return 8;
         }
     }
 }
