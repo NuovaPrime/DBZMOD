@@ -731,6 +731,35 @@ namespace DBZMOD
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
 
+            // aura frame effects moved out of draw pass to avoid being tied to frame rate!
+            
+            CurrentAura = AnimationHelper.GetAuraEffectOnPlayer(this);
+
+            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
+            if (IsCharging)
+            {
+                if (!WasCharging)
+                {
+                    var chargeAuraEffects = AuraAnimations.CreateChargeAura;
+                    HandleAuraStartupSound(chargeAuraEffects, true);
+                }
+            }
+
+            if (CurrentAura != PreviousAura)
+            {
+                AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
+                HandleAuraStartupSound(CurrentAura, false);
+                // reset aura frame and audio timers to 0, this is important
+                AuraSoundTimer = 0;
+                AuraFrameTimer = 0;
+            }
+
+            IncrementAuraFrameTimers(CurrentAura);
+            HandleAuraLoopSound(CurrentAura);
+
+            WasCharging = IsCharging;
+            PreviousAura = CurrentAura;
+
             CheckPlayerForTransformationStateDebuffApplication();
 
             ThrottleKi();
@@ -744,6 +773,34 @@ namespace DBZMOD
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
+        }
+
+        public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
+        {
+            if (aura == null)
+                return;
+            if (aura.StartupSoundName != null)
+            {
+                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
+            }
+        }
+
+        public void HandleAuraLoopSound(AuraAnimationInfo aura)
+        {
+            if (aura == null)
+                return;
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
+            if (shouldPlayAudio)
+            {
+                if (AuraSoundTimer == 0)
+                    AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, 0f);
+                AuraSoundTimer++;
+                if (AuraSoundTimer > aura.LoopSoundDuration)
+                    AuraSoundTimer = 0;
+            }
+
+            // try to update positional audio?
+            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
         }
 
         public bool AllDragonBallsNearby()
@@ -2508,6 +2565,8 @@ namespace DBZMOD
         public int AuraCurrentFrame = 0;
         public void IncrementAuraFrameTimers(AuraAnimationInfo aura)
         {
+            if (aura == null)
+                return;
             // doubled frame timer while charging.
             if (IsCharging && aura.ID != (int)AuraID.Charge)
                 AuraFrameTimer++;
