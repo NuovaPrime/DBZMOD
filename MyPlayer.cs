@@ -1370,7 +1370,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            else if (SSJ1Achieved && IsPlayerLegendary())
+            else if (SSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 LSSJAchieved = true;
