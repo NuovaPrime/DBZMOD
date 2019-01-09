@@ -26,7 +26,7 @@ namespace DBZMOD.Buffs
         {
             bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
 
-            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
+            KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
             base.Update(player, ref buffIndex);
         }
     }
