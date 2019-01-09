@@ -232,7 +232,12 @@ namespace DBZMOD.Projectiles
             // draw the beam head
             spriteBatch.Draw(texture, BodyPositionEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(HeadSize.X * .5f, HeadSize.Y * .5f), 1f, 0, 0f);
         }
-        
+
+        public Vector2 TailPositionCollisionStart()
+        {
+            return projectile.position + OffsetY + TailDistance * projectile.velocity;
+        }
+
         public Vector2 TailPositionStart()
         {
             return projectile.position + OffsetY + ((TailHeldDistance + TailDistance) * projectile.velocity);
@@ -285,7 +290,7 @@ namespace DBZMOD.Projectiles
             float bodyPoint = 0f;
             float headPoint = 0f;
 
-            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionStart(), TailPositionEnd(), TailSize.X, ref tailPoint);
+            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionCollisionStart(), TailPositionEnd(), TailSize.X, ref tailPoint);
 
             bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionEnd(), BodyPositionEnd(), BeamSize.X, ref bodyPoint);
 
