@@ -1028,6 +1028,7 @@ namespace DBZMOD
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
         public bool? SyncWishActive;
+        public int? SyncKaiokenLevel;
         public int? SyncMouseWorldOctant;
         public int? SyncPowerWishesLeft;
         public int? SyncHeldProj;
@@ -1176,6 +1177,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedWishActive(256, player.whoAmI, player.whoAmI, WishActive);
                 SyncWishActive = WishActive;
+            }
+
+            if (SyncKaiokenLevel != KaiokenLevel)
+            {
+                NetworkHelper.playerSync.SendChangedKaiokenLevel(256, player.whoAmI, player.whoAmI, KaiokenLevel);
+                SyncKaiokenLevel = KaiokenLevel;
             }
 
             if (SyncMouseWorldOctant != MouseWorldOctant)

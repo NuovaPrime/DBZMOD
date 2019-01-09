@@ -36,6 +36,7 @@ namespace DBZMOD.Enums
         TriggerDown,
         ChargeMoveSpeed,
         BonusSpeedMultiplier,
+        KaiokenLevel,
         MouseWorldOctant,
         PowerWishesLeft,
         HeldProjectile,
