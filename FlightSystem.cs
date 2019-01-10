@@ -28,6 +28,7 @@ namespace DBZMOD
             if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.IsFlying)
             {
                 modPlayer.IsFlying = false;
+				player.fallStart = (int)player.position.Y/16;
                 AddKatchinFeetBuff(player);
             }
 

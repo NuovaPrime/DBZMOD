@@ -1820,6 +1820,7 @@ namespace DBZMOD
                     IsFlying = !IsFlying;
                     if (!IsFlying)
                     {
+						player.fallStart = (int)player.position.Y/16;
                         FlightSystem.AddKatchinFeetBuff(player);
                     }
                 }
