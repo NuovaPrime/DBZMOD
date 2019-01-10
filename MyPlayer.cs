@@ -392,7 +392,7 @@ namespace DBZMOD
 
         public float GetMasteryIncreaseFromFormDrain(float currentMastery)
         {
-            return Math.Min(1.0f, currentMastery + FORM_MASTERY_GAIN_PER_TICK) * GetProdigyMasteryMultiplier();
+            return Math.Min(1.0f, currentMastery + FORM_MASTERY_GAIN_PER_TICK * GetProdigyMasteryMultiplier());
         }
 
         public float GetWeaponDrainFormMasteryContribution(float kiAmount)
