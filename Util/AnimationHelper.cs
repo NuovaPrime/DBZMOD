@@ -18,6 +18,8 @@ namespace DBZMOD.Util
     {        
         public static AuraAnimationInfo GetAuraEffectOnPlayer(MyPlayer modPlayer)
         {
+            if (modPlayer.player.dead)
+                return null;
             if (Transformations.IsKaioken(modPlayer.player))
                 return AuraAnimations.CreateKaiokenAura;
             if (Transformations.IsSuperKaioken(modPlayer.player))
