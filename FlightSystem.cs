@@ -104,6 +104,7 @@ namespace DBZMOD
                 player.velocity.Y = MathHelper.Lerp(player.velocity.Y, 0, 0.1f);
                 // keep the player suspended at worst.
                 player.velocity = player.velocity - (player.gravity * Vector2.UnitY);
+                player.fallStart = (int)(player.position.Y / 16f);
 
                 // handles keeping legs from moving when the player is in flight/moving fast/channeling.
                 if (player.velocity.X > 0)
