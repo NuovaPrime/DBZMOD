@@ -83,7 +83,7 @@ namespace DBZMOD.Buffs
         {
             if (!Transformations.IsKaioken(modPlayer.player))
                 return 0;
-            return 6 + (2 * modPlayer.KaiokenLevel);
+            return 8 + (4 * (modPlayer.KaiokenLevel) - 1);
         }
     }
 }
