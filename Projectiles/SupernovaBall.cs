@@ -20,8 +20,8 @@ namespace DBZMOD.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 28;
-            projectile.height = 28;
+            projectile.width = 226;
+            projectile.height = 226;
             projectile.light = 1f;
             projectile.aiStyle = 1;
             aiType = 14;
@@ -128,7 +128,7 @@ namespace DBZMOD.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
             DBZMOD.Circle.ApplyShader(-9001);
             return true;
         }
