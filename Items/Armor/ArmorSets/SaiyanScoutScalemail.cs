@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor.ArmorSets
 {
     [AutoloadEquip(EquipType.Body)]
-    public class SaiyanScoutScalemale : ModItem
+    public class SaiyanScoutScalemail : ModItem
     {
         public override void SetStaticDefaults()
         {
