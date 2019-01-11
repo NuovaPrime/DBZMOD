@@ -392,7 +392,7 @@ namespace DBZMOD
 
         public float GetMasteryIncreaseFromFormDrain(float currentMastery)
         {
-            return Math.Min(1.0f, currentMastery + FORM_MASTERY_GAIN_PER_TICK) * GetProdigyMasteryMultiplier();
+            return Math.Min(1.0f, currentMastery + FORM_MASTERY_GAIN_PER_TICK * GetProdigyMasteryMultiplier());
         }
 
         public float GetWeaponDrainFormMasteryContribution(float kiAmount)
@@ -731,6 +731,35 @@ namespace DBZMOD
             // charge activate and charge effects moved to post update so that they can also benefit from not being client sided.
             HandleChargeEffects();
 
+            // aura frame effects moved out of draw pass to avoid being tied to frame rate!
+            
+            CurrentAura = AnimationHelper.GetAuraEffectOnPlayer(this);
+
+            // save the charging aura for last, and only add it to the draw layer if no other auras are firing
+            if (IsCharging)
+            {
+                if (!WasCharging)
+                {
+                    var chargeAuraEffects = AuraAnimations.CreateChargeAura;
+                    HandleAuraStartupSound(chargeAuraEffects, true);
+                }
+            }
+
+            if (CurrentAura != PreviousAura)
+            {
+                AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
+                HandleAuraStartupSound(CurrentAura, false);
+                // reset aura frame and audio timers to 0, this is important
+                AuraSoundTimer = 0;
+                AuraFrameTimer = 0;
+            }
+
+            IncrementAuraFrameTimers(CurrentAura);
+            HandleAuraLoopSound(CurrentAura);
+
+            WasCharging = IsCharging;
+            PreviousAura = CurrentAura;
+
             CheckPlayerForTransformationStateDebuffApplication();
 
             ThrottleKi();
@@ -744,6 +773,34 @@ namespace DBZMOD
             // if the player is in mid-transformation, totally neuter horizontal velocity
             if (IsTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
+        }
+
+        public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
+        {
+            if (aura == null)
+                return;
+            if (aura.StartupSoundName != null)
+            {
+                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
+            }
+        }
+
+        public void HandleAuraLoopSound(AuraAnimationInfo aura)
+        {
+            if (aura == null)
+                return;
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
+            if (shouldPlayAudio)
+            {
+                if (AuraSoundTimer == 0)
+                    AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, 0f);
+                AuraSoundTimer++;
+                if (AuraSoundTimer > aura.LoopSoundDuration)
+                    AuraSoundTimer = 0;
+            }
+
+            // try to update positional audio?
+            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
         }
 
         public bool AllDragonBallsNearby()
@@ -971,6 +1028,7 @@ namespace DBZMOD
         public float? SyncChargeMoveSpeed;
         public float? SyncBonusSpeedMultiplier;
         public bool? SyncWishActive;
+        public int? SyncKaiokenLevel;
         public int? SyncMouseWorldOctant;
         public int? SyncPowerWishesLeft;
         public int? SyncHeldProj;
@@ -1119,6 +1177,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedWishActive(256, player.whoAmI, player.whoAmI, WishActive);
                 SyncWishActive = WishActive;
+            }
+
+            if (SyncKaiokenLevel != KaiokenLevel)
+            {
+                NetworkHelper.playerSync.SendChangedKaiokenLevel(256, player.whoAmI, player.whoAmI, KaiokenLevel);
+                SyncKaiokenLevel = KaiokenLevel;
             }
 
             if (SyncMouseWorldOctant != MouseWorldOctant)
@@ -1306,7 +1370,7 @@ namespace DBZMOD
                 Transformations.EndTransformations(player, true, false);
                 RageCurrent = 0;
             }
-            else if (SSJ1Achieved && IsPlayerLegendary())
+            else if (SSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 LSSJAchieved = true;
@@ -2031,7 +2095,7 @@ namespace DBZMOD
                 }
             }
             return false;
-        }
+        }              
 
         public void HandleChargeEffects()
         {
@@ -2065,7 +2129,7 @@ namespace DBZMOD
                 }
 
                 // grant defense and a protective barrier visual if charging with baldur essentia
-                if (baldurEssentia && !buldariumSigmite)
+                if (baldurEssentia)
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.30f);
@@ -2495,6 +2559,7 @@ namespace DBZMOD
                 {
                     bool WasSSJKK = WasTransformed;
                     Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
+                    KaiokenLevel = 0; // make triple sure the Kaio level gets reset.
                 }
                 if (WasTransformed && !IsTransformed)
                 {
@@ -2508,6 +2573,8 @@ namespace DBZMOD
         public int AuraCurrentFrame = 0;
         public void IncrementAuraFrameTimers(AuraAnimationInfo aura)
         {
+            if (aura == null)
+                return;
             // doubled frame timer while charging.
             if (IsCharging && aura.ID != (int)AuraID.Charge)
                 AuraFrameTimer++;
@@ -2571,7 +2638,6 @@ namespace DBZMOD
                 PlayerLayer.HairBack.visible = false;
                 PlayerHeadLayer.Hair.visible = false;
                 PlayerHeadLayer.Head.visible = false;
-                PlayerLayer.Arms.visible = false;
             }
         }
 
@@ -2610,6 +2676,25 @@ namespace DBZMOD
             base.UpdateBadLifeRegen();
 
             HandlePowerWishPlayerHealth();
+
+            // Kaioken neuters regen and drains the player
+            if (Transformations.IsAnyKaioken(player))
+            {
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+
+                player.lifeRegenTime = 0;
+
+                // only apply the kaio crystal benefit if this is kaioken
+                bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
+                float drainMult = isKaioCrystalEquipped ? 0.5f : 1f;
+
+                // recalculate the final health drain rate and reduce regen by that amount
+                var healthDrain = (int)Math.Ceiling(TransBuff.GetTotalHealthDrain(player) * drainMult);
+                player.lifeRegen -= healthDrain;
+            }
         }
 
         public override void PostUpdateEquips()

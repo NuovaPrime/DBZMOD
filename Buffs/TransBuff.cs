@@ -2,6 +2,7 @@
 using Terraria;
 using System;
 using DBZMOD.Util;
+using DBZMOD.Buffs;
 
 namespace DBZMOD
 {
@@ -42,24 +43,6 @@ namespace DBZMOD
 
             //give bonus base defense
             player.statDefense += BaseDefenceBonus;
-
-            // only neuter the life regen if this is a draining buff.
-            if (HealthDrainRate > 0)
-            {
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                player.lifeRegenTime = 0;
-
-                // only apply the kaio crystal benefit if this is kaioken
-                bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
-                float drainMult = (Transformations.IsAnyKaioken(player) && isKaioCrystalEquipped ? 0.5f : 1f);
-
-                // recalculate the final health drain rate and reduce regen by that amount
-                OverallHealthDrainRate = (int)Math.Ceiling((float)HealthDrainRate * drainMult);
-                player.lifeRegen -= OverallHealthDrainRate;
-            }
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (Transformations.IsAnythingOtherThanKaioken(player))
@@ -67,6 +50,10 @@ namespace DBZMOD
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
+                    if (Transformations.IsSuperKaioken(player))
+                    {
+                        modPlayer.KaiokenLevel = 0;
+                    }
                     Transformations.EndTransformations(player, true, false);
                 }
                 else
@@ -216,6 +203,12 @@ namespace DBZMOD
                 displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, HealthDrainRate / 2);
             }
             return displayString;
+        }
+
+        public static int GetTotalHealthDrain(Player player)
+        {
+            var healthDrain = KaiokenBuff.GetHealthDrain(player.GetModPlayer<MyPlayer>()) + SuperKaiokenBuff.GetHealthDrain(player);
+            return healthDrain;
         }
     }
 }

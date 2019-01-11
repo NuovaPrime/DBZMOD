@@ -1,3 +1,4 @@
+using DBZMOD.Util;
 using Terraria;
 
 namespace DBZMOD.Buffs
@@ -66,7 +67,7 @@ namespace DBZMOD.Buffs
 
             DamageMulti = 1f + (0.1f * KaiokenLevel);
             SpeedMulti = 1f + (0.1f * KaiokenLevel);
-            HealthDrainRate = 8 + (8 * KaiokenLevel);
+            HealthDrainRate = GetHealthDrain(modPlayer);
             KiDrainBuffMulti = 1f + (0.1f * KaiokenLevel);
             
             base.Update(player, ref buffIndex);
@@ -76,6 +77,13 @@ namespace DBZMOD.Buffs
         {
             base.ModifyBuffTip(ref tip, ref rare);
             tip = AssembleTransBuffDescription();
+        }
+
+        public static int GetHealthDrain(MyPlayer modPlayer)
+        {
+            if (!Transformations.IsKaioken(modPlayer.player))
+                return 0;
+            return 8 + (4 * (modPlayer.KaiokenLevel) - 1);
         }
     }
 }

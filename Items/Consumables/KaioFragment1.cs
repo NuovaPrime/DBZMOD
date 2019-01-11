@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Consumables
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KaioFragment1)
+            if (MyPlayer.ModPlayer(player).KaioFragment1 || !MyPlayer.ModPlayer(player).KaioAchieved)
             {
                 return false;
             }

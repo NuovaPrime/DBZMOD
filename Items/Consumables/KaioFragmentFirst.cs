@@ -30,7 +30,6 @@ namespace DBZMOD.Items.Consumables
             Tooltip.SetDefault("Unlocks an ancient technique.");
         }
 
-
         public override bool UseItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer)

@@ -5,14 +5,14 @@ using Terraria.ModLoader;
 namespace DBZMOD.Items.Armor.ArmorSets
 {
     [AutoloadEquip(EquipType.Body)]
-    public class SaiyanScoutScalemale : ModItem
+    public class SaiyanScoutScalemail : ModItem
     {
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("3% Increased Ki Damage"
                 + "\n2% Increased Ki Crit Chance" +
-                               "\n5$ reduced ki usage");
-            DisplayName.SetDefault("Saiyan Scout Scalemale");
+                               "\n5% reduced ki usage");
+            DisplayName.SetDefault("Saiyan Scout Scalemail");
         }
 
         public override void SetDefaults()

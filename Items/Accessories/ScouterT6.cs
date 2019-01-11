@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
-    [AutoloadEquip(EquipType.Head)]
+    [AutoloadEquip(EquipType.Head, EquipType.Face)]
     public class ScouterT6 : ModItem
     {
         public override void SetStaticDefaults()

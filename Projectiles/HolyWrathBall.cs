@@ -22,7 +22,7 @@ namespace DBZMOD.Projectiles
         public override void SetDefaults()
         {
             projectile.width = 226;
-            projectile.height = 228;
+            projectile.height = 226;
             projectile.light = 1f;
             projectile.aiStyle = 1;
             aiType = 14;
@@ -40,12 +40,6 @@ namespace DBZMOD.Projectiles
 
         public override Color? GetAlpha(Color lightColor)
         {
-			/*if (projectile.timeLeft < 85) 
-			{
-				byte b2 = (byte)(projectile.timeLeft * 3);
-				byte a2 = (byte)(100f * ((float)b2 / 255f));
-				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
-			}*/
 			return new Color(255, 255, 255, 100);
         }
 
@@ -57,7 +51,6 @@ namespace DBZMOD.Projectiles
             }
 
             Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("HolyWrathExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            //proj.Hitbox.Inflate(1000, 1000);
             proj.width *= (int)projectile.scale;
             proj.height *= (int)projectile.scale;
 
@@ -130,9 +123,6 @@ namespace DBZMOD.Projectiles
                     projectile.tileCollide = false;
                     projectile.damage *= (int)projectile.scale / 2;
                 }
-
-                //Projectile p = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y) - (projectile.velocity * 5), new Vector2(0, 0), mod.ProjectileType("EnergyWaveTrail"), projectile.damage / 3, 4f, projectile.owner, 0, projectile.rotation);
-                //p.scale = projectile.scale * 1.5f;
             }
 
         }
@@ -140,6 +130,7 @@ namespace DBZMOD.Projectiles
         {
             projectile.scale -= 0.25f;
         }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float radius = projectile.width * projectile.scale / 2f;
@@ -147,10 +138,11 @@ namespace DBZMOD.Projectiles
 
             return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
             DBZMOD.Circle.ApplyShader(-9001);
             return true;
         }

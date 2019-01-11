@@ -507,6 +507,15 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedKaiokenLevel(int toWho, int fromWho, int whichPlayer, int kaiokenLevel)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.KaiokenLevel);
+            packet.Write(whichPlayer);
+            packet.Write(kaiokenLevel);
+            packet.Send(toWho, fromWho);
+        }
+        
         public void SendChangedMouseWorldOctant(int toWho, int fromWho, int whichPlayer, int mouseWorldOctant)
         {
             var packet = GetPacket(SyncPlayer, fromWho);

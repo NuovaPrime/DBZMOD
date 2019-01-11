@@ -143,7 +143,7 @@ namespace DBZMOD.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
             DBZMOD.Circle.ApplyShader(-9001);
             return true;
         }

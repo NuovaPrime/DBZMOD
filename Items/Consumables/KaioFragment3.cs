@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kaioken 20x");
+            DisplayName.SetDefault("Kaioken 10x");
             Tooltip.SetDefault("Unlocks the next level of kaioken.");
         }
 
@@ -39,7 +39,7 @@ namespace DBZMOD.Items.Consumables
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KaioFragment3)
+            if (MyPlayer.ModPlayer(player).KaioFragment3 || !MyPlayer.ModPlayer(player).KaioFragment2)
             {
                 return false;
             }

@@ -443,7 +443,7 @@ namespace DBZMOD.Util
         public static bool IsTransformBlocked(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            return modPlayer.IsTransforming || modPlayer.IsPlayerImmobilized();
+            return modPlayer.IsTransforming || modPlayer.IsPlayerImmobilized() || modPlayer.IsKiDepleted();
         }
         
         // handle all the conditions of a transformation which would prevent the player from reaching that state. Return false if you can't transform.
@@ -609,7 +609,7 @@ namespace DBZMOD.Util
             if (IsKaioken(currentTransformation))
             {
                 // player was in kaioken, trying to power up. Go to super kaioken but set the player's kaioken level to 1 because that's how things are now.
-                if (currentNonKaioTransformation == null)
+                if (currentNonKaioTransformation == null && player.GetModPlayer<MyPlayer>().hasSSJ1)
                 {
                     player.GetModPlayer<MyPlayer>().KaiokenLevel = 1;
                     return SuperKaioken;

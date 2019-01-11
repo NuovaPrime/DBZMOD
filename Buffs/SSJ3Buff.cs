@@ -25,7 +25,7 @@ namespace DBZMOD.Buffs
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             bool isMastered = modPlayer.MasteryLevel3 >= 1f;
 
-            KiDrainRate = isMastered ? KiDrainRate : KiDrainRateWithMastery;
+            KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)
             {

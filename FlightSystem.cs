@@ -96,14 +96,13 @@ namespace DBZMOD
                 else
                 {
                     FlightDustType = 267;
-                }
-                
+                }                
 
                 //calculate velocity
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);
                 player.velocity.Y = MathHelper.Lerp(player.velocity.Y, 0, 0.1f);
                 // keep the player suspended at worst.
-                player.velocity = player.velocity - (player.gravity * Vector2.UnitY);
+                player.velocity = player.velocity - (player.gravity * Vector2.UnitY);                
 
                 // handles keeping legs from moving when the player is in flight/moving fast/channeling.
                 if (player.velocity.X > 0)
@@ -260,6 +259,8 @@ namespace DBZMOD
 
         public static void AddKatchinFeetBuff(Player player)
         {
+            // reset the player fall position here, even if they don't have flight dampening.
+            player.fallStart = (int)(player.position.Y / 16f);
             if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
             {
                 Mod mod = ModLoader.GetMod("DBZMOD");

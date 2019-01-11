@@ -185,6 +185,10 @@ namespace DBZMOD
                     player.QuickSpawnItem(mod.ItemType("SpiritualEmblem"));
                 }
             }
+            if (context == "bossBag" && arg == ItemID.WallOfFleshBossBag)
+            {
+                player.QuickSpawnItem(mod.ItemType("TransmissionVanish"));
+            }
         }
     }
 }
