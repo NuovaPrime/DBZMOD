@@ -30,7 +30,7 @@ namespace DBZMOD.Items.Accessories
             {
                 player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.14f;
                 player.thorns = .3f;
-                player.GetModPlayer<MyPlayer>(mod).burningEnergyAmulet = true;
+                player.GetModPlayer<MyPlayer>(mod).bloodstainedBandana = true;
             }
         }
     }

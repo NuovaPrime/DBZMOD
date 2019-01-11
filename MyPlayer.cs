@@ -2129,7 +2129,7 @@ namespace DBZMOD
                 }
 
                 // grant defense and a protective barrier visual if charging with baldur essentia
-                if (baldurEssentia && !buldariumSigmite)
+                if (baldurEssentia)
                 {
                     Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                     player.statDefense = (int)(player.statDefense * 1.30f);
