@@ -139,7 +139,7 @@ namespace DBZMOD
         }
 
         public override void GetWeaponCrit(Player player, ref int crit)
-        {
+        {            
             crit = crit + MyPlayer.ModPlayer(player).KiCrit;
         }
 

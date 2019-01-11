@@ -40,23 +40,13 @@ namespace DBZMOD.Projectiles
 
         public override Color? GetAlpha(Color lightColor)
         {
-			/*if (projectile.timeLeft < 85) 
-			{
-				byte b2 = (byte)(projectile.timeLeft * 3);
-				byte a2 = (byte)(100f * ((float)b2 / 255f));
-				return new Color((int)b2, (int)b2, (int)b2, (int)a2);
-			}*/
 			return new Color(255, 255, 255, 100);
         }
 
-        public override void Kill(int timeLeft)
-        {
-            //Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("SpiritBombExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            //proj.width *= (int)projectile.scale;
-            //proj.height *= (int)projectile.scale;
-
-            projectile.active = false;
-        }
+        //public override void Kill(int timeLeft)
+        //{
+        //    projectile.active = false;
+        //}
 
         public override void AI()
         {
@@ -71,7 +61,7 @@ namespace DBZMOD.Projectiles
             if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.02f;
-                projectile.position = player.position + new Vector2(0, -20 - (projectile.scale * 17));
+                projectile.position = player.Center + new Vector2(0, -20 - (projectile.scale * 17));
 
                 // reduced from 25.
                 for (int d = 0; d < 15; d++)
@@ -89,16 +79,6 @@ namespace DBZMOD.Projectiles
                     tDust.noGravity = true;
                 }
 
-                projectile.netUpdate = true;
-
-                if (projectile.timeLeft < 399)
-                {
-                    projectile.timeLeft = 400;
-                }
-
-                MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                ProjectileUtil.ApplyChannelingSlowdown(player);
-
                 //Rock effect
                 if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)
                 {
@@ -109,6 +89,16 @@ namespace DBZMOD.Projectiles
                         BaseFloatingDestructionProj.SpawnNewFloatingRock(player, projectile);
                     }
                 }
+
+                projectile.netUpdate = true;
+
+                if (projectile.timeLeft < 399)
+                {
+                    projectile.timeLeft = 400;
+                }
+
+                MyPlayer.ModPlayer(player).AddKi(-2, true, false);
+                ProjectileUtil.ApplyChannelingSlowdown(player);
 
                 projectile.netUpdate2 = true;
 

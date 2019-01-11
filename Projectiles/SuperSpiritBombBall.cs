@@ -50,7 +50,7 @@ namespace DBZMOD.Projectiles
             {
                 projectile.scale += 0.05f;
 
-                projectile.position = player.position + new Vector2(0, -40 - (projectile.scale * 17));
+                projectile.position = player.Center + new Vector2(0, -40 - (projectile.scale * 17));
 
                 // reduced from 25.
                 for (int d = 0; d < 15; d++)
@@ -68,16 +68,6 @@ namespace DBZMOD.Projectiles
                     tDust.noGravity = true;
                 }
 
-                projectile.netUpdate = true;
-
-                if (projectile.timeLeft < 399)
-                {
-                    projectile.timeLeft = 400;
-                }
-
-                MyPlayer.ModPlayer(player).AddKi(-5, true, false);
-                ProjectileUtil.ApplyChannelingSlowdown(player);
-
                 //Rock effect
                 if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)
                 {
@@ -88,6 +78,18 @@ namespace DBZMOD.Projectiles
                         BaseFloatingDestructionProj.SpawnNewFloatingRock(player, projectile);
                     }
                 }
+
+                projectile.netUpdate = true;
+
+                if (projectile.timeLeft < 399)
+                {
+                    projectile.timeLeft = 400;
+                }
+
+                MyPlayer.ModPlayer(player).AddKi(-5, true, false);
+                ProjectileUtil.ApplyChannelingSlowdown(player);
+
+                projectile.netUpdate2 = true;
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

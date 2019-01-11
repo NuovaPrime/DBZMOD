@@ -12,7 +12,7 @@ namespace DBZMOD.Projectiles
 {
     public class HolyWrathBall : KiProjectile
     {
-        public bool Released = false;
+        public bool IsReleased = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Holy Wrath Ball");
@@ -27,15 +27,15 @@ namespace DBZMOD.Projectiles
             projectile.aiStyle = 1;
             aiType = 14;
             projectile.friendly = true;
-            projectile.extraUpdates = 0;
+            projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.timeLeft = 1200;
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
-            projectile.netUpdate = true;
             KiDrainRate = 12;
+            projectile.scale = 0.15f;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -43,92 +43,84 @@ namespace DBZMOD.Projectiles
 			return new Color(255, 255, 255, 100);
         }
 
-        public override void Kill(int timeLeft)
-        {
-            if (!projectile.active)
-            {
-                return;
-            }
+        //public override void Kill(int timeLeft)
+        //{
+        //    if (!projectile.active)
+        //    {
+        //        return;
+        //    }
 
-            Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("HolyWrathExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-            proj.width *= (int)projectile.scale;
-            proj.height *= (int)projectile.scale;
+        //    Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("HolyWrathExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
+        //    proj.width *= (int)projectile.scale;
+        //    proj.height *= (int)projectile.scale;
 
-            projectile.active = false;
-        }
+        //    projectile.active = false;
+        //}
 
         public override void AI()
         {
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 4)
-            {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 3)
-            {
-                projectile.frame = 0;
-            }
             Player player = Main.player[projectile.owner];
 
-            if (Main.myPlayer == projectile.owner)
+            // cancel channeling if the projectile is maxed
+            if (player.channel && projectile.scale > 3.0)
             {
-                if (!Released)
+                player.channel = false;
+            }
+
+            if (player.channel && !IsReleased)
+            {
+                projectile.scale += 0.005f;
+                projectile.position = player.Center - new Vector2(0, -80 - (projectile.scale * 135f));
+
+                for (int d = 0; d < 25; d++)
                 {
-                    projectile.scale += 0.06f;
+                    float angle = Main.rand.NextFloat(360);
+                    float angleRad = MathHelper.ToRadians(angle);
+                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    projectile.position = player.position + new Vector2(20, -80 - (projectile.scale * 17));
-
-                    for (int d = 0; d < 25; d++)
-                    {
-                        float angle = Main.rand.NextFloat(360);
-                        float angleRad = MathHelper.ToRadians(angle);
-                        Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-
-                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 12.5f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
-                        tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
-                        tDust.noGravity = true;
-                    }
-
-                    if (projectile.timeLeft < 399)
-                    {
-                        projectile.timeLeft = 400;
-                    }
-                    if (MyPlayer.ModPlayer(player).IsKiDepleted())
-                    {
-                        projectile.Kill();
-                    }
-
-                    MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                    ProjectileUtil.ApplyChannelingSlowdown(player);
-
-                    //Rock effect
-                    projectile.ai[1]++;
-                    if (projectile.ai[1] % 7 == 0)
-                        Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
-                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (80 + 135f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    tDust.noGravity = true;
                 }
+
+                //Rock effect
+                projectile.ai[1]++;
+                if (projectile.ai[1] % 7 == 0)
+                    Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
+                Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
+
 
                 projectile.netUpdate = true;
-            }
 
-            //if button let go
-            if (!player.channel || projectile.scale > 30)
-            {
-                //projectile.Kill();
-                if (!Released)
+                if (projectile.timeLeft < 399)
                 {
-                    Released = true;
-                    projectile.velocity = Vector2.Normalize(Main.MouseWorld - projectile.position) * 6;
-                    projectile.tileCollide = false;
-                    projectile.damage *= (int)projectile.scale / 2;
+                    projectile.timeLeft = 400;
+                }
+
+                MyPlayer.ModPlayer(player).AddKi(-2, true, false);
+                ProjectileUtil.ApplyChannelingSlowdown(player);
+
+                projectile.netUpdate2 = true;
+
+                // depleted check, release the ball
+                if (MyPlayer.ModPlayer(player).IsKiDepleted())
+                {
+                    player.channel = false;
                 }
             }
-
+            else if (!IsReleased)
+            {
+                projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 600;
+                IsReleased = true;
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 6;
+                projectile.tileCollide = false;
+                projectile.damage *= (int)Math.Ceiling(projectile.scale * 4f);
+            }
         }
+
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
-            projectile.scale -= 0.25f;
+            projectile.scale -= 0.025f;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -150,7 +142,7 @@ namespace DBZMOD.Projectiles
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.Transform);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
