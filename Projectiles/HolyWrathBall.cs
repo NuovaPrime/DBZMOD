@@ -35,7 +35,6 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 12;
-            projectile.scale = 0.15f;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -43,22 +42,15 @@ namespace DBZMOD.Projectiles
 			return new Color(255, 255, 255, 100);
         }
 
-        //public override void Kill(int timeLeft)
-        //{
-        //    if (!projectile.active)
-        //    {
-        //        return;
-        //    }
-
-        //    Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0,0), mod.ProjectileType("HolyWrathExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-        //    proj.width *= (int)projectile.scale;
-        //    proj.height *= (int)projectile.scale;
-
-        //    projectile.active = false;
-        //}
-
+        private bool isInitialized = false;
         public override void AI()
         {
+            if (!isInitialized)
+            {
+                projectile.scale = 0.15f;
+                isInitialized = true;
+            }
+
             Player player = Main.player[projectile.owner];
 
             // cancel channeling if the projectile is maxed
@@ -70,16 +62,19 @@ namespace DBZMOD.Projectiles
             if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.005f;
-                projectile.position = player.Center - new Vector2(0, -80 - (projectile.scale * 135f));
+                Vector2 projectileOffset = new Vector2(-projectile.width * 0.5f, -projectile.height * 0.5f);
+                projectileOffset += new Vector2(0, -(80 + projectile.scale * 115f));
+                Vector2 projectileOuter = new Vector2(projectile.scale * projectile.width, projectile.scale * projectile.height);
+                projectile.position = player.Center + projectileOffset;
 
                 for (int d = 0; d < 25; d++)
                 {
                     float angle = Main.rand.NextFloat(360);
                     float angleRad = MathHelper.ToRadians(angle);
-                    Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
+                    Vector2 dustPosition = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (80 + 135f * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
-                    tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
+                    Dust tDust = Dust.NewDustDirect(projectile.Center + (dustPosition * projectileOuter) + projectileOffset, projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    tDust.velocity = Vector2.Normalize((projectile.Center + projectile.Size / 2f) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
 
@@ -133,9 +128,11 @@ namespace DBZMOD.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
+            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
-            DBZMOD.Circle.ApplyShader(-9001);
+            int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
+            DBZMOD.Circle.ApplyShader(radius);
             return true;
         }
 

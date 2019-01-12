@@ -124,6 +124,7 @@ namespace DBZMOD.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
+            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
             float radius = projectile.width * projectile.scale / 2f;
             float rSquared = radius * radius;
 
@@ -134,7 +135,8 @@ namespace DBZMOD.Projectiles
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
-            DBZMOD.Circle.ApplyShader(-9001);
+            int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
+            DBZMOD.Circle.ApplyShader(radius);
             return true;
         }
 

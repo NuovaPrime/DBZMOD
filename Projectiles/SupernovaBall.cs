@@ -34,7 +34,6 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 12;
-            projectile.scale = 0.15f;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -42,23 +41,16 @@ namespace DBZMOD.Projectiles
             return new Color(255, 255, 255, 100);
         }
 
-        //public override void Kill(int timeLeft)
-        //{
-        //    if (!projectile.active)
-        //    {
-        //        return;
-        //    }
 
-        //    Projectile proj = Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2(0, 0), mod.ProjectileType("SupernovaExplosion"), projectile.damage, projectile.knockBack, projectile.owner);
-        //    //proj.Hitbox.Inflate(1000, 1000);
-        //    proj.width *= (int)projectile.scale;
-        //    proj.height *= (int)projectile.scale;
-
-        //    projectile.active = false;
-        //}
-
+        private bool isInitialized = false;
         public override void AI()
         {
+            if (!isInitialized)
+            {
+                projectile.scale = 0.15f;
+                isInitialized = true;
+            }
+
             Player player = Main.player[projectile.owner];
 
             // cancel channeling if the projectile is maxed
@@ -70,26 +62,27 @@ namespace DBZMOD.Projectiles
             if (player.channel && !IsReleased)
             {
                 projectile.scale += 0.005f;
+                Vector2 projectileOffset = new Vector2(-projectile.width * 0.5f, -projectile.height * 0.5f);
+                projectileOffset += new Vector2(0, -(80 + projectile.scale * 115f));
+                projectile.position = player.Center + projectileOffset;
 
-                projectile.position = player.Center + new Vector2(0, -60 - (projectile.scale * 135f));
+                projectile.netUpdate = true;
 
                 //Rock effect
                 projectile.ai[1]++;
                 if (projectile.ai[1] % 7 == 0)
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("StoneBlockDestruction"), projectile.damage, 0f, projectile.owner);
                 Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y + 1000, 0, -10, mod.ProjectileType("DirtBlockDestruction"), projectile.damage, 0f, projectile.owner);
-
-                projectile.netUpdate = true;
-
+                
                 if (projectile.timeLeft < 399)
                 {
                     projectile.timeLeft = 400;
                 }
 
+                projectile.netUpdate2 = true;
+
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
                 ProjectileUtil.ApplyChannelingSlowdown(player);
-
-                projectile.netUpdate2 = true;
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
@@ -114,7 +107,8 @@ namespace DBZMOD.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            float radius = projectile.width * projectile.scale / 2f;
+            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
+            float radius = (float)projectile.width * projectile.scale / 2f;
             float rSquared = radius * radius;
 
             return rSquared > Vector2.DistanceSquared(Vector2.Clamp(projectile.Center, targetHitbox.TopLeft(), targetHitbox.BottomRight()), projectile.Center);
@@ -124,7 +118,8 @@ namespace DBZMOD.Projectiles
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
-            DBZMOD.Circle.ApplyShader(-9001);
+            int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
+            DBZMOD.Circle.ApplyShader(radius);
             return true;
         }
 

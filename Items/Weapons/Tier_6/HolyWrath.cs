@@ -37,20 +37,11 @@ namespace DBZMOD.Items.Weapons.Tier_6
             KiDrain = 500;
             WeaponType = "Massive Blast";
         }
+
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Holy Wrath");
+		    DisplayName.SetDefault("Holy Wrath");
 		}
-
-        //public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        //{
-        //	//Vector2 muzzleOffset = Vector2.Normalize(new Vector2(speedX, speedY)) * 20f;
-        //	//if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-        //	//{
-        //	//	position += muzzleOffset;
-        //	//}
-        //	return true;
-        //}
 
         public override void AddRecipes()
         {
@@ -63,11 +54,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
         }
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("HolyWrathBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
+            return player.ownedProjectileCounts[mod.ProjectileType("HolyWrathBall")] == 0;
         }
     }
 }

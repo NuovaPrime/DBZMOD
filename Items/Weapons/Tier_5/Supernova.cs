@@ -35,9 +35,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
             KiDrain = 350;
             WeaponType = "Massive Blast";
         }
+
 	    public override void SetStaticDefaults()
 		{
-		DisplayName.SetDefault("Supernova");
+		    DisplayName.SetDefault("Supernova");
 		}
 
         public override void AddRecipes()
@@ -50,13 +51,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
+
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("SupernovaBall")] > 1)
-            {
-                return false;
-            }
-            return base.CanUseItem(player);
+            return player.ownedProjectileCounts[mod.ProjectileType("SupernovaBall")] == 0;
         }
     }
 }
