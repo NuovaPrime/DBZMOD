@@ -21,6 +21,7 @@ namespace Network
         public const byte SendKiBeaconInitialSync = 50;
         public const byte SyncKiBeaconAdd = 51;
         public const byte SyncKiBeaconRemove = 52;
+        public const byte DestroyAndRespawnDragonBalls = 53;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -61,7 +62,39 @@ namespace Network
                 case (SendDragonBallKeySync):
                     ReceiveDragonBallKeySync(reader, fromWho);
                     break;
+                case (DestroyAndRespawnDragonBalls):
+                    HandleDestroyAndRespawnDragonBalls(reader, fromWho);
+                    break;
             }
+        }
+
+        public void SendDestroyAndRespawnDragonBalls(int toWho, int fromWho, int initiatingPlayer)
+        {
+            DebugUtil.Log("Sending despawn packet for dragon balls");
+            ModPacket packet = GetPacket(DestroyAndRespawnDragonBalls, fromWho);
+            packet.Write(initiatingPlayer);
+            packet.Send(toWho, initiatingPlayer);
+        }
+
+        public void HandleDestroyAndRespawnDragonBalls(BinaryReader reader, int fromWho)
+        {
+            DebugUtil.Log("Receiving despawn packet for dragon balls");
+            int ignorePlayer = reader.ReadInt32();
+            if (Main.netMode == NetmodeID.Server)
+            {
+                for(var i = 0; i < Main.player.Length; i++)
+                {
+                    if (Main.player[i] == null)
+                        continue;
+                    if (Main.player[i].whoAmI != i)
+                        continue;
+                    if (i == ignorePlayer)
+                        continue;
+                    SendDestroyAndRespawnDragonBalls(i, 256, ignorePlayer);
+                }                
+            }
+
+            DBZWorld.DestroyAndRespawnDragonBalls();
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)

@@ -266,7 +266,7 @@ namespace DBZMOD.Util
             // player is too close to the dragon ball.
             if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 1280f : (modPlayer.IsHoldingDragonRadarMk2 ? 640f : 320f)))
             {
-                radarAngle += (float)(Main.time % 59) * 6f;
+                radarAngle += (float)(DBZMOD.GetTicks() % 59) * 6f;
             }
             radarAngle += MathHelper.ToRadians(radarAngle) - drawPlayer.fullRotation;
             var yOffset = -120;

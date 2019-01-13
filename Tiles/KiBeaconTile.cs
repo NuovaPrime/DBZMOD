@@ -95,7 +95,7 @@ namespace DBZMOD.Tiles
                 Vector2 spritePosition = new Vector2(i * 16f - Main.screenPosition.X - 8, (j * 16f - Main.screenPosition.Y) - 14) + zero;
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.Default, Main.instance.Rasterizer);
-                int shiftAlpha = (int)(Main.time % 65);
+                int shiftAlpha = (int)(DBZMOD.GetTicks() % 65);
                 if (shiftAlpha >= 32)
                 {
                     shiftAlpha = 32 - (shiftAlpha - 32);

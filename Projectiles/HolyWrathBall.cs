@@ -128,7 +128,6 @@ namespace DBZMOD.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
             int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);

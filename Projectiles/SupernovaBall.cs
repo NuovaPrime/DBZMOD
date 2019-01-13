@@ -107,7 +107,6 @@ namespace DBZMOD.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
             float radius = (float)projectile.width * projectile.scale / 2f;
             float rSquared = radius * radius;
 

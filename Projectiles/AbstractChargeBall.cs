@@ -296,7 +296,7 @@ namespace DBZMOD.Projectiles
                     IsCharging = true;
 
                     // drain ki from the player when charging
-                    if (Main.time > 0 && Math.Ceiling(Main.time % CHARGE_KI_DRAIN_WINDOW) == 0)
+                    if (DBZMOD.IsTickRateElapsed(CHARGE_KI_DRAIN_WINDOW))
                     {
                         MyPlayer.ModPlayer(player).AddKi(-ChargeKiDrainRate(), true, false);
                     }

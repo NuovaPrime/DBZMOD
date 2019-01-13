@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using DBZMOD.Enums;
 using DBZMOD.Util;
+using Network;
 
 namespace DBZMOD.UI
 {
@@ -168,6 +169,7 @@ namespace DBZMOD.UI
                     }
                     break;
                 case WishSelectionID.Wealth:
+                    UsedWish = true;
                     DoWealthWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
                     break;
@@ -184,6 +186,7 @@ namespace DBZMOD.UI
                     }
                     break;
                 case WishSelectionID.Genetic:
+                    UsedWish = true;
                     DoGeneticWish();
                     SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
                     break;
@@ -205,8 +208,9 @@ namespace DBZMOD.UI
 
             if (UsedWish)
             {
+                DebugUtil.Log("Wish has been used.");
                 WishSelection = WishSelectionID.None;
-                DestroyAndRespawnDragonBalls();
+                HandleDragonBallRespawns();
                 modplayer.WishActive = false;
                 Main.PlaySound(SoundID.MenuClose);
             }
@@ -215,27 +219,18 @@ namespace DBZMOD.UI
             DBZMOD.ActivateWishmenu();
         }
 
-        private void DestroyAndRespawnDragonBalls()
+        private void HandleDragonBallRespawns()
         {
-            var dbzWorld = DBZWorld.GetWorld();
-            for (var i = 0; i < dbzWorld.DragonBallLocations.Length; i++)
+            DebugUtil.Log("Handle Dragon Ball Respawns");
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                var location = dbzWorld.DragonBallLocations[i];
-                WorldGen.KillTile(location.X, location.Y, false, false, true);                
+                DBZWorld.DestroyAndRespawnDragonBalls();
+            } else
+            {
+                DebugUtil.Log("Sync packet for dballs sent");
+                NetworkHelper.playerSync.SendDestroyAndRespawnDragonBalls(256, Main.myPlayer, Main.myPlayer);
             }
-
-            // nuke the original dragon ball locations
-            dbzWorld.DragonBallLocations[0] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[1] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[2] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[3] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[4] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[5] = new Point(-1, -1);
-            dbzWorld.DragonBallLocations[6] = new Point(-1, -1);
-
-            // handles respawning all the dragon balls
-            DBZWorld.DoDragonBallCleanupCheck();
-        }
+        }        
 
         private void DoPowerWish()
         {

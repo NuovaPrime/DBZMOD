@@ -252,8 +252,7 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-        }
-
+        }                
 
         // unabashedly stolen from Jopo with love, responsible for the instant transmission functionality we want out of book 1 with some assembly required
         public override void PostDrawFullscreenMap(ref string mouseText)
@@ -265,7 +264,17 @@ namespace DBZMOD
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
            NetworkHelper.HandlePacket(reader, whoAmI);
-        }        
+        }       
+        
+        public static uint GetTicks()
+        {
+            return Main.GameUpdateCount;
+        }
+
+        public static bool IsTickRateElapsed(int i)
+        {
+            return GetTicks() > 0 && GetTicks() % i == 0;
+        }
     }
 }
  

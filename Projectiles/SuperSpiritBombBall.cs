@@ -69,7 +69,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 //Rock effect
-                if (Main.time > 0 && Main.time % 10 == 0 && rocksFloating < MAX_ROCKS)
+                if (DBZMOD.IsTickRateElapsed(10) && rocksFloating < MAX_ROCKS)
                 {
                     // only some of the time, keeps it a little more varied.
                     if (Main.rand.NextFloat() < 0.6f)
@@ -114,7 +114,6 @@ namespace DBZMOD.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            DebugUtil.Log(string.Format("Projectile width: {0}", projectile.width));
             float radius = projectile.width * projectile.scale / 2f;
             float rSquared = radius * radius;
 

@@ -333,7 +333,7 @@ namespace DBZMOD
             HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
             SetKi(KiCurrent + kiAmount);
         }
-
+        
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             if (isFormDrain)
@@ -1594,7 +1594,7 @@ namespace DBZMOD
             FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
             PowerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
             // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
-            if (DebugUtil.isDebug)
+            if (DebugUtil.IsDebugModeOn())
             {
                 PowerWishesLeft = POWER_WISH_MAXIMUM;
             }
@@ -1912,7 +1912,7 @@ namespace DBZMOD
             if (WishActive)
             {
                 WishMenu.menuvisible = true;
-            } else if (DebugUtil.isDebug && QuickKi.JustPressed)
+            } else if (DebugUtil.IsDebugModeOn() && QuickKi.JustPressed)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
@@ -2547,7 +2547,7 @@ namespace DBZMOD
 
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
-            if (!DebugUtil.isDebug)
+            if (!DebugUtil.IsDebugModeOn())
             {
                 WasKaioken = IsKaioken;
                 WasTransformed = IsTransformed;
@@ -2671,11 +2671,16 @@ namespace DBZMOD
             }
         }
 
+        public override void NaturalLifeRegen(ref float regen)
+        {
+            base.NaturalLifeRegen(ref regen);
+
+            HandlePowerWishPlayerHealth();
+        }        
+
         public override void UpdateBadLifeRegen()
         {
             base.UpdateBadLifeRegen();
-
-            HandlePowerWishPlayerHealth();
 
             // Kaioken neuters regen and drains the player
             if (Transformations.IsAnyKaioken(player))
@@ -2690,7 +2695,7 @@ namespace DBZMOD
                 // only apply the kaio crystal benefit if this is kaioken
                 bool isKaioCrystalEquipped = player.IsAccessoryEquipped("Kaio Crystal");
                 float drainMult = isKaioCrystalEquipped ? 0.5f : 1f;
-
+                
                 // recalculate the final health drain rate and reduce regen by that amount
                 var healthDrain = (int)Math.Ceiling(TransBuff.GetTotalHealthDrain(player) * drainMult);
                 player.lifeRegen -= healthDrain;

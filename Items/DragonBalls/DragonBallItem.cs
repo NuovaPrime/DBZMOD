@@ -71,12 +71,12 @@ namespace DBZMOD.Items.DragonBalls
                 return true;
             if (!WorldDragonBallKey.HasValue)
             {
-                if (DebugUtil.isDebug)
+                if (DebugUtil.IsDebugModeOn())
                 {
                     SetDragonBallWorldKey(player);
                     return false;
                 }
-                    WorldDragonBallKey = 0;
+                WorldDragonBallKey = 0;
                 if (IsItemStoneBall(item.type))
                 {
                     ItemHelper.RemoveStoneBall(player.inventory, 0, GetWhichDragonBall());
@@ -117,7 +117,7 @@ namespace DBZMOD.Items.DragonBalls
                     return;
 
                 // it's legit, set its dragon ball key
-                var world = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+                var world = DBZWorld.GetWorld();
 
                 WorldDragonBallKey = world.WorldDragonBallKey;
             }
@@ -129,6 +129,8 @@ namespace DBZMOD.Items.DragonBalls
             if (Main.netMode == NetmodeID.Server)
                 return;
             if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI != Main.myPlayer)
+                return;
+            if (!WorldDragonBallKey.HasValue)
                 return;
             // if the keys match, check to see if this dragon ball is cheated in.
             if (DBZWorld.GetWorld().WorldDragonBallKey == WorldDragonBallKey.Value)
@@ -158,7 +160,7 @@ namespace DBZMOD.Items.DragonBalls
                 if (dbTile.type == dbTileType)
                 {
                     // the player is cheating. if we're in debug mode this is fine, but destroy that tile.
-                    if (DebugUtil.isDebug || isStoneBallTakingPlaceOfExistingDragonBall)
+                    if (DebugUtil.IsDebugModeOn() || isStoneBallTakingPlaceOfExistingDragonBall)
                     {
                         WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
                         DBZWorld.GetWorld().DragonBallLocations[GetWhichDragonBall() - 1] = new Point(-1, -1);

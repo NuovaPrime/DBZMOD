@@ -10,7 +10,7 @@ namespace DBZMOD.Buffs
             DisplayName.SetDefault("Kaioken");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = false;           
+            Main.debuff[Type] = false;            
             Description.SetDefault(AssembleTransBuffDescription());
         }
 
@@ -84,7 +84,7 @@ namespace DBZMOD.Buffs
             if (!Transformations.IsKaioken(modPlayer.player))
                 return 0;
             return 8 + (4 * (modPlayer.KaiokenLevel) - 1);
-        }
+        }        
     }
 }
 

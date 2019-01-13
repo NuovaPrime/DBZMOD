@@ -80,7 +80,7 @@ namespace DBZMOD.Projectiles
                 }
                 else if (!modPlayer.IsKiDepleted())
                 {
-                    if (Main.time > 0 && Main.time % FIRE_KI_DRAIN_WINDOW == 0)
+                    if (DBZMOD.IsTickRateElapsed(FIRE_KI_DRAIN_WINDOW))
                     {
                         modPlayer.AddKi(-FireKiDrainRate(), true, false);
                     }

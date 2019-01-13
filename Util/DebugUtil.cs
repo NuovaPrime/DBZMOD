@@ -9,7 +9,11 @@ namespace DBZMOD.Util
 {
     static class DebugUtil
     {
-        public static bool isDebug = true;
+        private static bool isDebug = true;
+        public static bool IsDebugModeOn()
+        {
+            return isDebug;
+        }
         public static void Log(string someString)
         {
             if (!isDebug)
@@ -34,9 +38,7 @@ namespace DBZMOD.Util
 
         public static bool IsTimeElapsed(int frames)
         {
-            if (frames == 0)
-                return false;
-            return Main.time % frames == 0;
+            return DBZMOD.IsTickRateElapsed(frames);
         }
     }
 }

@@ -121,14 +121,14 @@ namespace DBZMOD
                 //drain ki
                 if (!modPlayer.flightUpgraded)
                 {
-                    if (Main.time > 0 && Main.time % 2 == 0)
+                    if (DBZMOD.IsTickRateElapsed(2))
                     {
                         modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1, false, false);                        
                     }
                 }
                 else
                 {
-                    if (Main.time > 0 && Main.time % 4 == 0)
+                    if (DBZMOD.IsTickRateElapsed(4))
                     {
                         modPlayer.AddKi(-1, false, false);                        
                     }

@@ -78,6 +78,22 @@ namespace DBZMOD
             base.Load(tag);
         }
 
+        public static void DestroyAndRespawnDragonBalls()
+        {
+            DebugUtil.Log("Despawning dragon balls");
+            var dbzWorld = GetWorld();
+
+            for (var i = 0; i < dbzWorld.DragonBallLocations.Length; i++)
+            {                
+                var location = dbzWorld.DragonBallLocations[i];
+                DebugUtil.Log(string.Format("Despawning dragon ball at {0} {1}", location.X, location.Y));
+                WorldGen.KillTile(location.X, location.Y, false, false, true);
+            }
+
+            // handles respawning all the dragon balls
+            DoDragonBallCleanupCheck();
+        }
+
         public void CleanupKiBeaconList()
         {
             var listToRemove = new List<Vector2>();
@@ -641,7 +657,6 @@ namespace DBZMOD
             {
                 WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
                 int dbIndex = whichDragonball - 1;
-                GetWorld().DragonBallLocations[dbIndex] = new Point(offsetX, offsetY);
                 return true;
             } else
             {

@@ -1,6 +1,7 @@
 ﻿using DBZMOD.Items.DragonBalls;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
+using Network;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -68,20 +69,28 @@ namespace DBZMOD.Tiles.DragonBalls
             }
 
             return true;
-        }
+        }        
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
             base.PlaceInWorld(i, j, item);
-            if (DebugUtil.isDebug)
+            if (DebugUtil.IsDebugModeOn())
             {
                 var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
                 if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
                 {
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");
-                }                
-                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+                }
+                DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
+                }
+                else
+                {
+                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+                }
             }
             else
             {
@@ -92,7 +101,15 @@ namespace DBZMOD.Tiles.DragonBalls
                 }
                 else
                 {
-                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+                    DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
+                    }
+                    else
+                    {
+                        DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
+                    }
                 }
             }
         }
@@ -115,8 +132,17 @@ namespace DBZMOD.Tiles.DragonBalls
         {
             base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
             // make sure the MP client still gets the signal that the tile was killed.
-            if (!fail)            
-                DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
+            if (!fail)
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
+                }
+                else
+                {
+                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
+                }
+            }
             // if we're in multiplayer let the server handle item drops.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
