@@ -2066,7 +2066,7 @@ namespace DBZMOD
         {
             // unabashedly stolen from decompiled source for rod of discord.
             // find a suitable place to IT to, reversing the camera pan direction if necessary.
-            target.X -= (float)(player.width / 2);
+            target.Y -= 32f;
             if (target.X > 50f && target.X < (float)(Main.maxTilesX * 16 - 50) && target.Y > 50f && target.Y < (float)(Main.maxTilesY * 16 - 50))
             {
                 int tileX = (int)(target.X / 16f);
@@ -2272,6 +2272,7 @@ namespace DBZMOD
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
+            
             bool isAnyBossAlive = false;
             bool isGolemAlive = false;
             foreach (NPC npc in Main.npc)
@@ -2669,6 +2670,11 @@ namespace DBZMOD
                     NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
                 }
             }
+        }
+
+        public override void UpdateLifeRegen()
+        {
+            base.UpdateLifeRegen();
         }
 
         public override void NaturalLifeRegen(ref float regen)

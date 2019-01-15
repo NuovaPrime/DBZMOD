@@ -77,16 +77,14 @@ namespace DBZMOD.Util
                         if (cursorWorldPosition.Y < 0) cursorWorldPosition.Y = 0;
                         else if (cursorWorldPosition.Y + player.height > mapHeight) cursorWorldPosition.Y = mapHeight - player.height;
 
-                        // loop over non-hostile players and npcs
-                        NPC npcTarget = SeekNPCTarget(cursorWorldPosition);
-                        Player playerTarget = SeekPlayerTarget(cursorWorldPosition);                        
-                        Vector2 beaconTarget = SeekBeaconTarget(cursorWorldPosition);
-                        if (npcTarget != null || playerTarget != null || beaconTarget != Vector2.Zero)
+                        DebugUtil.Log(string.Format("Cursor position is {0} {1}", cursorWorldPosition.X, cursorWorldPosition.Y));
+
+                        Vector2 target = SeekValidTarget(cursorWorldPosition);
+                        if (target != Vector2.Zero)
                         {
-                            float distance = Vector2.Distance(player.Center, cursorWorldPosition);
-                            if (modPlayer.TryTransmission(cursorWorldPosition, distance))
+                            float distance = Vector2.Distance(player.Center, target);
+                            if (modPlayer.TryTransmission(target, distance))
                             {
-                                // dunno if either of these works
                                 Main.mapFullscreen = false;
                             }
                         }
@@ -95,37 +93,37 @@ namespace DBZMOD.Util
             }
         }
 
+        public Vector2 SeekValidTarget(Vector2 cursor)
+        {
+            Vector2 npcTarget = SeekNPCTarget(cursor);
+            if (npcTarget != Vector2.Zero)
+                return npcTarget;
+            Vector2 playerTarget = SeekPlayerTarget(cursor);
+            if (playerTarget != Vector2.Zero)
+                return playerTarget;
+            Vector2 beaconTarget = SeekBeaconTarget(cursor);
+            if (beaconTarget != Vector2.Zero)
+                return beaconTarget;
+            return Vector2.Zero;
+        }
+
         public Vector2 SeekBeaconTarget(Vector2 cursorWorldPosition)
         {
-            float mapScale = Main.mapFullscreenScale;
             foreach (var beaconLocation in DBZWorld.GetWorld().KiBeacons)
             {
-                float beaconWidth = 48;
-                float beaconHeight = 48;
-                float beaconPosX = beaconLocation.X;
-                float beaconLocationY = beaconLocation.Y - 32f;
+                var beaconCenter = beaconLocation + new Vector2(24, -24); // roughly half the size of a beacon, looking for its center, slightly "above" it.
 
-                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
-                float leftMargin = beaconWidth * (0.5f * mapScale);
-                float rightMargin = beaconWidth * (1f + (0.5f * mapScale));
-                float topMargin = beaconHeight * (1f + (0.5f * mapScale));
-                float bottomMargin = beaconHeight * (0.5f * mapScale);
-                float beaconLowerXBound = beaconPosX - leftMargin;
-                float beaconLowerYBound = beaconLocationY - topMargin;
-                float beaconUpperXBound = beaconPosX + rightMargin;
-                float beaconUpperYBound = beaconLocationY + bottomMargin;
-                if (cursorWorldPosition.X >= beaconLowerXBound && cursorWorldPosition.X <= beaconUpperXBound && cursorWorldPosition.Y >= beaconLowerYBound && cursorWorldPosition.Y <= beaconUpperYBound)
+                if (IsValidTarget(cursorWorldPosition, beaconCenter))
                 {
-                    return beaconLocation;
+                    return beaconLocation + new Vector2(16, -48);
                 }
             }
 
             return Vector2.Zero;
         }
 
-        public NPC SeekNPCTarget(Vector2 cursorWorldPosition)
+        public Vector2 SeekNPCTarget(Vector2 cursorWorldPosition)
         {
-            float mapScale = Main.mapFullscreenScale;
             for (int npcIndex = 0; npcIndex < 200; npcIndex++)
             {
                 NPC npc = Main.npc[npcIndex];
@@ -134,34 +132,19 @@ namespace DBZMOD.Util
                 if (!npc.active)
                     continue;
                 if (!npc.townNPC)
-                    continue;                
-                
-                float npcWidth = npc.width;
-                float npcHeight = npc.height;
-                float npcPosX = npc.position.X;
-                float npcPosY = npc.position.Y;
-                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
-                float leftMargin = npcWidth * (1f + (0.5f * mapScale));
-                float rightMargin = npcWidth * (2f + (0.5f * mapScale));
-                float topMargin = npcHeight * (1f + (0.5f * mapScale));
-                float bottomMargin = npcHeight * (2f + (0.5f * mapScale));
-                float npcLowerXBound = npcPosX - leftMargin;
-                float npcLowerYBound = npcPosY - topMargin;
-                float npcUpperXBound = npcPosX + rightMargin;
-                float npcUpperYBound = npcPosY + bottomMargin;
-                if (cursorWorldPosition.X >= npcLowerXBound && cursorWorldPosition.X <= npcUpperXBound && cursorWorldPosition.Y >= npcLowerYBound && cursorWorldPosition.Y <= npcUpperYBound)
+                    continue;
+
+                if (IsValidTarget(cursorWorldPosition, npc.Center))
                 {
-                    return Main.npc[npcIndex];
+                    return npc.position;
                 }
-                
             }
 
-            return null;
+            return Vector2.Zero;
         }
 
-        public Player SeekPlayerTarget(Vector2 cursorWorldPosition)
+        public Vector2 SeekPlayerTarget(Vector2 cursorWorldPosition)
         {
-            var mapScale = Main.mapFullscreenScale;
             for (int playerIndex = 0; playerIndex < 255; playerIndex++)
             {
                 Player player = Main.player[playerIndex];
@@ -181,29 +164,27 @@ namespace DBZMOD.Util
                 // why would you do this
                 if (player.whoAmI == Main.myPlayer)
                     continue;
-                float playerWidth = player.width;
-                float playerHeight = player.height;
-                float playerPosX = player.position.X;
-                float playerPosY = player.position.Y;
-                // sprite icons are "larger than they appear", so we give a bunch of padding to the hit detection routine, exaggerating the bounds
-                float leftMargin = playerWidth * (1f + (0.5f * mapScale));
-                float rightMargin = playerWidth * (2f + (0.5f * mapScale));
-                float topMargin = playerHeight * (1f + (0.5f * mapScale)); // for some reason the heighest point of the sprite is a bit misleading, so give this some padding
-                float bottomMargin = playerHeight * (2f + (0.5f * mapScale));
-                float playerLowerXBound = playerPosX - leftMargin;
-                float playerLowerYBound = playerPosY - topMargin;
-                float playerUpperXBound = playerPosX + rightMargin;
-                float playerUpperYBound = playerPosY + bottomMargin;
-                if (!player.dead)
+
+                if (player.dead)
+                    continue;
+
+                if (IsValidTarget(cursorWorldPosition, player.Center))
                 {
-                    if (cursorWorldPosition.X >= playerLowerXBound && cursorWorldPosition.X <= playerUpperXBound && cursorWorldPosition.Y >= playerLowerYBound && cursorWorldPosition.Y <= playerUpperYBound)
-                    {
-                        return player;
-                    }
-                }
+                    return player.position;
+                }               
             }
 
-            return null;
+            return Vector2.Zero;
+        }
+
+        private bool IsValidTarget(Vector2 cursor, Vector2 position)
+        {
+            if (Vector2.Distance(cursor, position) <= 64f + 160f / Main.mapFullscreenScale)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

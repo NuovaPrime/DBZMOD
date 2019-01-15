@@ -33,7 +33,7 @@ namespace DBZMOD.Projectiles
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(34, 30);
-            if (modPlayer.IsCharging)
+            if (!modPlayer.IsCharging)
             {
                 projectile.Kill();
             }
