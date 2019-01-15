@@ -473,8 +473,10 @@ namespace DBZMOD.Util
                 return (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == USSJ)
                 return IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
-            if (buff == Kaioken || buff == SuperKaioken)
+            if (buff == Kaioken)
                 return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+            if (buff == SuperKaioken)
+                return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player) && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Spectrum)
                 return player.name == "Nuova";
             return false;
