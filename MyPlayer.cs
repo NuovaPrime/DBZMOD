@@ -2141,21 +2141,13 @@ namespace DBZMOD
                     player.statDefense = (int)(player.statDefense * 1.50f);
                     player.shinyStone = true;
                 }
-                if (burningEnergyAmulet)
+                if (burningEnergyAmulet || pureEnergyCirclet)
                 {
                     FireAura();
-                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireAuraProj"), 1, 0, player.whoAmI);
                 }
-                if (iceTalisman)
+                if (iceTalisman || pureEnergyCirclet)
                 {
                     FrostAura();
-                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FrostAuraProj"), 1, 0, player.whoAmI);
-                }
-                if (pureEnergyCirclet)
-                {
-                    FireAura();
-                    FrostAura();
-                    Projectile.NewProjectile(player.Center.X + 10, player.Center.Y - 20, 0, 0, mod.ProjectileType("FireFrostAuraProj"), 1, 0, player.whoAmI);
                 }
             }
             else
@@ -2455,16 +2447,15 @@ namespace DBZMOD
             return true;
         }
 
-        public void FrostAura()
+        public const float AURA_DUST_EFFECT_WIDTH = 2f;
+        public void HandleAuraDust(int dustType)
         {
-            const float AURAWIDTH = 2f;
-
             for (int i = 0; i < 4; i++)
             {
-                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
+                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURA_DUST_EFFECT_WIDTH))).X;
                 float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
 
-                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 59, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, dustType, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
 
                 if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
                 {
@@ -2479,28 +2470,118 @@ namespace DBZMOD
             }
         }
 
+        public List<NPC> GetNpcsInAuraRadius(bool excludeFriendly, bool excludeHostile, float auraRadius)
+        {
+            var results = new List<NPC>();
+            for(var i = 0; i < Main.npc.Length; i++)
+            {
+                var npc = Main.npc[i];
+                if (npc == null)
+                    continue;
+                if (npc.friendly && excludeFriendly)
+                    continue;
+                if (!npc.friendly && excludeHostile)
+                    continue;
+                Vector2 closestPoint = GetClosestPoint(npc, player.Center);
+                if (Vector2.Distance(closestPoint, player.Center) > auraRadius)
+                    continue;
+                results.Add(npc);
+            }
+
+            return results;
+        }
+
+        public Vector2 GetClosestPoint(Entity e, Vector2 targetLocation)
+        {
+            Vector2 halfWidth = new Vector2(e.width / 2f, 0);
+            Vector2 halfHeight = new Vector2(0, e.height / 2f);
+            Vector2 fullWidth = new Vector2(e.width, 0);
+            Vector2 fullHeight = new Vector2(0, e.height);
+            Vector2[] pollLocations = new Vector2[] {
+                e.position, e.Center - halfHeight, e.position + fullWidth,
+                e.Center - halfWidth, e.Center, e.Center + halfWidth,
+                e.position + fullHeight, e.Center + halfHeight, e.position + fullWidth + fullHeight
+            };
+            float shortestDistance = float.MaxValue;
+            Vector2 closestPoint = Vector2.Zero;
+            for (var i = 0; i < pollLocations.Length; i++)
+            {
+                var location = pollLocations[i];
+                var distance = Vector2.Distance(location, targetLocation);
+                if (distance < shortestDistance) {
+                    shortestDistance = distance;
+                    closestPoint = location;
+                }
+            }
+            return closestPoint;
+        }
+
+        public List<Player> GetPlayersInAuraRadius(bool excludeFriendly, bool excludeHostile, float auraRadius)
+        {
+            var results = new List<Player>();
+            for (var i = 0; i < Main.player.Length; i++)
+            {
+                var playerTarget = Main.player[i];
+
+                // no nulls
+                if (playerTarget == null)
+                    continue;
+                // no weird shit
+                if (playerTarget.whoAmI != i)
+                    continue;
+                // no hostiles
+                bool isSameTeam = Main.player[Main.myPlayer].team == playerTarget.team && playerTarget.team != 0;
+                if ((Main.player[Main.myPlayer].hostile || playerTarget.hostile) && !isSameTeam && excludeHostile)
+                    continue;
+                if ((!Main.player[Main.myPlayer].hostile || !playerTarget.hostile || isSameTeam) && excludeFriendly)
+                    continue;
+                // no dead bodies
+                if (!playerTarget.active || playerTarget.dead)
+                    continue;
+                // why would you do this
+                if (playerTarget.whoAmI == Main.myPlayer)
+                    continue;
+                // too far away?
+                Vector2 closestPoint = GetClosestPoint(playerTarget, player.Center);
+                if (Vector2.Distance(closestPoint, player.Center) > auraRadius)
+                    continue;
+                results.Add(playerTarget);
+            }
+
+            return results;
+        }
+
+        public void HandleAuraBuff(int buffId, bool excludeFriendly, bool excludeHostile, float auraRadius)
+        {
+            List<NPC> SeekNpcs = GetNpcsInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
+            List<Player> SeekPlayers = GetPlayersInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
+            foreach(var npc in SeekNpcs)
+            {
+                if (npc.HasBuff(buffId))
+                    continue;
+                npc.AddBuff(buffId, 10, true);
+            }
+
+            foreach(var player in SeekPlayers)
+            {
+                if (player.HasBuff(buffId))
+                    continue;
+                player.AddBuff(buffId, 10, true);
+            }
+        }
+
+
+        public const float AURA_RADIUS = 256f; // 16 tiles, pretty wide.
+        public void FrostAura()
+        {
+            HandleAuraDust(59);
+            HandleAuraBuff(BuffID.Frostburn, true, false, AURA_RADIUS);
+        }
+
         public void FireAura()
         {
-            const float AURAWIDTH = 2f;
-
-            for (int i = 0; i < 4; i++)
-            {
-                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
-                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
-
-                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 60, 0f, 0f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
-
-                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
-                {
-                    tDust.scale *= 0.75f;
-                }
-
-                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
-                dir.Normalize();
-
-                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
-                tDust.noGravity = true;
-            }
+            HandleAuraDust(60);
+            HandleAuraBuff(BuffID.OnFire, true, false, AURA_RADIUS);
         }
 
         public void SSJTransformation()

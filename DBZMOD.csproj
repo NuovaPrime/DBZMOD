@@ -408,9 +408,7 @@
     <Compile Include="Projectiles\FinalFlashBeam.cs" />
     <Compile Include="Projectiles\FinalShineCharge.cs" />
     <Compile Include="Projectiles\FinalShineBeam.cs" />
-    <Compile Include="Projectiles\FireFrostAuraProj.cs" />
     <Compile Include="Projectiles\Fists\KiFistProj.cs" />
-    <Compile Include="Projectiles\FireAuraProj.cs" />
     <Compile Include="Projectiles\GalickGunCharge.cs" />
     <Compile Include="Projectiles\GalickGunBeam.cs" />
     <Compile Include="Projectiles\HellzoneGrenadeProjectile.cs" />
@@ -423,7 +421,6 @@
     <Compile Include="Projectiles\Kamehameha10Beam.cs" />
     <Compile Include="Projectiles\KiBeamProjectile.cs" />
     <Compile Include="Projectiles\KiBlastProjectile.cs" />
-    <Compile Include="Projectiles\FrostAuraProj.cs" />
     <Compile Include="Projectiles\KiSpark.cs" />
     <Compile Include="Projectiles\LSSJ2PillarStart.cs" />
     <Compile Include="Projectiles\LSSJAuraBall.cs" />

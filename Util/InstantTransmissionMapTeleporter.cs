@@ -165,9 +165,6 @@ namespace DBZMOD.Util
                 if (player.whoAmI == Main.myPlayer)
                     continue;
 
-                if (player.dead)
-                    continue;
-
                 if (IsValidTarget(cursorWorldPosition, player.Center))
                 {
                     return player.position;
