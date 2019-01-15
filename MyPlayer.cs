@@ -1979,7 +1979,8 @@ namespace DBZMOD
             Vector2 screenMiddle = Main.screenPosition + (new Vector2(Main.screenWidth, Main.screenHeight) / 2f);
             Vector2 direction = Vector2.Normalize(Main.MouseWorld - screenMiddle);
             float distance = Vector2.Distance(Main.MouseWorld, player.Center);
-            float intensity = (float)Vector2.Distance(Main.MouseWorld, screenMiddle) / 8f;
+            // throttle intensity by a lot
+            float intensity = Math.Min(128f, (float)Vector2.Distance(Main.MouseWorld, screenMiddle)) / 2f;
             float kiCost = GetInstantTransmissionFrameKiCost(intensity, distance);
 
             // the one frame delay on handling instant transmission is to set up the limbo var.
