@@ -12,7 +12,6 @@ namespace DBZMOD.Projectiles
 {
     public class HolyWrathBall : KiProjectile
     {
-        public bool IsReleased = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Holy Wrath Ball");
@@ -42,16 +41,29 @@ namespace DBZMOD.Projectiles
 			return new Color(255, 255, 255, 100);
         }
 
+        private float HeldTime
+        {
+            get
+            {
+                return projectile.ai[0];
+            }
+            set
+            {
+                projectile.ai[0] = value;
+            }
+        }
+
         private bool isInitialized = false;
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
+
             if (!isInitialized)
             {
+                HeldTime = 1;
                 projectile.scale = 0.15f;
                 isInitialized = true;
             }
-
-            Player player = Main.player[projectile.owner];
 
             // cancel channeling if the projectile is maxed
             if (player.channel && projectile.scale > 3.0)
@@ -59,12 +71,12 @@ namespace DBZMOD.Projectiles
                 player.channel = false;
             }
 
-            if (player.channel && !IsReleased)
+            if (player.channel && HeldTime > 0)
             {
                 projectile.scale += 0.005f;
                 Vector2 projectileOffset = new Vector2(-projectile.width * 0.5f, -projectile.height * 0.5f);
                 projectileOffset += new Vector2(0, -(80 + projectile.scale * 115f));
-                Vector2 projectileOuter = new Vector2(projectile.scale * projectile.width, projectile.scale * projectile.height);
+                Vector2 projectileOuter = new Vector2(projectile.scale * projectile.width, projectile.scale * projectile.height) / 2f;
                 projectile.position = player.Center + projectileOffset;
 
                 for (int d = 0; d < 25; d++)
@@ -103,10 +115,10 @@ namespace DBZMOD.Projectiles
                     player.channel = false;
                 }
             }
-            else if (!IsReleased)
+            else if (HeldTime > 0)
             {
+                HeldTime = 0;
                 projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 600;
-                IsReleased = true;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 6;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)Math.Ceiling(projectile.scale * 4f);

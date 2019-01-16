@@ -10,7 +10,6 @@ namespace DBZMOD.Projectiles
 {
     public class SpiritBombBall : KiProjectile
     {
-        bool IsReleased = false;
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
 
@@ -35,7 +34,6 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 10;
-            IsReleased = false;
         }        
 
         public override Color? GetAlpha(Color lightColor)
@@ -43,14 +41,29 @@ namespace DBZMOD.Projectiles
 			return new Color(255, 255, 255, 100);
         }
 
-        //public override void Kill(int timeLeft)
-        //{
-        //    projectile.active = false;
-        //}
+        private float HeldTime
+        {
+            get
+            {
+                return projectile.ai[0];
+            }
+            set
+            {
+                projectile.ai[0] = value;
+            }
+        }
 
+        private bool isInitialized = false;
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+
+            if (!isInitialized)
+            {
+                HeldTime = 1;
+                projectile.scale = 1f;
+                isInitialized = true;
+            }
 
             // cancel channeling if the projectile is maxed
             if (projectile.scale > 12 && player.channel)
@@ -58,7 +71,7 @@ namespace DBZMOD.Projectiles
                 player.channel = false;
             }
 
-            if (player.channel && !IsReleased)
+            if (player.channel && HeldTime > 0)
             {
                 projectile.scale += 0.02f;
                 projectile.position = player.Center + new Vector2(0, -20 - (projectile.scale * 17));
@@ -107,10 +120,10 @@ namespace DBZMOD.Projectiles
                 {
                     player.channel = false;
                 }
-            } else if (!IsReleased)
+            } else if (HeldTime > 0)
             {
-                projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 400;
-                IsReleased = true;
+                HeldTime = 0;
+                projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 400;                
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 3.5f;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;

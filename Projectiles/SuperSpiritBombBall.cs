@@ -17,7 +17,6 @@ namespace DBZMOD.Projectiles
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
 
-        bool IsReleased = false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Super Spirit Bomb");
@@ -39,14 +38,33 @@ namespace DBZMOD.Projectiles
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
             KiDrainRate = 10;
-            IsReleased = false;
         }
 
+        private float HeldTime
+        {
+            get
+            {
+                return projectile.ai[0];
+            }
+            set
+            {
+                projectile.ai[0] = value;
+            }
+        }
+
+        private bool isInitialized = false;
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
 
-            if (player.channel && !IsReleased)
+            if (!isInitialized)
+            {
+                HeldTime = 1;
+                projectile.scale = 1f;
+                isInitialized = true;
+            }
+
+            if (player.channel && HeldTime > 0)
             {
                 projectile.scale += 0.05f;
 
@@ -97,10 +115,10 @@ namespace DBZMOD.Projectiles
                     player.channel = false;
                 }
             }
-            else if (!IsReleased)
+            else if (HeldTime > 0)
             {
+                HeldTime = 0;
                 projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 600;
-                IsReleased = true;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 2.8f;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
