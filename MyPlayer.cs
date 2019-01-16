@@ -2096,62 +2096,73 @@ namespace DBZMOD
                 }
             }
             return false;
-        }              
+        }
+
+        // occurs in vanilla code *just* before regen effects are applied.
+        public override void PostUpdateMiscEffects()
+        {
+            base.PostUpdateMiscEffects();
+
+            // pretend the player has the shiny stone here - this is just in time for the vanilla regen calls to kick in.
+            if (buldariumSigmite)
+                player.shinyStone = true;
+        }
 
         public void HandleChargeEffects()
         {
             // various effects while charging
             // if the player is flying and moving, charging applies a speed boost and doesn't recharge ki, but also doesn't slow the player.
             bool isAnyKeyHeld = IsLeftHeld || IsRightHeld || IsUpHeld || IsDownHeld;
-            if (IsCharging && (GetKi() < OverallKiMax()) && (!IsFlying || !isAnyKeyHeld))
+            if (IsCharging)
             {
-                // determine base regen rate and bonuses
-                AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
-
-
-                // slow down the player a bunch - only when not flying
-                if ((IsLeftHeld || IsRightHeld) && !IsFlying)
+                bool isChargeBoostingFlight = IsFlying && isAnyKeyHeld;
+                bool shouldApplySlowdown = GetKi() < OverallKiMax() && !isChargeBoostingFlight;
+                // grant defense and a protective barrier visual if charging with baldur essentia
+                if (!isChargeBoostingFlight)
                 {
-                    if (chargeMoveSpeed > 0)
-                        player.velocity = new Vector2(chargeMoveSpeed * (IsLeftHeld ? -1f : 1f), player.velocity.Y);
-                    else
-                        player.velocity = new Vector2(0, player.velocity.Y);
-                }
-
-                // grant multiplicative charge bonuses that grow over time if using either earthen accessories
-                if (earthenScarab || earthenArcanium)
-                {
-                    ScarabChargeTimer++;
-                    if (ScarabChargeTimer > 180 && ScarabChargeRateAdd <= 5)
+                    if (baldurEssentia || buldariumSigmite)
                     {
-                        ScarabChargeRateAdd += 1;
-                        ScarabChargeTimer = 0;
+                        var defenseBoost = Math.Max(baldurEssentia ? 1.3f : 1f, buldariumSigmite ? 1.5f : 1f);
+                        shouldApplySlowdown = true;
+                        Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
+                        player.statDefense = (int)(player.statDefense * defenseBoost);
+                    }
+                    if (burningEnergyAmulet)
+                    {
+                        shouldApplySlowdown = true;
+                        FireAura();
+                    }
+                    if (iceTalisman)
+                    {
+                        shouldApplySlowdown = true;
+                        FrostAura();
+                    }
+                    if (pureEnergyCirclet)
+                    {
+                        shouldApplySlowdown = true;
+                        PureEnergyAura();
                     }
                 }
 
-                // grant defense and a protective barrier visual if charging with baldur essentia
-                if (baldurEssentia)
+                // determine base regen rate and bonuses
+                AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
+
+                if (shouldApplySlowdown)
                 {
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
-                    player.statDefense = (int)(player.statDefense * 1.30f);
-                }
-                if (buldariumSigmite)
-                {
-                    Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
-                    player.statDefense = (int)(player.statDefense * 1.50f);
-                    player.shinyStone = true;
-                }
-                if (burningEnergyAmulet || pureEnergyCirclet)
-                {
-                    FireAura();
-                }
-                if (iceTalisman || pureEnergyCirclet)
-                {
-                    FrostAura();
+                    ProjectileUtil.ApplyChannelingSlowdown(player);
                 }
             }
-            else
+
+            // grant multiplicative charge bonuses that grow over time if using either earthen accessories
+            if (IsCharging && GetKi() < OverallKiMax() && (earthenScarab || earthenArcanium))
             {
+                ScarabChargeTimer++;
+                if (ScarabChargeTimer > 180 && ScarabChargeRateAdd <= 5)
+                {
+                    ScarabChargeRateAdd += 1;
+                    ScarabChargeTimer = 0;
+                }
+            } else { 
                 // reset scarab/earthen bonuses
                 ScarabChargeTimer = 0;
                 ScarabChargeRateAdd = 0;
@@ -2497,9 +2508,11 @@ namespace DBZMOD
             Vector2 halfHeight = new Vector2(0, e.height / 2f);
             Vector2 fullWidth = new Vector2(e.width, 0);
             Vector2 fullHeight = new Vector2(0, e.height);
+            // takes 8 poll locations on the outer edge of the sprite. Is not perfect, but is good enough.
+            // you can skip center, it will never be closer to another entity than one of its edges.
             Vector2[] pollLocations = new Vector2[] {
-                e.position, e.Center - halfHeight, e.position + fullWidth,
-                e.Center - halfWidth, e.Center, e.Center + halfWidth,
+                e.position, e.Center - halfHeight, e.position + fullWidth,                
+                e.Center - halfWidth, e.Center + halfWidth,
                 e.position + fullHeight, e.Center + halfHeight, e.position + fullWidth + fullHeight
             };
             float shortestDistance = float.MaxValue;
@@ -2582,6 +2595,13 @@ namespace DBZMOD
         {
             HandleAuraDust(60);
             HandleAuraBuff(BuffID.OnFire, true, false, AURA_RADIUS);
+        }
+
+        public void PureEnergyAura()
+        {
+            HandleAuraDust(107);
+            HandleAuraBuff(BuffID.OnFire, true, false, AURA_RADIUS);
+            HandleAuraBuff(BuffID.Frostburn, true, false, AURA_RADIUS);
         }
 
         public void SSJTransformation()
