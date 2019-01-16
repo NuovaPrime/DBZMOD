@@ -22,6 +22,8 @@ namespace Network
         public const byte SyncKiBeaconAdd = 51;
         public const byte SyncKiBeaconRemove = 52;
         public const byte DestroyAndRespawnDragonBalls = 53;
+        public const byte SyncDragonBallAdd = 54;
+        public const byte SyncDragonBallRemove = 55;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -42,6 +44,12 @@ namespace Network
                     break;
                 case (SyncKiBeaconRemove):
                     ReceiveKiBeaconRemove(reader, fromWho);
+                    break;
+                case (SyncDragonBallAdd):
+                    ReceiveDragonBallAdd(reader, fromWho);
+                    break;
+                case (SyncDragonBallRemove):
+                    ReceiveDragonBallRemove(reader, fromWho);
                     break;
                 case (RequestKiBeaconInitialSync):
                     ReceiveKiBeaconInitialSyncRequest(fromWho);
@@ -139,6 +147,56 @@ namespace Network
                 SendKiBeaconRemove(-1, fromWho, location);
         }
 
+        public void SendDragonBallAdd(int toWho, int fromWho, Point dragonBallLocation, int whichDragonBall)
+        {
+            DebugUtil.Log(string.Format("Sending signal to add dragon ball {0} to {1} {2}", whichDragonBall, dragonBallLocation.X, dragonBallLocation.Y));
+            ModPacket packet = GetPacket(SyncDragonBallAdd, fromWho);
+            packet.Write(whichDragonBall);
+            packet.Write(dragonBallLocation.X);
+            packet.Write(dragonBallLocation.Y);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void SendDragonBallRemove(int toWho, int fromWho, int whichDragonBall)
+        {
+            DebugUtil.Log(string.Format("Sending signal to remove dragon ball {0}", whichDragonBall));
+            ModPacket packet = GetPacket(SyncDragonBallRemove, fromWho);
+            packet.Write(whichDragonBall);
+            packet.Send(toWho, fromWho);
+        }
+
+        // handle a single ki beacon update (including removals)
+        public void ReceiveDragonBallAdd(BinaryReader reader, int fromWho)
+        {
+            var whichDragonBall = reader.ReadInt32();
+            var coordX = reader.ReadInt32();
+            var coordY = reader.ReadInt32();
+            DebugUtil.Log(string.Format("Receiving signal to add dragon ball {0} to {1} {2}", whichDragonBall, coordX, coordY));
+            var location = new Point(coordX, coordY);
+            var dbWorld = DBZWorld.GetWorld();
+            dbWorld.SetDragonBallLocation(whichDragonBall, location, false);
+            if (Main.netMode == NetmodeID.Server)
+                SendDragonBallAdd(-1, fromWho, location, whichDragonBall);
+        }
+
+        // handle a single ki beacon update (including removals)
+        public void ReceiveDragonBallRemove(BinaryReader reader, int fromWho)
+        {
+            var whichDragonBall = reader.ReadInt32();
+            var dbWorld = DBZWorld.GetWorld();
+            var tileLocation = dbWorld.GetDragonBallLocation(whichDragonBall);
+            // our work here is done lol
+            if (tileLocation.X == -1 && tileLocation.Y == -1)
+                return;
+            DebugUtil.Log(string.Format("Receiving signal to remove dragon ball {0}", whichDragonBall));
+            DebugUtil.Log(string.Format("Calling kill tile at {0} {1}", tileLocation.X, tileLocation.Y));
+            WorldGen.KillTile(tileLocation.X, tileLocation.Y, false, false, true);
+            if (Main.netMode == NetmodeID.Server)
+            {
+                SendDragonBallRemove(-1, fromWho, whichDragonBall);
+            }
+        }
+
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
         {
             ModPacket packet = GetPacket(RequestKiBeaconInitialSync, fromWho);
@@ -187,20 +245,20 @@ namespace Network
             var dbWorld = DBZWorld.GetWorld();
             packet.Write(dbWorld.WorldDragonBallKey);
             // new stuff, send the player all the dragon ball points.
-            packet.Write(dbWorld.DragonBallLocations[0].X);
-            packet.Write(dbWorld.DragonBallLocations[0].Y);
-            packet.Write(dbWorld.DragonBallLocations[1].X);
-            packet.Write(dbWorld.DragonBallLocations[1].Y);
-            packet.Write(dbWorld.DragonBallLocations[2].X);
-            packet.Write(dbWorld.DragonBallLocations[2].Y);
-            packet.Write(dbWorld.DragonBallLocations[3].X);
-            packet.Write(dbWorld.DragonBallLocations[3].Y);
-            packet.Write(dbWorld.DragonBallLocations[4].X);
-            packet.Write(dbWorld.DragonBallLocations[4].Y);
-            packet.Write(dbWorld.DragonBallLocations[5].X);
-            packet.Write(dbWorld.DragonBallLocations[5].Y);
-            packet.Write(dbWorld.DragonBallLocations[6].X);
-            packet.Write(dbWorld.DragonBallLocations[6].Y);
+            packet.Write(dbWorld.GetDragonBallLocation(1).X);
+            packet.Write(dbWorld.GetDragonBallLocation(1).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(2).X);
+            packet.Write(dbWorld.GetDragonBallLocation(2).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(3).X);
+            packet.Write(dbWorld.GetDragonBallLocation(3).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(4).X);
+            packet.Write(dbWorld.GetDragonBallLocation(4).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(5).X);
+            packet.Write(dbWorld.GetDragonBallLocation(5).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(6).X);
+            packet.Write(dbWorld.GetDragonBallLocation(6).Y);
+            packet.Write(dbWorld.GetDragonBallLocation(7).X);
+            packet.Write(dbWorld.GetDragonBallLocation(7).Y);
             packet.Send(toWho, -1);
         }
 
@@ -222,13 +280,13 @@ namespace Network
             var db6Y = reader.ReadInt32();
             var db7X = reader.ReadInt32();
             var db7Y = reader.ReadInt32();
-            dbWorld.DragonBallLocations[0] = new Point(db1X, db1Y);
-            dbWorld.DragonBallLocations[1] = new Point(db2X, db2Y);
-            dbWorld.DragonBallLocations[2] = new Point(db3X, db3Y);
-            dbWorld.DragonBallLocations[3] = new Point(db4X, db4Y);
-            dbWorld.DragonBallLocations[4] = new Point(db5X, db5Y);
-            dbWorld.DragonBallLocations[5] = new Point(db6X, db6Y);
-            dbWorld.DragonBallLocations[6] = new Point(db7X, db7Y);
+            dbWorld.SetDragonBallLocation(1, new Point(db1X, db1Y), false);
+            dbWorld.SetDragonBallLocation(2, new Point(db2X, db2Y), false);
+            dbWorld.SetDragonBallLocation(3, new Point(db3X, db3Y), false);
+            dbWorld.SetDragonBallLocation(4, new Point(db4X, db4Y), false);
+            dbWorld.SetDragonBallLocation(5, new Point(db5X, db5Y), false);
+            dbWorld.SetDragonBallLocation(6, new Point(db6X, db6Y), false);
+            dbWorld.SetDragonBallLocation(7, new Point(db7X, db7Y), false);
             dbWorld.WorldDragonBallKey = dbKey;
         }
 

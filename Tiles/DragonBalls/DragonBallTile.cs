@@ -76,21 +76,14 @@ namespace DBZMOD.Tiles.DragonBalls
             base.PlaceInWorld(i, j, item);
             if (DebugUtil.IsDebugModeOn())
             {
-                var oldTile = DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1];
+                var oldTile = DBZWorld.GetWorld().GetDragonBallLocation(WhichDragonBallAmI);
                 if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
                 {
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");
                 }
                 DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
-                }
-                else
-                {
-                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
-                }
+                DBZWorld.GetWorld().SetDragonBallLocation(WhichDragonBallAmI, new Point(i, j), true);                
             }
             else
             {
@@ -102,14 +95,7 @@ namespace DBZMOD.Tiles.DragonBalls
                 else
                 {
                     DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
-                    }
-                    else
-                    {
-                        DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(i, j);
-                    }
+                    DBZWorld.GetWorld().SetDragonBallLocation(WhichDragonBallAmI, new Point(i, j), true);
                 }
             }
         }
@@ -136,18 +122,28 @@ namespace DBZMOD.Tiles.DragonBalls
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    NetworkHelper.playerSync.RequestServerSendDragonBallKey(256, Main.myPlayer);
+                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, WhichDragonBallAmI);
                 }
-                else
-                {
-                    DBZWorld.GetWorld().DragonBallLocations[WhichDragonBallAmI - 1] = new Point(-1, -1);
-                }
+                DBZWorld.GetWorld().RemoveDragonBallLocation(WhichDragonBallAmI, true);
             }
             // if we're in multiplayer let the server handle item drops.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
             if (!noItem)
+            {
                 Item.NewItem(i * 16, j * 16, 32, 48, drop);
+
+                Player player = Main.player[Player.FindClosest(new Vector2(i * 16f, j * 16f), 1, 1)];
+                if (player != null && WhichDragonBallAmI == 4)
+                {
+                    MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
+                    if (!modplayer.FirstFourStarDBPickup && !noItem)
+                    {
+                        Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
+                        modplayer.FirstFourStarDBPickup = true;
+                    }
+                }
+            }
             noItem = true; // kill tile behavior overrides typical drops.
         }
     }

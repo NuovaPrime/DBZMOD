@@ -30,19 +30,5 @@ namespace DBZMOD.Tiles.DragonBalls
                 modPlayer.FourStarDBNearby = true;
             }
         }
-
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {
-            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
-
-            Player player = Main.LocalPlayer;
-            MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
-
-            if (!modplayer.FirstFourStarDBPickup && !noItem)
-            {
-                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
-                modplayer.FirstFourStarDBPickup = true;
-            }
-        }
     }
 }

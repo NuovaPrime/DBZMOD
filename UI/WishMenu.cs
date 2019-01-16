@@ -210,27 +210,14 @@ namespace DBZMOD.UI
             {
                 DebugUtil.Log("Wish has been used.");
                 WishSelection = WishSelectionID.None;
-                HandleDragonBallRespawns();
+                DBZWorld.DestroyAndRespawnDragonBalls();
                 modplayer.WishActive = false;
                 Main.PlaySound(SoundID.MenuClose);
             }
 
             Initialize();
             DBZMOD.ActivateWishmenu();
-        }
-
-        private void HandleDragonBallRespawns()
-        {
-            DebugUtil.Log("Handle Dragon Ball Respawns");
-            if (Main.netMode == NetmodeID.SinglePlayer)
-            {
-                DBZWorld.DestroyAndRespawnDragonBalls();
-            } else
-            {
-                DebugUtil.Log("Sync packet for dballs sent");
-                NetworkHelper.playerSync.SendDestroyAndRespawnDragonBalls(256, Main.myPlayer, Main.myPlayer);
-            }
-        }        
+        }  
 
         private void DoPowerWish()
         {

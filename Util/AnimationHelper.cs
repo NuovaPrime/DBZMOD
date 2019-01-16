@@ -240,9 +240,9 @@ namespace DBZMOD.Util
 
             Point closestLocation = new Point(-1, -1);
             float closestDistance = float.MaxValue;
-            for (int i = 0; i < 7; i++)
+            for (int i = 1; i <= 7; i++)
             {
-                var location = DBZWorld.GetWorld().DragonBallLocations[i];
+                var location = DBZWorld.GetWorld().GetDragonBallLocation(i);
                 if (location == new Point(-1, -1))
                     continue;
                 var coordVector = location.ToVector2() * 16f;

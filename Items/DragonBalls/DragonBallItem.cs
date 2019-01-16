@@ -150,7 +150,7 @@ namespace DBZMOD.Items.DragonBalls
                         isStoneBallStale = true;
                     }
                 }
-                var dbLocation = DBZWorld.GetWorld().DragonBallLocations[GetWhichDragonBall() - 1];
+                var dbLocation = DBZWorld.GetWorld().GetDragonBallLocation(GetWhichDragonBall());
                 // something bad has happened, don't proceed
                 if (dbLocation == new Point(-1, -1))
                     return;
@@ -163,7 +163,6 @@ namespace DBZMOD.Items.DragonBalls
                     if (DebugUtil.IsDebugModeOn() || isStoneBallTakingPlaceOfExistingDragonBall)
                     {
                         WorldGen.KillTile(dbLocation.X, dbLocation.Y, false, false, true);
-                        DBZWorld.GetWorld().DragonBallLocations[GetWhichDragonBall() - 1] = new Point(-1, -1);
                         return;
                     }
                     else

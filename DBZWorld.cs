@@ -18,7 +18,7 @@ namespace DBZMOD
     public class DBZWorld : ModWorld
     {
         // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
-        public Point[] DragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
+        private Point[] DragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
         public List<Vector2> KiBeacons = new List<Vector2>();
         // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
         // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
@@ -28,6 +28,39 @@ namespace DBZMOD
         public static DBZWorld GetWorld()
         {
             return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+        }
+
+        public void SetDragonBallLocation(int whichDragonBall, Point point, bool isMarkedDirty)
+        {
+            DragonBallLocations[whichDragonBall - 1] = point;
+
+            if (isMarkedDirty && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                if (point.X == -1 && point.Y == -1)
+                {
+                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, whichDragonBall);
+                }
+                else
+                {
+                    NetworkHelper.playerSync.SendDragonBallAdd(256, Main.myPlayer, point, whichDragonBall);
+                }
+            }
+        }
+
+        public void SetDragonBallLocation(int whichDragonBall, int x, int y, bool isMarkedDirty)
+        {
+            var dragonBallCoordinates = new Point(x, y);
+            SetDragonBallLocation(whichDragonBall, dragonBallCoordinates, isMarkedDirty);
+        }
+
+        public void RemoveDragonBallLocation(int whichDragonBall, bool isMarkedDirty)
+        {
+            SetDragonBallLocation(whichDragonBall, -1, -1, isMarkedDirty);
+        }
+
+        public Point GetDragonBallLocation(int whichDragonBall)
+        {
+            return DragonBallLocations[whichDragonBall - 1];
         }
 
         public override TagCompound Save()
@@ -63,13 +96,13 @@ namespace DBZMOD
             var fiveStarPoint = new Point(tag.GetInt("FiveStarDragonBallX"), tag.GetInt("FiveStarDragonBallY"));
             var sixStarPoint = new Point(tag.GetInt("SixStarDragonBallX"), tag.GetInt("SixStarDragonBallY"));
             var sevenStarPoint = new Point(tag.GetInt("SevenStarDragonBallX"), tag.GetInt("SevenStarDragonBallY"));
-            DragonBallLocations[0] = oneStarPoint;
-            DragonBallLocations[1] = twoStarPoint;
-            DragonBallLocations[2] = threeStarPoint;
-            DragonBallLocations[3] = fourStarPoint;
-            DragonBallLocations[4] = fiveStarPoint;
-            DragonBallLocations[5] = sixStarPoint;
-            DragonBallLocations[6] = sevenStarPoint;
+            SetDragonBallLocation(1, oneStarPoint, false);
+            SetDragonBallLocation(2, twoStarPoint, false);
+            SetDragonBallLocation(3, threeStarPoint, false);
+            SetDragonBallLocation(4, fourStarPoint, false);
+            SetDragonBallLocation(5, fiveStarPoint, false);
+            SetDragonBallLocation(6, sixStarPoint, false);
+            SetDragonBallLocation(7, sevenStarPoint, false);
             KiBeacons = tag.ContainsKey("KiBeacons") ? (List<Vector2>)tag.GetList<Vector2>("KiBeacons") : new List<Vector2>();
 
             // cleanup ki beacon list, not sure why this is necessary.
@@ -83,9 +116,9 @@ namespace DBZMOD
             DebugUtil.Log("Despawning dragon balls");
             var dbzWorld = GetWorld();
 
-            for (var i = 0; i < dbzWorld.DragonBallLocations.Length; i++)
-            {                
-                var location = dbzWorld.DragonBallLocations[i];
+            for (var i = 1; i <= 7; i++)
+            {
+                var location = dbzWorld.GetDragonBallLocation(i);
                 DebugUtil.Log(string.Format("Despawning dragon ball at {0} {1}", location.X, location.Y));
                 WorldGen.KillTile(location.X, location.Y, false, false, true);
             }
