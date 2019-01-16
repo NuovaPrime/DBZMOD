@@ -506,7 +506,8 @@ namespace DBZMOD
                             WorldGen.PlaceObject(offsetX, offsetY, TileID.HangingLanterns, true, 26); // confirmed dynasty hanging lantern (small one)
                             break;
                         case 6:
-                            WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
+                            // WorldGen.PlaceObject(offsetX, offsetY, TileID.Dressers, true, 4); // confirmed shadewood dresser
+                            WorldGen.PlaceChest(offsetX, offsetY, TileID.Dressers, false, 4);
                             break;
                         case 7:
                             if (!isFirstPass)
