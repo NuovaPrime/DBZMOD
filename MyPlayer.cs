@@ -2072,7 +2072,7 @@ namespace DBZMOD
             {
                 int tileX = (int)(target.X / 16f);
                 int tileY = (int)(target.Y / 16f);
-                if ((Main.tile[tileX, tileY].wall != 87 || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
+                if (((Main.tile[tileX, tileY] != null && Main.tile[tileX, tileY].wall != 87) || (double)tileY <= Main.worldSurface || NPC.downedPlantBoss) && !Collision.SolidCollision(target, player.width, player.height))
                 {
                     if (target.X < player.Center.X)
                         player.ChangeDir(-1);
