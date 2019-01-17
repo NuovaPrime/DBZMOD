@@ -858,6 +858,16 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
+            if(AllDragonBallsNearby() && !WishActive)
+            {
+                int soundtimer = 0;
+                soundtimer++;
+                if(soundtimer > 300)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DBReady"));
+                    soundtimer = 0;
+                }
+            }
         }
 
         private void HandleBlackFusionMultiplier()
