@@ -13,6 +13,7 @@ namespace DBZMOD.Projectiles
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
         const float BASE_SCALE = 1f;
+        const float SCALE_INCREASE = 0.02f;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spirit Bomb");
@@ -61,7 +62,6 @@ namespace DBZMOD.Projectiles
             if (!isInitialized)
             {
                 HeldTime = 1;
-                projectile.scale = 1f;
                 isInitialized = true;
             }
 
@@ -73,8 +73,9 @@ namespace DBZMOD.Projectiles
 
             if (player.channel && HeldTime > 0)
             {
-                projectile.scale += 0.02f;
+                projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 projectile.position = player.Center + new Vector2(0, -20 - (projectile.scale * 17));
+                HeldTime++;
 
                 // reduced from 25.
                 for (int d = 0; d < 15; d++)

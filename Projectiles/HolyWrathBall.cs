@@ -12,6 +12,8 @@ namespace DBZMOD.Projectiles
 {
     public class HolyWrathBall : KiProjectile
     {
+        const float BASE_SCALE = 0.15f;
+        const float SCALE_INCREASE = 0.005f;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Holy Wrath Ball");
@@ -61,7 +63,6 @@ namespace DBZMOD.Projectiles
             if (!isInitialized)
             {
                 HeldTime = 1;
-                projectile.scale = 0.15f;
                 isInitialized = true;
             }
 
@@ -73,11 +74,12 @@ namespace DBZMOD.Projectiles
 
             if (player.channel && HeldTime > 0)
             {
-                projectile.scale += 0.005f;
+                projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 Vector2 projectileOffset = new Vector2(-projectile.width * 0.5f, -projectile.height * 0.5f);
                 projectileOffset += new Vector2(0, -(80 + projectile.scale * 115f));
                 Vector2 projectileOuter = new Vector2(projectile.scale * projectile.width, projectile.scale * projectile.height) / 2f;
                 projectile.position = player.Center + projectileOffset;
+                HeldTime++;
 
                 for (int d = 0; d < 25; d++)
                 {

@@ -257,34 +257,60 @@ namespace DBZMOD.Projectiles
         }
 
         private const float BEAM_ENTITY_DISTANCE_GRADIENT = 1f;
-        // This collision check is for living entities, not tiles. This is what determines damage is being dealt.
+        // Alceris hack, since collision is already handled outside of the Collider now, this always returns true
+        // and gets trumped by whatever is returned from CanHit methods.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            return DoCollisionCheck(targetHitbox);
+            return true;
         }
 
         public override bool? CanHitNPC(NPC target)
         {
             bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.dontTakeDamage && !target.friendly;
-            bool isBeamInterrupted = false;
             if (isAnyCollision && !IsDetached && IsEntityColliding)
             {
                 while (DoCollisionCheck(target.Hitbox))
                 {
-                    isBeamInterrupted = true;
                     if (Distance < 0f)
                         break;
                     Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
                 }
             }
-            // what I'm doing here is letting the beam move one gradient "point" forward. It's hitting something right?
-            // if you don't let it move forward, it won't.
-            if (isBeamInterrupted)
-            {
-                Distance += BEAM_ENTITY_DISTANCE_GRADIENT;
-            }
 
             if (target.immune[projectile.owner] > 0) return false;
+            return isAnyCollision;
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.immune;
+            if (isAnyCollision && !IsDetached && IsEntityColliding)
+            {
+                while (DoCollisionCheck(target.Hitbox))
+                {
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
+                }
+            }
+
+            return isAnyCollision;
+        }
+
+        public override bool CanHitPvp(Player target)
+        {            
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && target.hostile && target.team != Main.player[projectile.owner].team;
+            if (isAnyCollision && !IsDetached && IsEntityColliding)
+            {
+                while (DoCollisionCheck(target.Hitbox))
+                {
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
+                }
+            }
+
+            if (target.immune) return false;
             return isAnyCollision;
         }
 

@@ -16,6 +16,8 @@ namespace DBZMOD.Projectiles
     {
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
+        const float BASE_SCALE = 1f;
+        const float SCALE_INCREASE = 0.05f;
 
         public override void SetStaticDefaults()
         {
@@ -60,15 +62,14 @@ namespace DBZMOD.Projectiles
             if (!isInitialized)
             {
                 HeldTime = 1;
-                projectile.scale = 1f;
                 isInitialized = true;
             }
 
             if (player.channel && HeldTime > 0)
             {
-                projectile.scale += 0.05f;
-
+                projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 projectile.position = player.Center + new Vector2(0, -40 - (projectile.scale * 17));
+                HeldTime++;
 
                 // reduced from 25.
                 for (int d = 0; d < 15; d++)
