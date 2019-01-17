@@ -184,7 +184,7 @@ namespace DBZMOD.Projectiles
             projectile.height = 10;
             projectile.friendly = true;
             projectile.penetrate = -1;
-            projectile.tileCollide = true;
+            projectile.tileCollide = false;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -228,7 +228,7 @@ namespace DBZMOD.Projectiles
 
         public Vector2 TailPositionCollisionStart()
         {
-            return projectile.position + OffsetY + TailDistance * projectile.velocity;
+            return projectile.position + OffsetY + (16f + TailDistance) * projectile.velocity;
         }
 
         public Vector2 TailPositionStart()
@@ -260,18 +260,31 @@ namespace DBZMOD.Projectiles
         // This collision check is for living entities, not tiles. This is what determines damage is being dealt.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            
-            bool isAnyCollision = DoCollisionCheck(targetHitbox);
-            if (IsEntityColliding && (isAnyCollision))
+            return DoCollisionCheck(targetHitbox);
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.dontTakeDamage && !target.friendly;
+            bool isBeamInterrupted = false;
+            if (isAnyCollision && !IsDetached && IsEntityColliding)
             {
-                while (DoCollisionCheck(targetHitbox))
+                while (DoCollisionCheck(target.Hitbox))
                 {
+                    isBeamInterrupted = true;
                     if (Distance < 0f)
                         break;
                     Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
                 }
             }
+            // what I'm doing here is letting the beam move one gradient "point" forward. It's hitting something right?
+            // if you don't let it move forward, it won't.
+            if (isBeamInterrupted)
+            {
+                Distance += BEAM_ENTITY_DISTANCE_GRADIENT;
+            }
 
+            if (target.immune[projectile.owner] > 0) return false;
             return isAnyCollision;
         }
 
