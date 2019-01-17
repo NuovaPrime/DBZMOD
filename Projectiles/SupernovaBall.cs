@@ -101,6 +101,13 @@ namespace DBZMOD.Projectiles
                 {
                     player.channel = false;
                 }
+                int soundtimer = 0;
+                soundtimer++;
+                if (soundtimer > 120)
+                {
+                    SoundUtil.PlayCustomSound("Sounds/SuperNovaCharge", player, 0.6f);
+                    soundtimer = 0;
+                }
             }
             else if (HeldTime > 0)
             {
@@ -109,6 +116,7 @@ namespace DBZMOD.Projectiles
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 6;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)Math.Ceiling(projectile.scale * 3f);
+                SoundUtil.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
             }            
         }
 

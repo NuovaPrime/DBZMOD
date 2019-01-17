@@ -26,10 +26,6 @@ namespace DBZMOD.Items.Weapons.Tier_5
             item.noUseGraphic = true;
             item.height = 40;
             item.autoReuse = false;
-            if (!Main.dedServ)
-            {
-                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/SpiritBombFire").WithPitchVariance(.3f);
-            }
             item.value = 90000;
             item.rare = 7;
             KiDrain = 350;
