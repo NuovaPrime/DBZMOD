@@ -114,6 +114,13 @@ namespace DBZMOD.Projectiles
                 {
                     player.channel = false;
                 }
+                int soundtimer = 0;
+                soundtimer++;
+                if(soundtimer > 120)
+                {
+                    SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
+                    soundtimer = 0;
+                }
             }
             else if (HeldTime > 0)
             {
@@ -122,6 +129,7 @@ namespace DBZMOD.Projectiles
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 2.8f;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
+                SoundUtil.PlayCustomSound("Sounds/SpiritBombFire", player);
             }
         }
 

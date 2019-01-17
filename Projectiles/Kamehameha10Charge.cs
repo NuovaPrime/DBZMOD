@@ -53,7 +53,7 @@ namespace DBZMOD.Projectiles
             ChannelingOffset = new Vector2(0, 4f);
 
             // The sound effect used by the projectile when charging up.
-            ChargeSoundKey = "Sounds/EnergyWaveCharge";
+            ChargeSoundKey = "Sounds/Kamehameha10Charge";
 
             // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
             ChargeSoundDelay = 120;

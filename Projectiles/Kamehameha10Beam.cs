@@ -46,7 +46,7 @@ namespace DBZMOD.Projectiles
             CollisionParticleDensity = 8;
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
-            BeamSoundKey = "Sounds/BasicBeamFire";
+            BeamSoundKey = "Sounds/Kamehameha10Fire";
 
             IsEntityColliding = true;
 
