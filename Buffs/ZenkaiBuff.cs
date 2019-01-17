@@ -13,12 +13,14 @@ namespace DBZMOD.Buffs
             Description.SetDefault("Your inherent saiyan ability is active.");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = true;
+            DamageMulti = 2f;
+            SpeedMulti = 1f;          
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            DamageMulti *= 2f;
             MyPlayer.ModPlayer(player).zenkaiCharmActive = true;
+            base.Update(player, ref buffIndex);
         }
     }
 }

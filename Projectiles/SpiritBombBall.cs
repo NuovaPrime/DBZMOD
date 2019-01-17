@@ -12,7 +12,7 @@ namespace DBZMOD.Projectiles
     {
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
-
+        const float BASE_SCALE = 1f;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spirit Bomb");
