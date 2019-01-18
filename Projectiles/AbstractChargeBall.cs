@@ -27,6 +27,8 @@ namespace DBZMOD.Projectiles
         // made to humanize some of the variables in the beam routine and make balance a bit simpler.
         public int ChargeKiDrainPerSecond = 40;
 
+        public int FireKiDrainPerSecond = 40;
+
         public float FireChargeDrainPerSecond = 1.2f;
 
         public float ChargeRatePerSecond = 1f;
@@ -92,7 +94,7 @@ namespace DBZMOD.Projectiles
         protected bool IsBeamOriginTracking = true;
 
         // the rate at which charge level increases while channeling
-        protected float ChargeRate() { return ChargeRatePerSecond / 60f; }
+        protected float ChargeRate() { return ChargeRatePerSecond * MyPlayer.ModPlayer(Main.player[projectile.owner]).KiSpeedAddition / 60f; }
 
         // Rate at which Ki is drained while channeling
         protected int ChargeKiDrainRate() { return ChargeKiDrainPerSecond / (60 / CHARGE_KI_DRAIN_WINDOW); }

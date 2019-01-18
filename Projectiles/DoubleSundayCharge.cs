@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles
             ChargeRatePerSecond = 1f;
 
             // Rate at which Ki is drained while channeling
-            ChargeKiDrainPerSecond = 55;
+            ChargeKiDrainPerSecond = FireKiDrainPerSecond = 55;
 
             // rate at which firing drains charge until depleted, keep this less than the ratio between ki drain (charge and fire) or charging won't be beneficial to preserving ki.
             FireChargeDrainPerSecond = 1.2f;

@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		{
 			item.shoot = mod.ProjectileType("EnergyWaveCharge");
 			item.shootSpeed = 0f;
-			item.damage = 32;
+			item.damage = 11;
 			item.knockBack = 2f;
 			item.useStyle = 5;
             item.useAnimation = 2;

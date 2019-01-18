@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			item.shoot = mod.ProjectileType("FinalFlashCharge");
 			item.shootSpeed = 0f;
-			item.damage = 144;
+			item.damage = 48;
 			item.knockBack = 3f;
 			item.useStyle = 5;
             item.useAnimation = 240;

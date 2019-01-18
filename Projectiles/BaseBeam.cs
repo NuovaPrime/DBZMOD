@@ -54,7 +54,9 @@ namespace DBZMOD.Projectiles
         public int CollisionParticleDensity = 8;
 
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
-        public int ImmunityFrameOverride = 15;
+        public int ImmunityFrameOverride = 7;
+
+        int[] ImmuneTargets = new int[200];
 
         // Flag for whether the beam segment is animated (meaning it has its own movement protocol), defaults to false.
         public bool IsBeamSegmentAnimated = false;
@@ -80,7 +82,7 @@ namespace DBZMOD.Projectiles
 
         // Beam doesn't penetrate targets until they're dead (it doesn't penetrate at all, really)
         public bool IsEntityColliding = false;
-        
+
         // controls what sections of the beam segment we're drawing at any given point in time (assumes two or more beam segments tile correctly)
         private int BeamSegmentAnimation = 0;
 
@@ -171,7 +173,7 @@ namespace DBZMOD.Projectiles
                 projectile.netUpdate = true;
             }
         }
-        
+
         // the length of a "step" of the body, defined loosely as the body's Y length minus an arbitrary cluster of pixels to overlap cleanly.
         public float StepLength()
         {
@@ -276,8 +278,7 @@ namespace DBZMOD.Projectiles
                     Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
                 }
             }
-
-            if (target.immune[projectile.owner] > 0) return false;
+            if(ImmuneTargets[target.whoAmI] > 0) return false;
             return isAnyCollision;
         }
 
@@ -339,7 +340,8 @@ namespace DBZMOD.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             base.OnHitNPC(target, damage, knockback, crit);
-            target.immune[projectile.owner] = ImmunityFrameOverride;            
+            target.immune[projectile.owner] = 0;
+            if(ImmuneTargets[target.whoAmI] <= 0) ImmuneTargets[target.whoAmI] = ImmunityFrameOverride;
         }
 
         public void HandleBeamVisibility()
@@ -470,13 +472,19 @@ namespace DBZMOD.Projectiles
             // shoot sweet sweet particles
             for (var i = 0; i < FireParticleDensity; i++)
             {
-                ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
+                ProjectileUtil.DoBeamDust(TailPositionCollisionStart(), projectile.velocity, DustType, DustFrequency, Distance, TailHeldDistance, TailSize.ToVector2(), BeamSpeed);
             }
 
             // Handle the audio playing, note this positionally tracks at the head position end for effect.
             if (JustFired)
             {
                 BeamSoundSlotId = SoundUtil.PlayCustomSound(BeamSoundKey, HeadPositionEnd());
+            }
+
+            for (var i = 0; i < 200; i++)
+            {
+                if(!Main.npc[i].active) ImmuneTargets[i] = 0;
+                else if(ImmuneTargets[i] > 0) ImmuneTargets[i] -= 1;
             }
 
             JustFired = false;

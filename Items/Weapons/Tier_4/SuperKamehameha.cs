@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			item.shoot = mod.ProjectileType("SuperKamehamehaCharge");
 			item.shootSpeed = 0f;
-			item.damage = 118;
+			item.damage = 40;
 			item.knockBack = 7f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;

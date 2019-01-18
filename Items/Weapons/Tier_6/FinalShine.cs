@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		{
 			item.shoot = mod.ProjectileType("FinalShineCharge");
 			item.shootSpeed = 0f;
-			item.damage = 184;
+			item.damage = 62;
 			item.knockBack = 3f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
