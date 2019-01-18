@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
         {
             item.shoot = mod.ProjectileType("GalickGunCharge");
             item.shootSpeed = 0f;
-            item.damage = 94;
+            item.damage = 32;
             item.knockBack = 2f;
             item.useStyle = 5;
             item.UseSound = SoundID.Item12;
@@ -29,7 +29,6 @@ namespace DBZMOD.Items.Weapons.Tier_3
             item.value = 10000;
             item.rare = 3;
             KiDrain = 80;
-            item.channel = true;
             WeaponType = "Beam";
         }
 

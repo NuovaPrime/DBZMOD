@@ -720,6 +720,7 @@ namespace DBZMOD
             // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
             if (IsPlayerImmobilized() && IsFlying)
             {
+				player.fallStart = (int)player.position.Y/16;
                 IsFlying = false;
             }
 

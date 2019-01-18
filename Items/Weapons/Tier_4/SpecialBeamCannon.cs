@@ -15,7 +15,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			item.shoot = mod.ProjectileType("MakankosappoCharge");
             item.shootSpeed = 0f;
-			item.damage = 114;
+			item.damage = 342;
 			item.knockBack = 3f;
 			item.useStyle = 5;
             item.useAnimation = 240;

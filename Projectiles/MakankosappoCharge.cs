@@ -14,7 +14,7 @@ namespace DBZMOD.Projectiles
             MinimumChargeLevel = 2f;
 
             // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
-            MinimumFireFrames = 120;
+            MinimumFireFrames = 30;
 
             // the rate at which charge level increases while channeling
             ChargeRatePerSecond = 1f;
@@ -22,11 +22,13 @@ namespace DBZMOD.Projectiles
             // Rate at which Ki is drained while channeling
             ChargeKiDrainPerSecond = 220;
 
+            FireKiDrainPerSecond = 0;
+
             // rate at which firing drains charge until depleted, keep this less than the ratio between ki drain (charge and fire) or charging won't be beneficial to preserving ki.
-            FireChargeDrainPerSecond = 1.2f;
+            FireChargeDrainPerSecond = 600000f;
 
             // rate at which charge decays. keeping this roughly the same as the rate it charges is okay.
-            DecayChargeLevelPerSecond = 1f;
+            DecayChargeLevelPerSecond = 600000f;
 
             // this is the beam the charge beam fires when told to.
             BeamProjectileName = "MakankosappoBeam";
@@ -42,7 +44,7 @@ namespace DBZMOD.Projectiles
             RotationSlowness = 15f;
 
             // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-            InitialBeamCooldown = 180;
+            InitialBeamCooldown = 60;
 
             // the charge ball is just a single texture.
             // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
