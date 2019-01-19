@@ -256,7 +256,7 @@ namespace DBZMOD
         public bool IsHoldingDragonRadarMk3 = false;
         public bool IsInstantTransmission1Unlocked = false;
         public bool IsInstantTransmission2Unlocked = false;
-        public bool IsInstantTransmission3Unlocked = false;
+        public bool IsInstantTransmission3Unlocked = false;        
         public KeyValuePair<uint, SoundEffectInstance> AuraSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
@@ -275,6 +275,9 @@ namespace DBZMOD
         public bool WasTransformed;
 
         public int MouseWorldOctant = -1;
+
+        public bool IsMassiveBlastCharging;
+        public bool IsMassiveBlastInUse;
 
         // Aura tracking to play audio and stuff.
         public AuraAnimationInfo PreviousAura;
@@ -1042,6 +1045,7 @@ namespace DBZMOD
         public int? SyncMouseWorldOctant;
         public int? SyncPowerWishesLeft;
         public int? SyncHeldProj;
+        public bool? SyncIsMassiveBlastCharging;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? SyncTriggerSetMouseLeft;
@@ -1223,6 +1227,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, player.heldProj);
                 SyncHeldProj = player.heldProj;
+            }
+
+            if (SyncIsMassiveBlastCharging != IsMassiveBlastCharging)
+            {
+                NetworkHelper.playerSync.SendChangedMassiveBlastCharging(256, player.whoAmI, player.whoAmI, IsMassiveBlastCharging);
+                SyncIsMassiveBlastCharging = IsMassiveBlastCharging;
             }
         }
 

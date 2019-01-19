@@ -41,6 +41,7 @@ namespace DBZMOD.Enums
         PowerWishesLeft,
         HeldProjectile,
         WishActive,
-        FacingDirection
+        FacingDirection,
+        IsMassiveBlastCharging
     }
 }

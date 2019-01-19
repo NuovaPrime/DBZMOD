@@ -652,6 +652,15 @@ namespace Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendChangedMassiveBlastCharging(int toWho, int fromWho, int whichPlayer, bool isMassiveBlastCharging)
+        {
+            var packet = GetPacket(SyncPlayer, fromWho); ;
+            packet.Write((int)PlayerVarSyncEnum.IsMassiveBlastCharging);
+            packet.Write(whichPlayer);
+            packet.Write(isMassiveBlastCharging);
+            packet.Send(toWho, fromWho);
+        }       
+
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
         {
             PlayerVarSyncEnum syncEnum = (PlayerVarSyncEnum)reader.ReadInt32();
@@ -926,6 +935,14 @@ namespace Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.player.heldProj);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.IsMassiveBlastCharging:
+                    player.IsMassiveBlastCharging = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.IsMassiveBlastCharging);
                         packet.Send(-1, fromWho);
                     }
                     break;

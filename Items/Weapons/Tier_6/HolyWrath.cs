@@ -52,9 +52,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
+
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[mod.ProjectileType("HolyWrathBall")] == 0;
+            return !player.GetModPlayer<MyPlayer>().IsMassiveBlastInUse;
         }
     }
 }

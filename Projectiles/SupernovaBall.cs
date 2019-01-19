@@ -7,13 +7,18 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using DBZMOD.Util;
+using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD.Projectiles
 {
     public class SupernovaBall : KiProjectile
     {
         const float BASE_SCALE = 0.15f;
-        const float SCALE_INCREASE = 0.005f;
+        const float SCALE_INCREASE = 0.015f;
+        const float TRAVEL_SPEED_COEFFICIENT = 18f;
+        int soundtimer = 0;
+        KeyValuePair<uint, SoundEffectInstance> soundInfo;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Supernova Ball");
@@ -24,10 +29,8 @@ namespace DBZMOD.Projectiles
             projectile.width = 226;
             projectile.height = 226;
             projectile.light = 1f;
-            projectile.aiStyle = 1;
-            aiType = 14;
+            projectile.aiStyle = 0;
             projectile.friendly = true;
-            projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.timeLeft = 1200;
@@ -42,7 +45,7 @@ namespace DBZMOD.Projectiles
             return new Color(255, 255, 255, 100);
         }
 
-        private float HeldTime
+        public float HeldTime
         {
             get
             {
@@ -54,14 +57,25 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public override void Kill(int timeLeft)
+        {
+            base.Kill(timeLeft);
+
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.IsMassiveBlastInUse = false;
+        }
 
         private bool isInitialized = false;
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             if (!isInitialized)
             {
+                modPlayer.IsMassiveBlastCharging = true;
+                modPlayer.IsMassiveBlastInUse = true;
                 HeldTime = 1;
                 isInitialized = true;
             }
@@ -72,15 +86,13 @@ namespace DBZMOD.Projectiles
                 player.channel = false;
             }
 
-            if (player.channel && HeldTime > 0)
+            if (player.channel && modPlayer.IsMassiveBlastCharging)
             {
                 projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 Vector2 projectileOffset = new Vector2(-projectile.width * 0.5f, -projectile.height * 0.5f);
                 projectileOffset += new Vector2(0, -(80 + projectile.scale * 115f));
                 projectile.position = player.Center + projectileOffset;
                 HeldTime++;
-
-                projectile.netUpdate = true;
 
                 //Rock effect
                 projectile.ai[1]++;
@@ -93,8 +105,6 @@ namespace DBZMOD.Projectiles
                     projectile.timeLeft = 400;
                 }
 
-                projectile.netUpdate2 = true;
-
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
                 ProjectileUtil.ApplyChannelingSlowdown(player);
 
@@ -103,23 +113,29 @@ namespace DBZMOD.Projectiles
                 {
                     player.channel = false;
                 }
-                int soundtimer = 0;
+                if (soundtimer == 0)
+                {
+                    soundInfo = SoundUtil.PlayCustomSound("Sounds/SuperNovaCharge", player, 0.6f);
+                }
                 soundtimer++;
                 if (soundtimer > 120)
                 {
-                    SoundUtil.PlayCustomSound("Sounds/SuperNovaCharge", player, 0.6f);
                     soundtimer = 0;
                 }
             }
-            else if (HeldTime > 0)
+            else if (modPlayer.IsMassiveBlastCharging)
             {
-                HeldTime = 0;
-                projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 600;
-                projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 6;
+                modPlayer.IsMassiveBlastCharging = false;
+                float projectileWidthFactor = projectile.width * projectile.scale / TRAVEL_SPEED_COEFFICIENT;
+                projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)Math.Ceiling(projectile.scale * 3f);
+                projectile.damage *= (int)Math.Ceiling(projectile.scale * 25f);
+                soundInfo = SoundUtil.KillTrackedSound(soundInfo);
                 SoundUtil.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
-            }            
+            }
+            projectile.netUpdate = true;
+            projectile.netUpdate2 = true;
         }
 
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)

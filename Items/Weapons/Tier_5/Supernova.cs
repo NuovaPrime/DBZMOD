@@ -50,7 +50,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[mod.ProjectileType("SupernovaBall")] == 0;
+            return !player.GetModPlayer<MyPlayer>().IsMassiveBlastInUse;
         }
     }
 }
