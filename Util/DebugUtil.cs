@@ -9,7 +9,7 @@ namespace DBZMOD.Util
 {
     static class DebugUtil
     {
-        private static bool isDebug = true;
+        private static bool isDebug = false;
         public static bool IsDebugModeOn()
         {
             return isDebug;
