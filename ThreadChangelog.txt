@@ -208,3 +208,9 @@ V1.0.9.0
 22. Fixed bug where you could get ssj3 before golem.
 23. Fixed various issues relating to Supernova and Holy Wrath.
 24. Added Metamoran Sash.
+
+V1.0.9.1
+
+1. Fixed bug where Dragon Balls wouldn't generate.
+2. Fixed bug where the dragon radars spawned Dragon Balls + didn't work.
+3. Fixed bug where wishing didn't remove the Dragon Balls.
