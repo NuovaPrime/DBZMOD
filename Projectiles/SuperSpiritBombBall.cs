@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Destruction;
 using DBZMOD.Util;
+using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD.Projectiles
 {
@@ -17,7 +18,10 @@ namespace DBZMOD.Projectiles
         int rocksFloating = 0;
         const int MAX_ROCKS = 25;
         const float BASE_SCALE = 1f;
-        const float SCALE_INCREASE = 0.05f;
+        const float SCALE_INCREASE = 0.15f;
+        const float TRAVEL_SPEED_COEFFICIENT = 8f;
+        int soundtimer = 0;
+        KeyValuePair<uint, SoundEffectInstance> soundInfo;
 
         public override void SetStaticDefaults()
         {
@@ -29,10 +33,8 @@ namespace DBZMOD.Projectiles
             projectile.width = 28;
             projectile.height = 28;
             projectile.light = 1f;
-            projectile.aiStyle = 1;
-            aiType = 14;
+            projectile.aiStyle = 0;
             projectile.friendly = true;
-            projectile.extraUpdates = 2;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.timeLeft = 1600;
@@ -42,7 +44,7 @@ namespace DBZMOD.Projectiles
             KiDrainRate = 10;
         }
 
-        private float HeldTime
+        public float HeldTime
         {
             get
             {
@@ -54,18 +56,30 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        public override void Kill(int timeLeft)
+        {
+            base.Kill(timeLeft);
+
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.IsMassiveBlastInUse = false;
+        }
+
         private bool isInitialized = false;
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             if (!isInitialized)
             {
+                modPlayer.IsMassiveBlastCharging = true;
+                modPlayer.IsMassiveBlastInUse = true;
                 HeldTime = 1;
                 isInitialized = true;
             }
 
-            if (player.channel && HeldTime > 0)
+            if (player.channel && modPlayer.IsMassiveBlastCharging)
             {
                 projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 projectile.position = player.Center + new Vector2(0, -40 - (projectile.scale * 17));
@@ -98,8 +112,6 @@ namespace DBZMOD.Projectiles
                     }
                 }
 
-                projectile.netUpdate = true;
-
                 if (projectile.timeLeft < 399)
                 {
                     projectile.timeLeft = 400;
@@ -108,30 +120,34 @@ namespace DBZMOD.Projectiles
                 MyPlayer.ModPlayer(player).AddKi(-5, true, false);
                 ProjectileUtil.ApplyChannelingSlowdown(player);
 
-                projectile.netUpdate2 = true;
-
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
                     player.channel = false;
                 }
-                int soundtimer = 0;
-                soundtimer++;
-                if(soundtimer > 120)
+                if (soundtimer == 0)
                 {
-                    SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
+                    soundInfo = SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
+                }
+                soundtimer++;
+                if (soundtimer > 120)
+                {
                     soundtimer = 0;
                 }
             }
-            else if (HeldTime > 0)
+            else if (modPlayer.IsMassiveBlastCharging)
             {
-                HeldTime = 0;
-                projectile.timeLeft = (int)Math.Ceiling(projectile.scale * 15) + 600;
-                projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 2.8f;
+                modPlayer.IsMassiveBlastCharging = false;
+                float projectileWidthFactor = projectile.width * projectile.scale / TRAVEL_SPEED_COEFFICIENT;
+                projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
+                projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
+                soundInfo = SoundUtil.KillTrackedSound(soundInfo);
                 SoundUtil.PlayCustomSound("Sounds/SpiritBombFire", player);
             }
+            projectile.netUpdate = true;
+            projectile.netUpdate2 = true;
         }
 
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
