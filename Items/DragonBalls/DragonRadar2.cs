@@ -24,7 +24,7 @@ namespace DBZMOD.Items.DragonBalls
         public override bool AltFunctionUse(Player player)
         {
             // silently try to check for dragon ball existence in the world and attempt to replace any locations that aren't valid.
-            DBZWorld.DoDragonBallCleanupCheck();
+            // DBZWorld.DoDragonBallCleanupCheck();
             return base.AltFunctionUse(player);
         }
 

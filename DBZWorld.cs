@@ -82,6 +82,7 @@ namespace DBZMOD
             dbtWorldTag.Add("SevenStarDragonBallX", DragonBallLocations[6].X);
             dbtWorldTag.Add("SevenStarDragonBallY", DragonBallLocations[6].Y);
             dbtWorldTag.Add("KiBeacons", KiBeacons);
+            dbtWorldTag.Add("HasDoneSavageCleanup", !ShouldDoBrutalCleanup);
             return dbtWorldTag;
         }
 
@@ -103,6 +104,10 @@ namespace DBZMOD
             SetDragonBallLocation(5, fiveStarPoint, false);
             SetDragonBallLocation(6, sixStarPoint, false);
             SetDragonBallLocation(7, sevenStarPoint, false);
+            if (tag.ContainsKey("HasDoneSavageCleanup"))
+            {
+                ShouldDoBrutalCleanup = !tag.GetBool("HasDoneSavageCleanup");
+            }
             KiBeacons = tag.ContainsKey("KiBeacons") ? (List<Vector2>)tag.GetList<Vector2>("KiBeacons") : new List<Vector2>();
 
             // cleanup ki beacon list, not sure why this is necessary.
@@ -690,7 +695,7 @@ namespace DBZMOD
             if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
             {
                 WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
-                int dbIndex = whichDragonball - 1;
+                GetWorld().SetDragonBallLocation(whichDragonball, new Point(offsetX, offsetY), true);
                 return true;
             } else
             {
@@ -732,11 +737,18 @@ namespace DBZMOD
             }
         }
 
+        public bool ShouldDoBrutalCleanup = false;
         public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)
         {
             // only fire this server side or single player.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
+
+            if (GetWorld().ShouldDoBrutalCleanup)
+            {
+                DoBrutalCleanup();
+            }
+
             // loop over the saved locations for each dragonball
             for (var i = 0; i < GetWorld().DragonBallLocations.Length; i++)
             {
@@ -751,6 +763,148 @@ namespace DBZMOD
                     }
                 }
             }
+        }
+
+        public static void DoBrutalCleanup()
+        {
+            int invalidCount = 0;
+            for (var i = 0; i < Main.maxTilesX; i++)
+            {
+                for (var j = 0; j < Main.maxTilesY; j++)
+                {
+                    var tile = Framing.GetTileSafely(i, j);
+                    if (tile == null)
+                        continue;
+                    var dbNum = GetDragonBallNumberFromType(tile.type);
+                    if (dbNum == 0)
+                        continue;
+                    var existingLoc = GetWorld().GetDragonBallLocation(dbNum);
+                    if (existingLoc.X == -1 && existingLoc.Y == -1)
+                    {
+                        invalidCount++;
+                        WorldGen.KillTile(i, j, false, false, true);
+                    } else if (existingLoc.X != i || existingLoc.Y != j)
+                    {
+                        invalidCount++;
+                        WorldGen.KillTile(i, j, false, false, true);
+                    }
+                }
+            }
+            if (invalidCount > 0)
+            {
+                Main.NewText("Found " + invalidCount + " bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
+            }
+            GetWorld().ShouldDoBrutalCleanup = false;
+        }
+
+        public int? _db1;
+        public int Db1Type
+        {
+            get
+            {
+                if (_db1 == null)
+                {
+                    _db1 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db1.Value;
+            }
+        }
+
+        public int? _db2;
+        public int Db2Type
+        {
+            get
+            {
+                if (_db2 == null)
+                {
+                    _db2 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db2.Value;
+            }
+        }
+
+        public int? _db3;
+        public int Db3Type
+        {
+            get
+            {
+                if (_db3 == null)
+                {
+                    _db3 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db3.Value;
+            }
+        }
+
+        public int? _db4;
+        public int Db4Type
+        {
+            get
+            {
+                if (_db4 == null)
+                {
+                    _db4 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db4.Value;
+            }
+        }
+
+        public int? _db5;
+        public int Db5Type
+        {
+            get
+            {
+                if (_db5 == null)
+                {
+                    _db5 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db5.Value;
+            }
+        }
+
+        public int? _db6;
+        public int Db6Type
+        {
+            get
+            {
+                if (_db6 == null)
+                {
+                    _db6 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db6.Value;
+            }
+        }
+
+        public int? _db7;
+        public int Db7Type
+        {
+            get
+            {
+                if (_db7 == null)
+                {
+                    _db7 = DBZMOD.instance.TileType("OneStarDBTile");
+                }
+                return _db7.Value;
+            }
+        }
+
+        public static int GetDragonBallNumberFromType(int type)
+        {
+            if (type == GetWorld().Db1Type)
+                return 1;
+            if (type == GetWorld().Db2Type)
+                return 2;
+            if (type == GetWorld().Db3Type)
+                return 3;
+            if (type == GetWorld().Db4Type)
+                return 4;
+            if (type == GetWorld().Db5Type)
+                return 5;
+            if (type == GetWorld().Db6Type)
+                return 6;
+            if (type == GetWorld().Db7Type)
+                return 7;
+            return 0;
         }
 
         public static bool IsInvalidTileForDragonBallPlacement(Tile tile)
