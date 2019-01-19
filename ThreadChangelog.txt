@@ -206,4 +206,5 @@ V1.0.9.0
 20. Renamed Blighted Fang to Blood Thief and made it Tier 3. It is also now obtained from the Dryad instead of the Arms Dealer after Skeletron is dead.
 21. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
 22. Fixed bug where you could get ssj3 before golem.
-23. Added Metamoran Sash.
+23. Fixed various issues relating to Supernova and Holy Wrath.
+24. Added Metamoran Sash.
