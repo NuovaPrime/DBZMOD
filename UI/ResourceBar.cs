@@ -49,8 +49,8 @@ namespace DBZMOD.UI
                     gradientB = new Color(53, 146, 183); // dark blue
                     break;
                 case ResourceBarMode.OVERLOAD:
-                    gradientA = new Color(201, 255, 86); //light green
-                    gradientB = new Color(22, 147, 93); // dark green
+                    gradientA = new Color(221, 255, 28); //light green
+                    gradientB = new Color(70, 150, 93); // dark green
                     break;
 
                 default:
@@ -166,8 +166,8 @@ namespace DBZMOD.UI
                     text.SetText("Ki:" + averageKi + " / " + modplayer.OverallKiMax()); //a is light b is dark
                     if (modplayer.playerTrait == "Legendary")
                     {
-						gradientA = new Color(201, 255, 86);
-						gradientB = new Color(22, 147, 93);
+						gradientA = new Color(221, 255, 28);
+						gradientB = new Color(70, 150, 93);
                     }
                     else if (modplayer.playerTrait == "Prodigy")
                     {
