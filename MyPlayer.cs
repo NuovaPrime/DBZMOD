@@ -651,6 +651,15 @@ namespace DBZMOD
                 UI.TransMenu.lssjOn = true;
             }
 
+            if (masteryLevel1 > 1)
+                masteryLevel1 = 1;
+
+            if (masteryLevel2 > 1)
+                masteryLevel2 = 1;
+
+            if (masteryLevel3 > 1)
+                masteryLevel3 = 1;
+
             if (IsPlayerLegendary() && !lssjAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);

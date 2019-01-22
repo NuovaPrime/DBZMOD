@@ -185,6 +185,10 @@ namespace DBZMOD
             {
                 player.QuickSpawnItem(mod.ItemType("TransmissionVanish"));
             }
+            if (context == "bossBag" && arg == ItemID.FishronBossBag)
+            {
+                player.QuickSpawnItem(mod.ItemType("KatchinScale"), Main.rand.Next(18, 42));
+            }
         }
     }
 }
