@@ -63,49 +63,6 @@ Projectiles/SpiritBombBall.cs
 Projectiles/SpiritBombBall.cs
 obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 .vs/DBZMOD/v14/.suo
-obj/Debug/DBZMOD.csproj.FileListAbsolute.txt
-obj/Debug/DBZMOD.csprojResolveAssemblyReference.cache
-obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/Debug/DBZMOD.csprojAssemblyReference.cache
-/obj/Debug/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/x86/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/obj/x86/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/obj/x86/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/x86/Debug/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/x86/Mercurius/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/obj/x86/Mercurius/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/obj/x86/Mercurius/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/obj/x86/Mercurius/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/x86/Mercurius/DBZMOD.csprojAssemblyReference.cache
-/obj/x86/Mercurius/DBZMOD.csproj.FileListAbsolute.txt
-/obj/x86/Mercurius/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/x86/Mercurius/DBZMOD.csproj.CopyComplete
-/obj/x86/Debug/DBZMOD.csproj.FileListAbsolute.txt
-/obj/x86/Debug/DBZMOD.csproj.CopyComplete
-/obj/x86/Nuova C Drive/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/obj/x86/Nuova C Drive/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/obj/x86/Nuova C Drive/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/obj/x86/Nuova C Drive/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/x86/Nuova C Drive/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/Nuova C Drive/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/obj/Nuova C Drive/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/obj/Nuova C Drive/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/obj/Nuova C Drive/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/Nuova C Drive/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/x86/Nuova C Drive/DBZMOD.csprojAssemblyReference.cache
-/obj/x86/Nuova C Drive/DBZMOD.csproj.FileListAbsolute.txt
-/obj/x86/Nuova C Drive/DBZMOD.csproj.CopyComplete
-/obj/Mercurius/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-/obj/Mercurius/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-/obj/Mercurius/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-/obj/Mercurius/DesignTimeResolveAssemblyReferencesInput.cache
-/obj/Mercurius/DBZMOD.csproj.CoreCompileInputs.cache
-/obj/Nuova C Drive/DBZMOD.csprojAssemblyReference.cache
-/obj/Nuova C Drive/DBZMOD.csproj.FileListAbsolute.txt
-/obj/Nuova C Drive/DBZMOD.csproj.CopyComplete
-/obj/Mercurius/DBZMOD.csprojAssemblyReference.cache
-/obj/Mercurius/DBZMOD.csproj.FileListAbsolute.txt
-/obj/Mercurius/DBZMOD.csproj.CopyComplete
-/obj/Nuova C Drive/DesignTimeResolveAssemblyReferences.cache
+obj/
+*.DBZMOD.csproj.user
 *.cache
