@@ -97,7 +97,7 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
-                Transformations.DoTransform(player, Transformations.SSJ2, DBZMOD.instance, false);
+                Transformations.DoTransform(player, Transformations.SSJ2, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else

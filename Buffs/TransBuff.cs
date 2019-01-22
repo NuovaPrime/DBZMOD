@@ -54,7 +54,7 @@ namespace DBZMOD
                     {
                         modPlayer.KaiokenLevel = 0;
                     }
-                    Transformations.EndTransformations(player, true, false);
+                    Transformations.EndTransformations(player, true);
                 }
                 else
                 {

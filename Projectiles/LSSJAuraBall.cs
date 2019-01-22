@@ -88,12 +88,12 @@ namespace DBZMOD.Projectiles
             Player player = Main.player[projectile.owner];
             if (MyPlayer.ModPlayer(player).IsTransforming)
             {
-                Transformations.DoTransform(player, Transformations.LSSJ2, DBZMOD.instance, false);
+                Transformations.DoTransform(player, Transformations.LSSJ2, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
             else
             {
-                Transformations.DoTransform(player, Transformations.LSSJ, DBZMOD.instance, false);
+                Transformations.DoTransform(player, Transformations.LSSJ, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).IsTransforming = false;
             }
         }
