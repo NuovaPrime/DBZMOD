@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBZMOD.Enums
+﻿namespace DBZMOD.Enums
 {
     public enum MenuSelectionID : int
     {
@@ -14,8 +9,8 @@ namespace DBZMOD.Enums
         LSSJ1 = 4,
         SSJG = 5,
         LSSJ2 = 6,
-        SSJB = 7,
-        LSSJG = 8,
+        Ssjb = 7,
+        Lssjg = 8,
         UI = 9,
         Spectrum = 69
     }

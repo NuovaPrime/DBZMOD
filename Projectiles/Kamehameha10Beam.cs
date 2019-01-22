@@ -16,39 +16,39 @@ namespace DBZMOD.Projectiles
             HeadSize = new Point(70, 36);
 
             // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
-            BeamFadeOutTime = 30f;
+            beamFadeOutTime = 30f;
 
             // Bigger number = slower movement. For reference, 60f is pretty fast. 180f is pretty slow.
-            RotationSlowness = 60f;
+            rotationSlowness = 60f;
 
             // vector to reposition the beam tail down if it feels too low or too high on the character sprite
-            OffsetY = new Vector2(0, 4f);
+            offsetY = new Vector2(0, 4f);
 
             // the maximum travel distance the beam can go
-            MaxBeamDistance = 2000f;
+            maxBeamDistance = 2000f;
 
             // the speed at which the beam head travels through space
-            BeamSpeed = 15f;
+            beamSpeed = 15f;
 
             // the type of dust to spawn when the beam is firing
-            DustType = 169;
+            dustType = 169;
 
             // the frequency at which to spawn dust when the beam is firing
-            DustFrequency = 0.6f;
+            dustFrequency = 0.6f;
 
             // how many particles per frame fire while firing the beam.
-            FireParticleDensity = 6;
+            fireParticleDensity = 6;
 
             // the frequency at which to spawn dust when the beam collides with something
-            CollisionDustFrequency = 1.0f;
+            collisionDustFrequency = 1.0f;
 
             // how many particles per frame fire when the beam collides with something
-            CollisionParticleDensity = 8;
+            collisionParticleDensity = 8;
 
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
-            BeamSoundKey = "Sounds/Kamehameha10Fire";
+            beamSoundKey = "Sounds/Kamehameha10Fire";
 
-            IsEntityColliding = true;
+            isEntityColliding = true;
 
             base.SetDefaults();
         }

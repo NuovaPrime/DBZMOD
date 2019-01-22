@@ -1,6 +1,5 @@
 ﻿﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -30,11 +29,11 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.10f;
-                player.GetModPlayer<MyPlayer>(mod).FlightSpeedAdd += 0.1f;
-                player.GetModPlayer<MyPlayer>(mod).KiRegen += 1;
-                player.GetModPlayer<MyPlayer>(mod).FlightUsageAdd += 1;
-                player.GetModPlayer<MyPlayer>(mod).ChargeLimitAdd += 1;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.10f;
+                player.GetModPlayer<MyPlayer>(mod).flightSpeedAdd += 0.1f;
+                player.GetModPlayer<MyPlayer>(mod).kiRegen += 1;
+                player.GetModPlayer<MyPlayer>(mod).flightUsageAdd += 1;
+                player.GetModPlayer<MyPlayer>(mod).chargeLimitAdd += 1;
                 player.GetModPlayer<MyPlayer>(mod).earthenArcanium = true;
             }
         }

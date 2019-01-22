@@ -1,6 +1,5 @@
 ﻿﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -24,14 +23,14 @@ namespace DBZMOD.Items.Accessories
             item.rare = -12;
             item.defense = 3;
             item.accessory = true;
-            PatreonName = "Chese780";
+            patreonName = "Chese780";
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.1f;
-				player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.3f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.1f;
+				player.GetModPlayer<MyPlayer>(mod).kiDrainMulti -= 0.3f;
                 player.GetModPlayer<MyPlayer>(mod).metamoranSash = true;
             }
         }

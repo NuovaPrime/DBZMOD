@@ -1,7 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -13,8 +10,8 @@ namespace DBZMOD.Buffs
             Description.SetDefault("Your inherent saiyan ability is active.");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = true;
-            DamageMulti = 2f;
-            SpeedMulti = 1f;          
+            damageMulti = 2f;
+            speedMulti = 1f;          
         }
 
         public override void Update(Player player, ref int buffIndex)

@@ -1,7 +1,5 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using System;
 
 namespace DBZMOD.Buffs
 {
@@ -21,7 +19,7 @@ namespace DBZMOD.Buffs
             player.magicDamage *= 0.8f;
             player.minionDamage *= 0.8f;
             player.thrownDamage *= 0.8f;
-            MyPlayer.ModPlayer(player).KiDamage *= 0.8f;
+            MyPlayer.ModPlayer(player).kiDamage *= 0.8f;
             if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);

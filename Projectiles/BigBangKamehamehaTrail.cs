@@ -1,11 +1,7 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
@@ -27,12 +23,12 @@ namespace DBZMOD.Projectiles
             projectile.aiStyle = 1;
             projectile.light = 1f;
             projectile.timeLeft = 180;
-            projectile.knockBack = DefaultBeamKnockback;
+            projectile.knockBack = defaultBeamKnockback;
             aiType = 14;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.netUpdate = true;
-            BeamTrail = true;
+            beamTrail = true;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 1;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
         }

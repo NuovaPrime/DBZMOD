@@ -1,11 +1,8 @@
 ﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria.ID;
 
 namespace DBZMOD.Projectiles
 {
@@ -37,17 +34,17 @@ namespace DBZMOD.Projectiles
 		public bool alphaTicking = false;
 		public Vector2 originalVelocity = default(Vector2);
 
-        bool init = false;
+        bool _init = false;
 		public void Initialize()
 		{
 			if (projectile.position == default(Vector2)) return;
 			originalVelocity = projectile.velocity;
-            init = true;
+            _init = true;
 		}
 
 		public override void AI()
 		{
-            if (!init) Initialize();
+            if (!_init) Initialize();
 			if (alphaTicking)
 			{
 				if(projectile.tileCollide) projectile.velocity = originalVelocity;

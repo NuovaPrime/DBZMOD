@@ -1,5 +1,4 @@
 ﻿using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.DragonBalls
@@ -17,7 +16,7 @@ namespace DBZMOD.Items.DragonBalls
         public override void HoldItem(Player player)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.IsHoldingDragonRadarMk2 = true;
+            modPlayer.isHoldingDragonRadarMk2 = true;
             base.HoldItem(player);
         }
 

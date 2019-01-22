@@ -6,7 +6,7 @@ namespace DBZMOD.Npcs
 {
 	public class MajinSlime : ModNPC
 	{
-        private int majinRegentimer;
+        private int _majinRegentimer;
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Majin Slime");
@@ -43,11 +43,11 @@ namespace DBZMOD.Npcs
 
         public override void AI()
         {
-            majinRegentimer++;
-            if(majinRegentimer > 14 && npc.life <= npc.lifeMax)
+            _majinRegentimer++;
+            if(_majinRegentimer > 14 && npc.life <= npc.lifeMax)
             {
                 npc.life += 1;
-                majinRegentimer = 0;
+                _majinRegentimer = 0;
                 npc.netUpdate = true;
             }
             base.AI();

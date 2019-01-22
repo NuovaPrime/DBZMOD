@@ -28,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiChargeRate += 2;
+                player.GetModPlayer<MyPlayer>(mod).kiChargeRate += 2;
                 player.GetModPlayer<MyPlayer>(mod).buldariumSigmite = true;
             }
         }

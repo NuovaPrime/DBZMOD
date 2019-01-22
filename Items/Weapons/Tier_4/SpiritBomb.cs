@@ -1,9 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,8 +24,8 @@ namespace DBZMOD.Items.Weapons.Tier_4
             item.autoReuse = false;
             item.value = 35000;
             item.rare = 4;
-            KiDrain = 200;
-            WeaponType = "Massive Blast";
+            kiDrain = 200;
+            weaponType = "Massive Blast";
         }
 
 	    public override void SetStaticDefaults()
@@ -50,7 +45,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 
         public override bool CanUseItem(Player player)
         {
-            return !player.GetModPlayer<MyPlayer>().IsMassiveBlastInUse;
+            return !player.GetModPlayer<MyPlayer>().isMassiveBlastInUse;
         }
     }
 }

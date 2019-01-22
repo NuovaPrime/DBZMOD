@@ -1,13 +1,7 @@
-﻿﻿using System;
-using System.Linq;
-using DBZMOD.Buffs;
-using DBZMOD;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace DBZMOD.UI
@@ -72,19 +66,19 @@ namespace DBZMOD.UI
             }
         }
 
-        public void InitText(ref UIText TextToInitialise, string text, float scale = 1, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
+        public void InitText(ref UIText textToInitialise, string text, float scale = 1, float offsetX = 0, float offsetY = 0, Color textColour = default(Color), UIElement parentElement = null)
         {
-            TextToInitialise = new UIText(text, scale);
+            textToInitialise = new UIText(text, scale);
 
-            TextToInitialise.Width.Set(16f, 0f);
-            TextToInitialise.Height.Set(16f, 0f);
-            TextToInitialise.Left.Set(offsetX, 0f);
-            TextToInitialise.Top.Set(offsetY, 0f);
-            TextToInitialise.TextColor = textColour;
+            textToInitialise.Width.Set(16f, 0f);
+            textToInitialise.Height.Set(16f, 0f);
+            textToInitialise.Left.Set(offsetX, 0f);
+            textToInitialise.Top.Set(offsetY, 0f);
+            textToInitialise.TextColor = textColour;
 
             if (parentElement == null)
             {
-                backPanel.Append(TextToInitialise);
+                backPanel.Append(textToInitialise);
             }
             /*if (parentElement == wishbackPanel)
             {
@@ -92,16 +86,16 @@ namespace DBZMOD.UI
             }*/
             else
             {
-                parentElement.Append(TextToInitialise);
+                parentElement.Append(textToInitialise);
             }
         }
 
-        Vector2 offset;
+        Vector2 _offset;
         public bool dragging = false;
 
         protected void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
-            offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
+            _offset = new Vector2(evt.MousePosition.X - backPanel.Left.Pixels, evt.MousePosition.Y - backPanel.Top.Pixels);
             dragging = true;
         }
 
@@ -110,8 +104,8 @@ namespace DBZMOD.UI
             Vector2 end = evt.MousePosition;
             dragging = false;
 
-            backPanel.Left.Set(end.X - offset.X, 0f);
-            backPanel.Top.Set(end.Y - offset.Y, 0f);
+            backPanel.Left.Set(end.X - _offset.X, 0f);
+            backPanel.Top.Set(end.Y - _offset.Y, 0f);
 
             Recalculate();
         }
@@ -119,15 +113,15 @@ namespace DBZMOD.UI
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
-            Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
-            if (backPanel.ContainsPoint(MousePosition))
+            Vector2 mousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
+            if (backPanel.ContainsPoint(mousePosition))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
             if (dragging)
             {
-                backPanel.Left.Set(MousePosition.X - offset.X, 0f);
-                backPanel.Top.Set(MousePosition.Y - offset.Y, 0f);
+                backPanel.Left.Set(mousePosition.X - _offset.X, 0f);
+                backPanel.Top.Set(mousePosition.Y - _offset.Y, 0f);
                 Recalculate();
             }
         }

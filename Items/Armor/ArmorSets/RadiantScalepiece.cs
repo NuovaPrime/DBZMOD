@@ -1,10 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DBZMOD.Items.Armor.ArmorSets
 {
@@ -41,15 +38,15 @@ namespace DBZMOD.Items.Armor.ArmorSets
                 "\nIncreased Ki Regen and +200 Max Life";
             player.statLifeMax2 += 200;
             MyPlayer.ModPlayer(player).radiantBonus = true;
-            MyPlayer.ModPlayer(player).KiRegen += 3;
+            MyPlayer.ModPlayer(player).kiRegen += 3;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
-            MyPlayer.ModPlayer(player).KiKbAddition += 16;
-            MyPlayer.ModPlayer(player).KiMax2 += 1500;
-            MyPlayer.ModPlayer(player).ChargeLimitAdd += 4;
-            MyPlayer.ModPlayer(player).FlightUsageAdd += 1;
+            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).kiKbAddition += 16;
+            MyPlayer.ModPlayer(player).kiMax2 += 1500;
+            MyPlayer.ModPlayer(player).chargeLimitAdd += 4;
+            MyPlayer.ModPlayer(player).flightUsageAdd += 1;
 
         }
         public override Color? GetAlpha(Color lightColor)

@@ -2,8 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
- 
+
 namespace DBZMOD.Mounts
 {
     public class NimbusMount : ModMountData

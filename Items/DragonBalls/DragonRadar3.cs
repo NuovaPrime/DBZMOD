@@ -17,7 +17,7 @@ namespace DBZMOD.Items.DragonBalls
         public override void HoldItem(Player player)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.IsHoldingDragonRadarMk3 = true;
+            modPlayer.isHoldingDragonRadarMk3 = true;
             base.HoldItem(player);
         }
 

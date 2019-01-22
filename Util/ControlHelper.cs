@@ -1,10 +1,6 @@
 ﻿using DBZMOD.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.GameInput;
 
 namespace DBZMOD.Util
@@ -67,32 +63,32 @@ namespace DBZMOD.Util
         /// <summary>
         ///     Dictionary property responsible for holding player control state.
         /// </summary>
-        public static Dictionary<Controls, ControlStateMetadata> _currentControlDictionary = null;
+        public static Dictionary<Controls, ControlStateMetadata> currentControlDictionary = null;
         public static Dictionary<Controls, ControlStateMetadata> CurrentControlState
         {
             get
             {
-                return _previousControlDictionary;
+                return previousControlDictionary;
             }
             set
             {
-                _previousControlDictionary = value;
+                previousControlDictionary = value;
             }
         }
 
         /// <summary>
         ///     Dictionary property responsible for holding player's control state in the previous tick to compare with current.
         /// </summary>
-        public static Dictionary<Controls, ControlStateMetadata> _previousControlDictionary = null;
+        public static Dictionary<Controls, ControlStateMetadata> previousControlDictionary = null;
         public static Dictionary<Controls, ControlStateMetadata> PreviousControlState
         {
             get
             {
-                return _previousControlDictionary;
+                return previousControlDictionary;
             }
             set
             {
-                _previousControlDictionary = value;
+                previousControlDictionary = value;
             }
         }
 
@@ -202,20 +198,20 @@ namespace DBZMOD.Util
         public static ActionsToPerform ProcessActionQueue()
         {
             var actionsToPerform = new ActionsToPerform();
-            actionsToPerform.LightAttack = ShouldPerformLightAttack();
-            actionsToPerform.HeavyAttack = ShouldPerformHeavyAttack();
-            actionsToPerform.BlockPhase1 = ShouldPerformBlockPhase1();
-            actionsToPerform.BlockPhase2 = ShouldPerformBlockPhase2();
-            actionsToPerform.BlockPhase3 = ShouldPerformBlockPhase3();
-            actionsToPerform.DashUpLeft = ShouldDashUpLeft();
-            actionsToPerform.DashUpRight = ShouldDashUpRight();
-            actionsToPerform.DashDownLeft = ShouldDashDownLeft();
-            actionsToPerform.DashDownRight = ShouldDashDownRight();
-            actionsToPerform.DashUp = ShouldDashUp();
-            actionsToPerform.DashDown = ShouldDashDown();
-            actionsToPerform.DashLeft = ShouldDashLeft();
-            actionsToPerform.DashRight = ShouldDashRight();
-            actionsToPerform.Flurry = ShouldFlurry();
+            actionsToPerform.lightAttack = ShouldPerformLightAttack();
+            actionsToPerform.heavyAttack = ShouldPerformHeavyAttack();
+            actionsToPerform.blockPhase1 = ShouldPerformBlockPhase1();
+            actionsToPerform.blockPhase2 = ShouldPerformBlockPhase2();
+            actionsToPerform.blockPhase3 = ShouldPerformBlockPhase3();
+            actionsToPerform.dashUpLeft = ShouldDashUpLeft();
+            actionsToPerform.dashUpRight = ShouldDashUpRight();
+            actionsToPerform.dashDownLeft = ShouldDashDownLeft();
+            actionsToPerform.dashDownRight = ShouldDashDownRight();
+            actionsToPerform.dashUp = ShouldDashUp();
+            actionsToPerform.dashDown = ShouldDashDown();
+            actionsToPerform.dashLeft = ShouldDashLeft();
+            actionsToPerform.dashRight = ShouldDashRight();
+            actionsToPerform.flurry = ShouldFlurry();
             return actionsToPerform;
         }
 
@@ -542,19 +538,19 @@ namespace DBZMOD.Util
     /// </summary>
     class ActionsToPerform
     {
-        public bool LightAttack;
-        public bool HeavyAttack;
-        public bool BlockPhase1;
-        public bool BlockPhase2;
-        public bool BlockPhase3;
-        public bool DashUp;
-        public bool DashDown;
-        public bool DashLeft;
-        public bool DashRight;
-        public bool DashUpLeft;
-        public bool DashUpRight;
-        public bool DashDownLeft;
-        public bool DashDownRight;
-        public bool Flurry;
+        public bool lightAttack;
+        public bool heavyAttack;
+        public bool blockPhase1;
+        public bool blockPhase2;
+        public bool blockPhase3;
+        public bool dashUp;
+        public bool dashDown;
+        public bool dashLeft;
+        public bool dashRight;
+        public bool dashUpLeft;
+        public bool dashUpRight;
+        public bool dashDownLeft;
+        public bool dashDownRight;
+        public bool flurry;
     }
 }

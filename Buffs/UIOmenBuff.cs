@@ -1,6 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -12,10 +10,10 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2f;
-            SpeedMulti = 7f;
-            KiDrainRate = 10;
-            KiDrainBuffMulti = 1f;
+            damageMulti = 2f;
+            speedMulti = 7f;
+            kiDrainRate = 10;
+            kiDrainBuffMulti = 1f;
             Description.SetDefault("The secret technique of the gods. Grants the ability to dodge any attack.");
         }
     }

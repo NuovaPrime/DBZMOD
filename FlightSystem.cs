@@ -25,77 +25,77 @@ namespace DBZMOD
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
             //check for ki or death lol
-            if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.IsFlying)
+            if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.isFlying)
             {
-                modPlayer.IsFlying = false;
+                modPlayer.isFlying = false;
                 AddKatchinFeetBuff(player);
             }
 
-            if (modPlayer.IsFlying)
+            if (modPlayer.isFlying)
             {
                 // cancel platform collision
                 player.DryCollision(true, true);
 
                 //prepare vals
                 player.fullRotationOrigin = new Vector2(11, 22);
-                Vector2 m_rotationDir = Vector2.Zero;
+                Vector2 mRotationDir = Vector2.Zero;
 
-                int FlightDustType = 261;
+                int flightDustType = 261;
 
                 //Input checks
-                float boostSpeed = (BURST_SPEED) * (modPlayer.IsCharging ? 1 : 0);
-                int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.FlightUsageAdd);
-                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.FlightSpeedAdd;
-                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.FlightSpeedAdd;
+                float boostSpeed = (BURST_SPEED) * (modPlayer.isCharging ? 1 : 0);
+                int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.flightUsageAdd);
+                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.flightSpeedAdd;
+                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.flightSpeedAdd;
 
-                if (modPlayer.IsUpHeld)
+                if (modPlayer.isUpHeld)
                 {
                     // for some reason flying up is way, way faster than flying down.
                     player.velocity.Y -= (totalVerticalFlightSpeed / 3.8f);
-                    m_rotationDir = Vector2.UnitY;
+                    mRotationDir = Vector2.UnitY;
                 }
-                else if (modPlayer.IsDownHeld)
+                else if (modPlayer.isDownHeld)
                 {
                     player.maxFallSpeed = 20f;
                     player.velocity.Y += totalVerticalFlightSpeed / 3.6f;
-                    m_rotationDir = -Vector2.UnitY;
+                    mRotationDir = -Vector2.UnitY;
                 }
 
-                if (modPlayer.IsRightHeld)
+                if (modPlayer.isRightHeld)
                 {
                     player.velocity.X += totalHorizontalFlightSpeed;
-                    m_rotationDir += Vector2.UnitX;
+                    mRotationDir += Vector2.UnitX;
                 }
-                else if (modPlayer.IsLeftHeld)
+                else if (modPlayer.isLeftHeld)
                 {
                     player.velocity.X -= totalHorizontalFlightSpeed;
-                    m_rotationDir -= Vector2.UnitX;
+                    mRotationDir -= Vector2.UnitX;
                 }
 
                 if (player.velocity.Length() > 0.5f)
                 {
-                    SpawnFlightDust(player, boostSpeed, FlightDustType, 0f);
+                    SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
                 }
 
                 if (Transformations.IsSSJ(player) && !Transformations.IsSSJG(player))
                 {
-                    FlightDustType = 170;
+                    flightDustType = 170;
                 }
                 else if (Transformations.IsLSSJ(player))
                 {
-                    FlightDustType = 107;
+                    flightDustType = 107;
                 }
                 else if (Transformations.IsSSJG(player))
                 {
-                    FlightDustType = 174;
+                    flightDustType = 174;
                 }
                 else if (Transformations.IsAnyKaioken(player))
                 {
-                    FlightDustType = 182;
+                    flightDustType = 182;
                 }
                 else
                 {
-                    FlightDustType = 267;
+                    flightDustType = 267;
                 }                
 
                 //calculate velocity
@@ -114,7 +114,7 @@ namespace DBZMOD
                 }                
 
                 //calculate rotation
-                float radRot = GetPlayerFlightRotation(m_rotationDir, player);
+                float radRot = GetPlayerFlightRotation(mRotationDir, player);
 
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
 
@@ -136,7 +136,7 @@ namespace DBZMOD
             }
 
             // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.
-            if (!modPlayer.IsFlying)
+            if (!modPlayer.isFlying)
             {
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, 0, 0.1f);
             }
@@ -160,7 +160,7 @@ namespace DBZMOD
                     }
                 }
             }
-            return modPlayer.IsHoldingKiWeapon && ((modPlayer.IsMouseLeftHeld && isExistingBeamFiring) || modPlayer.IsMouseRightHeld);
+            return modPlayer.isHoldingKiWeapon && ((modPlayer.isMouseLeftHeld && isExistingBeamFiring) || modPlayer.isMouseRightHeld);
         }
 
         public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)
@@ -170,7 +170,7 @@ namespace DBZMOD
             // since the player is mirrored, there's really only 3 ordinal positions we care about
             // up angle, no angle and down angle
             // we don't go straight up or down cos it looks weird as shit
-            switch (modPlayer.MouseWorldOctant)
+            switch (modPlayer.mouseWorldOctant)
             {
                 case -3:
                 case -2:
@@ -203,7 +203,7 @@ namespace DBZMOD
             return new Tuple<int, float>(octantDirection, octantPitch * 45f);
         }
 
-        public static float GetPlayerFlightRotation(Vector2 m_rotationDir, Player player)
+        public static float GetPlayerFlightRotation(Vector2 mRotationDir, Player player)
         {
             float radRot = 0f;
 
@@ -217,7 +217,7 @@ namespace DBZMOD
                 var octantDirection = directionInfo.Item1;
                 leanThrottle = directionInfo.Item2;
 
-                bool isPlayerHorizontal = m_rotationDir.X != 0;
+                bool isPlayerHorizontal = mRotationDir.X != 0;
                 bool isMouseAbove = leanThrottle < 0;
                 int dir = octantDirection;
                 if (dir != player.direction && player.whoAmI == Main.myPlayer)
@@ -234,15 +234,15 @@ namespace DBZMOD
                 else if (player.direction == -1)
                     radRot = MathHelper.ToRadians(-leanThrottle);
             }
-            else if (m_rotationDir != Vector2.Zero)
+            else if (mRotationDir != Vector2.Zero)
             {
-                m_rotationDir.Normalize();
-                radRot = (float)Math.Atan((m_rotationDir.X / m_rotationDir.Y));
-                if (m_rotationDir.Y < 0)
+                mRotationDir.Normalize();
+                radRot = (float)Math.Atan((mRotationDir.X / mRotationDir.Y));
+                if (mRotationDir.Y < 0)
                 {
-                    if (m_rotationDir.X > 0)
+                    if (mRotationDir.X > 0)
                         radRot += MathHelper.ToRadians(leanThrottle);
-                    else if (m_rotationDir.X < 0)
+                    else if (mRotationDir.X < 0)
                         radRot -= MathHelper.ToRadians(leanThrottle);
                     else
                     {

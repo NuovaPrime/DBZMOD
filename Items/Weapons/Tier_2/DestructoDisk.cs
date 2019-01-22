@@ -1,9 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,8 +22,8 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			item.autoReuse = false;
 			item.value = 4000;
 			item.rare = 2;
-            KiDrain = 40;
-			WeaponType = "Disk";
+            kiDrain = 40;
+			weaponType = "Disk";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DiscFire").WithPitchVariance(.3f);

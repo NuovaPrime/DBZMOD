@@ -1,10 +1,6 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Network;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -114,7 +110,7 @@ namespace DBZMOD.Tiles
         public override void PlaceInWorld(int i, int j, Item item)
         {
             var kiBeaconLocation = new Vector2(i * 16f, j * 16f);
-            DBZWorld.GetWorld().KiBeacons.Add(kiBeaconLocation);
+            DBZWorld.GetWorld().kiBeacons.Add(kiBeaconLocation);
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetworkHelper.playerSync.SendKiBeaconAdd(256, Main.myPlayer, kiBeaconLocation);
         }
@@ -122,7 +118,7 @@ namespace DBZMOD.Tiles
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             var kiBeaconLocation = new Vector2(i * 16f, j * 16f);
-            DBZWorld.GetWorld().KiBeacons.Remove(kiBeaconLocation);
+            DBZWorld.GetWorld().kiBeacons.Remove(kiBeaconLocation);
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetworkHelper.playerSync.SendKiBeaconRemove(256, Main.myPlayer, kiBeaconLocation);
         }

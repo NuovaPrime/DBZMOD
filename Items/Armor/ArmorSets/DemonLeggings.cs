@@ -27,10 +27,10 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.13f;
-            MyPlayer.ModPlayer(player).KiCrit += 9;
-            MyPlayer.ModPlayer(player).KiMax2 += 300;
-            MyPlayer.ModPlayer(player).KiRegen += 1;
+            MyPlayer.ModPlayer(player).kiDamage += 0.13f;
+            MyPlayer.ModPlayer(player).kiCrit += 9;
+            MyPlayer.ModPlayer(player).kiMax2 += 300;
+            MyPlayer.ModPlayer(player).kiRegen += 1;
             player.moveSpeed += 0.12f;
 
         }

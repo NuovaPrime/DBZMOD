@@ -1,6 +1,5 @@
 using Terraria;
 using Terraria.ModLoader;
-using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {
@@ -18,7 +17,7 @@ namespace DBZMOD.Prefixes
             if (item.modItem != null && item.modItem is KiItem)
             {
                 item.GetGlobalItem<DBZMODItem>().kiChangeBonus = -13;
-                ((KiItem)item.modItem).KiDrain *= 0.87f;
+                ((KiItem)item.modItem).kiDrain *= 0.87f;
             }
         }
 

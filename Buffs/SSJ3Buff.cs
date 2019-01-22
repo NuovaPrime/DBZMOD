@@ -1,6 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -12,27 +10,27 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2.9f;
-            SpeedMulti = 2.9f;
-            KiDrainBuffMulti = 1.95f;
-            KiDrainRate = 2.65f;
-            KiDrainRateWithMastery = 1.325f;
-            BaseDefenceBonus = 12;
+            damageMulti = 2.9f;
+            speedMulti = 2.9f;
+            kiDrainBuffMulti = 1.95f;
+            kiDrainRate = 2.65f;
+            kiDrainRateWithMastery = 1.325f;
+            baseDefenceBonus = 12;
             Description.SetDefault(AssembleTransBuffDescription() + "\n(Life drains when below 30% Max Ki)");
         }
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            bool isMastered = modPlayer.MasteryLevel3 >= 1f;
+            bool isMastered = modPlayer.masteryLevel3 >= 1f;
 
-            KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
+            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)
             {
-                HealthDrainRate = isMastered ? 10 : 20;
+                healthDrainRate = isMastered ? 10 : 20;
             } else
             {
-                HealthDrainRate = 0;
+                healthDrainRate = 0;
             }
             base.Update(player, ref buffIndex);
         }

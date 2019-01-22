@@ -1,14 +1,6 @@
-﻿using System;
-using System.Linq;
-using DBZMOD.Buffs;
-using DBZMOD;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace DBZMOD.UI
 {
@@ -16,12 +8,12 @@ namespace DBZMOD.UI
     {
         public static bool menuvisible = false;
 
-        private UIText titleText;
+        private UIText _titleText;
         public UIImage backPanelImage;
 
-        private UIText kiExperienceText;
+        private UIText _kiExperienceText;
 
-        private Player player;
+        private Player _player;
         public const float PADDINGX = 10f;
         public const float PADDINGY = 30f;
 
@@ -37,17 +29,17 @@ namespace DBZMOD.UI
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
             Append(backPanel);
 
-            backPanelImage = new UIImage(GFX.BackPanel);
-            backPanelImage.Width.Set(GFX.BackPanel.Width, 0f);
-            backPanelImage.Height.Set(GFX.BackPanel.Height, 0f);
+            backPanelImage = new UIImage(Gfx.backPanel);
+            backPanelImage.Width.Set(Gfx.backPanel.Width, 0f);
+            backPanelImage.Height.Set(Gfx.backPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
             backPanel.Append(backPanelImage);
-            float Row1_OffsetX = 0.0f;
+            float row1OffsetX = 0.0f;
 
-            InitText(ref titleText, "Progression Menu", 1, 55, -32, Color.White);
+            InitText(ref _titleText, "Progression Menu", 1, 55, -32, Color.White);
 
-            InitText(ref kiExperienceText, "Ki Experience: ???", 1, 0, 0, Color.Cyan);
+            InitText(ref _kiExperienceText, "Ki Experience: ???", 1, 0, 0, Color.Cyan);
 
             base.OnInitialize();
         }
@@ -67,7 +59,7 @@ namespace DBZMOD.UI
             {
                 if(modplayer.GetProgressionSystem() != null)
                 {
-                    kiExperienceText.SetText("Ki Experience: " + modplayer.GetProgressionSystem().GetKiExperience());
+                    _kiExperienceText.SetText("Ki Experience: " + modplayer.GetProgressionSystem().GetKiExperience());
                 }
             }
 

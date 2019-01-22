@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using Terraria;
 using Terraria.IO;
 using Terraria.ModLoader;
 
-namespace Config
+namespace DBZMOD.Config
 {
     static class ConfigModel
     {
-        static string ConfigPath = Path.Combine(Main.SavePath, "Mod Configs", "DBZMOD.json");
-        static Preferences Configuration = new Preferences(ConfigPath);
+        static string _configPath = Path.Combine(Main.SavePath, "Mod Configs", "DBZMOD.json");
+        static Preferences _configuration = new Preferences(_configPath);
 
-        public static bool IsChargeToggled = false;
+        public static bool isChargeToggled = false;
 
         public static void Load()
         {
@@ -31,9 +27,9 @@ namespace Config
         //Returns "true" if the config file was found and successfully loaded.
         static bool ReadConfig()
         {
-            if (Configuration.Load())
+            if (_configuration.Load())
             {
-                Configuration.Get("IsChargeToggled", ref IsChargeToggled);
+                _configuration.Get("IsChargeToggled", ref isChargeToggled);
                 return true;
             }
             return false;
@@ -42,9 +38,9 @@ namespace Config
         //Creates a config file. This will only be called if the config file doesn't exist yet or it's invalid. 
         static void CreateConfig()
         {
-            Configuration.Clear();
-            Configuration.Put("IsChargeToggled", IsChargeToggled);
-            Configuration.Save();
+            _configuration.Clear();
+            _configuration.Put("IsChargeToggled", isChargeToggled);
+            _configuration.Save();
         }
     }
 }

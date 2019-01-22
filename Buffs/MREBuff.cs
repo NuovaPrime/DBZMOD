@@ -1,7 +1,5 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using System;
 
 namespace DBZMOD.Buffs
 {
@@ -16,11 +14,11 @@ namespace DBZMOD.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer.ModPlayer(player).KiRegen += 1;
+            MyPlayer.ModPlayer(player).kiRegen += 1;
             player.lifeRegen += 2;
             player.statDefense += 7;
             player.lifeMagnet = true;
-            MyPlayer.ModPlayer(player).OrbGrabRange += 2;
+            MyPlayer.ModPlayer(player).orbGrabRange += 2;
         }
     }
 }

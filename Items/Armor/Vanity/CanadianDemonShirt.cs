@@ -23,7 +23,7 @@ namespace DBZMOD.Items.Armor.Vanity
             item.value = 64000;
             item.rare = 9;
             item.defense = 22;
-            PatreonName = "CanadianMRE";
+            patreonName = "CanadianMRE";
         }
 		public override void DrawHands(ref bool drawHands, ref bool drawArms)
         {
@@ -39,14 +39,14 @@ namespace DBZMOD.Items.Armor.Vanity
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Pressing `Armor Bonus` grants you Demonic Overdrive, granting infinite ki for a limited time.";
-            MyPlayer.ModPlayer(player).DemonBonus = true;
+            MyPlayer.ModPlayer(player).demonBonus = true;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
-            MyPlayer.ModPlayer(player).KiCrit += 20;
-            MyPlayer.ModPlayer(player).KiMax2 += 1000;
-            MyPlayer.ModPlayer(player).ChargeLimitAdd += 2;
+            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).kiCrit += 20;
+            MyPlayer.ModPlayer(player).kiMax2 += 1000;
+            MyPlayer.ModPlayer(player).chargeLimitAdd += 2;
 
         }
         public override void AddRecipes()

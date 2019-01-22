@@ -1,7 +1,5 @@
 using DBZMOD.Util;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
 {
@@ -13,22 +11,22 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2.25f;
-            SpeedMulti = 2.25f;
-            KiDrainBuffMulti = 1.625f;
-            KiDrainRate = 2;
-            KiDrainRateWithMastery = 1;
-            KaiokenLevel = 1;
-            BaseDefenceBonus = 8;
+            damageMulti = 2.25f;
+            speedMulti = 2.25f;
+            kiDrainBuffMulti = 1.625f;
+            kiDrainRate = 2;
+            kiDrainRateWithMastery = 1;
+            kaiokenLevel = 1;
+            baseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
+            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
 
-            KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
-            HealthDrainRate = GetHealthDrain(player);
+            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
+            healthDrainRate = GetHealthDrain(player);
             base.Update(player, ref buffIndex);
         }
 

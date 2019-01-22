@@ -1,15 +1,12 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
     public class SuperEnergyBarrageExplosion : ModProjectile
     {
-        private float SizeTimer;
+        private float _sizeTimer;
         public override void SetDefaults()
         {
             projectile.width = 120;
@@ -23,7 +20,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 60;
-            SizeTimer = 120;
+            _sizeTimer = 120;
         }
 		
         public override Color? GetAlpha(Color lightColor)
@@ -40,10 +37,10 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (SizeTimer > 0)
+            if (_sizeTimer > 0)
             {
-                projectile.scale = (SizeTimer / 120f) * 2;
-                SizeTimer--;
+                projectile.scale = (_sizeTimer / 120f) * 2;
+                _sizeTimer--;
             }
             else
             {

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Buffs;
+using DBZMOD.Config;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameInput;
@@ -11,13 +13,11 @@ using Terraria.ModLoader.IO;
 using Terraria.ID;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Utilities;
-using Config;
-using Network;
 using DBZMOD.Util;
 using DBZMOD.Models;
 using DBZMOD.Enums;
-using System.Linq;
 using DBZMOD.Effects.Animations.Aura;
+using DBZMOD.Network;
 using DBZMOD.Projectiles;
 
 namespace DBZMOD
@@ -26,13 +26,13 @@ namespace DBZMOD
     {
         #region Variables
         //Player vars
-        public float KiDamage;
-        public float KiKbAddition;
-        public float KiSpeedAddition;
-        public int KiCrit;
-        public int KiRegenTimer;
-        public int KiRegen;
-        public int KaiokenLevel = 0;
+        public float kiDamage;
+        public float kiKbAddition;
+        public float kiSpeedAddition;
+        public int kiCrit;
+        public int kiRegenTimer;
+        public int kiRegen;
+        public int kaiokenLevel = 0;
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
         // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
@@ -43,113 +43,113 @@ namespace DBZMOD
         }
 
         // ki max 2 is ki max from equipment and accessories. there's no point changing this value as it gets reset each frame.
-        public int KiMax2;
+        public int kiMax2;
 
         // progression upgrades increase KiMax3. This is the only value that can be changed to have an impact on ki max and does not reset.
-        public int KiMax3;
+        public int kiMax3;
 
         // ki max mult is a multiplier for ki that stacks multiplicatively with other KiMaxMult bonuses. It resets to 1f each frame.
-        public float KiMaxMult = 1f;
+        public float kiMaxMult = 1f;
 
         // made KiCurrent private forcing everyone to use a method that syncs to clients, centralizing ki increase/decrease logic.
         // 12/24/2018 changed Ki current to a float so that you could do more elaborate ki draining things and ki drain rates can be more consistent.
-        private float KiCurrent;
+        private float _kiCurrent;
 
-        public int KiChargeRate = 1;
-        public int OverloadMax = 100;
-        public int OverloadCurrent;
-        public int OverloadTimer;
+        public int kiChargeRate = 1;
+        public int overloadMax = 100;
+        public int overloadCurrent;
+        public int overloadTimer;
         public float chargeMoveSpeed;
 
         //Transformation vars
-        public bool IsTransforming;
-        public int SSJAuraBeamTimer;
+        public bool isTransforming;
+        public int ssjAuraBeamTimer;
         public bool hasSSJ1;
-        public int TransformCooldown;
-        public bool ASSJAchieved;
-        public bool USSJAchieved;
-        public bool SSJ2Achieved;
-        public bool SSJ3Achieved;
-        public bool LSSJAchieved = false;
-        public bool SSJGAchieved = false;
-        public int lssj2timer;
-        public bool LSSJ2Achieved = false;
-        public bool LSSJGAchieved = false;
-        public int RageCurrent = 0;
-        public int RageDecreaseTimer = 0;
-        public int FormUnlockChance;
-        public int OverallFormUnlockChance;
-        public bool IsOverloading;
+        public int transformCooldown;
+        public bool assjAchieved;
+        public bool ussjAchieved;
+        public bool ssj2Achieved;
+        public bool ssj3Achieved;
+        public bool lssjAchieved = false;
+        public bool ssjgAchieved = false;
+        public int lssj2Timer;
+        public bool lssj2Achieved = false;
+        public bool lssjgAchieved = false;
+        public int rageCurrent = 0;
+        public int rageDecreaseTimer = 0;
+        public int formUnlockChance;
+        public int overallFormUnlockChance;
+        public bool isOverloading;
         // public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
-        public static ModHotKey KaiokenKey;
-        public static ModHotKey EnergyCharge;
-        public static ModHotKey Transform;
-        public static ModHotKey PowerDown;
-        public static ModHotKey SpeedToggle;
-        public static ModHotKey QuickKi;
-        public static ModHotKey TransMenu;
-        public static ModHotKey InstantTransmission;
+        public static ModHotKey kaiokenKey;
+        public static ModHotKey energyCharge;
+        public static ModHotKey transform;
+        public static ModHotKey powerDown;
+        public static ModHotKey speedToggle;
+        public static ModHotKey quickKi;
+        public static ModHotKey transMenu;
+        public static ModHotKey instantTransmission;
         //public static ModHotKey ProgressionMenuKey;
-        public static ModHotKey FlyToggle;
-        public static ModHotKey ArmorBonus;
+        public static ModHotKey flyToggle;
+        public static ModHotKey armorBonus;
 
         //mastery vars
-        public float MasteryLevel1 = 0;
-        public bool MasteredMessage1 = false;
-        public float MasteryLevel2 = 0;
-        public bool MasteredMessage2 = false;
-        public float MasteryLevel3 = 0;
-        public bool MasteredMessage3 = false;
-        public float MasteryLevelGod = 0;
-        public bool MasteredMessageGod = false;
-        public float MasteryLevelBlue = 0;
-        public bool MasteredMessageBlue = false;
-        public float MasteryMaxFlight = 1;
-        public float MasteryLevelFlight = 0;
-        public int MasteryTimer = 0;
+        public float masteryLevel1 = 0;
+        public bool masteredMessage1 = false;
+        public float masteryLevel2 = 0;
+        public bool masteredMessage2 = false;
+        public float masteryLevel3 = 0;
+        public bool masteredMessage3 = false;
+        public float masteryLevelGod = 0;
+        public bool masteredMessageGod = false;
+        public float masteryLevelBlue = 0;
+        public bool masteredMessageBlue = false;
+        public float masteryMaxFlight = 1;
+        public float masteryLevelFlight = 0;
+        public int masteryTimer = 0;
 
         //Wish vars
         public const int POWER_WISH_MAXIMUM = 5;
-        public int PowerWishesLeft = 5;
-        public int ImmortalityWishesLeft = 1;
-        public int SkillWishesLeft = 3;
-        public int AwakeningWishesLeft = 3;
-        public int ImmortalityRevivesLeft = 0;
+        public int powerWishesLeft = 5;
+        public int immortalityWishesLeft = 1;
+        public int skillWishesLeft = 3;
+        public int awakeningWishesLeft = 3;
+        public int immortalityRevivesLeft = 0;
 
         //unsorted vars
         public int drawX;
         public int drawY;
-        public bool SSJ1Achieved;
+        public bool ssj1Achieved;
         public bool scouterT2;
         public bool scouterT3;
         public bool scouterT4;
         public bool scouterT5;
         public bool scouterT6;
-        public bool Fragment1;
-        public bool Fragment2;
-        public bool Fragment3;
-        public bool Fragment4;
-        public bool Fragment5;
-        public bool KaioFragment1;
-        public bool KaioFragment2;
-        public bool KaioFragment3;
-        public bool KaioFragment4;
-        public bool ChlorophyteHeadPieceActive;
-        public bool KaioAchieved;
-        public bool KiEssence1;
-        public bool KiEssence2;
-        public bool KiEssence3;
+        public bool fragment1;
+        public bool fragment2;
+        public bool fragment3;
+        public bool fragment4;
+        public bool fragment5;
+        public bool kaioFragment1;
+        public bool kaioFragment2;
+        public bool kaioFragment3;
+        public bool kaioFragment4;
+        public bool chlorophyteHeadPieceActive;
+        public bool kaioAchieved;
+        public bool kiEssence1;
+        public bool kiEssence2;
+        public bool kiEssence3;
         public bool turtleShell;
-        public bool KiEssence4;
-        public bool KiEssence5;
-        public bool DemonBonusActive;
+        public bool kiEssence4;
+        public bool kiEssence5;
+        public bool demonBonusActive;
         public bool spiritualEmblem;
-        public float KaiokenTimer = 0.0f;
+        public float kaiokenTimer = 0.0f;
         public bool kiLantern;
         public float bonusSpeedMultiplier = 1f;
-        public float KiDrainMulti;
+        public float kiDrainMulti;
         public bool diamondNecklace;
         public bool emeraldNecklace;
         public bool sapphireNecklace;
@@ -158,40 +158,40 @@ namespace DBZMOD
         public bool amethystNecklace;
         public bool rubyNecklace;
         public bool dragongemNecklace;
-        public bool IsCharging;
+        public bool isCharging;
         // bool used internally to handle managing effects
-        public bool WasCharging;
-        public int AuraSoundTimer;
-        public int ChargeLimitAdd;
+        public bool wasCharging;
+        public int auraSoundTimer;
+        public int chargeLimitAdd;
         //public static bool RealismMode = false;
-        public bool JungleMessage = false;
-        public bool HellMessage = false;
-        public bool EvilMessage = false;
-        public bool MushroomMessage = false;
-        public int KiOrbDropChance;
-        public bool IsHoldingKiWeapon;
+        public bool jungleMessage = false;
+        public bool hellMessage = false;
+        public bool evilMessage = false;
+        public bool mushroomMessage = false;
+        public int kiOrbDropChance;
+        public bool isHoldingKiWeapon;
         public bool wornGloves;
         public bool senzuBag;
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
         public string playerTrait = null;
-        public bool DemonBonus;
-        public int OrbGrabRange;
-        public int OrbHealAmount;
-        public bool IsFlying;
+        public bool demonBonus;
+        public int orbGrabRange;
+        public int orbHealAmount;
+        public bool isFlying;
 
-        public int FlightUsageAdd;
-        public float FlightSpeedAdd;
+        public int flightUsageAdd;
+        public float flightSpeedAdd;
         public bool earthenSigil;
         public bool earthenScarab;
         public bool radiantTotem;
-        public int ScarabChargeRateAdd;
-        public int ScarabChargeTimer;
+        public int scarabChargeRateAdd;
+        public int scarabChargeTimer;
         public bool flightUnlocked = false;
         public bool flightDampeningUnlocked = false;
         public bool flightUpgraded = false;
-        public int DemonBonusTimer;
+        public int demonBonusTimer;
         public bool hermitBonus;
         public bool spiritCharm;
         public bool zenkaiCharm;
@@ -210,8 +210,8 @@ namespace DBZMOD
         public bool crystalliteFlow;
         public bool crystalliteAlleviate;
         public float chargeTimerMaxAdd;
-        public int KiDrainAddition;
-        public float KaiokenDrainMulti;
+        public int kiDrainAddition;
+        public float kaiokenDrainMulti;
         public bool kaioCrystal;
         public bool luminousSectum;
         public bool infuserAmber;
@@ -222,11 +222,11 @@ namespace DBZMOD
         public bool infuserRuby;
         public bool infuserSapphire;
         public bool infuserTopaz;
-        public bool IsDashing;
-        public bool CanUseHeavyHit;
-        public bool CanUseFlurry;
-        public bool CanUseZanzoken;
-        public int BlockState;
+        public bool isDashing;
+        public bool canUseHeavyHit;
+        public bool canUseFlurry;
+        public bool canUseZanzoken;
+        public int blockState;
         public bool blackDiamondShell;
         public bool buldariumSigmite;
         public bool attunementBracers;
@@ -242,60 +242,60 @@ namespace DBZMOD
         public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
-        public bool FirstFourStarDBPickup = false;
-        public bool OneStarDBNearby = false;
-        public bool TwoStarDBNearby = false;
-        public bool ThreeStarDBNearby = false;
-        public bool FourStarDBNearby = false;
-        public bool FiveStarDBNearby = false;
-        public bool SixStarDBNearby = false;
-        public bool SevenStarDBNearby = false;
-        public bool WishActive = false;
-        public bool IsHoldingDragonRadarMk1 = false;
-        public bool IsHoldingDragonRadarMk2 = false;
-        public bool IsHoldingDragonRadarMk3 = false;
-        public bool IsInstantTransmission1Unlocked = false;
-        public bool IsInstantTransmission2Unlocked = false;
-        public bool IsInstantTransmission3Unlocked = false;        
-        public KeyValuePair<uint, SoundEffectInstance> AuraSoundInfo;
+        public bool firstFourStarDbPickup = false;
+        public bool oneStarDbNearby = false;
+        public bool twoStarDbNearby = false;
+        public bool threeStarDbNearby = false;
+        public bool fourStarDbNearby = false;
+        public bool fiveStarDbNearby = false;
+        public bool sixStarDbNearby = false;
+        public bool sevenStarDbNearby = false;
+        public bool wishActive = false;
+        public bool isHoldingDragonRadarMk1 = false;
+        public bool isHoldingDragonRadarMk2 = false;
+        public bool isHoldingDragonRadarMk3 = false;
+        public bool isInstantTransmission1Unlocked = false;
+        public bool isInstantTransmission2Unlocked = false;
+        public bool isInstantTransmission3Unlocked = false;        
+        public KeyValuePair<uint, SoundEffectInstance> auraSoundInfo;
 
         // helper int tracks which player my local player is playing audio for
         // useful for preventing the mod from playing too many sounds
-        public int PlayerIndexWithLocalAudio = -1;
+        public int playerIndexWithLocalAudio = -1;
 
         // animation helper fields
-        public int LightningFrameTimer;
-        public int TransformationFrameTimer;
-        public bool IsTransformationAnimationPlaying = false;
+        public int lightningFrameTimer;
+        public int transformationFrameTimer;
+        public bool isTransformationAnimationPlaying = false;
 
         // bools used to apply transformation debuffs appropriately
-        public bool IsKaioken;
-        public bool WasKaioken;
-        public bool IsTransformed;
-        public bool WasTransformed;
+        public bool isKaioken;
+        public bool wasKaioken;
+        public bool isTransformed;
+        public bool wasTransformed;
 
-        public int MouseWorldOctant = -1;
+        public int mouseWorldOctant = -1;
 
-        public bool IsMassiveBlastCharging;
-        public bool IsMassiveBlastInUse;
+        public bool isMassiveBlastCharging;
+        public bool isMassiveBlastInUse;
 
         // Aura tracking to play audio and stuff.
-        public AuraAnimationInfo PreviousAura;
-        public AuraAnimationInfo CurrentAura;
+        public AuraAnimationInfo previousAura;
+        public AuraAnimationInfo currentAura;
         #endregion
 
         #region Syncable Controls
-        public bool IsMouseRightHeld = false;
-        public bool IsMouseLeftHeld = false;
-        public bool IsLeftHeld = false;
-        public bool IsRightHeld = false;
-        public bool IsUpHeld = false;
-        public bool IsDownHeld = false;
+        public bool isMouseRightHeld = false;
+        public bool isMouseLeftHeld = false;
+        public bool isLeftHeld = false;
+        public bool isRightHeld = false;
+        public bool isUpHeld = false;
+        public bool isDownHeld = false;
         #endregion
 
         #region Classes
-        ProgressionSystem m_progressionSystem = new ProgressionSystem();
-        FistSystem m_fistSystem = new FistSystem();
+        ProgressionSystem _mProgressionSystem = new ProgressionSystem();
+        FistSystem _mFistSystem = new FistSystem();
         #endregion
 
         public override void PlayerDisconnect(Player player)
@@ -325,7 +325,7 @@ namespace DBZMOD
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
         public int OverallKiMax()
         {
-            return (int)Math.Ceiling(KiMax() * KiMaxMult + KiMax2 + KiMax3);
+            return (int)Math.Ceiling(KiMax() * kiMaxMult + kiMax2 + kiMax3);
         }
 
         public const float FORM_MASTERY_GAIN_PER_TICK = 0.0000058f;
@@ -334,56 +334,56 @@ namespace DBZMOD
         public void AddKi(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
-            SetKi(KiCurrent + kiAmount);
+            SetKi(_kiCurrent + kiAmount);
         }
         
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             if (isFormDrain)
             {
-                if (Transformations.IsSSJ1(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsSSJ1(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
+                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsASSJ(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsAssj(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
+                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsUSSJ(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsUssj(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromFormDrain(MasteryLevel1);
+                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsSSJ2(player) && MasteryLevel2 < 1.0f)
+                if (Transformations.IsSSJ2(player) && masteryLevel2 < 1.0f)
                 {
-                    MasteryLevel2 = GetMasteryIncreaseFromFormDrain(MasteryLevel2);
+                    masteryLevel2 = GetMasteryIncreaseFromFormDrain(masteryLevel2);
                 }
-                if (Transformations.IsSSJ3(player) && MasteryLevel3 < 1.0f)
+                if (Transformations.IsSSJ3(player) && masteryLevel3 < 1.0f)
                 {
-                    MasteryLevel3 = GetMasteryIncreaseFromFormDrain(MasteryLevel3);
+                    masteryLevel3 = GetMasteryIncreaseFromFormDrain(masteryLevel3);
                 }
             }
 
             if (isWeaponDrain && kiAmount < 0)
             {
-                if (Transformations.IsSSJ1(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsSSJ1(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsASSJ(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsAssj(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsUSSJ(player) && MasteryLevel1 < 1.0f)
+                if (Transformations.IsUssj(player) && masteryLevel1 < 1.0f)
                 {
-                    MasteryLevel1 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel1, kiAmount);
+                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsSSJ2(player) && MasteryLevel2 < 1.0f)
+                if (Transformations.IsSSJ2(player) && masteryLevel2 < 1.0f)
                 {
-                    MasteryLevel2 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel2, kiAmount);
+                    masteryLevel2 = GetMasteryIncreaseFromWeaponDrain(masteryLevel2, kiAmount);
                 }
-                if (Transformations.IsSSJ3(player) && MasteryLevel3 < 1.0f)
+                if (Transformations.IsSSJ3(player) && masteryLevel3 < 1.0f)
                 {
-                    MasteryLevel3 = GetMasteryIncreaseFromWeaponDrain(MasteryLevel3, kiAmount);
+                    masteryLevel3 = GetMasteryIncreaseFromWeaponDrain(masteryLevel3, kiAmount);
                 }
             }
         }
@@ -418,24 +418,24 @@ namespace DBZMOD
             // this might seem weird, but remote clients aren't allowed to set eachothers ki. This prevents desync issues.
             if (player.whoAmI == Main.myPlayer || isSync)
             {
-                KiCurrent = kiAmount;
+                _kiCurrent = kiAmount;
             }
         }
 
         // return the amount of ki the player has, readonly
         public float GetKi()
         {
-            return KiCurrent;
+            return _kiCurrent;
         }
 
         public bool IsKiDepleted()
         {
-            return KiCurrent <= 0;
+            return _kiCurrent <= 0;
         }
 
         public bool HasKi(float kiAmount)
         {
-            return KiCurrent >= kiAmount;
+            return _kiCurrent >= kiAmount;
         }
 
         public const int BASE_KI_MAX = 1000;
@@ -443,11 +443,11 @@ namespace DBZMOD
         public int GetKiMaxFromFragments()
         {
             var kiMaxValue = BASE_KI_MAX;
-            kiMaxValue += (Fragment1 ? 1000 : 0);
-            kiMaxValue += (Fragment2 ? 2000 : 0);
-            kiMaxValue += (Fragment3 ? 2000 : 0);
-            kiMaxValue += (Fragment4 ? 2000 : 0);
-            kiMaxValue += (Fragment5 ? 2000 : 0);
+            kiMaxValue += (fragment1 ? 1000 : 0);
+            kiMaxValue += (fragment2 ? 2000 : 0);
+            kiMaxValue += (fragment3 ? 2000 : 0);
+            kiMaxValue += (fragment4 ? 2000 : 0);
+            kiMaxValue += (fragment5 ? 2000 : 0);
             return kiMaxValue;
         }
 
@@ -468,7 +468,7 @@ namespace DBZMOD
 
         public int GetPowerWishesUsed()
         {
-            return POWER_WISH_MAXIMUM - PowerWishesLeft;
+            return POWER_WISH_MAXIMUM - powerWishesLeft;
         }
 
         public float PowerWishMulti()
@@ -484,7 +484,7 @@ namespace DBZMOD
             player.magicDamage *= PowerWishMulti();
             player.minionDamage *= PowerWishMulti();
             player.thrownDamage *= PowerWishMulti();
-            KiDamage *= PowerWishMulti();
+            kiDamage *= PowerWishMulti();
             if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
@@ -509,26 +509,26 @@ namespace DBZMOD
 
         public override void PostUpdate()
         {
-            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (lssjAchieved && !lssj2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
-                lssj2timer++;
-                if (lssj2timer >= 300)
+                lssj2Timer++;
+                if (lssj2Timer >= 300)
                 {
                     if (Main.rand.Next(8) == 0)
                     {
                         Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
                         player.statLife = player.statLifeMax2 / 2;
                         player.HealEffect(player.statLifeMax2 / 2);
-                        LSSJ2Achieved = true;
-                        IsTransforming = true;
+                        lssj2Achieved = true;
+                        isTransforming = true;
                         LSSJ2Transformation();
-                        UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
-                        lssj2timer = 0;
+                        UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                        lssj2Timer = 0;
                         Transformations.EndTransformations(player, true);
                     }
-                    else if (lssj2timer >= 300)
+                    else if (lssj2Timer >= 300)
                     {
-                        lssj2timer = 0;
+                        lssj2Timer = 0;
                         Main.NewText(LSSJ2TextSelect(), Color.Red);
                     }
                 }
@@ -543,93 +543,93 @@ namespace DBZMOD
                 player.ClearBuff(mod.BuffType("KiLanternBuff"));
             }
 
-            if (IsTransforming)
+            if (isTransforming)
             {
-                SSJAuraBeamTimer++;
+                ssjAuraBeamTimer++;
             }
 
-            if (SSJ1Achieved)
+            if (ssj1Achieved)
             {
-                UI.TransMenu.SSJ1On = true;
+                UI.TransMenu.ssj1On = true;
             }
 
-            if (SSJ2Achieved)
+            if (ssj2Achieved)
             {
-                UI.TransMenu.SSJ2On = true;
+                UI.TransMenu.ssj2On = true;
             }
 
-            if (SSJ3Achieved)
+            if (ssj3Achieved)
             {
-                UI.TransMenu.SSJ3On = true;
+                UI.TransMenu.ssj3On = true;
             }
 
             if (Transformations.IsPlayerTransformed(player))
             {
-                if (!(Transformations.IsKaioken(player) && KaiokenLevel == 5) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
+                if (!(Transformations.IsKaioken(player) && kaiokenLevel == 5) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
                 {
-                    LightningFrameTimer++;
+                    lightningFrameTimer++;
                 }
                 else
                 {
-                    LightningFrameTimer += 2;
+                    lightningFrameTimer += 2;
                 }
             }
 
-            if (LightningFrameTimer >= 15)
+            if (lightningFrameTimer >= 15)
             {
-                LightningFrameTimer = 0;
+                lightningFrameTimer = 0;
             }
 
             if (!Transformations.IsPlayerTransformed(player))
             {
-                KiDrainAddition = 0;
+                kiDrainAddition = 0;
             }
 
             if (Transformations.IsAnyKaioken(player))
             {
-                KaiokenTimer += 1.5f;
+                kaiokenTimer += 1.5f;
             }
 
             #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                if (MasteryLevel1 >= 0.5f && !ASSJAchieved)
+                if (masteryLevel1 >= 0.5f && !assjAchieved)
                 {
-                    ASSJAchieved = true;
+                    assjAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
                         "\nHold charge and transform while in SSJ1 " +
                         "\nto ascend.", 232, 242, 50);
                 }
-                else if (MasteryLevel1 >= 0.75f && !USSJAchieved)
+                else if (masteryLevel1 >= 0.75f && !ussjAchieved)
                 {
-                    USSJAchieved = true;
+                    ussjAchieved = true;
                     Main.NewText("Your SSJ1 Mastery has been upgraded." +
                         "\nHold charge and transform while in ASSJ " +
                         "\nto ascend.", 232, 242, 50);
                 }
-                else if (MasteryLevel1 >= 1f && !MasteredMessage1)
+                else if (masteryLevel1 >= 1f && !masteredMessage1)
                 {
-                    MasteredMessage1 = true;
+                    masteredMessage1 = true;
                     Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
                 }
-                else if (MasteryLevel2 >= 1f && !MasteredMessage2)
+                else if (masteryLevel2 >= 1f && !masteredMessage2)
                 {
-                    MasteredMessage2 = true;
+                    masteredMessage2 = true;
                     Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
                 }
-                else if (MasteryLevel3 >= 1f && !MasteredMessage3)
+                else if (masteryLevel3 >= 1f && !masteredMessage3)
                 {
-                    MasteredMessage3 = true;
+                    masteredMessage3 = true;
                     Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
                 }
-                else if (MasteryLevelGod >= 1f && !MasteredMessageGod)
+                else if (masteryLevelGod >= 1f && !masteredMessageGod)
                 {
-                    MasteredMessageGod = true;
+                    masteredMessageGod = true;
                     Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
                 }
-                else if (MasteryLevelBlue >= 1f && !MasteredMessageBlue)
+                else if (masteryLevelBlue >= 1f && !masteredMessageBlue)
                 {
-                    MasteredMessageBlue = true;
+                    masteredMessageBlue = true;
                     Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
                 }
             }
@@ -638,7 +638,7 @@ namespace DBZMOD
 
             if (adamantiteBonus)
             {
-                KiDamage += 7;
+                kiDamage += 7;
             }
 
             if (!traitChecked)
@@ -646,16 +646,16 @@ namespace DBZMOD
                 ChooseTrait();
             }
 
-            if (LSSJAchieved)
+            if (lssjAchieved)
             {
-                UI.TransMenu.LSSJOn = true;
+                UI.TransMenu.lssjOn = true;
             }
 
-            if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
+            if (IsPlayerLegendary() && !lssjAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
-            else if (IsPlayerLegendary() && LSSJAchieved)
+            else if (IsPlayerLegendary() && lssjAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
@@ -666,24 +666,24 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("ProdigyTrait"), 3);
             }
 
-            if (KiRegen >= 1)
+            if (kiRegen >= 1)
             {
-                KiRegenTimer++;
+                kiRegenTimer++;
             }
 
-            if (KiRegenTimer > 2)
+            if (kiRegenTimer > 2)
             {
-                AddKi(KiRegen, false, false);
-                KiRegenTimer = 0;
+                AddKi(kiRegen, false, false);
+                kiRegenTimer = 0;
             }
 
-            if (DemonBonusActive)
+            if (demonBonusActive)
             {
-                DemonBonusTimer++;
-                if (DemonBonusTimer > 300)
+                demonBonusTimer++;
+                if (demonBonusTimer > 300)
                 {
-                    DemonBonusActive = false;
-                    DemonBonusTimer = 0;
+                    demonBonusActive = false;
+                    demonBonusTimer = 0;
                     player.AddBuff(mod.BuffType("ArmorCooldown"), 3600);
                 }
             }
@@ -691,21 +691,21 @@ namespace DBZMOD
             if (player.dead && Transformations.IsPlayerTransformed(player))
             {
                 Transformations.EndTransformations(player, true);
-                IsTransforming = false;
+                isTransforming = false;
             }
 
-            if (RageCurrent > 5)
+            if (rageCurrent > 5)
             {
-                RageCurrent = 5;
+                rageCurrent = 5;
             }
 
             HandleOverloadCounters();
 
-            OverallFormUnlockChance = FormUnlockChance - RageCurrent;
+            overallFormUnlockChance = formUnlockChance - rageCurrent;
 
-            if (OverallFormUnlockChance < 2)
+            if (overallFormUnlockChance < 2)
             {
-                OverallFormUnlockChance = 2;
+                overallFormUnlockChance = 2;
             }
 
             if (!player.HasBuff(mod.BuffType("ZenkaiBuff")) && zenkaiCharmActive)
@@ -713,7 +713,7 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
             }
 
-            if (IsDashing)
+            if (isDashing)
             {
                 player.invis = true;
             }
@@ -721,9 +721,9 @@ namespace DBZMOD
             HandleBlackFusionMultiplier();
 
             // neuters flight if the player gets immobilized. Note the lack of Katchin Feet buff.
-            if (IsPlayerImmobilized() && IsFlying)
+            if (IsPlayerImmobilized() && isFlying)
             {
-                IsFlying = false;
+                isFlying = false;
             }
 
             HandleMouseOctantAndSyncTracking();
@@ -736,32 +736,32 @@ namespace DBZMOD
 
             // aura frame effects moved out of draw pass to avoid being tied to frame rate!
             
-            CurrentAura = AnimationHelper.GetAuraEffectOnPlayer(this);
+            currentAura = AnimationHelper.GetAuraEffectOnPlayer(this);
 
             // save the charging aura for last, and only add it to the draw layer if no other auras are firing
-            if (IsCharging)
+            if (isCharging)
             {
-                if (!WasCharging)
+                if (!wasCharging)
                 {
-                    var chargeAuraEffects = AuraAnimations.CreateChargeAura;
+                    var chargeAuraEffects = AuraAnimations.createChargeAura;
                     HandleAuraStartupSound(chargeAuraEffects, true);
                 }
             }
 
-            if (CurrentAura != PreviousAura)
+            if (currentAura != previousAura)
             {
-                AuraSoundInfo = SoundUtil.KillTrackedSound(AuraSoundInfo);
-                HandleAuraStartupSound(CurrentAura, false);
+                auraSoundInfo = SoundUtil.KillTrackedSound(auraSoundInfo);
+                HandleAuraStartupSound(currentAura, false);
                 // reset aura frame and audio timers to 0, this is important
-                AuraSoundTimer = 0;
-                AuraFrameTimer = 0;
+                auraSoundTimer = 0;
+                auraFrameTimer = 0;
             }
 
-            IncrementAuraFrameTimers(CurrentAura);
-            HandleAuraLoopSound(CurrentAura);
+            IncrementAuraFrameTimers(currentAura);
+            HandleAuraLoopSound(currentAura);
 
-            WasCharging = IsCharging;
-            PreviousAura = CurrentAura;
+            wasCharging = isCharging;
+            previousAura = currentAura;
 
             CheckPlayerForTransformationStateDebuffApplication();
 
@@ -774,7 +774,7 @@ namespace DBZMOD
             HandleKaiokenDefenseDebuff();
 
             // if the player is in mid-transformation, totally neuter horizontal velocity
-            if (IsTransformationAnimationPlaying)
+            if (isTransformationAnimationPlaying)
                 player.velocity = new Vector2(0, player.velocity.Y);
         }
 
@@ -782,9 +782,9 @@ namespace DBZMOD
         {
             if (aura == null)
                 return;
-            if (aura.StartupSoundName != null)
+            if (aura.startupSoundName != null)
             {
-                SoundUtil.PlayCustomSound(aura.StartupSoundName, player, 0.7f, 0.1f);
+                SoundUtil.PlayCustomSound(aura.startupSoundName, player, 0.7f, 0.1f);
             }
         }
 
@@ -792,29 +792,29 @@ namespace DBZMOD
         {
             if (aura == null)
                 return;
-            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.IsFormAura);
+            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.isFormAura);
             if (shouldPlayAudio)
             {
-                if (AuraSoundTimer == 0)
-                    AuraSoundInfo = SoundUtil.PlayCustomSound(aura.LoopSoundName, player, .7f, 0f);
-                AuraSoundTimer++;
-                if (AuraSoundTimer > aura.LoopSoundDuration)
-                    AuraSoundTimer = 0;
+                if (auraSoundTimer == 0)
+                    auraSoundInfo = SoundUtil.PlayCustomSound(aura.loopSoundName, player, .7f, 0f);
+                auraSoundTimer++;
+                if (auraSoundTimer > aura.loopSoundDuration)
+                    auraSoundTimer = 0;
             }
 
             // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(AuraSoundInfo, player.position);
+            SoundUtil.UpdateTrackedSound(auraSoundInfo, player.position);
         }
 
         public bool AllDragonBallsNearby()
         {
-            return OneStarDBNearby && TwoStarDBNearby && ThreeStarDBNearby && FourStarDBNearby && FiveStarDBNearby && SixStarDBNearby && SevenStarDBNearby;
+            return oneStarDbNearby && twoStarDbNearby && threeStarDbNearby && fourStarDbNearby && fiveStarDbNearby && sixStarDbNearby && sevenStarDbNearby;
         }
 
         private void HandleOverloadCounters()
         {
             // clamp overload current values to 0/max
-            OverloadCurrent = (int)Math.Max(0, Math.Min(OverloadMax, OverloadCurrent));
+            overloadCurrent = (int)Math.Max(0, Math.Min(overloadMax, overloadCurrent));
 
             // does the player have the legendary trait
             if (IsPlayerLegendary())
@@ -822,21 +822,21 @@ namespace DBZMOD
                 // is the player in a legendary transform step (that isn't SSJ1)?
                 if (Transformations.IsLSSJ(player) && !Transformations.IsSSJ1(player))
                 {
-                    OverloadTimer++;
-                    if (OverloadTimer >= 60)
+                    overloadTimer++;
+                    if (overloadTimer >= 60)
                     {
-                        OverloadCurrent += 1;
-                        OverloadTimer = 0;
+                        overloadCurrent += 1;
+                        overloadTimer = 0;
                     }
                 }
                 else
                 {
                     // player isn't in legendary form, cools the player overload down
-                    OverloadTimer++;
-                    if (OverloadTimer >= 30)
+                    overloadTimer++;
+                    if (overloadTimer >= 30)
                     {
-                        OverloadCurrent -= 2;
-                        OverloadTimer = 0;
+                        overloadCurrent -= 2;
+                        overloadTimer = 0;
                     }
                 }
             }
@@ -861,7 +861,7 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
-            if(AllDragonBallsNearby() && !WishActive)
+            if(AllDragonBallsNearby() && !wishActive)
             {
                 int soundtimer = 0;
                 soundtimer++;
@@ -900,7 +900,7 @@ namespace DBZMOD
                 player.magicDamage *= blackFusionIncrease;
                 player.minionDamage *= blackFusionIncrease;
                 player.thrownDamage *= blackFusionIncrease;
-                KiDamage *= blackFusionIncrease;
+                kiDamage *= blackFusionIncrease;
                 player.statDefense *= (int)blackFusionIncrease;
                 if (DBZMOD.instance.thoriumLoaded)
                 {
@@ -934,7 +934,7 @@ namespace DBZMOD
         {
             if (Transformations.IsAnyKaioken(player))
             {
-                float defenseMultiplier = 1f - (KaiokenLevel * 0.05f);
+                float defenseMultiplier = 1f - (kaiokenLevel * 0.05f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
             }
         }
@@ -946,7 +946,7 @@ namespace DBZMOD
                 return;
 
             // this is why :p
-            MouseWorldOctant = GetMouseWorldOctantFromRadians(GetMouseRadiansOrDefault());
+            mouseWorldOctant = GetMouseWorldOctantFromRadians(GetMouseRadiansOrDefault());
         }
 
         public float GetMouseRadiansOrDefault()
@@ -973,7 +973,7 @@ namespace DBZMOD
                         var charge = proj.modProjectile as BaseBeamCharge;
                         if (charge.IsSustainingFire)
                         {
-                            mouseVector = charge.MyProjectile.velocity;
+                            mouseVector = charge.myProjectile.velocity;
                         }
                         else
                         {
@@ -1019,43 +1019,43 @@ namespace DBZMOD
         #region Sync
         // these initialize to null so that even bools will trigger an unset one-time sync on initialization.
         // this forces newly connected players to sync their information to everyone already connected.
-        public int? SyncKiMax2;
-        public int? SyncKiMax3;
-        public float? SyncKiMaxMult;
-        public bool? SyncIsTransforming;
-        public bool? SyncFragment1;
-        public bool? SyncFragment2;
-        public bool? SyncFragment3;
-        public bool? SyncFragment4;
-        public bool? SyncFragment5;
-        public bool? SyncIsCharging;
-        public bool? SyncJungleMessage;
-        public bool? SyncHellMessage;
-        public bool? SyncEvilMessage;
-        public bool? SyncIsHoldingKiWeapon;
-        public bool? SyncTraitChecked;
-        public string SyncPlayerTrait;
-        public bool? SyncIsFlying;
-        public bool? SyncIsTransformationAnimationPlaying;
-        public float? SyncKiCurrent;
-        public float? SyncChargeMoveSpeed;
-        public float? SyncBonusSpeedMultiplier;
-        public bool? SyncWishActive;
-        public int? SyncKaiokenLevel;
-        public int? SyncMouseWorldOctant;
-        public int? SyncPowerWishesLeft;
-        public int? SyncHeldProj;
-        public bool? SyncIsMassiveBlastCharging;
+        public int? syncKiMax2;
+        public int? syncKiMax3;
+        public float? syncKiMaxMult;
+        public bool? syncIsTransforming;
+        public bool? syncFragment1;
+        public bool? syncFragment2;
+        public bool? syncFragment3;
+        public bool? syncFragment4;
+        public bool? syncFragment5;
+        public bool? syncIsCharging;
+        public bool? syncJungleMessage;
+        public bool? syncHellMessage;
+        public bool? syncEvilMessage;
+        public bool? syncIsHoldingKiWeapon;
+        public bool? syncTraitChecked;
+        public string syncPlayerTrait;
+        public bool? syncIsFlying;
+        public bool? syncIsTransformationAnimationPlaying;
+        public float? syncKiCurrent;
+        public float? syncChargeMoveSpeed;
+        public float? syncBonusSpeedMultiplier;
+        public bool? syncWishActive;
+        public int? syncKaiokenLevel;
+        public int? syncMouseWorldOctant;
+        public int? syncPowerWishesLeft;
+        public int? syncHeldProj;
+        public bool? syncIsMassiveBlastCharging;
 
         // triggerset sync has its own method, but dropping these here anyway
-        public bool? SyncTriggerSetMouseLeft;
-        public bool? SyncTriggerSetMouseRight;
-        public bool? SyncTriggerSetLeft;
-        public bool? SyncTriggerSetRight;
-        public bool? SyncTriggerSetUp;
-        public bool? SyncTriggerSetDown;
+        public bool? syncTriggerSetMouseLeft;
+        public bool? syncTriggerSetMouseRight;
+        public bool? syncTriggerSetLeft;
+        public bool? syncTriggerSetRight;
+        public bool? syncTriggerSetUp;
+        public bool? syncTriggerSetDown;
 
-        public int? SyncDir;
+        public int? syncDir;
 
         public void CheckSyncState()
         {
@@ -1067,172 +1067,172 @@ namespace DBZMOD
             if (Main.myPlayer != player.whoAmI)
                 return;
 
-            if (SyncKiMax2 != KiMax2)
+            if (syncKiMax2 != kiMax2)
             {
-                NetworkHelper.playerSync.SendChangedKiMax2(256, player.whoAmI, player.whoAmI, KiMax2);
-                SyncKiMax2 = KiMax2;
+                NetworkHelper.playerSync.SendChangedKiMax2(256, player.whoAmI, player.whoAmI, kiMax2);
+                syncKiMax2 = kiMax2;
             }
 
-            if (SyncKiMax3 != KiMax3)
+            if (syncKiMax3 != kiMax3)
             {
-                NetworkHelper.playerSync.SendChangedKiMax3(256, player.whoAmI, player.whoAmI, KiMax3);
-                SyncKiMax3 = KiMax3;
+                NetworkHelper.playerSync.SendChangedKiMax3(256, player.whoAmI, player.whoAmI, kiMax3);
+                syncKiMax3 = kiMax3;
             }
 
-            if (SyncKiMaxMult != KiMaxMult)
+            if (syncKiMaxMult != kiMaxMult)
             {
-                NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, KiMaxMult);
-                SyncKiMaxMult = KiMaxMult;
+                NetworkHelper.playerSync.SendChangedKiMaxMult(256, player.whoAmI, player.whoAmI, kiMaxMult);
+                syncKiMaxMult = kiMaxMult;
             }
 
-            if (SyncIsTransforming != IsTransforming)
+            if (syncIsTransforming != isTransforming)
             {
-                NetworkHelper.playerSync.SendChangedIsTransforming(256, player.whoAmI, player.whoAmI, IsTransforming);
-                SyncIsTransforming = IsTransforming;
+                NetworkHelper.playerSync.SendChangedIsTransforming(256, player.whoAmI, player.whoAmI, isTransforming);
+                syncIsTransforming = isTransforming;
             }
 
-            if (SyncFragment1 != Fragment1)
+            if (syncFragment1 != fragment1)
             {
-                NetworkHelper.playerSync.SendChangedFragment1(256, player.whoAmI, player.whoAmI, Fragment1);
-                SyncFragment1 = Fragment1;
+                NetworkHelper.playerSync.SendChangedFragment1(256, player.whoAmI, player.whoAmI, fragment1);
+                syncFragment1 = fragment1;
             }
 
-            if (SyncFragment2 != Fragment2)
+            if (syncFragment2 != fragment2)
             {
-                NetworkHelper.playerSync.SendChangedFragment2(256, player.whoAmI, player.whoAmI, Fragment2);
-                SyncFragment2 = Fragment2;
+                NetworkHelper.playerSync.SendChangedFragment2(256, player.whoAmI, player.whoAmI, fragment2);
+                syncFragment2 = fragment2;
             }
 
-            if (SyncFragment3 != Fragment3)
+            if (syncFragment3 != fragment3)
             {
-                NetworkHelper.playerSync.SendChangedFragment3(256, player.whoAmI, player.whoAmI, Fragment3);
-                SyncFragment3 = Fragment3;
+                NetworkHelper.playerSync.SendChangedFragment3(256, player.whoAmI, player.whoAmI, fragment3);
+                syncFragment3 = fragment3;
             }
 
-            if (SyncFragment4 != Fragment4)
+            if (syncFragment4 != fragment4)
             {
-                NetworkHelper.playerSync.SendChangedFragment4(256, player.whoAmI, player.whoAmI, Fragment4);
-                SyncFragment4 = Fragment4;
+                NetworkHelper.playerSync.SendChangedFragment4(256, player.whoAmI, player.whoAmI, fragment4);
+                syncFragment4 = fragment4;
             }
 
-            if (SyncFragment5 != Fragment5)
+            if (syncFragment5 != fragment5)
             {
-                NetworkHelper.playerSync.SendChangedFragment5(256, player.whoAmI, player.whoAmI, Fragment5);
-                SyncFragment5 = Fragment5;
+                NetworkHelper.playerSync.SendChangedFragment5(256, player.whoAmI, player.whoAmI, fragment5);
+                syncFragment5 = fragment5;
             }
 
-            if (SyncIsCharging != IsCharging)
+            if (syncIsCharging != isCharging)
             {
-                NetworkHelper.playerSync.SendChangedIsCharging(256, player.whoAmI, player.whoAmI, IsCharging);
-                SyncIsCharging = IsCharging;
+                NetworkHelper.playerSync.SendChangedIsCharging(256, player.whoAmI, player.whoAmI, isCharging);
+                syncIsCharging = isCharging;
             }
 
-            if (SyncJungleMessage != JungleMessage)
+            if (syncJungleMessage != jungleMessage)
             {
-                NetworkHelper.playerSync.SendChangedJungleMessage(256, player.whoAmI, player.whoAmI, JungleMessage);
-                SyncJungleMessage = JungleMessage;
+                NetworkHelper.playerSync.SendChangedJungleMessage(256, player.whoAmI, player.whoAmI, jungleMessage);
+                syncJungleMessage = jungleMessage;
             }
 
-            if (SyncHellMessage != HellMessage)
+            if (syncHellMessage != hellMessage)
             {
-                NetworkHelper.playerSync.SendChangedHellMessage(256, player.whoAmI, player.whoAmI, HellMessage);
-                SyncHellMessage = HellMessage;
+                NetworkHelper.playerSync.SendChangedHellMessage(256, player.whoAmI, player.whoAmI, hellMessage);
+                syncHellMessage = hellMessage;
             }
 
-            if (SyncEvilMessage != EvilMessage)
+            if (syncEvilMessage != evilMessage)
             {
-                NetworkHelper.playerSync.SendChangedEvilMessage(256, player.whoAmI, player.whoAmI, EvilMessage);
-                SyncEvilMessage = EvilMessage;
+                NetworkHelper.playerSync.SendChangedEvilMessage(256, player.whoAmI, player.whoAmI, evilMessage);
+                syncEvilMessage = evilMessage;
             }
 
-            if (SyncIsHoldingKiWeapon != IsHoldingKiWeapon)
+            if (syncIsHoldingKiWeapon != isHoldingKiWeapon)
             {
-                NetworkHelper.playerSync.SendChangedIsHoldingKiWeapon(256, player.whoAmI, player.whoAmI, IsHoldingKiWeapon);
-                SyncIsHoldingKiWeapon = IsHoldingKiWeapon;
+                NetworkHelper.playerSync.SendChangedIsHoldingKiWeapon(256, player.whoAmI, player.whoAmI, isHoldingKiWeapon);
+                syncIsHoldingKiWeapon = isHoldingKiWeapon;
             }
 
-            if (SyncTraitChecked != traitChecked)
+            if (syncTraitChecked != traitChecked)
             {
                 NetworkHelper.playerSync.SendChangedTraitChecked(256, player.whoAmI, player.whoAmI, traitChecked);
-                SyncTraitChecked = traitChecked;
+                syncTraitChecked = traitChecked;
             }
 
-            if (SyncPlayerTrait != playerTrait)
+            if (syncPlayerTrait != playerTrait)
             {
                 NetworkHelper.playerSync.SendChangedPlayerTrait(256, player.whoAmI, player.whoAmI, playerTrait);
-                SyncPlayerTrait = playerTrait;
+                syncPlayerTrait = playerTrait;
             }
 
-            if (SyncIsFlying != IsFlying)
+            if (syncIsFlying != isFlying)
             {
-                NetworkHelper.playerSync.SendChangedIsFlying(256, player.whoAmI, player.whoAmI, IsFlying);
-                SyncIsFlying = IsFlying;
+                NetworkHelper.playerSync.SendChangedIsFlying(256, player.whoAmI, player.whoAmI, isFlying);
+                syncIsFlying = isFlying;
             }
 
-            if (SyncIsTransformationAnimationPlaying != IsTransformationAnimationPlaying)
+            if (syncIsTransformationAnimationPlaying != isTransformationAnimationPlaying)
             {
-                NetworkHelper.playerSync.SendChangedIsTransformationAnimationPlaying(256, player.whoAmI, player.whoAmI, IsTransformationAnimationPlaying);
-                SyncIsTransformationAnimationPlaying = IsTransformationAnimationPlaying;
+                NetworkHelper.playerSync.SendChangedIsTransformationAnimationPlaying(256, player.whoAmI, player.whoAmI, isTransformationAnimationPlaying);
+                syncIsTransformationAnimationPlaying = isTransformationAnimationPlaying;
             }
 
-            if (SyncChargeMoveSpeed != chargeMoveSpeed)
+            if (syncChargeMoveSpeed != chargeMoveSpeed)
             {
                 NetworkHelper.playerSync.SendChangedChargeMoveSpeed(256, player.whoAmI, player.whoAmI, chargeMoveSpeed);
-                SyncChargeMoveSpeed = chargeMoveSpeed;
+                syncChargeMoveSpeed = chargeMoveSpeed;
             }
 
-            if (SyncBonusSpeedMultiplier != bonusSpeedMultiplier)
+            if (syncBonusSpeedMultiplier != bonusSpeedMultiplier)
             {
                 NetworkHelper.playerSync.SendChangedBonusSpeedMultiplier(256, player.whoAmI, player.whoAmI, bonusSpeedMultiplier);
-                SyncBonusSpeedMultiplier = bonusSpeedMultiplier;
+                syncBonusSpeedMultiplier = bonusSpeedMultiplier;
             }
 
-            if (SyncWishActive != WishActive)
+            if (syncWishActive != wishActive)
             {
-                NetworkHelper.playerSync.SendChangedWishActive(256, player.whoAmI, player.whoAmI, WishActive);
-                SyncWishActive = WishActive;
+                NetworkHelper.playerSync.SendChangedWishActive(256, player.whoAmI, player.whoAmI, wishActive);
+                syncWishActive = wishActive;
             }
 
-            if (SyncKaiokenLevel != KaiokenLevel)
+            if (syncKaiokenLevel != kaiokenLevel)
             {
-                NetworkHelper.playerSync.SendChangedKaiokenLevel(256, player.whoAmI, player.whoAmI, KaiokenLevel);
-                SyncKaiokenLevel = KaiokenLevel;
+                NetworkHelper.playerSync.SendChangedKaiokenLevel(256, player.whoAmI, player.whoAmI, kaiokenLevel);
+                syncKaiokenLevel = kaiokenLevel;
             }
 
-            if (SyncMouseWorldOctant != MouseWorldOctant)
+            if (syncMouseWorldOctant != mouseWorldOctant)
             {
-                NetworkHelper.playerSync.SendChangedMouseWorldOctant(256, player.whoAmI, player.whoAmI, MouseWorldOctant);
-                SyncMouseWorldOctant = MouseWorldOctant;
+                NetworkHelper.playerSync.SendChangedMouseWorldOctant(256, player.whoAmI, player.whoAmI, mouseWorldOctant);
+                syncMouseWorldOctant = mouseWorldOctant;
             }
 
-            if (SyncPowerWishesLeft != PowerWishesLeft)
+            if (syncPowerWishesLeft != powerWishesLeft)
             {
-                NetworkHelper.playerSync.SnedChangedPowerWishesLeft(256, player.whoAmI, player.whoAmI, PowerWishesLeft);
-                SyncPowerWishesLeft = PowerWishesLeft;
+                NetworkHelper.playerSync.SnedChangedPowerWishesLeft(256, player.whoAmI, player.whoAmI, powerWishesLeft);
+                syncPowerWishesLeft = powerWishesLeft;
             }
 
-            if (SyncKiCurrent != GetKi())
+            if (syncKiCurrent != GetKi())
             {
                 NetworkHelper.playerSync.SendChangedKiCurrent(256, player.whoAmI, player.whoAmI, GetKi());
-                SyncKiCurrent = GetKi();
+                syncKiCurrent = GetKi();
             }
 
-            if (SyncDir != player.direction)
+            if (syncDir != player.direction)
             {
                 NetworkHelper.playerSync.SendChangedDirection(256, player.whoAmI, player.whoAmI, player.direction);
-                SyncDir = player.direction;
+                syncDir = player.direction;
             }
 
-            if (SyncHeldProj != player.heldProj)
+            if (syncHeldProj != player.heldProj)
             {
                 NetworkHelper.playerSync.SendChangedHeldProjectile(256, player.whoAmI, player.whoAmI, player.heldProj);
-                SyncHeldProj = player.heldProj;
+                syncHeldProj = player.heldProj;
             }
 
-            if (SyncIsMassiveBlastCharging != IsMassiveBlastCharging)
+            if (syncIsMassiveBlastCharging != isMassiveBlastCharging)
             {
-                NetworkHelper.playerSync.SendChangedMassiveBlastCharging(256, player.whoAmI, player.whoAmI, IsMassiveBlastCharging);
-                SyncIsMassiveBlastCharging = IsMassiveBlastCharging;
+                NetworkHelper.playerSync.SendChangedMassiveBlastCharging(256, player.whoAmI, player.whoAmI, isMassiveBlastCharging);
+                syncIsMassiveBlastCharging = isMassiveBlastCharging;
             }
         }
 
@@ -1247,37 +1247,37 @@ namespace DBZMOD
             if (Main.myPlayer != player.whoAmI)
                 return;
 
-            if (SyncTriggerSetLeft != IsLeftHeld)
+            if (syncTriggerSetLeft != isLeftHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerLeft(256, player.whoAmI, player.whoAmI, IsLeftHeld);
-                SyncTriggerSetLeft = IsLeftHeld;
+                NetworkHelper.playerSync.SendChangedTriggerLeft(256, player.whoAmI, player.whoAmI, isLeftHeld);
+                syncTriggerSetLeft = isLeftHeld;
             }
-            if (SyncTriggerSetRight != IsRightHeld)
+            if (syncTriggerSetRight != isRightHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerRight(256, player.whoAmI, player.whoAmI, IsRightHeld);
-                SyncTriggerSetRight = IsRightHeld;
+                NetworkHelper.playerSync.SendChangedTriggerRight(256, player.whoAmI, player.whoAmI, isRightHeld);
+                syncTriggerSetRight = isRightHeld;
             }
-            if (SyncTriggerSetUp != IsUpHeld)
+            if (syncTriggerSetUp != isUpHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerUp(256, player.whoAmI, player.whoAmI, IsUpHeld);
-                SyncTriggerSetUp = IsUpHeld;
+                NetworkHelper.playerSync.SendChangedTriggerUp(256, player.whoAmI, player.whoAmI, isUpHeld);
+                syncTriggerSetUp = isUpHeld;
             }
-            if (SyncTriggerSetDown != IsDownHeld)
+            if (syncTriggerSetDown != isDownHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerDown(256, player.whoAmI, player.whoAmI, IsDownHeld);
-                SyncTriggerSetDown = IsDownHeld;
-            }
-
-            if (SyncTriggerSetMouseRight != IsMouseRightHeld)
-            {
-                NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, IsMouseRightHeld);
-                SyncTriggerSetMouseRight = IsMouseRightHeld;
+                NetworkHelper.playerSync.SendChangedTriggerDown(256, player.whoAmI, player.whoAmI, isDownHeld);
+                syncTriggerSetDown = isDownHeld;
             }
 
-            if (SyncTriggerSetMouseLeft != IsMouseLeftHeld)
+            if (syncTriggerSetMouseRight != isMouseRightHeld)
             {
-                NetworkHelper.playerSync.SendChangedTriggerMouseLeft(256, player.whoAmI, player.whoAmI, IsMouseLeftHeld);
-                SyncTriggerSetMouseLeft = IsMouseLeftHeld;
+                NetworkHelper.playerSync.SendChangedTriggerMouseRight(256, player.whoAmI, player.whoAmI, isMouseRightHeld);
+                syncTriggerSetMouseRight = isMouseRightHeld;
+            }
+
+            if (syncTriggerSetMouseLeft != isMouseLeftHeld)
+            {
+                NetworkHelper.playerSync.SendChangedTriggerMouseLeft(256, player.whoAmI, player.whoAmI, isMouseLeftHeld);
+                syncTriggerSetMouseLeft = isMouseLeftHeld;
             }
         }
 
@@ -1315,7 +1315,7 @@ namespace DBZMOD
 
         #endregion
 
-        public Color? OriginalEyeColor = null;
+        public Color? originalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
             if (Transformations.IsSSJG(player))
@@ -1324,7 +1324,7 @@ namespace DBZMOD
                 drawInfo.hairShader = 1;
                 ChangeEyeColor(Color.Red);
             }
-            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsASSJ(player) || Transformations.IsUSSJ(player))
+            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsAssj(player) || Transformations.IsUssj(player))
             {
                 ChangeEyeColor(Color.Turquoise);
             }
@@ -1332,92 +1332,92 @@ namespace DBZMOD
             {
                 ChangeEyeColor(Color.Red);
             }
-            else if (OriginalEyeColor.HasValue && player.eyeColor != OriginalEyeColor.Value)
+            else if (originalEyeColor.HasValue && player.eyeColor != originalEyeColor.Value)
             {
-                player.eyeColor = OriginalEyeColor.Value;
+                player.eyeColor = originalEyeColor.Value;
             }
         }
 
         public void ChangeEyeColor(Color eyeColor)
         {
             // only fire this when attempting to change the eye color.
-            if (OriginalEyeColor == null)
+            if (originalEyeColor == null)
             {
-                OriginalEyeColor = player.eyeColor;
+                originalEyeColor = player.eyeColor;
             }
             player.eyeColor = eyeColor;
         }
 
         public string ChooseTrait()
         {
-            var TraitChooser = new WeightedRandom<string>();
-            TraitChooser.Add("Prodigy", 4);
-            TraitChooser.Add("Legendary", 1);
-            TraitChooser.Add(null, 15);
+            var traitChooser = new WeightedRandom<string>();
+            traitChooser.Add("Prodigy", 4);
+            traitChooser.Add("Legendary", 1);
+            traitChooser.Add(null, 15);
             traitChecked = true;
-            return playerTrait = TraitChooser;
+            return playerTrait = traitChooser;
 
         }
 
         public string ChooseTraitNoLimits()
         {
-            var TraitChooser = new WeightedRandom<string>();
-            TraitChooser.Add("Prodigy", 1);
-            TraitChooser.Add("Legendary", 1);
-            return playerTrait = TraitChooser;
+            var traitChooser = new WeightedRandom<string>();
+            traitChooser.Add("Prodigy", 1);
+            traitChooser.Add("Legendary", 1);
+            return playerTrait = traitChooser;
 
         }
 
         public void AwakeningFormUnlock()
         {
-            if (!SSJ1Achieved)
+            if (!ssj1Achieved)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
-                SSJ1Achieved = true;
-                IsTransforming = true;
+                ssj1Achieved = true;
+                isTransforming = true;
                 SSJTransformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
+                UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
             }
-            else if (SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
+            else if (ssj1Achieved && !ssj2Achieved && !IsPlayerLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
-                SSJ2Achieved = true;
-                IsTransforming = true;
+                ssj2Achieved = true;
+                isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
+                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
             }
-            else if (SSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
+            else if (ssj1Achieved && IsPlayerLegendary() && !lssjAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                LSSJAchieved = true;
-                IsTransforming = true;
+                lssjAchieved = true;
+                isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
+                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
             }
-            else if (SSJ2Achieved && !SSJ3Achieved)
+            else if (ssj2Achieved && !ssj3Achieved)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
-                SSJ3Achieved = true;
-                IsTransforming = true;
+                ssj3Achieved = true;
+                isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
+                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
             }
-            else if (LSSJAchieved && !LSSJ2Achieved)
+            else if (lssjAchieved && !lssj2Achieved)
             {
                 Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
-                LSSJ2Achieved = true;
-                IsTransforming = true;
+                lssj2Achieved = true;
+                isTransforming = true;
                 LSSJ2Transformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
-                lssj2timer = 0;
+                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                lssj2Timer = 0;
                 Transformations.EndTransformations(player, true);
             }
         }
@@ -1442,14 +1442,14 @@ namespace DBZMOD
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < OverallKiMax())
+            if (radiantBonus && _kiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
                 AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(2) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
                 }
             }
             if (metamoranSash)
@@ -1464,14 +1464,14 @@ namespace DBZMOD
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (radiantBonus && KiCurrent < OverallKiMax())
+            if (radiantBonus && _kiCurrent < OverallKiMax())
             {
                 int i = Main.rand.Next(1, 6);
                 AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(3) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
                 }
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
@@ -1481,76 +1481,76 @@ namespace DBZMOD
         {
             //bool useGodSky = Transformations.IsGodlike(player);
             //player.ManageSpecialBiomeVisuals("DBZMOD:GodSky", useGodSky, player.Center);
-            player.ManageSpecialBiomeVisuals("DBZMOD:WishSky", WishActive, player.Center);
+            player.ManageSpecialBiomeVisuals("DBZMOD:WishSky", wishActive, player.Center);
         }
 
         public override TagCompound Save()
         {
             TagCompound tag = new TagCompound();
 
-            tag.Add("Fragment1", Fragment1);
-            tag.Add("Fragment2", Fragment2);
-            tag.Add("Fragment3", Fragment3);
-            tag.Add("Fragment4", Fragment4);
-            tag.Add("Fragment5", Fragment5);
-            tag.Add("KaioFragment1", KaioFragment1);
-            tag.Add("KaioFragment2", KaioFragment2);
-            tag.Add("KaioFragment3", KaioFragment3);
-            tag.Add("KaioFragment4", KaioFragment4);
-            tag.Add("KaioAchieved", KaioAchieved);
-            tag.Add("SSJ1Achieved", SSJ1Achieved);
-            tag.Add("SSJ2Achieved", SSJ2Achieved);
-            tag.Add("ASSJAchieved", ASSJAchieved);
-            tag.Add("USSJAchieved", USSJAchieved);
-            tag.Add("SSJ3Achieved", SSJ3Achieved);
+            tag.Add("Fragment1", fragment1);
+            tag.Add("Fragment2", fragment2);
+            tag.Add("Fragment3", fragment3);
+            tag.Add("Fragment4", fragment4);
+            tag.Add("Fragment5", fragment5);
+            tag.Add("KaioFragment1", kaioFragment1);
+            tag.Add("KaioFragment2", kaioFragment2);
+            tag.Add("KaioFragment3", kaioFragment3);
+            tag.Add("KaioFragment4", kaioFragment4);
+            tag.Add("KaioAchieved", kaioAchieved);
+            tag.Add("SSJ1Achieved", ssj1Achieved);
+            tag.Add("SSJ2Achieved", ssj2Achieved);
+            tag.Add("ASSJAchieved", assjAchieved);
+            tag.Add("USSJAchieved", ussjAchieved);
+            tag.Add("SSJ3Achieved", ssj3Achieved);
             // changed save routine to save to a float, orphaning the original KiCurrent.
-            tag.Add("KiCurrentFloat", KiCurrent);
-            tag.Add("RageCurrent", RageCurrent);
-            tag.Add("KiRegenRate", KiChargeRate);
-            tag.Add("KiEssence1", KiEssence1);
-            tag.Add("KiEssence2", KiEssence2);
-            tag.Add("KiEssence3", KiEssence3);
-            tag.Add("KiEssence4", KiEssence4);
-            tag.Add("KiEssence5", KiEssence5);
-            tag.Add("MenuSelection", (int)UI.TransMenu.MenuSelection);
-            tag.Add("MasteryLevel1", MasteryLevel1);
-            tag.Add("MasteryLevel2", MasteryLevel2);
-            tag.Add("MasteryLevel3", MasteryLevel3);
-            tag.Add("MasteryLevelGod", MasteryLevelGod);
-            tag.Add("MasteryLevelBlue", MasteryLevelBlue);
-            tag.Add("MasteredMessage1", MasteredMessage1);
-            tag.Add("MasteredMessage2", MasteredMessage2);
-            tag.Add("MasteredMessage3", MasteredMessage3);
-            tag.Add("MasteredMessageGod", MasteredMessageGod);
-            tag.Add("MasteredMessageBlue", MasteredMessageBlue);
-            tag.Add("JungleMessage", JungleMessage);
-            tag.Add("HellMessage", HellMessage);
-            tag.Add("EvilMessage", EvilMessage);
-            tag.Add("MushroomMessage", MushroomMessage);
+            tag.Add("KiCurrentFloat", _kiCurrent);
+            tag.Add("RageCurrent", rageCurrent);
+            tag.Add("KiRegenRate", kiChargeRate);
+            tag.Add("KiEssence1", kiEssence1);
+            tag.Add("KiEssence2", kiEssence2);
+            tag.Add("KiEssence3", kiEssence3);
+            tag.Add("KiEssence4", kiEssence4);
+            tag.Add("KiEssence5", kiEssence5);
+            tag.Add("MenuSelection", (int)UI.TransMenu.menuSelection);
+            tag.Add("MasteryLevel1", masteryLevel1);
+            tag.Add("MasteryLevel2", masteryLevel2);
+            tag.Add("MasteryLevel3", masteryLevel3);
+            tag.Add("MasteryLevelGod", masteryLevelGod);
+            tag.Add("MasteryLevelBlue", masteryLevelBlue);
+            tag.Add("MasteredMessage1", masteredMessage1);
+            tag.Add("MasteredMessage2", masteredMessage2);
+            tag.Add("MasteredMessage3", masteredMessage3);
+            tag.Add("MasteredMessageGod", masteredMessageGod);
+            tag.Add("MasteredMessageBlue", masteredMessageBlue);
+            tag.Add("JungleMessage", jungleMessage);
+            tag.Add("HellMessage", hellMessage);
+            tag.Add("EvilMessage", evilMessage);
+            tag.Add("MushroomMessage", mushroomMessage);
             tag.Add("traitChecked", traitChecked);
             tag.Add("playerTrait", playerTrait);
-            tag.Add("LSSJAchieved", LSSJAchieved);
+            tag.Add("LSSJAchieved", lssjAchieved);
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
             tag.Add("flightUpgraded", flightUpgraded);
-            tag.Add("ssjgAchieved", SSJGAchieved);
-            tag.Add("LSSJ2Achieved", LSSJ2Achieved);
-            tag.Add("KiMax3", KiMax3);
-            tag.Add("FirstFourStarDBPickup", FirstFourStarDBPickup);
-            tag.Add("PowerWishesLeft", PowerWishesLeft);
-            tag.Add("SkillWishesLeft", SkillWishesLeft);
-            tag.Add("ImmortalityWishesLeft", ImmortalityWishesLeft);
-            tag.Add("AwakeningWishesLeft", AwakeningWishesLeft);
-            tag.Add("ImmortalityRevivesLeft", ImmortalityRevivesLeft);
-            tag.Add("IsInstantTransmission1Unlocked", IsInstantTransmission1Unlocked);
-            tag.Add("IsInstantTransmission2Unlocked", IsInstantTransmission2Unlocked);
-            tag.Add("IsInstantTransmission3Unlocked", IsInstantTransmission3Unlocked);
+            tag.Add("ssjgAchieved", ssjgAchieved);
+            tag.Add("LSSJ2Achieved", lssj2Achieved);
+            tag.Add("KiMax3", kiMax3);
+            tag.Add("FirstFourStarDBPickup", firstFourStarDbPickup);
+            tag.Add("PowerWishesLeft", powerWishesLeft);
+            tag.Add("SkillWishesLeft", skillWishesLeft);
+            tag.Add("ImmortalityWishesLeft", immortalityWishesLeft);
+            tag.Add("AwakeningWishesLeft", awakeningWishesLeft);
+            tag.Add("ImmortalityRevivesLeft", immortalityRevivesLeft);
+            tag.Add("IsInstantTransmission1Unlocked", isInstantTransmission1Unlocked);
+            tag.Add("IsInstantTransmission2Unlocked", isInstantTransmission2Unlocked);
+            tag.Add("IsInstantTransmission3Unlocked", isInstantTransmission3Unlocked);
             // added to store the player's original eye color if possible
-            if (OriginalEyeColor != null)
+            if (originalEyeColor != null)
             {
-                tag.Add("OriginalEyeColorR", OriginalEyeColor.Value.R);
-                tag.Add("OriginalEyeColorG", OriginalEyeColor.Value.G);
-                tag.Add("OriginalEyeColorB", OriginalEyeColor.Value.B);
+                tag.Add("OriginalEyeColorR", originalEyeColor.Value.R);
+                tag.Add("OriginalEyeColorG", originalEyeColor.Value.G);
+                tag.Add("OriginalEyeColorB", originalEyeColor.Value.B);
             }
             //tag.Add("RealismMode", RealismMode);
             return tag;
@@ -1558,84 +1558,84 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
-            Fragment1 = tag.Get<bool>("Fragment1");
-            Fragment2 = tag.Get<bool>("Fragment2");
-            Fragment3 = tag.Get<bool>("Fragment3");
-            Fragment4 = tag.Get<bool>("Fragment4");
-            Fragment5 = tag.Get<bool>("Fragment5");
-            KaioFragment1 = tag.Get<bool>("KaioFragment1");
-            KaioFragment2 = tag.Get<bool>("KaioFragment2");
-            KaioFragment3 = tag.Get<bool>("KaioFragment3");
-            KaioFragment4 = tag.Get<bool>("KaioFragment4");
-            KaioAchieved = tag.Get<bool>("KaioAchieved");
-            SSJ1Achieved = tag.Get<bool>("SSJ1Achieved");
-            SSJ2Achieved = tag.Get<bool>("SSJ2Achieved");
-            ASSJAchieved = tag.Get<bool>("ASSJAchieved");
-            USSJAchieved = tag.Get<bool>("USSJAchieved");
-            SSJ3Achieved = tag.Get<bool>("SSJ3Achieved");
+            fragment1 = tag.Get<bool>("Fragment1");
+            fragment2 = tag.Get<bool>("Fragment2");
+            fragment3 = tag.Get<bool>("Fragment3");
+            fragment4 = tag.Get<bool>("Fragment4");
+            fragment5 = tag.Get<bool>("Fragment5");
+            kaioFragment1 = tag.Get<bool>("KaioFragment1");
+            kaioFragment2 = tag.Get<bool>("KaioFragment2");
+            kaioFragment3 = tag.Get<bool>("KaioFragment3");
+            kaioFragment4 = tag.Get<bool>("KaioFragment4");
+            kaioAchieved = tag.Get<bool>("KaioAchieved");
+            ssj1Achieved = tag.Get<bool>("SSJ1Achieved");
+            ssj2Achieved = tag.Get<bool>("SSJ2Achieved");
+            assjAchieved = tag.Get<bool>("ASSJAchieved");
+            ussjAchieved = tag.Get<bool>("USSJAchieved");
+            ssj3Achieved = tag.Get<bool>("SSJ3Achieved");
             if (tag.ContainsKey("KiCurrentFloat"))
             {
-                KiCurrent = tag.Get<float>("KiCurrentFloat");
+                _kiCurrent = tag.Get<float>("KiCurrentFloat");
             } else
             {
-                KiCurrent = (float)tag.Get<int>("KiCurrent");
+                _kiCurrent = (float)tag.Get<int>("KiCurrent");
             }
-            RageCurrent = tag.Get<int>("RageCurrent");
-            KiChargeRate = tag.Get<int>("KiRegenRate");
-            KiEssence1 = tag.Get<bool>("KiEssence1");
-            KiEssence2 = tag.Get<bool>("KiEssence2");
-            KiEssence3 = tag.Get<bool>("KiEssence3");
-            KiEssence4 = tag.Get<bool>("KiEssence4");
-            KiEssence5 = tag.Get<bool>("KiEssence5");
-            UI.TransMenu.MenuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
-            MasteryLevel1 = tag.Get<float>("MasteryLevel1");
-            MasteryLevel2 = tag.Get<float>("MasteryLevel2");
-            MasteryLevel3 = tag.Get<float>("MasteryLevel3");
-            MasteryLevelGod = tag.Get<float>("MasteryLevelGod");
-            MasteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-            MasteredMessage1 = tag.Get<bool>("MasteredMessage1");
-            MasteredMessage2 = tag.Get<bool>("MasteredMessage2");
-            MasteredMessage3 = tag.Get<bool>("MasteredMessage3");
-            MasteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-            MasteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-            JungleMessage = tag.Get<bool>("JungleMessage");
-            HellMessage = tag.Get<bool>("HellMessage");
-            EvilMessage = tag.Get<bool>("EvilMessage");
-            MushroomMessage = tag.Get<bool>("MushroomMessage");
+            rageCurrent = tag.Get<int>("RageCurrent");
+            kiChargeRate = tag.Get<int>("KiRegenRate");
+            kiEssence1 = tag.Get<bool>("KiEssence1");
+            kiEssence2 = tag.Get<bool>("KiEssence2");
+            kiEssence3 = tag.Get<bool>("KiEssence3");
+            kiEssence4 = tag.Get<bool>("KiEssence4");
+            kiEssence5 = tag.Get<bool>("KiEssence5");
+            UI.TransMenu.menuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
+            masteryLevel1 = tag.Get<float>("MasteryLevel1");
+            masteryLevel2 = tag.Get<float>("MasteryLevel2");
+            masteryLevel3 = tag.Get<float>("MasteryLevel3");
+            masteryLevelGod = tag.Get<float>("MasteryLevelGod");
+            masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
+            masteredMessage1 = tag.Get<bool>("MasteredMessage1");
+            masteredMessage2 = tag.Get<bool>("MasteredMessage2");
+            masteredMessage3 = tag.Get<bool>("MasteredMessage3");
+            masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
+            masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
+            jungleMessage = tag.Get<bool>("JungleMessage");
+            hellMessage = tag.Get<bool>("HellMessage");
+            evilMessage = tag.Get<bool>("EvilMessage");
+            mushroomMessage = tag.Get<bool>("MushroomMessage");
             traitChecked = tag.Get<bool>("traitChecked");
             playerTrait = tag.Get<string>("playerTrait");
-            LSSJAchieved = tag.Get<bool>("LSSJAchieved");
+            lssjAchieved = tag.Get<bool>("LSSJAchieved");
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");
             flightUpgraded = tag.Get<bool>("flightUpgraded");
-            SSJGAchieved = tag.Get<bool>("ssjgAchieved");
-            LSSJ2Achieved = tag.Get<bool>("LSSJ2Achieved");
-            KiMax3 = tag.Get<int>("KiMax3");
-            FirstFourStarDBPickup = tag.Get<bool>("FirstFourStarDBPickup");
-            PowerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
+            ssjgAchieved = tag.Get<bool>("ssjgAchieved");
+            lssj2Achieved = tag.Get<bool>("LSSJ2Achieved");
+            kiMax3 = tag.Get<int>("KiMax3");
+            firstFourStarDbPickup = tag.Get<bool>("FirstFourStarDBPickup");
+            powerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
             // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
             if (DebugUtil.IsDebugModeOn())
             {
-                PowerWishesLeft = POWER_WISH_MAXIMUM;
+                powerWishesLeft = POWER_WISH_MAXIMUM;
             }
-            SkillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
-            ImmortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
-            AwakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
-            ImmortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
-            IsInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
-            IsInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
-            IsInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
+            skillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
+            immortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
+            awakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
+            immortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
+            isInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
+            isInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
+            isInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
             {
-                OriginalEyeColor = new Color(tag.Get<byte>("OriginalEyeColorR"), tag.Get<byte>("OriginalEyeColorG"), tag.Get<byte>("OriginalEyeColorB"));
+                originalEyeColor = new Color(tag.Get<byte>("OriginalEyeColorR"), tag.Get<byte>("OriginalEyeColorG"), tag.Get<byte>("OriginalEyeColorB"));
             }
             //RealismMode = tag.Get<bool>("RealismMode");
         }
 
         public ProgressionSystem GetProgressionSystem()
         {
-            return m_progressionSystem;
+            return _mProgressionSystem;
         }
 
         // notes from Prime:
@@ -1647,31 +1647,31 @@ namespace DBZMOD
         // by default, traverses up a step in transform - but starts off at whatever you've selected (letting you go straight to SSJ2 or LSSJ2 for example) in menu
         public bool IsTransformingUpOneStep()
         {
-            return Transform.JustPressed;
+            return transform.JustPressed;
         }
 
         // by default simply clears all transformation buffs from the user, including kaioken.
         public bool IsCompletelyPoweringDown()
         {
-            return PowerDown.JustPressed && !EnergyCharge.Current;
+            return powerDown.JustPressed && !energyCharge.Current;
         }
 
         // ascends the transformation state, from ssj1 to assj, or from assj to ussj
         public bool IsAscendingTransformation()
         {
-            return Transform.JustPressed && EnergyCharge.Current;
+            return transform.JustPressed && energyCharge.Current;
         }
 
         // functions four-fold. Steps down one level in a given transformation tree: ussj -> assj -> ssj1. lssj2 -> lssj -> ssj1. ssjg -> etc
         // also steps down from ssj1 + kk to just ssj1.
         public bool IsPoweringDownOneStep()
         {
-            return PowerDown.JustPressed && EnergyCharge.Current;
+            return powerDown.JustPressed && energyCharge.Current;
         }
 
         public bool CanAscend()
         {
-            return Transformations.IsSSJ1(player) || Transformations.IsASSJ(player);
+            return Transformations.IsSSJ1(player) || Transformations.IsAssj(player);
         }
 
         public void HandleTransformations()
@@ -1698,7 +1698,7 @@ namespace DBZMOD
                 }
                 else
                 {
-                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.MenuSelection);
+                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.menuSelection);
                 }
             }
             else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player))
@@ -1724,21 +1724,21 @@ namespace DBZMOD
 
             if (Transformations.IsAnythingOtherThanKaioken(player))
             {
-                return Transformations.IsValidKaiokenForm(player) && KaiokenLevel == 0 && KaioAchieved;
+                return Transformations.IsValidKaiokenForm(player) && kaiokenLevel == 0 && kaioAchieved;
             }
 
-            switch (KaiokenLevel)
+            switch (kaiokenLevel)
             {
                 case 0:
-                    return KaioAchieved;
+                    return kaioAchieved;
                 case 1:
-                    return KaioFragment1;
+                    return kaioFragment1;
                 case 2:
-                    return KaioFragment2;
+                    return kaioFragment2;
                 case 3:
-                    return KaioFragment3;
+                    return kaioFragment3;
                 case 4:
-                    return KaioFragment4;
+                    return kaioFragment4;
             }
             return false;
         }
@@ -1746,7 +1746,7 @@ namespace DBZMOD
         public void HandleKaioken()
         {
             bool canIncreaseKaiokenLevel = false;
-            if (KaiokenKey.JustPressed)
+            if (kaiokenKey.JustPressed)
             {
                 canIncreaseKaiokenLevel = CanIncreaseKaiokenLevel();
                 if (Transformations.IsKaioken(player))
@@ -1754,7 +1754,7 @@ namespace DBZMOD
                     if (canIncreaseKaiokenLevel)
                     {
                         SoundUtil.PlayCustomSound("Sounds/KaioAuraAscend", player, .7f, .1f);
-                        KaiokenLevel++;
+                        kaiokenLevel++;
                     }
                 } else
                 {
@@ -1763,16 +1763,16 @@ namespace DBZMOD
                         BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
                         if (Transformations.CanTransform(player, transformation))
                         {
-                            KaiokenLevel++;
+                            kaiokenLevel++;
                             Transformations.DoTransform(player, transformation, mod);
                         }
                     }
                 }
             } else if (IsPoweringDownOneStep())
             {
-                if (Transformations.IsKaioken(player) && KaiokenLevel > 1)
+                if (Transformations.IsKaioken(player) && kaiokenLevel > 1)
                 {
-                    KaiokenLevel--;
+                    kaiokenLevel--;
                 }
             }
         }
@@ -1781,34 +1781,34 @@ namespace DBZMOD
         {
             // this might look weird, but terraria reads these setters as changing the collection, which is bad.
             if (triggerSet.Left)
-                IsLeftHeld = true;
+                isLeftHeld = true;
             else
-                IsLeftHeld = false;
+                isLeftHeld = false;
 
             if (triggerSet.Right)
-                IsRightHeld = true;
+                isRightHeld = true;
             else
-                IsRightHeld = false;
+                isRightHeld = false;
 
             if (triggerSet.Up)
-                IsUpHeld = true;
+                isUpHeld = true;
             else
-                IsUpHeld = false;
+                isUpHeld = false;
 
             if (triggerSet.Down)
-                IsDownHeld = true;
+                isDownHeld = true;
             else
-                IsDownHeld = false;
+                isDownHeld = false;
 
             if (triggerSet.MouseRight)
-                IsMouseRightHeld = true;
+                isMouseRightHeld = true;
             else
-                IsMouseRightHeld = false;
+                isMouseRightHeld = false;
 
             if (triggerSet.MouseLeft)
-                IsMouseLeftHeld = true;
+                isMouseLeftHeld = true;
             else
-                IsMouseLeftHeld = false;
+                isMouseLeftHeld = false;
         }
 
         public float GetNextSpeedMultiplier()
@@ -1831,32 +1831,32 @@ namespace DBZMOD
 
             SyncTriggerSet();
 
-            if (FlyToggle.JustPressed)
+            if (flyToggle.JustPressed)
             {
                 if (flightUnlocked)
                 {
-                    IsFlying = !IsFlying;
-                    if (!IsFlying)
+                    isFlying = !isFlying;
+                    if (!isFlying)
                     {
                         FlightSystem.AddKatchinFeetBuff(player);
                     }
                 }
             }
 
-            m_progressionSystem.Update(player);
+            _mProgressionSystem.Update(player);
 
             // dropping the fist wireup here. Fingers crossed.
             if (player.HeldItem.Name.Equals("Fist"))
             {
-                m_fistSystem.Update(triggersSet, player, mod);
+                _mFistSystem.Update(triggersSet, player, mod);
             }
 
-            if (ArmorBonus.JustPressed)
+            if (armorBonus.JustPressed)
             {
-                if (DemonBonus && !player.HasBuff(mod.BuffType("ArmorCooldown")))
+                if (demonBonus && !player.HasBuff(mod.BuffType("ArmorCooldown")))
                 {
                     player.AddBuff(mod.BuffType("DemonBonus"), 300);
-                    DemonBonusActive = true;
+                    demonBonusActive = true;
                     for (int i = 0; i < 3; i++)
                     {
                         Dust tDust = Dust.NewDustDirect(player.position - (Vector2.UnitY * 0.7f) - (Vector2.UnitX * 1.0f), 50, 50, 15, 0f, 0f, 5, default(Color), 2.0f);
@@ -1865,27 +1865,27 @@ namespace DBZMOD
             }
 
             // handle ki charging
-            if (ConfigModel.IsChargeToggled)
+            if (ConfigModel.isChargeToggled)
             {
-                if (EnergyCharge.JustPressed)
+                if (energyCharge.JustPressed)
                 {
-                    IsCharging = !IsCharging;
+                    isCharging = !isCharging;
                 }
             }
             else
             {
-                if (EnergyCharge.Current && !IsCharging)
+                if (energyCharge.Current && !isCharging)
                 {
-                    IsCharging = true;
+                    isCharging = true;
                 }
-                if (!EnergyCharge.Current && IsCharging)
+                if (!energyCharge.Current && isCharging)
                 {
-                    IsCharging = false;
+                    isCharging = false;
                 }
             }
 
             // most of the forms have a default light value, but charging isn't a buff. Let there be light
-            if (IsCharging && !Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
+            if (isCharging && !Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
             {
                 Lighting.AddLight(player.Center, 1.2f, 1.2f, 1.2f);
             }
@@ -1896,14 +1896,14 @@ namespace DBZMOD
 
             HandleKaioken();
 
-            if (SpeedToggle.JustPressed)
+            if (speedToggle.JustPressed)
             {
                 float oldSpeedMult = bonusSpeedMultiplier;
                 bonusSpeedMultiplier = GetNextSpeedMultiplier();
                 CombatText.NewText(player.Hitbox, new Color(255, 255, 255), string.Format("Speed bonus {0}!", (bonusSpeedMultiplier == 0f) ? "off" : ((int)Math.Ceiling(bonusSpeedMultiplier * 100f)).ToString() + "%"), false, false);
             }
 
-            if (TransMenu.JustPressed)
+            if (transMenu.JustPressed)
             {
                 UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
             }
@@ -1922,21 +1922,21 @@ namespace DBZMOD
                 {
                     Transformations.DoTransform(player, Transformations.SSJ1, mod);
                 }
-                KaiokenLevel = 0;
+                kaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
 
 
-            if (WishActive)
+            if (wishActive)
             {
                 WishMenu.menuvisible = true;
-            } else if (DebugUtil.IsDebugModeOn() && QuickKi.JustPressed)
+            } else if (DebugUtil.IsDebugModeOn() && quickKi.JustPressed)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
 
             // freeform instant transmission requires book 2.
-            if (IsInstantTransmission2Unlocked)
+            if (isInstantTransmission2Unlocked)
             {
                 HandleInstantTransmissionFreeform();
             }
@@ -1950,27 +1950,27 @@ namespace DBZMOD
         public float GetInstantTransmissionFrameKiCost(float intensity, float distance)
         {
             // INSERT THINGS THAT REDUCE INSTANT TRANSMISSION COST HERE
-            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            float costCoefficient = isInstantTransmission3Unlocked ? 0.5f : 1f;
             return INSTANT_TRANSMISSION_FRAME_KI_COST * (float)Math.Sqrt(intensity) * (float)Math.Sqrt(distance) * costCoefficient;
         }
 
         public float GetInstantTransmissionTeleportKiCost()
         {
-            float costCoefficient = IsInstantTransmission3Unlocked ? 0.5f : 1f;
+            float costCoefficient = isInstantTransmission3Unlocked ? 0.5f : 1f;
             return INSTANT_TRANSMISSION_TELEPORT_MINIMUM_KI_COST;
         }
 
         protected const int INSTANT_TRANSMISSION_BASE_CHAOS_DURATION = 120;
         public int GetBaseChaosDuration()
         {
-            int durationReduction = IsInstantTransmission3Unlocked ? 2 : 1;
+            int durationReduction = isInstantTransmission3Unlocked ? 2 : 1;
             return INSTANT_TRANSMISSION_BASE_CHAOS_DURATION / durationReduction;
         }
 
         public int GetChaosDurationByDistance(float distance)
         {
             int baseDurationOfDebuff = GetBaseChaosDuration();
-            float debuffDurationCoefficient = IsInstantTransmission2Unlocked ? 0.5f : 1f;
+            float debuffDurationCoefficient = isInstantTransmission2Unlocked ? 0.5f : 1f;
             int debuffIncrease = (int)Math.Ceiling(distance * debuffDurationCoefficient / 2000f);
             
             return baseDurationOfDebuff + debuffIncrease;
@@ -1978,15 +1978,15 @@ namespace DBZMOD
 
         public void AddInstantTransmissionChaosDebuff(float distance) {
             // instant transmission 3 bypasses the debuff
-            if (!IsInstantTransmission3Unlocked)
+            if (!isInstantTransmission3Unlocked)
                 player.AddBuff(BuffID.ChaosState, GetChaosDurationByDistance(distance), true);
         }
 
-        private bool isReturningFromInstantTransmission = false;
-        private float trackedInstantTransmissionKiLoss = 0f;
+        private bool _isReturningFromInstantTransmission = false;
+        private float _trackedInstantTransmissionKiLoss = 0f;
         // bool handles the game feel of instant transmission by being a limbo flag.
         // the first time you press the IT key, this is set to true, but it can be set to false in mid swing to prevent further processing on the same trigger/keypress.
-        private bool isHandlingInstantTransmissionTriggers = false;
+        private bool _isHandlingInstantTransmissionTriggers = false;
         public void HandleInstantTransmissionFreeform()
         {
             // don't mess with stuff if the map is open
@@ -2003,16 +2003,16 @@ namespace DBZMOD
 
             // the one frame delay on handling instant transmission is to set up the limbo var.
             // this should also theoretically prevent fullscreen map transmission from double-firing ITs.
-            if (!isHandlingInstantTransmissionTriggers && InstantTransmission.JustPressed) {
-                isHandlingInstantTransmissionTriggers = true;
+            if (!_isHandlingInstantTransmissionTriggers && instantTransmission.JustPressed) {
+                _isHandlingInstantTransmissionTriggers = true;
             }
-            if (isHandlingInstantTransmissionTriggers && InstantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
+            if (_isHandlingInstantTransmissionTriggers && instantTransmission.Current && HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))
             {
                 // player is trying to IT and has the ki to do so.
                 // set the limbo var to true until we stop handling
-                isReturningFromInstantTransmission = true;
+                _isReturningFromInstantTransmission = true;
 
-                trackedInstantTransmissionKiLoss += kiCost;
+                _trackedInstantTransmissionKiLoss += kiCost;
                 AddKi(-kiCost, false, false);
 
                 Main.zoomX += (direction * intensity).X;
@@ -2027,12 +2027,12 @@ namespace DBZMOD
                 if (Main.zoomY + player.Center.Y <= 0)                
                     Main.zoomY = -player.Center.Y;
                 
-            } else if (isHandlingInstantTransmissionTriggers && ((InstantTransmission.JustReleased  || (InstantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))) && HasKi(GetInstantTransmissionTeleportKiCost())))
+            } else if (_isHandlingInstantTransmissionTriggers && ((instantTransmission.JustReleased  || (instantTransmission.Current && !HasKi(kiCost + GetInstantTransmissionTeleportKiCost()))) && HasKi(GetInstantTransmissionTeleportKiCost())))
             {
                 // player has either let go of the instant transmission key or run out of ki. either way, disable further processing and try to teleport
                 // if we fail, the player gets some ki back but the processing is still canceled.
-                isReturningFromInstantTransmission = true;
-                isHandlingInstantTransmissionTriggers = false;
+                _isReturningFromInstantTransmission = true;
+                _isHandlingInstantTransmissionTriggers = false;
 
                 Vector2 target;
                 target.X = Main.mouseX + Main.screenPosition.X;
@@ -2049,14 +2049,14 @@ namespace DBZMOD
                 {
                     // there's no need to "return" from IT, you succeeded.
                     // make sure we don't try to give the player back their ki
-                    trackedInstantTransmissionKiLoss = 0f;
+                    _trackedInstantTransmissionKiLoss = 0f;
                 }
-            } else if (isReturningFromInstantTransmission)
+            } else if (_isReturningFromInstantTransmission)
             {
-                AddKi(trackedInstantTransmissionKiLoss, false, false);
-                trackedInstantTransmissionKiLoss = 0f;
-                isReturningFromInstantTransmission = false;
-                isHandlingInstantTransmissionTriggers = false;
+                AddKi(_trackedInstantTransmissionKiLoss, false, false);
+                _trackedInstantTransmissionKiLoss = 0f;
+                _isReturningFromInstantTransmission = false;
+                _isHandlingInstantTransmissionTriggers = false;
                 Main.zoomX = 0f;
                 Main.zoomY = 0f;
             }
@@ -2067,8 +2067,8 @@ namespace DBZMOD
             Vector2 originalPosition = player.Center;
             if (!HandleInstantTransmissionExitRoutine(target, distance))
             {
-                AddKi(trackedInstantTransmissionKiLoss, false, false);
-                trackedInstantTransmissionKiLoss = 0f;
+                AddKi(_trackedInstantTransmissionKiLoss, false, false);
+                _trackedInstantTransmissionKiLoss = 0f;
                 return false;
             }
             else
@@ -2130,10 +2130,10 @@ namespace DBZMOD
         {
             // various effects while charging
             // if the player is flying and moving, charging applies a speed boost and doesn't recharge ki, but also doesn't slow the player.
-            bool isAnyKeyHeld = IsLeftHeld || IsRightHeld || IsUpHeld || IsDownHeld;
-            if (IsCharging)
+            bool isAnyKeyHeld = isLeftHeld || isRightHeld || isUpHeld || isDownHeld;
+            if (isCharging)
             {
-                bool isChargeBoostingFlight = IsFlying && isAnyKeyHeld;
+                bool isChargeBoostingFlight = isFlying && isAnyKeyHeld;
                 bool shouldApplySlowdown = GetKi() < OverallKiMax() && !isChargeBoostingFlight;
                 // grant defense and a protective barrier visual if charging with baldur essentia
                 if (!isChargeBoostingFlight)
@@ -2164,7 +2164,7 @@ namespace DBZMOD
                     }
 
                     // determine base regen rate and bonuses
-                    AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
+                    AddKi(kiChargeRate + scarabChargeRateAdd, false, false);
                 }
 
                 if (shouldApplySlowdown)
@@ -2174,18 +2174,18 @@ namespace DBZMOD
             }
 
             // grant multiplicative charge bonuses that grow over time if using either earthen accessories
-            if (IsCharging && GetKi() < OverallKiMax() && (earthenScarab || earthenArcanium))
+            if (isCharging && GetKi() < OverallKiMax() && (earthenScarab || earthenArcanium))
             {
-                ScarabChargeTimer++;
-                if (ScarabChargeTimer > 180 && ScarabChargeRateAdd <= 5)
+                scarabChargeTimer++;
+                if (scarabChargeTimer > 180 && scarabChargeRateAdd <= 5)
                 {
-                    ScarabChargeRateAdd += 1;
-                    ScarabChargeTimer = 0;
+                    scarabChargeRateAdd += 1;
+                    scarabChargeTimer = 0;
                 }
             } else { 
                 // reset scarab/earthen bonuses
-                ScarabChargeTimer = 0;
-                ScarabChargeRateAdd = 0;
+                scarabChargeTimer = 0;
+                scarabChargeRateAdd = 0;
             }
         }
 
@@ -2195,19 +2195,19 @@ namespace DBZMOD
 
         public override void ResetEffects()
         {
-            KiDamage = 1f;
-            KiKbAddition = 0f;
-            KiChargeRate = 1;
-            if (KiEssence1)            
-                KiChargeRate += 1;
-            if (KiEssence2)
-                KiChargeRate += 1;
-            if (KiEssence3)
-                KiChargeRate += 2;
-            if (KiEssence4)
-                KiChargeRate += 2;
-            if (KiEssence5)
-                KiChargeRate += 3;
+            kiDamage = 1f;
+            kiKbAddition = 0f;
+            kiChargeRate = 1;
+            if (kiEssence1)            
+                kiChargeRate += 1;
+            if (kiEssence2)
+                kiChargeRate += 1;
+            if (kiEssence3)
+                kiChargeRate += 2;
+            if (kiEssence4)
+                kiChargeRate += 2;
+            if (kiEssence5)
+                kiChargeRate += 3;
             scouterT2 = false;
             scouterT3 = false;
             scouterT4 = false;
@@ -2215,10 +2215,10 @@ namespace DBZMOD
             scouterT6 = false;
             spiritualEmblem = false;
             turtleShell = false;
-            KiDrainMulti = 1f;
-            KiSpeedAddition = 1f;
-            KiCrit = 5;
-            ChlorophyteHeadPieceActive = false;
+            kiDrainMulti = 1f;
+            kiSpeedAddition = 1f;
+            kiCrit = 5;
+            chlorophyteHeadPieceActive = false;
             diamondNecklace = false;
             emeraldNecklace = false;
             rubyNecklace = false;
@@ -2237,20 +2237,20 @@ namespace DBZMOD
             topazNecklace = false;
             amberNecklace = false;
             amethystNecklace = false;
-            KiOrbDropChance = 3;
-            IsHoldingKiWeapon = false;
+            kiOrbDropChance = 3;
+            isHoldingKiWeapon = false;
             wornGloves = false;
             senzuBag = false;
             palladiumBonus = false;
             adamantiteBonus = false;
-            OrbGrabRange = 2;
-            OrbHealAmount = 50;
-            DemonBonus = false;
+            orbGrabRange = 2;
+            orbHealAmount = 50;
+            demonBonus = false;
             blackFusionBonus = false;
-            ChargeLimitAdd = 0;
-            FlightSpeedAdd = 0;
-            FlightUsageAdd = 0;
-            KiRegen = 0;
+            chargeLimitAdd = 0;
+            flightSpeedAdd = 0;
+            flightUsageAdd = 0;
+            kiRegen = 0;
             earthenScarab = false;
             hermitBonus = false;
             zenkaiCharmActive = false;
@@ -2263,7 +2263,7 @@ namespace DBZMOD
             crystalliteFlow = false;
             crystalliteAlleviate = false;
             chargeMoveSpeed = 0f;
-            KaiokenDrainMulti = 1f;
+            kaiokenDrainMulti = 1f;
             kaioCrystal = false;
             luminousSectum = false;
             infuserAmber = false;
@@ -2285,12 +2285,12 @@ namespace DBZMOD
             goblinKiEnhancer = false;
             mechanicalAmplifier = false;
             metamoranSash = false;
-            KiMax2 = 0;
+            kiMax2 = 0;
             bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
-            KiMaxMult = hasLegendaryBuff ? 2f : 1f;
-            IsHoldingDragonRadarMk1 = false;
-            IsHoldingDragonRadarMk2 = false;
-            IsHoldingDragonRadarMk3 = false;
+            kiMaxMult = hasLegendaryBuff ? 2f : 1f;
+            isHoldingDragonRadarMk1 = false;
+            isHoldingDragonRadarMk2 = false;
+            isHoldingDragonRadarMk3 = false;
             eliteSaiyanBonus = false;
         }
 
@@ -2326,86 +2326,86 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+            if (isAnyBossAlive && !ssj1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
-                if (RageCurrent >= 3)
+                if (rageCurrent >= 3)
                 {
-                    OverallFormUnlockChance = 1;
+                    overallFormUnlockChance = 1;
                 }
                 else
                 {
-                    FormUnlockChance = 20;
+                    formUnlockChance = 20;
                 }
-                if ((Main.rand.Next(OverallFormUnlockChance) == 0))
+                if ((Main.rand.Next(overallFormUnlockChance) == 0))
                 {
                     Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                     player.statLife = player.statLifeMax2 / 2;
                     player.HealEffect(player.statLifeMax2 / 2);
-                    SSJ1Achieved = true;
-                    IsTransforming = true;
+                    ssj1Achieved = true;
+                    isTransforming = true;
                     SSJTransformation();
-                    UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
-                    RageCurrent = 0;
+                    UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
+                    rageCurrent = 0;
                     Transformations.EndTransformations(player, true);
                     return false;
                 }
             }
 
-            if (isAnyBossAlive && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && masteryLevel1 >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                SSJ2Achieved = true;
-                IsTransforming = true;
+                ssj2Achieved = true;
+                isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
+                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
                 return false;
             }
 
-            if (isAnyBossAlive && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && MasteryLevel1 >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && masteryLevel1 >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                LSSJAchieved = true;
-                IsTransforming = true;
+                lssjAchieved = true;
+                isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
+                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
                 return false;
             }
 
 
-            if (isGolemAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && MasteryLevel2 >= 1)
+            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && masteryLevel2 >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                SSJ3Achieved = true;
-                IsTransforming = true;
+                ssj3Achieved = true;
+                isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
+                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
                 Transformations.EndTransformations(player, true);
-                RageCurrent = 0;
+                rageCurrent = 0;
                 return false;
             }
 
-            if (ImmortalityRevivesLeft > 0)
+            if (immortalityRevivesLeft > 0)
             {
                 int healamount = (player.statLifeMax + player.statLifeMax2);
                 player.statLife += healamount;
                 player.HealEffect(healamount);
-                ImmortalityRevivesLeft -= 1;
+                immortalityRevivesLeft -= 1;
                 return false;
             }
 
             if (isAnyBossAlive && player.whoAmI == Main.myPlayer)
             {
-                RageCurrent += 1;
+                rageCurrent += 1;
                 return true;
             }
 
@@ -2414,26 +2414,26 @@ namespace DBZMOD
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            if (IsTransforming)
+            if (isTransforming)
             {
                 return false;
             }
-            if (BlockState == 1) // nearly frame-perfect block, zero damage.
+            if (blockState == 1) // nearly frame-perfect block, zero damage.
             {
                 damage = 0;
                 return true;
             }
-            if (BlockState == 2) // block not quite perfect, one third damage
+            if (blockState == 2) // block not quite perfect, one third damage
             {
                 damage /= 3;
                 return true;
             }
-            if (BlockState == 3) // block far from perfect, half damage.
+            if (blockState == 3) // block far from perfect, half damage.
             {
                 damage /= 2;
                 return true;
             }
-            if (ChlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
+            if (chlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
                 player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
                 return true;
@@ -2452,27 +2452,27 @@ namespace DBZMOD
             }
             if (Transformations.IsSSJ1(player))
             {
-                MasteryLevel1 += 0.00232f;
+                masteryLevel1 += 0.00232f;
                 return true;
             }
-            if (Transformations.IsASSJ(player))
+            if (Transformations.IsAssj(player))
             {
-                MasteryLevel1 += 0.00232f;
+                masteryLevel1 += 0.00232f;
                 return true;
             }
-            if (Transformations.IsUSSJ(player))
+            if (Transformations.IsUssj(player))
             {
-                MasteryLevel1 += 0.00232f;
+                masteryLevel1 += 0.00232f;
                 return true;
             }
             if (Transformations.IsSSJ2(player))
             {
-                MasteryLevel2 += 0.00232f;
+                masteryLevel2 += 0.00232f;
                 return true;
             }
             if (Transformations.IsSSJ3(player))
             {
-                MasteryLevel3 += 0.00232f;
+                masteryLevel3 += 0.00232f;
                 return true;
             }
             return true;
@@ -2586,16 +2586,16 @@ namespace DBZMOD
 
         public void HandleAuraBuff(int buffId, bool excludeFriendly, bool excludeHostile, float auraRadius)
         {
-            List<NPC> SeekNpcs = GetNpcsInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
-            List<Player> SeekPlayers = GetPlayersInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
-            foreach(var npc in SeekNpcs)
+            List<NPC> seekNpcs = GetNpcsInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
+            List<Player> seekPlayers = GetPlayersInAuraRadius(excludeFriendly, excludeHostile, auraRadius);
+            foreach(var npc in seekNpcs)
             {
                 if (npc.HasBuff(buffId))
                     continue;
                 npc.AddBuff(buffId, 10, true);
             }
 
-            foreach(var player in SeekPlayers)
+            foreach(var player in seekPlayers)
             {
                 if (player.HasBuff(buffId))
                     continue;
@@ -2672,19 +2672,19 @@ namespace DBZMOD
         {
             if (!DebugUtil.IsDebugModeOn())
             {
-                WasKaioken = IsKaioken;
-                WasTransformed = IsTransformed;
+                wasKaioken = isKaioken;
+                wasTransformed = isTransformed;
 
-                IsKaioken = Transformations.IsAnyKaioken(player);
-                IsTransformed = Transformations.IsAnythingOtherThanKaioken(player);
+                isKaioken = Transformations.IsAnyKaioken(player);
+                isTransformed = Transformations.IsAnythingOtherThanKaioken(player);
                 // this way, we can apply exhaustion debuffs correctly.
-                if (WasKaioken && !IsKaioken)
+                if (wasKaioken && !isKaioken)
                 {
-                    bool WasSSJKK = WasTransformed;
-                    Transformations.AddKaiokenExhaustion(player, WasSSJKK ? 2 : 1);
-                    KaiokenLevel = 0; // make triple sure the Kaio level gets reset.
+                    bool wasSsjkk = wasTransformed;
+                    Transformations.AddKaiokenExhaustion(player, wasSsjkk ? 2 : 1);
+                    kaiokenLevel = 0; // make triple sure the Kaio level gets reset.
                 }
-                if (WasTransformed && !IsTransformed)
+                if (wasTransformed && !isTransformed)
                 {
                     Transformations.AddTransformationExhaustion(player);
                 }
@@ -2692,55 +2692,55 @@ namespace DBZMOD
         }
 
 
-        public int AuraFrameTimer = 0;
-        public int AuraCurrentFrame = 0;
+        public int auraFrameTimer = 0;
+        public int auraCurrentFrame = 0;
         public void IncrementAuraFrameTimers(AuraAnimationInfo aura)
         {
             if (aura == null)
                 return;
             // doubled frame timer while charging.
-            if (IsCharging && aura.ID != (int)AuraID.Charge)
-                AuraFrameTimer++;
+            if (isCharging && aura.id != (int)AuraID.Charge)
+                auraFrameTimer++;
 
-            AuraFrameTimer++;
-            if (AuraFrameTimer >= aura.FrameTimerLimit)
+            auraFrameTimer++;
+            if (auraFrameTimer >= aura.frameTimerLimit)
             {
-                AuraFrameTimer = 0;
-                AuraCurrentFrame++;
+                auraFrameTimer = 0;
+                auraCurrentFrame++;
             }
-            if (AuraCurrentFrame >= aura.Frames)
+            if (auraCurrentFrame >= aura.frames)
             {
-                AuraCurrentFrame = 0;
+                auraCurrentFrame = 0;
             }
         }
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             //handle lightning effects
-            AnimationHelper.LightningEffects.visible = true;
-            layers.Add(AnimationHelper.LightningEffects);
+            AnimationHelper.lightningEffects.visible = true;
+            layers.Add(AnimationHelper.lightningEffects);
 
             // handle transformation animations
-            AnimationHelper.TransformationEffects.visible = true;
-            layers.Add(AnimationHelper.TransformationEffects);
+            AnimationHelper.transformationEffects.visible = true;
+            layers.Add(AnimationHelper.transformationEffects);
 
             // handle dragon radar drawing
-            if (IsHoldingDragonRadarMk1 || IsHoldingDragonRadarMk2 || IsHoldingDragonRadarMk3)
+            if (isHoldingDragonRadarMk1 || isHoldingDragonRadarMk2 || isHoldingDragonRadarMk3)
             {
-                AnimationHelper.DragonRadarEffects.visible = true;
-                layers.Add(AnimationHelper.DragonRadarEffects);
+                AnimationHelper.dragonRadarEffects.visible = true;
+                layers.Add(AnimationHelper.dragonRadarEffects);
             }
             
-            AnimationHelper.AuraEffect.visible = true;
+            AnimationHelper.auraEffect.visible = true;
             // capture the back layer index, which should always exist before the hook fires.
             var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
-            layers.Insert(index, AnimationHelper.AuraEffect);
+            layers.Insert(index, AnimationHelper.auraEffect);
 
             // handle SSJ hair/etc.
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
             if (hair < 0)
                 return;
-            if (Hair != null)
+            if (this.hair != null)
             {
                 layers[hair] = new PlayerLayer(mod.Name, "TransHair",
                     delegate (PlayerDrawInfo draw)
@@ -2748,13 +2748,13 @@ namespace DBZMOD
                         Player player = draw.drawPlayer;
 
                         Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), Color.White), draw.shadow);
-                        DrawData data = new DrawData(Hair, new Vector2((float)((int)(draw.position.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.position.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 4f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
+                        DrawData data = new DrawData(this.hair, new Vector2((float)((int)(draw.position.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.position.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 4f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
                         data.shader = draw.hairShader;
                         Main.playerDrawData.Add(data);
                     });
             }
 
-            if (Hair != null)
+            if (this.hair != null)
             {
                 PlayerLayer.Head.visible = false;
                 PlayerLayer.Hair.visible = false;
@@ -2776,7 +2776,7 @@ namespace DBZMOD
                     experienceMult = 2.0f;
                 }
 
-                m_progressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
+                _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
             base.OnHitAnything(x, y, victim);
         }
@@ -2840,7 +2840,7 @@ namespace DBZMOD
             player.statLifeMax2 = player.statLifeMax2 + GetPowerWishesUsed() * 20;
         }
 
-        public Texture2D Hair;
+        public Texture2D hair;
 
         public override void PreUpdate()
         {
@@ -2850,53 +2850,53 @@ namespace DBZMOD
                 {
                     if (Transformations.IsSSJ1(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
+                        hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                     }
-                    else if (Transformations.IsASSJ(player))
+                    else if (Transformations.IsAssj(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
+                        hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
                     }
-                    else if (Transformations.IsUSSJ(player))
+                    else if (Transformations.IsUssj(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/USSJHair");
+                        hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
                     else if (Transformations.IsSuperKaioken(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
+                        hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }
                     else if (Transformations.IsSSJ2(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
+                        hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
                     }
                     else if (Transformations.IsSSJ3(player))
                     {
-                        Hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
+                        hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                     }
                     else if (Transformations.IsLSSJ1(player))
                     {
-                        Hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
+                        hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                     }
                     else if (Transformations.IsLSSJ2(player))
                     {
-                        Hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
+                        hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
                     else if (Transformations.IsSpectrum(player))
                     {
-                        Hair = mod.GetTexture("Hairs/Dev/SSJSHair");
+                        hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }
                     if(Transformations.IsSSJG(player))
                     {
-                        Hair = null;
+                        hair = null;
                     }
                 }
             }
             else
             {
-                Hair = null;
+                hair = null;
             }
             if (player.dead)
             {
-                Hair = null;
+                hair = null;
             }
         }
     }

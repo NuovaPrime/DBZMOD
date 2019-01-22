@@ -1,7 +1,7 @@
 ﻿using DBZMOD.Items.DragonBalls;
+using DBZMOD.Network;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
-using Network;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -13,7 +13,7 @@ namespace DBZMOD.Tiles.DragonBalls
 {
     public abstract class DragonBallTile : ModTile
     {
-        public int WhichDragonBallAmI;
+        public int whichDragonBallAmI;
 
         public override void SetDefaults()
         {
@@ -50,7 +50,7 @@ namespace DBZMOD.Tiles.DragonBalls
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
             if (modPlayer.AllDragonBallsNearby() && NobodyHasWishActive())
             {
-                modPlayer.WishActive = true;
+                modPlayer.wishActive = true;
             }
         }
 
@@ -64,7 +64,7 @@ namespace DBZMOD.Tiles.DragonBalls
                 if (Main.player[i].whoAmI != i)
                     continue;
 
-                if (Main.player[i].GetModPlayer<MyPlayer>().WishActive)
+                if (Main.player[i].GetModPlayer<MyPlayer>().wishActive)
                     return false;
             }
 
@@ -76,18 +76,18 @@ namespace DBZMOD.Tiles.DragonBalls
             base.PlaceInWorld(i, j, item);
             if (DebugUtil.IsDebugModeOn())
             {
-                var oldTile = DBZWorld.GetWorld().GetDragonBallLocation(WhichDragonBallAmI);
+                var oldTile = DBZWorld.GetWorld().GetDragonBallLocation(whichDragonBallAmI);
                 if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
                 {
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");
                 }
                 DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
-                DBZWorld.GetWorld().SetDragonBallLocation(WhichDragonBallAmI, new Point(i, j), true);                
+                DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);                
             }
             else
             {
-                if (DBZWorld.IsExistingDragonBall(WhichDragonBallAmI))
+                if (DBZWorld.IsExistingDragonBall(whichDragonBallAmI))
                 {
                     WorldGen.KillTile(i, j, false, false, true);
                     Main.NewText("Cheated Dragon Balls taste awful.");
@@ -95,7 +95,7 @@ namespace DBZMOD.Tiles.DragonBalls
                 else
                 {
                     DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
-                    DBZWorld.GetWorld().SetDragonBallLocation(WhichDragonBallAmI, new Point(i, j), true);
+                    DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace DBZMOD.Tiles.DragonBalls
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.showItemIcon = true;
-            player.showItemIcon2 = mod.ItemType(DragonBallItem.GetDragonBallItemTypeFromNumber(WhichDragonBallAmI));
+            player.showItemIcon2 = mod.ItemType(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBallAmI));
         }
 
         // the four star is special, it has its own drop method
@@ -122,9 +122,9 @@ namespace DBZMOD.Tiles.DragonBalls
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, WhichDragonBallAmI);
+                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, whichDragonBallAmI);
                 }
-                DBZWorld.GetWorld().RemoveDragonBallLocation(WhichDragonBallAmI, true);
+                DBZWorld.GetWorld().RemoveDragonBallLocation(whichDragonBallAmI, true);
             }
             // if we're in multiplayer let the server handle item drops.
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -134,13 +134,13 @@ namespace DBZMOD.Tiles.DragonBalls
                 Item.NewItem(i * 16, j * 16, 32, 48, drop);
 
                 Player player = Main.player[Player.FindClosest(new Vector2(i * 16f, j * 16f), 1, 1)];
-                if (player != null && WhichDragonBallAmI == 4)
+                if (player != null && whichDragonBallAmI == 4)
                 {
                     MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
-                    if (!modplayer.FirstFourStarDBPickup && !noItem)
+                    if (!modplayer.firstFourStarDbPickup && !noItem)
                     {
                         Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
-                        modplayer.FirstFourStarDBPickup = true;
+                        modplayer.firstFourStarDbPickup = true;
                     }
                 }
             }

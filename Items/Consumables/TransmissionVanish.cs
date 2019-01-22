@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).IsInstantTransmission1Unlocked = true;
+            MyPlayer.ModPlayer(player).isInstantTransmission1Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
                 Main.NewText("You have unlocked Instant Transmission Lv1. Open your map to learn how to use it.");
@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).IsInstantTransmission1Unlocked)
+            if (MyPlayer.ModPlayer(player).isInstantTransmission1Unlocked)
             {
                 return false;
             }

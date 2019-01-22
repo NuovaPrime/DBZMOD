@@ -1,10 +1,7 @@
-﻿﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using DBZMOD.Util;
 
 namespace DBZMOD.Items.Misc

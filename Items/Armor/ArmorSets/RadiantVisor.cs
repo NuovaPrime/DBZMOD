@@ -1,10 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DBZMOD.Items.Armor.ArmorSets
 {
@@ -31,10 +28,10 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.18f;
-            MyPlayer.ModPlayer(player).KiCrit += 10;
-            MyPlayer.ModPlayer(player).KiMax2 += 750;
-            MyPlayer.ModPlayer(player).FlightSpeedAdd += 0.3f;
+            MyPlayer.ModPlayer(player).kiDamage += 0.18f;
+            MyPlayer.ModPlayer(player).kiCrit += 10;
+            MyPlayer.ModPlayer(player).kiMax2 += 750;
+            MyPlayer.ModPlayer(player).flightSpeedAdd += 0.3f;
 
         }
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)

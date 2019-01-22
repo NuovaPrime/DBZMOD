@@ -1,6 +1,4 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,14 +31,14 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).KiChargeRate += 1;
-            MyPlayer.ModPlayer(player).KiEssence1 = true;
+            MyPlayer.ModPlayer(player).kiChargeRate += 1;
+            MyPlayer.ModPlayer(player).kiEssence1 = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KiEssence1)
+            if (MyPlayer.ModPlayer(player).kiEssence1)
             {
                 return false;
             }

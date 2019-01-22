@@ -1,29 +1,28 @@
-﻿using DBZMOD;
+﻿using System.IO;
 using DBZMOD.Enums;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using DBZMOD.Util;
 
-namespace Network
+namespace DBZMOD.Network
 {
     internal class PlayerPacketHandler : PacketHandler
     {
-        public const byte SyncPlayer = 43;
-        public const byte SyncTriggers = 44;
-        public const byte RequestForSyncFromJoinedPlayer = 45;
-        public const byte RequestDragonBallKeySync = 46;
-        public const byte RequestTeleportMessage = 47;
-        public const byte SendDragonBallKeySync = 48;
-        public const byte RequestKiBeaconInitialSync = 49;
-        public const byte SendKiBeaconInitialSync = 50;
-        public const byte SyncKiBeaconAdd = 51;
-        public const byte SyncKiBeaconRemove = 52;
-        public const byte DestroyAndRespawnDragonBalls = 53;
-        public const byte SyncDragonBallAdd = 54;
-        public const byte SyncDragonBallRemove = 55;
+        public const byte SYNC_PLAYER = 43;
+        public const byte SYNC_TRIGGERS = 44;
+        public const byte REQUEST_FOR_SYNC_FROM_JOINED_PLAYER = 45;
+        public const byte REQUEST_DRAGON_BALL_KEY_SYNC = 46;
+        public const byte REQUEST_TELEPORT_MESSAGE = 47;
+        public const byte SEND_DRAGON_BALL_KEY_SYNC = 48;
+        public const byte REQUEST_KI_BEACON_INITIAL_SYNC = 49;
+        public const byte SEND_KI_BEACON_INITIAL_SYNC = 50;
+        public const byte SYNC_KI_BEACON_ADD = 51;
+        public const byte SYNC_KI_BEACON_REMOVE = 52;
+        public const byte DESTROY_AND_RESPAWN_DRAGON_BALLS = 53;
+        public const byte SYNC_DRAGON_BALL_ADD = 54;
+        public const byte SYNC_DRAGON_BALL_REMOVE = 55;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -33,44 +32,44 @@ namespace Network
         {
             switch (reader.ReadByte())
             {
-                case (SyncPlayer):
+                case (SYNC_PLAYER):
                     ReceiveChangedPlayerData(reader, fromWho);
                     break;
-                case (SyncTriggers):
+                case (SYNC_TRIGGERS):
                     ReceiveSyncTriggers(reader, fromWho);
                     break;
-                case (SyncKiBeaconAdd):
+                case (SYNC_KI_BEACON_ADD):
                     ReceiveKiBeaconAdd(reader, fromWho);
                     break;
-                case (SyncKiBeaconRemove):
+                case (SYNC_KI_BEACON_REMOVE):
                     ReceiveKiBeaconRemove(reader, fromWho);
                     break;
-                case (SyncDragonBallAdd):
+                case (SYNC_DRAGON_BALL_ADD):
                     ReceiveDragonBallAdd(reader, fromWho);
                     break;
-                case (SyncDragonBallRemove):
+                case (SYNC_DRAGON_BALL_REMOVE):
                     ReceiveDragonBallRemove(reader, fromWho);
                     break;
-                case (RequestKiBeaconInitialSync):
+                case (REQUEST_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSyncRequest(fromWho);
                     break;
-                case (SendKiBeaconInitialSync):
+                case (SEND_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSync(reader, fromWho);
                     break;
-                case (RequestForSyncFromJoinedPlayer):
+                case (REQUEST_FOR_SYNC_FROM_JOINED_PLAYER):
                     int whichPlayersDataNeedsRelay = reader.ReadInt32();
                     SendPlayerInfoToPlayerFromOtherPlayer(fromWho, whichPlayersDataNeedsRelay);
                     break;
-                case (RequestTeleportMessage):
+                case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
-                case (RequestDragonBallKeySync):
+                case (REQUEST_DRAGON_BALL_KEY_SYNC):
                     ReceiveDragonBallKeySyncRequest(fromWho);
                     break;
-                case (SendDragonBallKeySync):
+                case (SEND_DRAGON_BALL_KEY_SYNC):
                     ReceiveDragonBallKeySync(reader, fromWho);
                     break;
-                case (DestroyAndRespawnDragonBalls):
+                case (DESTROY_AND_RESPAWN_DRAGON_BALLS):
                     HandleDestroyAndRespawnDragonBalls(reader, fromWho);
                     break;
             }
@@ -79,7 +78,7 @@ namespace Network
         public void SendDestroyAndRespawnDragonBalls(int toWho, int fromWho, int initiatingPlayer)
         {
             DebugUtil.Log("Sending despawn packet for dragon balls");
-            ModPacket packet = GetPacket(DestroyAndRespawnDragonBalls, fromWho);
+            ModPacket packet = GetPacket(DESTROY_AND_RESPAWN_DRAGON_BALLS, fromWho);
             packet.Write(initiatingPlayer);
             packet.Send(toWho, initiatingPlayer);
         }
@@ -107,7 +106,7 @@ namespace Network
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
         {
-            ModPacket packet = GetPacket(SyncKiBeaconAdd, fromWho);
+            ModPacket packet = GetPacket(SYNC_KI_BEACON_ADD, fromWho);
             packet.Write(kiBeaconLocation.X);
             packet.Write(kiBeaconLocation.Y);
             packet.Send(toWho, fromWho);
@@ -115,7 +114,7 @@ namespace Network
 
         public void SendKiBeaconRemove(int toWho, int fromWho, Vector2 kiBeaconLocation)
         {
-            ModPacket packet = GetPacket(SyncKiBeaconRemove, fromWho);
+            ModPacket packet = GetPacket(SYNC_KI_BEACON_REMOVE, fromWho);
             packet.Write(kiBeaconLocation.X);
             packet.Write(kiBeaconLocation.Y);
             packet.Send(toWho, fromWho);
@@ -128,8 +127,8 @@ namespace Network
             var coordY = reader.ReadSingle();
             var location = new Vector2(coordX, coordY);
             var dbWorld = DBZWorld.GetWorld();
-            if (!dbWorld.KiBeacons.Contains(location))
-                dbWorld.KiBeacons.Add(location);
+            if (!dbWorld.kiBeacons.Contains(location))
+                dbWorld.kiBeacons.Add(location);
             if (Main.netMode == NetmodeID.Server)
                 SendKiBeaconAdd(-1, fromWho, location);
         }
@@ -141,8 +140,8 @@ namespace Network
             var coordY = reader.ReadSingle();
             var location = new Vector2(coordX, coordY);
             var dbWorld = DBZWorld.GetWorld();
-            if (dbWorld.KiBeacons.Contains(location))
-                dbWorld.KiBeacons.Remove(location);
+            if (dbWorld.kiBeacons.Contains(location))
+                dbWorld.kiBeacons.Remove(location);
             if (Main.netMode == NetmodeID.Server)
                 SendKiBeaconRemove(-1, fromWho, location);
         }
@@ -150,7 +149,7 @@ namespace Network
         public void SendDragonBallAdd(int toWho, int fromWho, Point dragonBallLocation, int whichDragonBall)
         {
             DebugUtil.Log(string.Format("Sending signal to add dragon ball {0} to {1} {2}", whichDragonBall, dragonBallLocation.X, dragonBallLocation.Y));
-            ModPacket packet = GetPacket(SyncDragonBallAdd, fromWho);
+            ModPacket packet = GetPacket(SYNC_DRAGON_BALL_ADD, fromWho);
             packet.Write(whichDragonBall);
             packet.Write(dragonBallLocation.X);
             packet.Write(dragonBallLocation.Y);
@@ -160,7 +159,7 @@ namespace Network
         public void SendDragonBallRemove(int toWho, int fromWho, int whichDragonBall)
         {
             DebugUtil.Log(string.Format("Sending signal to remove dragon ball {0}", whichDragonBall));
-            ModPacket packet = GetPacket(SyncDragonBallRemove, fromWho);
+            ModPacket packet = GetPacket(SYNC_DRAGON_BALL_REMOVE, fromWho);
             packet.Write(whichDragonBall);
             packet.Send(toWho, fromWho);
         }
@@ -199,7 +198,7 @@ namespace Network
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
         {
-            ModPacket packet = GetPacket(RequestKiBeaconInitialSync, fromWho);
+            ModPacket packet = GetPacket(REQUEST_KI_BEACON_INITIAL_SYNC, fromWho);
             packet.Send(toWho, fromWho);
         }
 
@@ -207,15 +206,15 @@ namespace Network
         public void ReceiveKiBeaconInitialSyncRequest(int toWho)
         {
             var dbWorld = DBZWorld.GetWorld();
-            var numIndexes = dbWorld.KiBeacons.Count;
+            var numIndexes = dbWorld.kiBeacons.Count;
             // if there aren't any, no sync needed, skip this.
             if (numIndexes == 0)
                 return;
-            ModPacket packet = GetPacket(SendKiBeaconInitialSync, 256);
+            ModPacket packet = GetPacket(SEND_KI_BEACON_INITIAL_SYNC, 256);
             // attach the number of indexes to be unpacked so the client knows when to stop reading on the other side.
             packet.Write(numIndexes);
             // loop over beacon locations and write each to the packet.
-            foreach (var kiBeacon in dbWorld.KiBeacons)
+            foreach (var kiBeacon in dbWorld.kiBeacons)
             {
                 // each beacon position coordinate is two floats.
                 packet.Write(kiBeacon.X);
@@ -230,20 +229,20 @@ namespace Network
             var dbWorld = DBZWorld.GetWorld();
             var numIndexes = reader.ReadInt32();
             // presume whatever we have in ours is wrong and wipe it out.
-            dbWorld.KiBeacons.Clear();
+            dbWorld.kiBeacons.Clear();
             for (var i = 0; i < numIndexes; i++)
             {
                 var coordX = reader.ReadSingle();
                 var coordY = reader.ReadSingle();
-                dbWorld.KiBeacons.Add(new Vector2(coordX, coordY));
+                dbWorld.kiBeacons.Add(new Vector2(coordX, coordY));
             }
         }
 
         public void ReceiveDragonBallKeySyncRequest(int toWho)
         {
-            ModPacket packet = GetPacket(SendDragonBallKeySync, 256);
+            ModPacket packet = GetPacket(SEND_DRAGON_BALL_KEY_SYNC, 256);
             var dbWorld = DBZWorld.GetWorld();
-            packet.Write(dbWorld.WorldDragonBallKey);
+            packet.Write(dbWorld.worldDragonBallKey);
             // new stuff, send the player all the dragon ball points.
             packet.Write(dbWorld.GetDragonBallLocation(1).X);
             packet.Write(dbWorld.GetDragonBallLocation(1).Y);
@@ -287,25 +286,25 @@ namespace Network
             dbWorld.SetDragonBallLocation(5, new Point(db5X, db5Y), false);
             dbWorld.SetDragonBallLocation(6, new Point(db6X, db6Y), false);
             dbWorld.SetDragonBallLocation(7, new Point(db7X, db7Y), false);
-            dbWorld.WorldDragonBallKey = dbKey;
+            dbWorld.worldDragonBallKey = dbKey;
         }
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
         {
-            ModPacket packet = GetPacket(RequestDragonBallKeySync, fromWho);
+            ModPacket packet = GetPacket(REQUEST_DRAGON_BALL_KEY_SYNC, fromWho);
             packet.Send(toWho, fromWho);
         }
 
         public void RequestPlayerSendTheirInfo(int toWho, int fromWho, int playerWhoseDataIneed)
         {
-            ModPacket packet = GetPacket(RequestForSyncFromJoinedPlayer, fromWho);
+            ModPacket packet = GetPacket(REQUEST_FOR_SYNC_FROM_JOINED_PLAYER, fromWho);
             packet.Write(playerWhoseDataIneed);
             packet.Send(toWho, fromWho);
         }
 
         public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
         {
-            ModPacket packet = GetPacket(RequestTeleportMessage, fromWho);
+            ModPacket packet = GetPacket(REQUEST_TELEPORT_MESSAGE, fromWho);
             packet.WriteVector2(mapPosition);
             packet.Send();
         }
@@ -323,32 +322,32 @@ namespace Network
         {
             Player player = Main.player[fromWho];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            SendChangedKiMax2(toWho, fromWho, fromWho, modPlayer.KiMax2);
-            SendChangedKiMax3(toWho, fromWho, fromWho, modPlayer.KiMax3);
-            SendChangedKiMaxMult(toWho, fromWho, fromWho, modPlayer.KiMaxMult);
-            SendChangedIsTransforming(toWho, fromWho, fromWho, modPlayer.IsTransforming);
-            SendChangedFragment1(toWho, fromWho, fromWho, modPlayer.Fragment1);
-            SendChangedFragment2(toWho, fromWho, fromWho, modPlayer.Fragment2);
-            SendChangedFragment3(toWho, fromWho, fromWho, modPlayer.Fragment3);
-            SendChangedFragment4(toWho, fromWho, fromWho, modPlayer.Fragment4);
-            SendChangedFragment5(toWho, fromWho, fromWho, modPlayer.Fragment5);
-            SendChangedIsCharging(toWho, fromWho, fromWho, modPlayer.IsCharging);
-            SendChangedJungleMessage(toWho, fromWho, fromWho, modPlayer.JungleMessage);
-            SendChangedHellMessage(toWho, fromWho, fromWho, modPlayer.HellMessage);
-            SendChangedEvilMessage(toWho, fromWho, fromWho, modPlayer.EvilMessage);
-            SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.MushroomMessage);
-            SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.IsHoldingKiWeapon);
+            SendChangedKiMax2(toWho, fromWho, fromWho, modPlayer.kiMax2);
+            SendChangedKiMax3(toWho, fromWho, fromWho, modPlayer.kiMax3);
+            SendChangedKiMaxMult(toWho, fromWho, fromWho, modPlayer.kiMaxMult);
+            SendChangedIsTransforming(toWho, fromWho, fromWho, modPlayer.isTransforming);
+            SendChangedFragment1(toWho, fromWho, fromWho, modPlayer.fragment1);
+            SendChangedFragment2(toWho, fromWho, fromWho, modPlayer.fragment2);
+            SendChangedFragment3(toWho, fromWho, fromWho, modPlayer.fragment3);
+            SendChangedFragment4(toWho, fromWho, fromWho, modPlayer.fragment4);
+            SendChangedFragment5(toWho, fromWho, fromWho, modPlayer.fragment5);
+            SendChangedIsCharging(toWho, fromWho, fromWho, modPlayer.isCharging);
+            SendChangedJungleMessage(toWho, fromWho, fromWho, modPlayer.jungleMessage);
+            SendChangedHellMessage(toWho, fromWho, fromWho, modPlayer.hellMessage);
+            SendChangedEvilMessage(toWho, fromWho, fromWho, modPlayer.evilMessage);
+            SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.mushroomMessage);
+            SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.isHoldingKiWeapon);
             SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
             SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
-            SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.IsFlying);
-            SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.PowerWishesLeft);
-            SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.IsTransformationAnimationPlaying);
+            SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.isFlying);
+            SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.powerWishesLeft);
+            SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.isTransformationAnimationPlaying);
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
         }
 
         public void SendChangedTriggerMouseRight(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerMouseRight);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -357,7 +356,7 @@ namespace Network
 
         public void SendChangedTriggerMouseLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerMouseLeft);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -366,7 +365,7 @@ namespace Network
 
         public void SendChangedTriggerLeft(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerLeft);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -375,7 +374,7 @@ namespace Network
 
         public void SendChangedTriggerRight(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerRight);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -384,7 +383,7 @@ namespace Network
 
         public void SendChangedTriggerUp(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerUp);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -393,7 +392,7 @@ namespace Network
 
         public void SendChangedTriggerDown(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
-            var packet = GetPacket(SyncTriggers, fromWho);
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
             packet.Write((int)PlayerVarSyncEnum.TriggerDown);
             packet.Write(whichPlayer);
             packet.Write(isHeld);
@@ -402,7 +401,7 @@ namespace Network
 
         public void SendChangedKiMax2(int toWho, int fromWho, int whichPlayer, int kiMax2)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMax2);
             packet.Write(whichPlayer);
             packet.Write(kiMax2);
@@ -411,134 +410,134 @@ namespace Network
 
         public void SendChangedKiMax3(int toWho, int fromWho, int whichPlayer, int kiMax3)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMax3);
             packet.Write(whichPlayer);
             packet.Write(kiMax3);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedKiMaxMult(int toWho, int fromWho, int whichPlayer, float KiMaxMult)
+        public void SendChangedKiMaxMult(int toWho, int fromWho, int whichPlayer, float kiMaxMult)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KiMaxMult);
             packet.Write(whichPlayer);
-            packet.Write(KiMaxMult);
+            packet.Write(kiMaxMult);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsTransforming(int toWho, int fromWho, int whichPlayer, bool IsTransforming)
+        public void SendChangedIsTransforming(int toWho, int fromWho, int whichPlayer, bool isTransforming)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsTransforming);
             packet.Write(whichPlayer);
-            packet.Write(IsTransforming);
+            packet.Write(isTransforming);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedFragment1(int toWho, int fromWho, int whichPlayer, bool Fragment1)
+        public void SendChangedFragment1(int toWho, int fromWho, int whichPlayer, bool fragment1)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment1);
             packet.Write(whichPlayer);
-            packet.Write(Fragment1);
+            packet.Write(fragment1);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedFragment2(int toWho, int fromWho, int whichPlayer, bool Fragment2)
+        public void SendChangedFragment2(int toWho, int fromWho, int whichPlayer, bool fragment2)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment2);
             packet.Write(whichPlayer);
-            packet.Write(Fragment2);
+            packet.Write(fragment2);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedFragment3(int toWho, int fromWho, int whichPlayer, bool Fragment3)
+        public void SendChangedFragment3(int toWho, int fromWho, int whichPlayer, bool fragment3)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment3);
             packet.Write(whichPlayer);
-            packet.Write(Fragment3);
+            packet.Write(fragment3);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedFragment4(int toWho, int fromWho, int whichPlayer, bool Fragment4)
+        public void SendChangedFragment4(int toWho, int fromWho, int whichPlayer, bool fragment4)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment4);
             packet.Write(whichPlayer);
-            packet.Write(Fragment4);
+            packet.Write(fragment4);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedFragment5(int toWho, int fromWho, int whichPlayer, bool Fragment5)
+        public void SendChangedFragment5(int toWho, int fromWho, int whichPlayer, bool fragment5)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.Fragment5);
             packet.Write(whichPlayer);
-            packet.Write(Fragment5);
+            packet.Write(fragment5);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsCharging(int toWho, int fromWho, int whichPlayer, bool IsCharging)
+        public void SendChangedIsCharging(int toWho, int fromWho, int whichPlayer, bool isCharging)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsCharging);
             packet.Write(whichPlayer);
-            packet.Write(IsCharging);
+            packet.Write(isCharging);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedJungleMessage(int toWho, int fromWho, int whichPlayer, bool JungleMessage)
+        public void SendChangedJungleMessage(int toWho, int fromWho, int whichPlayer, bool jungleMessage)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.JungleMessage);
             packet.Write(whichPlayer);
-            packet.Write(JungleMessage);
+            packet.Write(jungleMessage);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedHellMessage(int toWho, int fromWho, int whichPlayer, bool HellMessage)
+        public void SendChangedHellMessage(int toWho, int fromWho, int whichPlayer, bool hellMessage)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.HellMessage);
             packet.Write(whichPlayer);
-            packet.Write(HellMessage);
+            packet.Write(hellMessage);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedEvilMessage(int toWho, int fromWho, int whichPlayer, bool EvilMessage)
+        public void SendChangedEvilMessage(int toWho, int fromWho, int whichPlayer, bool evilMessage)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.EvilMessage);
             packet.Write(whichPlayer);
-            packet.Write(EvilMessage);
+            packet.Write(evilMessage);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedMushroomMessage(int toWho, int fromWho, int whichPlayer, bool MushroomMessage)
+        public void SendChangedMushroomMessage(int toWho, int fromWho, int whichPlayer, bool mushroomMessage)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.MushroomMessage);
             packet.Write(whichPlayer);
-            packet.Write(MushroomMessage);
+            packet.Write(mushroomMessage);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsHoldingKiWeapon(int toWho, int fromWho, int whichPlayer, bool IsHoldingKiWeapon)
+        public void SendChangedIsHoldingKiWeapon(int toWho, int fromWho, int whichPlayer, bool isHoldingKiWeapon)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsHoldingKiWeapon);
             packet.Write(whichPlayer);
-            packet.Write(IsHoldingKiWeapon);
+            packet.Write(isHoldingKiWeapon);
             packet.Send(toWho, fromWho);
         }
 
         public void SendChangedTraitChecked(int toWho, int fromWho, int whichPlayer, bool traitChecked)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
-            packet.Write((int)PlayerVarSyncEnum.traitChecked);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.TraitChecked);
             packet.Write(whichPlayer);
             packet.Write(traitChecked);
             packet.Send(toWho, fromWho);
@@ -546,34 +545,34 @@ namespace Network
 
         public void SendChangedPlayerTrait(int toWho, int fromWho, int whichPlayer, string playerTrait)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
-            packet.Write((int)PlayerVarSyncEnum.playerTrait);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.PlayerTrait);
             packet.Write(whichPlayer);
             packet.Write(playerTrait);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsFlying(int toWho, int fromWho, int whichPlayer, bool IsFlying)
+        public void SendChangedIsFlying(int toWho, int fromWho, int whichPlayer, bool isFlying)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsFlying);
             packet.Write(whichPlayer);
-            packet.Write(IsFlying);
+            packet.Write(isFlying);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsTransformationAnimationPlaying(int toWho, int fromWho, int whichPlayer, bool IsTransformationAnimationPlaying)
+        public void SendChangedIsTransformationAnimationPlaying(int toWho, int fromWho, int whichPlayer, bool isTransformationAnimationPlaying)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.IsTransformationAnimationPlaying);
             packet.Write(whichPlayer);
-            packet.Write(IsTransformationAnimationPlaying);
+            packet.Write(isTransformationAnimationPlaying);
             packet.Send(toWho, fromWho);
         }
 
         public void SendChangedChargeMoveSpeed(int toWho, int fromWho, int whichPlayer, float chargeMoveSpeed)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.ChargeMoveSpeed);
             packet.Write(whichPlayer);
             packet.Write(chargeMoveSpeed);
@@ -582,25 +581,25 @@ namespace Network
 
         public void SendChangedBonusSpeedMultiplier(int toWho, int fromWho, int whichPlayer, float bonusSpeedMultiplier)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.BonusSpeedMultiplier);
             packet.Write(whichPlayer);
             packet.Write(bonusSpeedMultiplier);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedWishActive(int toWho, int fromWho, int whichPlayer, bool WishActive)
+        public void SendChangedWishActive(int toWho, int fromWho, int whichPlayer, bool wishActive)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.WishActive);
             packet.Write(whichPlayer);
-            packet.Write(WishActive);
+            packet.Write(wishActive);
             packet.Send(toWho, fromWho);
         }
 
         public void SendChangedKaiokenLevel(int toWho, int fromWho, int whichPlayer, int kaiokenLevel)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.KaiokenLevel);
             packet.Write(whichPlayer);
             packet.Write(kaiokenLevel);
@@ -609,7 +608,7 @@ namespace Network
         
         public void SendChangedMouseWorldOctant(int toWho, int fromWho, int whichPlayer, int mouseWorldOctant)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.MouseWorldOctant);
             packet.Write(whichPlayer);
             packet.Write(mouseWorldOctant);
@@ -618,7 +617,7 @@ namespace Network
 
         public void SnedChangedPowerWishesLeft(int toWho, int fromWho, int whichPlayer, int powerWishesLeft)
         {
-            var packet = GetPacket(SyncPlayer, fromWho);
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.PowerWishesLeft);
             packet.Write(whichPlayer);
             packet.Write(powerWishesLeft);
@@ -627,7 +626,7 @@ namespace Network
 
         public void SendChangedDirection(int toWho, int fromWho, int whichPlayer, int direction)
         {
-            var packet = GetPacket(SyncPlayer, fromWho); ;
+            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.FacingDirection);
             packet.Write(whichPlayer);
             packet.Write(direction);
@@ -636,7 +635,7 @@ namespace Network
 
         public void SendChangedKiCurrent(int toWho, int fromWho, int whichPlayer, float kiCurrent)
         {
-            var packet = GetPacket(SyncPlayer, fromWho); ;
+            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.KiCurrent);
             packet.Write(whichPlayer);
             packet.Write(kiCurrent);
@@ -645,7 +644,7 @@ namespace Network
 
         public void SendChangedHeldProjectile(int toWho, int fromWho, int whichPlayer, int projHeld)
         {
-            var packet = GetPacket(SyncPlayer, fromWho); ;
+            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.HeldProjectile);
             packet.Write(whichPlayer);
             packet.Write(projHeld);
@@ -654,7 +653,7 @@ namespace Network
 
         public void SendChangedMassiveBlastCharging(int toWho, int fromWho, int whichPlayer, bool isMassiveBlastCharging)
         {
-            var packet = GetPacket(SyncPlayer, fromWho); ;
+            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
             packet.Write((int)PlayerVarSyncEnum.IsMassiveBlastCharging);
             packet.Write(whichPlayer);
             packet.Write(isMassiveBlastCharging);
@@ -671,7 +670,7 @@ namespace Network
             ModPacket packet = null;
             if (Main.netMode == NetmodeID.Server)
             {
-                packet = GetPacket(SyncTriggers, fromWho);
+                packet = GetPacket(SYNC_TRIGGERS, fromWho);
                 packet.Write((int)syncEnum);
                 packet.Write(playerNum);
             }
@@ -679,7 +678,7 @@ namespace Network
             switch (syncEnum)
             {
                 case PlayerVarSyncEnum.TriggerMouseLeft:
-                    player.IsMouseLeftHeld = isHeld;
+                    player.isMouseLeftHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -687,7 +686,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerMouseRight:
-                    player.IsMouseRightHeld = isHeld;
+                    player.isMouseRightHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -695,7 +694,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerLeft:
-                    player.IsLeftHeld = isHeld;
+                    player.isLeftHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -703,7 +702,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerRight:
-                    player.IsRightHeld = isHeld;
+                    player.isRightHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -711,7 +710,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerUp:
-                    player.IsUpHeld = isHeld;
+                    player.isUpHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -719,7 +718,7 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerDown:
-                    player.IsDownHeld = isHeld;
+                    player.isDownHeld = isHeld;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
@@ -740,133 +739,133 @@ namespace Network
             ModPacket packet = null;
             if (Main.netMode == NetmodeID.Server)
             {
-                packet = GetPacket(SyncPlayer, fromWho);
+                packet = GetPacket(SYNC_PLAYER, fromWho);
                 packet.Write((int)syncEnum);
                 packet.Write(playerNum);
             }
             switch (syncEnum)
             {
                 case PlayerVarSyncEnum.KiMax2:
-                    player.KiMax2 = reader.ReadInt32();
+                    player.kiMax2 = reader.ReadInt32();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.KiMax2);
+                        packet.Write(player.kiMax2);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.KiMax3:
-                    player.KiMax3 = reader.ReadInt32();
+                    player.kiMax3 = reader.ReadInt32();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.KiMax3);
+                        packet.Write(player.kiMax3);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.KiMaxMult:
-                    player.KiMaxMult = reader.ReadSingle();
+                    player.kiMaxMult = reader.ReadSingle();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.KiMaxMult);
+                        packet.Write(player.kiMaxMult);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.IsTransforming:
-                    player.IsTransforming = reader.ReadBoolean();
+                    player.isTransforming = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsTransforming);
+                        packet.Write(player.isTransforming);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.Fragment1:
-                    player.Fragment1 = reader.ReadBoolean();
+                    player.fragment1 = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.Fragment1);
+                        packet.Write(player.fragment1);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.Fragment2:
-                    player.Fragment2 = reader.ReadBoolean();
+                    player.fragment2 = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.Fragment2);
+                        packet.Write(player.fragment2);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.Fragment3:
-                    player.Fragment3 = reader.ReadBoolean();
+                    player.fragment3 = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.Fragment3);
+                        packet.Write(player.fragment3);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.Fragment4:
-                    player.Fragment4 = reader.ReadBoolean();
+                    player.fragment4 = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.Fragment4);
+                        packet.Write(player.fragment4);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.Fragment5:
-                    player.Fragment5 = reader.ReadBoolean();
+                    player.fragment5 = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.Fragment5);
+                        packet.Write(player.fragment5);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.IsCharging:
-                    player.IsCharging = reader.ReadBoolean();
+                    player.isCharging = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsCharging);
+                        packet.Write(player.isCharging);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.JungleMessage:
-                    player.JungleMessage = reader.ReadBoolean();
+                    player.jungleMessage = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.JungleMessage);
+                        packet.Write(player.jungleMessage);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.HellMessage:
-                    player.HellMessage = reader.ReadBoolean();
+                    player.hellMessage = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.HellMessage);
+                        packet.Write(player.hellMessage);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.EvilMessage:
-                    player.EvilMessage = reader.ReadBoolean();
+                    player.evilMessage = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.EvilMessage);
+                        packet.Write(player.evilMessage);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.MushroomMessage:
-                    player.MushroomMessage = reader.ReadBoolean();
+                    player.mushroomMessage = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.MushroomMessage);
+                        packet.Write(player.mushroomMessage);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.IsHoldingKiWeapon:
-                    player.IsHoldingKiWeapon = reader.ReadBoolean();
+                    player.isHoldingKiWeapon = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsHoldingKiWeapon);
+                        packet.Write(player.isHoldingKiWeapon);
                         packet.Send(-1, fromWho);
                     }
                     break;
-                case PlayerVarSyncEnum.traitChecked:
+                case PlayerVarSyncEnum.TraitChecked:
                     player.traitChecked = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
@@ -874,7 +873,7 @@ namespace Network
                         packet.Send(-1, fromWho);
                     }
                     break;
-                case PlayerVarSyncEnum.playerTrait:
+                case PlayerVarSyncEnum.PlayerTrait:
                     player.playerTrait = reader.ReadString();
                     if (Main.netMode == NetmodeID.Server)
                     {
@@ -883,18 +882,18 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.IsFlying:
-                    player.IsFlying = reader.ReadBoolean();
+                    player.isFlying = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsFlying);
+                        packet.Write(player.isFlying);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.IsTransformationAnimationPlaying:
-                    player.IsTransformationAnimationPlaying = reader.ReadBoolean();
+                    player.isTransformationAnimationPlaying = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsTransformationAnimationPlaying);
+                        packet.Write(player.isTransformationAnimationPlaying);
                         packet.Send(-1, fromWho);
                     }
                     break;
@@ -915,18 +914,18 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.MouseWorldOctant:
-                    player.MouseWorldOctant = reader.ReadInt32();
+                    player.mouseWorldOctant = reader.ReadInt32();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.MouseWorldOctant);
+                        packet.Write(player.mouseWorldOctant);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.PowerWishesLeft:
-                    player.PowerWishesLeft = reader.ReadInt32();
+                    player.powerWishesLeft = reader.ReadInt32();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.PowerWishesLeft);
+                        packet.Write(player.powerWishesLeft);
                         packet.Send(-1, fromWho);
                     }
                     break;
@@ -939,18 +938,18 @@ namespace Network
                     }
                     break;
                 case PlayerVarSyncEnum.IsMassiveBlastCharging:
-                    player.IsMassiveBlastCharging = reader.ReadBoolean();
+                    player.isMassiveBlastCharging = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.IsMassiveBlastCharging);
+                        packet.Write(player.isMassiveBlastCharging);
                         packet.Send(-1, fromWho);
                     }
                     break;
                 case PlayerVarSyncEnum.WishActive:
-                    player.WishActive = reader.ReadBoolean();
+                    player.wishActive = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.WishActive);
+                        packet.Write(player.wishActive);
                         packet.Send(-1, fromWho);
                     }
                     break;

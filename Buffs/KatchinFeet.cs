@@ -1,13 +1,11 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using System;
 
 namespace DBZMOD.Buffs
 {
     public class KatchinFeet : ModBuff
     {
-        private int StimulantTimer;
+        private int _stimulantTimer;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Katchin Feet");

@@ -1,6 +1,5 @@
 ﻿﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -27,9 +26,9 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.12f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax2 += 500;
-                player.GetModPlayer<MyPlayer>(mod).KiRegen += 2;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.12f;
+                player.GetModPlayer<MyPlayer>(mod).kiMax2 += 500;
+                player.GetModPlayer<MyPlayer>(mod).kiRegen += 2;
                 player.GetModPlayer<MyPlayer>(mod).radiantTotem = true;
             }
         }

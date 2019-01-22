@@ -7,36 +7,36 @@ using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using DBZMOD.Effects;
-using Config;
 using Terraria.Graphics.Effects;
 using System.IO;
-using Network;
+using DBZMOD.Config;
+using DBZMOD.Network;
 using DBZMOD.Util;
 
 namespace DBZMOD
 {
     public class DBZMOD : Mod
     {
-        private UIFlatPanel UIFlatPanel;
+        private UIFlatPanel _uiFlatPanel;
 
-        private static TransMenu transMenu;
-        private static UserInterface TransMenuInterface;
+        private static TransMenu _transMenu;
+        private static UserInterface _transMenuInterface;
 
-        private static WishMenu wishMenu;
-        private static UserInterface wishMenuInterface;
+        private static WishMenu _wishMenu;
+        private static UserInterface _wishMenuInterface;
 
-        private static KiBar kibar;
-        private static UserInterface KiBarInterface;
+        private static KiBar _kibar;
+        private static UserInterface _kiBarInterface;
 
-        private static ProgressionMenu progressionMenu;
-        private static UserInterface ProgressionMenuInterface;
+        private static ProgressionMenu _progressionMenu;
+        private static UserInterface _progressionMenuInterface;
 
-        private static OverloadBar overloadbar;
-        private static UserInterface OverloadBarInterface;
+        private static OverloadBar _overloadbar;
+        private static UserInterface _overloadBarInterface;
 
-        private static InstantTransmissionMapTeleporter InstantTransmissionMapTeleporter;
+        private static InstantTransmissionMapTeleporter _instantTransmissionMapTeleporter;
 
-        private ResourceBar resourceBar;
+        private ResourceBar _resourceBar;
 
         public bool thoriumLoaded;
         public bool tremorLoaded;
@@ -45,7 +45,7 @@ namespace DBZMOD
         public bool expandedSentriesLoaded;
         public static DBZMOD instance;
 
-        internal static CircleShader Circle;
+        internal static CircleShader circle;
 
         public DBZMOD()
         {
@@ -59,16 +59,16 @@ namespace DBZMOD
 
         public override void Unload()
         {
-            GFX.UnloadGFX();
+            Gfx.UnloadGfx();
             KiBar.visible = false;
             OverloadBar.visible = false;
             instance = null;
             TransMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
             WishMenu.menuvisible = false;
-            TransMenu.SSJ1On = false;
-            TransMenu.SSJ2On = false;
-            UIFlatPanel._backgroundTexture = null;
+            TransMenu.ssj1On = false;
+            TransMenu.ssj2On = false;
+            UIFlatPanel.backgroundTexture = null;
         }
 
         public override void Load()
@@ -85,20 +85,22 @@ namespace DBZMOD
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;
             battlerodsLoaded = ModLoader.GetMod("UnuBattleRods") != null;
             expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;
-            MyPlayer.KaiokenKey = RegisterHotKey("Kaioken", "J");
-            MyPlayer.EnergyCharge = RegisterHotKey("Energy Charge", "C");
-            MyPlayer.Transform = RegisterHotKey("Transform", "X");
-            MyPlayer.PowerDown = RegisterHotKey("Power Down", "V");
-            MyPlayer.SpeedToggle = RegisterHotKey("Speed Toggle", "Z");
-            MyPlayer.QuickKi = RegisterHotKey("Quick Ki", "N");
-            MyPlayer.TransMenu = RegisterHotKey("Transformation Menu", "K");
-            MyPlayer.InstantTransmission = RegisterHotKey("Instant Transmission", "I");
+
+            MyPlayer.kaiokenKey = RegisterHotKey("Kaioken", "J");
+            MyPlayer.energyCharge = RegisterHotKey("Energy Charge", "C");
+            MyPlayer.transform = RegisterHotKey("Transform", "X");
+            MyPlayer.powerDown = RegisterHotKey("Power Down", "V");
+            MyPlayer.speedToggle = RegisterHotKey("Speed Toggle", "Z");
+            MyPlayer.quickKi = RegisterHotKey("Quick Ki", "N");
+            MyPlayer.transMenu = RegisterHotKey("Transformation Menu", "K");
+            MyPlayer.instantTransmission = RegisterHotKey("Instant Transmission", "I");
             //MyPlayer.ProgressionMenuKey = RegisterHotKey("Progression Menu", "P");
-            MyPlayer.FlyToggle = RegisterHotKey("Flight Toggle", "Q");
-            MyPlayer.ArmorBonus = RegisterHotKey("Armor Bonus", "Y");
+            MyPlayer.flyToggle = RegisterHotKey("Flight Toggle", "Q");
+            MyPlayer.armorBonus = RegisterHotKey("Armor Bonus", "Y");
+
             if (!Main.dedServ)
             {
-                GFX.LoadGFX(this);
+                Gfx.LoadGfx(this);
                 KiBar.visible = true;
 
                 ActivateTransMenu();
@@ -107,9 +109,9 @@ namespace DBZMOD
                 ActivateKiBar();
                 ActivateOverloadBar();
 
-                InstantTransmissionMapTeleporter = new InstantTransmissionMapTeleporter();
+                _instantTransmissionMapTeleporter = new InstantTransmissionMapTeleporter();
 
-                Circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
+                circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
 
                 Filters.Scene["DBZMOD:GodSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.9f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:GodSky"] = new GodSky();
@@ -120,42 +122,42 @@ namespace DBZMOD
 
         public static void ActivateTransMenu()
         {
-            transMenu = new TransMenu();
-            transMenu.Activate();
-            TransMenuInterface = new UserInterface();
-            TransMenuInterface.SetState(transMenu);
+            _transMenu = new TransMenu();
+            _transMenu.Activate();
+            _transMenuInterface = new UserInterface();
+            _transMenuInterface.SetState(_transMenu);
         }
 
         public static void ActivateWishmenu()
         {
-            wishMenu = new WishMenu();
-            wishMenu.Activate();
-            wishMenuInterface = new UserInterface();
-            wishMenuInterface.SetState(wishMenu);
+            _wishMenu = new WishMenu();
+            _wishMenu.Activate();
+            _wishMenuInterface = new UserInterface();
+            _wishMenuInterface.SetState(_wishMenu);
         }
 
         public static void ActivateProgressionMenu()
         {
-            progressionMenu = new ProgressionMenu();
-            progressionMenu.Activate();
-            ProgressionMenuInterface = new UserInterface();
-            ProgressionMenuInterface.SetState(progressionMenu);
+            _progressionMenu = new ProgressionMenu();
+            _progressionMenu.Activate();
+            _progressionMenuInterface = new UserInterface();
+            _progressionMenuInterface.SetState(_progressionMenu);
         }
 
         public static void ActivateKiBar()
         {
-            kibar = new KiBar();
-            kibar.Activate();
-            KiBarInterface = new UserInterface();
-            KiBarInterface.SetState(kibar);
+            _kibar = new KiBar();
+            _kibar.Activate();
+            _kiBarInterface = new UserInterface();
+            _kiBarInterface.SetState(_kibar);
         }
 
         public static void ActivateOverloadBar()
         {
-            overloadbar = new OverloadBar();
-            overloadbar.Activate();
-            OverloadBarInterface = new UserInterface();
-            OverloadBarInterface.SetState(overloadbar);
+            _overloadbar = new OverloadBar();
+            _overloadbar.Activate();
+            _overloadBarInterface = new UserInterface();
+            _overloadBarInterface.SetState(_overloadbar);
         }
 
         public override void AddRecipeGroups()
@@ -173,19 +175,19 @@ namespace DBZMOD
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (TransMenuInterface != null && TransMenu.menuvisible)
+            if (_transMenuInterface != null && TransMenu.menuvisible)
             {
-                TransMenuInterface.Update(gameTime);
+                _transMenuInterface.Update(gameTime);
             }
 
-            if (wishMenuInterface != null && WishMenu.menuvisible)
+            if (_wishMenuInterface != null && WishMenu.menuvisible)
             {
-                wishMenuInterface.Update(gameTime);
+                _wishMenuInterface.Update(gameTime);
             }
 
-            if (ProgressionMenuInterface != null && ProgressionMenu.menuvisible)
+            if (_progressionMenuInterface != null && ProgressionMenu.menuvisible)
             {
-                progressionMenu.Update(gameTime);
+                _progressionMenu.Update(gameTime);
             }
         }
 
@@ -200,8 +202,8 @@ namespace DBZMOD
                     {
                         if (KiBar.visible)
                         {
-                            KiBarInterface.Update(Main._drawInterfaceGameTime);
-                            kibar.Draw(Main.spriteBatch);
+                            _kiBarInterface.Update(Main._drawInterfaceGameTime);
+                            _kibar.Draw(Main.spriteBatch);
                         }
                         return true;
                     },
@@ -217,17 +219,17 @@ namespace DBZMOD
                     {
                         if (TransMenu.menuvisible)
                         {
-                            TransMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                            _transMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         if (ProgressionMenu.menuvisible)
                         {
-                            ProgressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                            _progressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         if (WishMenu.menuvisible)
                         {
-                            wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                            _wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;
@@ -244,8 +246,8 @@ namespace DBZMOD
                     {
                         if (OverloadBar.visible)
                         {
-                            OverloadBarInterface.Update(Main._drawInterfaceGameTime);
-                            overloadbar.Draw(Main.spriteBatch);
+                            _overloadBarInterface.Update(Main._drawInterfaceGameTime);
+                            _overloadbar.Draw(Main.spriteBatch);
                         }
                         return true;
                     },

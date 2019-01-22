@@ -1,10 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DBZMOD.Items.Weapons.Tier_6
 {
@@ -33,10 +30,10 @@ namespace DBZMOD.Items.Weapons.Tier_6
             item.noMelee = true;
             item.noUseGraphic = true;
             item.autoReuse = true;
-            KiDrain = 105;
+            kiDrain = 105;
             item.shoot = mod.ProjectileType("BlindingBladeProj");
             item.shootSpeed = 20f;
-            WeaponType = "Disk";
+            weaponType = "Disk";
             if (!Main.dedServ)
             {
                 item.UseSound = SoundID.Item71;

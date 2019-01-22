@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Terraria;
-using Terraria.ID;
+﻿using System.IO;
 using Terraria.ModLoader;
 
-namespace Network
+namespace DBZMOD.Network
 {
     internal abstract class PacketHandler
     {
@@ -22,7 +16,7 @@ namespace Network
 
         protected ModPacket GetPacket(byte packetType, int fromWho)
         {
-            var p = DBZMOD.DBZMOD.instance.GetPacket();
+            var p = global::DBZMOD.DBZMOD.instance.GetPacket();
             p.Write(HandlerType);
             p.Write(packetType);
             // this seems to fuck shit up and I don't understand why blushie put it in the example.

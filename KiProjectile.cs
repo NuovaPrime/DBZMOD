@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,26 +9,26 @@ namespace DBZMOD
 {
     public abstract class KiProjectile : ModProjectile
     {
-        public static float DefaultBeamKnockback = 1.5f;
-        public int ChargeLevel;
-        public int ChargeTimer;
-        public float ChargeTimerMax;
-        public int ChargeLimit = 4;
-        public int FinalChargeLimit = 4;
-        public int SizeTimer;
+        public static float defaultBeamKnockback = 1.5f;
+        public int chargeLevel;
+        public int chargeTimer;
+        public float chargeTimerMax;
+        public int chargeLimit = 4;
+        public int finalChargeLimit = 4;
+        public int sizeTimer;
         public int originalWidth;
         public int originalHeight;
-        public bool ChargeBall;
-        public bool KiWeapon = true;
-        public bool BeamTrail;
-        public int KiDrainRate;
+        public bool chargeBall;
+        public bool kiWeapon = true;
+        public bool beamTrail;
+        public int kiDrainRate;
         public Color color;
         public Player player;
         public MyPlayer myPlayer;
         public int yoffset;
         public int xoffset;
         public float ballscale = 1f;
-        public int DustType;
+        public int dustType;
 
         public override bool CloneNewInstances
         {
@@ -56,19 +53,19 @@ namespace DBZMOD
         {
             projectile.netUpdate = true;
             player = Main.player[projectile.owner];
-            FinalChargeLimit = ChargeLimit + MyPlayer.ModPlayer(player).ChargeLimitAdd;
-            if (!ChargeBall)
+            finalChargeLimit = chargeLimit + MyPlayer.ModPlayer(player).chargeLimitAdd;
+            if (!chargeBall)
             {
-                projectile.scale = projectile.scale + ChargeLevel;
+                projectile.scale = projectile.scale + chargeLevel;
             }
 
-            if (BeamTrail && projectile.scale > 0 && SizeTimer > 0)
+            if (beamTrail && projectile.scale > 0 && sizeTimer > 0)
             {
-                SizeTimer = 120;
-                SizeTimer--;
-                projectile.scale = (projectile.scale * SizeTimer / 120f);
+                sizeTimer = 120;
+                sizeTimer--;
+                projectile.scale = (projectile.scale * sizeTimer / 120f);
             }
-            if (ChargeBall)
+            if (chargeBall)
             {
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
@@ -85,7 +82,7 @@ namespace DBZMOD
                 projectile.position.Y = player.Center.Y - 3 + yoffset;
                 projectile.netUpdate2 = true;
 
-                if (!player.channel && ChargeLevel < 1)
+                if (!player.channel && chargeLevel < 1)
                 {
                     projectile.Kill();
                 }
@@ -93,21 +90,21 @@ namespace DBZMOD
                 // if the player is channeling, increment the timer and apply some slowdown
                 if (player.channel && projectile.active)
                 {
-                    ChargeTimer++;
+                    chargeTimer++;
                     ProjectileUtil.ApplyChannelingSlowdown(player);
                 }
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;
 
-                if (ChargeTimer > ChargeTimerMax && ChargeLevel < FinalChargeLimit)
+                if (chargeTimer > chargeTimerMax && chargeLevel < finalChargeLimit)
                 {
-                    ChargeLevel += 1;
-                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), ChargeLevel, false, false);
-                    ChargeTimer = 0;
+                    chargeLevel += 1;
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), chargeLevel, false, false);
+                    chargeTimer = 0;
                 }
                 if (DBZMOD.IsTickRateElapsed(2) && !MyPlayer.ModPlayer(player).IsKiDepleted())
                 {
-                    MyPlayer.ModPlayer(player).AddKi(-KiDrainRate, true, false);
+                    MyPlayer.ModPlayer(player).AddKi(-kiDrainRate, true, false);
                 }
                 for (int d = 0; d < 4; d++)
                 {
@@ -115,7 +112,7 @@ namespace DBZMOD
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, DustType, 0f, 0f, 213, default(Color), ballscale);
+                    Dust tDust = Dust.NewDustDirect(projectile.position + (position * (10 + 2.0f * projectile.scale)), projectile.width, projectile.height, dustType, 0f, 0f, 213, default(Color), ballscale);
                     tDust.velocity = Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
@@ -150,15 +147,15 @@ namespace DBZMOD
         {
             Player player = Main.player[projectile.owner];
             int item = 0;
-            if (KiWeapon)
+            if (kiWeapon)
             {
                 if (npc.life <= 0)
                 {
-                    if (npc.boss && MyPlayer.ModPlayer(player).RageCurrent >= 1)
+                    if (npc.boss && MyPlayer.ModPlayer(player).rageCurrent >= 1)
                     {
-                        MyPlayer.ModPlayer(player).RageCurrent -= 1;
+                        MyPlayer.ModPlayer(player).rageCurrent -= 1;
                     }
-                    if (Main.rand.Next(MyPlayer.ModPlayer(player).KiOrbDropChance) == 0)
+                    if (Main.rand.Next(MyPlayer.ModPlayer(player).kiOrbDropChance) == 0)
                     {
                         item = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("KiOrb"), 1);
                     }
@@ -168,7 +165,7 @@ namespace DBZMOD
                     }
                 }
             }
-            if (KiWeapon)
+            if (kiWeapon)
             {
                 if (MyPlayer.ModPlayer(player).palladiumBonus)
                 {
@@ -182,7 +179,7 @@ namespace DBZMOD
                     }
                 }
             }
-            if (KiWeapon)
+            if (kiWeapon)
             {
                 if (MyPlayer.ModPlayer(player).luminousSectum)
                 {

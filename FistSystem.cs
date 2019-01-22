@@ -3,15 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameInput;
-using DBZMOD.UI;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.Graphics;
 using Microsoft.Xna.Framework;
-using DBZMOD.Projectiles;
-using Terraria.ModLoader.IO;
-using Terraria.ID;
-using DBZMOD;
 using DBZMOD.Util;
 using DBZMOD.Enums;
 
@@ -20,24 +12,24 @@ namespace DBZMOD
     class FistSystem
     {
         #region Variables
-        public bool EyeDowned;
-        public bool BeeDowned;
-        public bool WallDowned;
-        public bool PlantDowned;
-        public bool DukeDowned;
-        public bool MoonlordDowned;
-        private int BasicPunchDamage;
-        private int HeavyPunchDamage;
-        private int FlurryPunchDamage;
-        private int FlurryActiveTimer;
-        private int FlurryCooldownTimer;
-        private int ShootSpeed;        
-        private int ZanzokenCooldownTimer;
-        private int ZanzokenHeavyInputTimer;
-        private int ZanzokenHeavyCooldownTimer;
-        private float ZanzokenKiCostMultiplier = 1f;
-        private float ZanzokenDistanceMultiplier = 1f;
-        private int LightAttackCooldownTimer;
+        public bool eyeDowned;
+        public bool beeDowned;
+        public bool wallDowned;
+        public bool plantDowned;
+        public bool dukeDowned;
+        public bool moonlordDowned;
+        private int _basicPunchDamage;
+        private int _heavyPunchDamage;
+        private int _flurryPunchDamage;
+        private int _flurryActiveTimer;
+        private int _flurryCooldownTimer;
+        private int _shootSpeed;        
+        private int _zanzokenCooldownTimer;
+        private int _zanzokenHeavyInputTimer;
+        private int _zanzokenHeavyCooldownTimer;
+        private float _zanzokenKiCostMultiplier = 1f;
+        private float _zanzokenDistanceMultiplier = 1f;
+        private int _lightAttackCooldownTimer;
 
         #endregion
 
@@ -88,27 +80,27 @@ namespace DBZMOD
             // PUT STUFF HERE FOR BONUSES TO ZANZOKEN DISTANCE AND KI COST, IF DESIRED.
 
             // take the greater of two numbers: the current ki cost multiplier after some decay, or the minimum ki cost multiplier.
-            ZanzokenKiCostMultiplier = Math.Max(ZANZOKEN_KI_COST_MINIMUM, ZanzokenKiCostMultiplier * ZANZOKEN_KI_COST_RECOVERY);
+            _zanzokenKiCostMultiplier = Math.Max(ZANZOKEN_KI_COST_MINIMUM, _zanzokenKiCostMultiplier * ZANZOKEN_KI_COST_RECOVERY);
 
             // take the lesser of two numbers: the current distance multiplier after some regrowth, or the maximum distance multiplier.
-            ZanzokenDistanceMultiplier = Math.Min(ZANZOKEN_DISTANCE_MAXIMUM, ZanzokenDistanceMultiplier * ZANZOKEN_DISTANCE_RECOVERY);
+            _zanzokenDistanceMultiplier = Math.Min(ZANZOKEN_DISTANCE_MAXIMUM, _zanzokenDistanceMultiplier * ZANZOKEN_DISTANCE_RECOVERY);
 
             // PUT STUFF HERE FOR BONUSES TO COOLDOWNS (There's a few places to do this below also)
 
             // reduce the cooldown on Zanzoken
-            ZanzokenCooldownTimer = Math.Max(0, ZanzokenCooldownTimer - 1);
+            _zanzokenCooldownTimer = Math.Max(0, _zanzokenCooldownTimer - 1);
 
             // also reduce the window for the Zanzoken Heavy combo
-            ZanzokenHeavyInputTimer = Math.Max(0, ZanzokenHeavyInputTimer - 1);
+            _zanzokenHeavyInputTimer = Math.Max(0, _zanzokenHeavyInputTimer - 1);
 
             // also reduce the cooldown for the Zanzoken Heavy Combo
-            ZanzokenHeavyCooldownTimer = Math.Max(0, ZanzokenHeavyCooldownTimer - 1);
+            _zanzokenHeavyCooldownTimer = Math.Max(0, _zanzokenHeavyCooldownTimer - 1);
 
             // also reduce the cooldown for flurries
-            FlurryCooldownTimer = Math.Max(0, FlurryCooldownTimer - 1);
+            _flurryCooldownTimer = Math.Max(0, _flurryCooldownTimer - 1);
 
             // and a cooldown for light attacks.
-            LightAttackCooldownTimer = Math.Max(0, LightAttackCooldownTimer - 1);
+            _lightAttackCooldownTimer = Math.Max(0, _lightAttackCooldownTimer - 1);
         }
 
         // return whether the player is in a fit state to use a zan heavy combo
@@ -116,18 +108,18 @@ namespace DBZMOD
         {
             // Heavy input timer is a nonzero, meaning it's ticking down the frames they can use a heavy combo
             // Meanwhile the cooldown timer must be zero, meaning not on cooldown.
-            return ZanzokenHeavyInputTimer > 0 && ZanzokenHeavyCooldownTimer == 0;
+            return _zanzokenHeavyInputTimer > 0 && _zanzokenHeavyCooldownTimer == 0;
         }
 
         public bool CanPerformFlurry(Player player)
         {
             // Is the flurry on cooldown?
-            return FlurryCooldownTimer == 0 && MyPlayer.ModPlayer(player).CanUseFlurry;
+            return _flurryCooldownTimer == 0 && MyPlayer.ModPlayer(player).canUseFlurry;
         }
 
         public bool CanPerformLightAttack(Player player)
         {
-            return LightAttackCooldownTimer == 0;
+            return _lightAttackCooldownTimer == 0;
         }
 
         public int GetFlurryDuration(Player player)
@@ -153,7 +145,7 @@ namespace DBZMOD
                 player.direction = -1;
             }
 
-            return (normalizedVector * ShootSpeed);
+            return (normalizedVector * _shootSpeed);
         }
 
         public Vector2 GetProjectilePosition(Player player)
@@ -173,23 +165,23 @@ namespace DBZMOD
 
         public void PerformLightAttack(Mod mod, Player player)
         {
-            ShootSpeed = 7;
-            Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), BasicPunchDamage, 5);
-            LightAttackCooldownTimer = GetLightAttackCooldown(player);
+            _shootSpeed = 7;
+            Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), _basicPunchDamage, 5);
+            _lightAttackCooldownTimer = GetLightAttackCooldown(player);
         }
 
         public void Update(TriggersSet triggersSet, Player player, Mod mod)
         {
             HandleZanzokenAndComboRecovery();
 
-            if (FlurryActiveTimer > 0)
+            if (_flurryActiveTimer > 0)
             {
-                if (FlurryActiveTimer % 2 == 0)
+                if (_flurryActiveTimer % 2 == 0)
                 {
                     // spawn flurry attack                    
-                    Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), FlurryPunchDamage, 3);
+                    Projectile.NewProjectile(GetProjectilePosition(player), GetProjectileVelocity(player), BasicFistProjSelect(mod), _flurryPunchDamage, 3);
                 }
-                FlurryActiveTimer--;
+                _flurryActiveTimer--;
 
                 // process no other triggers. 
                 return;
@@ -199,33 +191,33 @@ namespace DBZMOD
             var actionsToPerform = ControlHelper.ProcessInputs(triggersSet);
 
             #region Mouse Clicks
-            if (actionsToPerform.BlockPhase1)//both click, for blocking
+            if (actionsToPerform.blockPhase1)//both click, for blocking
             {
-                MyPlayer.ModPlayer(player).BlockState = 1;
+                MyPlayer.ModPlayer(player).blockState = 1;
             }
-            else if (actionsToPerform.BlockPhase2)
+            else if (actionsToPerform.blockPhase2)
             {
-                MyPlayer.ModPlayer(player).BlockState = 2;
+                MyPlayer.ModPlayer(player).blockState = 2;
             }
-            else if (actionsToPerform.BlockPhase3)
+            else if (actionsToPerform.blockPhase3)
             {
-                MyPlayer.ModPlayer(player).BlockState = 3;
+                MyPlayer.ModPlayer(player).blockState = 3;
             } else
             {
-                MyPlayer.ModPlayer(player).BlockState = 0;
-                if (actionsToPerform.Flurry && CanPerformFlurry(player))
+                MyPlayer.ModPlayer(player).blockState = 0;
+                if (actionsToPerform.flurry && CanPerformFlurry(player))
                 {
-                    ShootSpeed = 2;
-                    FlurryActiveTimer = GetFlurryDuration(player);
-                    FlurryCooldownTimer = GetFlurryCooldownDuration(player);
+                    _shootSpeed = 2;
+                    _flurryActiveTimer = GetFlurryDuration(player);
+                    _flurryCooldownTimer = GetFlurryCooldownDuration(player);
                 }
-                else if (actionsToPerform.LightAttack && CanPerformLightAttack(player))
+                else if (actionsToPerform.lightAttack && CanPerformLightAttack(player))
                 {
                     PerformLightAttack(mod, player);
                 }
-                else if (actionsToPerform.HeavyAttack)
+                else if (actionsToPerform.heavyAttack)
                 {
-                    if (!player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && MyPlayer.ModPlayer(player).CanUseHeavyHit)
+                    if (!player.HasBuff(mod.BuffType("HeavyPunchCooldown")) && MyPlayer.ModPlayer(player).canUseHeavyHit)
                     {
                         if (CanUseZanzokenHeavy(player))
                         {
@@ -233,7 +225,7 @@ namespace DBZMOD
                         }
                         else
                         {
-                            Projectile.NewProjectile(player.position, GetProjectileVelocity(player), mod.ProjectileType("KiFistProjHeavy"), HeavyPunchDamage, 50);
+                            Projectile.NewProjectile(player.position, GetProjectileVelocity(player), mod.ProjectileType("KiFistProjHeavy"), _heavyPunchDamage, 50);
                         }
                     }
                 }
@@ -241,44 +233,44 @@ namespace DBZMOD
             #endregion
 
             #region Dash Checks
-            if (actionsToPerform.DashUp)
+            if (actionsToPerform.dashUp)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Up);
             }
-            if (actionsToPerform.DashDown)
+            if (actionsToPerform.dashDown)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Down);
             }
-            if (actionsToPerform.DashLeft)
+            if (actionsToPerform.dashLeft)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Left);
             }
-            if (actionsToPerform.DashRight)
+            if (actionsToPerform.dashRight)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Right);
             }
-            if (actionsToPerform.DashUpLeft)
+            if (actionsToPerform.dashUpLeft)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Up, Controls.Left);
             }
-            if (actionsToPerform.DashUpRight)
+            if (actionsToPerform.dashUpRight)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Up, Controls.Right);
             }
-            if (actionsToPerform.DashDownLeft)
+            if (actionsToPerform.dashDownLeft)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Down, Controls.Left);
             }
-            if (actionsToPerform.DashDownRight)
+            if (actionsToPerform.dashDownRight)
             {
-                MyPlayer.ModPlayer(player).IsDashing = true;
+                MyPlayer.ModPlayer(player).isDashing = true;
                 PerformZanzoken(mod, player, Controls.Down, Controls.Right);
             }
             #endregion
@@ -286,57 +278,57 @@ namespace DBZMOD
             #region boss downed bools
             if (NPC.downedBoss1)
             {
-                EyeDowned = true;
+                eyeDowned = true;
             }
             if (NPC.downedQueenBee)
             {
-                BeeDowned = true;
+                beeDowned = true;
             }
             if (Main.hardMode)
             {
-                WallDowned = true;
+                wallDowned = true;
             }
             if (NPC.downedPlantBoss)
             {
-                PlantDowned = true;
+                plantDowned = true;
             }
             if (NPC.downedFishron)
             {
-                DukeDowned = true;
+                dukeDowned = true;
             }
             if (NPC.downedMoonlord)
             {
-                MoonlordDowned = true;
+                moonlordDowned = true;
             }
             #endregion
 
             #region Stat Checks
-            BasicPunchDamage = 8;
-            HeavyPunchDamage = BasicPunchDamage * 3;
-            FlurryPunchDamage = BasicPunchDamage / 2;
-            if (EyeDowned)
+            _basicPunchDamage = 8;
+            _heavyPunchDamage = _basicPunchDamage * 3;
+            _flurryPunchDamage = _basicPunchDamage / 2;
+            if (eyeDowned)
             {
-                BasicPunchDamage += 6;
+                _basicPunchDamage += 6;
             }
-            if (BeeDowned)
+            if (beeDowned)
             {
-                BasicPunchDamage += 8;
+                _basicPunchDamage += 8;
             }
-            if (WallDowned)
+            if (wallDowned)
             {
-                BasicPunchDamage += 26;
+                _basicPunchDamage += 26;
             }
-            if (PlantDowned)
+            if (plantDowned)
             {
-                BasicPunchDamage += 32;
+                _basicPunchDamage += 32;
             }
-            if (DukeDowned)
+            if (dukeDowned)
             {
-                BasicPunchDamage += 28;
+                _basicPunchDamage += 28;
             }
-            if (MoonlordDowned)
+            if (moonlordDowned)
             {
-                BasicPunchDamage += 124;
+                _basicPunchDamage += 124;
             }
 
             #endregion
@@ -392,13 +384,13 @@ namespace DBZMOD
         private int GetZanzokenKiCost(Player player)
         {
             // PUT STUFF HERE TO IMPACT THE ZANZOKEN KI COST IF DESIRED.
-            return (int)Math.Ceiling(ZANZOKEN_KI_COST * ZanzokenKiCostMultiplier);
+            return (int)Math.Ceiling(ZANZOKEN_KI_COST * _zanzokenKiCostMultiplier);
         }
 
         private bool IsZanzokenOnCooldown(Player player)
         {
             // PUT STUFF HERE TO IMPACT THE ZANZOKEN COOLDOWN IF DESIRED.
-            return ZanzokenCooldownTimer > 0;
+            return _zanzokenCooldownTimer > 0;
         }
 
         private int GetZanzokenHeavyTimer(Player player)
@@ -428,8 +420,8 @@ namespace DBZMOD
 
         private void ApplyZanzokenReusePenalties(Player player)
         {
-            ZanzokenKiCostMultiplier *= ZANZOKEN_KI_COST_DELTA;
-            ZanzokenDistanceMultiplier *= ZANZOKEN_DISTANCE_DELTA;
+            _zanzokenKiCostMultiplier *= ZANZOKEN_KI_COST_DELTA;
+            _zanzokenDistanceMultiplier *= ZANZOKEN_DISTANCE_DELTA;
         }
 
         public void PerformZanzoken(Mod mod, Player player, params Controls[] directions)
@@ -561,9 +553,9 @@ namespace DBZMOD
             ApplyZanzokenReusePenalties(player);
 
             // enable the player to execute a zanzoken heavy attack
-            ZanzokenHeavyInputTimer = GetZanzokenHeavyTimer(player);
+            _zanzokenHeavyInputTimer = GetZanzokenHeavyTimer(player);
 
-            ZanzokenCooldownTimer = GetZanzokenCooldownDuration(player);
+            _zanzokenCooldownTimer = GetZanzokenCooldownDuration(player);
         }
     }
 }
