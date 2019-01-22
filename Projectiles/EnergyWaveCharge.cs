@@ -40,7 +40,7 @@ namespace DBZMOD.Projectiles
             // the charge ball is just a single texture.
             // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.
             ChargeOrigin = new Point(0, 0);
-            ChargeSize = new Point(16, 16);
+            ChargeSize = new Point(18, 18);
 
             // vector to reposition the charge ball if it feels too low or too high on the character sprite
             ChannelingOffset = new Vector2(0, 4f);
