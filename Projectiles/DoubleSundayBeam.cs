@@ -8,12 +8,12 @@ namespace DBZMOD.Projectiles
         {
             // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
             // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
-            tailOrigin = new Point(14, 0);
-            tailSize = new Point(46, 74);
-            beamOrigin = new Point(14, 76);
-            beamSize = new Point(46, 36);
-            headOrigin = new Point(6, 114);
-            headSize = new Point(62, 74);
+            tailOrigin = new Point(0, 0);
+            tailSize = new Point(106, 92);
+            beamOrigin = new Point(18, 94);
+            beamSize = new Point(70, 2);
+            headOrigin = new Point(18, 98);
+            headSize = new Point(70, 14);
 
             // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
             beamFadeOutTime = 30f;

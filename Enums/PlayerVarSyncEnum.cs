@@ -7,7 +7,7 @@
         KiMax3,
         KiMaxMult,
         KiCurrent,
-        IsTransforming,
+        isTransforming,
         Fragment1,
         Fragment2,
         Fragment3,
