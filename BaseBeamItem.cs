@@ -1,12 +1,6 @@
-﻿using DBZMOD;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using DBZMOD.Util;
 
 namespace DBZMOD
@@ -29,7 +23,7 @@ namespace DBZMOD
             item.autoReuse = false;            
             item.value = 120000;
             item.rare = 8;            
-            KiDrain = 1;
+            kiDrain = 1;
         }
 
         public override void SetStaticDefaults()
@@ -41,7 +35,7 @@ namespace DBZMOD
         public override void HoldItem(Player player)
         {
             // set the ki weapon held var
-            player.GetModPlayer<MyPlayer>().IsHoldingKiWeapon = true;
+            player.GetModPlayer<MyPlayer>().isHoldingKiWeapon = true;
         }
 
         public override bool AltFunctionUse(Player player)

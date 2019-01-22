@@ -1,10 +1,8 @@
-﻿﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using DBZMOD.Util;
 
 namespace DBZMOD.Items
@@ -36,13 +34,13 @@ namespace DBZMOD.Items
 
         public override void GrabRange(Player player, ref int grabRange)
         {
-            grabRange *= MyPlayer.ModPlayer(player).OrbGrabRange;
+            grabRange *= MyPlayer.ModPlayer(player).orbGrabRange;
         }
 
         public override bool OnPickup(Player player)
         {
             SoundUtil.PlayVanillaSound(SoundID.NPCDeath7, player);
-            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).OrbHealAmount, false, false);
+            MyPlayer.ModPlayer(player).AddKi(MyPlayer.ModPlayer(player).orbHealAmount, false, false);
             CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), 50, false, false);
             return false;
         }

@@ -1,7 +1,6 @@
 ﻿﻿using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria;
+ using Terraria;
 
 namespace DBZMOD.Items.Weapons.Normal
 {

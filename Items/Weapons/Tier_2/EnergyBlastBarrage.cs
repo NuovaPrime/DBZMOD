@@ -1,9 +1,5 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -31,8 +27,8 @@ namespace DBZMOD.Items.Weapons.Tier_2
             }
 			item.value = 4000;
 			item.rare = 2;
-            KiDrain = 50;
-			WeaponType = "Barrage";
+            kiDrain = 50;
+			weaponType = "Barrage";
 	    }
 		public override void SetStaticDefaults()
 		{

@@ -32,13 +32,13 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Getting hit gives greatly increased life regen and ki regen.";
-            MyPlayer.ModPlayer(player).ChlorophyteHeadPieceActive = true;
+            MyPlayer.ModPlayer(player).chlorophyteHeadPieceActive = true;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.16f;
-            MyPlayer.ModPlayer(player).KiCrit += 12;
-            MyPlayer.ModPlayer(player).KiMax2 += 500;
+            MyPlayer.ModPlayer(player).kiDamage += 0.16f;
+            MyPlayer.ModPlayer(player).kiCrit += 12;
+            MyPlayer.ModPlayer(player).kiMax2 += 500;
         }
 
         public override void AddRecipes()

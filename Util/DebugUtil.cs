@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 
@@ -9,14 +6,14 @@ namespace DBZMOD.Util
 {
     static class DebugUtil
     {
-        private static bool isDebug = false;
+        private static bool _isDebug = false;
         public static bool IsDebugModeOn()
         {
-            return isDebug;
+            return _isDebug;
         }
         public static void Log(string someString)
         {
-            if (!isDebug)
+            if (!_isDebug)
                 return;
             if (Main.netMode == NetmodeID.Server)
                 Console.WriteLine(someString);

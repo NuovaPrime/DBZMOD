@@ -1,14 +1,9 @@
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD
 {
-    public static class GFX
+    public static class Gfx
     {
 
         private const string GUI_DIRECTORY = "GFX/";
@@ -20,12 +15,12 @@ namespace DBZMOD
         private const string BACKPANEL = UI_DIRECTORY + "BackPanel";
         private const string WISHBACKPANEL = UI_DIRECTORY + "WishBackPanel";
         private const string GRANTBUTTON = BUTTON_DIRECTORY + "GrantButton";
-        private const string SSJ1BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage";
-        private const string SSJ2BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage";
-        private const string SSJ3BUTTON = BUTTON_DIRECTORY + "SSJ3ButtonImage";
+        private const string SSJ1_BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage";
+        private const string SSJ2_BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage";
+        private const string SSJ3_BUTTON = BUTTON_DIRECTORY + "SSJ3ButtonImage";
         private const string SSJGBUTTON = BUTTON_DIRECTORY + "SSJGButtonImage";
         private const string LSSJBUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
-        private const string LSSJ2BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage";
+        private const string LSSJ2_BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage";
         private const string SSJSBUTTON = BUTTON_DIRECTORY + "SSJSButtonImage";
         private const string WISHFORPOWER = BUTTON_DIRECTORY + "WishforPower";
         private const string WISHFORWEALTH = BUTTON_DIRECTORY + "WishforWealth";
@@ -38,79 +33,79 @@ namespace DBZMOD
         private const string UNKNOWN = UI_DIRECTORY + "UnknownImage";
         private const string HAIR_DIRECTORY = "HAIR/";
 
-        public static Texture2D KiBar;
-        public static Texture2D OverloadBar;
-        public static Texture2D KiBarLightning;
-        public static Texture2D Bg;
-        public static Texture2D BackPanel;
-        public static Texture2D WishBackPanel;
-        public static Texture2D GrantButton;
-        public static Texture2D SSJ1ButtonImage;
-        public static Texture2D SSJ2ButtonImage;
-        public static Texture2D SSJ3ButtonImage;
-        public static Texture2D SSJGButtonImage;
-        public static Texture2D LSSJButtonImage;
-        public static Texture2D LSSJ2ButtonImage;
-        public static Texture2D SSJSButtonImage;
-        public static Texture2D WishforPower;
-        public static Texture2D WishforWealth;
-        public static Texture2D WishforImmortality;
-        public static Texture2D WishforGenetics;
-        public static Texture2D WishforSkill;
-        public static Texture2D WishforAwakening;
-        public static Texture2D LockedImage;
-        public static Texture2D UnknownImage;
-        public static void LoadGFX(Mod mod)
+        public static Texture2D kiBar;
+        public static Texture2D overloadBar;
+        public static Texture2D kiBarLightning;
+        public static Texture2D bg;
+        public static Texture2D backPanel;
+        public static Texture2D wishBackPanel;
+        public static Texture2D grantButton;
+        public static Texture2D ssj1ButtonImage;
+        public static Texture2D ssj2ButtonImage;
+        public static Texture2D ssj3ButtonImage;
+        public static Texture2D ssjgButtonImage;
+        public static Texture2D lssjButtonImage;
+        public static Texture2D lssj2ButtonImage;
+        public static Texture2D ssjsButtonImage;
+        public static Texture2D wishforPower;
+        public static Texture2D wishforWealth;
+        public static Texture2D wishforImmortality;
+        public static Texture2D wishforGenetics;
+        public static Texture2D wishforSkill;
+        public static Texture2D wishforAwakening;
+        public static Texture2D lockedImage;
+        public static Texture2D unknownImage;
+        public static void LoadGfx(Mod mod)
         {
-            KiBar = mod.GetTexture(KIBAR);
-            OverloadBar = mod.GetTexture(OVERLOADBAR);
-            KiBarLightning = mod.GetTexture(KIBARLIGHTNING);
-            Bg = mod.GetTexture(BG);
-            BackPanel = mod.GetTexture(BACKPANEL);
-            WishBackPanel = mod.GetTexture(WISHBACKPANEL);
-            GrantButton = mod.GetTexture(GRANTBUTTON);
-            SSJ1ButtonImage = mod.GetTexture(SSJ1BUTTON);
-            SSJ2ButtonImage = mod.GetTexture(SSJ2BUTTON);
-            SSJ3ButtonImage = mod.GetTexture(SSJ3BUTTON);
-            SSJGButtonImage = mod.GetTexture(SSJGBUTTON);
-            LSSJButtonImage = mod.GetTexture(LSSJBUTTON);
-            LSSJ2ButtonImage = mod.GetTexture(LSSJ2BUTTON);
-            SSJSButtonImage = mod.GetTexture(SSJSBUTTON);
-            LockedImage = mod.GetTexture(LOCKED);
-            UnknownImage = mod.GetTexture(UNKNOWN);
-            WishforPower = mod.GetTexture(WISHFORPOWER);
-            WishforWealth = mod.GetTexture(WISHFORWEALTH);
-            WishforImmortality = mod.GetTexture(WISHFORIMMORTALITY);
-            WishforGenetics = mod.GetTexture(WISHFORGENETICS);
-            WishforSkill = mod.GetTexture(WISHFORSKILL);
-            WishforAwakening = mod.GetTexture(WISHFORAWAKENING);
+            kiBar = mod.GetTexture(KIBAR);
+            overloadBar = mod.GetTexture(OVERLOADBAR);
+            kiBarLightning = mod.GetTexture(KIBARLIGHTNING);
+            bg = mod.GetTexture(BG);
+            backPanel = mod.GetTexture(BACKPANEL);
+            wishBackPanel = mod.GetTexture(WISHBACKPANEL);
+            grantButton = mod.GetTexture(GRANTBUTTON);
+            ssj1ButtonImage = mod.GetTexture(SSJ1_BUTTON);
+            ssj2ButtonImage = mod.GetTexture(SSJ2_BUTTON);
+            ssj3ButtonImage = mod.GetTexture(SSJ3_BUTTON);
+            ssjgButtonImage = mod.GetTexture(SSJGBUTTON);
+            lssjButtonImage = mod.GetTexture(LSSJBUTTON);
+            lssj2ButtonImage = mod.GetTexture(LSSJ2_BUTTON);
+            ssjsButtonImage = mod.GetTexture(SSJSBUTTON);
+            lockedImage = mod.GetTexture(LOCKED);
+            unknownImage = mod.GetTexture(UNKNOWN);
+            wishforPower = mod.GetTexture(WISHFORPOWER);
+            wishforWealth = mod.GetTexture(WISHFORWEALTH);
+            wishforImmortality = mod.GetTexture(WISHFORIMMORTALITY);
+            wishforGenetics = mod.GetTexture(WISHFORGENETICS);
+            wishforSkill = mod.GetTexture(WISHFORSKILL);
+            wishforAwakening = mod.GetTexture(WISHFORAWAKENING);
 
         }
 
-        public static void UnloadGFX()
+        public static void UnloadGfx()
         {
-            KiBar = null;
-            OverloadBar = null;
-            KiBarLightning = null;
-            Bg = null;
-            SSJ1ButtonImage = null;
-            SSJ2ButtonImage = null;
-            SSJ3ButtonImage = null;
-            LSSJButtonImage = null;
-            LSSJ2ButtonImage = null;
-            SSJGButtonImage = null;
-            SSJSButtonImage = null;
-            LockedImage = null;
-            BackPanel = null;
-            UnknownImage = null;
-            WishBackPanel = null;
-            WishforPower = null;
-            WishforWealth = null;
-            WishforImmortality = null;
-            WishforGenetics = null;
-            WishforSkill = null;
-            WishforAwakening = null;
-            GrantButton = null;
+            kiBar = null;
+            overloadBar = null;
+            kiBarLightning = null;
+            bg = null;
+            ssj1ButtonImage = null;
+            ssj2ButtonImage = null;
+            ssj3ButtonImage = null;
+            lssjButtonImage = null;
+            lssj2ButtonImage = null;
+            ssjgButtonImage = null;
+            ssjsButtonImage = null;
+            lockedImage = null;
+            backPanel = null;
+            unknownImage = null;
+            wishBackPanel = null;
+            wishforPower = null;
+            wishforWealth = null;
+            wishforImmortality = null;
+            wishforGenetics = null;
+            wishforSkill = null;
+            wishforAwakening = null;
+            grantButton = null;
         }
     }
 }

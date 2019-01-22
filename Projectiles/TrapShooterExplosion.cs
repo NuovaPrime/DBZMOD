@@ -1,15 +1,12 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
     public class TrapShooterExplosion : ModProjectile
     {
-        private float SizeTimer;
+        private float _sizeTimer;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 1;
@@ -26,7 +23,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 60;
-            SizeTimer = 120;
+            _sizeTimer = 120;
         }
 		
 		public override Color? GetAlpha(Color lightColor)
@@ -53,10 +50,10 @@ namespace DBZMOD.Projectiles
             {
                 projectile.frame = 0;
             }
-            if (SizeTimer > 0)
+            if (_sizeTimer > 0)
             {
-                projectile.scale = (SizeTimer / 120f) * 2;
-                SizeTimer--;
+                projectile.scale = (_sizeTimer / 120f) * 2;
+                _sizeTimer--;
             }
             else
             {

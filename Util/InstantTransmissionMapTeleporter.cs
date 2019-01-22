@@ -1,13 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Network;
 using ReLogic.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
-using Terraria.GameInput;
 
 namespace DBZMOD.Util
 {
@@ -25,7 +19,7 @@ namespace DBZMOD.Util
             Texture2D texture = DBZMOD.instance.GetTexture("UI/KiBeaconMap");
 
             // desperation starts here
-            foreach (var beaconLocation in DBZWorld.GetWorld().KiBeacons)
+            foreach (var beaconLocation in DBZWorld.GetWorld().kiBeacons)
             {
                 // map coordinates represent the map tile being placed at *the center* of the screen.
                 var mapX = Main.mapFullscreenPos.X;
@@ -43,7 +37,7 @@ namespace DBZMOD.Util
             HandleDrawingKiBeacons();
             var modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             var player = modPlayer.player;
-            if (modPlayer.IsInstantTransmission1Unlocked)
+            if (modPlayer.isInstantTransmission1Unlocked)
             {
                 if (!modPlayer.HasKi(modPlayer.GetInstantTransmissionTeleportKiCost()))
                 {
@@ -53,7 +47,7 @@ namespace DBZMOD.Util
                 {
                     Main.spriteBatch.DrawString(Main.fontMouseText, "Press the Instant Transmission key on an NPC, beacon or player icon to teleport using Ki.", new Vector2(15, Main.screenHeight - 120), Color.White);
 
-                    if (MyPlayer.InstantTransmission.JustPressed)
+                    if (MyPlayer.instantTransmission.JustPressed)
                     {
                         int mapWidth = Main.maxTilesX * 16;
                         int mapHeight = Main.maxTilesY * 16;
@@ -109,7 +103,7 @@ namespace DBZMOD.Util
 
         public Vector2 SeekBeaconTarget(Vector2 cursorWorldPosition)
         {
-            foreach (var beaconLocation in DBZWorld.GetWorld().KiBeacons)
+            foreach (var beaconLocation in DBZWorld.GetWorld().kiBeacons)
             {
                 var beaconCenter = beaconLocation + new Vector2(24, -24); // roughly half the size of a beacon, looking for its center, slightly "above" it.
 

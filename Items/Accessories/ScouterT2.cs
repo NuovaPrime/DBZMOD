@@ -36,7 +36,7 @@ namespace DBZMOD.Items.Accessories
 
         public void GivePlayerBonuses(Player player)
         {
-            player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.05f;
+            player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.05f;
             player.GetModPlayer<MyPlayer>(mod).scouterT2 = true;
             player.detectCreature = true;
         }

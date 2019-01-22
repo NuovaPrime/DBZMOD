@@ -1,34 +1,28 @@
-﻿using DBZMOD.Effects.Animations.Aura;
-using DBZMOD.Enums;
-using DBZMOD.Util;
+﻿using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Terraria;
 
 namespace DBZMOD.Models
 {
     public class AuraAnimationInfo
     {
-        public int ID;
-        public string AuraAnimationSpriteName;
-        public int Frames;
-        public int FrameTimerLimit;
-        public int Priority;
-        public BlendState BlendState;
-        public string StartupSoundName;
-        public string LoopSoundName;
-        public int LoopSoundDuration;
-        public bool IsKaiokenAura;
-        public bool IsFormAura;
-        public bool IsStarting;
-        public int StartingFrames;
-        public int StartingFrameCounter;
-        public DustDelegate DoStartingDust;        
-        public DustDelegate DoDust;
+        public int id;
+        public string auraAnimationSpriteName;
+        public int frames;
+        public int frameTimerLimit;
+        public int priority;
+        public BlendState blendState;
+        public string startupSoundName;
+        public string loopSoundName;
+        public int loopSoundDuration;
+        public bool isKaiokenAura;
+        public bool isFormAura;
+        public bool isStarting;
+        public int startingFrames;
+        public int startingFrameCounter;
+        public DustDelegate doStartingDust;        
+        public DustDelegate doDust;
         public delegate void DustDelegate(MyPlayer modPlayer, AuraAnimationInfo info);
 
         public AuraAnimationInfo()
@@ -37,31 +31,31 @@ namespace DBZMOD.Models
 
         public AuraAnimationInfo(AuraID id, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
-            ID = (int)id;
-            AuraAnimationSpriteName = spriteName;
-            Frames = frames;
-            FrameTimerLimit = frameTimer;
-            BlendState = blendState;
-            StartupSoundName = startupSound;
-            LoopSoundName = loopSoundName;
-            LoopSoundDuration = loopSoundDuration;
-            IsKaiokenAura = isKaioken;
-            IsFormAura = isForm;
-            DoDust = dustDelegate;
-            StartingFrames = startingFrames;
-            StartingFrameCounter = 0;
-            DoStartingDust = startingDustDelegate;
-            Priority = priority;
+            this.id = (int)id;
+            auraAnimationSpriteName = spriteName;
+            this.frames = frames;
+            frameTimerLimit = frameTimer;
+            this.blendState = blendState;
+            startupSoundName = startupSound;
+            this.loopSoundName = loopSoundName;
+            this.loopSoundDuration = loopSoundDuration;
+            isKaiokenAura = isKaioken;
+            isFormAura = isForm;
+            doDust = dustDelegate;
+            this.startingFrames = startingFrames;
+            startingFrameCounter = 0;
+            doStartingDust = startingDustDelegate;
+            this.priority = priority;
         }
 
         public Texture2D GetTexture()
         {
-            return DBZMOD.instance.GetTexture(AuraAnimationSpriteName);
+            return DBZMOD.instance.GetTexture(auraAnimationSpriteName);
         }
 
         public int GetHeight()
         {
-            return GetTexture().Height / Frames;
+            return GetTexture().Height / frames;
         }
 
         public int GetWidth()
@@ -77,7 +71,7 @@ namespace DBZMOD.Models
             Vector2 position = Vector2.Zero;
             float scale = GetAuraScale(modPlayer);
             int auraOffsetY = GetAuraOffsetY(modPlayer);
-            if (modPlayer.IsFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
+            if (modPlayer.isFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
                 // ever so slightly shift the aura down a tad.
                 var forwardOffset = (int)Math.Floor(modPlayer.player.height * 0.75f);
@@ -112,14 +106,14 @@ namespace DBZMOD.Models
 
         public void ProcessDust(MyPlayer modPlayer)
         {
-            if (DoDust != null)
-                DoDust(modPlayer, this);
+            if (doDust != null)
+                doDust(modPlayer, this);
         }
 
         public void ProcessStartingDust(MyPlayer modPlayer)
         {
-            if (DoStartingDust != null)
-                DoStartingDust(modPlayer, this);
+            if (doStartingDust != null)
+                doStartingDust(modPlayer, this);
         }
 
         public Vector2 GetCenter(MyPlayer modPlayer)
@@ -142,9 +136,9 @@ namespace DBZMOD.Models
             var baseScale = 1.0f;
 
             // special scaling for Kaioken auras only
-            if (IsKaiokenAura)
+            if (isKaiokenAura)
             {
-                return baseScale * (0.9f + 0.1f * modPlayer.KaiokenLevel);
+                return baseScale * (0.9f + 0.1f * modPlayer.kaiokenLevel);
             }
             else
             {

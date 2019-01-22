@@ -1,65 +1,54 @@
-﻿﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using Terraria.GameInput;
-using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
-using Terraria.GameContent.Generation;
-using Terraria.ModLoader.IO;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
-using DBZMOD;
 using System;
 using DBZMOD.Util;
-using Network;
 
 namespace DBZMOD
 {
     public abstract class KiItem : ModItem
     {
         internal Player player;
-        private NPC npc;
-        public bool IsFistWeapon;
-        public bool CanUseHeavyHit;
-        public float KiDrain;
-        public string WeaponType;
+        private NPC _npc;
+        public bool isFistWeapon;
+        public bool canUseHeavyHit;
+        public float kiDrain;
+        public string weaponType;
         #region Boss bool checks
-        public bool EyeDowned;
-        public bool BeeDowned;
-        public bool WallDowned;
-        public bool PlantDowned;
-        public bool DukeDowned;
-        public bool MoodlordDowned;
+        public bool eyeDowned;
+        public bool beeDowned;
+        public bool wallDowned;
+        public bool plantDowned;
+        public bool dukeDowned;
+        public bool moodlordDowned;
         public override void PostUpdate()
         {
             if (NPC.downedBoss1)
             {
-                EyeDowned = true;
+                eyeDowned = true;
             }
             if (NPC.downedQueenBee)
             {
-                BeeDowned = true;
+                beeDowned = true;
             }
             if (Main.hardMode)
             {
-                WallDowned = true;
+                wallDowned = true;
             }
             if (NPC.downedPlantBoss)
             {
-                PlantDowned = true;
+                plantDowned = true;
             }
             if (NPC.downedFishron)
             {
-                DukeDowned = true;
+                dukeDowned = true;
             }
             if (NPC.downedMoonlord)
             {
-                MoodlordDowned = true;
+                moodlordDowned = true;
             }
             if (item.channel)
             {
@@ -90,23 +79,23 @@ namespace DBZMOD
 
         public override int ChoosePrefix(Terraria.Utilities.UnifiedRandom rand)
         {
-            var PrefixChooser = new WeightedRandom<int>();
-            PrefixChooser.Add(mod.PrefixType("BalancedPrefix"), 3); // 3 times as likely
-            PrefixChooser.Add(mod.PrefixType("CondensedPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("MystifyingPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("UnstablePrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("FlawedPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("BoostedPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("NegatedPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("OutrageousPrefix"), 3);
-            PrefixChooser.Add(mod.PrefixType("PoweredPrefix"), 2);
-            PrefixChooser.Add(mod.PrefixType("FlashyPrefix"), 2);
-            PrefixChooser.Add(mod.PrefixType("InfusedPrefix"), 2);
-            PrefixChooser.Add(mod.PrefixType("DistractingPrefix"), 2);
-            PrefixChooser.Add(mod.PrefixType("DestructivePrefix"), 2);
-            PrefixChooser.Add(mod.PrefixType("MasteredPrefix"), 1);
-            PrefixChooser.Add(mod.PrefixType("TranscendedPrefix"), 1);
-            int choice = PrefixChooser;
+            var prefixChooser = new WeightedRandom<int>();
+            prefixChooser.Add(mod.PrefixType("BalancedPrefix"), 3); // 3 times as likely
+            prefixChooser.Add(mod.PrefixType("CondensedPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("MystifyingPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("UnstablePrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("FlawedPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("BoostedPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("NegatedPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("OutrageousPrefix"), 3);
+            prefixChooser.Add(mod.PrefixType("PoweredPrefix"), 2);
+            prefixChooser.Add(mod.PrefixType("FlashyPrefix"), 2);
+            prefixChooser.Add(mod.PrefixType("InfusedPrefix"), 2);
+            prefixChooser.Add(mod.PrefixType("DistractingPrefix"), 2);
+            prefixChooser.Add(mod.PrefixType("DestructivePrefix"), 2);
+            prefixChooser.Add(mod.PrefixType("MasteredPrefix"), 1);
+            prefixChooser.Add(mod.PrefixType("TranscendedPrefix"), 1);
+            int choice = prefixChooser;
             if ((item.damage > 0) && item.maxStack == 1)
             {
                 return choice;
@@ -121,12 +110,12 @@ namespace DBZMOD
 
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
-            knockback = knockback + MyPlayer.ModPlayer(player).KiKbAddition;
+            knockback = knockback + MyPlayer.ModPlayer(player).kiKbAddition;
         }
 
         public override void GetWeaponDamage(Player player, ref int damage)
         {            
-            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).KiDamage);
+            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).kiDamage);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)
@@ -140,17 +129,17 @@ namespace DBZMOD
 
         public override void GetWeaponCrit(Player player, ref int crit)
         {            
-            crit = crit + MyPlayer.ModPlayer(player).KiCrit;
+            crit = crit + MyPlayer.ModPlayer(player).kiCrit;
         }
 
         public override float UseTimeMultiplier(Player player)
         {
-            return MyPlayer.ModPlayer(player).KiSpeedAddition;
+            return MyPlayer.ModPlayer(player).kiSpeedAddition;
         }
 
         public int RealKiDrain(Player player)
         {
-            return (int)(KiDrain * MyPlayer.ModPlayer(player).KiDrainMulti);
+            return (int)(kiDrain * MyPlayer.ModPlayer(player).kiDrainMulti);
         }
 
         public override bool CanUseItem(Player player)
@@ -168,18 +157,18 @@ namespace DBZMOD
             if(Transformations.IsLSSJ(player) && !Transformations.IsSSJ1(player))
             {
                 int i = Main.rand.Next(1, 4);
-                MyPlayer.ModPlayer(player).OverloadCurrent += i;
+                MyPlayer.ModPlayer(player).overloadCurrent += i;
             }
             return true;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            TooltipLine Indicate = new TooltipLine(mod, "", "");
-            string[] Text = Indicate.text.Split(' ');
-            Indicate.text = "Consumes " + RealKiDrain(Main.LocalPlayer) + " Ki ";
-            Indicate.overrideColor = new Color(34, 232, 222);
-            tooltips.Add(Indicate);
+            TooltipLine indicate = new TooltipLine(mod, "", "");
+            string[] text = indicate.text.Split(' ');
+            indicate.text = "Consumes " + RealKiDrain(Main.LocalPlayer) + " Ki ";
+            indicate.overrideColor = new Color(34, 232, 222);
+            tooltips.Add(indicate);
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
             if (tt != null)
             {
@@ -188,11 +177,11 @@ namespace DBZMOD
                 string damageWord = splitText.Last();
                 tt.text = damageValue + " ki " + damageWord;
             }
-            TooltipLine Indicate2 = new TooltipLine(mod, "", "");
-            string[] Text2 = Indicate.text.Split(' ');
-            Indicate2.text = WeaponType + " Technique ";
-            Indicate2.overrideColor = new Color(232, 202, 34);
-            tooltips.Add(Indicate2);
+            TooltipLine indicate2 = new TooltipLine(mod, "", "");
+            string[] text2 = indicate.text.Split(' ');
+            indicate2.text = weaponType + " Technique ";
+            indicate2.overrideColor = new Color(232, 202, 34);
+            tooltips.Add(indicate2);
             if (item.damage > 0)
             {
                 foreach (TooltipLine line in tooltips)
@@ -207,18 +196,18 @@ namespace DBZMOD
     }
     public abstract class KiPotion : ModItem
     {
-        public int KiHeal;
+        public int kiHeal;
         public int potioncooldown = 3600;
-        public bool IsKiPotion;
+        public bool isKiPotion;
         public override bool CloneNewInstances
         {
             get { return true; }
         }
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).AddKi(KiHeal, false, false);
+            MyPlayer.ModPlayer(player).AddKi(kiHeal, false, false);
             player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
-            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), KiHeal, false, false);
+            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kiHeal, false, false);
             return true;
         }
 
@@ -236,9 +225,9 @@ namespace DBZMOD
     }
     public abstract class PatreonItem : ModItem
     {
-        public bool IsArmorPiece;
-        public bool IsItem;
-        public string PatreonName;
+        public bool isArmorPiece;
+        public bool isItem;
+        public string patreonName;
         public override bool CloneNewInstances
         {
             get
@@ -248,11 +237,11 @@ namespace DBZMOD
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            TooltipLine Indicate2 = new TooltipLine(mod, "", "");
-            string[] Text2 = Indicate2.text.Split(' ');
-            Indicate2.text = PatreonName + "'s Item";
-            Indicate2.overrideColor = new Color(232, 169, 34);
-            tooltips.Add(Indicate2);
+            TooltipLine indicate2 = new TooltipLine(mod, "", "");
+            string[] text2 = indicate2.text.Split(' ');
+            indicate2.text = patreonName + "'s Item";
+            indicate2.overrideColor = new Color(232, 169, 34);
+            tooltips.Add(indicate2);
         }
     }
 }

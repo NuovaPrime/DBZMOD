@@ -1,9 +1,5 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using DBZMOD;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
@@ -33,7 +29,7 @@ namespace DBZMOD.Projectiles
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
             projectile.Center = player.Center + new Vector2(34, 30);
-            if (!modPlayer.IsCharging)
+            if (!modPlayer.isCharging)
             {
                 projectile.Kill();
             }

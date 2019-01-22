@@ -1,8 +1,4 @@
-using System;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables
 {
@@ -24,7 +20,7 @@ namespace DBZMOD.Items.Consumables
 			item.potion = false;
             item.buffType = mod.BuffType("MREBuff");
             item.buffTime = 10800;
-		    PatreonName = "CanadianMRE";
+		    patreonName = "CanadianMRE";
 		}
     
         public override void SetStaticDefaults()

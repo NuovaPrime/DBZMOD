@@ -76,6 +76,15 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>DBZMOD</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Web%27s|x86'">
+    <OutputPath>bin\x86\Web%27s\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Web%27s|AnyCPU'">
+    <OutputPath>bin\Webs\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Buffs\ArmorCooldown.cs" />
     <Compile Include="Buffs\ASSJBuff.cs" />

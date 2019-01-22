@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBZMOD.Enums
+﻿namespace DBZMOD.Enums
 {
     public enum AuraID
     {
@@ -19,7 +14,7 @@ namespace DBZMOD.Enums
         FalseUI = 9,
         Kaioken = 10,
         SuperKaioken = 11,
-        ASSJ = 12,
-        USSJ = 13
+        Assj = 12,
+        Ussj = 13
     }
 }

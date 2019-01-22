@@ -1,6 +1,4 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,13 +31,13 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).KaioFragment3 = true;
+            MyPlayer.ModPlayer(player).kaioFragment3 = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KaioFragment3 || !MyPlayer.ModPlayer(player).KaioFragment2)
+            if (MyPlayer.ModPlayer(player).kaioFragment3 || !MyPlayer.ModPlayer(player).kaioFragment2)
             {
                 return false;
             }

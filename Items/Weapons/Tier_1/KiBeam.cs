@@ -1,9 +1,5 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -28,8 +24,8 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			item.autoReuse = true;
 			item.value = 550;
 			item.rare = 1;
-            KiDrain = 30;
-			WeaponType = "Laser";
+            kiDrain = 30;
+			weaponType = "Laser";
 			if(!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/EyeBeam").WithPitchVariance(.3f);

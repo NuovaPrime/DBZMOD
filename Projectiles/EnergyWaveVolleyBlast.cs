@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
@@ -24,7 +20,7 @@ namespace DBZMOD.Projectiles
 			projectile.light = 1f;
 			projectile.timeLeft = 150;
 			projectile.damage = 25;
-            projectile.knockBack = DefaultBeamKnockback;
+            projectile.knockBack = defaultBeamKnockback;
             aiType = 14;
             projectile.netUpdate = true;
             projectile.ignoreWater = true;

@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.GameInput;
-using DBZMOD.UI;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.Graphics;
-using Microsoft.Xna.Framework;
-using DBZMOD.Projectiles;
-using Terraria.ModLoader.IO;
-using Terraria.ID;
-using DBZMOD;
+﻿using Terraria;
 using DBZMOD.Util;
 
 namespace DBZMOD
@@ -19,7 +6,7 @@ namespace DBZMOD
     public class ProgressionSystem
     {
         //vars
-        private float m_kiExperience = 0;
+        private float _mKiExperience = 0;
 
         //methods
 
@@ -27,17 +14,17 @@ namespace DBZMOD
         //Getters
         public float GetKiExperience()
         {
-            return m_kiExperience;
+            return _mKiExperience;
         }
 
         //setters
         public void SetKiExperience(float value)
         {
-            m_kiExperience = value;
+            _mKiExperience = value;
 
-            if(m_kiExperience < 0)
+            if(_mKiExperience < 0)
             {
-                m_kiExperience = 0;
+                _mKiExperience = 0;
             }
         }
 
@@ -59,7 +46,7 @@ namespace DBZMOD
                 AddKiExperience(0.2f);
             }
 
-            if(modplayer.IsFlying)
+            if(modplayer.isFlying)
             {
                 AddKiExperience(0.1f);
             }
@@ -82,11 +69,11 @@ namespace DBZMOD
 
         public void UpgradeKiMax(int kiamount, Player player)
         {
-            int EXPCOST = kiamount * 100;
+            int expcost = kiamount * 100;
 
-            if (ProcessCost(EXPCOST))
+            if (ProcessCost(expcost))
             {
-                MyPlayer.ModPlayer(player).KiMax3 += kiamount;
+                MyPlayer.ModPlayer(player).kiMax3 += kiamount;
             }
         }
 

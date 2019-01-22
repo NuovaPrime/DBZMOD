@@ -37,14 +37,14 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "15% reduced ki usage and +200 Max Ki.";
-            MyPlayer.ModPlayer(player).KiDrainMulti -= 0.15f;
-            MyPlayer.ModPlayer(player).KiMax2 += 200;
+            MyPlayer.ModPlayer(player).kiDrainMulti -= 0.15f;
+            MyPlayer.ModPlayer(player).kiMax2 += 200;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.05f;
-            MyPlayer.ModPlayer(player).KiCrit += 3;
-            MyPlayer.ModPlayer(player).KiRegen += 1;
+            MyPlayer.ModPlayer(player).kiDamage += 0.05f;
+            MyPlayer.ModPlayer(player).kiCrit += 3;
+            MyPlayer.ModPlayer(player).kiRegen += 1;
 
         }
         public override void AddRecipes()

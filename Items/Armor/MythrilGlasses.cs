@@ -38,13 +38,13 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Ki orbs regenerate twice as much ki.";
-            MyPlayer.ModPlayer(player).OrbHealAmount *= 2;
+            MyPlayer.ModPlayer(player).orbHealAmount *= 2;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.11f;
-            MyPlayer.ModPlayer(player).KiCrit += 6;
-            MyPlayer.ModPlayer(player).KiMax2 += 100;
+            MyPlayer.ModPlayer(player).kiDamage += 0.11f;
+            MyPlayer.ModPlayer(player).kiCrit += 6;
+            MyPlayer.ModPlayer(player).kiMax2 += 100;
         }
 
         public override void AddRecipes()

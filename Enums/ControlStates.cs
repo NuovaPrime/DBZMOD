@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DBZMOD.Enums
+﻿namespace DBZMOD.Enums
 {
     /// <summary>
     ///     The possible states a control can be in, needed for heuristic/behavior detection by the mod at any given point.

@@ -1,10 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_3
@@ -28,9 +22,9 @@ namespace DBZMOD.Items.Weapons.Tier_3
             item.autoReuse = false;
             item.value = 10000;
             item.rare = 3;
-            KiDrain = 80;
+            kiDrain = 80;
             item.channel = true;
-            WeaponType = "Beam";
+            weaponType = "Beam";
         }
 
         public override void SetStaticDefaults()

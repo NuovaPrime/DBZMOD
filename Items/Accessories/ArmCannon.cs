@@ -1,6 +1,5 @@
 ﻿﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
 {
@@ -26,8 +25,8 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti -= 0.10f;
-                player.GetModPlayer<MyPlayer>(mod).KiChargeRate += 1;
+                player.GetModPlayer<MyPlayer>(mod).kiDrainMulti -= 0.10f;
+                player.GetModPlayer<MyPlayer>(mod).kiChargeRate += 1;
                 player.GetModPlayer<MyPlayer>(mod).armCannon = true;
             }
         }

@@ -1,19 +1,14 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
     public class DirtyFireworksProjectile : KiProjectile
     {
-        NPC targetNPC = null;
-        Player targetPlayer = null;
+        NPC _targetNPC = null;
+        Player _targetPlayer = null;
 
         public override void SetStaticDefaults()
 		{
@@ -51,13 +46,13 @@ namespace DBZMOD.Projectiles
                 return;
             }
 
-            if(targetNPC != null)
+            if(_targetNPC != null)
             {
                 Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, mod.ProjectileType("BigBangAttackProjectile2"), 100, 30, projectile.owner, 0f, 1f);
 
                 ExplodeEffect();
             }
-            if(targetPlayer != null)
+            if(_targetPlayer != null)
             {
                 Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 0, mod.ProjectileType("BigBangAttackProjectile2"), 100, 30, projectile.owner, 0f, 1f);
 
@@ -71,7 +66,7 @@ namespace DBZMOD.Projectiles
         {
             if(Main.myPlayer == projectile.owner)
             {
-                if (targetNPC == null && targetPlayer == null)
+                if (_targetNPC == null && _targetPlayer == null)
                 {
                     if (Vector2.Distance(projectile.position, Main.MouseWorld) > 0.1)
                     {
@@ -87,35 +82,35 @@ namespace DBZMOD.Projectiles
                 projectile.netUpdate = true;
             }
 
-            if(targetNPC != null)
+            if(_targetNPC != null)
             {
-                if(targetNPC.life <= 0)
+                if(_targetNPC.life <= 0)
                 {
                     Kill(0);
                 }
                 else
                 {
                     //targetNPC.position = Main.MouseWorld;
-                    targetNPC.velocity.Y = -2.5f;
-                    targetNPC.velocity.X = 0;
+                    _targetNPC.velocity.Y = -2.5f;
+                    _targetNPC.velocity.X = 0;
 
-                    projectile.position = targetNPC.position;
+                    projectile.position = _targetNPC.position;
                 }
             }
-            if(targetPlayer != null)
+            if(_targetPlayer != null)
             {
-                if(targetPlayer.statLife <= 0)
+                if(_targetPlayer.statLife <= 0)
                 {
                     Kill(0);
                 }
                 else
                 {
                     //targetNPC.position = Main.MouseWorld;
-                    targetPlayer.velocity.Y = -2.5f;
-                    targetPlayer.velocity.X = 0;
-                    targetPlayer.lifeRegen -= 4;
+                    _targetPlayer.velocity.Y = -2.5f;
+                    _targetPlayer.velocity.X = 0;
+                    _targetPlayer.lifeRegen -= 4;
 
-                    projectile.position = targetPlayer.position;
+                    projectile.position = _targetPlayer.position;
                 }
             }
 
@@ -132,10 +127,10 @@ namespace DBZMOD.Projectiles
 
         public override void OnHitNPC(NPC npc, int damage, float knockback, bool crit)
         {
-            if(targetNPC == null)
+            if(_targetNPC == null)
             {
                 base.OnHitNPC(npc, 0, 0, crit);
-                targetNPC = npc;
+                _targetNPC = npc;
                 projectile.damage = 0;
                 projectile.hide = true;
                 projectile.timeLeft = 100;
@@ -143,9 +138,9 @@ namespace DBZMOD.Projectiles
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            if(targetPlayer == null)
+            if(_targetPlayer == null)
             {
-                targetPlayer = target;
+                _targetPlayer = target;
                 projectile.damage = 0;
                 projectile.hide = true;
                 projectile.timeLeft = 100;

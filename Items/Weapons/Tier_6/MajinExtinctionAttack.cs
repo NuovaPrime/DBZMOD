@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using DBZMOD.Items;
 
 namespace DBZMOD.Items.Weapons.Tier_6 
 {
@@ -39,7 +35,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
             }
             item.value = 0;
             item.rare = 8;
-            KiDrain = 500;
+            kiDrain = 500;
 	    }
 	    
 	    public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

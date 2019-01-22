@@ -1,25 +1,24 @@
-﻿﻿using Terraria.ModLoader;
-using Terraria;
-using System;
+﻿using System;
 using DBZMOD.Util;
-using DBZMOD.Buffs;
+using Terraria;
+using Terraria.ModLoader;
 
-namespace DBZMOD
+namespace DBZMOD.Buffs
 {
     public abstract class TransBuff : ModBuff
     {
-        public float DamageMulti;
-        public float SpeedMulti;
-        public float KiDrainBuffMulti;
-        public float SSJLightValue;
-        public int HealthDrainRate;
-        public int OverallHealthDrainRate;
-        public float KiDrainRate;
-        public float KiDrainRateWithMastery;
-        private int KiDrainAddTimer;
-        public bool RealismModeOn;
-        public int BaseDefenceBonus;
-        public int PrecentDefenceBonus;
+        public float damageMulti;
+        public float speedMulti;
+        public float kiDrainBuffMulti;
+        public float ssjLightValue;
+        public int healthDrainRate;
+        public int overallHealthDrainRate;
+        public float kiDrainRate;
+        public float kiDrainRateWithMastery;
+        private int _kiDrainAddTimer;
+        public bool realismModeOn;
+        public int baseDefenceBonus;
+        public int precentDefenceBonus;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -32,7 +31,7 @@ namespace DBZMOD
             } else if (Transformations.IsLSSJ1(player) || Transformations.IsLSSJ2(player))
             {                
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (Transformations.IsSSJ1(player) || Transformations.IsSSJ2(player) || Transformations.IsSSJ2(player) || Transformations.IsASSJ(player) || Transformations.IsUSSJ(player))
+            } else if (Transformations.IsSSJ1(player) || Transformations.IsSSJ2(player) || Transformations.IsSSJ2(player) || Transformations.IsAssj(player) || Transformations.IsUssj(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
             } else if (Transformations.IsSpectrum(player))
@@ -42,7 +41,7 @@ namespace DBZMOD
             }
 
             //give bonus base defense
-            player.statDefense += BaseDefenceBonus;
+            player.statDefense += baseDefenceBonus;
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (Transformations.IsAnythingOtherThanKaioken(player))
@@ -52,25 +51,25 @@ namespace DBZMOD
                 {
                     if (Transformations.IsSuperKaioken(player))
                     {
-                        modPlayer.KaiokenLevel = 0;
+                        modPlayer.kaiokenLevel = 0;
                     }
-                    Transformations.EndTransformations(player, true, false);
+                    Transformations.EndTransformations(player, true);
                 }
                 else
                 {
-                    modPlayer.AddKi((KiDrainRate + modPlayer.KiDrainAddition) * -1, false, true);
-                    KiDrainAddTimer++;
-                    if (KiDrainAddTimer > 600)
+                    modPlayer.AddKi((kiDrainRate + modPlayer.kiDrainAddition) * -1, false, true);
+                    _kiDrainAddTimer++;
+                    if (_kiDrainAddTimer > 600)
                     {
-                        modPlayer.KiDrainAddition += 1;
-                        KiDrainAddTimer = 0;
+                        modPlayer.kiDrainAddition += 1;
+                        _kiDrainAddTimer = 0;
                     }
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }
             } else
             {
                 // the player isn't in a ki draining state anymore, reset KiDrainAddition
-                modPlayer.KiDrainAddition = 0;                
+                modPlayer.kiDrainAddition = 0;                
             }
             
             player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
@@ -86,7 +85,7 @@ namespace DBZMOD
             player.magicDamage *= GetHalvedDamageBonus();
             player.minionDamage *= GetHalvedDamageBonus();
             player.thrownDamage *= GetHalvedDamageBonus();
-            modPlayer.KiDamage *= DamageMulti;
+            modPlayer.kiDamage *= damageMulti;
 
             // cross mod support stuff
             if (DBZMOD.instance.thoriumLoaded)
@@ -113,12 +112,12 @@ namespace DBZMOD
 
         public float GetModifiedSpeedMultiplier(MyPlayer modPlayer)
         {
-            return 1f + ((SpeedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
+            return 1f + ((speedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
         }
 
         public float GetHalvedDamageBonus()
         {
-            return 1f + ((DamageMulti - 1f) * 0.5f);
+            return 1f + ((damageMulti - 1f) * 0.5f);
         }
 
         public void ThoriumEffects(Player player)
@@ -149,7 +148,7 @@ namespace DBZMOD
 
         private void KiDrainAdd(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDrainMulti = KiDrainBuffMulti;
+            MyPlayer.ModPlayer(player).kiDrainMulti = kiDrainBuffMulti;
         }
 
         public string GetPercentForDisplay(string currentDisplayString, string text, int percent)
@@ -159,34 +158,34 @@ namespace DBZMOD
             return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
-        public int KaiokenLevel = 0;
+        public int kaiokenLevel = 0;
         public string AssembleTransBuffDescription()
         {
-            string KaiokenName = string.Empty;
+            string kaiokenName = string.Empty;
             if (Type == Transformations.Kaioken.GetBuffId() || Type == Transformations.SuperKaioken.GetBuffId())
             {
-                switch (KaiokenLevel)
+                switch (kaiokenLevel)
                 {
                     case 2:
-                        KaiokenName = "(x3)\n";
+                        kaiokenName = "(x3)\n";
                         break;
                     case 3:
-                        KaiokenName = "(x4)\n";
+                        kaiokenName = "(x4)\n";
                         break;
                     case 4:
-                        KaiokenName = "(x10)\n";
+                        kaiokenName = "(x10)\n";
                         break;
                     case 5:
-                        KaiokenName = "(x20)\n";
+                        kaiokenName = "(x20)\n";
                         break;
                 }
             }
-            int percentDamageMult = (int)Math.Round(DamageMulti * 100f, 0) - 100;
-            int percentSpeedMult = (int)Math.Round(SpeedMulti * 100f, 0) - 100;
-            float kiDrainPerSecond = 60f * KiDrainRate;
-            float kiDrainPerSecondWithMastery = 60f * KiDrainRateWithMastery;
-            int percentKiDrainMulti = (int)Math.Round(KiDrainBuffMulti * 100f, 0) - 100;
-            string displayString = KaiokenName;
+            int percentDamageMult = (int)Math.Round(damageMulti * 100f, 0) - 100;
+            int percentSpeedMult = (int)Math.Round(speedMulti * 100f, 0) - 100;
+            float kiDrainPerSecond = 60f * kiDrainRate;
+            float kiDrainPerSecondWithMastery = 60f * kiDrainRateWithMastery;
+            int percentKiDrainMulti = (int)Math.Round(kiDrainBuffMulti * 100f, 0) - 100;
+            string displayString = kaiokenName;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
             displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
@@ -198,9 +197,9 @@ namespace DBZMOD
                     displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
                 }
             }
-            if (HealthDrainRate > 0)
+            if (healthDrainRate > 0)
             {
-                displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, HealthDrainRate / 2);
+                displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, healthDrainRate / 2);
             }
             return displayString;
         }

@@ -1,8 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -13,7 +9,7 @@ namespace DBZMOD.Items.DragonBalls
 {
     public abstract class DragonBallItem : ModItem
     {
-        public int? WorldDragonBallKey = null;
+        public int? worldDragonBallKey = null;
 
         // the most important thing basically.
         public override bool CloneNewInstances
@@ -40,20 +36,20 @@ namespace DBZMOD.Items.DragonBalls
         public override TagCompound Save()
         {
             var dbTagCompound = new TagCompound();
-            dbTagCompound.Add("WorldDragonBallKey", WorldDragonBallKey);
+            dbTagCompound.Add("WorldDragonBallKey", worldDragonBallKey);
             return dbTagCompound;
         }
 
         public override void Load(TagCompound tag)
         {
-            WorldDragonBallKey = tag.GetInt("WorldDragonBallKey");
+            worldDragonBallKey = tag.GetInt("WorldDragonBallKey");
             base.Load(tag);
         }
 
         public override void UpdateInventory(Player player)
         {
             // world isn't loaded yet.
-            if (DBZWorld.GetWorld().WorldDragonBallKey == 0)
+            if (DBZWorld.GetWorld().worldDragonBallKey == 0)
                 return;
             if (!RemoveThisDragonBallIfUnkeyed(player))
             {
@@ -69,14 +65,14 @@ namespace DBZMOD.Items.DragonBalls
                 return true;
             if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI != Main.myPlayer)
                 return true;
-            if (!WorldDragonBallKey.HasValue)
+            if (!worldDragonBallKey.HasValue)
             {
                 if (DebugUtil.IsDebugModeOn())
                 {
                     SetDragonBallWorldKey(player);
                     return false;
                 }
-                WorldDragonBallKey = 0;
+                worldDragonBallKey = 0;
                 if (IsItemStoneBall(item.type))
                 {
                     ItemHelper.RemoveStoneBall(player.inventory, 0, GetWhichDragonBall());
@@ -113,13 +109,13 @@ namespace DBZMOD.Items.DragonBalls
             if (!IsItemStoneBall(item.type))
             {
                 // we already have a dragon ball key, abandon ship.
-                if (WorldDragonBallKey > 0)
+                if (worldDragonBallKey > 0)
                     return;
 
                 // it's legit, set its dragon ball key
                 var world = DBZWorld.GetWorld();
 
-                WorldDragonBallKey = world.WorldDragonBallKey;
+                worldDragonBallKey = world.worldDragonBallKey;
             }
             return;
         }
@@ -130,19 +126,19 @@ namespace DBZMOD.Items.DragonBalls
                 return;
             if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI != Main.myPlayer)
                 return;
-            if (!WorldDragonBallKey.HasValue)
+            if (!worldDragonBallKey.HasValue)
                 return;
             // if the keys match, check to see if this dragon ball is cheated in.
-            if (DBZWorld.GetWorld().WorldDragonBallKey == WorldDragonBallKey.Value)
+            if (DBZWorld.GetWorld().worldDragonBallKey == worldDragonBallKey.Value)
             {
                 bool isStoneBallTakingPlaceOfExistingDragonBall = false;
                 bool isStoneBallStale = false;
                 // check if this is an inert ball that needs to be restored to its glory.
                 if (IsItemStoneBall(item.type))
                 {
-                    if (!DBZWorld.IsDragonBallWithPlayers(WorldDragonBallKey.Value))
+                    if (!DBZWorld.IsDragonBallWithPlayers(worldDragonBallKey.Value))
                     {
-                        ItemHelper.SwapStoneBallWithDragonBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
+                        ItemHelper.SwapStoneBallWithDragonBall(player.inventory, worldDragonBallKey.Value, GetWhichDragonBall());
                         isStoneBallTakingPlaceOfExistingDragonBall = true;
                     } else
                     {
@@ -175,7 +171,7 @@ namespace DBZMOD.Items.DragonBalls
                         {
                             Main.NewText("Cheated Dragon Balls taste awful.");
                         }
-                        ItemHelper.RemoveDragonBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
+                        ItemHelper.RemoveDragonBall(player.inventory, worldDragonBallKey.Value, GetWhichDragonBall());
                         return;
                     }
                 }                
@@ -183,7 +179,7 @@ namespace DBZMOD.Items.DragonBalls
             else
             {
                 // the keys don't match.. what we have here is a different world's dragon ball.
-                ItemHelper.SwapDragonBallWithStoneBall(player.inventory, WorldDragonBallKey.Value, GetWhichDragonBall());
+                ItemHelper.SwapDragonBallWithStoneBall(player.inventory, worldDragonBallKey.Value, GetWhichDragonBall());
                 return;
             }
         }

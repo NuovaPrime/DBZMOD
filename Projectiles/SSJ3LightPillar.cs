@@ -1,9 +1,5 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using DBZMOD;
-using Terraria.ID;
 using Terraria.ModLoader;
 using DBZMOD.Util;
 
@@ -11,8 +7,8 @@ namespace DBZMOD.Projectiles
 {
     public class SSJ3LightPillar : ModProjectile
     {
-        private float SizeTimer;
-        private float BlastTimer;
+        private float _sizeTimer;
+        private float _blastTimer;
         public override void SetDefaults()
         {
             projectile.width = 120;
@@ -24,7 +20,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            SizeTimer = 0f;
+            _sizeTimer = 0f;
         }
         public override void AI()
         {
@@ -34,14 +30,14 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(-50, -300);
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).isTransforming)
             {
                 projectile.Kill();
             }
-            if (SizeTimer < 300)
+            if (_sizeTimer < 300)
             {
-                projectile.scale = SizeTimer / 300f * 4;
-                SizeTimer++;
+                projectile.scale = _sizeTimer / 300f * 4;
+                _sizeTimer++;
             }
             else
             {
@@ -66,8 +62,8 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            Transformations.DoTransform(player, Transformations.SSJ3, DBZMOD.instance, false);
-            MyPlayer.ModPlayer(player).IsTransforming = false;
+            Transformations.DoTransform(player, Transformations.SSJ3, DBZMOD.instance);
+            MyPlayer.ModPlayer(player).isTransforming = false;
         }
     }
 }

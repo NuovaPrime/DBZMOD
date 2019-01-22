@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).IsInstantTransmission3Unlocked = true;
+            MyPlayer.ModPlayer(player).isInstantTransmission3Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
                 Main.NewText("You have unlocked Instant Transmission Lv3."
@@ -46,7 +46,7 @@ namespace DBZMOD.Items.Consumables
         public override bool CanUseItem(Player player)
         {
             // no if book 3 is unlocked, no if book 2 isn't read yet.
-            if (MyPlayer.ModPlayer(player).IsInstantTransmission3Unlocked || !MyPlayer.ModPlayer(player).IsInstantTransmission2Unlocked)
+            if (MyPlayer.ModPlayer(player).isInstantTransmission3Unlocked || !MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked)
             {
                 return false;
             }

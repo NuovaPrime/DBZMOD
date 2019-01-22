@@ -1,9 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,7 +6,7 @@ namespace DBZMOD.Items.Weapons.Tier_3
 {
 	public class DirtyFireworks : KiItem
 	{
-        private Player player;
+        private Player _player;
 
         public override void SetDefaults()
 		{
@@ -30,8 +25,8 @@ namespace DBZMOD.Items.Weapons.Tier_3
 			item.channel = true;
 			item.value = 5500;
 			item.rare = 3;
-            KiDrain = 110;
-			WeaponType = "Unique";
+            kiDrain = 110;
+			weaponType = "Unique";
 	    }
 	    public override void SetStaticDefaults()
 		{

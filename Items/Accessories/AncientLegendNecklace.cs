@@ -29,9 +29,9 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.09f;
-                player.GetModPlayer<MyPlayer>(mod).KiDrainMulti *= 0.88f;
-                player.GetModPlayer<MyPlayer>(mod).KiMax2 -= 500;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.09f;
+                player.GetModPlayer<MyPlayer>(mod).kiDrainMulti *= 0.88f;
+                player.GetModPlayer<MyPlayer>(mod).kiMax2 -= 500;
                 player.GetModPlayer<MyPlayer>(mod).legendNecklace = true;
             }
         }

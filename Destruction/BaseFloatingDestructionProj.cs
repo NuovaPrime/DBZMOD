@@ -1,10 +1,7 @@
 ﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+ using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
+ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Destruction
@@ -12,7 +9,7 @@ namespace DBZMOD.Destruction
 
     public class BaseFloatingDestructionProj : ModProjectile
     {
-        public bool IsReleased = false;
+        public bool isReleased = false;
         public float yVariance = 0f;
         public float initialRotationVariance = 0f;
         public float scaleVariance = 0f;
@@ -59,10 +56,10 @@ namespace DBZMOD.Destruction
             // let go of the projectile if the player gets too far from it, but not until it's above the player's feet (prevents it from despawning below the player)
             if (projectile.Center.Y < (player.position.Y + player.height) && Vector2.Distance(player.Center, projectile.Center) > 250f)
             {
-                IsReleased = true;
+                isReleased = true;
             }
 
-            if (!IsReleased)
+            if (!isReleased)
             {
                 // decaying upward momentum
                 projectile.velocity *= 0.995f;
@@ -82,7 +79,7 @@ namespace DBZMOD.Destruction
 
                 if (!player.channel)
                 {
-                    IsReleased = true;
+                    isReleased = true;
                 }
 
                 // spawn a bit of dust
@@ -93,7 +90,7 @@ namespace DBZMOD.Destruction
                     projectile.scale *= 0.90f;
                     if (projectile.scale < 0.1f)
                     {
-                        IsReleased = true;
+                        isReleased = true;
                         projectile.Kill();
                     }
                 }
