@@ -501,3 +501,14 @@ V1.0.9.0
 == Patreon Items ==
 
 1. Added [[Metamoran Sash]].
+
+
+V1.0.9.1
+
+== Fixes ==
+
+1. Fixed bug where [[Dragon Balls]] wouldn't generate.
+
+2. Fixed bug where the dragon radars spawned [[Dragon Balls]] + didn't work.
+
+3. Fixed bug where wishing didn't remove the [[Dragon Balls]].
