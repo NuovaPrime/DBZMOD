@@ -1,18 +1,14 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
     public class BigBangKamehamehaBlast : KiProjectile
     {
-        private Player player;
+        private Player _player;
         public override void SetDefaults()
         {
             projectile.CloneDefaults(ProjectileID.SwordBeam);
@@ -25,7 +21,7 @@ namespace DBZMOD.Projectiles
             projectile.light = 1f;
             projectile.timeLeft = 200;
             projectile.netUpdate = true;
-            projectile.knockBack = DefaultBeamKnockback;
+            projectile.knockBack = defaultBeamKnockback;
             aiType = 14;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;

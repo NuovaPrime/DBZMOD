@@ -12,13 +12,13 @@ namespace DBZMOD.Projectiles
 {
     public class SpiritBombBall : KiProjectile
     {
-        int rocksFloating = 0;
+        int _rocksFloating = 0;
         const int MAX_ROCKS = 25;
         const float BASE_SCALE = 1f;
         const float SCALE_INCREASE = 0.06f;
         const float TRAVEL_SPEED_COEFFICIENT = 10f;
-        int soundtimer = 0;
-        KeyValuePair<uint, SoundEffectInstance> soundInfo;
+        int _soundtimer = 0;
+        KeyValuePair<uint, SoundEffectInstance> _soundInfo;
 
         public override void SetStaticDefaults()
         {
@@ -38,7 +38,7 @@ namespace DBZMOD.Projectiles
             projectile.tileCollide = false;
             ProjectileID.Sets.TrailCacheLength[projectile.type] = 4;
             ProjectileID.Sets.TrailingMode[projectile.type] = 0;
-            KiDrainRate = 10;
+            kiDrainRate = 10;
         }        
 
         public override Color? GetAlpha(Color lightColor)
@@ -64,21 +64,21 @@ namespace DBZMOD.Projectiles
 
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.IsMassiveBlastInUse = false;
+            modPlayer.isMassiveBlastInUse = false;
         }
 
-        private bool isInitialized = false;
+        private bool _isInitialized = false;
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (!isInitialized)
+            if (!_isInitialized)
             {
-                modPlayer.IsMassiveBlastCharging = true;
-                modPlayer.IsMassiveBlastInUse = true;
+                modPlayer.isMassiveBlastCharging = true;
+                modPlayer.isMassiveBlastInUse = true;
                 HeldTime = 1;
-                isInitialized = true;
+                _isInitialized = true;
             }
 
             // cancel channeling if the projectile is maxed
@@ -87,7 +87,7 @@ namespace DBZMOD.Projectiles
                 player.channel = false;
             }
 
-            if (player.channel && modPlayer.IsMassiveBlastCharging)
+            if (player.channel && modPlayer.isMassiveBlastCharging)
             {
                 projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
                 projectile.position = player.Center + new Vector2(0, -20 - (projectile.scale * 17));
@@ -110,12 +110,12 @@ namespace DBZMOD.Projectiles
                 }
 
                 //Rock effect
-                if (DBZMOD.IsTickRateElapsed(10) && rocksFloating < MAX_ROCKS)
+                if (DBZMOD.IsTickRateElapsed(10) && _rocksFloating < MAX_ROCKS)
                 {
                     // only some of the time, keeps it a little more varied.
                     if (Main.rand.NextFloat() < 0.6f)
                     {
-                        rocksFloating++;
+                        _rocksFloating++;
                         BaseFloatingDestructionProj.SpawnNewFloatingRock(player, projectile);
                     }
                 }
@@ -133,24 +133,24 @@ namespace DBZMOD.Projectiles
                 {
                     player.channel = false;
                 }
-                if (soundtimer == 0)
+                if (_soundtimer == 0)
                 {
-                    soundInfo = SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
+                    _soundInfo = SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
                 }
-                soundtimer++;
-                if (soundtimer > 120)
+                _soundtimer++;
+                if (_soundtimer > 120)
                 {
-                    soundtimer = 0;
+                    _soundtimer = 0;
                 }
-            } else if (modPlayer.IsMassiveBlastCharging)
+            } else if (modPlayer.isMassiveBlastCharging)
             {
-                modPlayer.IsMassiveBlastCharging = false;
+                modPlayer.isMassiveBlastCharging = false;
                 float projectileWidthFactor = projectile.width * projectile.scale / TRAVEL_SPEED_COEFFICIENT;
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
-                soundInfo = SoundUtil.KillTrackedSound(soundInfo);
+                _soundInfo = SoundUtil.KillTrackedSound(_soundInfo);
                 SoundUtil.PlayCustomSound("Sounds/SpiritBombFire", player);
             }
             projectile.netUpdate = true;
@@ -175,7 +175,7 @@ namespace DBZMOD.Projectiles
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
             int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
-            DBZMOD.Circle.ApplyShader(radius);
+            DBZMOD.circle.ApplyShader(radius);
             return true;
         }
 

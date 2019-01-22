@@ -1,6 +1,4 @@
-﻿﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
+﻿using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories.Vanity
 {
@@ -21,7 +19,7 @@ namespace DBZMOD.Items.Accessories.Vanity
             item.rare = 5;
             item.accessory = true;
             item.vanity = true;
-            PatreonName = "FullNovaAlchemist";
+            patreonName = "FullNovaAlchemist";
         }
     }
 }

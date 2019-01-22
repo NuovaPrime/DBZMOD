@@ -21,14 +21,14 @@ namespace DBZMOD.Items.Accessories
             item.value = 60000;
             item.rare = 6;
             item.accessory = true;
-            PatreonName = "Lethaius";
+            patreonName = "Lethaius";
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
                 player.lifeRegen += 4;
-                player.GetModPlayer<MyPlayer>(mod).KiRegen += 3;
+                player.GetModPlayer<MyPlayer>(mod).kiRegen += 3;
                 player.GetModPlayer<MyPlayer>(mod).timeRing = true;
             }
         }

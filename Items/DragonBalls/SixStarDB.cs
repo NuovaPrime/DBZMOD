@@ -1,7 +1,3 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace DBZMOD.Items.DragonBalls
 {
     public class SixStarDB : DragonBallItem

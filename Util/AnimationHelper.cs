@@ -1,12 +1,8 @@
 ﻿using DBZMOD.Effects.Animations.Aura;
-using DBZMOD.Enums;
 using DBZMOD.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -21,34 +17,34 @@ namespace DBZMOD.Util
             if (modPlayer.player.dead)
                 return null;
             if (Transformations.IsKaioken(modPlayer.player))
-                return AuraAnimations.CreateKaiokenAura;
+                return AuraAnimations.createKaiokenAura;
             if (Transformations.IsSuperKaioken(modPlayer.player))
-                return AuraAnimations.CreateSuperKaiokenAura;
+                return AuraAnimations.createSuperKaiokenAura;
             if (Transformations.IsSSJ1(modPlayer.player))
-                return AuraAnimations.SSJ1Aura;
-            if (Transformations.IsASSJ(modPlayer.player))
-                return AuraAnimations.ASSJAura;
-            if (Transformations.IsUSSJ(modPlayer.player))
-                return AuraAnimations.USSJAura;
+                return AuraAnimations.ssj1Aura;
+            if (Transformations.IsAssj(modPlayer.player))
+                return AuraAnimations.assjAura;
+            if (Transformations.IsUssj(modPlayer.player))
+                return AuraAnimations.ussjAura;
             if (Transformations.IsSSJ2(modPlayer.player))
-                return AuraAnimations.SSJ2Aura;
+                return AuraAnimations.ssj2Aura;
             if (Transformations.IsSSJ3(modPlayer.player))
-                return AuraAnimations.SSJ3Aura;
+                return AuraAnimations.ssj3Aura;
             if (Transformations.IsSSJG(modPlayer.player))
-                return AuraAnimations.SSJGAura;
+                return AuraAnimations.ssjgAura;
             if (Transformations.IsLSSJ1(modPlayer.player))
-                return AuraAnimations.LSSJAura;
+                return AuraAnimations.lssjAura;
             if (Transformations.IsLSSJ2(modPlayer.player))
-                return AuraAnimations.LSSJ2Aura;
+                return AuraAnimations.lssj2Aura;
             if (Transformations.IsSpectrum(modPlayer.player))
-                return AuraAnimations.SpectrumAura;
+                return AuraAnimations.spectrumAura;
             // handle charging last
-            if (modPlayer.IsCharging)
-                return AuraAnimations.CreateChargeAura;
+            if (modPlayer.isCharging)
+                return AuraAnimations.createChargeAura;
             return null;
         }
 
-        public static readonly PlayerLayer AuraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer auraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -76,7 +72,7 @@ namespace DBZMOD.Util
         {
             Player player = modPlayer.player;
             Texture2D texture = aura.GetTexture();
-            Rectangle textureRectangle = new Rectangle(0, aura.GetHeight() * modPlayer.AuraCurrentFrame, texture.Width, aura.GetHeight());
+            Rectangle textureRectangle = new Rectangle(0, aura.GetHeight() * modPlayer.auraCurrentFrame, texture.Width, aura.GetHeight());
             float scale = aura.GetAuraScale(modPlayer);
             Tuple<float, Vector2> rotationAndPosition = aura.GetAuraRotationAndPosition(modPlayer);
             float rotation = rotationAndPosition.Item1;
@@ -89,7 +85,7 @@ namespace DBZMOD.Util
             }
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, aura.BlendState, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, aura.blendState, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
             // custom draw routine
             Main.spriteBatch.Draw(texture, position - Main.screenPosition, textureRectangle, Color.White, rotation, new Vector2(aura.GetWidth(), aura.GetHeight()) * 0.5f, scale, SpriteEffects.None, 0f);
@@ -98,7 +94,7 @@ namespace DBZMOD.Util
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
-        public static readonly PlayerLayer TransformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", null, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer transformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -109,13 +105,13 @@ namespace DBZMOD.Util
             {
                 return;
             }
-            if (!modPlayer.IsTransformationAnimationPlaying)
+            if (!modPlayer.isTransformationAnimationPlaying)
             {
-                modPlayer.TransformationFrameTimer = 0;
+                modPlayer.transformationFrameTimer = 0;
                 return;
             }
 
-            modPlayer.TransformationFrameTimer++;
+            modPlayer.transformationFrameTimer++;
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
@@ -125,7 +121,7 @@ namespace DBZMOD.Util
                 var numberOfFrames = 4;
                 var yOffset = -18;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+                isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
             if (Transformations.IsSSJ3(drawPlayer) && !Transformations.IsSSJG(drawPlayer))
             {
@@ -133,7 +129,7 @@ namespace DBZMOD.Util
                 var numberOfFrames = 4;
                 var yOffset = -18;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+                isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
             if (Transformations.IsSSJG(drawPlayer))
             {
@@ -141,7 +137,7 @@ namespace DBZMOD.Util
                 var numberOfFrames = 6;
                 var yOffset = 35;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJG", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+                isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
             /*if (Transformations.IsLSSJ(drawPlayer))
             {
@@ -154,14 +150,14 @@ namespace DBZMOD.Util
                 var numberOfFrames = 7;
                 var yOffset = -18;
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJSpectrum", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
+                isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
 
             // if we made it this far, we don't want to get stuck in a transformation animation state just because one doesn't exist
             // cancel it so we can move on and show auras.
             if (!isAnyAnimationPlaying)
             {
-                modPlayer.IsTransformationAnimationPlaying = false;
+                modPlayer.isTransformationAnimationPlaying = false;
             }
         });
 
@@ -170,7 +166,7 @@ namespace DBZMOD.Util
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = DBZMOD.instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = modPlayer.TransformationFrameTimer / frameCounterLimit;
+            int frame = modPlayer.transformationFrameTimer / frameCounterLimit;
             Texture2D texture = mod.GetTexture(transformationSpriteSheet);
             int frameSize = texture.Height / numberOfFrames;
             int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -178,7 +174,7 @@ namespace DBZMOD.Util
             // we've hit the frame limit, so kill the animation
             if (frame == numberOfFrames)
             {
-                modPlayer.IsTransformationAnimationPlaying = false;
+                modPlayer.isTransformationAnimationPlaying = false;
             }
             return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
         }
@@ -188,7 +184,7 @@ namespace DBZMOD.Util
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = DBZMOD.instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            int frame = modPlayer.LightningFrameTimer / 5;
+            int frame = modPlayer.lightningFrameTimer / 5;
             Texture2D texture = mod.GetTexture(lightningTexture);
             int frameSize = texture.Height / 3;
             int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -196,7 +192,7 @@ namespace DBZMOD.Util
             return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
         }
 
-        public static readonly PlayerLayer LightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer lightningEffects = new PlayerLayer("DBZMOD", "LightningEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -218,13 +214,13 @@ namespace DBZMOD.Util
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((Transformations.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().KaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((Transformations.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
         });
 
-        public static readonly PlayerLayer DragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer dragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
         {
             // ragon radar effects only show up for the player holding it.
             if (drawInfo.drawPlayer.whoAmI != Main.myPlayer)
@@ -264,7 +260,7 @@ namespace DBZMOD.Util
             float radarAngle = radarAngleVector.ToRotation();
 
             // player is too close to the dragon ball.
-            if (closestDistance < (modPlayer.IsHoldingDragonRadarMk1 ? 1280f : (modPlayer.IsHoldingDragonRadarMk2 ? 640f : 320f)))
+            if (closestDistance < (modPlayer.isHoldingDragonRadarMk1 ? 1280f : (modPlayer.isHoldingDragonRadarMk2 ? 640f : 320f)))
             {
                 radarAngle += (float)(DBZMOD.GetTicks() % 59) * 6f;
             }
@@ -279,7 +275,7 @@ namespace DBZMOD.Util
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = DBZMOD.instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
-            float radarArrowScale = (modPlayer.IsHoldingDragonRadarMk1 ? 1f : (modPlayer.IsHoldingDragonRadarMk2 ? 1.25f : 1.5f));
+            float radarArrowScale = (modPlayer.isHoldingDragonRadarMk1 ? 1f : (modPlayer.isHoldingDragonRadarMk2 ? 1.25f : 1.5f));
             Texture2D texture = mod.GetTexture(dragonRadarSprite);
             int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
             int drawY = (int)(drawInfo.position.Y + yOffset + drawPlayer.height / 0.6f - Main.screenPosition.Y);

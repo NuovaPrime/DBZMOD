@@ -1,8 +1,5 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using DBZMOD;
 using Terraria.ID;
 using Terraria.ModLoader;
 using DBZMOD.Util;
@@ -11,8 +8,8 @@ namespace DBZMOD.Projectiles
 {
     public class SSJ1AuraProjStart : ModProjectile
     {
-        private float SizeTimer;
-        private float BeamTimer;
+        private float _sizeTimer;
+        private float _beamTimer;
         public override void SetDefaults()
         {
             projectile.width = 176;
@@ -24,7 +21,7 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            SizeTimer = 0f;
+            _sizeTimer = 0f;
         }
         public override void AI()
         {
@@ -34,14 +31,14 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).isTransforming)
             {
                 projectile.Kill();
             }
-            if (SizeTimer < 300)
+            if (_sizeTimer < 300)
             {
-                projectile.scale = SizeTimer / 300f * 2;
-                SizeTimer++;
+                projectile.scale = _sizeTimer / 300f * 2;
+                _sizeTimer++;
             }
             else
             {
@@ -50,10 +47,10 @@ namespace DBZMOD.Projectiles
             projectile.frameCounter++; 
             if(projectile.active)
             {
-                BeamTimer++;
-                if(BeamTimer > 90)
+                _beamTimer++;
+                if(_beamTimer > 90)
                 {
-                    BeamTimer = 0;
+                    _beamTimer = 0;
                     Projectile.NewProjectile(projectile.Center.X + Main.rand.NextFloat(-500, 600), projectile.Center.Y - 1000, 0, -50, ProjectileID.VortexVortexLightning, 0, 0, player.whoAmI);
 
                 }     

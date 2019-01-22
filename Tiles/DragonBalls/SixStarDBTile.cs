@@ -1,11 +1,6 @@
 ﻿﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
+ using Terraria;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Tiles.DragonBalls
 {
@@ -19,7 +14,7 @@ namespace DBZMOD.Tiles.DragonBalls
             drop = mod.ItemType("SixStarDB");
             AddMapEntry(new Color(249, 193, 49), name);
             disableSmartCursor = true;
-            WhichDragonBallAmI = 6;
+            whichDragonBallAmI = 6;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -27,7 +22,7 @@ namespace DBZMOD.Tiles.DragonBalls
             if (closer)
             {
                 MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-                modPlayer.SixStarDBNearby = true;
+                modPlayer.sixStarDbNearby = true;
             }
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +7,7 @@ namespace DBZMOD.Effects
 {
 	public class GodSky : CustomSky
 	{
-		private bool active;
+		private bool _active;
 
 		public override void OnLoad()
 		{
@@ -45,22 +44,22 @@ namespace DBZMOD.Effects
 
 		public override void Activate(Vector2 position, params object[] args)
 		{
-			active = true;
+			_active = true;
 		}
 
 		public override void Deactivate(params object[] args)
 		{
-			active = false;
+			_active = false;
 		}
 
 		public override void Reset()
 		{
-			active = false;
+			_active = false;
 		}
 
 		public override bool IsActive()
 		{
-			return active;
+			return _active;
 		}
 	}
 }

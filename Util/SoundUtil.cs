@@ -1,5 +1,4 @@
-﻿using DBZMOD;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using Terraria;
@@ -9,18 +8,18 @@ namespace DBZMOD.Util
 {
     public static class SoundUtil
     {
-        public static uint InvalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
-        public static DBZMOD _mod;
-        public static DBZMOD mod
+        public static uint invalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
+        public static DBZMOD mod;
+        public static DBZMOD Mod
         {
             get
             {
-                if (_mod == null)
+                if (mod == null)
                 {
-                    _mod = DBZMOD.instance;
+                    mod = DBZMOD.instance;
                 }
 
-                return _mod;
+                return mod;
             }
         }
 
@@ -83,9 +82,9 @@ namespace DBZMOD.Util
         public static KeyValuePair<uint, SoundEffectInstance> PlayCustomSound(string soundId, Vector2 location, float volume = 1f, float pitchVariance = 0f)
         {
             if (Main.dedServ)
-                return new KeyValuePair<uint, SoundEffectInstance>(InvalidSlot, null);
+                return new KeyValuePair<uint, SoundEffectInstance>(invalidSlot, null);
 
-            var slotId = InvalidSlot;
+            var slotId = invalidSlot;
             var style = GetCustomStyle(soundId, volume, pitchVariance);
             SoundEffectInstance sound = null;
             if (location == Vector2.Zero)
@@ -95,7 +94,7 @@ namespace DBZMOD.Util
             {
                 sound = Main.PlaySound(style, location);
             }
-            slotId = (uint)mod.GetSoundSlot(SoundType.Custom, soundId);
+            slotId = (uint)Mod.GetSoundSlot(SoundType.Custom, soundId);
             return new KeyValuePair<uint, SoundEffectInstance>(slotId, sound);
         }
 
@@ -108,7 +107,7 @@ namespace DBZMOD.Util
 
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)
         {
-            return mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
+            return Mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
         }
 
         public static KeyValuePair<uint, SoundEffectInstance> KillTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo)
@@ -124,7 +123,7 @@ namespace DBZMOD.Util
                     soundInstance.Stop();
             }
 
-            return new KeyValuePair<uint, SoundEffectInstance>(InvalidSlot, null);
+            return new KeyValuePair<uint, SoundEffectInstance>(invalidSlot, null);
         }
 
         public static void UpdateTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo, Vector2 position)
@@ -139,7 +138,7 @@ namespace DBZMOD.Util
 
         public static bool CanPlayOtherPlayerAudio(MyPlayer myPlayer, Player otherPlayer)
         {
-            return myPlayer.PlayerIndexWithLocalAudio == otherPlayer.whoAmI || myPlayer.PlayerIndexWithLocalAudio == -1;
+            return myPlayer.playerIndexWithLocalAudio == otherPlayer.whoAmI || myPlayer.playerIndexWithLocalAudio == -1;
         }
 
         // tries to settle ties when trying to play aura and charge effects - the local player always wins, otherwise it's first come first serve. Only one at a time.
@@ -149,9 +148,9 @@ namespace DBZMOD.Util
             var modPlayer = player.GetModPlayer<MyPlayer>();            
             if (player.whoAmI == Main.myPlayer)
             {
-                shouldPlayAudio = modPlayer.AuraSoundInfo.Value == null || isTransformation;
+                shouldPlayAudio = modPlayer.auraSoundInfo.Value == null || isTransformation;
                 
-                if (modPlayer.PlayerIndexWithLocalAudio != -1)
+                if (modPlayer.playerIndexWithLocalAudio != -1)
                 {
                     KillOtherPlayerAudio(player);
                 }
@@ -159,10 +158,10 @@ namespace DBZMOD.Util
             else
             {
                 var myPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-                shouldPlayAudio = myPlayer.AuraSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
+                shouldPlayAudio = myPlayer.auraSoundInfo.Value == null && CanPlayOtherPlayerAudio(myPlayer, player);                
                 if (shouldPlayAudio)
                 {
-                    myPlayer.PlayerIndexWithLocalAudio = player.whoAmI;
+                    myPlayer.playerIndexWithLocalAudio = player.whoAmI;
                 }
             }
             return shouldPlayAudio;
@@ -179,10 +178,10 @@ namespace DBZMOD.Util
                 if (player.whoAmI == Main.myPlayer)
                     continue;
                 var modPlayer = player.GetModPlayer<MyPlayer>();
-                modPlayer.AuraSoundInfo = KillTrackedSound(modPlayer.AuraSoundInfo);
+                modPlayer.auraSoundInfo = KillTrackedSound(modPlayer.auraSoundInfo);
             }
             var myModPlayer = myPlayer.GetModPlayer<MyPlayer>();
-            myModPlayer.PlayerIndexWithLocalAudio = -1;
+            myModPlayer.playerIndexWithLocalAudio = -1;
         }
     }
 }

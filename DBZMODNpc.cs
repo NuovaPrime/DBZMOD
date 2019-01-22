@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 
 namespace DBZMOD
 {
+    // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once InconsistentNaming
     public class DBZMODNPC : GlobalNPC
     {
         public override bool InstancePerEntity
@@ -212,7 +214,7 @@ namespace DBZMOD
                 {
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-                    modPlayer.KaiokenLevel = 0;
+                    modPlayer.kaiokenLevel = 0;
                     Transformations.EndTransformations(player, true);
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
@@ -238,45 +240,45 @@ namespace DBZMOD
 
                 if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                 {
-                    if (!modPlayer.JungleMessage)
+                    if (!modPlayer.jungleMessage)
                     {
-                        modPlayer.JungleMessage = true;
+                        modPlayer.jungleMessage = true;
                         isDisplayingJungleMessage = true;
                     }
                 }
 
                 if (npc.type == NPCID.BrainofCthulhu)
                 {
-                    if (!modPlayer.JungleMessage)
+                    if (!modPlayer.jungleMessage)
                     {
-                        modPlayer.JungleMessage = true;
+                        modPlayer.jungleMessage = true;
                         isDisplayingJungleMessage = true;
                     }
                 }
 
                 if (npc.type == NPCID.SkeletronHead)
                 {
-                    if (!modPlayer.HellMessage)
+                    if (!modPlayer.hellMessage)
                     {
-                        modPlayer.HellMessage = true;
+                        modPlayer.hellMessage = true;
                         isDisplayingHellMessage = true;
                     }
                 }
 
                 if (npc.type == NPCID.WallofFlesh)
                 {
-                    if (!modPlayer.EvilMessage)
+                    if (!modPlayer.evilMessage)
                     {
-                        modPlayer.EvilMessage = true;
+                        modPlayer.evilMessage = true;
                         isDisplayingEvilMessage = true;
                     }
                 }
 
                 if (npc.type == NPCID.Plantera)
                 {
-                    if (!modPlayer.MushroomMessage)
+                    if (!modPlayer.mushroomMessage)
                     {
-                        modPlayer.MushroomMessage = true;
+                        modPlayer.mushroomMessage = true;
                         isDisplayingMushroomMessage = true;
                     }
                 }
@@ -300,45 +302,45 @@ namespace DBZMOD
 
                     if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                     {
-                        if (!modPlayer.JungleMessage)
+                        if (!modPlayer.jungleMessage)
                         {
-                            modPlayer.JungleMessage = true;
+                            modPlayer.jungleMessage = true;
                             isDisplayingJungleMessage = true;
                         }
                     }
 
                     if (npc.type == NPCID.BrainofCthulhu)
                     {
-                        if (!modPlayer.JungleMessage)
+                        if (!modPlayer.jungleMessage)
                         {
-                            modPlayer.JungleMessage = true;
+                            modPlayer.jungleMessage = true;
                             isDisplayingJungleMessage = true;
                         }
                     }
 
                     if (npc.type == NPCID.SkeletronHead)
                     {
-                        if (!modPlayer.HellMessage)
+                        if (!modPlayer.hellMessage)
                         {
-                            modPlayer.HellMessage = true;
+                            modPlayer.hellMessage = true;
                             isDisplayingHellMessage = true;
                         }
                     }
 
                     if (npc.type == NPCID.WallofFlesh)
                     {
-                        if (!modPlayer.EvilMessage)
+                        if (!modPlayer.evilMessage)
                         {
-                            modPlayer.EvilMessage = true;
+                            modPlayer.evilMessage = true;
                             isDisplayingEvilMessage = true;
                         }
                     }
 
                     if (npc.type == NPCID.Plantera)
                     {
-                        if (!modPlayer.MushroomMessage)
+                        if (!modPlayer.mushroomMessage)
                         {
-                            modPlayer.MushroomMessage = true;
+                            modPlayer.mushroomMessage = true;
                             isDisplayingMushroomMessage = true;
                         }
                     }

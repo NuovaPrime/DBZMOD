@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -12,11 +10,11 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 2.30f;
-            SpeedMulti = 2.30f;
-            KiDrainBuffMulti = 2.1f;
-            KiDrainRate = 2.15f;
-            BaseDefenceBonus = 6;
+            damageMulti = 2.30f;
+            speedMulti = 2.30f;
+            kiDrainBuffMulti = 2.1f;
+            kiDrainRate = 2.15f;
+            baseDefenceBonus = 6;
             Description.SetDefault(AssembleTransBuffDescription());
         }
     }

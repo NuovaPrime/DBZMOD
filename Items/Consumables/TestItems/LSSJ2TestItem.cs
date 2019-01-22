@@ -1,7 +1,4 @@
-﻿﻿using System;
-using DBZMOD.UI;
-using DBZMOD.Enums;
-using Microsoft.Xna.Framework;
+﻿using DBZMOD.Enums;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,9 +33,9 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override bool UseItem(Player player)
         {
             MyPlayer.ModPlayer(player).LSSJ2Transformation();
-            UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
-            MyPlayer.ModPlayer(player).LSSJ2Achieved = true;
-            MyPlayer.ModPlayer(player).IsTransforming = true;
+            UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+            MyPlayer.ModPlayer(player).lssj2Achieved = true;
+            MyPlayer.ModPlayer(player).isTransforming = true;
             return true;
 
         }

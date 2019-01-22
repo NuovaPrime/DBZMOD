@@ -26,8 +26,8 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KaiokenDrainMulti -= 0.5f;
-                player.GetModPlayer<MyPlayer>(mod).KiMaxMult *= 0.7f;
+                player.GetModPlayer<MyPlayer>(mod).kaiokenDrainMulti -= 0.5f;
+                player.GetModPlayer<MyPlayer>(mod).kiMaxMult *= 0.7f;
                 player.GetModPlayer<MyPlayer>(mod).kaioCrystal = true;
             }
         }

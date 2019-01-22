@@ -1,18 +1,13 @@
-using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameInput;
 
 namespace DBZMOD.Items.Weapons.Fist
 {
 	public class KiFist1 : KiItem
 	{
-        private string tooltip;
+        private string _tooltip;
 		public override void SetDefaults()
 		{
 			item.damage = 10;
@@ -35,30 +30,30 @@ namespace DBZMOD.Items.Weapons.Fist
             Tooltip.SetDefault("'The most essential skill of any martial artist.'");
         }
 
-        private const string FistLine1 = "\nLeft click to punch, has no cooldown between attacks.";
-        private const string FistLine2 = "\nHolding Left click allows you to do a flurry attack.";
-        private const string FistLine3 = "\nRight click to do a ki infused punch, this sends anything flying.";
-        private const string ZanzokenLine1 = "\nDouble tap in any direction to do a short ranged teleport, teleporting towards a enemy makes you teleport to them.";
-        private const string ZanzokenHeavyLine1 = "\nHeavy hitting after teleporting to a enemy will send them flying even harder.";
+        private const string FIST_LINE1 = "\nLeft click to punch, has no cooldown between attacks.";
+        private const string FIST_LINE2 = "\nHolding Left click allows you to do a flurry attack.";
+        private const string FIST_LINE3 = "\nRight click to do a ki infused punch, this sends anything flying.";
+        private const string ZANZOKEN_LINE1 = "\nDouble tap in any direction to do a short ranged teleport, teleporting towards a enemy makes you teleport to them.";
+        private const string ZANZOKEN_HEAVY_LINE1 = "\nHeavy hitting after teleporting to a enemy will send them flying even harder.";
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             Player player = Main.LocalPlayer;
-            string tooltip = FistLine1;
-            if (MyPlayer.ModPlayer(player).CanUseFlurry)
+            string tooltip = FIST_LINE1;
+            if (MyPlayer.ModPlayer(player).canUseFlurry)
             {
-                tooltip += FistLine2;
+                tooltip += FIST_LINE2;
             }
-            if (MyPlayer.ModPlayer(player).CanUseHeavyHit)
+            if (MyPlayer.ModPlayer(player).canUseHeavyHit)
             {
-                tooltip += FistLine3;
+                tooltip += FIST_LINE3;
             }
-            if (MyPlayer.ModPlayer(player).CanUseZanzoken)
+            if (MyPlayer.ModPlayer(player).canUseZanzoken)
             {
-                tooltip += ZanzokenLine1;
+                tooltip += ZANZOKEN_LINE1;
             }
-            if (MyPlayer.ModPlayer(player).CanUseHeavyHit && MyPlayer.ModPlayer(player).CanUseZanzoken)
+            if (MyPlayer.ModPlayer(player).canUseHeavyHit && MyPlayer.ModPlayer(player).canUseZanzoken)
             {
-                tooltip += ZanzokenHeavyLine1;
+                tooltip += ZANZOKEN_HEAVY_LINE1;
             }
 
             foreach (TooltipLine line2 in tooltips)

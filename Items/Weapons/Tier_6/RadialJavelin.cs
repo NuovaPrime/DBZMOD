@@ -1,10 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DBZMOD.Items.Weapons.Tier_6
 {
@@ -33,9 +30,9 @@ namespace DBZMOD.Items.Weapons.Tier_6
 			item.noMelee = true; 
 			item.noUseGraphic = true; 
 			item.autoReuse = true;
-            KiDrain = 90;
+            kiDrain = 90;
             item.UseSound = SoundID.Item45;
-			WeaponType = "Unique";
+			weaponType = "Unique";
         }
         public override void AddRecipes()
         {

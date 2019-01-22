@@ -1,6 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -12,21 +10,21 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 1.75f;
-            SpeedMulti = 1.75f;
-            KiDrainRate = 1.15f;
-            KiDrainRateWithMastery = 0.575f;
-            KiDrainBuffMulti = 1.4f;
-            BaseDefenceBonus = 5;
+            damageMulti = 1.75f;
+            speedMulti = 1.75f;
+            kiDrainRate = 1.15f;
+            kiDrainRateWithMastery = 0.575f;
+            kiDrainBuffMulti = 1.4f;
+            baseDefenceBonus = 5;
             Description.SetDefault(AssembleTransBuffDescription());
         }
 
         // per Nova's design, mastery applies to ASSJ and USSJ
         public override void Update(Player player, ref int buffIndex)
         {
-            bool isMastered = MyPlayer.ModPlayer(player).MasteryLevel1 >= 1;
+            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
 
-            KiDrainRate = !isMastered ? KiDrainRate : KiDrainRateWithMastery;
+            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
             base.Update(player, ref buffIndex);
         }
     }

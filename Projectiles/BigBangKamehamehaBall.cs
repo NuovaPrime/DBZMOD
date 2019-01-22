@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
 using DBZMOD.Util;
 
@@ -14,7 +10,7 @@ namespace DBZMOD.Projectiles
     public class BigBangKamehamehaBall : KiProjectile
     {
         public bool startingCharge = false;
-        KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
+        KeyValuePair<uint, SoundEffectInstance> _chargeSoundSlotId;
 
         public override void SetDefaults()
         {
@@ -31,13 +27,13 @@ namespace DBZMOD.Projectiles
             aiType = 14;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
-            ChargeBall = true;
-            ChargeLimit = 10;
-            KiDrainRate = 3;
+            chargeBall = true;
+            chargeLimit = 10;
+            kiDrainRate = 3;
             ballscale = 2f;
             color = Color.Blue;
-            ChargeTimerMax = 80f;
-            DustType = 15;
+            chargeTimerMax = 80f;
+            dustType = 15;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -61,12 +57,12 @@ namespace DBZMOD.Projectiles
 
             
 
-            if (!player.channel || (ChargeLevel >= ChargeLimit))
+            if (!player.channel || (chargeLevel >= chargeLimit))
             {
-                if (ChargeLevel >= 1)
+                if (chargeLevel >= 1)
                 {
                     float rot = (float)Math.Atan2((Main.mouseY + Main.screenPosition.Y) - projectile.Center.Y, (Main.mouseX + Main.screenPosition.X) - projectile.Center.X);
-                    Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("BigBangKamehamehaBlast"), projectile.damage + (ChargeLevel * 65), projectile.knockBack, projectile.owner);
+                    Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("BigBangKamehamehaBlast"), projectile.damage + (chargeLevel * 65), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
                     SoundUtil.PlayCustomSound("Sounds/BasicBeamFire", projectile.Center);
@@ -78,22 +74,22 @@ namespace DBZMOD.Projectiles
                         float angle = Main.rand.NextFloat(360);
                         float angleRad = MathHelper.ToRadians(angle);
                         Vector2 position = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, DustType, 0f, 0f, 213, default(Color), 3.0f);
+                        Dust tDust = Dust.NewDustDirect(projectile.position + (position * (20 + 3.0f * projectile.scale)), projectile.width, projectile.height, dustType, 0f, 0f, 213, default(Color), 3.0f);
                         tDust.velocity = -0.5f * Vector2.Normalize((projectile.position + (projectile.Size / 2)) - tDust.position) * 2;
                         tDust.noGravity = true;
                     }
                 }
-                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);                
+                _chargeSoundSlotId = SoundUtil.KillTrackedSound(_chargeSoundSlotId);                
             }
 
             if (!startingCharge)
             {
                 startingCharge = true;
                 if (!Main.dedServ)
-                    chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
+                    _chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
             }
 
-            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
+            SoundUtil.UpdateTrackedSound(_chargeSoundSlotId, projectile.Center);
         }
     }
 }

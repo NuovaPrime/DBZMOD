@@ -1,6 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs.DevBuffs
 {
@@ -18,12 +16,12 @@ namespace DBZMOD.Buffs.DevBuffs
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            DamageMulti = 69f;
-            SpeedMulti = 69f;
+            damageMulti = 69f;
+            speedMulti = 69f;
             
-            KiDrainBuffMulti = 1f;
-            modPlayer.KiRegen += 9999;
-            modPlayer.KiMax2 += 999999;
+            kiDrainBuffMulti = 1f;
+            modPlayer.kiRegen += 9999;
+            modPlayer.kiMax2 += 999999;
             base.Update(player, ref buffIndex);
         }
     }

@@ -1,7 +1,4 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Network;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,7 +32,7 @@ namespace DBZMOD.Items.Consumables
         public override bool UseItem(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            modPlayer.Fragment2 = true;
+            modPlayer.fragment2 = true;
             //if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
             //{
             //    NetworkHelper.kiFragmentSync.SendFragmentChanges(256, player.whoAmI, player.whoAmI, modPlayer.Fragment1, modPlayer.Fragment2, modPlayer.Fragment3, modPlayer.Fragment4, modPlayer.Fragment5);
@@ -45,7 +42,7 @@ namespace DBZMOD.Items.Consumables
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).Fragment2)
+            if (MyPlayer.ModPlayer(player).fragment2)
             {
                 return false;
             }

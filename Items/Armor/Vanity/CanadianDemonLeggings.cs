@@ -24,14 +24,14 @@ namespace DBZMOD.Items.Armor.Vanity
             item.value = 32000;
             item.rare = 9;
             item.defense = 14;
-            PatreonName = "CanadianMRE";
+            patreonName = "CanadianMRE";
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.20f;
-            MyPlayer.ModPlayer(player).KiCrit += 16;
-            MyPlayer.ModPlayer(player).KiMax2 += 500;
-            MyPlayer.ModPlayer(player).KiRegen += 2;
+            MyPlayer.ModPlayer(player).kiDamage += 0.20f;
+            MyPlayer.ModPlayer(player).kiCrit += 16;
+            MyPlayer.ModPlayer(player).kiMax2 += 500;
+            MyPlayer.ModPlayer(player).kiRegen += 2;
             player.moveSpeed += 0.18f;
 
         }

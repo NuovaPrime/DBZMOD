@@ -1,9 +1,5 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
-using DBZMOD;
-using Terraria.ID;
 using Terraria.ModLoader;
 using DBZMOD.Util;
 
@@ -53,7 +49,7 @@ namespace DBZMOD.Projectiles
             {
                 Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("SSJGDustCenter"), 0, 0, player.whoAmI);
             }
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).isTransforming)
             {
                 projectile.Kill();
             }

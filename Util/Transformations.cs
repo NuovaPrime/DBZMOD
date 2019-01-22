@@ -1,12 +1,11 @@
-﻿using Buffs;
-using DBZMOD;
-using DBZMOD.Enums;
+﻿using DBZMOD.Enums;
 using DBZMOD.Models;
 using Microsoft.Xna.Framework;
-using Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DBZMOD.Buffs;
+using DBZMOD.Network;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,7 +18,7 @@ namespace DBZMOD.Util
         public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
 
         private static Mod _modInstance;
-        public static Mod modInstance
+        public static Mod ModInstance
         {
             get
             {
@@ -35,163 +34,163 @@ namespace DBZMOD.Util
         {
             get {
                 return new List<BuffInfo>() {
-                    SSJ1, SSJ2, SSJ3, SSJG, LSSJ, LSSJ2, ASSJ, USSJ, Kaioken, SuperKaioken, KaiokenFatigue, TransformationExhaustion, Spectrum
+                    SSJ1, SSJ2, SSJ3, SSJG, LSSJ, LSSJ2, Assj, Ussj, Kaioken, SuperKaioken, KaiokenFatigue, TransformationExhaustion, Spectrum
                 };
             }
         }
 
         // the following are cached info classes that get passed around for all sorts of things.
-        private static BuffInfo _SSJ1;
+        private static BuffInfo _ssj1;
         public static BuffInfo SSJ1
         {
             get
             {
-                if (_SSJ1 == null)
-                    _SSJ1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.SSJ1, "Super Saiyan 1", DefaultTransformationTextColor);
-                return _SSJ1;
+                if (_ssj1 == null)
+                    _ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor);
+                return _ssj1;
             }
         }
 
-        public static BuffInfo _SSJ2;
+        public static BuffInfo ssj2;
         public static BuffInfo SSJ2
         {
             get
             {
-                if (_SSJ2 == null)
-                    _SSJ2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.SSJ2, "Super Saiyan 2", DefaultTransformationTextColor);
-                return _SSJ2;
+                if (ssj2 == null)
+                    ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor);
+                return ssj2;
             }
         }
 
-        public static BuffInfo _SSJ3;
+        public static BuffInfo ssj3;
         public static BuffInfo SSJ3
         {
             get
             {
-                if (_SSJ3 == null)
-                    _SSJ3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.SSJ3, "Super Saiyan 3", DefaultTransformationTextColor);
-                return _SSJ3;
+                if (ssj3 == null)
+                    ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor);
+                return ssj3;
             }
         }
 
-        public static BuffInfo _SSJG;
+        public static BuffInfo ssjg;
         public static BuffInfo SSJG
         {
             get
             {
-                if (_SSJG == null)
-                    _SSJG = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.SSJG, "Super Saiyan God", DefaultTransformationTextColor);
-                return _SSJG;
+                if (ssjg == null)
+                    ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", defaultTransformationTextColor);
+                return ssjg;
             }
         }
 
-        public static BuffInfo _SSJB;
-        public static BuffInfo SSJB
+        public static BuffInfo ssjb;
+        public static BuffInfo Ssjb
         {
             get
             {
-                if (_SSJB == null)
-                    _SSJB = new BuffInfo(MenuSelectionID.SSJB, BuffKeyNames.SSJB, null, DefaultTransformationTextColor);
-                return _SSJB;
+                if (ssjb == null)
+                    ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor);
+                return ssjb;
             }
         }
 
-        public static BuffInfo _LSSJ;
+        public static BuffInfo lssj;
         public static BuffInfo LSSJ
         {
             get
             {
-                if (_LSSJ == null)
-                    _LSSJ = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.LSSJ, "Legendary Super Saiyan", DefaultTransformationTextColor);
-                return _LSSJ;
+                if (lssj == null)
+                    lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor);
+                return lssj;
             }
         }
 
-        public static BuffInfo _LSSJ2;
+        public static BuffInfo lssj2;
         public static BuffInfo LSSJ2
         {
             get
             {
-                if (_LSSJ2 == null)
-                    _LSSJ2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.LSSJ2, "Legendary Super Saiyan 2", DefaultTransformationTextColor);
-                return _LSSJ2;
+                if (lssj2 == null)
+                    lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor);
+                return lssj2;
             }
         }
 
-        public static BuffInfo _ASSJ;
-        public static BuffInfo ASSJ
+        public static BuffInfo assj;
+        public static BuffInfo Assj
         {
             get
             {
-                if (_ASSJ == null)
-                    _ASSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ASSJ, "Ascended Super Saiyan", DefaultTransformationTextColor);
-                return _ASSJ;
+                if (assj == null)
+                    assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, "Ascended Super Saiyan", defaultTransformationTextColor);
+                return assj;
             }
         }
 
-        public static BuffInfo _USSJ;
-        public static BuffInfo USSJ
+        public static BuffInfo ussj;
+        public static BuffInfo Ussj
         {
             get
             {
-                if (_USSJ == null)
-                    _USSJ = new BuffInfo(MenuSelectionID.None, BuffKeyNames.USSJ, "Ultra Super Saiyan", DefaultTransformationTextColor);
-                return _USSJ;
+                if (ussj == null)
+                    ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, "Ultra Super Saiyan", defaultTransformationTextColor);
+                return ussj;
             }
         }
 
-        public static BuffInfo _Kaioken;
+        public static BuffInfo kaioken;
         public static BuffInfo Kaioken
         {
             get
             {
-                if (_Kaioken == null)
-                    _Kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.Kaioken, null, DefaultTransformationTextColor);
-                return _Kaioken;
+                if (kaioken == null)
+                    kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaioken, null, defaultTransformationTextColor);
+                return kaioken;
             }
         }
 
         // the difference between Kaioken and super kaioken is purely cosmetic. They're the same buff.
-        public static BuffInfo _SuperKaioken;
+        public static BuffInfo superKaioken;
         public static BuffInfo SuperKaioken
         {
             get
             {
-                if (_SuperKaioken == null)
-                    _SuperKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.SuperKaioken, null, DefaultTransformationTextColor);
-                return _SuperKaioken;
+                if (superKaioken == null)
+                    superKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.superKaioken, null, defaultTransformationTextColor);
+                return superKaioken;
             }
         }
 
         // the two debuffs from transforms
-        public static BuffInfo _KaiokenFatigue;
+        public static BuffInfo kaiokenFatigue;
         public static BuffInfo KaiokenFatigue
         {
             get
             {
-                if (_KaiokenFatigue == null)
-                    _KaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.KaiokenFatigue, null, DefaultTransformationTextColor);
-                return _KaiokenFatigue;
+                if (kaiokenFatigue == null)
+                    kaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor);
+                return kaiokenFatigue;
             }
         }
-        public static BuffInfo _TransformationExhaustion;
+        public static BuffInfo transformationExhaustion;
         public static BuffInfo TransformationExhaustion
         {
             get
             {
-                if (_TransformationExhaustion == null)
-                    _TransformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.TransformationExhaustion, null, DefaultTransformationTextColor);
-                return _TransformationExhaustion;
+                if (transformationExhaustion == null)
+                    transformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor);
+                return transformationExhaustion;
             }
         }
-        public static BuffInfo _Spectrum;
+        public static BuffInfo spectrum;
         public static BuffInfo Spectrum
         {
             get
             {
-                if (_Spectrum == null)
-                    _Spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.Spectrum, "Super Saiyan Spectrum", DefaultTransformationTextColor);
-                return _Spectrum;
+                if (spectrum == null)
+                    spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor);
+                return spectrum;
             }
         }
 
@@ -202,17 +201,17 @@ namespace DBZMOD.Util
             if (menuId == MenuSelectionID.None)
                 return null;
 
-            return BuffInfoList.Where(x => x.MenuId == menuId).FirstOrDefault();
+            return BuffInfoList.Where(x => x.menuId == menuId).FirstOrDefault();
         }
 
         // the typical color used for super saiyan transformation Text, except God
-        public static Color DefaultTransformationTextColor = new Color(219, 219, 48);
+        public static Color defaultTransformationTextColor = new Color(219, 219, 48);
 
-        public static Color GodTransformationTextColor = new Color(229, 20, 51);
+        public static Color godTransformationTextColor = new Color(229, 20, 51);
 
         public static BuffInfo GetBuffByKeyName(string keyName)
         {
-            return BuffInfoList.Find(x => x.BuffKeyName == keyName);
+            return BuffInfoList.Find(x => x.buffKeyName == keyName);
         }
 
         // returns a list of transformation steps specific to non-legendary SSJ players
@@ -232,7 +231,7 @@ namespace DBZMOD.Util
         // a list of transformation steps from SSJ1 through ascended SSJ forms
         public static BuffInfo[] AscensionBuffs()
         {
-            BuffInfo[] buffs = { SSJ1, ASSJ, USSJ };
+            BuffInfo[] buffs = { SSJ1, Assj, Ussj };
             return buffs;
         }
 
@@ -241,7 +240,7 @@ namespace DBZMOD.Util
         // (Union() excludes duplicates automatically)
         public static List<BuffInfo> AllBuffs()
         {
-            return BuffInfoList.Where(x => x.BuffKeyName != BuffKeyNames.KaiokenFatigue && x.BuffKeyName != BuffKeyNames.TransformationExhaustion).ToList();
+            return BuffInfoList.Where(x => x.buffKeyName != BuffKeyNames.kaiokenFatigue && x.buffKeyName != BuffKeyNames.transformationExhaustion).ToList();
         }
 
         // whether the player is in any of the transformation states. Relies on AllBuffs() containing every possible transformation buff.
@@ -412,15 +411,15 @@ namespace DBZMOD.Util
         }
 
         // specifically whether or not the player is in ASSJ, used primarily for checking if ascension is valid.
-        public static bool IsASSJ(Player player)
+        public static bool IsAssj(Player player)
         {
-            return player.HasBuff(ASSJ.GetBuffId());
+            return player.HasBuff(Assj.GetBuffId());
         }
 
         // specifically whether or not the player is in ASSJ, used primarily for checking if ascension is valid.
-        public static bool IsUSSJ(Player player)
+        public static bool IsUssj(Player player)
         {
-            return player.HasBuff(USSJ.GetBuffId());
+            return player.HasBuff(Ussj.GetBuffId());
         }
 
         // overload method of CanTransform(player, buffId [as int])
@@ -432,18 +431,18 @@ namespace DBZMOD.Util
         // whether the buff ID is one of the ascended states.
         public static bool IsAscended(BuffInfo buff)
         {
-            return buff == ASSJ || buff == USSJ;
+            return buff == Assj || buff == Ussj;
         }
 
         // whether the player is in either ascended state, used when ascending (charge + transform)
         public static bool IsAscended(Player player)
         {
-            return player.HasBuff(ASSJ.GetBuffId()) || player.HasBuff(USSJ.GetBuffId());
+            return player.HasBuff(Assj.GetBuffId()) || player.HasBuff(Ussj.GetBuffId());
         }
         public static bool IsTransformBlocked(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            return modPlayer.IsTransforming || modPlayer.IsPlayerImmobilized() || modPlayer.IsKiDepleted();
+            return modPlayer.isTransforming || modPlayer.IsPlayerImmobilized() || modPlayer.IsKiDepleted();
         }
         
         // handle all the conditions of a transformation which would prevent the player from reaching that state. Return false if you can't transform.
@@ -458,25 +457,25 @@ namespace DBZMOD.Util
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (buff == SSJ1)
-                return modPlayer.SSJ1Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.ssj1Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ2)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJ3)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == SSJG)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ)
-                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
-                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !Transformations.IsExhaustedFromTransformation(player);
-            if (buff == ASSJ)
-                return (IsSSJ1(player) || IsUSSJ(player)) && modPlayer.ASSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
-            if (buff == USSJ)
-                return IsASSJ(player) && modPlayer.USSJAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+            if (buff == Assj)
+                return (IsSSJ1(player) || IsUssj(player)) && modPlayer.assjAchieved && !Transformations.IsExhaustedFromTransformation(player);
+            if (buff == Ussj)
+                return IsAssj(player) && modPlayer.ussjAchieved && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Kaioken)
-                return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.kaioAchieved && !Transformations.IsTiredFromKaioken(player);
             if (buff == SuperKaioken)
-                return modPlayer.KaioAchieved && !Transformations.IsTiredFromKaioken(player) && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.kaioAchieved && !Transformations.IsTiredFromKaioken(player) && !Transformations.IsExhaustedFromTransformation(player);
             if (buff == Spectrum)
                 return player.name == "Nuova";
             return false;
@@ -485,8 +484,8 @@ namespace DBZMOD.Util
         public static void AddKaiokenExhaustion(Player player, int multiplier)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.KaiokenTimer * multiplier));
-            modPlayer.KaiokenTimer = 0f;
+            player.AddBuff(KaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
+            modPlayer.kaiokenTimer = 0f;
         }
 
         public static void AddTransformationExhaustion(Player player)
@@ -511,7 +510,7 @@ namespace DBZMOD.Util
                 if (buff == transformationToKeep)
                     continue;
 
-                RemoveTransformation(player, buff.BuffKeyName);
+                RemoveTransformation(player, buff.buffKeyName);
             }
         }
 
@@ -542,7 +541,7 @@ namespace DBZMOD.Util
             // make sure to swap kaioken with super kaioken when appropriate.
             if (buff == SuperKaioken)
             {
-                RemoveTransformation(player, Kaioken.BuffKeyName);
+                RemoveTransformation(player, Kaioken.buffKeyName);
             }
 
             // remove all *transformation* buffs from the player.
@@ -550,7 +549,7 @@ namespace DBZMOD.Util
             EndTransformations(player, isPoweringDown);
 
             // add whatever buff it is for a really long time.
-            AddTransformation(player, buff.BuffKeyName, ABSURDLY_LONG_BUFF_DURATION);
+            AddTransformation(player, buff.buffKeyName, ABSURDLY_LONG_BUFF_DURATION);
         }
 
         public static void EndTransformations(Player player, bool isPoweringDown)
@@ -560,10 +559,10 @@ namespace DBZMOD.Util
             // skk qualifies as "non" kaioken.
             var currentBuff = GetCurrentTransformation(player, false, true);
             ClearAllTransformations(player, isPoweringDown);
-            modPlayer.IsTransformationAnimationPlaying = false;
-            modPlayer.TransformationFrameTimer = 0;
+            modPlayer.isTransformationAnimationPlaying = false;
+            modPlayer.transformationFrameTimer = 0;
             
-            modPlayer.IsTransforming = false;
+            modPlayer.isTransforming = false;
         }
 
         public static void AddTransformation(Player player, string buffKeyName, int duration)
@@ -571,15 +570,15 @@ namespace DBZMOD.Util
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
             player.AddBuff(buff.GetBuffId(), ABSURDLY_LONG_BUFF_DURATION, false);
 
-            if (!string.IsNullOrEmpty(buff.TransformationText))
-                CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
+            if (!string.IsNullOrEmpty(buff.transformationText))
+                CombatText.NewText(player.Hitbox, buff.transformationTextColor, buff.transformationText, false, false);
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
             }
 
             // start the transformation animation, if one exists. This auto cancels if nothing is there to play.
-            player.GetModPlayer<MyPlayer>().IsTransformationAnimationPlaying = true;
+            player.GetModPlayer<MyPlayer>().isTransformationAnimationPlaying = true;
         }
 
         // return the first located transformation of a given player. Assumes there should only ever be one, returns the first it finds.
@@ -613,7 +612,7 @@ namespace DBZMOD.Util
                 // player was in kaioken, trying to power up. Go to super kaioken but set the player's kaioken level to 1 because that's how things are now.
                 if (currentNonKaioTransformation == null && player.GetModPlayer<MyPlayer>().hasSSJ1)
                 {
-                    player.GetModPlayer<MyPlayer>().KaiokenLevel = 1;
+                    player.GetModPlayer<MyPlayer>().kaiokenLevel = 1;
                     return SuperKaioken;
                 }
 

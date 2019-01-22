@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).IsInstantTransmission2Unlocked = true;
+            MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
                 Main.NewText("You have unlocked Instant Transmission Lv2 (Supreme Kai Teleportation)."
@@ -43,7 +43,7 @@ namespace DBZMOD.Items.Consumables
 
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).IsInstantTransmission2Unlocked)
+            if (MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked)
             {
                 return false;
             }

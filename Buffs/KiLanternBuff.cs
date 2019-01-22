@@ -1,13 +1,11 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using System;
 
 namespace DBZMOD.Buffs
 {
     public class KiLanternBuff : ModBuff
     {
-        private int LanternTimer;
+        private int _lanternTimer;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Ki Diffuser");

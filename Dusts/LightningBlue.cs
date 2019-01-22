@@ -1,12 +1,11 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Dusts
 {
     public class LightningBlue : ModDust
     {
-        private int DustTimer;
+        private int _dustTimer;
         public override void OnSpawn(Dust dust)
         {
             dust.noLight = true;
@@ -18,11 +17,11 @@ namespace DBZMOD.Dusts
         }
         public override bool Update(Dust dust)
         {
-            DustTimer++;
-            if (DustTimer > 60)
+            _dustTimer++;
+            if (_dustTimer > 60)
             {
                 dust.active = false;
-                DustTimer = 0;
+                _dustTimer = 0;
             }
             return false;
         }

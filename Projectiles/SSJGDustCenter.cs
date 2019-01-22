@@ -1,10 +1,7 @@
 ﻿﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using DBZMOD;
-using Terraria.ID;
-using Terraria.ModLoader;
+ using Terraria;
+ using Terraria.ModLoader;
 
 namespace DBZMOD.Projectiles
 {
@@ -25,12 +22,12 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            const float AURAWIDTH = 3.0f;
+            const float aurawidth = 3.0f;
             Lighting.AddLight(player.Center, 1f, 0.3f, 0f);
 
             for (int i = 0; i < 60; i++)
             {
-                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * AURAWIDTH))).X;
+                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * aurawidth))).X;
                 float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
 
                 Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 200, 0f, -2f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
@@ -55,7 +52,7 @@ namespace DBZMOD.Projectiles
             projectile.Center = player.Center + new Vector2(0, -25);
             projectile.netUpdate = true;
 
-            if (!MyPlayer.ModPlayer(player).IsTransforming)
+            if (!MyPlayer.ModPlayer(player).isTransforming)
             {
                 projectile.Kill();
             }

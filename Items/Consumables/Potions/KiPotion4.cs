@@ -1,7 +1,4 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.Potions
@@ -22,8 +19,8 @@ namespace DBZMOD.Items.Consumables.Potions
             item.value = 800;
             item.rare = 3;
             item.potion = false;
-            IsKiPotion = true;
-            KiHeal = 2180;
+            isKiPotion = true;
+            kiHeal = 2180;
         }
 
         public override void SetStaticDefaults()

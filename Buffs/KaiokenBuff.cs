@@ -36,7 +36,7 @@ namespace DBZMOD.Buffs
 
         public void CheckKaiokenName(MyPlayer player)
         {
-            string kaiokenName = GetKaiokenNameFromKaiokenLevel(player.KaiokenLevel);
+            string kaiokenName = GetKaiokenNameFromKaiokenLevel(player.kaiokenLevel);
             this.DisplayName.SetDefault(kaiokenName);
         }
 
@@ -45,30 +45,30 @@ namespace DBZMOD.Buffs
             // makes it so that kaioken is basically just one buff.
             MyPlayer modPlayer = player.GetModPlayer <MyPlayer>();
             CheckKaiokenName(modPlayer);
-            if (modPlayer.KaiokenLevel == 0)
+            if (modPlayer.kaiokenLevel == 0)
             {
                 player.ClearBuff(buffIndex);
                 return;
             }
             else
             {
-                if (KaiokenLevel == 0)
+                if (kaiokenLevel == 0)
                 {
-                    KaiokenLevel = modPlayer.KaiokenLevel;
+                    kaiokenLevel = modPlayer.kaiokenLevel;
                 }
                 else
                 {
-                    if (KaiokenLevel != modPlayer.KaiokenLevel)
+                    if (kaiokenLevel != modPlayer.kaiokenLevel)
                     {
-                        KaiokenLevel = modPlayer.KaiokenLevel;
+                        kaiokenLevel = modPlayer.kaiokenLevel;
                     }
                 }
             }
 
-            DamageMulti = 1f + (0.1f * KaiokenLevel);
-            SpeedMulti = 1f + (0.1f * KaiokenLevel);
-            HealthDrainRate = GetHealthDrain(modPlayer);
-            KiDrainBuffMulti = 1f + (0.1f * KaiokenLevel);
+            damageMulti = 1f + (0.1f * kaiokenLevel);
+            speedMulti = 1f + (0.1f * kaiokenLevel);
+            healthDrainRate = GetHealthDrain(modPlayer);
+            kiDrainBuffMulti = 1f + (0.1f * kaiokenLevel);
             
             base.Update(player, ref buffIndex);
         }
@@ -83,7 +83,7 @@ namespace DBZMOD.Buffs
         {
             if (!Transformations.IsKaioken(modPlayer.player))
                 return 0;
-            return 8 + (4 * (modPlayer.KaiokenLevel) - 1);
+            return 8 + (4 * (modPlayer.kaiokenLevel) - 1);
         }        
     }
 }

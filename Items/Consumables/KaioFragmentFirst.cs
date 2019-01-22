@@ -1,6 +1,4 @@
-﻿﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,13 +34,13 @@ namespace DBZMOD.Items.Consumables
             {
                 Main.NewText("You feel your power surge.");
             }
-            MyPlayer.ModPlayer(player).KaioAchieved = true;
+            MyPlayer.ModPlayer(player).kaioAchieved = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).KaioAchieved)
+            if (MyPlayer.ModPlayer(player).kaioAchieved)
             {
                 return false;
             }

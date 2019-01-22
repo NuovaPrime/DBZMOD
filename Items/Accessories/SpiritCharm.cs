@@ -32,9 +32,9 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.20f;
-                player.GetModPlayer<MyPlayer>(mod).KiCrit += 12;
-                player.GetModPlayer<MyPlayer>(mod).KiMax2 += 500;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.20f;
+                player.GetModPlayer<MyPlayer>(mod).kiCrit += 12;
+                player.GetModPlayer<MyPlayer>(mod).kiMax2 += 500;
                 player.endurance += 0.12f;
                 player.meleeDamage += 0.14f;
                 player.meleeSpeed += 0.14f;

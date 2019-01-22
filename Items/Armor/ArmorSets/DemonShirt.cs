@@ -38,14 +38,14 @@ namespace DBZMOD.Items.Armor.ArmorSets
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Pressing `Armor Bonus` grants you Demonic Overdrive, granting infinite ki for a limited time.";
-            MyPlayer.ModPlayer(player).DemonBonus = true;
+            MyPlayer.ModPlayer(player).demonBonus = true;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.18f;
-            MyPlayer.ModPlayer(player).KiCrit += 14;
-            MyPlayer.ModPlayer(player).KiMax2 += 700;
-            MyPlayer.ModPlayer(player).ChargeLimitAdd += 1;
+            MyPlayer.ModPlayer(player).kiDamage += 0.18f;
+            MyPlayer.ModPlayer(player).kiCrit += 14;
+            MyPlayer.ModPlayer(player).kiMax2 += 700;
+            MyPlayer.ModPlayer(player).chargeLimitAdd += 1;
 
         }
         public override void AddRecipes()

@@ -1,11 +1,7 @@
 ﻿﻿using Terraria.ID;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.IO;
-using Terraria;
+ using System.Collections.Generic;
+ using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.Utilities;
 
 namespace DBZMOD
 {
@@ -29,11 +25,11 @@ namespace DBZMOD
         }
         public override GlobalItem Clone(Item item, Item itemClone)
         {
-            DBZMODItem DBZClone = (DBZMODItem)base.Clone(item, itemClone);
-            DBZClone.kiChangeBonus = kiChangeBonus;
-            DBZClone.speedChangeBonus = speedChangeBonus;
-            DBZClone.maxChargeBonus = maxChargeBonus;
-            return DBZClone;
+            DBZMODItem dbzClone = (DBZMODItem)base.Clone(item, itemClone);
+            dbzClone.kiChangeBonus = kiChangeBonus;
+            dbzClone.speedChangeBonus = speedChangeBonus;
+            dbzClone.maxChargeBonus = maxChargeBonus;
+            return dbzClone;
         }
         
         //Broken right now, smh

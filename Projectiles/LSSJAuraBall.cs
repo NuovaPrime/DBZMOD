@@ -7,10 +7,10 @@ namespace DBZMOD.Projectiles
 {
     public class LSSJAuraBall : ModProjectile
     {
-        private float SizeTimer;
-        private float BlastTimer;
-        private float yoffset;
-        private float xoffset;
+        private float _sizeTimer;
+        private float _blastTimer;
+        private float _yoffset;
+        private float _xoffset;
 
         public override void SetDefaults()
         {
@@ -23,9 +23,9 @@ namespace DBZMOD.Projectiles
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
             projectile.damage = 0;
-            SizeTimer = 200f;
-            yoffset = -200f;
-            xoffset = 0f;
+            _sizeTimer = 200f;
+            _yoffset = -200f;
+            _xoffset = 0f;
         }
 
         public override void AI()
@@ -35,48 +35,48 @@ namespace DBZMOD.Projectiles
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
-                projectile.Center = player.Center + new Vector2(xoffset, yoffset);
+                projectile.Center = player.Center + new Vector2(_xoffset, _yoffset);
                 projectile.netUpdate = true;
 
-                if (!MyPlayer.ModPlayer(player).IsTransforming && !MyPlayer.ModPlayer(player).IsTransforming)
+                if (!MyPlayer.ModPlayer(player).isTransforming && !MyPlayer.ModPlayer(player).isTransforming)
                 {
                     projectile.Kill();
                 }
 
-                if (SizeTimer <= 200)
+                if (_sizeTimer <= 200)
                 {
-                    projectile.scale = SizeTimer / 50f * 4;
-                    SizeTimer--;
-                    yoffset++;
+                    projectile.scale = _sizeTimer / 50f * 4;
+                    _sizeTimer--;
+                    _yoffset++;
                 }
-                if (SizeTimer <= 40)
+                if (_sizeTimer <= 40)
                 {
-                    xoffset--;
+                    _xoffset--;
                 }
-                if (projectile.active && !MyPlayer.ModPlayer(player).IsTransforming)
+                if (projectile.active && !MyPlayer.ModPlayer(player).isTransforming)
                 {
-                    BlastTimer++;
-                    if (BlastTimer > 1)
+                    _blastTimer++;
+                    if (_blastTimer > 1)
                     {
                         Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 30;
                         Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJAuraLaser"), 0, 0, player.whoAmI);
-                        BlastTimer = 0;
+                        _blastTimer = 0;
                     }
 
                 }
-                else if (projectile.active && MyPlayer.ModPlayer(player).IsTransforming)
+                else if (projectile.active && MyPlayer.ModPlayer(player).isTransforming)
                 {
-                    BlastTimer++;
-                    if (BlastTimer > 1)
+                    _blastTimer++;
+                    if (_blastTimer > 1)
                     {
                         Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 40;
                         Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJAuraLaserBlack"), 0, 0, player.whoAmI);
                     }
-                    if (BlastTimer > 1)
+                    if (_blastTimer > 1)
                     {
                         Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 40;
                         Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y, mod.ProjectileType("LSSJBarrageProj"), 0, 0, player.whoAmI);
-                        BlastTimer = 0;
+                        _blastTimer = 0;
                     }
 
                 }
@@ -86,7 +86,7 @@ namespace DBZMOD.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).IsTransforming)
+            if (MyPlayer.ModPlayer(player).isTransforming)
             {
                 Transformations.DoTransform(player, Transformations.LSSJ2, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).IsTransforming = false;

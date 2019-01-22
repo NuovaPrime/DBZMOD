@@ -1,10 +1,6 @@
-﻿using DBZMOD;
-using DBZMOD.Projectiles;
+﻿using DBZMOD.Projectiles;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 
 namespace DBZMOD.Util
@@ -14,11 +10,11 @@ namespace DBZMOD.Util
         public static void ApplyChannelingSlowdown(Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (modPlayer.IsFlying)
+            if (modPlayer.isFlying)
             {
                 float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
                 float yVelocity = -(player.gravity + 0.001f);
-                if (modPlayer.IsDownHeld || modPlayer.IsUpHeld)
+                if (modPlayer.isDownHeld || modPlayer.isUpHeld)
                 {
                     yVelocity = player.velocity.Y / (1.2f - chargeMoveSpeedBonus);
                 }
@@ -103,17 +99,17 @@ namespace DBZMOD.Util
         }
 
         // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
-        public static void DoBeamDust(Vector2 TailPosition, Vector2 velocity, int dustId, float dustFrequency, float travelDistance, float TailHeldDistance, Vector2 tailSize, float BeamSpeed)
+        public static void DoBeamDust(Vector2 tailPosition, Vector2 velocity, int dustId, float dustFrequency, float travelDistance, float tailHeldDistance, Vector2 tailSize, float beamSpeed)
         {
             // snazzy beam shooting dust, reduced to less than 1 per frame.
             if (Main.rand.NextFloat() < dustFrequency)
             {
-                float randomLengthOnBeam = Main.rand.NextFloat(TailHeldDistance, travelDistance + TailHeldDistance);
+                float randomLengthOnBeam = Main.rand.NextFloat(tailHeldDistance, travelDistance + tailHeldDistance);
                 Vector2 beamWidthVariance = tailSize / 2f;
                 float xVar = Math.Abs(beamWidthVariance.X);
                 float yVar = Math.Abs(beamWidthVariance.Y);
                 Vector2 variance = new Vector2(Main.rand.NextFloat(-xVar, xVar), Main.rand.NextFloat(-yVar, yVar));
-                Vector2 randomPositionOnBeam = TailPosition - (tailSize / 2f) + variance * velocity + randomLengthOnBeam * velocity;
+                Vector2 randomPositionOnBeam = tailPosition - (tailSize / 2f) + variance * velocity + randomLengthOnBeam * velocity;
                 Dust tDust = Dust.NewDustDirect(randomPositionOnBeam, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
                 float angleVariance = Main.rand.NextFloat() < 0.5f ? -90 : 90f;
                 tDust.velocity = DegreesToVector(VectorToDegrees(velocity) + angleVariance) * (tailSize.Y / 40f);
@@ -184,44 +180,44 @@ namespace DBZMOD.Util
         }
 
         // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
-        public static bool CanHitLine(Vector2 Position1, Vector2 Position2)
+        public static bool CanHitLine(Vector2 position1, Vector2 position2)
         {
-            var step = Vector2.Normalize(Position2 - Position1) * 8f;
+            var step = Vector2.Normalize(position2 - position1) * 8f;
             bool isColliding = false;
             // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
             if (step.X < 0)
             {
-                while (Position1.X >= Position2.X && IsInWorldBounds(Position1))
+                while (position1.X >= position2.X && IsInWorldBounds(position1))
                 {
-                    Position1 += step;
-                    isColliding = IsPositionInTile(Position1);
+                    position1 += step;
+                    isColliding = IsPositionInTile(position1);
                     if (isColliding)
                         break;
                 }
             } else if (step.X > 0)
             {
-                while (Position1.X <= Position2.X && IsInWorldBounds(Position1))
+                while (position1.X <= position2.X && IsInWorldBounds(position1))
                 {
-                    Position1 += step;
-                    isColliding = IsPositionInTile(Position1);
+                    position1 += step;
+                    isColliding = IsPositionInTile(position1);
                     if (isColliding)
                         break;
                 }
             } else if (step.Y < 0)
             {
-                while (Position1.Y >= Position2.Y && IsInWorldBounds(Position1))
+                while (position1.Y >= position2.Y && IsInWorldBounds(position1))
                 {
-                    Position1 += step;
-                    isColliding = IsPositionInTile(Position1);
+                    position1 += step;
+                    isColliding = IsPositionInTile(position1);
                     if (isColliding)
                         break;
                 }
             } else if (step.Y > 0)
             {
-                while (Position1.Y <= Position2.Y && IsInWorldBounds(Position1))
+                while (position1.Y <= position2.Y && IsInWorldBounds(position1))
                 {
-                    Position1 += step;
-                    isColliding = IsPositionInTile(Position1);
+                    position1 += step;
+                    isColliding = IsPositionInTile(position1);
                     if (isColliding)
                         break;
                 }

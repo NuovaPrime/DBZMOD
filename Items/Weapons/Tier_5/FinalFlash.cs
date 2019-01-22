@@ -1,11 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_5
 {
@@ -27,8 +20,8 @@ namespace DBZMOD.Items.Weapons.Tier_5
 			item.value = 55000;
 			item.rare = 6;
             item.channel = true;
-            KiDrain = 220;
-			WeaponType = "Beam";
+            kiDrain = 220;
+			weaponType = "Beam";
 	    }
 	    public override void SetStaticDefaults()
 		{

@@ -1,6 +1,5 @@
 using Terraria;
 using Terraria.ModLoader;
-using DBZMOD.Items;
 
 namespace DBZMOD.Prefixes
 {

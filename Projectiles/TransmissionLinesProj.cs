@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 using DBZMOD.Util;
 
@@ -13,7 +8,7 @@ namespace DBZMOD.Projectiles
     {
         public bool isInitialized = false;
         private const int MAX_FRAMES = 18;
-        public float ScaleExtra;
+        public float scaleExtra;
 
         public override void SetStaticDefaults()
         {
@@ -33,7 +28,7 @@ namespace DBZMOD.Projectiles
             projectile.penetrate = -1;
             projectile.damage = 0;
             projectile.alpha = 50;
-            ScaleExtra = 0.1f;
+            scaleExtra = 0.1f;
             projectile.light = 0f;
             projectile.position.X = player.Center.X;
             projectile.position.Y = player.Center.Y;
@@ -73,7 +68,7 @@ namespace DBZMOD.Projectiles
                 projectile.frame = 0;
             }
 
-            projectile.scale = 1.0f + ScaleExtra;
+            projectile.scale = 1.0f + scaleExtra;
         }
     }
 }

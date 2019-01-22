@@ -1,6 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {
@@ -12,12 +10,12 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            DamageMulti = 3.5f;
-            SpeedMulti = 3.5f;
-            KiDrainRate = 2.25f;
-            KiDrainRateWithMastery = 1.65f;
-            KiDrainBuffMulti = 1.5f;
-            BaseDefenceBonus = 16;
+            damageMulti = 3.5f;
+            speedMulti = 3.5f;
+            kiDrainRate = 2.25f;
+            kiDrainRateWithMastery = 1.65f;
+            kiDrainBuffMulti = 1.5f;
+            baseDefenceBonus = 16;
             Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
         }
         public override void Update(Player player, ref int buffIndex)

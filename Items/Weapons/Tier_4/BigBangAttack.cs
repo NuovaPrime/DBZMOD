@@ -1,10 +1,4 @@
- using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Weapons.Tier_4
@@ -26,8 +20,8 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.autoReuse = false;
 			item.value = 21000;
 			item.rare = 4;
-            KiDrain = 100;
-			WeaponType = "Massive Blast";
+            kiDrain = 100;
+			weaponType = "Massive Blast";
             if (!Main.dedServ)
             {
                 item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/KiBlastFast").WithPitchVariance(.1f);
