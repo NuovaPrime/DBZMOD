@@ -13,7 +13,7 @@ namespace DBZMOD.Projectiles
             BeamOrigin = new Point(18, 94);
             BeamSize = new Point(70, 2);
             HeadOrigin = new Point(18, 98);
-            HeadSize = new Point(70, 36);
+            HeadSize = new Point(70, 14);
 
             // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
             BeamFadeOutTime = 30f;
