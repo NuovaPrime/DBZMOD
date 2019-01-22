@@ -2142,7 +2142,9 @@ namespace DBZMOD
                     {
                         var defenseBoost = Math.Max(baldurEssentia ? 1.3f : 1f, buldariumSigmite ? 1.5f : 1f);
                         shouldApplySlowdown = true;
-                        Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
+                        // only create the projectile if one doesn't exist already.
+                        if (player.ownedProjectileCounts[mod.ProjectileType("BaldurShell")] == 0)
+                            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("BaldurShell"), 0, 0, player.whoAmI);
                         player.statDefense = (int)(player.statDefense * defenseBoost);
                     }
                     if (burningEnergyAmulet)
@@ -2160,10 +2162,10 @@ namespace DBZMOD
                         shouldApplySlowdown = true;
                         PureEnergyAura();
                     }
-                }
 
-                // determine base regen rate and bonuses
-                AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
+                    // determine base regen rate and bonuses
+                    AddKi(KiChargeRate + ScarabChargeRateAdd, false, false);
+                }
 
                 if (shouldApplySlowdown)
                 {
