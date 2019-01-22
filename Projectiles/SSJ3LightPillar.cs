@@ -63,7 +63,7 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
             Transformations.DoTransform(player, Transformations.SSJ3, DBZMOD.instance);
-            MyPlayer.ModPlayer(player).IsTransforming = false;
+            MyPlayer.ModPlayer(player).isTransforming = false;
         }
     }
 }

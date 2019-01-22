@@ -429,7 +429,7 @@ namespace DBZMOD.Network
         public void SendChangedIsTransforming(int toWho, int fromWho, int whichPlayer, bool isTransforming)
         {
             var packet = GetPacket(SYNC_PLAYER, fromWho);
-            packet.Write((int)PlayerVarSyncEnum.IsTransforming);
+            packet.Write((int)PlayerVarSyncEnum.isTransforming);
             packet.Write(whichPlayer);
             packet.Write(isTransforming);
             packet.Send(toWho, fromWho);
@@ -769,7 +769,7 @@ namespace DBZMOD.Network
                         packet.Send(-1, fromWho);
                     }
                     break;
-                case PlayerVarSyncEnum.IsTransforming:
+                case PlayerVarSyncEnum.isTransforming:
                     player.isTransforming = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
