@@ -89,12 +89,12 @@ namespace DBZMOD.Projectiles
             if (MyPlayer.ModPlayer(player).isTransforming)
             {
                 Transformations.DoTransform(player, Transformations.LSSJ2, DBZMOD.instance);
-                MyPlayer.ModPlayer(player).IsTransforming = false;
+                MyPlayer.ModPlayer(player).isTransforming = false;
             }
             else
             {
                 Transformations.DoTransform(player, Transformations.LSSJ, DBZMOD.instance);
-                MyPlayer.ModPlayer(player).IsTransforming = false;
+                MyPlayer.ModPlayer(player).isTransforming = false;
             }
         }
     }

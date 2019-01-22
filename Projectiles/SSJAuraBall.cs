@@ -94,7 +94,7 @@ namespace DBZMOD.Projectiles
             if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 Transformations.DoTransform(player, Transformations.SSJ2, DBZMOD.instance);
-                MyPlayer.ModPlayer(player).IsTransforming = false;
+                MyPlayer.ModPlayer(player).isTransforming = false;
             }
             else
             {

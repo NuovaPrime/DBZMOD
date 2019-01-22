@@ -59,7 +59,7 @@ namespace DBZMOD.Projectiles
         {
             Player player = Main.player[projectile.owner];
             Transformations.DoTransform(player, Transformations.SSJG, DBZMOD.instance);
-            MyPlayer.ModPlayer(player).IsTransforming = false;
+            MyPlayer.ModPlayer(player).isTransforming = false;
             SoundUtil.PlayCustomSound("Sounds/SSJAscension");
         }
     }
