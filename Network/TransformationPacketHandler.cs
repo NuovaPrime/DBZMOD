@@ -58,7 +58,7 @@ namespace Network
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    Transformations.AddTransformation(thePlayer, buffKeyName, duration);                    
+                    Transformations.DoTransform(thePlayer, Transformations.GetBuffByKeyName(buffKeyName), DBZMOD.DBZMOD.instance);
                 }
             }
         }

@@ -499,7 +499,7 @@ namespace DBZMOD.Util
         public static bool IsTiredFromKaioken(Player player) { return player.HasBuff(KaiokenFatigue.GetBuffId()); }
 
         // wipes out all transformation buffs, requires them to be a part of the AllBuffs() union (it's a bunch of lists joined together).
-        public static void ClearAllTransformations(Player player, bool isPoweringDown, bool isOneStep, BuffInfo transformationToKeep = null)
+        public static void ClearAllTransformations(Player player, bool isPoweringDown, BuffInfo transformationToKeep = null)
         {
             foreach (BuffInfo buff in AllBuffs())
             {
@@ -529,7 +529,7 @@ namespace DBZMOD.Util
         }
 
         // actually handle transforming. Takes quite a few steps to clean up after itself and do all the things.
-        public static void DoTransform(Player player, BuffInfo buff, Mod mod, bool isOneStep)
+        public static void DoTransform(Player player, BuffInfo buff, Mod mod)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
@@ -547,19 +547,19 @@ namespace DBZMOD.Util
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
-            EndTransformations(player, isPoweringDown, isOneStep);
+            EndTransformations(player, isPoweringDown);
 
             // add whatever buff it is for a really long time.
             AddTransformation(player, buff.BuffKeyName, ABSURDLY_LONG_BUFF_DURATION);
         }
 
-        public static void EndTransformations(Player player, bool isPoweringDown, bool isOneStep)
+        public static void EndTransformations(Player player, bool isPoweringDown)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
             // skk qualifies as "non" kaioken.
             var currentBuff = GetCurrentTransformation(player, false, true);
-            ClearAllTransformations(player, isPoweringDown, isOneStep);
+            ClearAllTransformations(player, isPoweringDown);
             modPlayer.IsTransformationAnimationPlaying = false;
             modPlayer.TransformationFrameTimer = 0;
             

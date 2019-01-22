@@ -524,7 +524,7 @@ namespace DBZMOD
                         LSSJ2Transformation();
                         UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
                         lssj2timer = 0;
-                        Transformations.EndTransformations(player, true, false);
+                        Transformations.EndTransformations(player, true);
                     }
                     else if (lssj2timer >= 300)
                     {
@@ -690,7 +690,7 @@ namespace DBZMOD
 
             if (player.dead && Transformations.IsPlayerTransformed(player))
             {
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 IsTransforming = false;
             }
 
@@ -1377,7 +1377,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 SSJTransformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
             }
             else if (SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
@@ -1387,7 +1387,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
             }
             else if (SSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
@@ -1397,7 +1397,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
             }
             else if (SSJ2Achieved && !SSJ3Achieved)
@@ -1407,7 +1407,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
             }
             else if (LSSJAchieved && !LSSJ2Achieved)
@@ -1418,7 +1418,7 @@ namespace DBZMOD
                 LSSJ2Transformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ2;
                 lssj2timer = 0;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
             }
         }
 
@@ -1676,7 +1676,6 @@ namespace DBZMOD
 
         public void HandleTransformations()
         {
-            bool isPoweringDownOneStep = false;
             BuffInfo targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.
@@ -1706,7 +1705,6 @@ namespace DBZMOD
             {
                 // player is powering down a transformation state.
                 targetTransformation = Transformations.GetPreviousTransformationStep(player);
-                isPoweringDownOneStep = true;
             }
 
             // if we made it this far without a target, it means for some reason we can't change transformations.
@@ -1715,7 +1713,7 @@ namespace DBZMOD
 
             // finally, check that the transformation is really valid and then do it.
             if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation, mod, isPoweringDownOneStep);
+                Transformations.DoTransform(player, targetTransformation, mod);
         }
 
         public bool CanIncreaseKaiokenLevel()
@@ -1766,7 +1764,7 @@ namespace DBZMOD
                         if (Transformations.CanTransform(player, transformation))
                         {
                             KaiokenLevel++;
-                            Transformations.DoTransform(player, transformation, mod, false);
+                            Transformations.DoTransform(player, transformation, mod);
                         }
                     }
                 }
@@ -1919,10 +1917,10 @@ namespace DBZMOD
             if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
             {
                 var playerWasSuperKaioken = Transformations.IsSuperKaioken(player);
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 if (playerWasSuperKaioken)
                 {
-                    Transformations.DoTransform(player, Transformations.SSJ1, mod, false);
+                    Transformations.DoTransform(player, Transformations.SSJ1, mod);
                 }
                 KaiokenLevel = 0;
                 SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
@@ -2346,7 +2344,7 @@ namespace DBZMOD
                     SSJTransformation();
                     UI.TransMenu.MenuSelection = MenuSelectionID.SSJ1;
                     RageCurrent = 0;
-                    Transformations.EndTransformations(player, true, false);
+                    Transformations.EndTransformations(player, true);
                     return false;
                 }
             }
@@ -2360,7 +2358,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ2;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
                 return false;
             }
@@ -2374,7 +2372,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.LSSJ1;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
                 return false;
             }
@@ -2389,7 +2387,7 @@ namespace DBZMOD
                 IsTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.MenuSelection = MenuSelectionID.SSJ3;
-                Transformations.EndTransformations(player, true, false);
+                Transformations.EndTransformations(player, true);
                 RageCurrent = 0;
                 return false;
             }

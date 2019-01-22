@@ -213,7 +213,7 @@ namespace DBZMOD
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
                     modPlayer.KaiokenLevel = 0;
-                    Transformations.EndTransformations(player, true, false);
+                    Transformations.EndTransformations(player, true);
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
