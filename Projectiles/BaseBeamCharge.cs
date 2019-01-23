@@ -1,7 +1,7 @@
 using System;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
-using DBZMOD.Util;
 using Terraria.ID;
 
 namespace DBZMOD.Projectiles
@@ -48,6 +48,7 @@ namespace DBZMOD.Projectiles
         protected float FireDecayRate() { return GetBeamPowerMultiplier() * fireChargeDrainPerSecond / 60f; }
 
         public Projectile myProjectile = null;
+
         public void HandleFiring(Player player, Vector2 mouseVector)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();

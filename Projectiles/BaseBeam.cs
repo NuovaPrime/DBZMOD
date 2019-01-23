@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Audio;
-using Terraria.Enums;
-using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -16,12 +16,13 @@ namespace DBZMOD.Projectiles
     {
         // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
         // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
-        public Point tailOrigin = new Point(14, 0);
-        public Point tailSize = new Point(46, 72);
-        public Point beamOrigin = new Point(14, 74);
-        public Point beamSize = new Point(46, 36);
-        public Point headOrigin = new Point(0, 112);
-        public Point headSize = new Point(74, 74);
+        protected Point 
+            tailOrigin = new Point(14, 0),
+            tailSize = new Point(46, 72),
+            beamOrigin = new Point(14, 74),
+            beamSize = new Point(46, 36),
+            headOrigin = new Point(0, 112),
+            headSize = new Point(74, 74);
         
         // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
         public float beamFadeOutTime = 30f;
