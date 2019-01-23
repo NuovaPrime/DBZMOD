@@ -602,11 +602,15 @@
     <Content Include="Sounds\KiBlast3.wav" />
     <Content Include="Sounds\KiBlastFast.wav" />
     <Content Include="Sounds\Kiplosion.wav" />
+    <Content Include="Sounds\Lightning1.wav" />
+    <Content Include="Sounds\Lightning2.wav" />
+    <Content Include="Sounds\Lightning3.wav" />
     <Content Include="Sounds\PowerDown.wav" />
     <Content Include="Sounds\SBCCharge.wav" />
     <Content Include="Sounds\SBCFire.wav" />
     <Content Include="Sounds\Scatterbeam.wav" />
     <Content Include="Sounds\Shotgun.wav" />
+    <Content Include="Sounds\SpiritBombCharge.wav" />
     <Content Include="Sounds\SpiritBombFire.wav" />
     <Content Include="Sounds\SSB.wav" />
     <Content Include="Sounds\SSBKK.wav" />
