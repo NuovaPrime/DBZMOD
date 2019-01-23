@@ -1,9 +1,9 @@
-﻿using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class AstralEssentia : ModItem
+    public class AstralEssentia : DBItem
     {
         public override void SetStaticDefaults()
         {

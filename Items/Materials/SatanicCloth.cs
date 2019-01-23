@@ -1,9 +1,9 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class SatanicCloth : ModItem
+    public class SatanicCloth : DBItem
     {
         public override void SetStaticDefaults()
         {

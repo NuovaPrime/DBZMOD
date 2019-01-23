@@ -1,10 +1,10 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
     public class SoulofEntity : ModItem
     {
@@ -28,6 +28,7 @@ namespace DBZMOD.Items
             item.value = 520;
             item.rare = 5;
         }
+
 	    public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;

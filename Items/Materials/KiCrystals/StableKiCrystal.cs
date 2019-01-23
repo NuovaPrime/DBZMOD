@@ -1,8 +1,6 @@
-using Terraria.ModLoader;
-
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials.KiCrystals
 {
-    public class StableKiCrystal : ModItem
+    public class StableKiCrystal : KiCrystal
     {
         public override void SetStaticDefaults()
         {
