@@ -1,9 +1,7 @@
-using Terraria.ModLoader;
-
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials.KiCrystals
 {
-	public class PureKiCrystal : ModItem
-	{
+	public class PureKiCrystal : KiCrystal
+    {
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Pure Ki Crystal");

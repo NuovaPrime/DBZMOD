@@ -1,8 +1,8 @@
 ﻿using Terraria.ModLoader;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class EarthenShard : ModItem
+    public class EarthenShard : DBItem
     {
         public override void SetStaticDefaults()
         {

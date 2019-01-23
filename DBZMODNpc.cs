@@ -1,6 +1,7 @@
 ﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -728,7 +729,7 @@ namespace DBZMOD
         {
             if (type == NPCID.Merchant)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.ScrapMetal>());
+                shop.item[nextSlot].SetDefaults(mod.ItemType<ScrapMetal>());
                 nextSlot++;
             }
             if (type == NPCID.TravellingMerchant)

@@ -1,8 +1,8 @@
 ﻿using Terraria.ModLoader;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class SkeletalEssence : ModItem
+    public class SkeletalEssence : DBItem
     {
         public override void SetStaticDefaults()
         {

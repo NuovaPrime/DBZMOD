@@ -1,8 +1,8 @@
 ﻿using Terraria.ModLoader;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class ScrapMetal : ModItem
+    public class ScrapMetal : DBItem
     {
         public override void SetStaticDefaults()
         {

@@ -1,10 +1,10 @@
-﻿using Terraria.ID;
+﻿using Microsoft.Xna.Framework;
+using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
-namespace DBZMOD.Items
+namespace DBZMOD.Items.Materials
 {
-    public class DemonicSoul : ModItem
+    public class DemonicSoul : DBItem
     {
         public override void SetStaticDefaults()
         {
@@ -21,6 +21,7 @@ namespace DBZMOD.Items
             item.value = 800;
             item.rare = 7;
         }
+
 	    public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
