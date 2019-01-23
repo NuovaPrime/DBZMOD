@@ -595,6 +595,8 @@
     <Content Include="Sounds\HeavyHit.wav" />
     <Content Include="Sounds\KaioAuraAscend.wav" />
     <Content Include="Sounds\KaioAuraStart.wav" />
+    <Content Include="Sounds\Kamehameha10Charge.wav" />
+    <Content Include="Sounds\Kamehameha10Fire.wav" />
     <Content Include="Sounds\Kiblast1.wav" />
     <Content Include="Sounds\Kiblast2.wav" />
     <Content Include="Sounds\KiBlast3.wav" />
