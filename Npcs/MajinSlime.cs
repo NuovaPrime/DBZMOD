@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Npcs
+namespace DBZMOD.NPCs
 {
 	public class MajinSlime : ModNPC
 	{

@@ -1,10 +1,10 @@
-using Microsoft.Xna.Framework.Graphics;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using DBZMOD.Util;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.EnergyWaves
 {
 	public class EnergyWaveVolleyBlast : KiProjectile
 	{

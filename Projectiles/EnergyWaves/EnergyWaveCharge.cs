@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.EnergyWaves
 {
 	public class EnergyWaveCharge : BaseBeamCharge
 	{

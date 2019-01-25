@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.EnergyWaves
 {
 	public class EnergyWaveBeam : BaseBeam
 	{

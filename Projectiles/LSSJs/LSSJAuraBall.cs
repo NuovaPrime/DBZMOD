@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Util;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using DBZMOD.Util;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.LSSJs
 {
     public class LSSJAuraBall : ModProjectile
     {

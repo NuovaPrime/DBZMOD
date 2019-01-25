@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 
-
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.LSSJs
 {
     public class LSSJBarrageProj : KiProjectile
     {
