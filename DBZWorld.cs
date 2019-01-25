@@ -692,6 +692,8 @@ namespace DBZMOD
                     // var tile = Framing.GetTileSafely(i, j);
                     if (tile == null)
                         continue;
+                    if (!tile.active())
+                        continue;
                     var dbNum = GetDragonBallNumberFromType(tile.type);
                     if (dbNum == 0)
                         continue;
