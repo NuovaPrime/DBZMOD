@@ -338,7 +338,7 @@ namespace DBZMOD.Projectiles
 
         public bool ShouldHandleWeaponChangesAndContinue(Player player)
         {
-            if (player.HeldItem == null)
+            if (player.HeldItem == null || player.dead)
             {
                 projectile.Kill();
                 return false;
