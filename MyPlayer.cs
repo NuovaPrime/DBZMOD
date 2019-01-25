@@ -2430,68 +2430,76 @@ namespace DBZMOD
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
+            // i frames during transformation
             if (isTransforming)
             {
                 return false;
             }
-            if (blockState == 1) // nearly frame-perfect block, zero damage.
+
+            // PLACE DAMAGE CANCELLING EFFECTS HERE.
+
+            // handle blocking damage reductions
+            switch (blockState)
             {
-                damage = 0;
-                return true;
+                case 1:
+                    return false; // damage negated
+                case 2:
+                    damage /= 3;
+                    break;
+                case 3:
+                    damage /= 2;
+                    break;
             }
-            if (blockState == 2) // block not quite perfect, one third damage
-            {
-                damage /= 3;
-                return true;
-            }
-            if (blockState == 3) // block far from perfect, half damage.
-            {
-                damage /= 2;
-                return true;
-            }
+
+            // handle chlorophyte regen
             if (chlorophyteHeadPieceActive && !player.HasBuff(mod.BuffType("ChlorophyteRegen")))
             {
-                player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);
-                return true;
+                player.AddBuff(mod.BuffType("ChlorophyteRegen"), 180);                
             }
+
+            // handle ki enhancer "reserves" buff
             if (goblinKiEnhancer && !player.HasBuff(mod.BuffType("EnhancedReserves")))
             {
-                player.AddBuff(mod.BuffType("EnhancedReserves"), 180);
-                return true;
+                player.AddBuff(mod.BuffType("EnhancedReserves"), 180);                
             }
+
+            // black diamond ki bonus
             if (blackDiamondShell)
             {
                 int i = Main.rand.Next(10, 100);
                 AddKi(i, false, false);
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
-                return true;
             }
+
+            // increment current mastery if applicable, for damage taken.
+            HandleDamageReceivedMastery(damage);
+
+            return true;
+        }
+
+        // currently doesn't use the damage received param. Included just in case.
+        public void HandleDamageReceivedMastery(int damageReceived)
+        {
             if (Transformations.IsSSJ1(player))
             {
-                masteryLevel1 += 0.00232f;
-                return true;
+                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
             if (Transformations.IsAssj(player))
             {
-                masteryLevel1 += 0.00232f;
-                return true;
+                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
             if (Transformations.IsUssj(player))
             {
-                masteryLevel1 += 0.00232f;
-                return true;
+                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
             if (Transformations.IsSSJ2(player))
             {
-                masteryLevel2 += 0.00232f;
-                return true;
+                masteryLevel2 = Math.Min(1.0f, masteryLevel2 + 0.00232f);
             }
             if (Transformations.IsSSJ3(player))
             {
-                masteryLevel3 += 0.00232f;
-                return true;
+                masteryLevel3 = Math.Min(1.0f, masteryLevel3 + 0.00232f);
             }
-            return true;
         }
 
         public const float AURA_DUST_EFFECT_WIDTH = 2f;
