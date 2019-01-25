@@ -6,6 +6,9 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Util
 {
+    /// <summary>
+    ///     WIP stuff, this was Xeno considering switching from weak refs to reflection on player vars. Not sure if it's gonna work yet, haven't put in enough time.
+    /// </summary>
     public static class CompatibilityUtil
     {
         private const string ENIGMA_MOD_NAME = "Laugicality";

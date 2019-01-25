@@ -168,7 +168,7 @@ namespace DBZMOD.Util
 
         private bool IsValidTarget(Vector2 cursor, Vector2 position)
         {
-            if (Vector2.Distance(cursor, position) <= 64f + 160f / Main.mapFullscreenScale)
+            if (Vector2.Distance(cursor, position) <= 96f + 160f / Main.mapFullscreenScale)
             {
                 return true;
             }
