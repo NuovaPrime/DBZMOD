@@ -1,6 +1,7 @@
 ﻿using DBZMOD.Projectiles;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 
 namespace DBZMOD.Util
@@ -76,7 +77,25 @@ namespace DBZMOD.Util
                 return true;
             }
             return false;
-        }        
+        }
+
+        public static void RegisterMassiveBlast(int projectileType)
+        {
+            if (MassiveBlastProjectileTypes.Contains(projectileType))
+                return;
+            MassiveBlastProjectileTypes.Add(projectileType);
+        }
+
+        public static List<int> MassiveBlastProjectileTypes = new List<int>();
+        public static bool IsMassiveBlastInUse(Player player)
+        {            
+            foreach(int massiveBlastType in MassiveBlastProjectileTypes)
+            {
+                if (player.ownedProjectileCounts[massiveBlastType] > 0)
+                    return true;
+            }
+            return false;
+        }
 
         // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
         public static void DoChargeDust(Vector2 chargeBallPosition, int dustId, float dustFrequency, bool isDecaying, Vector2 chargeSize)

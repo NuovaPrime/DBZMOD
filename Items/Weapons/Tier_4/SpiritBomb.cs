@@ -46,8 +46,11 @@ namespace DBZMOD.Items.Weapons.Tier_4
 
         public override bool CanUseItem(Player player)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return true;
             var modPlayer = player.GetModPlayer<MyPlayer>();
-            var inUse = modPlayer.isMassiveBlastInUse;
+            //var inUse = modPlayer.isMassiveBlastInUse;
+            var inUse = ProjectileUtil.IsMassiveBlastInUse(player);
             DebugUtil.Log(string.Format("Player is trying to use {0} and Massive Blast In Use? {1}", DisplayName, inUse));
             return !inUse;
         }

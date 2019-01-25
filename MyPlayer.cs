@@ -277,7 +277,7 @@ namespace DBZMOD
         public int mouseWorldOctant = -1;
 
         public bool isMassiveBlastCharging;
-        public bool isMassiveBlastInUse;
+        // public bool isMassiveBlastInUse;
 
         // Aura tracking to play audio and stuff.
         public AuraAnimationInfo previousAura;
@@ -1245,11 +1245,11 @@ namespace DBZMOD
                 syncIsMassiveBlastCharging = isMassiveBlastCharging;
             }
 
-            if (syncIsMassiveBlastInUse != isMassiveBlastInUse)
-            {
-                NetworkHelper.playerSync.SendChangedMassiveBlastInUse(256, player.whoAmI, player.whoAmI, isMassiveBlastInUse);
-                syncIsMassiveBlastInUse = isMassiveBlastInUse;
-            }
+            //if (syncIsMassiveBlastInUse != isMassiveBlastInUse)
+            //{
+            //    NetworkHelper.playerSync.SendChangedMassiveBlastInUse(256, player.whoAmI, player.whoAmI, isMassiveBlastInUse);
+            //    syncIsMassiveBlastInUse = isMassiveBlastInUse;
+            //}
         }
 
         public void SyncTriggerSet()

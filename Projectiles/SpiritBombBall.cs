@@ -23,6 +23,7 @@ namespace DBZMOD.Projectiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spirit Bomb");
+            ProjectileUtil.RegisterMassiveBlast(projectile.type);
         }
 
         public override void SetDefaults()
@@ -58,14 +59,14 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public override void Kill(int timeLeft)
-        {
-            base.Kill(timeLeft);
+        //public override void Kill(int timeLeft)
+        //{
+        //    base.Kill(timeLeft);
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.isMassiveBlastInUse = false;
-        }
+        //    Player player = Main.player[projectile.owner];
+        //    MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+        //    modPlayer.isMassiveBlastInUse = false;
+        //}
 
         private bool _isInitialized = false;
         public override void AI()
@@ -76,7 +77,7 @@ namespace DBZMOD.Projectiles
             if (!_isInitialized)
             {
                 modPlayer.isMassiveBlastCharging = true;
-                modPlayer.isMassiveBlastInUse = true;
+                //modPlayer.isMassiveBlastInUse = true;
                 HeldTime = 1;
                 _isInitialized = true;
             }

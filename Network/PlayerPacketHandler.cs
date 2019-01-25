@@ -947,14 +947,14 @@ namespace DBZMOD.Network
                         packet.Send(-1, fromWho);
                     }
                     break;
-                case PlayerVarSyncEnum.IsMassiveBlastInUse:
-                    player.isMassiveBlastInUse = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        packet.Write(player.isMassiveBlastInUse);
-                        packet.Send(-1, fromWho);
-                    }
-                    break;
+                //case PlayerVarSyncEnum.IsMassiveBlastInUse:
+                //    player.isMassiveBlastInUse = reader.ReadBoolean();
+                //    if (Main.netMode == NetmodeID.Server)
+                //    {
+                //        packet.Write(player.isMassiveBlastInUse);
+                //        packet.Send(-1, fromWho);
+                //    }
+                //    break;
                 case PlayerVarSyncEnum.WishActive:
                     player.wishActive = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
