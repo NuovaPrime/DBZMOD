@@ -71,32 +71,32 @@ namespace DBZMOD.Tiles.DragonBalls
             return true;
         }        
 
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-            base.PlaceInWorld(i, j, item);
-            if (DebugUtil.IsDebugModeOn())
-            {
-                var oldTile = DBZWorld.GetWorld().GetDragonBallLocation(whichDragonBallAmI);
-                if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
-                {
-                    WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
-                    Main.NewText("Replaced the Old Dragon ball with this one.");
-                }
-                DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);                
-            }
-            else
-            {
-                if (DBZWorld.IsExistingDragonBall(whichDragonBallAmI))
-                {
-                    WorldGen.KillTile(i, j, false, false, true);
-                    Main.NewText("Cheated Dragon Balls taste awful.");
-                }
-                else
-                {
-                    DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);
-                }
-            }
-        }
+        //public override void PlaceInWorld(int i, int j, Item item)
+        //{
+        //    base.PlaceInWorld(i, j, item);
+        //    if (DebugUtil.IsDebugModeOn())
+        //    {
+        //        var oldTile = DBZWorld.GetWorld().GetDragonBallLocation(whichDragonBallAmI);
+        //        if (oldTile != new Point(-1, -1) && oldTile != new Point(i, j))
+        //        {
+        //            WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
+        //            Main.NewText("Replaced the Old Dragon ball with this one.");
+        //        }
+        //        DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);                
+        //    }
+        //    else
+        //    {
+        //        if (DBZWorld.IsExistingDragonBall(whichDragonBallAmI))
+        //        {
+        //            WorldGen.KillTile(i, j, false, false, true);
+        //            Main.NewText("Cheated Dragon Balls taste awful.");
+        //        }
+        //        else
+        //        {
+        //            DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);
+        //        }
+        //    }
+        //}
 
         public override void MouseOver(int i, int j)
         {
@@ -109,40 +109,50 @@ namespace DBZMOD.Tiles.DragonBalls
         // the four star is special, it has its own drop method
         public override bool Drop(int i, int j)
         {
-            return false;
-        }
-
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {
-            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
-            // make sure the MP client still gets the signal that the tile was killed.
-            if (!fail)
+            Player player = Main.player[Player.FindClosest(new Vector2(i * 16f, j * 16f), 1, 1)];
+            if (player != null)// && whichDragonBallAmI == 4) // works on any dragon ball, useful for old worlds
             {
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
+                if (!modplayer.firstDragonBallPickup)
                 {
-                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, whichDragonBallAmI);
-                }
-                DBZWorld.GetWorld().RemoveDragonBallLocation(whichDragonBallAmI, true);
-            }
-            // if we're in multiplayer let the server handle item drops.
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                return;
-            if (!noItem)
-            {
-                Item.NewItem(i * 16, j * 16, 32, 48, drop);
-
-                Player player = Main.player[Player.FindClosest(new Vector2(i * 16f, j * 16f), 1, 1)];
-                if (player != null && whichDragonBallAmI == 4)
-                {
-                    MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
-                    if (!modplayer.firstFourStarDbPickup && !noItem)
-                    {
-                        Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
-                        modplayer.firstFourStarDbPickup = true;
-                    }
+                    Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
+                    modplayer.firstDragonBallPickup = true;
                 }
             }
-            noItem = true; // kill tile behavior overrides typical drops.
+            return true;
         }
+
+        //public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        //{
+        //    base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
+        //    // make sure the MP client still gets the signal that the tile was killed.
+        //    if (!fail)
+        //    {
+        //        if (Main.netMode == NetmodeID.MultiplayerClient)
+        //        {
+        //            NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, whichDragonBallAmI);
+        //        }
+        //        DBZWorld.GetWorld().RemoveDragonBallLocation(whichDragonBallAmI, true);
+        //    }
+        //    // if we're in multiplayer let the server handle item drops.
+        //    if (Main.netMode == NetmodeID.MultiplayerClient)
+        //        return;
+        //    if (!noItem)
+        //    {
+        //        Item.NewItem(i * 16, j * 16, 32, 48, drop);
+
+        //        Player player = Main.player[Player.FindClosest(new Vector2(i * 16f, j * 16f), 1, 1)];
+        //        if (player != null && whichDragonBallAmI == 4)
+        //        {
+        //            MyPlayer modplayer = player.GetModPlayer<MyPlayer>(mod);
+        //            if (!modplayer.firstFourStarDbPickup && !noItem)
+        //            {
+        //                Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType("DBNote"));
+        //                modplayer.firstFourStarDbPickup = true;
+        //            }
+        //        }
+        //    }
+        //    noItem = true; // kill tile behavior overrides typical drops.
+        //}
     }
 }

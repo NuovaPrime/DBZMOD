@@ -242,7 +242,7 @@ namespace DBZMOD
         public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
-        public bool firstFourStarDbPickup = false;
+        public bool firstDragonBallPickup = false;
         public bool oneStarDbNearby = false;
         public bool twoStarDbNearby = false;
         public bool threeStarDbNearby = false;
@@ -298,12 +298,6 @@ namespace DBZMOD
         FistSystem _mFistSystem = new FistSystem();
         #endregion
 
-        public override void PlayerDisconnect(Player player)
-        {
-            base.PlayerDisconnect(player);
-            // make sure if the player is leaving with a dragon ball we spawn a new one. This might not work.
-            DBZWorld.DoDragonBallCleanupCheck(player);
-        }
         
         public override void OnEnterWorld(Player player)
         {
@@ -311,15 +305,10 @@ namespace DBZMOD
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                DBZWorld.SyncWorldDragonBallKey(player);
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
             }
 
-            ItemHelper.ScanPlayerForIllegitimateDragonballs(player);
-
-            // very quietly, make sure the world has dragon balls. Shh, don't tell anyone.
-            // I'm not sure why worldgen doesn't always work, but this makes it recover from any issues it might have.
-            DBZWorld.DoDragonBallCleanupCheck();
+            DBZWorld.HandleDragonBallPrecacheAndCleanup();
         }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
@@ -1552,7 +1541,7 @@ namespace DBZMOD
             tag.Add("ssjgAchieved", ssjgAchieved);
             tag.Add("LSSJ2Achieved", lssj2Achieved);
             tag.Add("KiMax3", kiMax3);
-            tag.Add("FirstFourStarDBPickup", firstFourStarDbPickup);
+            tag.Add("FirstFourStarDBPickup", firstDragonBallPickup);
             tag.Add("PowerWishesLeft", powerWishesLeft);
             tag.Add("SkillWishesLeft", skillWishesLeft);
             tag.Add("ImmortalityWishesLeft", immortalityWishesLeft);
@@ -1627,7 +1616,7 @@ namespace DBZMOD
             ssjgAchieved = tag.Get<bool>("ssjgAchieved");
             lssj2Achieved = tag.Get<bool>("LSSJ2Achieved");
             kiMax3 = tag.Get<int>("KiMax3");
-            firstFourStarDbPickup = tag.Get<bool>("FirstFourStarDBPickup");
+            firstDragonBallPickup = tag.Get<bool>("FirstFourStarDBPickup");
             powerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
             // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
             if (DebugUtil.IsDebugModeOn())

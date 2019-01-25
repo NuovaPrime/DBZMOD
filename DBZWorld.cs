@@ -17,11 +17,8 @@ namespace DBZMOD
     public class DBZWorld : ModWorld
     {
         // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
-        private Point[] _dragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
+        // private Point[] _dragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
         public List<Vector2> kiBeacons = new List<Vector2>();
-        // the world dragon ball key is a special random integer that gets created with the world. When the player takes a dragon ball in tile form, the item created
-        // has its key set. Taking that ball to another world results in it transforming into something that sucks and doesn't work and isn't a dragon ball.        
-        public int worldDragonBallKey = 0;
 
         // helper utility method for snagging the currently loaded world.
         public static DBZWorld GetWorld()
@@ -29,57 +26,9 @@ namespace DBZMOD
             return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
         }
 
-        public void SetDragonBallLocation(int whichDragonBall, Point point, bool isMarkedDirty)
-        {
-            _dragonBallLocations[whichDragonBall - 1] = point;
-
-            if (isMarkedDirty && Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                if (point.X == -1 && point.Y == -1)
-                {
-                    NetworkHelper.playerSync.SendDragonBallRemove(256, Main.myPlayer, whichDragonBall);
-                }
-                else
-                {
-                    NetworkHelper.playerSync.SendDragonBallAdd(256, Main.myPlayer, point, whichDragonBall);
-                }
-            }
-        }
-
-        public void SetDragonBallLocation(int whichDragonBall, int x, int y, bool isMarkedDirty)
-        {
-            var dragonBallCoordinates = new Point(x, y);
-            SetDragonBallLocation(whichDragonBall, dragonBallCoordinates, isMarkedDirty);
-        }
-
-        public void RemoveDragonBallLocation(int whichDragonBall, bool isMarkedDirty)
-        {
-            SetDragonBallLocation(whichDragonBall, -1, -1, isMarkedDirty);
-        }
-
-        public Point GetDragonBallLocation(int whichDragonBall)
-        {
-            return _dragonBallLocations[whichDragonBall - 1];
-        }
-
         public override TagCompound Save()
         {
             var dbtWorldTag = new TagCompound();
-            dbtWorldTag.Add("WorldDragonBallKey", worldDragonBallKey);
-            dbtWorldTag.Add("OneStarDragonBallX", _dragonBallLocations[0].X);
-            dbtWorldTag.Add("OneStarDragonBallY", _dragonBallLocations[0].Y);
-            dbtWorldTag.Add("TwoStarDragonBallX", _dragonBallLocations[1].X);
-            dbtWorldTag.Add("TwoStarDragonBallY", _dragonBallLocations[1].Y);
-            dbtWorldTag.Add("ThreeStarDragonBallX", _dragonBallLocations[2].X);
-            dbtWorldTag.Add("ThreeStarDragonBallY", _dragonBallLocations[2].Y);
-            dbtWorldTag.Add("FourStarDragonBallX", _dragonBallLocations[3].X);
-            dbtWorldTag.Add("FourStarDragonBallY", _dragonBallLocations[3].Y);
-            dbtWorldTag.Add("FiveStarDragonBallX", _dragonBallLocations[4].X);
-            dbtWorldTag.Add("FiveStarDragonBallY", _dragonBallLocations[4].Y);
-            dbtWorldTag.Add("SixStarDragonBallX", _dragonBallLocations[5].X);
-            dbtWorldTag.Add("SixStarDragonBallY", _dragonBallLocations[5].Y);
-            dbtWorldTag.Add("SevenStarDragonBallX", _dragonBallLocations[6].X);
-            dbtWorldTag.Add("SevenStarDragonBallY", _dragonBallLocations[6].Y);
             dbtWorldTag.Add("KiBeacons", kiBeacons);
             dbtWorldTag.Add("HasDoneSavageCleanup", !shouldDoBrutalCleanup);
             return dbtWorldTag;
@@ -87,22 +36,6 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
-            var dbKey = tag.GetInt("WorldDragonBallKey");
-            worldDragonBallKey = dbKey;
-            var oneStarPoint = new Point(tag.GetInt("OneStarDragonBallX"), tag.GetInt("OneStarDragonBallY"));
-            var twoStarPoint = new Point(tag.GetInt("TwoStarDragonBallX"), tag.GetInt("TwoStarDragonBallY"));
-            var threeStarPoint = new Point(tag.GetInt("ThreeStarDragonBallX"), tag.GetInt("ThreeStarDragonBallY"));
-            var fourStarPoint = new Point(tag.GetInt("FourStarDragonBallX"), tag.GetInt("FourStarDragonBallY"));
-            var fiveStarPoint = new Point(tag.GetInt("FiveStarDragonBallX"), tag.GetInt("FiveStarDragonBallY"));
-            var sixStarPoint = new Point(tag.GetInt("SixStarDragonBallX"), tag.GetInt("SixStarDragonBallY"));
-            var sevenStarPoint = new Point(tag.GetInt("SevenStarDragonBallX"), tag.GetInt("SevenStarDragonBallY"));
-            SetDragonBallLocation(1, oneStarPoint, false);
-            SetDragonBallLocation(2, twoStarPoint, false);
-            SetDragonBallLocation(3, threeStarPoint, false);
-            SetDragonBallLocation(4, fourStarPoint, false);
-            SetDragonBallLocation(5, fiveStarPoint, false);
-            SetDragonBallLocation(6, sixStarPoint, false);
-            SetDragonBallLocation(7, sevenStarPoint, false);
             if (tag.ContainsKey("HasDoneSavageCleanup"))
             {
                 shouldDoBrutalCleanup = !tag.GetBool("HasDoneSavageCleanup");
@@ -112,21 +45,21 @@ namespace DBZMOD
             // cleanup ki beacon list, not sure why this is necessary.
             CleanupKiBeaconList();
 
+            // try to precache dragon ball locations in advance
+            PrecacheDragonBallLocations();
             base.Load(tag);
         }
 
         public static void DestroyAndRespawnDragonBalls()
         {
-            var dbzWorld = GetWorld();
-
             for (var i = 1; i <= 7; i++)
             {
-                var location = dbzWorld.GetDragonBallLocation(i);
+                var location = GetDragonBallLocation(i);
+                if (location.Equals(Point.Zero))
+                    continue;
                 WorldGen.KillTile(location.X, location.Y, false, false, true);
+                TryToPlaceDragonBall(i);
             }
-
-            // handles respawning all the dragon balls
-            DoDragonBallCleanupCheck();
         }
 
         public void CleanupKiBeaconList()
@@ -343,9 +276,6 @@ namespace DBZMOD
                 progress.Set(0.25f);
             }
 
-            // before we do anything, create a new World Key for this world
-            worldDragonBallKey = Main.rand.Next(1, int.MaxValue);
-
             gohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
             for (var attempts = 0; attempts < 10000; attempts++)
             {
@@ -558,8 +488,6 @@ namespace DBZMOD
             }
 
             GenerateGohanStructureWithByteArrays(false);
-
-            DoDragonBallCleanupCheck();
             return true;
         }
 
@@ -577,19 +505,7 @@ namespace DBZMOD
             return false;
         }
 
-        public static bool IsExistingDragonBall(int whichDragonball)
-        {
-            int dbIndex = whichDragonball - 1;
-            var coordinates = GetWorld()._dragonBallLocations[dbIndex];
-            if (coordinates.Equals(new Point(-1, -1)))
-                return false;
-            var dbTile = Framing.GetTileSafely(coordinates.X, coordinates.Y);
-            if (dbTile.type == (ushort)ModLoader.GetMod("DBZMOD").TileType(GetDragonBallTileTypeFromNumber(whichDragonball)))
-                return true;
-            return false;
-        }
-
-        public static string GetDragonBallTileTypeFromNumber(int whichDragonBall)
+        public static string GetDragonBallTileNameFromNumber(int whichDragonBall)
         {
             switch (whichDragonBall) {
                 case 1:
@@ -653,9 +569,9 @@ namespace DBZMOD
 
                 var dbItem = item.modItem as DragonBallItem;
                 // assume this runs before the inventory loop that turns stone balls into real ones - we don't care which it is, if it's legit, we don't want to spawn dragonballs replacing it.
-                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetStoneBallFromNumber(whichDragonball)) && dbItem.worldDragonBallKey == GetWorld().worldDragonBallKey)
+                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetStoneBallFromNumber(whichDragonball)))
                     return true;
-                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball)) && dbItem.worldDragonBallKey == GetWorld().worldDragonBallKey)
+                if (dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonball)))
                     return true;                
             }
             return false;
@@ -680,19 +596,19 @@ namespace DBZMOD
             if (IsExistingDragonBall(whichDragonball))
                 return true;
 
-            // dragon ball is in a connected player's inventory. This isn't fool proof.
-            if (IsDragonBallWithPlayers(whichDragonball, ignorePlayer))
-                return true;
+            //// dragon ball is in a connected player's inventory. This isn't fool proof.
+            //if (IsDragonBallWithPlayers(whichDragonball, ignorePlayer))
+            //    return true;
 
-            // dragon ball is in a chest somewhere. This also isn't fool proof.
-            if (IsDragonBallInventoried(whichDragonball))
-                return true;
+            //// dragon ball is in a chest somewhere. This also isn't fool proof.
+            //if (IsDragonBallInventoried(whichDragonball))
+            //    return true;
 
             TileObject toBePlaced;
-            if (TileObject.CanPlace(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), 0, -1, out toBePlaced, true, false))
+            if (TileObject.CanPlace(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonball), 0, -1, out toBePlaced, true, false))
             {
-                WorldGen.PlaceObject(offsetX, offsetY, DBZMOD.instance.TileType(GetDragonBallTileTypeFromNumber(whichDragonball)), true);
-                GetWorld().SetDragonBallLocation(whichDragonball, new Point(offsetX, offsetY), true);
+                GetWorld().CacheDragonBallLocation(whichDragonball, new Point(offsetX, offsetY));
+                WorldGen.PlaceObject(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonball), true);
                 return true;
             } else
             {
@@ -711,18 +627,25 @@ namespace DBZMOD
 
             for (int i = 0; i <= 6; i++)
             {
-                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);
-
-                if (shouldTryToSpawn)
-                {
-                    Point safeCoordinates = GetSafeDragonBallCoordinates();
-                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y))
-                    {
-                        safeCoordinates = GetSafeDragonBallCoordinates();
-                    }
-                }
+                TryToPlaceDragonBall(i + 1);
             }
             return true;
+        }
+
+        public static void TryToPlaceDragonBall(int whichDragonBall)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+            bool shouldTryToSpawn = !IsExistingDragonBall(whichDragonBall);
+
+            if (shouldTryToSpawn)
+            {
+                Point safeCoordinates = GetSafeDragonBallCoordinates();
+                while (!TryPlacingDragonball(whichDragonBall, safeCoordinates.X, safeCoordinates.Y))
+                {
+                    safeCoordinates = GetSafeDragonBallCoordinates();
+                }
+            }
         }
 
         private bool _kiBeaconCleanupCheck = false;
@@ -735,7 +658,7 @@ namespace DBZMOD
         }
 
         public bool shouldDoBrutalCleanup = false;
-        public static void DoDragonBallCleanupCheck(Player ignorePlayer = null)
+        public static void HandleDragonBallPrecacheAndCleanup(Player ignorePlayer = null)
         {
             // only fire this server side or single player.
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -746,45 +669,38 @@ namespace DBZMOD
                 DoBrutalCleanup();
             }
 
-            // loop over the saved locations for each dragonball
-            for (var i = 0; i < GetWorld()._dragonBallLocations.Length; i++)
-            {
-                bool shouldTryToSpawn = !IsExistingDragonBall(i + 1);                
-
-                if (shouldTryToSpawn)
-                {
-                    Point safeCoordinates = GetSafeDragonBallCoordinates();
-                    while (!TryPlacingDragonball(i + 1, safeCoordinates.X, safeCoordinates.Y, ignorePlayer))
-                    {
-                        safeCoordinates = GetSafeDragonBallCoordinates();
-                    }
-                }
-            }
+            GetWorld().PrecacheDragonBallLocations();
         }
 
         public static void DoBrutalCleanup()
         {
             int invalidCount = 0;
+            Point[] dragonBallFirstFound = new Point[7] { Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero };
+            for (var i = 0; i < dragonBallFirstFound.Length; i++)
+            {
+                var existingDragonBall = GetDragonBallLocation(i + 1);
+                if (existingDragonBall.Equals(Point.Zero))
+                    continue;
+                dragonBallFirstFound[i] = existingDragonBall;
+            }
+            // destroy all but the first located dragon ball of any given type in the world, with no items.
             for (var i = 0; i < Main.maxTilesX; i++)
             {
                 for (var j = 0; j < Main.maxTilesY; j++)
                 {
-                    var tile = Framing.GetTileSafely(i, j);
+                    var tile = Main.tile[i, j];
+                    // var tile = Framing.GetTileSafely(i, j);
                     if (tile == null)
                         continue;
                     var dbNum = GetDragonBallNumberFromType(tile.type);
                     if (dbNum == 0)
                         continue;
-                    var existingLoc = GetWorld().GetDragonBallLocation(dbNum);
-                    if (existingLoc.X == -1 && existingLoc.Y == -1)
-                    {
-                        invalidCount++;
-                        WorldGen.KillTile(i, j, false, false, true);
-                    } else if (existingLoc.X != i || existingLoc.Y != j)
-                    {
-                        invalidCount++;
-                        WorldGen.KillTile(i, j, false, false, true);
-                    }
+                    var thisDragonBallLocation = dragonBallFirstFound[dbNum - 1];
+                    var shouldSkipThisDragonBall = !thisDragonBallLocation.Equals(Point.Zero) && thisDragonBallLocation.Equals(new Point(i, j));
+                    if (shouldSkipThisDragonBall)
+                        continue;                    
+                    invalidCount++;
+                    WorldGen.KillTile(i, j, false, false, true);                    
                 }
             }
             if (invalidCount > 0)
@@ -792,6 +708,95 @@ namespace DBZMOD
                 Main.NewText("Found " + invalidCount + " bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
             }
             GetWorld().shouldDoBrutalCleanup = false;
+        }
+
+        public static bool IsExistingDragonBall(int whichDragonball)
+        {
+            var existingLocation = GetDragonBallLocation(whichDragonball);
+            if (existingLocation.Equals(Point.Zero))
+                return false;
+            return true;
+        }
+
+        private Point[] _cachedDragonBallLocations = new Point[] { Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero, Point.Zero };
+        public Point GetCachedDragonBallLocation(int whichDragonBall)
+        {
+            return _cachedDragonBallLocations[whichDragonBall - 1];
+        }
+
+        public void CacheDragonBallLocation(int whichDragonBall, Point location)
+        {
+            _cachedDragonBallLocations[whichDragonBall - 1] = location;
+        }
+
+        public static Point GetDragonBallLocation(int whichDragonBall)
+        {
+            var world = GetWorld();
+            var result = world.GetCachedDragonBallLocation(whichDragonBall);
+            // try to return a cached location if possible.
+            if (result != Point.Zero)
+            {
+                // var checkTile = Framing.GetTileSafely(result.X, result.Y);
+                var checkTile = Main.tile[result.X, result.Y];
+                if (checkTile != null && checkTile.active() && checkTile.type == GetDragonBallTypeFromNumber(whichDragonBall))
+                {
+                    return result;
+                }
+                else
+                {
+                    // dragon ball isn't where we think it is, nuke this point.
+                    world.CacheDragonBallLocation(whichDragonBall, Point.Zero);
+                }
+            }
+            // if we reached this point, we already know the cache was inaccurate, so try to find the real one. if we reach the end of this routine and
+            // don't find the dragon ball, simply spawn a new one.
+            for (var i = 0; i < Main.maxTilesX; i++)
+            {
+                for (var j = 0; j < Main.maxTilesY; j++)
+                {
+                    //var tile = Framing.GetTileSafely(i, j);
+                    var tile = Main.tile[i, j];
+                    if (tile == null)
+                        continue;
+                    if (!tile.active())
+                        continue;
+                    var dbType = GetDragonBallTypeFromNumber(whichDragonBall);
+                    if (tile.type == dbType)
+                        result = new Point(i, j);
+                }
+            }
+
+            // we couldn't find a legitimate dragon ball, let's make one.
+            // this also caches the location.
+            if (result.Equals(Point.Zero))
+            {
+                TryToPlaceDragonBall(whichDragonBall);
+            }
+
+            world.CacheDragonBallLocation(whichDragonBall, result);
+            return result;
+        }
+
+        public void PrecacheDragonBallLocations()
+        {
+            for (var i = 0; i < Main.maxTilesX; i++)
+            {
+                for (var j = 0; j < Main.maxTilesY; j++)
+                {
+                    //var tile = Framing.GetTileSafely(i, j);
+                    var tile = Main.tile[i, j];
+                    if (tile == null)
+                        continue;
+                    if (!tile.active())
+                        continue;
+                    for (int d = 0; d < _cachedDragonBallLocations.Length; d++)
+                    {
+                        var dbType = GetDragonBallTypeFromNumber(d + 1);
+                        if (tile.type == dbType)
+                            CacheDragonBallLocation(d + 1, new Point(i, j));
+                    }                    
+                }
+            }
         }
 
         public int? db1;
@@ -883,6 +888,28 @@ namespace DBZMOD
                 }
                 return db7.Value;
             }
+        }
+
+        public static int GetDragonBallTypeFromNumber(int whichDragonBall)
+        {
+            switch (whichDragonBall)
+            {
+                case 1:
+                    return GetWorld().Db1Type;
+                case 2:
+                    return GetWorld().Db2Type;
+                case 3:
+                    return GetWorld().Db3Type;
+                case 4:
+                    return GetWorld().Db4Type;
+                case 5:
+                    return GetWorld().Db5Type;
+                case 6:
+                    return GetWorld().Db6Type;
+                case 7:
+                    return GetWorld().Db7Type;
+            }
+            return 0;
         }
 
         public static int GetDragonBallNumberFromType(int type)

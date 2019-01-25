@@ -44,12 +44,12 @@ namespace DBZMOD.Network
                 case (SYNC_KI_BEACON_REMOVE):
                     ReceiveKiBeaconRemove(reader, fromWho);
                     break;
-                case (SYNC_DRAGON_BALL_ADD):
-                    ReceiveDragonBallAdd(reader, fromWho);
-                    break;
-                case (SYNC_DRAGON_BALL_REMOVE):
-                    ReceiveDragonBallRemove(reader, fromWho);
-                    break;
+                //case (SYNC_DRAGON_BALL_ADD):
+                //    ReceiveDragonBallAdd(reader, fromWho);
+                //    break;
+                //case (SYNC_DRAGON_BALL_REMOVE):
+                //    ReceiveDragonBallRemove(reader, fromWho);
+                //    break;
                 case (REQUEST_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSyncRequest(fromWho);
                     break;
@@ -63,12 +63,12 @@ namespace DBZMOD.Network
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
-                case (REQUEST_DRAGON_BALL_KEY_SYNC):
-                    ReceiveDragonBallKeySyncRequest(fromWho);
-                    break;
-                case (SEND_DRAGON_BALL_KEY_SYNC):
-                    ReceiveDragonBallKeySync(reader, fromWho);
-                    break;
+                //case (REQUEST_DRAGON_BALL_KEY_SYNC):
+                //    ReceiveDragonBallKeySyncRequest(fromWho);
+                //    break;
+                //case (SEND_DRAGON_BALL_KEY_SYNC):
+                //    ReceiveDragonBallKeySync(reader, fromWho);
+                //    break;
                 case (DESTROY_AND_RESPAWN_DRAGON_BALLS):
                     HandleDestroyAndRespawnDragonBalls(reader, fromWho);
                     break;
@@ -160,34 +160,34 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        // handle a single ki beacon update (including removals)
-        public void ReceiveDragonBallAdd(BinaryReader reader, int fromWho)
-        {
-            var whichDragonBall = reader.ReadInt32();
-            var coordX = reader.ReadInt32();
-            var coordY = reader.ReadInt32();
-            var location = new Point(coordX, coordY);
-            var dbWorld = DBZWorld.GetWorld();
-            dbWorld.SetDragonBallLocation(whichDragonBall, location, false);
-            if (Main.netMode == NetmodeID.Server)
-                SendDragonBallAdd(-1, fromWho, location, whichDragonBall);
-        }
+        //// handle a single ki beacon update (including removals)
+        //public void ReceiveDragonBallAdd(BinaryReader reader, int fromWho)
+        //{
+        //    var whichDragonBall = reader.ReadInt32();
+        //    var coordX = reader.ReadInt32();
+        //    var coordY = reader.ReadInt32();
+        //    var location = new Point(coordX, coordY);
+        //    var dbWorld = DBZWorld.GetWorld();
+        //    dbWorld.SetDragonBallLocation(whichDragonBall, location, false);
+        //    if (Main.netMode == NetmodeID.Server)
+        //        SendDragonBallAdd(-1, fromWho, location, whichDragonBall);
+        //}
 
-        // handle a single ki beacon update (including removals)
-        public void ReceiveDragonBallRemove(BinaryReader reader, int fromWho)
-        {
-            var whichDragonBall = reader.ReadInt32();
-            var dbWorld = DBZWorld.GetWorld();
-            var tileLocation = dbWorld.GetDragonBallLocation(whichDragonBall);
-            // our work here is done lol
-            if (tileLocation.X == -1 && tileLocation.Y == -1)
-                return;
-            WorldGen.KillTile(tileLocation.X, tileLocation.Y, false, false, true);
-            if (Main.netMode == NetmodeID.Server)
-            {
-                SendDragonBallRemove(-1, fromWho, whichDragonBall);
-            }
-        }
+        //// handle a single ki beacon update (including removals)
+        //public void ReceiveDragonBallRemove(BinaryReader reader, int fromWho)
+        //{
+        //    var whichDragonBall = reader.ReadInt32();
+        //    var dbWorld = DBZWorld.GetWorld();
+        //    var tileLocation = dbWorld.GetDragonBallLocation(whichDragonBall);
+        //    // our work here is done lol
+        //    if (tileLocation.X == -1 && tileLocation.Y == -1)
+        //        return;
+        //    WorldGen.KillTile(tileLocation.X, tileLocation.Y, false, false, true);
+        //    if (Main.netMode == NetmodeID.Server)
+        //    {
+        //        SendDragonBallRemove(-1, fromWho, whichDragonBall);
+        //    }
+        //}
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
         {
@@ -231,56 +231,56 @@ namespace DBZMOD.Network
             }
         }
 
-        public void ReceiveDragonBallKeySyncRequest(int toWho)
-        {
-            ModPacket packet = GetPacket(SEND_DRAGON_BALL_KEY_SYNC, 256);
-            var dbWorld = DBZWorld.GetWorld();
-            packet.Write(dbWorld.worldDragonBallKey);
-            // new stuff, send the player all the dragon ball points.
-            packet.Write(dbWorld.GetDragonBallLocation(1).X);
-            packet.Write(dbWorld.GetDragonBallLocation(1).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(2).X);
-            packet.Write(dbWorld.GetDragonBallLocation(2).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(3).X);
-            packet.Write(dbWorld.GetDragonBallLocation(3).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(4).X);
-            packet.Write(dbWorld.GetDragonBallLocation(4).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(5).X);
-            packet.Write(dbWorld.GetDragonBallLocation(5).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(6).X);
-            packet.Write(dbWorld.GetDragonBallLocation(6).Y);
-            packet.Write(dbWorld.GetDragonBallLocation(7).X);
-            packet.Write(dbWorld.GetDragonBallLocation(7).Y);
-            packet.Send(toWho, -1);
-        }
+        //public void ReceiveDragonBallKeySyncRequest(int toWho)
+        //{
+        //    ModPacket packet = GetPacket(SEND_DRAGON_BALL_KEY_SYNC, 256);
+        //    var dbWorld = DBZWorld.GetWorld();
+        //    packet.Write(dbWorld.worldDragonBallKey);
+        //    // new stuff, send the player all the dragon ball points.
+        //    packet.Write(dbWorld.GetDragonBallLocation(1).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(1).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(2).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(2).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(3).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(3).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(4).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(4).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(5).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(5).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(6).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(6).Y);
+        //    packet.Write(dbWorld.GetDragonBallLocation(7).X);
+        //    packet.Write(dbWorld.GetDragonBallLocation(7).Y);
+        //    packet.Send(toWho, -1);
+        //}
 
-        public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
-        {
-            var dbWorld = DBZWorld.GetWorld();
-            var dbKey = reader.ReadInt32();
-            var db1X = reader.ReadInt32();
-            var db1Y = reader.ReadInt32();
-            var db2X = reader.ReadInt32();
-            var db2Y = reader.ReadInt32();
-            var db3X = reader.ReadInt32();
-            var db3Y = reader.ReadInt32();
-            var db4X = reader.ReadInt32();
-            var db4Y = reader.ReadInt32();
-            var db5X = reader.ReadInt32();
-            var db5Y = reader.ReadInt32();
-            var db6X = reader.ReadInt32();
-            var db6Y = reader.ReadInt32();
-            var db7X = reader.ReadInt32();
-            var db7Y = reader.ReadInt32();
-            dbWorld.SetDragonBallLocation(1, new Point(db1X, db1Y), false);
-            dbWorld.SetDragonBallLocation(2, new Point(db2X, db2Y), false);
-            dbWorld.SetDragonBallLocation(3, new Point(db3X, db3Y), false);
-            dbWorld.SetDragonBallLocation(4, new Point(db4X, db4Y), false);
-            dbWorld.SetDragonBallLocation(5, new Point(db5X, db5Y), false);
-            dbWorld.SetDragonBallLocation(6, new Point(db6X, db6Y), false);
-            dbWorld.SetDragonBallLocation(7, new Point(db7X, db7Y), false);
-            dbWorld.worldDragonBallKey = dbKey;
-        }
+        //public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
+        //{
+        //    var dbWorld = DBZWorld.GetWorld();
+        //    var dbKey = reader.ReadInt32();
+        //    var db1X = reader.ReadInt32();
+        //    var db1Y = reader.ReadInt32();
+        //    var db2X = reader.ReadInt32();
+        //    var db2Y = reader.ReadInt32();
+        //    var db3X = reader.ReadInt32();
+        //    var db3Y = reader.ReadInt32();
+        //    var db4X = reader.ReadInt32();
+        //    var db4Y = reader.ReadInt32();
+        //    var db5X = reader.ReadInt32();
+        //    var db5Y = reader.ReadInt32();
+        //    var db6X = reader.ReadInt32();
+        //    var db6Y = reader.ReadInt32();
+        //    var db7X = reader.ReadInt32();
+        //    var db7Y = reader.ReadInt32();
+        //    dbWorld.SetDragonBallLocation(1, new Point(db1X, db1Y), false);
+        //    dbWorld.SetDragonBallLocation(2, new Point(db2X, db2Y), false);
+        //    dbWorld.SetDragonBallLocation(3, new Point(db3X, db3Y), false);
+        //    dbWorld.SetDragonBallLocation(4, new Point(db4X, db4Y), false);
+        //    dbWorld.SetDragonBallLocation(5, new Point(db5X, db5Y), false);
+        //    dbWorld.SetDragonBallLocation(6, new Point(db6X, db6Y), false);
+        //    dbWorld.SetDragonBallLocation(7, new Point(db7X, db7Y), false);
+        //    dbWorld.worldDragonBallKey = dbKey;
+        //}
 
         public void RequestServerSendDragonBallKey(int toWho, int fromWho)
         {
