@@ -116,7 +116,7 @@ namespace DBZMOD.Projectiles.SuperSpiritBomb
 
                 MyPlayer.ModPlayer(player).AddKi(-5, true, false);
                 ProjectileUtil.ApplyChannelingSlowdown(player);
-
+                
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
                 {

@@ -658,7 +658,16 @@ namespace DBZMOD.Network
             packet.Write(whichPlayer);
             packet.Write(isMassiveBlastCharging);
             packet.Send(toWho, fromWho);
-        }       
+        }
+
+        public void SendChangedMassiveBlastInUse(int toWho, int fromWho, int whichPlayer, bool isMassiveBlastInUse)
+        {
+            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
+            packet.Write((int)PlayerVarSyncEnum.IsMassiveBlastInUse);
+            packet.Write(whichPlayer);
+            packet.Write(isMassiveBlastInUse);
+            packet.Send(toWho, fromWho);
+        }
 
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
         {
@@ -942,6 +951,14 @@ namespace DBZMOD.Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.isMassiveBlastCharging);
+                        packet.Send(-1, fromWho);
+                    }
+                    break;
+                case PlayerVarSyncEnum.IsMassiveBlastInUse:
+                    player.isMassiveBlastInUse = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.isMassiveBlastInUse);
                         packet.Send(-1, fromWho);
                     }
                     break;

@@ -37,6 +37,7 @@
         HeldProjectile,
         WishActive,
         FacingDirection,
-        IsMassiveBlastCharging
+        IsMassiveBlastCharging,
+        IsMassiveBlastInUse
     }
 }

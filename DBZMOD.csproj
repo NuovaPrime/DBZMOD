@@ -449,8 +449,6 @@
     <Compile Include="Projectiles\MakankosappoBeam.cs" />
     <Compile Include="Projectiles\SpiritBallProjectile.cs" />
     <Compile Include="Projectiles\SpiritBombBall.cs" />
-    <Compile Include="Projectiles\SpiritBombExplosion.cs" />
-    <Compile Include="Projectiles\SpiritBombProjectile.cs" />
     <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjBeam.cs" />
     <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjBeamHead.cs" />
     <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjStart.cs" />
@@ -465,10 +463,7 @@
     <Compile Include="Projectiles\Kamehamehas\SuperKamehameha\SuperKamehamehaCharge.cs" />
     <Compile Include="Projectiles\Kamehamehas\SuperKamehameha\SuperKamehamehaBeam.cs" />
     <Compile Include="Projectiles\SupernovaBall.cs" />
-    <Compile Include="Projectiles\SupernovaExplosion.cs" />
     <Compile Include="Projectiles\SuperSpiritBomb\SuperSpiritBombBall.cs" />
-    <Compile Include="Projectiles\SuperSpiritBomb\SuperSpiritBombExplosion.cs" />
-    <Compile Include="Projectiles\SuperSpiritBomb\SuperSpiritBombProjectile.cs" />
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />

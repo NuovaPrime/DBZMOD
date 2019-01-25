@@ -1055,6 +1055,7 @@ namespace DBZMOD
         public int? syncPowerWishesLeft;
         public int? syncHeldProj;
         public bool? syncIsMassiveBlastCharging;
+        public bool? syncIsMassiveBlastInUse;
 
         // triggerset sync has its own method, but dropping these here anyway
         public bool? syncTriggerSetMouseLeft;
@@ -1242,6 +1243,12 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedMassiveBlastCharging(256, player.whoAmI, player.whoAmI, isMassiveBlastCharging);
                 syncIsMassiveBlastCharging = isMassiveBlastCharging;
+            }
+
+            if (syncIsMassiveBlastInUse != isMassiveBlastInUse)
+            {
+                NetworkHelper.playerSync.SendChangedMassiveBlastInUse(256, player.whoAmI, player.whoAmI, isMassiveBlastInUse);
+                syncIsMassiveBlastInUse = isMassiveBlastInUse;
             }
         }
 
@@ -2699,7 +2706,6 @@ namespace DBZMOD
                 }
             }
         }
-
 
         public int auraFrameTimer = 0;
         public int auraCurrentFrame = 0;
