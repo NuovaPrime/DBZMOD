@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Util;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -45,7 +46,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
 
         public override bool CanUseItem(Player player)
         {
-            return !player.GetModPlayer<MyPlayer>().isMassiveBlastInUse;
+            var modPlayer = player.GetModPlayer<MyPlayer>();
+            var inUse = modPlayer.isMassiveBlastInUse;
+            DebugUtil.Log(string.Format("Player is trying to use {0} and Massive Blast In Use? {1}", DisplayName, inUse));
+            return !inUse;
         }
     }
 }
