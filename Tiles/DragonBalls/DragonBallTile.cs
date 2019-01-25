@@ -82,7 +82,6 @@ namespace DBZMOD.Tiles.DragonBalls
                     WorldGen.KillTile(oldTile.X, oldTile.Y, false, false, true);
                     Main.NewText("Replaced the Old Dragon ball with this one.");
                 }
-                DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
                 DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);                
             }
             else
@@ -94,7 +93,6 @@ namespace DBZMOD.Tiles.DragonBalls
                 }
                 else
                 {
-                    DebugUtil.Log(string.Format("Placing db in world: {0} {1}", i, j));
                     DBZWorld.GetWorld().SetDragonBallLocation(whichDragonBallAmI, new Point(i, j), true);
                 }
             }

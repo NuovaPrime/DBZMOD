@@ -201,7 +201,6 @@ namespace DBZMOD.UI
 
             if (usedWish)
             {
-                DebugUtil.Log("Wish has been used.");
                 wishSelection = WishSelectionID.None;
                 DBZWorld.DestroyAndRespawnDragonBalls();
                 modplayer.wishActive = false;

@@ -77,7 +77,6 @@ namespace DBZMOD.Network
 
         public void SendDestroyAndRespawnDragonBalls(int toWho, int fromWho, int initiatingPlayer)
         {
-            DebugUtil.Log("Sending despawn packet for dragon balls");
             ModPacket packet = GetPacket(DESTROY_AND_RESPAWN_DRAGON_BALLS, fromWho);
             packet.Write(initiatingPlayer);
             packet.Send(toWho, initiatingPlayer);
@@ -85,7 +84,6 @@ namespace DBZMOD.Network
 
         public void HandleDestroyAndRespawnDragonBalls(BinaryReader reader, int fromWho)
         {
-            DebugUtil.Log("Receiving despawn packet for dragon balls");
             int ignorePlayer = reader.ReadInt32();
             if (Main.netMode == NetmodeID.Server)
             {
@@ -148,7 +146,6 @@ namespace DBZMOD.Network
 
         public void SendDragonBallAdd(int toWho, int fromWho, Point dragonBallLocation, int whichDragonBall)
         {
-            DebugUtil.Log(string.Format("Sending signal to add dragon ball {0} to {1} {2}", whichDragonBall, dragonBallLocation.X, dragonBallLocation.Y));
             ModPacket packet = GetPacket(SYNC_DRAGON_BALL_ADD, fromWho);
             packet.Write(whichDragonBall);
             packet.Write(dragonBallLocation.X);
@@ -158,7 +155,6 @@ namespace DBZMOD.Network
 
         public void SendDragonBallRemove(int toWho, int fromWho, int whichDragonBall)
         {
-            DebugUtil.Log(string.Format("Sending signal to remove dragon ball {0}", whichDragonBall));
             ModPacket packet = GetPacket(SYNC_DRAGON_BALL_REMOVE, fromWho);
             packet.Write(whichDragonBall);
             packet.Send(toWho, fromWho);
@@ -170,7 +166,6 @@ namespace DBZMOD.Network
             var whichDragonBall = reader.ReadInt32();
             var coordX = reader.ReadInt32();
             var coordY = reader.ReadInt32();
-            DebugUtil.Log(string.Format("Receiving signal to add dragon ball {0} to {1} {2}", whichDragonBall, coordX, coordY));
             var location = new Point(coordX, coordY);
             var dbWorld = DBZWorld.GetWorld();
             dbWorld.SetDragonBallLocation(whichDragonBall, location, false);
@@ -187,8 +182,6 @@ namespace DBZMOD.Network
             // our work here is done lol
             if (tileLocation.X == -1 && tileLocation.Y == -1)
                 return;
-            DebugUtil.Log(string.Format("Receiving signal to remove dragon ball {0}", whichDragonBall));
-            DebugUtil.Log(string.Format("Calling kill tile at {0} {1}", tileLocation.X, tileLocation.Y));
             WorldGen.KillTile(tileLocation.X, tileLocation.Y, false, false, true);
             if (Main.netMode == NetmodeID.Server)
             {

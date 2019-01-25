@@ -71,8 +71,6 @@ namespace DBZMOD.Util
                         if (cursorWorldPosition.Y < 0) cursorWorldPosition.Y = 0;
                         else if (cursorWorldPosition.Y + player.height > mapHeight) cursorWorldPosition.Y = mapHeight - player.height;
 
-                        DebugUtil.Log(string.Format("Cursor position is {0} {1}", cursorWorldPosition.X, cursorWorldPosition.Y));
-
                         Vector2 target = SeekValidTarget(cursorWorldPosition);
                         if (target != Vector2.Zero)
                         {

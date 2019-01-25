@@ -117,13 +117,11 @@ namespace DBZMOD
 
         public static void DestroyAndRespawnDragonBalls()
         {
-            DebugUtil.Log("Despawning dragon balls");
             var dbzWorld = GetWorld();
 
             for (var i = 1; i <= 7; i++)
             {
                 var location = dbzWorld.GetDragonBallLocation(i);
-                DebugUtil.Log(string.Format("Despawning dragon ball at {0} {1}", location.X, location.Y));
                 WorldGen.KillTile(location.X, location.Y, false, false, true);
             }
 
