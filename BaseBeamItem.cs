@@ -43,7 +43,7 @@ namespace DBZMOD
             player.channel = true;
             if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
             {
-                if (!ProjectileUtil.RecapturePlayerChargeBall(player, item.shoot))
+                if (!ProjectileHelper.RecapturePlayerChargeBall(player, item.shoot))
                 {
                     int weaponDamage = item.damage;
                     GetWeaponDamage(player, ref weaponDamage);

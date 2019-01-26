@@ -49,11 +49,11 @@ namespace DBZMOD.Network
                 // handle form removal if duration is 0
                 if (duration == 0)
                 {
-                    Transformations.RemoveTransformation(thePlayer, buffKeyName);                    
+                    TransformationHelper.RemoveTransformation(thePlayer, buffKeyName);                    
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    Transformations.DoTransform(thePlayer, Transformations.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.instance);
+                    TransformationHelper.DoTransform(thePlayer, TransformationHelper.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.instance);
                 }
             }
         }

@@ -34,7 +34,7 @@ namespace DBZMOD
         private static OverloadBar _overloadbar;
         private static UserInterface _overloadBarInterface;
 
-        private static InstantTransmissionMapTeleporter _instantTransmissionMapTeleporter;
+        private static InstantTransmissionMapHelper _instantTransmissionMapTeleporter;
 
         private ResourceBar _resourceBar;
 
@@ -109,7 +109,7 @@ namespace DBZMOD
                 ActivateKiBar();
                 ActivateOverloadBar();
 
-                _instantTransmissionMapTeleporter = new InstantTransmissionMapTeleporter();
+                _instantTransmissionMapTeleporter = new InstantTransmissionMapHelper();
 
                 circle = new CircleShader(new Ref<Effect>(GetEffect("Effects/CircleShader")), "Pass1");
 
@@ -259,7 +259,7 @@ namespace DBZMOD
         // unabashedly stolen from Jopo with love, responsible for the instant transmission functionality we want out of book 1 with some assembly required
         public override void PostDrawFullscreenMap(ref string mouseText)
         {
-            InstantTransmissionMapTeleporter.instance.PostDrawFullScreenMap();
+            InstantTransmissionMapHelper.instance.PostDrawFullScreenMap();
         }
 
         // packet handling goes here

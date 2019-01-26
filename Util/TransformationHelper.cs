@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace DBZMOD.Util
 {
     // class for helping out with all the buff integers, lists of buffs in order, presence of buffs/abstraction
-    public static class Transformations
+    public static class TransformationHelper
     {
         public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
 
@@ -457,25 +457,25 @@ namespace DBZMOD.Util
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (buff == SSJ1)
-                return modPlayer.ssj1Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.ssj1Achieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == SSJ2)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == SSJ3)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == SSJG)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == LSSJ)
-                return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == LSSJ2)
-                return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == Assj)
-                return (IsSSJ1(player) || IsUssj(player)) && modPlayer.assjAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return (IsSSJ1(player) || IsUssj(player)) && modPlayer.assjAchieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == Ussj)
-                return IsAssj(player) && modPlayer.ussjAchieved && !Transformations.IsExhaustedFromTransformation(player);
+                return IsAssj(player) && modPlayer.ussjAchieved && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == Kaioken)
-                return modPlayer.kaioAchieved && !Transformations.IsTiredFromKaioken(player);
+                return modPlayer.kaioAchieved && !TransformationHelper.IsTiredFromKaioken(player);
             if (buff == SuperKaioken)
-                return modPlayer.kaioAchieved && !Transformations.IsTiredFromKaioken(player) && !Transformations.IsExhaustedFromTransformation(player);
+                return modPlayer.kaioAchieved && !TransformationHelper.IsTiredFromKaioken(player) && !TransformationHelper.IsExhaustedFromTransformation(player);
             if (buff == Spectrum)
                 return player.name == "Nuova";
             return false;

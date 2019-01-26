@@ -32,7 +32,7 @@ namespace DBZMOD.Buffs.SSJBuffs
 
         public static int GetHealthDrain(Player player)
         {
-            if (!Transformations.IsSuperKaioken(player))
+            if (!TransformationHelper.IsSuperKaioken(player))
                 return 0;
             return 8;
         }

@@ -91,7 +91,7 @@ namespace DBZMOD
                 if (player.channel && projectile.active)
                 {
                     chargeTimer++;
-                    ProjectileUtil.ApplyChannelingSlowdown(player);
+                    ProjectileHelper.ApplyChannelingSlowdown(player);
                 }
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;

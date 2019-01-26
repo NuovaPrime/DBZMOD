@@ -275,7 +275,7 @@ namespace DBZMOD.Projectiles
 
                     // don't draw the ball when firing.
                     if (!IsSustainingFire)
-                        ProjectileUtil.DoChargeDust(GetChargeBallPosition(), dustType, decayDustFrequency, true, chargeSize.ToVector2());
+                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, decayDustFrequency, true, chargeSize.ToVector2());
                 }
                 else
                 {
@@ -303,11 +303,11 @@ namespace DBZMOD.Projectiles
                     ChargeLevel = Math.Min(finalChargeLimit, ChargeRate() + ChargeLevel);
 
                     // slow down the player while charging.
-                    ProjectileUtil.ApplyChannelingSlowdown(player);
+                    ProjectileHelper.ApplyChannelingSlowdown(player);
 
                     // shoot some dust into the ball to show it's charging, and to look cool.
                     if (!IsSustainingFire)
-                        ProjectileUtil.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
+                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
                 }
             }
 
@@ -355,7 +355,7 @@ namespace DBZMOD.Projectiles
                     // do a buttload of decay dust
                     for (var i = 0; i < disperseDustQuantity; i++)
                     {
-                        ProjectileUtil.DoChargeDust(GetChargeBallPosition(), dustType, disperseDustFrequency, true, chargeSize.ToVector2());
+                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, disperseDustFrequency, true, chargeSize.ToVector2());
                     }
                     projectile.Kill();
                     return false;

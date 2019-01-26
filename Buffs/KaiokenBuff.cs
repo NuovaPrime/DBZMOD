@@ -70,7 +70,7 @@ namespace DBZMOD.Buffs
 
         public static int GetHealthDrain(MyPlayer modPlayer)
         {
-            if (!Transformations.IsKaioken(modPlayer.player))
+            if (!TransformationHelper.IsKaioken(modPlayer.player))
                 return 0;
             return 8 + (4 * (modPlayer.kaiokenLevel) - 1);
         }        

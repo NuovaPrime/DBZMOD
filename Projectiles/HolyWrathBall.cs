@@ -21,7 +21,7 @@ namespace DBZMOD.Projectiles
         {
             DisplayName.SetDefault("Holy Wrath Ball");
             Main.projFrames[projectile.type] = 1;
-            ProjectileUtil.RegisterMassiveBlast(projectile.type);
+            ProjectileHelper.RegisterMassiveBlast(projectile.type);
         }
 
         public override void SetDefaults()
@@ -117,7 +117,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                ProjectileUtil.ApplyChannelingSlowdown(player);
+                ProjectileHelper.ApplyChannelingSlowdown(player);
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

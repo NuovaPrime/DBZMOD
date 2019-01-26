@@ -16,27 +16,27 @@ namespace DBZMOD.Util
         {
             if (modPlayer.player.dead)
                 return null;
-            if (Transformations.IsKaioken(modPlayer.player))
+            if (TransformationHelper.IsKaioken(modPlayer.player))
                 return AuraAnimations.createKaiokenAura;
-            if (Transformations.IsSuperKaioken(modPlayer.player))
+            if (TransformationHelper.IsSuperKaioken(modPlayer.player))
                 return AuraAnimations.createSuperKaiokenAura;
-            if (Transformations.IsSSJ1(modPlayer.player))
+            if (TransformationHelper.IsSSJ1(modPlayer.player))
                 return AuraAnimations.ssj1Aura;
-            if (Transformations.IsAssj(modPlayer.player))
+            if (TransformationHelper.IsAssj(modPlayer.player))
                 return AuraAnimations.assjAura;
-            if (Transformations.IsUssj(modPlayer.player))
+            if (TransformationHelper.IsUssj(modPlayer.player))
                 return AuraAnimations.ussjAura;
-            if (Transformations.IsSSJ2(modPlayer.player))
+            if (TransformationHelper.IsSSJ2(modPlayer.player))
                 return AuraAnimations.ssj2Aura;
-            if (Transformations.IsSSJ3(modPlayer.player))
+            if (TransformationHelper.IsSSJ3(modPlayer.player))
                 return AuraAnimations.ssj3Aura;
-            if (Transformations.IsSSJG(modPlayer.player))
+            if (TransformationHelper.IsSSJG(modPlayer.player))
                 return AuraAnimations.ssjgAura;
-            if (Transformations.IsLSSJ1(modPlayer.player))
+            if (TransformationHelper.IsLSSJ1(modPlayer.player))
                 return AuraAnimations.lssjAura;
-            if (Transformations.IsLSSJ2(modPlayer.player))
+            if (TransformationHelper.IsLSSJ2(modPlayer.player))
                 return AuraAnimations.lssj2Aura;
-            if (Transformations.IsSpectrum(modPlayer.player))
+            if (TransformationHelper.IsSpectrum(modPlayer.player))
                 return AuraAnimations.spectrumAura;
             // handle charging last
             if (modPlayer.isCharging)
@@ -115,7 +115,7 @@ namespace DBZMOD.Util
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (Transformations.IsSSJ(drawPlayer) && !Transformations.IsSSJG(drawPlayer) && !Transformations.IsSSJ3(drawPlayer))
+            if (TransformationHelper.IsSSJ(drawPlayer) && !TransformationHelper.IsSSJG(drawPlayer) && !TransformationHelper.IsSSJ3(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -123,7 +123,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (Transformations.IsSSJ3(drawPlayer) && !Transformations.IsSSJG(drawPlayer))
+            if (TransformationHelper.IsSSJ3(drawPlayer) && !TransformationHelper.IsSSJG(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -131,7 +131,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (Transformations.IsSSJG(drawPlayer))
+            if (TransformationHelper.IsSSJG(drawPlayer))
             {
                 var frameCounterLimit = 6;
                 var numberOfFrames = 6;
@@ -144,7 +144,7 @@ namespace DBZMOD.Util
 				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/LSSJ", frameCounterLimit, numberOfFrames, yOffset));
 				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }*/
-            if (Transformations.IsSpectrum(drawPlayer))
+            if (TransformationHelper.IsSpectrum(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 7;
@@ -202,19 +202,19 @@ namespace DBZMOD.Util
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.HasBuff(Transformations.SSJ2.GetBuffId()))
+            if (drawPlayer.HasBuff(TransformationHelper.SSJ2.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
-            if (drawPlayer.HasBuff(Transformations.LSSJ.GetBuffId()) || drawPlayer.HasBuff(Transformations.LSSJ2.GetBuffId()))
+            if (drawPlayer.HasBuff(TransformationHelper.LSSJ.GetBuffId()) || drawPlayer.HasBuff(TransformationHelper.LSSJ2.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
             }
-            if (drawPlayer.HasBuff(Transformations.SSJ3.GetBuffId()))
+            if (drawPlayer.HasBuff(TransformationHelper.SSJ3.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((Transformations.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((TransformationHelper.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }

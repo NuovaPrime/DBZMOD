@@ -58,7 +58,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            Transformations.DoTransform(player, Transformations.SSJG, DBZMOD.instance);
+            TransformationHelper.DoTransform(player, TransformationHelper.SSJG, DBZMOD.instance);
             MyPlayer.ModPlayer(player).isTransforming = false;
             SoundHelper.PlayCustomSound("Sounds/SSJAscension");
         }

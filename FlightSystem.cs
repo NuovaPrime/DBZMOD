@@ -77,19 +77,19 @@ namespace DBZMOD
                     SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
                 }
 
-                if (Transformations.IsSSJ(player) && !Transformations.IsSSJG(player))
+                if (TransformationHelper.IsSSJ(player) && !TransformationHelper.IsSSJG(player))
                 {
                     flightDustType = 170;
                 }
-                else if (Transformations.IsLSSJ(player))
+                else if (TransformationHelper.IsLSSJ(player))
                 {
                     flightDustType = 107;
                 }
-                else if (Transformations.IsSSJG(player))
+                else if (TransformationHelper.IsSSJG(player))
                 {
                     flightDustType = 174;
                 }
-                else if (Transformations.IsAnyKaioken(player))
+                else if (TransformationHelper.IsAnyKaioken(player))
                 {
                     flightDustType = 182;
                 }

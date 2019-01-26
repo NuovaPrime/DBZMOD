@@ -134,7 +134,7 @@ namespace DBZMOD.UI
             {
                 _frameTimer2 = 0;
             }
-			if(Transformations.IsPlayerTransformed(player.player))
+			if(TransformationHelper.IsPlayerTransformed(player.player))
 			{
 				Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
 				int frameHeight2 = Gfx.kiBarLightning.Height / 3;
@@ -184,7 +184,7 @@ namespace DBZMOD.UI
                         _gradientA = new Color(255, 182, 0);
                         _gradientB = new Color(255, 92, 78);
                     }
-                    else if (Transformations.IsSSJG(player))
+                    else if (TransformationHelper.IsSSJG(player))
                     {
                         _gradientA = new Color(255, 140, 48);
                         _gradientB = new Color(175, 45, 63);

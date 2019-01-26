@@ -7,16 +7,5 @@ namespace DBZMOD.Items.DragonBalls
             DisplayName.SetDefault("5 Star Dragon Ball");
             Tooltip.SetDefault("A mystical ball with 5 stars inscribed on it.");
         }
-
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            item.createTile = mod.TileType("FiveStarDBTile");
-        }
-
-        public override int GetWhichDragonBall()
-        {
-            return 5;
-        }
     }
 }

@@ -436,7 +436,7 @@ namespace DBZMOD.Projectiles
             {
                 Vector2 origin = TailPositionStart() + projectile.velocity * (trackedDistance + headSize.Y - StepLength());
                 
-                if (!ProjectileUtil.CanHitLine(TailPositionStart(), origin))
+                if (!ProjectileHelper.CanHitLine(TailPositionStart(), origin))
                 {
                     // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
                     trackedDistance -= BEAM_TILE_DISTANCE_GRADIENT;
@@ -462,7 +462,7 @@ namespace DBZMOD.Projectiles
             if (Distance >= trackedDistance)
             {
                 var dustVector = TailPositionStart() + (trackedDistance + headSize.Y - StepLength()) * projectile.velocity;
-                ProjectileUtil.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);                    
+                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);                    
             }
 
             // throttle distance by collision
@@ -471,7 +471,7 @@ namespace DBZMOD.Projectiles
             // shoot sweet sweet particles
             for (var i = 0; i < fireParticleDensity; i++)
             {
-                ProjectileUtil.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
+                ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
             }
 
             // Handle the audio playing, note this positionally tracks at the head position end for effect.
@@ -515,7 +515,7 @@ namespace DBZMOD.Projectiles
 
             if (!modPlayer.isMouseLeftHeld)
             {
-                ProjectileUtil.StartKillRoutine(projectile);
+                ProjectileHelper.StartKillRoutine(projectile);
             }
 
             if (IsDetached && FiringTime == 0)

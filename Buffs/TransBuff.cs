@@ -26,16 +26,16 @@ namespace DBZMOD.Buffs
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(Transformations.IsAnyKaioken(player) || Transformations.IsSSJG(player))
+            if(TransformationHelper.IsAnyKaioken(player) || TransformationHelper.IsSSJG(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
-            } else if (Transformations.IsLSSJ1(player) || Transformations.IsLSSJ2(player))
+            } else if (TransformationHelper.IsLSSJ1(player) || TransformationHelper.IsLSSJ2(player))
             {                
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (Transformations.IsSSJ1(player) || Transformations.IsSSJ2(player) || Transformations.IsSSJ2(player) || Transformations.IsAssj(player) || Transformations.IsUssj(player))
+            } else if (TransformationHelper.IsSSJ1(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsAssj(player) || TransformationHelper.IsUssj(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
-            } else if (Transformations.IsSpectrum(player))
+            } else if (TransformationHelper.IsSpectrum(player))
             {
                 var rainbow = Main.DiscoColor;
                 Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 512f, rainbow.G / 512f, rainbow.B / 512f);
@@ -45,16 +45,16 @@ namespace DBZMOD.Buffs
             player.statDefense += baseDefenceBonus;
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (Transformations.IsAnythingOtherThanKaioken(player))
+            if (TransformationHelper.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
-                    if (Transformations.IsSuperKaioken(player))
+                    if (TransformationHelper.IsSuperKaioken(player))
                     {
                         modPlayer.kaiokenLevel = 0;
                     }
-                    Transformations.EndTransformations(player, true);
+                    TransformationHelper.EndTransformations(player, true);
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == Transformations.Kaioken.GetBuffId() || Type == Transformations.SuperKaioken.GetBuffId())
+            if (Type == TransformationHelper.Kaioken.GetBuffId() || Type == TransformationHelper.SuperKaioken.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {

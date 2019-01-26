@@ -41,7 +41,7 @@ namespace DBZMOD
 
         private void ProcessKiExperienceGain(MyPlayer modplayer)
         {
-            if (Transformations.IsPlayerTransformed(modplayer.player))
+            if (TransformationHelper.IsPlayerTransformed(modplayer.player))
             {
                 AddKiExperience(0.2f);
             }

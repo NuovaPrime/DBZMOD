@@ -1,4 +1,5 @@
-﻿using DBZMOD.Items.DragonBalls;
+﻿using System.Linq;
+using DBZMOD.Items.DragonBalls;
 using Terraria;
 
 namespace DBZMOD.Util
@@ -37,6 +38,30 @@ namespace DBZMOD.Util
             return -1;
         }
 
+        public static bool PlayerHasAllDragonBalls(Player player)
+        {
+            bool[] dragonBallsPresent = Enumerable.Repeat(false, 7).ToArray();
+            for (int i = 0; i < dragonBallsPresent.Length; i++)
+            {
+                dragonBallsPresent[i] = InventoryContainsDragonBall(i + 1, player.inventory);
+            }
+
+            return dragonBallsPresent.All(x => x);
+        }
+
+        public static bool InventoryContainsDragonBall(int whichDragonBall, Item[] inventory)
+        {
+            return
+            (
+                from item in inventory
+                where item?.modItem != null
+                where item.modItem is DragonBallItem
+                select (DragonBallItem)item.modItem
+            ).Any(
+                dbItem => dbItem.item.type == ItemHelper.GetItemTypeFromName(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBall))
+            );
+        }
+
         ///// <summary>
         /////     Return the slot of the inventory a dragon ball was in after deleting it.
         /////     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
@@ -54,7 +79,7 @@ namespace DBZMOD.Util
 
         //        if (item.modItem == null)
         //            continue;
-                
+
         //        if (item.type != ballTypeInt)
         //            continue;
 
@@ -109,15 +134,15 @@ namespace DBZMOD.Util
         //    return -1;
         //}
 
-        //public static void ScanPlayerForIllegitimateDragonballs(Player player)
+        //public static void ScanPlayerForIllegitimateDragonBalls(Player player)
         //{
-        //    ScanInventoryForIllegitimateDragonballs(player.inventory);
-        //    ScanInventoryForIllegitimateDragonballs(player.bank.item);
-        //    ScanInventoryForIllegitimateDragonballs(player.bank2.item);
-        //    ScanInventoryForIllegitimateDragonballs(player.bank3.item);
+        //    ScanInventoryForIllegitimateDragonBalls(player.inventory);
+        //    ScanInventoryForIllegitimateDragonBalls(player.bank.item);
+        //    ScanInventoryForIllegitimateDragonBalls(player.bank2.item);
+        //    ScanInventoryForIllegitimateDragonBalls(player.bank3.item);
         //}
 
-        //public static void ScanInventoryForIllegitimateDragonballs(Item[] inventory)
+        //public static void ScanInventoryForIllegitimateDragonBalls(Item[] inventory)
         //{
         //    for (var i = 0; i < inventory.Length; i++)
         //    {

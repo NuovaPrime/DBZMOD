@@ -243,13 +243,6 @@ namespace DBZMOD
         public float blackFusionIncrease = 1f;
         public int blackFusionBonusTimer;
         public bool firstDragonBallPickup = false;
-        public bool oneStarDbNearby = false;
-        public bool twoStarDbNearby = false;
-        public bool threeStarDbNearby = false;
-        public bool fourStarDbNearby = false;
-        public bool fiveStarDbNearby = false;
-        public bool sixStarDbNearby = false;
-        public bool sevenStarDbNearby = false;
         public bool wishActive = false;
         public bool isHoldingDragonRadarMk1 = false;
         public bool isHoldingDragonRadarMk2 = false;
@@ -308,7 +301,7 @@ namespace DBZMOD
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
             }
 
-            DBZWorld.HandleDragonBallPrecacheAndCleanup();
+            DBZWorld.HandleRetrogradeCleanup();
         }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
@@ -330,23 +323,23 @@ namespace DBZMOD
         {
             if (isFormDrain)
             {
-                if (Transformations.IsSSJ1(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsSSJ1(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsAssj(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsAssj(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsUssj(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsUssj(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
                 }
-                if (Transformations.IsSSJ2(player) && masteryLevel2 < 1.0f)
+                if (TransformationHelper.IsSSJ2(player) && masteryLevel2 < 1.0f)
                 {
                     masteryLevel2 = GetMasteryIncreaseFromFormDrain(masteryLevel2);
                 }
-                if (Transformations.IsSSJ3(player) && masteryLevel3 < 1.0f)
+                if (TransformationHelper.IsSSJ3(player) && masteryLevel3 < 1.0f)
                 {
                     masteryLevel3 = GetMasteryIncreaseFromFormDrain(masteryLevel3);
                 }
@@ -354,23 +347,23 @@ namespace DBZMOD
 
             if (isWeaponDrain && kiAmount < 0)
             {
-                if (Transformations.IsSSJ1(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsSSJ1(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsAssj(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsAssj(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsUssj(player) && masteryLevel1 < 1.0f)
+                if (TransformationHelper.IsUssj(player) && masteryLevel1 < 1.0f)
                 {
                     masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
                 }
-                if (Transformations.IsSSJ2(player) && masteryLevel2 < 1.0f)
+                if (TransformationHelper.IsSSJ2(player) && masteryLevel2 < 1.0f)
                 {
                     masteryLevel2 = GetMasteryIncreaseFromWeaponDrain(masteryLevel2, kiAmount);
                 }
-                if (Transformations.IsSSJ3(player) && masteryLevel3 < 1.0f)
+                if (TransformationHelper.IsSSJ3(player) && masteryLevel3 < 1.0f)
                 {
                     masteryLevel3 = GetMasteryIncreaseFromWeaponDrain(masteryLevel3, kiAmount);
                 }
@@ -513,7 +506,7 @@ namespace DBZMOD
                         LSSJ2Transformation();
                         UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
                         lssj2Timer = 0;
-                        Transformations.EndTransformations(player, true);
+                        TransformationHelper.EndTransformations(player, true);
                     }
                     else if (lssj2Timer >= 300)
                     {
@@ -552,9 +545,9 @@ namespace DBZMOD
                 UI.TransMenu.ssj3On = true;
             }
 
-            if (Transformations.IsPlayerTransformed(player))
+            if (TransformationHelper.IsPlayerTransformed(player))
             {
-                if (!(Transformations.IsKaioken(player) && kaiokenLevel == 5) && !player.HasBuff(Transformations.LSSJ2.GetBuffId()))
+                if (!(TransformationHelper.IsKaioken(player) && kaiokenLevel == 5) && !player.HasBuff(TransformationHelper.LSSJ2.GetBuffId()))
                 {
                     lightningFrameTimer++;
                 }
@@ -569,12 +562,12 @@ namespace DBZMOD
                 lightningFrameTimer = 0;
             }
 
-            if (!Transformations.IsPlayerTransformed(player))
+            if (!TransformationHelper.IsPlayerTransformed(player))
             {
                 kiDrainAddition = 0;
             }
 
-            if (Transformations.IsAnyKaioken(player))
+            if (TransformationHelper.IsAnyKaioken(player))
             {
                 kaiokenTimer += 1.5f;
             }
@@ -686,9 +679,9 @@ namespace DBZMOD
                 }
             }
 
-            if (player.dead && Transformations.IsPlayerTransformed(player))
+            if (player.dead && TransformationHelper.IsPlayerTransformed(player))
             {
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 isTransforming = false;
             }
 
@@ -804,11 +797,6 @@ namespace DBZMOD
             SoundHelper.UpdateTrackedSound(auraSoundInfo, player.position);
         }
 
-        public bool AllDragonBallsNearby()
-        {
-            return oneStarDbNearby && twoStarDbNearby && threeStarDbNearby && fourStarDbNearby && fiveStarDbNearby && sixStarDbNearby && sevenStarDbNearby;
-        }
-
         private void HandleOverloadCounters()
         {
             // clamp overload current values to 0/max
@@ -818,7 +806,7 @@ namespace DBZMOD
             if (IsPlayerLegendary())
             {
                 // is the player in a legendary transform step (that isn't SSJ1)?
-                if (Transformations.IsLSSJ(player) && !Transformations.IsSSJ1(player))
+                if (TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
                 {
                     overloadTimer++;
                     if (overloadTimer >= 60)
@@ -859,14 +847,14 @@ namespace DBZMOD
             }*/
             OverloadBar.visible = false;
             KiBar.visible = true;
-            if(AllDragonBallsNearby() && !wishActive)
+            if(ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
             {
-                int soundtimer = 0;
-                soundtimer++;
-                if(soundtimer > 300)
+                int soundTimer = 0;
+                soundTimer++;
+                if(soundTimer > 300)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DBReady"));
-                    soundtimer = 0;
+                    soundTimer = 0;
                 }
             }
         }
@@ -930,7 +918,7 @@ namespace DBZMOD
 
         public void HandleKaiokenDefenseDebuff()
         {
-            if (Transformations.IsAnyKaioken(player))
+            if (TransformationHelper.IsAnyKaioken(player))
             {
                 float defenseMultiplier = 1f - (kaiokenLevel * 0.05f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
@@ -1323,17 +1311,17 @@ namespace DBZMOD
         public Color? originalEyeColor = null;
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (Transformations.IsSSJG(player))
+            if (TransformationHelper.IsSSJG(player))
             {
                 drawInfo.hairColor = new Color(255, 57, 74);
                 drawInfo.hairShader = 1;
                 ChangeEyeColor(Color.Red);
             }
-            else if (Transformations.IsSSJ(player) || Transformations.IsLSSJ(player) || Transformations.IsAssj(player) || Transformations.IsUssj(player))
+            else if (TransformationHelper.IsSSJ(player) || TransformationHelper.IsLSSJ(player) || TransformationHelper.IsAssj(player) || TransformationHelper.IsUssj(player))
             {
                 ChangeEyeColor(Color.Turquoise);
             }
-            else if (Transformations.IsAnyKaioken(player))
+            else if (TransformationHelper.IsAnyKaioken(player))
             {
                 ChangeEyeColor(Color.Red);
             }
@@ -1382,7 +1370,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
             }
             else if (ssj1Achieved && !ssj2Achieved && !IsPlayerLegendary())
@@ -1392,7 +1380,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
             }
             else if (ssj1Achieved && IsPlayerLegendary() && !lssjAchieved)
@@ -1402,7 +1390,7 @@ namespace DBZMOD
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
             }
             else if (ssj2Achieved && !ssj3Achieved)
@@ -1412,7 +1400,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
             }
             else if (lssjAchieved && !lssj2Achieved)
@@ -1423,7 +1411,7 @@ namespace DBZMOD
                 LSSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
                 lssj2Timer = 0;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
             }
         }
 
@@ -1619,7 +1607,7 @@ namespace DBZMOD
             firstDragonBallPickup = tag.Get<bool>("FirstFourStarDBPickup");
             powerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
             // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
-            if (DebugUtil.IsDebugModeOn())
+            if (DebugHelper.IsDebugModeOn())
             {
                 powerWishesLeft = POWER_WISH_MAXIMUM;
             }
@@ -1676,7 +1664,7 @@ namespace DBZMOD
 
         public bool CanAscend()
         {
-            return Transformations.IsSSJ1(player) || Transformations.IsAssj(player);
+            return TransformationHelper.IsSSJ1(player) || TransformationHelper.IsAssj(player);
         }
 
         public void HandleTransformations()
@@ -1686,30 +1674,30 @@ namespace DBZMOD
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
-                if (Transformations.IsPlayerTransformed(player))
+                if (TransformationHelper.IsPlayerTransformed(player))
                 {
                     // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
                     if (IsAscendingTransformation())
                     {
                         if (CanAscend())
                         {
-                            targetTransformation = Transformations.GetNextAscensionStep(player);
+                            targetTransformation = TransformationHelper.GetNextAscensionStep(player);
                         }
                     }
                     else
                     {
-                        targetTransformation = Transformations.GetNextTransformationStep(player);
+                        targetTransformation = TransformationHelper.GetNextTransformationStep(player);
                     }
                 }
                 else
                 {
-                    targetTransformation = Transformations.GetBuffFromMenuSelection(UI.TransMenu.menuSelection);
+                    targetTransformation = TransformationHelper.GetBuffFromMenuSelection(UI.TransMenu.menuSelection);
                 }
             }
-            else if (IsPoweringDownOneStep() && !Transformations.IsKaioken(player))
+            else if (IsPoweringDownOneStep() && !TransformationHelper.IsKaioken(player))
             {
                 // player is powering down a transformation state.
-                targetTransformation = Transformations.GetPreviousTransformationStep(player);
+                targetTransformation = TransformationHelper.GetPreviousTransformationStep(player);
             }
 
             // if we made it this far without a target, it means for some reason we can't change transformations.
@@ -1717,19 +1705,19 @@ namespace DBZMOD
                 return;
 
             // finally, check that the transformation is really valid and then do it.
-            if (Transformations.CanTransform(player, targetTransformation))
-                Transformations.DoTransform(player, targetTransformation, mod);
+            if (TransformationHelper.CanTransform(player, targetTransformation))
+                TransformationHelper.DoTransform(player, targetTransformation, mod);
         }
 
         public bool CanIncreaseKaiokenLevel()
         {
             // immediately handle aborts from super kaioken states
-            if (Transformations.IsSuperKaioken(player))
+            if (TransformationHelper.IsSuperKaioken(player))
                 return false;
 
-            if (Transformations.IsAnythingOtherThanKaioken(player))
+            if (TransformationHelper.IsAnythingOtherThanKaioken(player))
             {
-                return Transformations.IsValidKaiokenForm(player) && kaiokenLevel == 0 && kaioAchieved;
+                return TransformationHelper.IsValidKaiokenForm(player) && kaiokenLevel == 0 && kaioAchieved;
             }
 
             switch (kaiokenLevel)
@@ -1754,7 +1742,7 @@ namespace DBZMOD
             if (kaiokenKey.JustPressed)
             {
                 canIncreaseKaiokenLevel = CanIncreaseKaiokenLevel();
-                if (Transformations.IsKaioken(player))
+                if (TransformationHelper.IsKaioken(player))
                 {
                     if (canIncreaseKaiokenLevel)
                     {
@@ -1765,17 +1753,17 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        BuffInfo transformation = Transformations.IsAnythingOtherThanKaioken(player) ? Transformations.SuperKaioken : Transformations.Kaioken;
-                        if (Transformations.CanTransform(player, transformation))
+                        BuffInfo transformation = TransformationHelper.IsAnythingOtherThanKaioken(player) ? TransformationHelper.SuperKaioken : TransformationHelper.Kaioken;
+                        if (TransformationHelper.CanTransform(player, transformation))
                         {
                             kaiokenLevel++;
-                            Transformations.DoTransform(player, transformation, mod);
+                            TransformationHelper.DoTransform(player, transformation, mod);
                         }
                     }
                 }
             } else if (IsPoweringDownOneStep())
             {
-                if (Transformations.IsKaioken(player) && kaiokenLevel > 1)
+                if (TransformationHelper.IsKaioken(player) && kaiokenLevel > 1)
                 {
                     kaiokenLevel--;
                 }
@@ -1890,7 +1878,7 @@ namespace DBZMOD
             }
 
             // most of the forms have a default light value, but charging isn't a buff. Let there be light
-            if (isCharging && !Transformations.IsKaioken(player) && !Transformations.IsAnythingOtherThanKaioken(player))
+            if (isCharging && !TransformationHelper.IsKaioken(player) && !TransformationHelper.IsAnythingOtherThanKaioken(player))
             {
                 Lighting.AddLight(player.Center, 1.2f, 1.2f, 1.2f);
             }
@@ -1919,13 +1907,13 @@ namespace DBZMOD
             }*/
 
             // power down handling
-            if (IsCompletelyPoweringDown() && Transformations.IsPlayerTransformed(player))
+            if (IsCompletelyPoweringDown() && TransformationHelper.IsPlayerTransformed(player))
             {
-                var playerWasSuperKaioken = Transformations.IsSuperKaioken(player);
-                Transformations.EndTransformations(player, true);
+                var playerWasSuperKaioken = TransformationHelper.IsSuperKaioken(player);
+                TransformationHelper.EndTransformations(player, true);
                 if (playerWasSuperKaioken)
                 {
-                    Transformations.DoTransform(player, Transformations.SSJ1, mod);
+                    TransformationHelper.DoTransform(player, TransformationHelper.SSJ1, mod);
                 }
                 kaiokenLevel = 0;
                 SoundHelper.PlayCustomSound("Sounds/PowerDown", player, .3f);
@@ -1935,7 +1923,7 @@ namespace DBZMOD
             if (wishActive)
             {
                 WishMenu.menuvisible = true;
-            } else if (DebugUtil.IsDebugModeOn() && quickKi.JustPressed)
+            } else if (DebugHelper.IsDebugModeOn() && quickKi.JustPressed)
             {
                 WishMenu.menuvisible = !WishMenu.menuvisible;
             }
@@ -2174,7 +2162,7 @@ namespace DBZMOD
 
                 if (shouldApplySlowdown)
                 {
-                    ProjectileUtil.ApplyChannelingSlowdown(player);
+                    ProjectileHelper.ApplyChannelingSlowdown(player);
                 }
             }
 
@@ -2351,12 +2339,12 @@ namespace DBZMOD
                     SSJTransformation();
                     UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
                     rageCurrent = 0;
-                    Transformations.EndTransformations(player, true);
+                    TransformationHelper.EndTransformations(player, true);
                     return false;
                 }
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (Transformations.IsSSJ1(player) || Transformations.IsAssj(player) || Transformations.IsUssj(player)) && masteryLevel1 >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (TransformationHelper.IsSSJ1(player) || TransformationHelper.IsAssj(player) || TransformationHelper.IsUssj(player)) && masteryLevel1 >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2365,12 +2353,12 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(Transformations.SSJ1.GetBuffId()) && masteryLevel1 >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(TransformationHelper.SSJ1.GetBuffId()) && masteryLevel1 >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2379,12 +2367,12 @@ namespace DBZMOD
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(Transformations.SSJ2.GetBuffId()) && masteryLevel2 >= 1)
+            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(TransformationHelper.SSJ2.GetBuffId()) && masteryLevel2 >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2393,7 +2381,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
-                Transformations.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player, true);
                 rageCurrent = 0;
                 return false;
             }
@@ -2468,23 +2456,23 @@ namespace DBZMOD
         // currently doesn't use the damage received param. Included just in case.
         public void HandleDamageReceivedMastery(int damageReceived)
         {
-            if (Transformations.IsSSJ1(player))
+            if (TransformationHelper.IsSSJ1(player))
             {
                 masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
-            if (Transformations.IsAssj(player))
+            if (TransformationHelper.IsAssj(player))
             {
                 masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
-            if (Transformations.IsUssj(player))
+            if (TransformationHelper.IsUssj(player))
             {
                 masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
             }
-            if (Transformations.IsSSJ2(player))
+            if (TransformationHelper.IsSSJ2(player))
             {
                 masteryLevel2 = Math.Min(1.0f, masteryLevel2 + 0.00232f);
             }
-            if (Transformations.IsSSJ3(player))
+            if (TransformationHelper.IsSSJ3(player))
             {
                 masteryLevel3 = Math.Min(1.0f, masteryLevel3 + 0.00232f);
             }
@@ -2682,23 +2670,23 @@ namespace DBZMOD
 
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
-            if (!DebugUtil.IsDebugModeOn())
+            if (!DebugHelper.IsDebugModeOn())
             {
                 wasKaioken = isKaioken;
                 wasTransformed = isTransformed;
 
-                isKaioken = Transformations.IsAnyKaioken(player);
-                isTransformed = Transformations.IsAnythingOtherThanKaioken(player);
+                isKaioken = TransformationHelper.IsAnyKaioken(player);
+                isTransformed = TransformationHelper.IsAnythingOtherThanKaioken(player);
                 // this way, we can apply exhaustion debuffs correctly.
                 if (wasKaioken && !isKaioken)
                 {
                     bool wasSsjkk = wasTransformed;
-                    Transformations.AddKaiokenExhaustion(player, wasSsjkk ? 2 : 1);
+                    TransformationHelper.AddKaiokenExhaustion(player, wasSsjkk ? 2 : 1);
                     kaiokenLevel = 0; // make triple sure the Kaio level gets reset.
                 }
                 if (wasTransformed && !isTransformed)
                 {
-                    Transformations.AddTransformationExhaustion(player);
+                    TransformationHelper.AddTransformationExhaustion(player);
                 }
             }
         }
@@ -2782,7 +2770,7 @@ namespace DBZMOD
                 float expierenceToAdd = 10.0f;
                 float experienceMult = 1.0f;
 
-                if (Transformations.IsPlayerTransformed(player))
+                if (TransformationHelper.IsPlayerTransformed(player))
                 {
                     experienceMult = 2.0f;
                 }
@@ -2822,7 +2810,7 @@ namespace DBZMOD
             base.UpdateBadLifeRegen();
 
             // Kaioken neuters regen and drains the player
-            if (Transformations.IsAnyKaioken(player))
+            if (TransformationHelper.IsAnyKaioken(player))
             {
                 if (player.lifeRegen > 0)
                 {
@@ -2855,47 +2843,47 @@ namespace DBZMOD
 
         public override void PreUpdate()
         {
-            if (Transformations.IsPlayerTransformed(player))
+            if (TransformationHelper.IsPlayerTransformed(player))
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (Transformations.IsSSJ1(player))
+                    if (TransformationHelper.IsSSJ1(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJ1Hair");
                     }
-                    else if (Transformations.IsAssj(player))
+                    else if (TransformationHelper.IsAssj(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/ASSJHair");
                     }
-                    else if (Transformations.IsUssj(player))
+                    else if (TransformationHelper.IsUssj(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/USSJHair");
                     }
-                    else if (Transformations.IsSuperKaioken(player))
+                    else if (TransformationHelper.IsSuperKaioken(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair");
                     }
-                    else if (Transformations.IsSSJ2(player))
+                    else if (TransformationHelper.IsSSJ2(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJ2Hair");
                     }
-                    else if (Transformations.IsSSJ3(player))
+                    else if (TransformationHelper.IsSSJ3(player))
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJ3Hair");
                     }
-                    else if (Transformations.IsLSSJ1(player))
+                    else if (TransformationHelper.IsLSSJ1(player))
                     {
                         hair = mod.GetTexture("Hairs/LSSJ/LSSJHair");
                     }
-                    else if (Transformations.IsLSSJ2(player))
+                    else if (TransformationHelper.IsLSSJ2(player))
                     {
                         hair = mod.GetTexture("Hairs/LSSJ/LSSJ2Hair");
                     }
-                    else if (Transformations.IsSpectrum(player))
+                    else if (TransformationHelper.IsSpectrum(player))
                     {
                         hair = mod.GetTexture("Hairs/Dev/SSJSHair");
                     }
-                    if(Transformations.IsSSJG(player))
+                    if(TransformationHelper.IsSSJG(player))
                     {
                         hair = null;
                     }

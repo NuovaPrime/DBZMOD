@@ -108,7 +108,7 @@ namespace DBZMOD.Projectiles
             bool isPassingPreAi = base.PreAI();
             if (!isPassingPreAi && myProjectile != null)
             {
-                ProjectileUtil.StartKillRoutine(myProjectile);
+                ProjectileHelper.StartKillRoutine(myProjectile);
             }
             return isPassingPreAi;
         }
@@ -120,7 +120,7 @@ namespace DBZMOD.Projectiles
 
             if (myProjectile != null)
             {
-                ProjectileUtil.StartKillRoutine(myProjectile);
+                ProjectileHelper.StartKillRoutine(myProjectile);
                 myProjectile = null;
             }
         }

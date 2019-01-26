@@ -5,11 +5,11 @@ using Terraria;
 
 namespace DBZMOD.Util
 {
-    public class InstantTransmissionMapTeleporter
+    public class InstantTransmissionMapHelper
     {
-        public static InstantTransmissionMapTeleporter instance;
+        public static InstantTransmissionMapHelper instance;
 
-        public InstantTransmissionMapTeleporter()
+        public InstantTransmissionMapHelper()
         {
             instance = this;
         }

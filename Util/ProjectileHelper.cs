@@ -6,7 +6,7 @@ using Terraria;
 
 namespace DBZMOD.Util
 {
-    public static class ProjectileUtil
+    public static class ProjectileHelper
     {
         public static void ApplyChannelingSlowdown(Player player)
         {

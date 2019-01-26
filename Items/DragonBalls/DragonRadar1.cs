@@ -20,13 +20,6 @@ namespace DBZMOD.Items.DragonBalls
             base.HoldItem(player);
         }
 
-        public override bool AltFunctionUse(Player player)
-        {
-            // silently try to check for dragon ball existence in the world and attempt to replace any locations that aren't valid.
-            // DBZWorld.DoDragonBallCleanupCheck();
-            return base.AltFunctionUse(player);
-        }
-
         public override void SetDefaults()
         {
             item.width = 20;

@@ -23,7 +23,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Super Spirit Bomb");
-            ProjectileUtil.RegisterMassiveBlast(projectile.type);
+            ProjectileHelper.RegisterMassiveBlast(projectile.type);
         }
 
         public override void SetDefaults()
@@ -116,7 +116,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-5, true, false);
-                ProjectileUtil.ApplyChannelingSlowdown(player);
+                ProjectileHelper.ApplyChannelingSlowdown(player);
                 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

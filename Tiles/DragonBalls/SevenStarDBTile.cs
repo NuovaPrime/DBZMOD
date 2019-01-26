@@ -16,14 +16,5 @@ namespace DBZMOD.Tiles.DragonBalls
             disableSmartCursor = true;
             whichDragonBallAmI = 7;
         }
-
-        public override void NearbyEffects(int i, int j, bool closer)
-        {
-            if (closer)
-            {
-                MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>(mod);
-                modPlayer.sevenStarDbNearby = true;
-            }
-        }
     }
 }

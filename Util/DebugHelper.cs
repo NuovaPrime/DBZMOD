@@ -4,7 +4,7 @@ using Terraria.ID;
 
 namespace DBZMOD.Util
 {
-    static class DebugUtil
+    static class DebugHelper
     {
         private static bool _isDebug = true;
         public static bool IsDebugModeOn()
