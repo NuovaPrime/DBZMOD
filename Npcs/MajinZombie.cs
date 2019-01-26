@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.NPCs
+namespace DBZMOD.Npcs
 {
 	public class MajinZombie : ModNPC
 	{

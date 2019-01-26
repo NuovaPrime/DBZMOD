@@ -301,7 +301,7 @@ namespace DBZMOD
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
             }
 
-            DBZWorld.HandleRetrogradeCleanup();
+            DBZWorld.GetWorld().HandleRetrogradeCleanup();
         }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
