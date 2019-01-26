@@ -363,8 +363,8 @@
     <Compile Include="Network\PlayerPacketHandler.cs" />
     <Compile Include="Network\PacketHandler.cs" />
     <Compile Include="Network\TransformationPacketHandler.cs" />
-    <Compile Include="NPCs\MajinSlime.cs" />
-    <Compile Include="NPCs\MajinZombie.cs" />
+    <Compile Include="Npcs\MajinSlime.cs" />
+    <Compile Include="Npcs\MajinZombie.cs" />
     <Compile Include="Prefixes\BalancedPrefix.cs" />
     <Compile Include="Prefixes\BoostedPrefix.cs" />
     <Compile Include="Prefixes\CondensedPrefix.cs" />
@@ -567,6 +567,12 @@
     <Content Include="Lib\ThoriumMod.dll" />
     <Content Include="Lib\Tremor.dll" />
     <Content Include="Lib\UnuBattleRods.dll" />
+    <Content Include="Npcs\MajinSlime.png" />
+    <Content Include="Npcs\MajinZombie.png" />
+    <Content Include="Npcs\SaibaBlue.png" />
+    <Content Include="Npcs\SaibaGold.png" />
+    <Content Include="Npcs\SaibaGreen.png" />
+    <Content Include="Npcs\SaibaPurple.png" />
     <Content Include="Sounds\Awakening.wav" />
     <Content Include="Sounds\BasicBeamFire.wav" />
     <Content Include="Sounds\DiscFire.wav" />
