@@ -522,11 +522,17 @@ namespace DBZMOD
             if (IsExistingDragonBall(whichDragonBall))
                 return true;
             TileObject tileObjectOut;
-            if (!TileObject.CanPlace(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonBall), 0, -1, out tileObjectOut, true,
+            int? dragonBallType = GetDragonBallTypeFromNumber(whichDragonBall);
+            // something really bad has happened.
+            if (!dragonBallType.HasValue)
+            {
+                throw (new Exception("Dragon ball types haven't been initialized but the world tried to place one. This is bad."));
+            }
+            if (!TileObject.CanPlace(offsetX, offsetY, dragonBallType.Value, 0, -1, out tileObjectOut, true,
                 false)) return false;
             // precache dragon ball location if successful to prevent it from having to fetch it.
             GetWorld().CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY));
-            WorldGen.PlaceObject(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonBall), true);
+            WorldGen.PlaceObject(offsetX, offsetY, dragonBallType.Value, true);
             return true;
         }
 
