@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Util
 {
-    public static class SoundUtil
+    public static class SoundHelper
     {
         public static uint invalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
         public static DBZMOD mod;
@@ -25,7 +25,7 @@ namespace DBZMOD.Util
 
         public static void PlayVanillaSound(int soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
-            Vector2 location = player != null ? player.Center : Vector2.Zero;
+            Vector2 location = player?.Center ?? Vector2.Zero;
             PlayVanillaSound(soundId, location, volume, pitchVariance);
         }
 
@@ -55,7 +55,7 @@ namespace DBZMOD.Util
 
         public static ReLogic.Utilities.SlotId PlayVanillaSound(Terraria.Audio.LegacySoundStyle soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
-            Vector2 location = player != null ? player.Center : Vector2.Zero;
+            Vector2 location = player?.Center ?? Vector2.Zero;
             return PlayVanillaSound(soundId, location, volume, pitchVariance);
         }
 

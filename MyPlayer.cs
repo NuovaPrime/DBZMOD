@@ -748,7 +748,7 @@ namespace DBZMOD
 
             if (currentAura != previousAura)
             {
-                auraSoundInfo = SoundUtil.KillTrackedSound(auraSoundInfo);
+                auraSoundInfo = SoundHelper.KillTrackedSound(auraSoundInfo);
                 HandleAuraStartupSound(currentAura, false);
                 // reset aura frame and audio timers to 0, this is important
                 auraSoundTimer = 0;
@@ -782,7 +782,7 @@ namespace DBZMOD
                 return;
             if (aura.startupSoundName != null)
             {
-                SoundUtil.PlayCustomSound(aura.startupSoundName, player, 0.7f, 0.1f);
+                SoundHelper.PlayCustomSound(aura.startupSoundName, player, 0.7f, 0.1f);
             }
         }
 
@@ -790,18 +790,18 @@ namespace DBZMOD
         {
             if (aura == null)
                 return;
-            bool shouldPlayAudio = SoundUtil.ShouldPlayPlayerAudio(player, aura.isFormAura);
+            bool shouldPlayAudio = SoundHelper.ShouldPlayPlayerAudio(player, aura.isFormAura);
             if (shouldPlayAudio)
             {
                 if (auraSoundTimer == 0)
-                    auraSoundInfo = SoundUtil.PlayCustomSound(aura.loopSoundName, player, .7f, 0f);
+                    auraSoundInfo = SoundHelper.PlayCustomSound(aura.loopSoundName, player, .7f, 0f);
                 auraSoundTimer++;
                 if (auraSoundTimer > aura.loopSoundDuration)
                     auraSoundTimer = 0;
             }
 
             // try to update positional audio?
-            SoundUtil.UpdateTrackedSound(auraSoundInfo, player.position);
+            SoundHelper.UpdateTrackedSound(auraSoundInfo, player.position);
         }
 
         public bool AllDragonBallsNearby()
@@ -1758,7 +1758,7 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        SoundUtil.PlayCustomSound("Sounds/KaioAuraAscend", player, .7f, .1f);
+                        SoundHelper.PlayCustomSound("Sounds/KaioAuraAscend", player, .7f, .1f);
                         kaiokenLevel++;
                     }
                 } else
@@ -1928,7 +1928,7 @@ namespace DBZMOD
                     Transformations.DoTransform(player, Transformations.SSJ1, mod);
                 }
                 kaiokenLevel = 0;
-                SoundUtil.PlayCustomSound("Sounds/PowerDown", player, .3f);
+                SoundHelper.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
 
 
@@ -2639,37 +2639,37 @@ namespace DBZMOD
         public void SSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJRockProjStart"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/GroundRumble", player);
+            SoundHelper.PlayCustomSound("Sounds/GroundRumble", player);
         }
 
         public void SSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJ3Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJ3LightPillar"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJAuraBall"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void LSSJ2Transformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("LSSJ2PillarStart"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public void SSJGTransformation()
         {
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 70, 0, 0, mod.ProjectileType("SSJGDustStart"), 0, 0, player.whoAmI);
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
         public override void SetupStartInventory(IList<Item> items)

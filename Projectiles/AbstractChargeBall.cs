@@ -267,7 +267,7 @@ namespace DBZMOD.Projectiles
             if (!player.channel && !modPlayer.isMouseRightHeld && !IsSustainingFire)
             {
                 // kill the tracked charge sound if the player let go, immediately
-                chargeSoundSlotId = SoundUtil.KillTrackedSound(chargeSoundSlotId);
+                chargeSoundSlotId = SoundHelper.KillTrackedSound(chargeSoundSlotId);
 
                 if (ChargeLevel > 0f)
                 {
@@ -315,7 +315,7 @@ namespace DBZMOD.Projectiles
             if (!_wasCharging && isCharging && ChargeSoundCooldown == 0f)
             {
                 if (!Main.dedServ)
-                    chargeSoundSlotId = SoundUtil.PlayCustomSound(chargeSoundKey, projectile.Center);
+                    chargeSoundSlotId = SoundHelper.PlayCustomSound(chargeSoundKey, projectile.Center);
                 ChargeSoundCooldown = chargeSoundDelay;
             }
             else
@@ -436,7 +436,7 @@ namespace DBZMOD.Projectiles
             DoCharge(player);
 
             // Handle Audio
-            SoundUtil.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
+            SoundHelper.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)

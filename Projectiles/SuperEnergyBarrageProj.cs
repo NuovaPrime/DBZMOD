@@ -39,7 +39,7 @@ namespace DBZMOD.Projectiles
         {
             Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 0, 0, 0, mod.ProjectileType("SuperEnergyBarrageExplosion"), projectile.damage, 4f, projectile.owner, 0, projectile.rotation);
 
-            SoundUtil.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
+            SoundHelper.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {

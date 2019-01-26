@@ -45,7 +45,7 @@ namespace DBZMOD.Projectiles
         public void InitializeVanishState()
         {
             isInitialized = true;
-            SoundUtil.PlayCustomSound("Sounds/Transmission", projectile.Center, .7f, .2f);
+            SoundHelper.PlayCustomSound("Sounds/Transmission", projectile.Center, .7f, .2f);
         }
 
         public override void AI()

@@ -14,9 +14,9 @@ namespace DBZMOD.Buffs
             Description.SetDefault(AssembleTransBuffDescription());
         }
 
-        public string GetKaiokenNameFromKaiokenLevel(int kaiokenLevel)
+        public string GetKaiokenNameFromKaiokenLevel(int displayKaiokenLevel)
         {
-            switch (kaiokenLevel)
+            switch (displayKaiokenLevel)
             {
                 case 0:
                     return string.Empty;
@@ -30,40 +30,29 @@ namespace DBZMOD.Buffs
                     return "Kaioken x10";
                 case 5:
                     return "Kaioken x20";
+                default:
+                    return string.Empty;
             }
-            return string.Empty;
         }
 
         public void CheckKaiokenName(MyPlayer player)
         {
-            string kaiokenName = GetKaiokenNameFromKaiokenLevel(player.kaiokenLevel);
+            var kaiokenName = GetKaiokenNameFromKaiokenLevel(player.kaiokenLevel);
             this.DisplayName.SetDefault(kaiokenName);
         }
 
         public override void Update(Player player, ref int buffIndex)
         {   
             // makes it so that kaioken is basically just one buff.
-            MyPlayer modPlayer = player.GetModPlayer <MyPlayer>();
+            var modPlayer = player.GetModPlayer <MyPlayer>();
             CheckKaiokenName(modPlayer);
             if (modPlayer.kaiokenLevel == 0)
             {
                 player.ClearBuff(buffIndex);
                 return;
             }
-            else
-            {
-                if (kaiokenLevel == 0)
-                {
-                    kaiokenLevel = modPlayer.kaiokenLevel;
-                }
-                else
-                {
-                    if (kaiokenLevel != modPlayer.kaiokenLevel)
-                    {
-                        kaiokenLevel = modPlayer.kaiokenLevel;
-                    }
-                }
-            }
+
+            kaiokenLevel = modPlayer.kaiokenLevel;
 
             damageMulti = 1f + (0.1f * kaiokenLevel);
             speedMulti = 1f + (0.1f * kaiokenLevel);

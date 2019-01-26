@@ -16,8 +16,7 @@ namespace DBZMOD
 {
     public class DBZWorld : ModWorld
     {
-        // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.
-        // private Point[] _dragonBallLocations = new Point[7] { new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1), new Point(-1, -1) };
+        // initialize dragon ball locations to an empty set of points. These get loaded in the world data load segment.        
         public List<Vector2> kiBeacons = new List<Vector2>();
 
         // helper utility method for snagging the currently loaded world.
@@ -31,6 +30,15 @@ namespace DBZMOD
             var dbtWorldTag = new TagCompound();
             dbtWorldTag.Add("KiBeacons", kiBeacons);
             dbtWorldTag.Add("HasDoneSavageCleanup", !shouldDoBrutalCleanup);
+            for(var i = 0; i < 7; i++)
+            {
+                var dbCache = GetCachedDragonBallLocation(i + 1);
+                var cacheKeyNameX = string.Format("DragonBall{0}LocationX", i + 1);
+                var cacheKeyNameY = string.Format("DragonBall{0}LocationY", i + 1);
+                dbtWorldTag.Add(cacheKeyNameX, dbCache.X);
+                dbtWorldTag.Add(cacheKeyNameY, dbCache.Y);
+            }
+                        
             return dbtWorldTag;
         }
 
@@ -45,8 +53,18 @@ namespace DBZMOD
             // cleanup ki beacon list, not sure why this is necessary.
             CleanupKiBeaconList();
 
-            // try to precache dragon ball locations in advance
-            PrecacheDragonBallLocations();
+            for (var i = 0; i < 7; i++)
+            {
+                var cacheKeyNameX = string.Format("DragonBall{0}LocationX", i + 1);
+                var cacheKeyNameY = string.Format("DragonBall{0}LocationY", i + 1);
+                if (tag.ContainsKey(cacheKeyNameX) && tag.ContainsKey(cacheKeyNameY))
+                {
+                    var dbX = tag.GetInt(cacheKeyNameX);
+                    var dbY = tag.GetInt(cacheKeyNameY);
+                    var dbLocation = new Point(dbX, dbY);
+                    CacheDragonBallLocation(i + 1, dbLocation);
+                }
+            }
             base.Load(tag);
         }
 
@@ -596,17 +614,10 @@ namespace DBZMOD
             if (IsExistingDragonBall(whichDragonball))
                 return true;
 
-            //// dragon ball is in a connected player's inventory. This isn't fool proof.
-            //if (IsDragonBallWithPlayers(whichDragonball, ignorePlayer))
-            //    return true;
-
-            //// dragon ball is in a chest somewhere. This also isn't fool proof.
-            //if (IsDragonBallInventoried(whichDragonball))
-            //    return true;
-
             TileObject toBePlaced;
             if (TileObject.CanPlace(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonball), 0, -1, out toBePlaced, true, false))
             {
+                // precache dragon ball location if successful to prevent it from having to fetch it.
                 GetWorld().CacheDragonBallLocation(whichDragonball, new Point(offsetX, offsetY));
                 WorldGen.PlaceObject(offsetX, offsetY, GetDragonBallTypeFromNumber(whichDragonball), true);
                 return true;
@@ -781,6 +792,12 @@ namespace DBZMOD
 
         public void PrecacheDragonBallLocations()
         {
+            // if the player is in multiplayer mode, request the server send a packet of the locations instead.
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {                
+
+                return;
+            }
             for (var i = 0; i < Main.maxTilesX; i++)
             {
                 for (var j = 0; j < Main.maxTilesY; j++)

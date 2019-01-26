@@ -114,7 +114,7 @@ namespace DBZMOD.Projectiles
                 }
                 if (_soundtimer == 0)
                 {
-                    _soundInfo = SoundUtil.PlayCustomSound("Sounds/SuperNovaCharge", player, 0.6f);
+                    _soundInfo = SoundHelper.PlayCustomSound("Sounds/SuperNovaCharge", player, 0.6f);
                 }
                 _soundtimer++;
                 if (_soundtimer > 120)
@@ -130,8 +130,8 @@ namespace DBZMOD.Projectiles
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)Math.Ceiling(projectile.scale * 25f);
-                _soundInfo = SoundUtil.KillTrackedSound(_soundInfo);
-                SoundUtil.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
+                _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
+                SoundHelper.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
             }
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

@@ -136,7 +136,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 }
                 if (_soundtimer == 0)
                 {
-                    _soundInfo = SoundUtil.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
+                    _soundInfo = SoundHelper.PlayCustomSound("Sounds/SpiritBombCharge", player, 0.5f);
                 }
                 _soundtimer++;
                 if (_soundtimer > 120)
@@ -151,8 +151,8 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
                 projectile.damage *= (int)projectile.scale / 2;
-                _soundInfo = SoundUtil.KillTrackedSound(_soundInfo);
-                SoundUtil.PlayCustomSound("Sounds/SpiritBombFire", player);
+                _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
+                SoundHelper.PlayCustomSound("Sounds/SpiritBombFire", player);
             }
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

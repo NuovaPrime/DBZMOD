@@ -65,7 +65,7 @@ namespace DBZMOD.Projectiles
             int num = projectile.timeLeft;
             projectile.timeLeft = 0;
 
-            SoundUtil.PlayVanillaSound(2, projectile.position, 14);
+            SoundHelper.PlayVanillaSound(2, projectile.position, 14);
 
             projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
             projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);

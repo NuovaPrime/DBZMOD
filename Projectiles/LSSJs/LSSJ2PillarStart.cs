@@ -54,7 +54,7 @@ namespace DBZMOD.Projectiles.LSSJs
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            SoundUtil.PlayCustomSound("Sounds/Awakening", player, 1.5f);
+            SoundHelper.PlayCustomSound("Sounds/Awakening", player, 1.5f);
             Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
         }
     }

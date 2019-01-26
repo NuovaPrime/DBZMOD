@@ -154,7 +154,7 @@ namespace DBZMOD.UI
                     {
                         usedWish = true;
                         DoPowerWish();
-                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                        SoundHelper.PlayCustomSound("Sounds/WishGranted", player.Center);
                     }
                     else
                     {
@@ -164,14 +164,14 @@ namespace DBZMOD.UI
                 case WishSelectionID.Wealth:
                     usedWish = true;
                     DoWealthWish();
-                    SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                    SoundHelper.PlayCustomSound("Sounds/WishGranted", player.Center);
                     break;
                 case WishSelectionID.Immortality:
                     if (modplayer.immortalityWishesLeft > 0)
                     {
                         usedWish = true;
                         DoImmortalityWish();
-                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                        SoundHelper.PlayCustomSound("Sounds/WishGranted", player.Center);
                     }
                     else
                     {
@@ -181,14 +181,14 @@ namespace DBZMOD.UI
                 case WishSelectionID.Genetic:
                     usedWish = true;
                     DoGeneticWish();
-                    SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                    SoundHelper.PlayCustomSound("Sounds/WishGranted", player.Center);
                     break;
                 case WishSelectionID.Awakening:
                     if (modplayer.awakeningWishesLeft > 0)
                     {
                         usedWish = true;
                         DoAwakeningWish();
-                        SoundUtil.PlayCustomSound("Sounds/WishGranted", player.Center);
+                        SoundHelper.PlayCustomSound("Sounds/WishGranted", player.Center);
                     }
                     else
                     {

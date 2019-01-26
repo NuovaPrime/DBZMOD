@@ -65,7 +65,7 @@ namespace DBZMOD.Projectiles.Kamehamehas.BigBangKamehameha
                     Projectile.NewProjectileDirect(new Vector2(projectile.Center.X, projectile.Center.Y), new Vector2((float)((Math.Cos(rot) * 15)), (float)((Math.Sin(rot) * 15))), mod.ProjectileType("BigBangKamehamehaBlast"), projectile.damage + (chargeLevel * 65), projectile.knockBack, projectile.owner);
 
                     //ChargeLevel = 0;
-                    SoundUtil.PlayCustomSound("Sounds/BasicBeamFire", projectile.Center);
+                    SoundHelper.PlayCustomSound("Sounds/BasicBeamFire", projectile.Center);
 
                     projectile.Kill();
 
@@ -79,17 +79,17 @@ namespace DBZMOD.Projectiles.Kamehamehas.BigBangKamehameha
                         tDust.noGravity = true;
                     }
                 }
-                _chargeSoundSlotId = SoundUtil.KillTrackedSound(_chargeSoundSlotId);                
+                _chargeSoundSlotId = SoundHelper.KillTrackedSound(_chargeSoundSlotId);                
             }
 
             if (!startingCharge)
             {
                 startingCharge = true;
                 if (!Main.dedServ)
-                    _chargeSoundSlotId = SoundUtil.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
+                    _chargeSoundSlotId = SoundHelper.PlayCustomSound("Sounds/EnergyWaveCharge", projectile.Center);
             }
 
-            SoundUtil.UpdateTrackedSound(_chargeSoundSlotId, projectile.Center);
+            SoundHelper.UpdateTrackedSound(_chargeSoundSlotId, projectile.Center);
         }
     }
 }

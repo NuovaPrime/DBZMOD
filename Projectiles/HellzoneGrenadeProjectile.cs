@@ -60,7 +60,7 @@ namespace DBZMOD.Projectiles
 		
         public override void Kill(int timeLeft)
         {
-            SoundUtil.PlayVanillaSound(2, projectile.position, 122);
+            SoundHelper.PlayVanillaSound(2, projectile.position, 122);
         	int num251 = 1;
         	if (projectile.owner == Main.myPlayer)
         	{

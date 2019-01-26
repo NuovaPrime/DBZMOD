@@ -165,7 +165,7 @@ namespace DBZMOD.Projectiles
             int num = projectile.timeLeft;
             projectile.timeLeft = 0;
 
-            SoundUtil.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
+            SoundHelper.PlayCustomSound("Sounds/Kiplosion", projectile.position, 1.0f);
 
             projectile.position.X = projectile.position.X + (float)(projectile.width / 2);
             projectile.position.Y = projectile.position.Y + (float)(projectile.height / 2);

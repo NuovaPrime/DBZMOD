@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Misc
 
         public override bool OnPickup(Player player)
         {
-            SoundUtil.PlayVanillaSound(SoundID.NPCDeath7, player);
+            SoundHelper.PlayVanillaSound(SoundID.NPCDeath7, player);
             MyPlayer.ModPlayer(player).AddKi(25, false, false);
             player.statLife += 15;
             player.HealEffect(10);

@@ -239,12 +239,12 @@ namespace DBZMOD.UI
             if (player.ssj1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText(string.Format("Super Saiyan Mastery: {0}%", Math.Round(100f * player.masteryLevel1, 2)));
             }
             else
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("Only through failure with a powerful foe will true power awaken.");
             }
         }
@@ -255,12 +255,12 @@ namespace DBZMOD.UI
             if (player.ssj2Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ2;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText(string.Format("Super Saiyan 2 Mastery: {0}%", Math.Round(100f * player.masteryLevel2, 2)));
             }
             else if (!player.lssjAchieved)
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("One may awaken their true power through extreme pressure while ascended.");
             }
         }
@@ -270,12 +270,12 @@ namespace DBZMOD.UI
             if (player.ssj3Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ3;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText(string.Format("Super Saiyan 3 Mastery: {0}%", Math.Round(100f * player.masteryLevel3, 2)));
             }
             else if (!player.lssjAchieved)
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
             }
         }
@@ -285,11 +285,11 @@ namespace DBZMOD.UI
             if (player.lssjAchieved)
             {
                 menuSelection = MenuSelectionID.LSSJ1;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.ssj2Achieved)
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
             }
         }
@@ -300,11 +300,11 @@ namespace DBZMOD.UI
             if (player.lssj2Achieved)
             {
                 menuSelection = MenuSelectionID.LSSJ2;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.lssj2Achieved)
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("A legendary saiyan sometimes may lose complete control upon being pushed into a critical state.");
             }
         }
@@ -314,11 +314,11 @@ namespace DBZMOD.UI
             if (player.ssjgAchieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJG;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
             else if (!player.lssjAchieved)
             {
-                SoundUtil.PlayVanillaSound(SoundID.MenuClose);
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
             }
         }
@@ -328,7 +328,7 @@ namespace DBZMOD.UI
             if (player.name == "Nuova")
             {
                 menuSelection = MenuSelectionID.Spectrum;
-                SoundUtil.PlayVanillaSound(SoundID.MenuTick);
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
         }
 

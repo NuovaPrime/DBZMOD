@@ -60,7 +60,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
             Player player = Main.player[projectile.owner];
             Transformations.DoTransform(player, Transformations.SSJG, DBZMOD.instance);
             MyPlayer.ModPlayer(player).isTransforming = false;
-            SoundUtil.PlayCustomSound("Sounds/SSJAscension");
+            SoundHelper.PlayCustomSound("Sounds/SSJAscension");
         }
     }
 }

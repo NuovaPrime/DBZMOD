@@ -477,13 +477,13 @@ namespace DBZMOD.Projectiles
             // Handle the audio playing, note this positionally tracks at the head position end for effect.
             if (_justFired)
             {
-                beamSoundSlotId = SoundUtil.PlayCustomSound(beamSoundKey, HeadPositionEnd());
+                beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadPositionEnd());
             }
 
             _justFired = false;
 
             // Update tracked audio
-            SoundUtil.UpdateTrackedSound(beamSoundSlotId, HeadPositionEnd());
+            SoundHelper.UpdateTrackedSound(beamSoundSlotId, HeadPositionEnd());
 
             //Add lights
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
