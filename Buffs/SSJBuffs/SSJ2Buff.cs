@@ -1,31 +1,28 @@
 ﻿using Terraria;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class USSJBuff : TransBuff
+    public class SSJ2Buff : TransBuff
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Ultra Super Saiyan");
+            DisplayName.SetDefault("Super Saiyan 2");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            damageMulti = 1.90f;
-            speedMulti = 0.9f;
-            kiDrainRate = 1.5f;
-            kiDrainRateWithMastery = 0.75f;
-            kiDrainBuffMulti = 1.6f;
-            baseDefenceBonus = 6;
+            damageMulti = 2.25f;
+            speedMulti = 2.25f;
+            kiDrainBuffMulti = 1.625f;
+            kiDrainRate = 2;
+            kiDrainRateWithMastery = 1;
+            baseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
-
-        // per Nova's design, mastery applies to ASSJ and USSJ
         public override void Update(Player player, ref int buffIndex)
         {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
+            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel2 >= 1;
 
             kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-
             base.Update(player, ref buffIndex);
         }
     }

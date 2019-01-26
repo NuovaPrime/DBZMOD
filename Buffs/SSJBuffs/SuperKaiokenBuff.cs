@@ -1,7 +1,7 @@
 using DBZMOD.Util;
 using Terraria;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Buffs.SSJBuffs
 {
     public class SuperKaiokenBuff : TransBuff
     {

@@ -87,7 +87,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Buffs\ArmorCooldown.cs" />
-    <Compile Include="Buffs\ASSJBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
     <Compile Include="Buffs\BuffKeyNames.cs" />
     <Compile Include="Buffs\EnhancedReserves.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
@@ -100,22 +100,22 @@
     <Compile Include="Buffs\KiPotionSickness.cs" />
     <Compile Include="Buffs\KiStimulantBuff.cs" />
     <Compile Include="Buffs\LegendaryTrait.cs" />
-    <Compile Include="Buffs\LSSJ2Buff.cs" />
-    <Compile Include="Buffs\LSSJBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\LSSJ2Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\LSSJBuff.cs" />
     <Compile Include="Buffs\MREBuff.cs" />
     <Compile Include="Buffs\NimbusBuff.cs" />
     <Compile Include="Buffs\ProdigyTrait.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
-    <Compile Include="Buffs\SSJ1Buff.cs" />
-    <Compile Include="Buffs\SSJ2Buff.cs" />
-    <Compile Include="Buffs\SSJ3Buff.cs" />
-    <Compile Include="Buffs\SSJGBuff.cs" />
-    <Compile Include="Buffs\SuperKaiokenBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ1Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ2Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ3Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJGBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SuperKaiokenBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Buffs\TransExhaustionBuff.cs" />
     <Compile Include="Buffs\UIOmenBuff.cs" />
     <Compile Include="Buffs\UnknownLegendary.cs" />
-    <Compile Include="Buffs\USSJBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\USSJBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
     <Compile Include="Config\ConfigModel.cs" />

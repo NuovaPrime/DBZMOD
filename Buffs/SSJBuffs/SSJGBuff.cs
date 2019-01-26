@@ -1,6 +1,6 @@
 ﻿using Terraria;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Buffs.SSJBuffs
 {
     public class SSJGBuff : TransBuff
     {

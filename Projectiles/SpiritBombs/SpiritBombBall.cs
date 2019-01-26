@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using DBZMOD.Destruction;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using DBZMOD.Util;
-using DBZMOD.Destruction;
-using Microsoft.Xna.Framework.Audio;
-using System.Collections.Generic;
 
-namespace DBZMOD.Projectiles
+namespace DBZMOD.Projectiles.SpiritBombs
 {
     public class SpiritBombBall : KiProjectile
     {

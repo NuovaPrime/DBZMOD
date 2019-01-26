@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 
-namespace DBZMOD.Projectiles.SuperSpiritBomb
+namespace DBZMOD.Projectiles.SpiritBombs
 {
     public class SuperSpiritBombBall : KiProjectile
     {

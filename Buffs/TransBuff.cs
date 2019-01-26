@@ -1,4 +1,5 @@
 ﻿using System;
+using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
