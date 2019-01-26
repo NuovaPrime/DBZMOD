@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.Transmissions
 {
     public class TransmissionPura : ModItem
     {

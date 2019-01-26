@@ -2,14 +2,14 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.KaioFragments
 {
-    public class KaioFragment2 : ModItem
+    public class KaioFragmentFirst : ModItem
     {
         public override void SetDefaults()
         {
-            item.width = 42;
-            item.height = 42;
+            item.width = 36;
+            item.height = 36;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -18,26 +18,29 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 5;
+            item.rare = 2;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kaioken 4x");
-            Tooltip.SetDefault("Unlocks the next level of kaioken.");
+            DisplayName.SetDefault("Kaioken");
+            Tooltip.SetDefault("Unlocks an ancient technique.");
         }
-
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).kaioFragment2 = true;
+            if (player.whoAmI == Main.myPlayer)
+            {
+                Main.NewText("You feel your power surge.");
+            }
+            MyPlayer.ModPlayer(player).kaioAchieved = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kaioFragment2 || !MyPlayer.ModPlayer(player).kaioFragment1)
+            if (MyPlayer.ModPlayer(player).kaioAchieved)
             {
                 return false;
             }

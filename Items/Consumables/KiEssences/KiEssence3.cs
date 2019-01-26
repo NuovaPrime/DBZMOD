@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.KiEssences
 {
-    public class KiEssence5 : ModItem
+    public class KiEssence3 : ModItem
     {
         public override void SetDefaults()
         {
@@ -18,27 +18,27 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 9;
+            item.rare = 4;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Master Ki Scroll");
+            DisplayName.SetDefault("Adept Ki Scroll");
             Tooltip.SetDefault("Increases your ki charge rate.");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).kiChargeRate += 3;
-            MyPlayer.ModPlayer(player).kiEssence5 = true;
+            MyPlayer.ModPlayer(player).kiChargeRate += 2;
+            MyPlayer.ModPlayer(player).kiEssence3 = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kiEssence5)
+            if (MyPlayer.ModPlayer(player).kiEssence3)
             {
                 return false;
             }
@@ -50,12 +50,10 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "PureKiCrystal", 30);
-            recipe.AddIngredient(null, "AngerKiCrystal", 30);
+            recipe.AddIngredient(null, "AngerKiCrystal", 20);
             recipe.AddIngredient(null, "PridefulKiCrystal", 30);
-            recipe.AddIngredient(null, "CalmKiCrystal", 30);
-            recipe.AddIngredient(null, "StableKiCrystal", 30);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddIngredient(ItemID.SpiderFang, 5);
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

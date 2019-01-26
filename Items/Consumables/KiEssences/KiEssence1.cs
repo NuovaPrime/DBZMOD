@@ -2,13 +2,13 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.KiEssences
 {
-    public class KaioFragmentFirst : ModItem
+    public class KiEssence1 : ModItem
     {
         public override void SetDefaults()
         {
-            item.width = 36;
+            item.width = 38;
             item.height = 36;
             item.consumable = true;
             item.maxStack = 1;
@@ -24,23 +24,21 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kaioken");
-            Tooltip.SetDefault("Unlocks an ancient technique.");
+            DisplayName.SetDefault("Novice Ki Scroll");
+            Tooltip.SetDefault("Increases your ki charge rate.");
         }
+
 
         public override bool UseItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                Main.NewText("You feel your power surge.");
-            }
-            MyPlayer.ModPlayer(player).kaioAchieved = true;
+            MyPlayer.ModPlayer(player).kiChargeRate += 1;
+            MyPlayer.ModPlayer(player).kiEssence1 = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kaioAchieved)
+            if (MyPlayer.ModPlayer(player).kiEssence1)
             {
                 return false;
             }
@@ -48,6 +46,16 @@ namespace DBZMOD.Items.Consumables
             {
                 return true;
             }
+        }
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(null, "CalmKiCrystal", 20);
+            recipe.AddIngredient(null, "StableKiCrystal", 30);
+            recipe.AddIngredient(ItemID.Sunflower, 5);
+            recipe.AddTile(null, "ZTable");
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

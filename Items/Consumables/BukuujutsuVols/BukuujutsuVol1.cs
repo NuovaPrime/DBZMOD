@@ -2,15 +2,14 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.BukuujutsuVols
 {
-    public class TransmissionTeleport : ModItem
+    public class BukuujutsuVol1 : ModItem
     {
-
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 34;
+            item.width = 40;
+            item.height = 40;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -25,25 +24,26 @@ namespace DBZMOD.Items.Consumables
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("I.T. Tome Vol 2 - Ianuae Magicae");
-            Tooltip.SetDefault("'It holds an alien power, bending space to your will.'");
+            DisplayName.SetDefault("Bukuujutsu Guide Vol 1 - Chorus Aeria");
+            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes you feel lighter.'");
         }
+
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked = true;
+            MyPlayer.ModPlayer(player).flightUnlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked Instant Transmission Lv2 (Supreme Kai Teleportation)."
-                + "\nUse your Instant Transmission hotkey and cursor to seek a remote destination.");
+                Main.NewText("You have unlocked flight."
+                + "\nBind a key to flight toggle to use it.");
                 return true;
             }
             return true;
-        }
 
+        }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked)
+            if (MyPlayer.ModPlayer(player).flightUnlocked)
             {
                 return false;
             }
@@ -52,14 +52,12 @@ namespace DBZMOD.Items.Consumables
                 return true;
             }
         }
-
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "AngerKiCrystal", 30);            
-            recipe.AddIngredient(ItemID.SoulofSight, 5);
-            recipe.AddIngredient(ItemID.RodofDiscord, 1);
-            recipe.AddIngredient(ItemID.SpellTome, 1);
+            recipe.AddIngredient(null, "StableKiCrystal", 100);
+            recipe.AddIngredient(ItemID.ManaCrystal, 3);
+            recipe.AddIngredient(ItemID.Book, 1);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();

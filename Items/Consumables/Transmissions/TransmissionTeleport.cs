@@ -2,14 +2,15 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.Transmissions
 {
-    public class BukuujutsuVol3 : ModItem
+    public class TransmissionTeleport : ModItem
     {
+
         public override void SetDefaults()
         {
-            item.width = 40;
-            item.height = 40;
+            item.width = 28;
+            item.height = 34;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -18,31 +19,31 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 6;
+            item.rare = 4;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bukuujutsu Guide Vol 3 - Fugam Arriperent");
-            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes your ki feel calmer.'");
+            DisplayName.SetDefault("I.T. Tome Vol 2 - Ianuae Magicae");
+            Tooltip.SetDefault("'It holds an alien power, bending space to your will.'");
         }
-
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).flightUpgraded = true;
+            MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("Your flight now takes barely any ki.");
+                Main.NewText("You have unlocked Instant Transmission Lv2 (Supreme Kai Teleportation)."
+                + "\nUse your Instant Transmission hotkey and cursor to seek a remote destination.");
                 return true;
             }
             return true;
-
         }
+
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).flightUpgraded)
+            if (MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked)
             {
                 return false;
             }
@@ -51,15 +52,15 @@ namespace DBZMOD.Items.Consumables
                 return true;
             }
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "AngerKiCrystal", 250);
-            recipe.AddIngredient(ItemID.SoulofFright, 8);
-            recipe.AddIngredient(ItemID.SoulofSight, 8);
-            recipe.AddIngredient(ItemID.SoulofMight, 8);
-            recipe.AddIngredient(ItemID.Book, 3);
-            recipe.AddTile(null, "KaiTable");
+            recipe.AddIngredient(null, "AngerKiCrystal", 30);            
+            recipe.AddIngredient(ItemID.SoulofSight, 5);
+            recipe.AddIngredient(ItemID.RodofDiscord, 1);
+            recipe.AddIngredient(ItemID.SpellTome, 1);
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

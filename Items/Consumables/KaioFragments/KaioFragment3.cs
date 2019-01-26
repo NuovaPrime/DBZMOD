@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.KaioFragments
 {
-    public class KiEssence4 : ModItem
+    public class KaioFragment3 : ModItem
     {
         public override void SetDefaults()
         {
@@ -18,27 +18,26 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 3;
+            item.rare = 6;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Enraged Ki Scroll");
-            Tooltip.SetDefault("Increases your ki charge rate.");
+            DisplayName.SetDefault("Kaioken 10x");
+            Tooltip.SetDefault("Unlocks the next level of kaioken.");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).kiChargeRate += 2;
-            MyPlayer.ModPlayer(player).kiEssence4 = true;
+            MyPlayer.ModPlayer(player).kaioFragment3 = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kiEssence4)
+            if (MyPlayer.ModPlayer(player).kaioFragment3 || !MyPlayer.ModPlayer(player).kaioFragment2)
             {
                 return false;
             }
@@ -46,16 +45,6 @@ namespace DBZMOD.Items.Consumables
             {
                 return true;
             }
-        }
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "PureKiCrystal", 30);
-            recipe.AddIngredient(null, "AngerKiCrystal", 20);
-            recipe.AddIngredient(ItemID.LihzahrdPowerCell);
-            recipe.AddTile(null, "KaiTable");
-            recipe.SetResult(this);
-            recipe.AddRecipe();
         }
     }
 }

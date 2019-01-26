@@ -2,14 +2,14 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables
+namespace DBZMOD.Items.Consumables.BukuujutsuVols
 {
-    public class KiEssence1 : ModItem
+    public class BukuujutsuVol2 : ModItem
     {
         public override void SetDefaults()
         {
-            item.width = 38;
-            item.height = 36;
+            item.width = 40;
+            item.height = 40;
             item.consumable = true;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -18,27 +18,31 @@ namespace DBZMOD.Items.Consumables
             item.useAnimation = 17;
             item.useTime = 17;
             item.value = 0;
-            item.rare = 2;
+            item.rare = 5;
             item.potion = false;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Novice Ki Scroll");
-            Tooltip.SetDefault("Increases your ki charge rate.");
+            DisplayName.SetDefault("Bukuujutsu Guide Vol 2 - Lux Ruinam");
+            Tooltip.SetDefault("'It has an ancient technique inscribed in it, holding it makes your feet feel softer.'");
         }
 
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).kiChargeRate += 1;
-            MyPlayer.ModPlayer(player).kiEssence1 = true;
+            MyPlayer.ModPlayer(player).flightDampeningUnlocked = true;
+            if (player.whoAmI == Main.myPlayer)
+            {
+                Main.NewText("You now take no fall damage for 10 seconds after flying.");
+                return true;
+            }
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kiEssence1)
+            if (MyPlayer.ModPlayer(player).flightDampeningUnlocked)
             {
                 return false;
             }
@@ -50,9 +54,9 @@ namespace DBZMOD.Items.Consumables
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "CalmKiCrystal", 20);
-            recipe.AddIngredient(null, "StableKiCrystal", 30);
-            recipe.AddIngredient(ItemID.Sunflower, 5);
+            recipe.AddIngredient(null, "PridefulKiCrystal", 50);
+            recipe.AddIngredient(ItemID.SoulofFlight, 12);
+            recipe.AddIngredient(ItemID.Book, 2);
             recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
             recipe.AddRecipe();
