@@ -723,15 +723,15 @@ namespace DBZMOD
             }
         }
 
-        public int Db1Type { get; } = DBZMOD.instance.TileType("OneStarDBTile");
-        public int Db2Type { get; } = DBZMOD.instance.TileType("TwoStarDBTile");
-        public int Db3Type { get; } = DBZMOD.instance.TileType("ThreeStarDBTile");
-        public int Db4Type { get; } = DBZMOD.instance.TileType("FourStarDBTile");
-        public int Db5Type { get; } = DBZMOD.instance.TileType("FiveStarDBTile");
-        public int Db6Type { get; } = DBZMOD.instance.TileType("SixStarDBTile");
-        public int Db7Type { get; } = DBZMOD.instance.TileType("SevenStarDBTile");
+        public int? Db1Type { get; } = DBZMOD.instance?.TileType("OneStarDBTile");
+        public int? Db2Type { get; } = DBZMOD.instance?.TileType("TwoStarDBTile");
+        public int? Db3Type { get; } = DBZMOD.instance?.TileType("ThreeStarDBTile");
+        public int? Db4Type { get; } = DBZMOD.instance?.TileType("FourStarDBTile");
+        public int? Db5Type { get; } = DBZMOD.instance?.TileType("FiveStarDBTile");
+        public int? Db6Type { get; } = DBZMOD.instance?.TileType("SixStarDBTile");
+        public int? Db7Type { get; } = DBZMOD.instance?.TileType("SevenStarDBTile");
 
-        public static int GetDragonBallTypeFromNumber(int whichDragonBall)
+        public static int? GetDragonBallTypeFromNumber(int whichDragonBall)
         {
             switch (whichDragonBall)
             {
