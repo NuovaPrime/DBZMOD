@@ -640,11 +640,6 @@ namespace DBZMOD
 
         public void CacheDragonBallLocation(int whichDragonBall, Point location)
         {
-            if (location.Equals(Point.Zero))
-            {
-                TryPlacingDragonBall(whichDragonBall);
-                return;
-            }
             CachedDragonBallLocations[whichDragonBall - 1] = location;
         }
 
