@@ -156,6 +156,7 @@ namespace DBZMOD.Network
             var locationX = reader.ReadInt32();
             var locationY = reader.ReadInt32();
             world.CacheDragonBallLocation(whichDragonBall, new Point(locationX, locationY));
+            DebugHelper.Log($"Receiving dragon ball {whichDragonBall} location at {locationX} {locationY}");
         }
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)

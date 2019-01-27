@@ -254,7 +254,7 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-        }                
+        }
 
         // unabashedly stolen from Jopo with love, responsible for the instant transmission functionality we want out of book 1 with some assembly required
         public override void PostDrawFullscreenMap(ref string mouseText)

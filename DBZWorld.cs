@@ -62,6 +62,7 @@ namespace DBZMOD
                     CacheDragonBallLocation(i + 1, dbLocation);
                 }
             }
+
             base.Load(tag);
         }
 

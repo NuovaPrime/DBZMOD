@@ -305,6 +305,7 @@ namespace DBZMOD
             // Send sync to connecting players
             if (Main.netMode == NetmodeID.Server)
             {
+                DebugHelper.Log($"Sending Player {player.whoAmI} Dragon Ball Cached Locations.");
                 NetworkHelper.playerSync.SendAllDragonBallLocations();
             }
         }
