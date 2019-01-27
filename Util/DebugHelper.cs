@@ -37,5 +37,25 @@ namespace DBZMOD.Util
         {
             return DBZMOD.IsTickRateElapsed(frames);
         }
+
+        public static bool DragonRadarDebug(Player player)
+        {
+            if (!IsDebugModeOn())
+                return true;
+            var world = DBZWorld.GetWorld();
+            var count = 0;
+            for (var i = 0; i < Main.maxTilesX; i++)
+            {
+                for (var j = 0; j < Main.maxTilesY; j++)
+                {
+                    if (world.IsDragonBallLocation(i, j))
+                    {
+                        count++;
+                    }
+                }
+            }
+            Log($"Debug count of dragon balls returned {count}");
+            return true;
+        }
     }
 }

@@ -683,6 +683,18 @@ namespace DBZMOD
             return result;
         }
 
+        public bool IsDragonBallLocation(int i, int j)
+        {
+            var tile = Main.tile[i, j];
+            if (tile == null)
+                return false;
+            if (!tile.active())
+                return false;
+            if (dbTypes.Contains(tile.type))
+                return true;
+            return false;
+        }
+
         public void PrecacheDragonBallLocations()
         {
             // if the player is in multiplayer mode, request the server send a packet of the locations instead.

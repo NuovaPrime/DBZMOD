@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Util;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.DragonBalls
@@ -19,6 +20,8 @@ namespace DBZMOD.Items.DragonBalls
             modPlayer.isHoldingDragonRadarMk2 = true;
             base.HoldItem(player);
         }
+
+        public override bool AltFunctionUse(Player player) => DebugHelper.DragonRadarDebug(player);
 
         public override void SetDefaults()
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.UI;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -16,10 +17,10 @@ namespace DBZMOD.Items.DragonBalls
         
         public override void RightClick(Player player)
         {
-            var isPlayerAbleToWish = ItemHelper.PlayerHasAllDragonBalls(player);
             if (ItemHelper.PlayerHasAllDragonBalls(player))
             {
                 player.GetModPlayer<MyPlayer>().wishActive = !player.GetModPlayer<MyPlayer>().wishActive;
+                WishMenu.menuVisible = player.GetModPlayer<MyPlayer>().wishActive;
             }
         }
 

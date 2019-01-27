@@ -51,7 +51,7 @@ namespace DBZMOD.Util
                 {
                     distance = projDistance;
                     closestProjectile = i;
-                }                
+                }
             }
             return closestProjectile == -1 ? null : Main.projectile[closestProjectile];
         }
@@ -62,7 +62,7 @@ namespace DBZMOD.Util
             if (player.heldProj != -1)
             {
                 var heldProj = Main.projectile[player.heldProj];
-                if (heldProj.modProjectile != null && heldProj.modProjectile is AbstractChargeBall)
+                if (heldProj.modProjectile is AbstractChargeBall)
                 {
                     return true;
                 }

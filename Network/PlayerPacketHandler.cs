@@ -58,9 +58,6 @@ namespace DBZMOD.Network
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
-                case (DESTROY_AND_RESPAWN_DRAGON_BALLS):
-                    HandleDestroyAndRespawnDragonBalls(reader, fromWho);
-                    break;
             }
         }
 
@@ -69,26 +66,6 @@ namespace DBZMOD.Network
             ModPacket packet = GetPacket(DESTROY_AND_RESPAWN_DRAGON_BALLS, fromWho);
             packet.Write(initiatingPlayer);
             packet.Send(toWho, initiatingPlayer);
-        }
-
-        public void HandleDestroyAndRespawnDragonBalls(BinaryReader reader, int fromWho)
-        {
-            int ignorePlayer = reader.ReadInt32();
-            if (Main.netMode == NetmodeID.Server)
-            {
-                for(var i = 0; i < Main.player.Length; i++)
-                {
-                    if (Main.player[i] == null)
-                        continue;
-                    if (Main.player[i].whoAmI != i)
-                        continue;
-                    if (i == ignorePlayer)
-                        continue;
-                    SendDestroyAndRespawnDragonBalls(i, 256, ignorePlayer);
-                }                
-            }
-
-            DBZWorld.GetWorld().DestroyPlayerDragonBalls();
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
