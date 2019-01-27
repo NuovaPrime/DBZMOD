@@ -556,10 +556,9 @@ namespace DBZMOD
         public void HandleRetrogradeCleanup(Player ignorePlayer = null)
         {
             // only fire this server side or single player.
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                return;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                DoBrutalCleanup();
 
-            DoBrutalCleanup();
         }
 
         public void DoBrutalCleanup()
@@ -601,7 +600,7 @@ namespace DBZMOD
 
         public bool IsExistingDragonBall(int whichDragonBall)
         {
-            var existingLocation = GetDragonBallLocation(whichDragonBall);
+            var existingLocation = GetCachedDragonBallLocation(whichDragonBall);
             if (existingLocation.Equals(Point.Zero))
                 return false;
             return true;
@@ -624,53 +623,53 @@ namespace DBZMOD
             }
         }
 
-        public Point GetDragonBallLocation(int whichDragonBall)
-        {
-            var result = GetCachedDragonBallLocation(whichDragonBall);
-            // try to return a cached location if possible.
-            if (result != Point.Zero)
-            {
-                // var checkTile = Framing.GetTileSafely(result.X, result.Y);
-                var checkTile = Main.tile[result.X, result.Y];
-                if (checkTile != null && checkTile.active() && checkTile.type == GetDbType(whichDragonBall))
-                {
-                    return result;
-                }
-                else
-                {
-                    // dragon ball isn't where we think it is, nuke this point.
-                    CacheDragonBallLocation(whichDragonBall, Point.Zero);
-                }
-            }
+        //public Point GetDragonBallLocation(int whichDragonBall)
+        //{
+        //    var result = GetCachedDragonBallLocation(whichDragonBall);
+        //    // try to return a cached location if possible.
+        //    if (result != Point.Zero)
+        //    {
+        //        // var checkTile = Framing.GetTileSafely(result.X, result.Y);
+        //        var checkTile = Main.tile[result.X, result.Y];
+        //        if (checkTile != null && checkTile.active() && checkTile.type == GetDbType(whichDragonBall))
+        //        {
+        //            return result;
+        //        }
+        //        else
+        //        {
+        //            // dragon ball isn't where we think it is, nuke this point.
+        //            CacheDragonBallLocation(whichDragonBall, Point.Zero);
+        //        }
+        //    }
 
-            // if we reached this point, we already know the cache was inaccurate, so try to find the real one. if we reach the end of this routine and
-            // don't find the dragon ball, simply spawn a new one.
-            for (var i = 0; i < Main.maxTilesX; i++)
-            {
-                for (var j = 0; j < Main.maxTilesY; j++)
-                {
-                    //var tile = Framing.GetTileSafely(i, j);
-                    var tile = Main.tile[i, j];
-                    if (tile == null)
-                        continue;
-                    if (!tile.active())
-                        continue;
-                    var dbType = GetDbType(whichDragonBall);
-                    if (tile.type == dbType)
-                        result = new Point(i, j);
-                }
-            }
+        //    // if we reached this point, we already know the cache was inaccurate, so try to find the real one. if we reach the end of this routine and
+        //    // don't find the dragon ball, simply spawn a new one.
+        //    for (var i = 0; i < Main.maxTilesX; i++)
+        //    {
+        //        for (var j = 0; j < Main.maxTilesY; j++)
+        //        {
+        //            //var tile = Framing.GetTileSafely(i, j);
+        //            var tile = Main.tile[i, j];
+        //            if (tile == null)
+        //                continue;
+        //            if (!tile.active())
+        //                continue;
+        //            var dbType = GetDbType(whichDragonBall);
+        //            if (tile.type == dbType)
+        //                result = new Point(i, j);
+        //        }
+        //    }
 
-            // we couldn't find a legitimate dragon ball, let's make one.
-            // this also caches the location.
-            if (result.Equals(Point.Zero))
-            {
-                TryPlacingDragonBall(whichDragonBall);
-            }
+        //    // we couldn't find a legitimate dragon ball, let's make one.
+        //    // this also caches the location.
+        //    if (result.Equals(Point.Zero))
+        //    {
+        //        TryPlacingDragonBall(whichDragonBall);
+        //    }
 
-            CacheDragonBallLocation(whichDragonBall, result);
-            return result;
-        }
+        //    CacheDragonBallLocation(whichDragonBall, result);
+        //    return result;
+        //}
 
         public bool IsDragonBallLocation(int i, int j)
         {

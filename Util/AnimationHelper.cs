@@ -238,7 +238,7 @@ namespace DBZMOD.Util
             float closestDistance = float.MaxValue;
             for (int i = 1; i <= 7; i++)
             {
-                var location = DBZWorld.GetWorld().GetDragonBallLocation(i);
+                var location = DBZWorld.GetWorld().GetCachedDragonBallLocation(i);
                 if (location == new Point(-1, -1))
                     continue;
                 var coordVector = location.ToVector2() * 16f;
