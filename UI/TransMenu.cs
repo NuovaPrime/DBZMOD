@@ -6,6 +6,7 @@ using Terraria.UI;
 using DBZMOD.Enums;
 using DBZMOD.Util;
 using System;
+using DBZMOD.Models;
 
 namespace DBZMOD.UI
 {
@@ -239,8 +240,12 @@ namespace DBZMOD.UI
             if (player.ssj1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText(string.Format("Super Saiyan Mastery: {0}%", Math.Round(100f * player.masteryLevel1, 2)));
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else
             {
@@ -255,8 +260,12 @@ namespace DBZMOD.UI
             if (player.ssj2Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ2;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText(string.Format("Super Saiyan 2 Mastery: {0}%", Math.Round(100f * player.masteryLevel2, 2)));
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else if (!player.lssjAchieved)
             {
@@ -270,8 +279,12 @@ namespace DBZMOD.UI
             if (player.ssj3Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ3;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
-                Main.NewText(string.Format("Super Saiyan 3 Mastery: {0}%", Math.Round(100f * player.masteryLevel3, 2)));
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else if (!player.lssjAchieved)
             {
@@ -285,7 +298,12 @@ namespace DBZMOD.UI
             if (player.lssjAchieved)
             {
                 menuSelection = MenuSelectionID.LSSJ1;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else if (!player.ssj2Achieved)
             {
@@ -300,7 +318,12 @@ namespace DBZMOD.UI
             if (player.lssj2Achieved)
             {
                 menuSelection = MenuSelectionID.LSSJ2;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else if (!player.lssj2Achieved)
             {
@@ -314,7 +337,12 @@ namespace DBZMOD.UI
             if (player.ssjgAchieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJG;
+                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.displayName;
+                string keyName = buff.masteryBuffKeyName;
+                float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
+                Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
             else if (!player.lssjAchieved)
             {

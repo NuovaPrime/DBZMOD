@@ -18,6 +18,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             baseDefenceBonus = 16;
             Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.lifeRegen += 2;

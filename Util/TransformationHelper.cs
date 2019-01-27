@@ -46,7 +46,7 @@ namespace DBZMOD.Util
             get
             {
                 if (_ssj1 == null)
-                    _ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor);
+                    _ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, true, BuffKeyNames.ssj1);
                 return _ssj1;
             }
         }
@@ -57,7 +57,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ssj2 == null)
-                    ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor);
+                    ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, true, BuffKeyNames.ssj2);
                 return ssj2;
             }
         }
@@ -68,7 +68,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ssj3 == null)
-                    ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor);
+                    ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, true, BuffKeyNames.ssj3);
                 return ssj3;
             }
         }
@@ -79,7 +79,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ssjg == null)
-                    ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", defaultTransformationTextColor);
+                    ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", defaultTransformationTextColor, true, BuffKeyNames.ssjg);
                 return ssjg;
             }
         }
@@ -90,7 +90,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ssjb == null)
-                    ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor);
+                    ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor, true, BuffKeyNames.ssjb);
                 return ssjb;
             }
         }
@@ -101,7 +101,7 @@ namespace DBZMOD.Util
             get
             {
                 if (lssj == null)
-                    lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor);
+                    lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, true, BuffKeyNames.lssj);
                 return lssj;
             }
         }
@@ -112,7 +112,7 @@ namespace DBZMOD.Util
             get
             {
                 if (lssj2 == null)
-                    lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor);
+                    lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, true, BuffKeyNames.lssj2);
                 return lssj2;
             }
         }
@@ -123,7 +123,7 @@ namespace DBZMOD.Util
             get
             {
                 if (assj == null)
-                    assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, "Ascended Super Saiyan", defaultTransformationTextColor);
+                    assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, "Ascended Super Saiyan", defaultTransformationTextColor, true, BuffKeyNames.ssj1);
                 return assj;
             }
         }
@@ -134,7 +134,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ussj == null)
-                    ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, "Ultra Super Saiyan", defaultTransformationTextColor);
+                    ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, "Ultra Super Saiyan", defaultTransformationTextColor, true, BuffKeyNames.ssj1);
                 return ussj;
             }
         }
@@ -564,8 +564,8 @@ namespace DBZMOD.Util
             BuffInfo buff = GetBuffByKeyName(buffKeyName);
             player.AddBuff(buff.GetBuffId(), ABSURDLY_LONG_BUFF_DURATION, false);
 
-            if (!string.IsNullOrEmpty(buff.transformationText))
-                CombatText.NewText(player.Hitbox, buff.transformationTextColor, buff.transformationText, false, false);
+            if (!string.IsNullOrEmpty(buff.displayName))
+                CombatText.NewText(player.Hitbox, buff.transformationTextColor, buff.displayName, false, false);
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
@@ -594,6 +594,19 @@ namespace DBZMOD.Util
 
             // is the player transformed? Something bad may have happened.
             return null;
+        }
+
+        public static string GetCurrentFormForMastery(Player player)
+        {
+            foreach (BuffInfo buff in AllBuffs().Where(x => x.hasMastery))
+            {
+                if (player.HasBuff(buff.GetBuffId()))
+                {
+                    return buff.masteryBuffKeyName;
+                }
+            }
+
+            return string.Empty;
         }
 
         // based on some conditions, figure out what the next "step" of transformation should be.

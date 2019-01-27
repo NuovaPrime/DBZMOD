@@ -44,6 +44,22 @@ namespace DBZMOD.Buffs
             //give bonus base defense
             player.statDefense += baseDefenceBonus;
             
+
+            // handle ki drain mastery
+            bool isMastered = modPlayer.masteryLevels.ContainsKey(this.Name) &&
+                              modPlayer.masteryLevels[this.Name] >= 1.0;
+            float actualKiDrain = isMastered ? kiDrainRateWithMastery : kiDrainRate;
+            float kiDrainMultiplier = 1f;
+            if (!isMastered && kiDrainMultiplier < 2.5f)
+            {
+                _kiDrainAddTimer++;
+                if (_kiDrainAddTimer >= 300)
+                {
+                    kiDrainMultiplier += 0.5f;
+                    _kiDrainAddTimer = 0;
+                }
+            }
+
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (TransformationHelper.IsAnythingOtherThanKaioken(player))
             {
@@ -58,13 +74,7 @@ namespace DBZMOD.Buffs
                 }
                 else
                 {
-                    modPlayer.AddKi((kiDrainRate + modPlayer.kiDrainAddition) * -1, false, true);
-                    _kiDrainAddTimer++;
-                    if (_kiDrainAddTimer > 600)
-                    {
-                        modPlayer.kiDrainAddition += 1;
-                        _kiDrainAddTimer = 0;
-                    }
+                    modPlayer.AddKi((actualKiDrain * kiDrainMultiplier) * -1, false, true);
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }
             } else

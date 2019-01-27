@@ -17,15 +17,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             kiDrainRateWithMastery = 0.5f;
             baseDefenceBonus = 4;
             Description.SetDefault(AssembleTransBuffDescription());
-        }
-
-        public override void Update(Player player, ref int buffIndex)
-        {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
-            
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-            base.Update(player, ref buffIndex);
-        }        
+        }  
     }
 }
 

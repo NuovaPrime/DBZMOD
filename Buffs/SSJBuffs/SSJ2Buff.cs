@@ -18,13 +18,6 @@ namespace DBZMOD.Buffs.SSJBuffs
             baseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
         }
-        public override void Update(Player player, ref int buffIndex)
-        {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel2 >= 1;
-
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-            base.Update(player, ref buffIndex);
-        }
     }
 }
 

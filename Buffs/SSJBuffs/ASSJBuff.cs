@@ -18,15 +18,6 @@ namespace DBZMOD.Buffs.SSJBuffs
             baseDefenceBonus = 5;
             Description.SetDefault(AssembleTransBuffDescription());
         }
-
-        // per Nova's design, mastery applies to ASSJ and USSJ
-        public override void Update(Player player, ref int buffIndex)
-        {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
-
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-            base.Update(player, ref buffIndex);
-        }
     }
 }
 

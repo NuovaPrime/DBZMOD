@@ -1,4 +1,5 @@
 ﻿using System;
+using DBZMOD.Util;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -32,7 +33,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).masteryLevel1 = Math.Min(1.0f, MyPlayer.ModPlayer(player).masteryLevel1 + 0.25f);
+            var modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.masteryLevels[TransformationHelper.SSJ1.masteryBuffKeyName] = Math.Min(1.0f, modPlayer.masteryLevels[TransformationHelper.SSJ1.masteryBuffKeyName] + 0.25f);
             return true;
 
         }
