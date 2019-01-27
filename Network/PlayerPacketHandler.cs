@@ -19,6 +19,7 @@ namespace DBZMOD.Network
         public const byte SEND_KI_BEACON_INITIAL_SYNC = 50;
         public const byte SYNC_KI_BEACON_ADD = 51;
         public const byte SYNC_KI_BEACON_REMOVE = 52;
+        public const byte SEND_DRAGON_BALL_DESTROYED = 53;
         public const byte SYNC_DRAGON_BALL_CHANGE = 54;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -60,7 +61,26 @@ namespace DBZMOD.Network
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
+                case (SEND_DRAGON_BALL_DESTROYED):
+                    ReceiveDragonBallDestroyed(reader, fromWho);
+                    break;
             }
+        }
+
+        public void ReceiveDragonBallDestroyed(BinaryReader reader, int fromWho)
+        {
+            DebugHelper.Log("Dragon ball destroyed, receiving regeneration packet.");
+            int whichDragonBallAmI = reader.ReadInt32();
+            DBZWorld world = DBZWorld.GetWorld();
+            world.ReplaceDragonBall(whichDragonBallAmI);
+        }
+
+        public void SendDragonBallDestroyed(int toWho, int fromWho, int whichDragonBall)
+        {
+            DebugHelper.Log("Dragon ball destroyed, sending regeneration packet.");
+            ModPacket packet = GetPacket(SEND_DRAGON_BALL_DESTROYED, fromWho);
+            packet.Write(whichDragonBall);
+            packet.Send(toWho, fromWho);
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
@@ -109,7 +129,6 @@ namespace DBZMOD.Network
         {
             if (Main.netMode != NetmodeID.Server)
                 return;
-            DebugHelper.Log($"Receiving dragon ball sync request from {fromWho}");
             SendAllDragonBallLocations(fromWho);
         }
 
@@ -117,7 +136,6 @@ namespace DBZMOD.Network
         {
             if (Main.netMode != NetmodeID.Server)
                 return;
-            DebugHelper.Log($"Sending dragon ball locations to {toWho}");
             DBZWorld world = DBZWorld.GetWorld();
             for (var i = 0; i < world.CachedDragonBallLocations.Length; i++)
             {
@@ -142,6 +160,8 @@ namespace DBZMOD.Network
                     continue;
                 if (player.whoAmI != i)
                     continue;
+                if (player.whoAmI == fromWho)
+                    continue;
                 SendDragonBallChange(i, fromWho, whichDragonBall, dragonBallLocation);
             }
         }
@@ -153,7 +173,6 @@ namespace DBZMOD.Network
             packet.Write(dragonBallLocation.X);
             packet.Write(dragonBallLocation.Y);
             packet.Send(toWho, fromWho);
-            DebugHelper.Log($"Sending dragon ball {whichDragonBall} location at {dragonBallLocation.X} {dragonBallLocation.Y}");
         }
 
         public void ReceiveDragonBallChange(BinaryReader reader, int fromWho)
@@ -163,7 +182,6 @@ namespace DBZMOD.Network
             var locationX = reader.ReadInt32();
             var locationY = reader.ReadInt32();
             world.CacheDragonBallLocation(whichDragonBall, new Point(locationX, locationY), true);
-            DebugHelper.Log($"Receiving dragon ball {whichDragonBall} location at {locationX} {locationY} from {fromWho}");
         }
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)

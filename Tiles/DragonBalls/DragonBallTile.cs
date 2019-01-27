@@ -65,9 +65,15 @@ namespace DBZMOD.Tiles.DragonBalls
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
-            DBZWorld world = DBZWorld.GetWorld();
-            world.CacheDragonBallLocation(whichDragonBallAmI, Point.Zero, false);
-            world.TryPlacingDragonBall(whichDragonBallAmI);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetworkHelper.playerSync.SendDragonBallDestroyed(256, Main.myPlayer, whichDragonBallAmI);
+            }
+            else
+            {
+                DBZWorld.GetWorld().ReplaceDragonBall(whichDragonBallAmI);
+            }
         }
     }
 }

@@ -512,7 +512,7 @@ namespace DBZMOD
             return false;
         }
 
-        public bool TryPlacingDragonBall(int whichDragonBall, int offsetX, int offsetY, Player ignorePlayer = null)
+        public bool TryPlacingDragonBall(int whichDragonBall, int offsetX, int offsetY)
         {            
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonBall))
@@ -523,6 +523,8 @@ namespace DBZMOD
                 false)) return false;
             // precache dragon ball location if successful to prevent it from having to fetch it.
             GetWorld().CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY), false);
+
+            NetMessage.SendObjectPlacment(256, offsetX, offsetY, dragonBallType, 0, 0, 0, -1);
             WorldGen.PlaceObject(offsetX, offsetY, dragonBallType, true);
             return true;
         }
@@ -576,6 +578,8 @@ namespace DBZMOD
 
         public void DoBrutalCleanup()
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
             DebugHelper.Log("Server is running cleanup routine.");
             int invalidCount = 0;
             Point[] dragonBallFirstFound = Enumerable.Repeat(Point.Zero, 7).ToArray();
@@ -648,13 +652,22 @@ namespace DBZMOD
 
         public void CacheDragonBallLocation(int whichDragonBall, Point location, bool fromSync)
         {
+            DebugHelper.Log($"Receiving dragon ball {whichDragonBall} location {location.X} {location.Y}");
+            DebugHelper.Log($"From sync? {fromSync}");
             CachedDragonBallLocations[whichDragonBall - 1] = location;
+
             if (Main.netMode == NetmodeID.MultiplayerClient && !fromSync)
             {
                 DebugHelper.Log($"Sending players updated dragon ball locations...");
                 // sync new dragon ball location to everyone.
                 NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location, Main.myPlayer);
             }
+        }
+
+        public void ReplaceDragonBall(int whichDragonBall)
+        {
+            CacheDragonBallLocation(whichDragonBall, Point.Zero, false);
+            TryPlacingDragonBall(whichDragonBall);
         }
 
         public bool IsDragonBallLocation(int i, int j)
