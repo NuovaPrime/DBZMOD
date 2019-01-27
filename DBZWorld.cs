@@ -651,6 +651,7 @@ namespace DBZMOD
             CachedDragonBallLocations[whichDragonBall - 1] = location;
             if (Main.netMode == NetmodeID.Server)
             {
+                DebugHelper.Log($"Sending players updated dragon ball locations...");
                 // sync new dragon ball location to everyone.
                 NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location);
             }
