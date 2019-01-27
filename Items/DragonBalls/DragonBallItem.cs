@@ -17,9 +17,9 @@ namespace DBZMOD.Items.DragonBalls
         public override void RightClick(Player player)
         {
             var isPlayerAbleToWish = ItemHelper.PlayerHasAllDragonBalls(player);
-            if (isPlayerAbleToWish)
+            if (ItemHelper.PlayerHasAllDragonBalls(player))
             {
-                player.GetModPlayer<MyPlayer>().wishActive = true;
+                player.GetModPlayer<MyPlayer>().wishActive = !player.GetModPlayer<MyPlayer>().wishActive;
             }
         }
 

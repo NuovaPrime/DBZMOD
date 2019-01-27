@@ -1928,10 +1928,10 @@ namespace DBZMOD
 
             if (wishActive)
             {
-                WishMenu.menuvisible = true;
+                WishMenu.menuVisible = true;
             } else if (DebugHelper.IsDebugModeOn() && quickKi.JustPressed)
             {
-                WishMenu.menuvisible = !WishMenu.menuvisible;
+                WishMenu.menuVisible = !WishMenu.menuVisible;
             }
 
             // freeform instant transmission requires book 2.

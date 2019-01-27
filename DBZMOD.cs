@@ -65,7 +65,7 @@ namespace DBZMOD
             instance = null;
             TransMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
-            WishMenu.menuvisible = false;
+            WishMenu.menuVisible = false;
             TransMenu.ssj1On = false;
             TransMenu.ssj2On = false;
             UIFlatPanel.backgroundTexture = null;
@@ -180,7 +180,7 @@ namespace DBZMOD
                 _transMenuInterface.Update(gameTime);
             }
 
-            if (_wishMenuInterface != null && WishMenu.menuvisible)
+            if (_wishMenuInterface != null && WishMenu.menuVisible)
             {
                 _wishMenuInterface.Update(gameTime);
             }
@@ -227,7 +227,7 @@ namespace DBZMOD
                             _progressionMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
-                        if (WishMenu.menuvisible)
+                        if (WishMenu.menuVisible)
                         {
                             _wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
