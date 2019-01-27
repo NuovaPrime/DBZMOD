@@ -769,8 +769,17 @@ namespace DBZMOD
             HandleKaiokenDefenseDebuff();
 
             // if the player is in mid-transformation, totally neuter horizontal velocity
+            // also handle the frame counter advancement here.
             if (isTransformationAnimationPlaying)
+            {
                 player.velocity = new Vector2(0, player.velocity.Y);
+
+                transformationFrameTimer++;
+            }
+            else
+            {
+                transformationFrameTimer = 0;
+            }
         }
 
         public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
