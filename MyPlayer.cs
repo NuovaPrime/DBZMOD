@@ -390,9 +390,9 @@ namespace DBZMOD
             return _kiCurrent;
         }
 
-        public bool IsKiDepleted()
+        public bool IsKiDepleted(float projectedKiDrain = 0f)
         {
-            return _kiCurrent <= 0;
+            return _kiCurrent - projectedKiDrain <= 0;
         }
 
         public bool HasKi(float kiAmount)

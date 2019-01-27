@@ -60,11 +60,13 @@ namespace DBZMOD.Buffs
                 }
             }
 
+            float projectedKiDrain = actualKiDrain * kiDrainMultiplier;
+
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (TransformationHelper.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
-                if (modPlayer.IsKiDepleted())
+                if (modPlayer.IsKiDepleted(projectedKiDrain))
                 {
                     if (TransformationHelper.IsSuperKaioken(player))
                     {
@@ -74,7 +76,7 @@ namespace DBZMOD.Buffs
                 }
                 else
                 {
-                    modPlayer.AddKi((actualKiDrain * kiDrainMultiplier) * -1, false, true);
+                    modPlayer.AddKi((projectedKiDrain) * -1, false, true);
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }
             } else
