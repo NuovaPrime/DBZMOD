@@ -13,13 +13,12 @@ namespace DBZMOD.Network
         public const byte SYNC_PLAYER = 43;
         public const byte SYNC_TRIGGERS = 44;
         public const byte REQUEST_FOR_SYNC_FROM_JOINED_PLAYER = 45;
-        public const byte REQUEST_DRAGON_BALL_KEY_SYNC = 46;
+        public const byte REQUEST_DRAGON_BALL_LOCATION_SYNC = 46;
         public const byte REQUEST_TELEPORT_MESSAGE = 47;
         public const byte REQUEST_KI_BEACON_INITIAL_SYNC = 49;
         public const byte SEND_KI_BEACON_INITIAL_SYNC = 50;
         public const byte SYNC_KI_BEACON_ADD = 51;
         public const byte SYNC_KI_BEACON_REMOVE = 52;
-        public const byte DESTROY_AND_RESPAWN_DRAGON_BALLS = 53;
         public const byte SYNC_DRAGON_BALL_CHANGE = 54;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -48,6 +47,9 @@ namespace DBZMOD.Network
                 case (REQUEST_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSyncRequest(fromWho);
                     break;
+                case (REQUEST_DRAGON_BALL_LOCATION_SYNC):
+                    ReceiveDragonBallInitialSyncRequest(fromWho);
+                    break;
                 case (SEND_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSync(reader, fromWho);
                     break;
@@ -59,13 +61,6 @@ namespace DBZMOD.Network
                     ProcessRequestTeleport(reader, fromWho);
                     break;
             }
-        }
-
-        public void SendDestroyAndRespawnDragonBalls(int toWho, int fromWho, int initiatingPlayer)
-        {
-            ModPacket packet = GetPacket(DESTROY_AND_RESPAWN_DRAGON_BALLS, fromWho);
-            packet.Write(initiatingPlayer);
-            packet.Send(toWho, initiatingPlayer);
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
@@ -108,6 +103,11 @@ namespace DBZMOD.Network
                 dbWorld.kiBeacons.Remove(location);
             if (Main.netMode == NetmodeID.Server)
                 SendKiBeaconRemove(-1, fromWho, location);
+        }
+
+        public void ReceiveDragonBallInitialSyncRequest(int fromWho)
+        {
+            SendAllDragonBallLocations(fromWho);
         }
 
         public void SendAllDragonBallLocations(int toWho = -1)
@@ -165,6 +165,12 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
+        public void RequestAllDragonBallLocations(int toWho, int fromWho)
+        {
+            ModPacket packet = GetPacket(REQUEST_DRAGON_BALL_LOCATION_SYNC, fromWho);
+            packet.Send(toWho, fromWho);
+        }
+
         // handle a request to receive ki beacon sync from server
         public void ReceiveKiBeaconInitialSyncRequest(int toWho)
         {
@@ -201,63 +207,6 @@ namespace DBZMOD.Network
             }
         }
 
-        //public void ReceiveDragonBallKeySyncRequest(int toWho)
-        //{
-        //    ModPacket packet = GetPacket(SEND_DRAGON_BALL_KEY_SYNC, 256);
-        //    var dbWorld = DBZWorld.GetWorld();
-        //    packet.Write(dbWorld.worldDragonBallKey);
-        //    // new stuff, send the player all the dragon ball points.
-        //    packet.Write(dbWorld.GetDragonBallLocation(1).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(1).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(2).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(2).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(3).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(3).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(4).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(4).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(5).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(5).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(6).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(6).Y);
-        //    packet.Write(dbWorld.GetDragonBallLocation(7).X);
-        //    packet.Write(dbWorld.GetDragonBallLocation(7).Y);
-        //    packet.Send(toWho, -1);
-        //}
-
-        //public void ReceiveDragonBallKeySync(BinaryReader reader, int fromWho)
-        //{
-        //    var dbWorld = DBZWorld.GetWorld();
-        //    var dbKey = reader.ReadInt32();
-        //    var db1X = reader.ReadInt32();
-        //    var db1Y = reader.ReadInt32();
-        //    var db2X = reader.ReadInt32();
-        //    var db2Y = reader.ReadInt32();
-        //    var db3X = reader.ReadInt32();
-        //    var db3Y = reader.ReadInt32();
-        //    var db4X = reader.ReadInt32();
-        //    var db4Y = reader.ReadInt32();
-        //    var db5X = reader.ReadInt32();
-        //    var db5Y = reader.ReadInt32();
-        //    var db6X = reader.ReadInt32();
-        //    var db6Y = reader.ReadInt32();
-        //    var db7X = reader.ReadInt32();
-        //    var db7Y = reader.ReadInt32();
-        //    dbWorld.SetDragonBallLocation(1, new Point(db1X, db1Y), false);
-        //    dbWorld.SetDragonBallLocation(2, new Point(db2X, db2Y), false);
-        //    dbWorld.SetDragonBallLocation(3, new Point(db3X, db3Y), false);
-        //    dbWorld.SetDragonBallLocation(4, new Point(db4X, db4Y), false);
-        //    dbWorld.SetDragonBallLocation(5, new Point(db5X, db5Y), false);
-        //    dbWorld.SetDragonBallLocation(6, new Point(db6X, db6Y), false);
-        //    dbWorld.SetDragonBallLocation(7, new Point(db7X, db7Y), false);
-        //    dbWorld.worldDragonBallKey = dbKey;
-        //}
-
-        public void RequestServerSendDragonBallKey(int toWho, int fromWho)
-        {
-            ModPacket packet = GetPacket(REQUEST_DRAGON_BALL_KEY_SYNC, fromWho);
-            packet.Send(toWho, fromWho);
-        }
-
         public void RequestPlayerSendTheirInfo(int toWho, int fromWho, int playerWhoseDataIneed)
         {
             ModPacket packet = GetPacket(REQUEST_FOR_SYNC_FROM_JOINED_PLAYER, fromWho);
@@ -265,12 +214,12 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
-        {
-            ModPacket packet = GetPacket(REQUEST_TELEPORT_MESSAGE, fromWho);
-            packet.WriteVector2(mapPosition);
-            packet.Send();
-        }
+        //public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
+        //{
+        //    ModPacket packet = GetPacket(REQUEST_TELEPORT_MESSAGE, fromWho);
+        //    packet.WriteVector2(mapPosition);
+        //    packet.Send();
+        //}
 
         public void ProcessRequestTeleport(BinaryReader reader, int fromWho)
         {
@@ -623,14 +572,14 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedMassiveBlastInUse(int toWho, int fromWho, int whichPlayer, bool isMassiveBlastInUse)
-        {
-            var packet = GetPacket(SYNC_PLAYER, fromWho); ;
-            packet.Write((int)PlayerVarSyncEnum.IsMassiveBlastInUse);
-            packet.Write(whichPlayer);
-            packet.Write(isMassiveBlastInUse);
-            packet.Send(toWho, fromWho);
-        }
+        //public void SendChangedMassiveBlastInUse(int toWho, int fromWho, int whichPlayer, bool isMassiveBlastInUse)
+        //{
+        //    var packet = GetPacket(SYNC_PLAYER, fromWho); ;
+        //    packet.Write((int)PlayerVarSyncEnum.IsMassiveBlastInUse);
+        //    packet.Write(whichPlayer);
+        //    packet.Write(isMassiveBlastInUse);
+        //    packet.Send(toWho, fromWho);
+        //}
 
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
         {

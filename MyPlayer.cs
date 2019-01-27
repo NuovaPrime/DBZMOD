@@ -298,12 +298,7 @@ namespace DBZMOD
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
-            }
-
-            // Send sync to connecting players
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetworkHelper.playerSync.RequestAllDragonBallLocations();
+                NetworkHelper.playerSync.RequestAllDragonBallLocations(256, Main.myPlayer);
             }
         }
 
