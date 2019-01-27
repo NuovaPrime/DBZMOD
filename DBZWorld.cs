@@ -70,18 +70,6 @@ namespace DBZMOD
             base.Load(tag);
         }
 
-        public void DestroyAndRespawnDragonBalls()
-        {
-            for (var i = 1; i <= 7; i++)
-            {
-                var location = GetDragonBallLocation(i);
-                if (location.Equals(Point.Zero))
-                    continue;
-                WorldGen.KillTile(location.X, location.Y, false, false, true);
-                TryPlacingDragonBall(i);
-            }
-        }
-
         public void CleanupKiBeaconList()
         {
             var listToRemove = new List<Vector2>();

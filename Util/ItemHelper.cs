@@ -62,145 +62,17 @@ namespace DBZMOD.Util
             );
         }
 
-        ///// <summary>
-        /////     Return the slot of the inventory a dragon ball was in after deleting it.
-        /////     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
-        ///// </summary>
-        ///// <returns></returns>
-        //public static int RemoveDragonBall(Item[] inventory, int dbKey, int whichDragonBall)
-        //{
-        //    string ballType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBall);
-        //    int ballTypeInt = GetItemTypeFromName(ballType);
-        //    for (var i = 0; i < inventory.Length; i++)
-        //    {
-        //        var item = inventory[i];
-        //        if (item == null)
-        //            continue;
-
-        //        if (item.modItem == null)
-        //            continue;
-
-        //        if (item.type != ballTypeInt)
-        //            continue;
-
-        //        if (item.modItem is DragonBallItem)
-        //        {
-        //            var dBall = item.modItem as DragonBallItem;
-        //            if (dBall.worldDragonBallKey == dbKey)
-        //            {
-        //                inventory[i].TurnToAir();
-        //                return i;
-        //            }
-        //        }
-        //    }
-
-        //    // dragonball wasn't found, return an oob index.
-        //    return -1;
-        //}
-
-        ///// <summary>
-        /////     Return the slot of the inventory a dragon ball was in after deleting it.
-        /////     This is used to replace a dragon ball with an inert dragon ball brought from other worlds.
-        ///// </summary>
-        ///// <returns></returns>
-        //public static int RemoveStoneBall(Item[] inventory, int dbKey, int whichDragonBall)
-        //{
-        //    string ballType = DragonBallItem.GetStoneBallFromNumber(whichDragonBall);
-        //    int ballTypeInt = GetItemTypeFromName(ballType);
-        //    for (var i = 0; i < inventory.Length; i++)
-        //    {
-        //        var item = inventory[i];
-        //        if (item == null)
-        //            continue;
-
-        //        if (item.modItem == null)
-        //            continue;
-
-        //        if (item.type != ballTypeInt)
-        //            continue;
-
-        //        if (item.modItem is DragonBallItem)
-        //        {
-        //            var dBall = item.modItem as DragonBallItem;
-        //            if (dBall.worldDragonBallKey == dbKey)
-        //            {
-        //                inventory[i].TurnToAir();
-        //                return i;
-        //            }
-        //        }
-        //    }
-
-        //    // dragonball wasn't found, return an oob index.
-        //    return -1;
-        //}
-
-        //public static void ScanPlayerForIllegitimateDragonBalls(Player player)
-        //{
-        //    ScanInventoryForIllegitimateDragonBalls(player.inventory);
-        //    ScanInventoryForIllegitimateDragonBalls(player.bank.item);
-        //    ScanInventoryForIllegitimateDragonBalls(player.bank2.item);
-        //    ScanInventoryForIllegitimateDragonBalls(player.bank3.item);
-        //}
-
-        //public static void ScanInventoryForIllegitimateDragonBalls(Item[] inventory)
-        //{
-        //    for (var i = 0; i < inventory.Length; i++)
-        //    {
-        //        var item = inventory[i];
-        //        if (item == null)
-        //            continue;
-
-        //        if (item.modItem == null)
-        //            continue;
-
-        //        if (!(item.modItem is DragonBallItem))
-        //            continue;
-
-        //        var dbItem = item.modItem as DragonBallItem;
-        //        var dbWorld = DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
-        //        if (dbItem.worldDragonBallKey != dbWorld.worldDragonBallKey)
-        //        {
-        //            SwapDragonBallWithStoneBall(inventory, dbItem.worldDragonBallKey.Value, dbItem.GetWhichDragonBall());
-        //        }
-        //        else
-        //        {
-        //            if (DragonBallItem.IsItemStoneBall(dbItem.item.type))
-        //            {
-        //                // this stone ball is being re-legitimized, which is not a word
-        //                SwapStoneBallWithDragonBall(inventory, dbItem.worldDragonBallKey.Value, dbItem.GetWhichDragonBall());
-        //            }
-        //        }
-
-        //    }
-        //}
-
-        //public static void SwapStoneBallWithDragonBall(Item[] inventory, int worldDragonBallKey, int whichDragonBall)
-        //{
-        //    // this stone ball was pulled back into its world. Turn it into a dragon ball.
-        //    int dbKey = worldDragonBallKey;
-        //    int dbSlot = ItemHelper.RemoveStoneBall(inventory, worldDragonBallKey, whichDragonBall);
-        //    // something went wrong, abort.
-        //    if (dbSlot == -1)
-        //        return;
-        //    var dbType = DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBall);
-        //    var newDragonBall = DBZMOD.instance.GetItem(DragonBallItem.GetDragonBallItemTypeFromNumber(whichDragonBall)).item.DeepClone();
-        //    var dbData = newDragonBall.modItem as DragonBallItem;
-        //    dbData.worldDragonBallKey = dbKey;
-        //    inventory[dbSlot] = newDragonBall;
-        //}
-
-        //public static void SwapDragonBallWithStoneBall(Item[] inventory, int worldDragonBallKey, int whichDragonBall)
-        //{
-        //    // this dragon ball was pulled in from another world. Turn it into a rock.
-        //    int dbKey = worldDragonBallKey;
-        //    int dbSlot = ItemHelper.RemoveDragonBall(inventory, worldDragonBallKey, whichDragonBall);
-        //    // something went wrong, abort.
-        //    if (dbSlot == -1)
-        //        return;            
-        //    var newStoneBall = DBZMOD.instance.GetItem(DragonBallItem.GetStoneBallFromNumber(whichDragonBall)).item.DeepClone();
-        //    var dbData = newStoneBall.modItem as DragonBallItem;
-        //    dbData.worldDragonBallKey = dbKey;
-        //    inventory[dbSlot] = newStoneBall;
-        //}
+        public static void DestroyPlayerDragonBalls(Player player)
+        {
+            foreach (var item in player.inventory)
+            {
+                if (item?.modItem == null)
+                    continue;
+                if (item.modItem is DragonBallItem)
+                {
+                    item.TurnToAir();
+                }
+            }
+        }
     }
 }

@@ -199,7 +199,7 @@ namespace DBZMOD.UI
             if (usedWish)
             {
                 wishSelection = WishSelectionID.None;
-                DBZWorld.GetWorld().DestroyAndRespawnDragonBalls();
+                DBZWorld.GetWorld().DestroyPlayerDragonBalls(modPlayer.player);
                 modPlayer.wishActive = false;
                 Main.PlaySound(SoundID.MenuClose);
             }

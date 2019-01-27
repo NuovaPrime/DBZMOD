@@ -88,7 +88,7 @@ namespace DBZMOD.Network
                 }                
             }
 
-            DBZWorld.GetWorld().DestroyAndRespawnDragonBalls();
+            DBZWorld.GetWorld().DestroyPlayerDragonBalls();
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
