@@ -290,7 +290,6 @@ namespace DBZMOD
         ProgressionSystem _mProgressionSystem = new ProgressionSystem();
         FistSystem _mFistSystem = new FistSystem();
         #endregion
-
         
         public override void OnEnterWorld(Player player)
         {

@@ -29,8 +29,7 @@ namespace DBZMOD
         {
             var dbtWorldTag = new TagCompound
             {
-                {"KiBeacons", kiBeacons},
-                { "HasDoneSavageCleanup",!shouldDoBrutalCleanup}
+                {"KiBeacons", kiBeacons}
             };
             for(var i = 0; i < 7; i++)
             {
@@ -46,10 +45,6 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
-            if (tag.ContainsKey("HasDoneSavageCleanup"))
-            {
-                shouldDoBrutalCleanup = !tag.GetBool("HasDoneSavageCleanup");
-            }
             kiBeacons = tag.ContainsKey("KiBeacons") ? (List<Vector2>)tag.GetList<Vector2>("KiBeacons") : new List<Vector2>();
 
             // cleanup ki beacon list, not sure why this is necessary.
@@ -528,7 +523,7 @@ namespace DBZMOD
                 progress.Set(0.25f);
             }
 
-            for (var i = 0; i <= 6; i++)
+            for (var i = 0; i < 7; i++)
             {
                 TryPlacingDragonBall(i + 1);
             }
@@ -558,30 +553,20 @@ namespace DBZMOD
             }
         }
 
-        public bool shouldDoBrutalCleanup = false;
         public void HandleRetrogradeCleanup(Player ignorePlayer = null)
         {
             // only fire this server side or single player.
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
 
-            if (GetWorld().shouldDoBrutalCleanup)
-            {
-                DoBrutalCleanup();
-            }
+            DoBrutalCleanup();
         }
 
         public void DoBrutalCleanup()
         {
             int invalidCount = 0;
             Point[] dragonBallFirstFound = Enumerable.Repeat(Point.Zero, 7).ToArray();
-            for (var i = 0; i < dragonBallFirstFound.Length; i++)
-            {
-                var existingDragonBall = GetDragonBallLocation(i + 1);
-                if (existingDragonBall.Equals(Point.Zero))
-                    continue;
-                dragonBallFirstFound[i] = existingDragonBall;
-            }
+            
             // destroy all but the first located dragon ball of any given type in the world, with no items.
             for (var i = 0; i < Main.maxTilesX; i++)
             {
@@ -596,19 +581,22 @@ namespace DBZMOD
                     var dbNum = GetDragonBallNumberFromType(tile.type);
                     if (dbNum == 0)
                         continue;
-                    var thisDragonBallLocation = dragonBallFirstFound[dbNum - 1];
-                    var shouldSkipThisDragonBall = !thisDragonBallLocation.Equals(Point.Zero) && thisDragonBallLocation.Equals(new Point(i, j));
-                    if (shouldSkipThisDragonBall)
-                        continue;                    
-                    invalidCount++;
-                    WorldGen.KillTile(i, j, false, false, true);                    
+                    var thisDragonBallLocation = new Point(i, j);
+                    if (dragonBallFirstFound[dbNum - 1].Equals(Point.Zero))
+                    {
+                        dragonBallFirstFound[dbNum - 1] = thisDragonBallLocation;
+                    }
+                    else
+                    {
+                        invalidCount++;
+                        WorldGen.KillTile(i, j, false, false, true);
+                    }
                 }
             }
             if (invalidCount > 0)
             {
                 Main.NewText("Found " + invalidCount + " bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
             }
-            GetWorld().shouldDoBrutalCleanup = false;
         }
 
         public bool IsExistingDragonBall(int whichDragonBall)
@@ -654,6 +642,7 @@ namespace DBZMOD
                     CacheDragonBallLocation(whichDragonBall, Point.Zero);
                 }
             }
+
             // if we reached this point, we already know the cache was inaccurate, so try to find the real one. if we reach the end of this routine and
             // don't find the dragon ball, simply spawn a new one.
             for (var i = 0; i < Main.maxTilesX; i++)
@@ -690,37 +679,13 @@ namespace DBZMOD
                 return false;
             if (!tile.active())
                 return false;
-            if (dbTypes.Contains(tile.type))
-                return true;
-            return false;
-        }
-
-        public void PrecacheDragonBallLocations()
-        {
-            // if the player is in multiplayer mode, request the server send a packet of the locations instead.
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {                
-
-                return;
-            }
-            for (var i = 0; i < Main.maxTilesX; i++)
+            for (var d = 0; d < 7; d++)
             {
-                for (var j = 0; j < Main.maxTilesY; j++)
-                {
-                    //var tile = Framing.GetTileSafely(i, j);
-                    var tile = Main.tile[i, j];
-                    if (tile == null)
-                        continue;
-                    if (!tile.active())
-                        continue;
-                    for (var d = 0; d < CachedDragonBallLocations.Length; d++)
-                    {
-                        var dbType = GetDbType(d + 1);
-                        if (tile.type == dbType)
-                            CacheDragonBallLocation(d + 1, new Point(i, j));
-                    }                    
-                }
+                bool isDragonBall = GetDbType(d + 1) == tile.type;
+                if (isDragonBall)
+                    return true;
             }
+            return false;
         }
 
         public int?[] dbTypes = Enumerable.Repeat((int?)null, 7).ToArray();
@@ -761,8 +726,7 @@ namespace DBZMOD
 
         public int GetDragonBallNumberFromType(int type)
         {
-
-            for (int i = 1; i < 7; i++)
+            for (int i = 1; i <= 7; i++)
             {
                 if (type == GetDbType(i))
                 {

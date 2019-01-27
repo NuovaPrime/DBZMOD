@@ -50,6 +50,7 @@ namespace DBZMOD.Util
                 {
                     if (world.IsDragonBallLocation(i, j))
                     {
+                        Log($"Dragon ball found at {i} {j}");
                         count++;
                     }
                 }
