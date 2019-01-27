@@ -66,7 +66,7 @@ namespace DBZMOD.Tiles.DragonBalls
         {
             base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
             DBZWorld world = DBZWorld.GetWorld();
-            world.CacheDragonBallLocation(whichDragonBallAmI, Point.Zero);
+            world.CacheDragonBallLocation(whichDragonBallAmI, Point.Zero, false);
             world.TryPlacingDragonBall(whichDragonBallAmI);
         }
     }

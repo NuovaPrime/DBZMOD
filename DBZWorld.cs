@@ -59,7 +59,7 @@ namespace DBZMOD
                     var dbX = tag.GetInt(cacheKeyNameX);
                     var dbY = tag.GetInt(cacheKeyNameY);
                     var dbLocation = new Point(dbX, dbY);
-                    CacheDragonBallLocation(i + 1, dbLocation);
+                    CacheDragonBallLocation(i + 1, dbLocation, false);
                 }
             }
 
@@ -522,7 +522,7 @@ namespace DBZMOD
             if (!TileObject.CanPlace(offsetX, offsetY, dragonBallType, 0, -1, out tileObjectOut, true,
                 false)) return false;
             // precache dragon ball location if successful to prevent it from having to fetch it.
-            GetWorld().CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY));
+            GetWorld().CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY), false);
             WorldGen.PlaceObject(offsetX, offsetY, dragonBallType, true);
             return true;
         }
@@ -621,7 +621,7 @@ namespace DBZMOD
                 {
                     // if this isn't a dragon ball, erase it.
                     dragonBallFirstFound[i] = Point.Zero;
-                    CacheDragonBallLocation(i + 1, Point.Zero);
+                    CacheDragonBallLocation(i + 1, Point.Zero, false);
                 }
                 
                 if (dragonBallFirstFound[i].Equals(Point.Zero))
@@ -646,14 +646,14 @@ namespace DBZMOD
             return CachedDragonBallLocations[whichDragonBall - 1];
         }
 
-        public void CacheDragonBallLocation(int whichDragonBall, Point location)
+        public void CacheDragonBallLocation(int whichDragonBall, Point location, bool fromSync)
         {
             CachedDragonBallLocations[whichDragonBall - 1] = location;
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode == NetmodeID.MultiplayerClient && !fromSync)
             {
                 DebugHelper.Log($"Sending players updated dragon ball locations...");
                 // sync new dragon ball location to everyone.
-                NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location);
+                NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location, Main.myPlayer);
             }
         }
 
