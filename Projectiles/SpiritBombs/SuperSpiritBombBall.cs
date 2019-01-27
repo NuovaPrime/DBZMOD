@@ -79,7 +79,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
 
             if (player.channel && modPlayer.isMassiveBlastCharging)
             {
-                projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
+                projectile.scale = BASE_SCALE + SCALE_INCREASE * (HeldTime / 3f);
                 projectile.position = player.Center + new Vector2(0, -40 - (projectile.scale * 17));
                 HeldTime++;
 
