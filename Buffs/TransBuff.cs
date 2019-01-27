@@ -54,7 +54,7 @@ namespace DBZMOD.Buffs
                     {
                         modPlayer.kaiokenLevel = 0;
                     }
-                    TransformationHelper.EndTransformations(player, true);
+                    TransformationHelper.EndTransformations(player);
                 }
                 else
                 {

@@ -511,7 +511,7 @@ namespace DBZMOD
                         LSSJ2Transformation();
                         UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
                         lssj2Timer = 0;
-                        TransformationHelper.EndTransformations(player, true);
+                        TransformationHelper.EndTransformations(player);
                     }
                     else if (lssj2Timer >= 300)
                     {
@@ -686,7 +686,7 @@ namespace DBZMOD
 
             if (player.dead && TransformationHelper.IsPlayerTransformed(player))
             {
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 isTransforming = false;
             }
 
@@ -1375,7 +1375,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
             }
             else if (ssj1Achieved && !ssj2Achieved && !IsPlayerLegendary())
@@ -1385,7 +1385,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
             }
             else if (ssj1Achieved && IsPlayerLegendary() && !lssjAchieved)
@@ -1395,7 +1395,7 @@ namespace DBZMOD
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
             }
             else if (ssj2Achieved && !ssj3Achieved)
@@ -1405,7 +1405,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
             }
             else if (lssjAchieved && !lssj2Achieved)
@@ -1416,7 +1416,7 @@ namespace DBZMOD
                 LSSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
                 lssj2Timer = 0;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
             }
         }
 
@@ -1915,7 +1915,7 @@ namespace DBZMOD
             if (IsCompletelyPoweringDown() && TransformationHelper.IsPlayerTransformed(player))
             {
                 var playerWasSuperKaioken = TransformationHelper.IsSuperKaioken(player);
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 if (playerWasSuperKaioken)
                 {
                     TransformationHelper.DoTransform(player, TransformationHelper.SSJ1, mod);
@@ -2344,7 +2344,7 @@ namespace DBZMOD
                     SSJTransformation();
                     UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
                     rageCurrent = 0;
-                    TransformationHelper.EndTransformations(player, true);
+                    TransformationHelper.EndTransformations(player);
                     return false;
                 }
             }
@@ -2358,7 +2358,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
                 return false;
             }
@@ -2372,7 +2372,7 @@ namespace DBZMOD
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
                 return false;
             }
@@ -2386,7 +2386,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
-                TransformationHelper.EndTransformations(player, true);
+                TransformationHelper.EndTransformations(player);
                 rageCurrent = 0;
                 return false;
             }

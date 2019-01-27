@@ -498,16 +498,12 @@ namespace DBZMOD.Util
         public static bool IsTiredFromKaioken(Player player) { return player.HasBuff(KaiokenFatigue.GetBuffId()); }
 
         // wipes out all transformation buffs, requires them to be a part of the AllBuffs() union (it's a bunch of lists joined together).
-        public static void ClearAllTransformations(Player player, bool isPoweringDown, BuffInfo transformationToKeep = null)
+        public static void ClearAllTransformations(Player player)
         {
             foreach (BuffInfo buff in AllBuffs())
             {
                 // don't clear buffs the player doesn't have, obviously.
                 if (!player.HasBuff(buff.GetBuffId()))
-                    continue;
-
-                //dont clear the buff we want to keep
-                if (buff == transformationToKeep)
                     continue;
 
                 RemoveTransformation(player, buff.buffKeyName);
@@ -531,9 +527,7 @@ namespace DBZMOD.Util
         public static void DoTransform(Player player, BuffInfo buff, Mod mod)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-
-            bool isPoweringDown = buff == null;
-
+            
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
             if (buff == GetCurrentTransformation(player, true, false) || buff == GetCurrentTransformation(player, false, true))
                 return;
@@ -546,19 +540,19 @@ namespace DBZMOD.Util
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
-            EndTransformations(player, isPoweringDown);
+            EndTransformations(player);
 
             // add whatever buff it is for a really long time.
             AddTransformation(player, buff.buffKeyName, ABSURDLY_LONG_BUFF_DURATION);
         }
 
-        public static void EndTransformations(Player player, bool isPoweringDown)
+        public static void EndTransformations(Player player)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             // automatically applies debuffs.
             // skk qualifies as "non" kaioken.
             var currentBuff = GetCurrentTransformation(player, false, true);
-            ClearAllTransformations(player, isPoweringDown);
+            ClearAllTransformations(player);
             modPlayer.isTransformationAnimationPlaying = false;
             modPlayer.transformationFrameTimer = 0;
             

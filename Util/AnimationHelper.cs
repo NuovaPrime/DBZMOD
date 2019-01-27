@@ -239,8 +239,9 @@ namespace DBZMOD.Util
             for (int i = 1; i <= 7; i++)
             {
                 var location = DBZWorld.GetWorld().GetCachedDragonBallLocation(i);
-                if (location == new Point(-1, -1))
+                if (location.Equals(Point.Zero))
                     continue;
+
                 var coordVector = location.ToVector2() * 16f;
                 var distance = Vector2.Distance(coordVector, drawPlayer.Center + Vector2.UnitY * -120f);
                 if (distance < closestDistance)

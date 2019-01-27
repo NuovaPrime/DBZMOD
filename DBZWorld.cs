@@ -596,6 +596,24 @@ namespace DBZMOD
             {
                 Main.NewText("Found " + invalidCount + " bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
             }
+
+            // figure out if new dragon balls need to be spawned (are any missing?)
+            for (var i = 0; i < dragonBallFirstFound.Length; i++)
+            {
+                // check that the found locations are still valid
+                Point testLocation = dragonBallFirstFound[i];
+                if (!IsDragonBallLocation(testLocation.X, testLocation.Y)) 
+                {
+                    // if this isn't a dragon ball, erase it.
+                    dragonBallFirstFound[i] = Point.Zero;
+                    CacheDragonBallLocation(i + 1, Point.Zero);
+                }
+                
+                if (dragonBallFirstFound[i].Equals(Point.Zero))
+                {
+                    TryPlacingDragonBall(i + 1);
+                }
+            }
         }
 
         public bool IsExistingDragonBall(int whichDragonBall)
@@ -622,54 +640,6 @@ namespace DBZMOD
                 NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location);
             }
         }
-
-        //public Point GetDragonBallLocation(int whichDragonBall)
-        //{
-        //    var result = GetCachedDragonBallLocation(whichDragonBall);
-        //    // try to return a cached location if possible.
-        //    if (result != Point.Zero)
-        //    {
-        //        // var checkTile = Framing.GetTileSafely(result.X, result.Y);
-        //        var checkTile = Main.tile[result.X, result.Y];
-        //        if (checkTile != null && checkTile.active() && checkTile.type == GetDbType(whichDragonBall))
-        //        {
-        //            return result;
-        //        }
-        //        else
-        //        {
-        //            // dragon ball isn't where we think it is, nuke this point.
-        //            CacheDragonBallLocation(whichDragonBall, Point.Zero);
-        //        }
-        //    }
-
-        //    // if we reached this point, we already know the cache was inaccurate, so try to find the real one. if we reach the end of this routine and
-        //    // don't find the dragon ball, simply spawn a new one.
-        //    for (var i = 0; i < Main.maxTilesX; i++)
-        //    {
-        //        for (var j = 0; j < Main.maxTilesY; j++)
-        //        {
-        //            //var tile = Framing.GetTileSafely(i, j);
-        //            var tile = Main.tile[i, j];
-        //            if (tile == null)
-        //                continue;
-        //            if (!tile.active())
-        //                continue;
-        //            var dbType = GetDbType(whichDragonBall);
-        //            if (tile.type == dbType)
-        //                result = new Point(i, j);
-        //        }
-        //    }
-
-        //    // we couldn't find a legitimate dragon ball, let's make one.
-        //    // this also caches the location.
-        //    if (result.Equals(Point.Zero))
-        //    {
-        //        TryPlacingDragonBall(whichDragonBall);
-        //    }
-
-        //    CacheDragonBallLocation(whichDragonBall, result);
-        //    return result;
-        //}
 
         public bool IsDragonBallLocation(int i, int j)
         {
