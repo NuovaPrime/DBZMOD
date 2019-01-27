@@ -649,7 +649,7 @@ namespace DBZMOD
         public void CacheDragonBallLocation(int whichDragonBall, Point location)
         {
             CachedDragonBallLocations[whichDragonBall - 1] = location;
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 DebugHelper.Log($"Sending players updated dragon ball locations...");
                 // sync new dragon ball location to everyone.

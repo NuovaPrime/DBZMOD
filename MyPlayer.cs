@@ -301,10 +301,22 @@ namespace DBZMOD
             }
 
             // Send sync to connecting players
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                DebugHelper.Log($"Sending Player {player.whoAmI} Dragon Ball Cached Locations.");
-                NetworkHelper.playerSync.SendAllDragonBallLocations();
+                NetworkHelper.playerSync.RequestAllDragonBallLocations();
+            }
+        }
+
+        public override void PlayerConnect(Player player)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                if (player.whoAmI != Main.myPlayer)
+                {
+                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
+
+                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
+                }
             }
         }
 
@@ -769,8 +781,17 @@ namespace DBZMOD
             HandleKaiokenDefenseDebuff();
 
             // if the player is in mid-transformation, totally neuter horizontal velocity
+            // also handle the frame counter advancement here.
             if (isTransformationAnimationPlaying)
+            {
                 player.velocity = new Vector2(0, player.velocity.Y);
+
+                transformationFrameTimer++;
+            }
+            else
+            {
+                transformationFrameTimer = 0;
+            }
         }
 
         public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
@@ -2782,19 +2803,6 @@ namespace DBZMOD
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
             base.OnHitAnything(x, y, victim);
-        }
-
-        public override void PlayerConnect(Player player)
-        {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                if (player.whoAmI != Main.myPlayer)
-                {
-                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
-
-                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
-                }
-            }
         }
 
         public override void UpdateLifeRegen()
