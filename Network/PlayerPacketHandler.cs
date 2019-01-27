@@ -15,14 +15,12 @@ namespace DBZMOD.Network
         public const byte REQUEST_FOR_SYNC_FROM_JOINED_PLAYER = 45;
         public const byte REQUEST_DRAGON_BALL_KEY_SYNC = 46;
         public const byte REQUEST_TELEPORT_MESSAGE = 47;
-        public const byte SEND_DRAGON_BALL_KEY_SYNC = 48;
         public const byte REQUEST_KI_BEACON_INITIAL_SYNC = 49;
         public const byte SEND_KI_BEACON_INITIAL_SYNC = 50;
         public const byte SYNC_KI_BEACON_ADD = 51;
         public const byte SYNC_KI_BEACON_REMOVE = 52;
         public const byte DESTROY_AND_RESPAWN_DRAGON_BALLS = 53;
-        public const byte SYNC_DRAGON_BALL_ADD = 54;
-        public const byte SYNC_DRAGON_BALL_REMOVE = 55;
+        public const byte SYNC_DRAGON_BALL_CHANGE = 54;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -44,12 +42,9 @@ namespace DBZMOD.Network
                 case (SYNC_KI_BEACON_REMOVE):
                     ReceiveKiBeaconRemove(reader, fromWho);
                     break;
-                //case (SYNC_DRAGON_BALL_ADD):
-                //    ReceiveDragonBallAdd(reader, fromWho);
-                //    break;
-                //case (SYNC_DRAGON_BALL_REMOVE):
-                //    ReceiveDragonBallRemove(reader, fromWho);
-                //    break;
+                case (SYNC_DRAGON_BALL_CHANGE):
+                    ReceiveDragonBallChange(reader, fromWho);
+                    break;
                 case (REQUEST_KI_BEACON_INITIAL_SYNC):
                     ReceiveKiBeaconInitialSyncRequest(fromWho);
                     break;
@@ -63,12 +58,6 @@ namespace DBZMOD.Network
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
-                //case (REQUEST_DRAGON_BALL_KEY_SYNC):
-                //    ReceiveDragonBallKeySyncRequest(fromWho);
-                //    break;
-                //case (SEND_DRAGON_BALL_KEY_SYNC):
-                //    ReceiveDragonBallKeySync(reader, fromWho);
-                //    break;
                 case (DESTROY_AND_RESPAWN_DRAGON_BALLS):
                     HandleDestroyAndRespawnDragonBalls(reader, fromWho);
                     break;
@@ -144,50 +133,53 @@ namespace DBZMOD.Network
                 SendKiBeaconRemove(-1, fromWho, location);
         }
 
-        public void SendDragonBallAdd(int toWho, int fromWho, Point dragonBallLocation, int whichDragonBall)
+        public void SendAllDragonBallLocations(int toWho = -1)
         {
-            ModPacket packet = GetPacket(SYNC_DRAGON_BALL_ADD, fromWho);
+            DBZWorld world = DBZWorld.GetWorld();
+            for (var i = 0; i < world.CachedDragonBallLocations.Length; i++)
+            {
+                if (toWho == -1) 
+                    SendDragonBallChange(i + 1, world.GetCachedDragonBallLocation(i + 1));
+                else
+                    SendDragonBallChange(toWho, i + 1, world.GetCachedDragonBallLocation(i + 1));
+            }
+        }
+
+        public void SendDragonBallChange(int toWho, int whichDragonBall, Point dragonBallLocation)
+        {
+            SendDragonBallChange(toWho, 256, whichDragonBall, dragonBallLocation);
+        }
+
+        public void SendDragonBallChange(int whichDragonBall, Point dragonBallLocation)
+        {
+            for (var i = 0; i < Main.player.Length; i++)
+            {
+                Player player = Main.player[i];
+                if (player == null)
+                    continue;
+                if (player.whoAmI != i)
+                    continue;
+                SendDragonBallChange(i, 256, whichDragonBall, dragonBallLocation);
+            }
+        }
+
+        public void SendDragonBallChange(int toWho, int fromWho, int whichDragonBall, Point dragonBallLocation)
+        {
+            ModPacket packet = GetPacket(SYNC_DRAGON_BALL_CHANGE, fromWho);
             packet.Write(whichDragonBall);
             packet.Write(dragonBallLocation.X);
             packet.Write(dragonBallLocation.Y);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendDragonBallRemove(int toWho, int fromWho, int whichDragonBall)
+        public void ReceiveDragonBallChange(BinaryReader reader, int fromWho)
         {
-            ModPacket packet = GetPacket(SYNC_DRAGON_BALL_REMOVE, fromWho);
-            packet.Write(whichDragonBall);
-            packet.Send(toWho, fromWho);
+            DBZWorld world = DBZWorld.GetWorld();
+            var whichDragonBall = reader.ReadInt32();
+            var locationX = reader.ReadInt32();
+            var locationY = reader.ReadInt32();
+            world.CacheDragonBallLocation(whichDragonBall, new Point(locationX, locationY));
         }
-
-        //// handle a single ki beacon update (including removals)
-        //public void ReceiveDragonBallAdd(BinaryReader reader, int fromWho)
-        //{
-        //    var whichDragonBall = reader.ReadInt32();
-        //    var coordX = reader.ReadInt32();
-        //    var coordY = reader.ReadInt32();
-        //    var location = new Point(coordX, coordY);
-        //    var dbWorld = DBZWorld.GetWorld();
-        //    dbWorld.SetDragonBallLocation(whichDragonBall, location, false);
-        //    if (Main.netMode == NetmodeID.Server)
-        //        SendDragonBallAdd(-1, fromWho, location, whichDragonBall);
-        //}
-
-        //// handle a single ki beacon update (including removals)
-        //public void ReceiveDragonBallRemove(BinaryReader reader, int fromWho)
-        //{
-        //    var whichDragonBall = reader.ReadInt32();
-        //    var dbWorld = DBZWorld.GetWorld();
-        //    var tileLocation = dbWorld.GetDragonBallLocation(whichDragonBall);
-        //    // our work here is done lol
-        //    if (tileLocation.X == -1 && tileLocation.Y == -1)
-        //        return;
-        //    WorldGen.KillTile(tileLocation.X, tileLocation.Y, false, false, true);
-        //    if (Main.netMode == NetmodeID.Server)
-        //    {
-        //        SendDragonBallRemove(-1, fromWho, whichDragonBall);
-        //    }
-        //}
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
         {

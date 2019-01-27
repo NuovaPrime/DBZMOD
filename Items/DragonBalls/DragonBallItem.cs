@@ -13,13 +13,19 @@ namespace DBZMOD.Items.DragonBalls
 
         // the most important thing basically.
         public override bool CloneNewInstances => true;
-
-
+        
         public override void RightClick(Player player)
         {
-            base.RightClick(player);
             var isPlayerAbleToWish = ItemHelper.PlayerHasAllDragonBalls(player);
-            player.GetModPlayer<MyPlayer>().wishActive = true;
+            if (isPlayerAbleToWish)
+            {
+                player.GetModPlayer<MyPlayer>().wishActive = true;
+            }
+        }
+
+        public override bool ConsumeItem(Player player)
+        {
+            return false;
         }
 
         public override bool CanRightClick()

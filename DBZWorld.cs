@@ -641,6 +641,11 @@ namespace DBZMOD
         public void CacheDragonBallLocation(int whichDragonBall, Point location)
         {
             CachedDragonBallLocations[whichDragonBall - 1] = location;
+            if (Main.netMode == NetmodeID.Server)
+            {
+                // sync new dragon ball location to everyone.
+                NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location);
+            }
         }
 
         public Point GetDragonBallLocation(int whichDragonBall)

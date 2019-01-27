@@ -302,6 +302,12 @@ namespace DBZMOD
             }
 
             DBZWorld.GetWorld().HandleRetrogradeCleanup();
+
+            // Send sync to connecting players
+            if (Main.netMode == NetmodeID.Server)
+            {
+                NetworkHelper.playerSync.SendAllDragonBallLocations();
+            }
         }
 
         // overall ki max is now just a formula representing your total ki, after all bonuses are applied.
