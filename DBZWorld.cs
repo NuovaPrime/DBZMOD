@@ -66,6 +66,18 @@ namespace DBZMOD
             base.Load(tag);
         }
 
+        // handle retrograde cleanup immediately after the first update tick.
+        private bool _initialized;
+        public override void PostUpdate()
+        {
+            if (!_initialized)
+            {
+                _initialized = true;
+                HandleRetrogradeCleanup();
+            }
+
+        }
+
         public void CleanupKiBeaconList()
         {
             var listToRemove = new List<Vector2>();
@@ -564,6 +576,7 @@ namespace DBZMOD
 
         public void DoBrutalCleanup()
         {
+            DebugHelper.Log("Server is running cleanup routine.");
             int invalidCount = 0;
             Point[] dragonBallFirstFound = Enumerable.Repeat(Point.Zero, 7).ToArray();
             
@@ -595,7 +608,8 @@ namespace DBZMOD
             }
             if (invalidCount > 0)
             {
-                Main.NewText("Found " + invalidCount + " bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
+                DebugHelper.Log("Server is running cleanup routine.");
+                Main.NewText($"Found { invalidCount } bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
             }
 
             // figure out if new dragon balls need to be spawned (are any missing?)

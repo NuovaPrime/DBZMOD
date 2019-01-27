@@ -300,8 +300,6 @@ namespace DBZMOD
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
             }
 
-            DBZWorld.GetWorld().HandleRetrogradeCleanup();
-
             // Send sync to connecting players
             if (Main.netMode == NetmodeID.Server)
             {
