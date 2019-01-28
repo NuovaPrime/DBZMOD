@@ -1361,22 +1361,36 @@ namespace DBZMOD
             player.eyeColor = eyeColor;
         }
 
+        private readonly Dictionary<string, int> _traitPool = new Dictionary<string, int>()
+        {
+            { "Prodigy", 4 }
+            , { "Legendary", 1 }
+            , { null, 15 }
+        };
+
         public string ChooseTrait()
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 4);
-            traitChooser.Add("Legendary", 1);
-            traitChooser.Add(null, 15);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
+            }
             traitChecked = true;
             return playerTrait = traitChooser;
 
         }
 
-        public string ChooseTraitNoLimits()
+        public string ChooseTraitNoLimits(string oldTrait)
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 1);
-            traitChooser.Add("Legendary", 1);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                if (traitWithWeight.Key.Equals(oldTrait))
+                    continue;
+                if (string.IsNullOrEmpty(traitWithWeight.Key))
+                    continue;
+                traitChooser.Add(traitWithWeight.Key, 1);
+            }
             return playerTrait = traitChooser;
 
         }

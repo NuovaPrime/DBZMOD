@@ -239,8 +239,9 @@ namespace DBZMOD.UI
         private static void DoGeneticWish()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            string oldTrait = modPlayer.playerTrait;
             modPlayer.playerTrait = null;
-            modPlayer.ChooseTraitNoLimits();
+            modPlayer.ChooseTraitNoLimits(oldTrait);
             menuVisible = false;
             modPlayer.wishActive = false;
         }
