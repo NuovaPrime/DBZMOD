@@ -210,11 +210,6 @@ namespace DBZMOD.Projectiles
             projectile.tileCollide = false;   
         }
 
-        public float GetTransparency()
-        {
-            return projectile.alpha / 255f;
-        }
-
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             // don't draw the ball when firing.
@@ -222,7 +217,7 @@ namespace DBZMOD.Projectiles
                 return false;
             float originalRotation = -1.57f;
             // float experimentalRotation = 200f;
-            DrawChargeBall(spriteBatch, Main.projectileTexture[projectile.type], projectile.damage, originalRotation, 1f, MAX_DISTANCE, Color.White);
+            DrawChargeBall(spriteBatch, Main.projectileTexture[projectile.type], projectile.damage, originalRotation, projectile.scale, MAX_DISTANCE, Color.White);
             return false;
         }
 
@@ -238,7 +233,12 @@ namespace DBZMOD.Projectiles
         {
             float r = projectile.velocity.ToRotation() + rotation;
             spriteBatch.Draw(texture, GetChargeBallPosition() - Main.screenPosition,
-                new Rectangle(0, 0, chargeSize.X, chargeSize.Y), color * GetTransparency(), r, new Vector2(chargeSize.X * .5f, chargeSize.Y * .5f), scale, 0, 0.99f);
+                new Rectangle(0, 0, chargeSize.X, chargeSize.Y), color, r, new Vector2(chargeSize.X * .5f, chargeSize.Y * .5f), scale, 0, 0.99f);
+        }
+
+        public void HandleChargeBallSize()
+        {
+            projectile.scale = ChargeLevel / chargeLimit;
         }
 
         private bool _wasCharging = false;
@@ -329,13 +329,6 @@ namespace DBZMOD.Projectiles
 
         protected bool wasSustainingFire = false;
 
-        public void HandleChargeBallVisibility()
-        {
-            var chargeVisibility = (int)Math.Ceiling((Math.Sqrt(ChargeLevel) / Math.Sqrt(finalChargeLimit)) * 255f);
-            projectile.alpha = chargeVisibility;
-            projectile.hide = ChargeLevel <= 0f;
-        }
-
         public bool ShouldHandleWeaponChangesAndContinue(Player player)
         {
             if (player.HeldItem == null || player.dead)
@@ -413,7 +406,7 @@ namespace DBZMOD.Projectiles
             HandleChargingKi(player);
 
             // handle whether the ball should be visible, and how visible.
-            HandleChargeBallVisibility();
+            HandleChargeBallSize();
 
             // If we just crossed a threshold, display combat text for the charge level increase.
             if (Math.Floor(oldChargeLevel) != Math.Floor(ChargeLevel) && oldChargeLevel != ChargeLevel)

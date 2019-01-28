@@ -32,7 +32,7 @@ namespace DBZMOD.Projectiles.EnergyWaves
             beamProjectileName = "EnergyWaveBeam";
 
             // the type of dust that should spawn when charging or decaying
-            dustType = 169;
+            dustType = 15;
 
             // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
             initialBeamCooldown = 180;

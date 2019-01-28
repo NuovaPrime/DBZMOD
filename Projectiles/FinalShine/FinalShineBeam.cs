@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles.FinalShine
             beamSpeed = 15f;
 
             // the type of dust to spawn when the beam is firing
-            dustType = 169;
+            dustType = 74;
 
             // the frequency at which to spawn dust when the beam is firing
             dustFrequency = 0.6f;
