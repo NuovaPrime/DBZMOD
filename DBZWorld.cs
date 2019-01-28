@@ -584,7 +584,6 @@ namespace DBZMOD
             // only fire this server side or single player.
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 CleanupAndRegenerateDragonBalls(true);
-
         }
 
         public void CleanupAndRegenerateDragonBalls(bool isCleanupNeeded)
@@ -733,8 +732,14 @@ namespace DBZMOD
             return 0;
         }
 
+        // the following walls are *natural* [not placed] dungeon walls and the lihzard temple wall, respectively.
+        // these prevent the dragon ball from spawning.
+        private static readonly int[] _invalidDragonBallWalls = new int[] { 7, 9, 94, 95, 96, 97, 98, 99, 87 };
         public static bool IsInvalidTileForDragonBallPlacement(Tile tile)
         {
+            // quick wall check
+            if (_invalidDragonBallWalls.Contains(tile.wall))
+                return false;
             return tile.type == TileID.SmallPiles
                 || tile.type == TileID.LargePiles
                 || tile.type == TileID.LargePiles2
