@@ -175,7 +175,7 @@ namespace DBZMOD
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
-        public string playerTrait = null;
+        public string playerTrait = "";
         public bool demonBonus;
         public int orbGrabRange;
         public int orbHealAmount;
@@ -1365,10 +1365,10 @@ namespace DBZMOD
         {
             { "Prodigy", 4 }
             , { "Legendary", 1 }
-            , { null, 15 }
+            , { "", 15 }
         };
 
-        public string ChooseTrait()
+        public void ChooseTrait()
         {
             var traitChooser = new WeightedRandom<string>();
             foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
@@ -1376,8 +1376,7 @@ namespace DBZMOD
                 traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
             }
             traitChecked = true;
-            return playerTrait = traitChooser;
-
+            playerTrait = traitChooser;
         }
 
         public string ChooseTraitNoLimits(string oldTrait)
