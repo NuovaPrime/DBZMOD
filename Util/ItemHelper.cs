@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DBZMOD.Items.DragonBalls;
 using Terraria;
 
@@ -64,12 +65,17 @@ namespace DBZMOD.Util
 
         public static void DestroyPlayerDragonBalls(Player player)
         {
+            List<int> dragonBallTypeAlreadyRemoved = new List<int>();
             foreach (var item in player.inventory)
             {
                 if (item?.modItem == null)
                     continue;
                 if (item.modItem is DragonBallItem)
                 {
+                    // only remove one of each type of dragon ball. If the player has extras, leave them. Lucky them.
+                    if (dragonBallTypeAlreadyRemoved.Contains(item.type))
+                        continue;
+                    dragonBallTypeAlreadyRemoved.Add(item.type);
                     item.TurnToAir();
                 }
             }

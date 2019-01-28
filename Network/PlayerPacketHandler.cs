@@ -61,26 +61,7 @@ namespace DBZMOD.Network
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
                     break;
-                case (SEND_DRAGON_BALL_DESTROYED):
-                    ReceiveDragonBallDestroyed(reader, fromWho);
-                    break;
             }
-        }
-
-        public void ReceiveDragonBallDestroyed(BinaryReader reader, int fromWho)
-        {
-            DebugHelper.Log("Dragon ball destroyed, receiving regeneration packet.");
-            int whichDragonBallAmI = reader.ReadInt32();
-            DBZWorld world = DBZWorld.GetWorld();
-            world.ReplaceDragonBall(whichDragonBallAmI);
-        }
-
-        public void SendDragonBallDestroyed(int toWho, int fromWho, int whichDragonBall)
-        {
-            DebugHelper.Log("Dragon ball destroyed, sending regeneration packet.");
-            ModPacket packet = GetPacket(SEND_DRAGON_BALL_DESTROYED, fromWho);
-            packet.Write(whichDragonBall);
-            packet.Send(toWho, fromWho);
         }
 
         public void SendKiBeaconAdd(int toWho, int fromWho, Vector2 kiBeaconLocation)
@@ -181,7 +162,7 @@ namespace DBZMOD.Network
             var whichDragonBall = reader.ReadInt32();
             var locationX = reader.ReadInt32();
             var locationY = reader.ReadInt32();
-            world.CacheDragonBallLocation(whichDragonBall, new Point(locationX, locationY), true);
+            world.CacheDragonBallLocation(whichDragonBall, new Point(locationX, locationY));
         }
 
         public void RequestServerSendKiBeaconInitialSync(int toWho, int fromWho)
