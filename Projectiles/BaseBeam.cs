@@ -55,7 +55,7 @@ namespace DBZMOD.Projectiles
         public int collisionParticleDensity = 8;
 
         // how many I-Frames your target receives when taking damage from the blast. Take care, this makes beams stupid strong.
-        public int immunityFrameOverride = 15;
+        public int immunityFrameOverride = 5;
 
         // Flag for whether the beam segment is animated (meaning it has its own movement protocol), defaults to false.
         public bool isBeamSegmentAnimated = false;
