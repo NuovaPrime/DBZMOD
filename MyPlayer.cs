@@ -175,7 +175,7 @@ namespace DBZMOD
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
-        public string playerTrait = null;
+        public string playerTrait = "";
         public bool demonBonus;
         public int orbGrabRange;
         public int orbHealAmount;
@@ -1361,22 +1361,35 @@ namespace DBZMOD
             player.eyeColor = eyeColor;
         }
 
-        public string ChooseTrait()
+        private readonly Dictionary<string, int> _traitPool = new Dictionary<string, int>()
+        {
+            { "Prodigy", 4 }
+            , { "Legendary", 1 }
+            , { "", 15 }
+        };
+
+        public void ChooseTrait()
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 4);
-            traitChooser.Add("Legendary", 1);
-            traitChooser.Add(null, 15);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
+            }
             traitChecked = true;
-            return playerTrait = traitChooser;
-
+            playerTrait = traitChooser;
         }
 
-        public string ChooseTraitNoLimits()
+        public string ChooseTraitNoLimits(string oldTrait)
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 1);
-            traitChooser.Add("Legendary", 1);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                if (traitWithWeight.Key.Equals(oldTrait))
+                    continue;
+                if (string.IsNullOrEmpty(traitWithWeight.Key))
+                    continue;
+                traitChooser.Add(traitWithWeight.Key, 1);
+            }
             return playerTrait = traitChooser;
 
         }
