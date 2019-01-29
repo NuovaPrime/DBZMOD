@@ -26,6 +26,13 @@ namespace DBZMOD
     {
         #region Variables
         //Player vars
+        // regression safe property accessor for Ki Damage until web gets off his buttocks
+        // intended to fix compatibility with AllDamage and Leveled, temporarily.
+        public float KiDamage
+        {
+            get => kiDamage;
+            set => kiDamage = value;
+        }
         public float kiDamage;
         public float kiKbAddition;
         public float kiSpeedAddition;
