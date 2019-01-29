@@ -95,7 +95,7 @@ namespace DBZMOD.UI
 					quotient = Utils.Clamp(quotient, 0, 1);
 					break;
                 case ResourceBarMode.Overload:
-                    quotient = player.overloadCurrent / player.overloadMax;
+                    quotient = (float)player.overloadCurrent / player.overloadMax;
                     quotient = Utils.Clamp(quotient, 0, 1);
                     break;
 
