@@ -49,8 +49,8 @@ namespace DBZMOD.UI
                     _gradientB = new Color(53, 146, 183); // dark blue
                     break;
                 case ResourceBarMode.Overload:
-                    _gradientA = new Color(221, 255, 28); //light green
-                    _gradientB = new Color(70, 150, 93); // dark green
+                    _gradientA = new Color(1, 168, 1);
+                    _gradientB = new Color(35, 237, 35);
                     break;
 
                 default:
@@ -65,7 +65,19 @@ namespace DBZMOD.UI
 
 			Append(_text);
 
-			_barDestination = new Rectangle(20, 0, (int)_width, (int)_height);
+
+            switch (_stat)
+            {
+                case ResourceBarMode.Ki:
+                    _barDestination = new Rectangle(20, 0, (int)_width, (int)_height);
+                    break;
+                case ResourceBarMode.Overload:
+                    _barDestination = new Rectangle(15, 0, (int)_width, (int)_height);
+                    break;
+
+                default:
+                    break;
+            }
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -136,11 +148,18 @@ namespace DBZMOD.UI
             }
 			if(TransformationHelper.IsPlayerTransformed(player.player))
 			{
-				Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
-				int frameHeight2 = Gfx.kiBarLightning.Height / 3;
-				int frame2 = _frameTimer / 5;
-				Rectangle sourceRectangle2 = new Rectangle(0, frameHeight2 * frame2, Gfx.kiBarLightning.Width, frameHeight2);
-				spriteBatch.Draw(Gfx.kiBarLightning, drawPosition2, sourceRectangle2, Color.White);
+                switch (_stat)
+                {
+                    case ResourceBarMode.Ki:
+                        Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
+                        int frameHeight2 = Gfx.kiBarLightning.Height / 3;
+                        int frame2 = _frameTimer / 5;
+                        Rectangle sourceRectangle2 = new Rectangle(0, frameHeight2 * frame2, Gfx.kiBarLightning.Width, frameHeight2);
+                        spriteBatch.Draw(Gfx.kiBarLightning, drawPosition2, sourceRectangle2, Color.White);
+                        break;
+                    case ResourceBarMode.Overload:
+                        break;
+                }	
 			}
 			
 		}
@@ -198,9 +217,8 @@ namespace DBZMOD.UI
 
                 case ResourceBarMode.Overload:
                     _text.SetText("Overload:" + modplayer.overloadCurrent + " / " + modplayer.overloadMax);
-                    _gradientA = new Color(1, 168, 1); //dark green
-                    _gradientB = new Color(35, 237, 35); // light green
-                    break;
+                    _gradientA = new Color(1, 168, 1);
+                    _gradientB = new Color(35, 237, 35);
                     break;
 
                 default:

@@ -829,43 +829,44 @@ namespace DBZMOD
                 if (TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
                 {
                     overloadTimer++;
-                    if (overloadTimer >= 60)
+                    if (TransformationHelper.IsLSSJ1(player))
                     {
-                        overloadCurrent += 1;
-                        overloadTimer = 0;
+                        if (overloadTimer >= 60)
+                        {
+                            overloadCurrent += 1;
+                            overloadTimer = 0;
+                        }
                     }
+                    if (TransformationHelper.IsLSSJ2(player))
+                    {
+                        if (overloadTimer >= 25)
+                        {
+                            overloadCurrent += 1;
+                            overloadTimer = 0;
+                        }
+                    }   
                 }
                 else
                 {
                     // player isn't in legendary form, cools the player overload down
                     overloadTimer++;
-                    if (overloadTimer >= 30)
+                    if (overloadTimer >= 4)
                     {
-                        overloadCurrent -= 2;
+                        overloadCurrent -= 1;
                         overloadTimer = 0;
                     }
                 }
             }
 
-            /*if(LSSJAchieved)
+            if(TransformationHelper.IsLSSJ(player) || overloadCurrent > 0)
             {
                 OverloadBar.visible = true;
             }
             else
             {
-                if(eliteSaiyanBonus)
-                {
-                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 3600);
-                }
-                else
-                {
-                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
-                }
-            }
                 OverloadBar.visible = false;
-            
-            }*/
-            OverloadBar.visible = false;
+            }
+            //OverloadBar.visible = false;
             KiBar.visible = true;
             if(ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
             {
