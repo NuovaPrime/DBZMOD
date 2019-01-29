@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.09f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).kiCrit += 6;
         }
 

@@ -86,7 +86,7 @@ namespace DBZMOD.Buffs
             player.magicDamage *= GetHalvedDamageBonus();
             player.minionDamage *= GetHalvedDamageBonus();
             player.thrownDamage *= GetHalvedDamageBonus();
-            modPlayer.kiDamage *= damageMulti;
+            modPlayer.KiDamage *= damageMulti;
 
             // cross mod support stuff
             if (DBZMOD.instance.thoriumLoaded)

@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.10f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.10f;
                 player.GetModPlayer<MyPlayer>(mod).flightSpeedAdd += 0.1f;
                 player.GetModPlayer<MyPlayer>(mod).kiRegen += 1;
                 player.GetModPlayer<MyPlayer>(mod).flightUsageAdd += 1;

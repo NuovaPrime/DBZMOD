@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
 
-                player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.15f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.15f;
                 player.GetModPlayer<MyPlayer>(mod).spiritualEmblem = true;
             }
         }
