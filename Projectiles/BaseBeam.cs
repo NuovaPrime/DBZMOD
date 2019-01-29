@@ -255,7 +255,7 @@ namespace DBZMOD.Projectiles
         public override bool? CanHitNPC(NPC target)
         {
             bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.dontTakeDamage && !target.friendly;
-            if (isAnyCollision && !IsDetached && isEntityColliding)
+            if (isAnyCollision && isEntityColliding)
             {
                 while (DoCollisionCheck(target.Hitbox))
                 {
@@ -272,7 +272,7 @@ namespace DBZMOD.Projectiles
         public override bool CanHitPlayer(Player target)
         {
             bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.immune;
-            if (isAnyCollision && !IsDetached && isEntityColliding)
+            if (isAnyCollision && isEntityColliding)
             {
                 while (DoCollisionCheck(target.Hitbox))
                 {
@@ -288,7 +288,7 @@ namespace DBZMOD.Projectiles
         public override bool CanHitPvp(Player target)
         {            
             bool isAnyCollision = DoCollisionCheck(target.Hitbox) && target.hostile && target.team != Main.player[projectile.owner].team;
-            if (isAnyCollision && !IsDetached && isEntityColliding)
+            if (isAnyCollision && isEntityColliding)
             {
                 while (DoCollisionCheck(target.Hitbox))
                 {
