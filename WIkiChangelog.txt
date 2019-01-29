@@ -528,7 +528,7 @@ V1.0.9.2
 
 5. Adjusted [[Massive Blast]] Weapons, [[Spirit Bomb]] and [[Super Spirit Bomb]] now charge slower but deal higher damage, while [[Supernova]] and [[Holy Wrath]] charge faster but deal lower damage.
 
-6. You can no longer get your current trait from a genetic reroll wish.
+6. The [[Wishes#Genetic Reroll|Genetic Reroll]] wish now can't give you the same trait as before.
 
 == Dragon Balls ==
 
