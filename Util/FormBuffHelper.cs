@@ -66,16 +66,13 @@ namespace DBZMOD.Util
         // returns a list of transformation steps specific to non-legendary SSJ players
         public static readonly BuffInfo[] ssjBuffs = { ssj1, ssj2, ssj3, ssjg };
 
-
         // a list of transformation steps specific to legendary SSJ players
         public static readonly BuffInfo[] legendaryBuffs = {ssj1, lssj, lssj2};
 
         // a list of transformation steps from SSJ1 through ascended SSJ forms
         public static BuffInfo[] ascensionBuffs = {ssj1, assj, ussj};
 
-        // A bunch of lists joined together, in order to contain every possible transformation buff.
-        // when adding new ones, make sure they wind up here in some form, even if you just have to add them one at a time.
-        // (Union() excludes duplicates automatically)
+        // list containing all the form buffs that aren't debuffs.
         public static List<BuffInfo> AllBuffs()
         {
             return buffInfoList.Where(x => x.buffKeyName != BuffKeyNames.kaiokenFatigue && x.buffKeyName != BuffKeyNames.transformationExhaustion).ToList();
