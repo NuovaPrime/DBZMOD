@@ -500,7 +500,7 @@ namespace DBZMOD.Projectiles
                 FiringTime--;
             }
 
-            if (player.dead || DetachmentTimer >= beamFadeOutTime || (DetachmentTimer > 0 && Distance <= 0))
+            if (player.dead || DetachmentTimer >= beamFadeOutTime)
             {
                 projectile.Kill();
             }
