@@ -7,10 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A frozen talisman that seems to make even your soul cold.'" +
-                "\n7% Increased Ki damage" +
-                "\nIncreased Ki regen" +
-                "\nCharging grants a aura of frostburn around you.");
+            Tooltip.SetDefault("'A frozen talisman that seems to make even your soul cold.'\n7% Increased Ki damage\nIncreased Ki regen\nCharging grants a aura of frostburn around you.");
             DisplayName.SetDefault("Ice Energy Talisman");
         }
 

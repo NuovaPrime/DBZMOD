@@ -8,9 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'Change the future.'" +
-                "\n14% Increased Ki damage" +
-                "\nThorns effect.");
+            Tooltip.SetDefault("'Change the future.'\n14% Increased Ki damage\nThorns effect.");
             DisplayName.SetDefault("Bloodstained Bandana");
         }
 

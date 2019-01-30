@@ -9,8 +9,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A turtle shell with an odd resemblence to the turtle hermit.'"
-               + "\n7% increased ki damage, 8% increased ki knockback.");
+            Tooltip.SetDefault("'A turtle shell with an odd resemblence to the turtle hermit.'\n7% increased ki damage, 8% increased ki knockback.");
             DisplayName.SetDefault("Large Turtle Shell");
         }
 

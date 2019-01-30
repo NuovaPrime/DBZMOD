@@ -7,13 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A core of the pure energy of the earth.'" +
-                "\n10% Increased ki damage" +
-                "\nIncreased ki regen" +
-                "\nReduced flight ki usage" +
-                "\n+1 Max Charges" +
-                "\nIncreased flight speed" +
-                "\nThe longer you charge the more ki you charge, limits at +500%.");
+            Tooltip.SetDefault("'A core of the pure energy of the earth.'\n10% Increased ki damage\nIncreased ki regen\nReduced flight ki usage\n+1 Max Charges\nIncreased flight speed\nThe longer you charge the more ki you charge, limits at +500%.");
             DisplayName.SetDefault("Earthen Arcanium");
         }
 

@@ -11,8 +11,7 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            Description.SetDefault("You are truly gifted." +
-                "\nFaster mastery gains.");
+            Description.SetDefault("You are truly gifted.\nFaster mastery gains.");
         }
     }
 }

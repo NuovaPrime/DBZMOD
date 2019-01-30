@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A ancient necklace that seems to seal energy."
-               + "\n12% reduced ki usage" +
-               "\n9% increased ki damage" +
-               "\n-500 max ki");
+            Tooltip.SetDefault("A ancient necklace that seems to seal energy.\n12% reduced ki usage\n9% increased ki damage\n-500 max ki");
             DisplayName.SetDefault("Ancient Legend Necklace");
         }
 

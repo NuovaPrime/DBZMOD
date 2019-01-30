@@ -16,7 +16,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             kiDrainRateWithMastery = 1.65f;
             kiDrainBuffMulti = 1.5f;
             baseDefenceBonus = 16;
-            Description.SetDefault(AssembleTransBuffDescription() + "\nSlightly increased health regen.");
+            Description.SetDefault($"{AssembleTransBuffDescription()}\nSlightly increased health regen.");
         }
         public override void Update(Player player, ref int buffIndex)
         {

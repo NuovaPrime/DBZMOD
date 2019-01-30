@@ -7,9 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An old arm blaster used by many soldiers." +
-                "\n10% Reduced Ki usage" +
-                "\nIncreased charge speed");
+            Tooltip.SetDefault("An old arm blaster used by many soldiers.\n10% Reduced Ki usage\nIncreased charge speed");
             DisplayName.SetDefault("Arm Cannon");
         }
 

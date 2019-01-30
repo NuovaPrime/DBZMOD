@@ -16,7 +16,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             kiDrainRate = 2.65f;
             kiDrainRateWithMastery = 1.325f;
             baseDefenceBonus = 12;
-            Description.SetDefault(AssembleTransBuffDescription() + "\n(Life drains when below 30% Max Ki)");
+            Description.SetDefault($"{AssembleTransBuffDescription()}\n(Life drains when below 30% Max Ki)");
         }
         public override void Update(Player player, ref int buffIndex)
         {

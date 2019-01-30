@@ -8,10 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The soul of the land seems to give it life.'" +
-                "\n4% Increased ki damage" +
-                "\nIncreased flight speed" +
-                "\nThe longer you charge the more ki you charge, limits at +500%.");
+            Tooltip.SetDefault("'The soul of the land seems to give it life.'\n4% Increased ki damage\nIncreased flight speed\nThe longer you charge the more ki you charge, limits at +500%.");
             DisplayName.SetDefault("Earthen Scarab");
         }
 

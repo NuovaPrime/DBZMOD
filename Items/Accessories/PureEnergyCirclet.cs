@@ -8,11 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'It radiates a unbelievably pure presence.'" +
-                "\n12% Increased Ki damage" +
-                "\nIncreased Ki regen" +
-                "\n+300 Max Ki" +
-                "\nCharging grants a aura of inferno and frostburn around you.");
+            Tooltip.SetDefault("'It radiates a unbelievably pure presence.'\n12% Increased Ki damage\nIncreased Ki regen\n+300 Max Ki\nCharging grants a aura of inferno and frostburn around you.");
             DisplayName.SetDefault("Pure Energy Circlet");
         }
 

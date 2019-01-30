@@ -205,15 +205,15 @@ namespace DBZMOD.Buffs
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, (int)Math.Round(kiDrainPerSecond, 0));
+                displayString = $"{displayString}\nKi Drain: {(int)Math.Round(kiDrainPerSecond, 0)}/s";
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
+                    displayString = $"{displayString}, {(int) Math.Round(kiDrainPerSecondWithMastery, 0)}/s when mastered";
                 }
             }
             if (healthDrainRate > 0)
             {
-                displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, healthDrainRate / 2);
+                displayString = $"{displayString}\nLife Drain: -{healthDrainRate / 2}/s.";
             }
             return displayString;
         }

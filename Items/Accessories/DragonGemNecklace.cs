@@ -7,8 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'Infused with the essence of the dragon.'" +
-                "\nAll effects of the previous necklaces, some enhanced.");
+            Tooltip.SetDefault("'Infused with the essence of the dragon.'\nAll effects of the previous necklaces, some enhanced.");
             DisplayName.SetDefault("Dragon Gem Necklace");
         }
 

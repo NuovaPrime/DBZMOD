@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A jeweled turtle shell that gets the attention of many creatures, for some reason it's unbelievably tough."
-               + "\n12% increased ki damage, 14% increased ki knockback." +
-               "\n+200 Max Ki." +
-               "\nGetting hit restores a small amount of Ki.");
+            Tooltip.SetDefault("A jeweled turtle shell that gets the attention of many creatures, for some reason it's unbelievably tough.\n12% increased ki damage, 14% increased ki knockback.\n+200 Max Ki.\nGetting hit restores a small amount of Ki.");
             DisplayName.SetDefault("Black Diamond Shell");
         }
 

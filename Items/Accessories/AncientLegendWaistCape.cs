@@ -8,10 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A ancient garment made of a ki enhancing material."
-               + "\n14% reduced ki usage" +
-               "\n6% increased ki damage" +
-               "\n-250 max ki");
+            Tooltip.SetDefault("A ancient garment made of a ki enhancing material.\n14% reduced ki usage\n6% increased ki damage\n-250 max ki");
             DisplayName.SetDefault("Ancient Legend Waistcape");
         }
 

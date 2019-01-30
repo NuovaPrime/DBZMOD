@@ -11,7 +11,8 @@ namespace DBZMOD.Items.DragonBalls
             DisplayName.SetDefault("Dragon Radar MK2");
             Tooltip.SetDefault("A medium tech piece of equipment used to locate dragon balls." +
                 "\nHolding this will point you in the direction of the nearest dragon ball with reasonable accuracy," +
-                "\nGetting too close to a dragon ball will overload the radar.");
+                "\nGetting too close to a dragon ball will overload the radar." +
+                "\nWon't point to Dragon Balls you're holding in your inventory.");
         }
 
         public override void HoldItem(Player player)
