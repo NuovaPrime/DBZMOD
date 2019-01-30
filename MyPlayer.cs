@@ -605,16 +605,12 @@ namespace DBZMOD
                 if (masteryLevel1 >= 0.5f && !assjAchieved)
                 {
                     assjAchieved = true;
-                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in SSJ1 " +
-                        "\nto ascend.", 232, 242, 50);
+                    Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.", 232, 242, 50);
                 }
                 else if (masteryLevel1 >= 0.75f && !ussjAchieved)
                 {
                     ussjAchieved = true;
-                    Main.NewText("Your SSJ1 Mastery has been upgraded." +
-                        "\nHold charge and transform while in ASSJ " +
-                        "\nto ascend.", 232, 242, 50);
+                    Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.", 232, 242, 50);
                 }
                 else if (masteryLevel1 >= 1f && !masteredMessage1)
                 {

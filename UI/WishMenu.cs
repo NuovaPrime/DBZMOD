@@ -24,8 +24,7 @@ namespace DBZMOD.UI
         private UIImageButton _wishButtonSkill;
         private UIImageButton _wishButtonAwakening;
         private UIImageButton _grantButton;
-        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire." +
-            "\nCertain wishes have limits.";
+        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire.\nCertain wishes have limits.";
         private static string _wishTextValue = "";
 
 
