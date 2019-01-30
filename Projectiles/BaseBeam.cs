@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ProjectileExtensions = DBZMOD.Extensions.ProjectileExtensions;
 
 namespace DBZMOD.Projectiles
 {
@@ -485,7 +486,7 @@ namespace DBZMOD.Projectiles
 
             if (!modPlayer.isMouseLeftHeld)
             {
-                ProjectileHelper.StartKillRoutine(projectile);
+                ProjectileExtensions.StartKillRoutine(projectile);
             }
 
             if (IsDetached && FiringTime == 0)

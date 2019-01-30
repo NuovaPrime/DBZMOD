@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("LSSJ Test Item");
-            Tooltip.SetDefault("Manually activates the lssj transformation cutscene and unlocks it.");
+            Tooltip.SetDefault("Manually activates the Lssj transformation cutscene and unlocks it.");
         }
 
 

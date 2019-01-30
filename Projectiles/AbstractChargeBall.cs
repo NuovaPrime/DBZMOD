@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -303,7 +304,7 @@ namespace DBZMOD.Projectiles
                     ChargeLevel = Math.Min(finalChargeLimit, ChargeRate() + ChargeLevel);
 
                     // slow down the player while charging.
-                    ProjectileHelper.ApplyChannelingSlowdown(player);
+                    player.ApplyChannelingSlowdown();
 
                     // shoot some dust into the ball to show it's charging, and to look cool.
                     if (!IsSustainingFire)

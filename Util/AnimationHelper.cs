@@ -3,47 +3,17 @@ using DBZMOD.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using DBZMOD.Extensions;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Util
 {
     public static class AnimationHelper
-    {        
-        public static AuraAnimationInfo GetAuraEffectOnPlayer(MyPlayer modPlayer)
-        {
-            if (modPlayer.player.dead)
-                return null;
-            if (TransformationHelper.IsKaioken(modPlayer.player))
-                return AuraAnimations.createKaiokenAura;
-            if (TransformationHelper.IsSuperKaioken(modPlayer.player))
-                return AuraAnimations.createSuperKaiokenAura;
-            if (TransformationHelper.IsSSJ1(modPlayer.player))
-                return AuraAnimations.ssj1Aura;
-            if (TransformationHelper.IsAssj(modPlayer.player))
-                return AuraAnimations.assjAura;
-            if (TransformationHelper.IsUssj(modPlayer.player))
-                return AuraAnimations.ussjAura;
-            if (TransformationHelper.IsSSJ2(modPlayer.player))
-                return AuraAnimations.ssj2Aura;
-            if (TransformationHelper.IsSSJ3(modPlayer.player))
-                return AuraAnimations.ssj3Aura;
-            if (TransformationHelper.IsSSJG(modPlayer.player))
-                return AuraAnimations.ssjgAura;
-            if (TransformationHelper.IsLSSJ1(modPlayer.player))
-                return AuraAnimations.lssjAura;
-            if (TransformationHelper.IsLSSJ2(modPlayer.player))
-                return AuraAnimations.lssj2Aura;
-            if (TransformationHelper.IsSpectrum(modPlayer.player))
-                return AuraAnimations.spectrumAura;
-            // handle charging last
-            if (modPlayer.isCharging)
-                return AuraAnimations.createChargeAura;
-            return null;
-        }
-
+    {
         public static readonly PlayerLayer auraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
@@ -58,7 +28,7 @@ namespace DBZMOD.Util
                 return;
             }
 
-            var aura = GetAuraEffectOnPlayer(modPlayer);
+            var aura = modPlayer.GetAuraEffectOnPlayer();
 
             if (aura != null)
             {
@@ -111,7 +81,7 @@ namespace DBZMOD.Util
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (TransformationHelper.IsSSJ(drawPlayer) && !TransformationHelper.IsSSJG(drawPlayer) && !TransformationHelper.IsSSJ3(drawPlayer))
+            if (PlayerExtensions.IsSSJ(drawPlayer) && !PlayerExtensions.IsSSJG(drawPlayer) && !PlayerExtensions.IsSSJ3(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -119,7 +89,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (TransformationHelper.IsSSJ3(drawPlayer) && !TransformationHelper.IsSSJG(drawPlayer))
+            if (PlayerExtensions.IsSSJ3(drawPlayer) && !PlayerExtensions.IsSSJG(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -127,7 +97,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (TransformationHelper.IsSSJG(drawPlayer))
+            if (PlayerExtensions.IsSSJG(drawPlayer))
             {
                 var frameCounterLimit = 6;
                 var numberOfFrames = 6;
@@ -140,7 +110,7 @@ namespace DBZMOD.Util
 				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/LSSJ", frameCounterLimit, numberOfFrames, yOffset));
 				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }*/
-            if (TransformationHelper.IsSpectrum(drawPlayer))
+            if (PlayerExtensions.IsSpectrum(drawPlayer))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 7;
@@ -198,19 +168,19 @@ namespace DBZMOD.Util
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.HasBuff(TransformationHelper.SSJ2.GetBuffId()))
+            if (drawPlayer.HasBuff(FormBuffHelper.ssj2.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
-            if (drawPlayer.HasBuff(TransformationHelper.LSSJ.GetBuffId()) || drawPlayer.HasBuff(TransformationHelper.LSSJ2.GetBuffId()))
+            if (drawPlayer.HasBuff(FormBuffHelper.lssj.GetBuffId()) || drawPlayer.HasBuff(FormBuffHelper.lssj2.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
             }
-            if (drawPlayer.HasBuff(TransformationHelper.SSJ3.GetBuffId()))
+            if (drawPlayer.HasBuff(FormBuffHelper.ssj3.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((TransformationHelper.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((PlayerExtensions.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }

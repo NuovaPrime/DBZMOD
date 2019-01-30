@@ -1,9 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace DBZMOD.Util
+namespace DBZMOD.Extensions
 {
-    public static class HomingHelper
+    /// <summary>
+    ///     Class housing all projectile extensions
+    /// </summary>
+    public static class ProjectileExtensions
     {
         /// <summary>
         ///     Performs a single frame of homing, detecting the closest target and adjusting its own velocity
@@ -13,10 +17,10 @@ namespace DBZMOD.Util
         /// <param name="acceleration">Complicated. Values should be somewhere between 1 and 10, with 10 being extremely tight tracking.</param>
         /// <param name="topSpeed">The speed at which the projectile will move, at most, when hunting a target.</param>
         /// <param name="isLineOfSightNeeded">Whether the projectile needs a clear path to its target before tracking it.</param>
-        public static void DoHoming(Projectile projectile, float homingRadius, float topSpeed, bool isLineOfSightNeeded)
+        public static void DoHoming(this Projectile projectile, float homingRadius, float topSpeed, bool isLineOfSightNeeded)
         {
             NPC closestTarget = null;
-            float closestTargetDistance = float.MaxValue;
+            float closestTargetDistance = Single.MaxValue;
             foreach (NPC target in Main.npc)
             {
 
@@ -51,6 +55,15 @@ namespace DBZMOD.Util
                 Vector2 trueVelocity = normalizedVelocity * topSpeed;
                 projectile.velocity = trueVelocity;
             }
+        }
+
+        public static void StartKillRoutine(this Projectile projectile)
+        {
+            if (projectile == null)
+                return;
+
+            if (projectile.localAI[0] == 0)
+                projectile.localAI[0] = 1;
         }
     }
 }

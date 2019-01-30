@@ -1,4 +1,5 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Extensions;
+using DBZMOD.Util;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -55,7 +56,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
                 return true;
             var modPlayer = player.GetModPlayer<MyPlayer>();
             //var inUse = modPlayer.isMassiveBlastInUse;
-            var inUse = ProjectileHelper.IsMassiveBlastInUse(player);
+            var inUse = player.IsMassiveBlastInUse();
             DebugHelper.Log(string.Format("Player is trying to use {0} and Massive Blast In Use? {1}", DisplayName, inUse));
             return !inUse;
         }

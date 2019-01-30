@@ -10,76 +10,7 @@ namespace DBZMOD.Util
 {
     public static class ProjectileHelper
     {
-        public static void ApplyChannelingSlowdown(Player player)
-        {
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (modPlayer.isFlying)
-            {
-                float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
-                float yVelocity = -(player.gravity + 0.001f);
-                if (modPlayer.isDownHeld || modPlayer.isUpHeld)
-                {
-                    yVelocity = player.velocity.Y / (1.2f - chargeMoveSpeedBonus);
-                }
-                else
-                {
-                    yVelocity = Math.Min(-0.4f, player.velocity.Y / (1.2f - chargeMoveSpeedBonus));
-                }
-                player.velocity = new Vector2(player.velocity.X / (1.2f - chargeMoveSpeedBonus), yVelocity);
-            }
-            else
-            {
-                float chargeMoveSpeedBonus = modPlayer.chargeMoveSpeed / 10f;
-                // don't neuter falling - keep the positive Y velocity if it's greater - if the player is jumping, this reduces their height. if falling, falling is always greater.                        
-                player.velocity = new Vector2(player.velocity.X / (1.2f - chargeMoveSpeedBonus), Math.Max(player.velocity.Y, player.velocity.Y / (1.2f - chargeMoveSpeedBonus)));
-            }
-        }
-
         // find the closest projectile to a player (owned by that player) of a given type, used to "recapture" charge balls, letting the player resume charging them whenever they want.
-        public static Projectile FindNearestOwnedProjectileOfType(Player player, int type)
-        {
-            int closestProjectile = -1;
-            float distance = float.MaxValue;
-            for(var i = 0; i < Main.projectile.Length; i++)
-            {
-                var proj = Main.projectile[i];
-
-                // abort if the projectile is invalid, the player isn't the owner, the projectile is inactive or the type doesn't match what we want.
-                if (proj == null || proj.owner != player.whoAmI || !proj.active || proj.type != type)
-                    continue;               
-                
-                var projDistance = proj.Distance(player.Center);
-                if (projDistance < distance)
-                {
-                    distance = projDistance;
-                    closestProjectile = i;
-                }
-            }
-            return closestProjectile == -1 ? null : Main.projectile[closestProjectile];
-        }
-
-        public static bool RecapturePlayerChargeBall(Player player, int type)
-        {   
-            // assume first that the player's already holding a proj
-            if (player.heldProj != -1)
-            {
-                var heldProj = Main.projectile[player.heldProj];
-                if (heldProj.modProjectile is AbstractChargeBall)
-                {
-                    return true;
-                }
-            }
-
-            // otherwise try to recapture the held projectile if possible.
-            var proj = FindNearestOwnedProjectileOfType(player, type);
-            if (proj != null)
-            {
-                // the part that matters
-                player.heldProj = proj.whoAmI;
-                return true;
-            }
-            return false;
-        }
 
         public static void RegisterMassiveBlast(int projectileType)
         {
@@ -89,15 +20,6 @@ namespace DBZMOD.Util
         }
 
         public static List<int> MassiveBlastProjectileTypes = new List<int>();
-        public static bool IsMassiveBlastInUse(Player player)
-        {            
-            foreach(int massiveBlastType in MassiveBlastProjectileTypes)
-            {
-                if (player.ownedProjectileCounts[massiveBlastType] > 0)
-                    return true;
-            }
-            return false;
-        }
 
         // spawn some dust (of type: dustId) that approaches or leaves the ball's center, depending on whether it's charging or decaying. Frequency is the chance to spawn one each frame.
         public static void DoChargeDust(Vector2 chargeBallPosition, int dustId, float dustFrequency, bool isDecaying, Vector2 chargeSize)
@@ -176,14 +98,6 @@ namespace DBZMOD.Util
         }
 
         // starts the kill routine for beams that lets them detach from the charge ball and fade incrementally.
-        public static void StartKillRoutine(Projectile projectile)
-        {
-            if (projectile == null)
-                return;
-
-            if (projectile.localAI[0] == 0)
-                projectile.localAI[0] = 1;
-        }
 
         public static int GetTileX(float xCoord)
         {

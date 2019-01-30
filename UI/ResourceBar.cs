@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using DBZMOD.Util;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.UI
 {
@@ -146,7 +147,7 @@ namespace DBZMOD.UI
             {
                 _frameTimer2 = 0;
             }
-			if(TransformationHelper.IsPlayerTransformed(player.player))
+			if(PlayerExtensions.IsPlayerTransformed(player.player))
 			{
                 switch (_stat)
                 {
@@ -203,7 +204,7 @@ namespace DBZMOD.UI
                         _gradientA = new Color(255, 182, 0);
                         _gradientB = new Color(255, 92, 78);
                     }
-                    else if (TransformationHelper.IsSSJG(player))
+                    else if (PlayerExtensions.IsSSJG(player))
                     {
                         _gradientA = new Color(255, 140, 48);
                         _gradientB = new Color(175, 45, 63);

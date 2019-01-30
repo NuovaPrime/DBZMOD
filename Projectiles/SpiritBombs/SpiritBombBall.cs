@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Destruction;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -127,7 +128,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                ProjectileHelper.ApplyChannelingSlowdown(player);
+                player.ApplyChannelingSlowdown();
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

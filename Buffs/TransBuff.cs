@@ -3,6 +3,7 @@ using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
@@ -27,16 +28,16 @@ namespace DBZMOD.Buffs
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(TransformationHelper.IsAnyKaioken(player) || TransformationHelper.IsSSJG(player))
+            if(PlayerExtensions.IsAnyKaioken(player) || PlayerExtensions.IsSSJG(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
-            } else if (TransformationHelper.IsLSSJ1(player) || TransformationHelper.IsLSSJ2(player))
+            } else if (PlayerExtensions.IsLSSJ1(player) || PlayerExtensions.IsLSSJ2(player))
             {                
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (TransformationHelper.IsSSJ1(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsAssj(player) || TransformationHelper.IsUssj(player))
+            } else if (PlayerExtensions.IsSSJ1(player) || PlayerExtensions.IsSSJ2(player) || PlayerExtensions.IsSSJ2(player) || PlayerExtensions.IsAssj(player) || PlayerExtensions.IsUssj(player))
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
-            } else if (TransformationHelper.IsSpectrum(player))
+            } else if (PlayerExtensions.IsSpectrum(player))
             {
                 var rainbow = Main.DiscoColor;
                 Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 512f, rainbow.G / 512f, rainbow.B / 512f);
@@ -46,16 +47,16 @@ namespace DBZMOD.Buffs
             player.statDefense += baseDefenceBonus;
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (TransformationHelper.IsAnythingOtherThanKaioken(player))
+            if (PlayerExtensions.IsAnythingOtherThanKaioken(player))
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
-                    if (TransformationHelper.IsSuperKaioken(player))
+                    if (PlayerExtensions.IsSuperKaioken(player))
                     {
                         modPlayer.kaiokenLevel = 0;
                     }
-                    TransformationHelper.EndTransformations(player);
+                    PlayerExtensions.EndTransformations(player);
                 }
                 else
                 {
@@ -174,7 +175,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == TransformationHelper.Kaioken.GetBuffId() || Type == TransformationHelper.SuperKaioken.GetBuffId())
+            if (Type == FormBuffHelper.kaioken.GetBuffId() || Type == FormBuffHelper.superKaioken.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {

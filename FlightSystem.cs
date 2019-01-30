@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using DBZMOD.Util;
 using DBZMOD.Projectiles;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -77,19 +78,19 @@ namespace DBZMOD
                     SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
                 }
 
-                if (TransformationHelper.IsSSJ(player) && !TransformationHelper.IsSSJG(player))
+                if (PlayerExtensions.IsSSJ(player) && !PlayerExtensions.IsSSJG(player))
                 {
                     flightDustType = 170;
                 }
-                else if (TransformationHelper.IsLSSJ(player))
+                else if (PlayerExtensions.IsLSSJ(player))
                 {
                     flightDustType = 107;
                 }
-                else if (TransformationHelper.IsSSJG(player))
+                else if (PlayerExtensions.IsSSJG(player))
                 {
                     flightDustType = 174;
                 }
-                else if (TransformationHelper.IsAnyKaioken(player))
+                else if (PlayerExtensions.IsAnyKaioken(player))
                 {
                     flightDustType = 182;
                 }

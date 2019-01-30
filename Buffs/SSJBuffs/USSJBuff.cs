@@ -7,7 +7,7 @@ namespace DBZMOD.Buffs.SSJBuffs
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault(TransformationHelper.GetUSSJNamePreference());
+            DisplayName.SetDefault(FormBuffHelper.GetUssjNamePreference());
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;

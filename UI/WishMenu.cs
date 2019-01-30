@@ -4,6 +4,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 
 namespace DBZMOD.UI

@@ -1,5 +1,6 @@
 using DBZMOD.Util;
 using Terraria;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
@@ -70,7 +71,7 @@ namespace DBZMOD.Buffs
 
         public static int GetHealthDrain(MyPlayer modPlayer)
         {
-            if (!TransformationHelper.IsKaioken(modPlayer.player))
+            if (!PlayerExtensions.IsKaioken(modPlayer.player))
                 return 0;
             return 8 + (4 * (modPlayer.kaiokenLevel) - 1);
         }        

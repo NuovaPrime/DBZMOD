@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Extensions;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -91,7 +92,7 @@ namespace DBZMOD
                 if (player.channel && projectile.active)
                 {
                     chargeTimer++;
-                    ProjectileHelper.ApplyChannelingSlowdown(player);
+                    player.ApplyChannelingSlowdown();
                 }
 
                 //ChargeTimerMax -= MyPlayer.ModPlayer(player).chargeTimerMaxAdd;

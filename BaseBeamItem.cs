@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Extensions;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using DBZMOD.Util;
@@ -43,7 +44,7 @@ namespace DBZMOD
             player.channel = true;
             if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
             {
-                if (!ProjectileHelper.RecapturePlayerChargeBall(player, item.shoot))
+                if (!player.IsChargeBallRecaptured(item.shoot))
                 {
                     int weaponDamage = item.damage;
                     GetWeaponDamage(player, ref weaponDamage);

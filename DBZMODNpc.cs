@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -216,7 +217,7 @@ namespace DBZMOD
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
                     modPlayer.kaiokenLevel = 0;
-                    TransformationHelper.EndTransformations(player);
+                    PlayerExtensions.EndTransformations(player);
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);

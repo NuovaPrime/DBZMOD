@@ -133,6 +133,10 @@
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
     <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Extensions\BuffInfoExtensions.cs" />
+    <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Extensions\PlayerExtensions.cs" />
+    <Compile Include="Extensions\ProjectileExtensions.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
     <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
@@ -497,9 +501,8 @@
     <Compile Include="Util\InstantTransmissionMapHelper.cs" />
     <Compile Include="Util\ProjectileHelper.cs" />
     <Compile Include="Util\SoundHelper.cs" />
-    <Compile Include="Util\TransformationHelper.cs" />
+    <Compile Include="Util\FormBuffHelper.cs" />
     <Compile Include="Util\ControlHelper.cs" />
-    <Compile Include="Util\HomingHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />

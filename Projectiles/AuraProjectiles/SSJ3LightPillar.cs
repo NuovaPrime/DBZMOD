@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Projectiles.AuraProjectiles
 {
@@ -62,7 +63,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            TransformationHelper.DoTransform(player, TransformationHelper.SSJ3, DBZMOD.instance);
+            PlayerExtensions.DoTransform(player, FormBuffHelper.ssj3, DBZMOD.instance);
             MyPlayer.ModPlayer(player).isTransforming = false;
         }
     }
