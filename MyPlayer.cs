@@ -20,19 +20,22 @@ using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
 using DBZMOD.Projectiles;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
     // TODO : Change this class name.
     public class MyPlayer : ModPlayer
     {
+        public const float FORM_MASTERY_GAIN_PER_TICK = 0.0000058f;
+
         #region Variables
         //Player vars
         // regression safe property accessor for Ki Damage until web gets off his buttocks
         // intended to fix compatibility with AllDamage and Leveled, temporarily.
+        // ReSharper disable once InconsistentNaming
         public float KiDamage;
 
+        // ReSharper disable once InconsistentNaming
         public float kiDamage
         {
             get { return KiDamage; }
@@ -79,15 +82,17 @@ namespace DBZMOD
         public int ssjAuraBeamTimer;
         public bool hasSSJ1;
         public int transformCooldown;
+
         public bool assjAchieved;
         public bool ussjAchieved;
         public bool ssj2Achieved;
         public bool ssj3Achieved;
-        public bool lssjAchieved = false;
-        public bool ssjgAchieved = false;
-        public int lssj2Timer;
-        public bool lssj2Achieved = false;
+        public bool lssjAchieved;
+        public bool ssjgAchieved;
+        public bool lssj2Achieved;
         public bool lssjgAchieved = false;
+
+        public int lssj2Timer;
         public int rageCurrent = 0;
         public int rageDecreaseTimer = 0;
         public int formUnlockChance;
@@ -95,31 +100,38 @@ namespace DBZMOD
         // public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
-        public static ModHotKey kaiokenKey;
-        public static ModHotKey energyCharge;
-        public static ModHotKey transform;
-        public static ModHotKey powerDown;
-        public static ModHotKey speedToggle;
-        public static ModHotKey quickKi;
-        public static ModHotKey transMenu;
-        public static ModHotKey instantTransmission;
-        //public static ModHotKey ProgressionMenuKey;
-        public static ModHotKey flyToggle;
-        public static ModHotKey armorBonus;
+        public static ModHotKey 
+            kaiokenKey,
+            energyCharge,
+            transform,
+            powerDown,
+            speedToggle,
+            quickKi,
+            transMenu,
+            instantTransmission,
+            flyToggle,
+            armorBonus;
 
         //mastery vars
-        public float masteryLevel1 = 0;
-        public bool masteredMessage1 = false;
-        public float masteryLevel2 = 0;
-        public bool masteredMessage2 = false;
-        public float masteryLevel3 = 0;
-        public bool masteredMessage3 = false;
-        public float masteryLevelGod = 0;
-        public bool masteredMessageGod = false;
-        public float masteryLevelBlue = 0;
-        public bool masteredMessageBlue = false;
-        public float masteryMaxFlight = 1;
-        public float masteryLevelFlight = 0;
+        public float 
+            masteryLevel1,
+            masteryLevel2,
+            masteryLevel3,
+
+            masteryLevelGod,
+            masteryLevelBlue,
+
+            masteryMaxFlight = 1,
+            masteryLevelFlight = 0;
+
+        public bool 
+            masteredMessage1,
+            masteredMessage2,
+            masteredMessage3,
+
+            masteredMessageGod,
+            masteredMessageBlue;
+
         public int masteryTimer = 0;
 
         //Wish vars
@@ -332,8 +344,6 @@ namespace DBZMOD
         {
             return (int)Math.Ceiling(KiMax() * kiMaxMult + kiMax2 + kiMax3);
         }
-
-        public const float FORM_MASTERY_GAIN_PER_TICK = 0.0000058f;
 
         // all changes to Ki Current are now made through this method.
         public void AddKi(float kiAmount, bool isWeaponDrain, bool isFormDrain)
