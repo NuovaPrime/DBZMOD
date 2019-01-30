@@ -10,6 +10,7 @@ using DBZMOD.Network;
 using DBZMOD.Projectiles;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -595,6 +596,32 @@ namespace DBZMOD.Extensions
         public static bool IsUssj(this Player player)
         {
             return player.HasBuff(FormBuffHelper.ussj.GetBuffId());
+        }
+
+        public static void DrawAura(this MyPlayer modPlayer, AuraAnimationInfo aura)
+        {
+            Player player = modPlayer.player;
+            Texture2D texture = aura.GetTexture();
+            Rectangle textureRectangle = new Rectangle(0, aura.GetHeight() * modPlayer.auraCurrentFrame, texture.Width, aura.GetHeight());
+            float scale = aura.GetAuraScale(modPlayer);
+            Tuple<float, Vector2> rotationAndPosition = aura.GetAuraRotationAndPosition(modPlayer);
+            float rotation = rotationAndPosition.Item1;
+            Vector2 position = rotationAndPosition.Item2;
+
+            SamplerState samplerState = Main.DefaultSamplerState;
+            if (player.mount.Active)
+            {
+                samplerState = Main.MountedSamplerState;
+            }
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, aura.blendState, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+
+            // custom draw routine
+            Main.spriteBatch.Draw(texture, position - Main.screenPosition, textureRectangle, Color.White, rotation, new Vector2(aura.GetWidth(), aura.GetHeight()) * 0.5f, scale, SpriteEffects.None, 0f);
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
