@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Util;
+using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
@@ -6,7 +7,7 @@ namespace DBZMOD.Buffs.SSJBuffs
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Ultra Super Saiyan");
+            DisplayName.SetDefault(TransformationHelper.GetUSSJNamePreference());
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
