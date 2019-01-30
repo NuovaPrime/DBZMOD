@@ -802,7 +802,7 @@ namespace DBZMOD
                 transformationFrameTimer = 0;
             }
             KiBar.visible = true;
-            if (ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
+            if (player.IsCarryingAllDragonBalls() && !wishActive)
             {
                 int soundTimer = 0;
                 soundTimer++;
@@ -2037,7 +2037,7 @@ namespace DBZMOD
 
             if (quickKi.JustPressed)
             {
-                ItemHelper.ConsumeKiPotion(player);
+                ItemHelper.FindAndConsumeKiPotion(player);
             }
 
             // freeform instant transmission requires book 2.

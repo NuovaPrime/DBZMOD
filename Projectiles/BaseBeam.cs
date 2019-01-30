@@ -481,7 +481,6 @@ namespace DBZMOD.Projectiles
         public void ProcessKillRoutine(Player player)
         {
             projectile.timeLeft = 2;
-
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             if (!modPlayer.isMouseLeftHeld)

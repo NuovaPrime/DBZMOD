@@ -238,7 +238,7 @@ namespace DBZMOD.Util
                 if (location.Equals(Point.Zero))
                     continue;
                 // skip this dragon ball if the player is holding a copy
-                if (ItemHelper.InventoryContainsDragonBall(i, Main.LocalPlayer.inventory))
+                if (Main.LocalPlayer.inventory.IsDragonBallPresent(i))
                     continue;
                 var coordVector = location.ToVector2() * 16f;
                 var distance = Vector2.Distance(coordVector, drawPlayer.Center + Vector2.UnitY * -120f);

@@ -32,29 +32,11 @@ namespace DBZMOD.Util
             return false;
         }
 
-        public static void ConsumeOneItem(int type, Player player)
-        {
-            for (int i = 0; i < player.inventory.Length; i++)
-            {
-                Item item = player.inventory[i];
-                if (item == null)
-                    continue;
-
-                if (!item.type.Equals(type))
-                    continue;
-                
-                if (item.stack.Equals(1))
-                {
-                    item.TurnToAir();
-                }
-                else
-                {
-                    item.stack -= 1;
-                }
-            }
-        }
-
-        public static void ConsumeKiPotion(Player player)
+        /// <summary>
+        ///     Find a single ki potion (first found) and consume it.
+        /// </summary>
+        /// <param name="player"></param>
+        public static void FindAndConsumeKiPotion(this Player player)
         {
             for (int i = 0; i < player.inventory.Length; i++)
             {
@@ -71,6 +53,10 @@ namespace DBZMOD.Util
             }
         }
 
+        /// <summary>
+        ///     Return an item type (int) using the name of an item.
+        /// </summary>
+        /// <param name="name">The internal name of the item.</param>
         public static int GetItemTypeFromName(string name)
         {
             if (DBZMOD.instance.GetItem(name) != null && DBZMOD.instance.GetItem(name).item != null)
@@ -79,18 +65,29 @@ namespace DBZMOD.Util
             return -1;
         }
 
-        public static bool PlayerHasAllDragonBalls(Player player)
+        /// <summary>
+        ///     Return true if the player is carrying one of each dragon ball.
+        /// </summary>
+        /// <param name="player">The player being checked.</param>
+        /// <returns></returns>
+        public static bool IsCarryingAllDragonBalls(this Player player)
         {
             bool[] dragonBallsPresent = Enumerable.Repeat(false, 7).ToArray();
             for (int i = 0; i < dragonBallsPresent.Length; i++)
             {
-                dragonBallsPresent[i] = InventoryContainsDragonBall(i + 1, player.inventory);
+                dragonBallsPresent[i] = player.inventory.IsDragonBallPresent(i + 1);
             }
 
             return dragonBallsPresent.All(x => x);
         }
 
-        public static bool InventoryContainsDragonBall(int whichDragonBall, Item[] inventory)
+        /// <summary>
+        ///     Whether a single dragon ball of a specific type is present in an inventory.
+        /// </summary>
+        /// <param name="inventory">The inventory being checked.</param>
+        /// <param name="whichDragonBall">Which (int) dragon ball we're looking for.</param>
+        /// <returns></returns>
+        public static bool IsDragonBallPresent(this Item[] inventory, int whichDragonBall)
         {
             return
             (
@@ -103,7 +100,12 @@ namespace DBZMOD.Util
             );
         }
 
-        public static void DestroyPlayerDragonBalls(Player player)
+        /// <summary>
+        ///     Find and destroy exactly one of each dragon ball type in a player's inventory.
+        ///     Called after making a wish.
+        /// </summary>
+        /// <param name="player">The player being checked.</param>
+        public static void DestroyOneOfEachDragonBall(this Player player)
         {
             List<int> dragonBallTypeAlreadyRemoved = new List<int>();
             foreach (var item in player.inventory)
