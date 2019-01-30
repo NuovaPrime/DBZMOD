@@ -1,4 +1,5 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Extensions;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -89,12 +90,12 @@ namespace DBZMOD.Projectiles.LSSJs
             Player player = Main.player[projectile.owner];
             if (MyPlayer.ModPlayer(player).isTransforming)
             {
-                PlayerExtensions.DoTransform(player, FormBuffHelper.lssj2, DBZMOD.instance);
+                player.DoTransform(FormBuffHelper.lssj2, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;
             }
             else
             {
-                PlayerExtensions.DoTransform(player, FormBuffHelper.lssj, DBZMOD.instance);
+                player.DoTransform(FormBuffHelper.lssj, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;
             }
         }

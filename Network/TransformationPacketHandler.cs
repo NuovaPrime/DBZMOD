@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ID;
@@ -46,15 +47,15 @@ namespace DBZMOD.Network
             }
             else
             {
-                Player thePlayer = Main.player[whichPlayer];
+                Player player = Main.player[whichPlayer];
                 // handle form removal if duration is 0
                 if (duration == 0)
                 {
-                    PlayerExtensions.RemoveTransformation(thePlayer, buffKeyName);                    
+                    player.RemoveTransformation(buffKeyName);                    
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    PlayerExtensions.DoTransform(thePlayer, FormBuffHelper.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.instance);
+                    player.DoTransform(FormBuffHelper.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.instance);
                 }
             }
         }

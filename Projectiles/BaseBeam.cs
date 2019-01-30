@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -486,7 +487,7 @@ namespace DBZMOD.Projectiles
 
             if (!modPlayer.isMouseLeftHeld)
             {
-                ProjectileExtensions.StartKillRoutine(projectile);
+                projectile.StartKillRoutine();
             }
 
             if (IsDetached && FiringTime == 0)

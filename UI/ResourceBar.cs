@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DBZMOD.Extensions;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -147,7 +148,7 @@ namespace DBZMOD.UI
             {
                 _frameTimer2 = 0;
             }
-			if(PlayerExtensions.IsPlayerTransformed(player.player))
+			if(player.player.IsPlayerTransformed())
 			{
                 switch (_stat)
                 {
@@ -204,7 +205,7 @@ namespace DBZMOD.UI
                         _gradientA = new Color(255, 182, 0);
                         _gradientB = new Color(255, 92, 78);
                     }
-                    else if (PlayerExtensions.IsSSJG(player))
+                    else if (player.IsSSJG())
                     {
                         _gradientA = new Color(255, 140, 48);
                         _gradientB = new Color(175, 45, 63);

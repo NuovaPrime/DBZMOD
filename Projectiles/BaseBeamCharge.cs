@@ -1,4 +1,5 @@
 using System;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -109,7 +110,7 @@ namespace DBZMOD.Projectiles
             bool isPassingPreAi = base.PreAI();
             if (!isPassingPreAi && myProjectile != null)
             {
-                ProjectileExtensions.StartKillRoutine(myProjectile);
+                myProjectile.StartKillRoutine();
             }
             return isPassingPreAi;
         }
@@ -121,7 +122,7 @@ namespace DBZMOD.Projectiles
 
             if (myProjectile != null)
             {
-                ProjectileExtensions.StartKillRoutine(myProjectile);
+                myProjectile.StartKillRoutine();
                 myProjectile = null;
             }
         }

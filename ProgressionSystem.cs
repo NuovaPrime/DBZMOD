@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Extensions;
+using Terraria;
 using DBZMOD.Util;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
@@ -40,14 +41,14 @@ namespace DBZMOD
             ProcessKiExperienceGain(MyPlayer.ModPlayer(player));
         }
 
-        private void ProcessKiExperienceGain(MyPlayer modplayer)
+        private void ProcessKiExperienceGain(MyPlayer modPlayer)
         {
-            if (PlayerExtensions.IsPlayerTransformed(modplayer.player))
+            if (modPlayer.player.IsPlayerTransformed())
             {
                 AddKiExperience(0.2f);
             }
 
-            if(modplayer.isFlying)
+            if(modPlayer.isFlying)
             {
                 AddKiExperience(0.1f);
             }

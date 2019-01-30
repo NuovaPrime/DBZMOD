@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Extensions;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
@@ -36,10 +37,11 @@ namespace DBZMOD.Items.Misc
         public override bool OnPickup(Player player)
         {
             SoundHelper.PlayVanillaSound(SoundID.NPCDeath7, player);
-            PlayerExtensions.EndTransformations(player);
-            MyPlayer.ModPlayer(player).SSJGTransformation();
-            MyPlayer.ModPlayer(player).isTransforming = true;
-            MyPlayer.ModPlayer(player).ssjgAchieved = true;
+            player.EndTransformations();
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+            modPlayer.SSJGTransformation();
+            modPlayer.isTransforming = true;
+            modPlayer.ssjgAchieved = true;
             Main.NewText("You feel enveloped in a divine energy.");
             return false;
         }

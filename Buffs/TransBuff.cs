@@ -1,5 +1,6 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
@@ -28,16 +29,16 @@ namespace DBZMOD.Buffs
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(PlayerExtensions.IsAnyKaioken(player) || PlayerExtensions.IsSSJG(player))
+            if(player.IsAnyKaioken() || player.IsSSJG())
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
-            } else if (PlayerExtensions.IsLSSJ1(player) || PlayerExtensions.IsLSSJ2(player))
+            } else if (player.IsLSSJ1() || player.IsLSSJ2())
             {                
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (PlayerExtensions.IsSSJ1(player) || PlayerExtensions.IsSSJ2(player) || PlayerExtensions.IsSSJ2(player) || PlayerExtensions.IsAssj(player) || PlayerExtensions.IsUssj(player))
+            } else if (player.IsSSJ1() || player.IsSSJ2() || player.IsSSJ2() || player.IsAssj() || player.IsUssj())
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
-            } else if (PlayerExtensions.IsSpectrum(player))
+            } else if (player.IsSpectrum())
             {
                 var rainbow = Main.DiscoColor;
                 Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 512f, rainbow.G / 512f, rainbow.B / 512f);
@@ -47,16 +48,16 @@ namespace DBZMOD.Buffs
             player.statDefense += baseDefenceBonus;
             
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (PlayerExtensions.IsAnythingOtherThanKaioken(player))
+            if (player.IsAnythingOtherThanKaioken())
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted())
                 {
-                    if (PlayerExtensions.IsSuperKaioken(player))
+                    if (player.IsSuperKaioken())
                     {
                         modPlayer.kaiokenLevel = 0;
                     }
-                    PlayerExtensions.EndTransformations(player);
+                    player.EndTransformations();
                 }
                 else
                 {

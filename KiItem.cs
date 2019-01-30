@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
@@ -155,7 +156,7 @@ namespace DBZMOD
 
         public override bool UseItem(Player player)
         {
-            if(PlayerExtensions.IsLSSJ(player) && !PlayerExtensions.IsSSJ1(player))
+            if(player.IsLSSJ() && !player.IsSSJ1())
             {
                 int i = Main.rand.Next(1, 4);
                 MyPlayer.ModPlayer(player).overloadCurrent += i;

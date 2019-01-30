@@ -111,27 +111,27 @@ namespace DBZMOD.Extensions
         {
             if (modPlayer.player.dead)
                 return null;
-            if (PlayerExtensions.IsKaioken(modPlayer.player))
+            if (modPlayer.player.IsKaioken())
                 return AuraAnimations.createKaiokenAura;
-            if (PlayerExtensions.IsSuperKaioken(modPlayer.player))
+            if (modPlayer.player.IsSuperKaioken())
                 return AuraAnimations.createSuperKaiokenAura;
-            if (PlayerExtensions.IsSSJ1(modPlayer.player))
+            if (modPlayer.player.IsSSJ1())
                 return AuraAnimations.ssj1Aura;
-            if (PlayerExtensions.IsAssj(modPlayer.player))
+            if (modPlayer.player.IsAssj())
                 return AuraAnimations.assjAura;
-            if (PlayerExtensions.IsUssj(modPlayer.player))
+            if (modPlayer.player.IsUssj())
                 return AuraAnimations.ussjAura;
-            if (PlayerExtensions.IsSSJ2(modPlayer.player))
+            if (modPlayer.player.IsSSJ2())
                 return AuraAnimations.ssj2Aura;
-            if (PlayerExtensions.IsSSJ3(modPlayer.player))
+            if (modPlayer.player.IsSSJ3())
                 return AuraAnimations.ssj3Aura;
-            if (PlayerExtensions.IsSSJG(modPlayer.player))
+            if (modPlayer.player.IsSSJG())
                 return AuraAnimations.ssjgAura;
-            if (PlayerExtensions.IsLSSJ1(modPlayer.player))
+            if (modPlayer.player.IsLSSJ1())
                 return AuraAnimations.lssjAura;
-            if (PlayerExtensions.IsLSSJ2(modPlayer.player))
+            if (modPlayer.player.IsLSSJ2())
                 return AuraAnimations.lssj2Aura;
-            if (PlayerExtensions.IsSpectrum(modPlayer.player))
+            if (modPlayer.player.IsSpectrum())
                 return AuraAnimations.spectrumAura;
             // handle charging last
             if (modPlayer.isCharging)
@@ -430,10 +430,10 @@ namespace DBZMOD.Extensions
         {
             foreach (BuffInfo buff in FormBuffHelper.AllBuffs())
             {
-                if (BuffInfoExtensions.IsKaioken(buff) && isIgnoringKaioken)
+                if (buff.IsKaioken() && isIgnoringKaioken)
                     continue;
 
-                if (BuffInfoExtensions.IsAnythingOtherThanKaioken(buff) && isIgnoringNonKaioken)
+                if (buff.IsAnythingOtherThanKaioken() && isIgnoringNonKaioken)
                     continue;
 
                 if (player.HasBuff(buff.GetBuffId()))
@@ -450,7 +450,7 @@ namespace DBZMOD.Extensions
         {
             BuffInfo currentTransformation = player.GetCurrentTransformation(false, false);
             BuffInfo currentNonKaioTransformation = player.GetCurrentTransformation(true, false);
-            if (BuffInfoExtensions.IsKaioken(currentTransformation))
+            if (currentTransformation.IsKaioken())
             {
                 // player was in kaioken, trying to power up. Go to super kaioken but set the player's kaioken level to 1 because that's how things are now.
                 if (currentNonKaioTransformation == null && player.GetModPlayer<MyPlayer>().hasSSJ1)
@@ -469,7 +469,7 @@ namespace DBZMOD.Extensions
                 return FormBuffHelper.ssj1;
 
             // the player is legendary and doing a legendary step up.
-            if (BuffInfoExtensions.IsLssj(currentTransformation) && MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsLssj() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
@@ -481,7 +481,7 @@ namespace DBZMOD.Extensions
             }
 
             // the player isn't legendary and is doing a normal step up.
-            if (BuffInfoExtensions.IsSsj(currentTransformation) && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsSsj() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {

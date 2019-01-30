@@ -55,7 +55,7 @@ namespace DBZMOD.Util
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (PlayerExtensions.IsSSJ(drawPlayer) && !PlayerExtensions.IsSSJG(drawPlayer) && !PlayerExtensions.IsSSJ3(drawPlayer))
+            if (drawPlayer.IsSSJ() && !drawPlayer.IsSSJG() && !drawPlayer.IsSSJ3())
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -63,7 +63,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (PlayerExtensions.IsSSJ3(drawPlayer) && !PlayerExtensions.IsSSJG(drawPlayer))
+            if (drawPlayer.IsSSJ3() && !drawPlayer.IsSSJG())
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -71,7 +71,7 @@ namespace DBZMOD.Util
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (PlayerExtensions.IsSSJG(drawPlayer))
+            if (drawPlayer.IsSSJG())
             {
                 var frameCounterLimit = 6;
                 var numberOfFrames = 6;
@@ -84,7 +84,7 @@ namespace DBZMOD.Util
 				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/LSSJ", frameCounterLimit, numberOfFrames, yOffset));
 				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }*/
-            if (PlayerExtensions.IsSpectrum(drawPlayer))
+            if (drawPlayer.IsSpectrum())
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 7;
@@ -154,7 +154,7 @@ namespace DBZMOD.Util
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((PlayerExtensions.IsKaioken(drawPlayer) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((drawPlayer.IsKaioken() && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
