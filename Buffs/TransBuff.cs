@@ -17,6 +17,7 @@ namespace DBZMOD.Buffs
         public float kiDrainRate;
         public float kiDrainRateWithMastery;
         private int _kiDrainAddTimer;
+        private int _overloadDrainAddTimer;
         public bool realismModeOn;
         public int baseDefenceBonus;
         public int precentDefenceBonus;
@@ -64,6 +65,16 @@ namespace DBZMOD.Buffs
                     {
                         modPlayer.kiDrainAddition += 1;
                         _kiDrainAddTimer = 0;
+                    }
+
+                    if (modPlayer.IsOverloading())
+                    {
+                        _overloadDrainAddTimer++;
+                        if (_kiDrainAddTimer > 60)
+                        {
+                            modPlayer.kiDrainAddition += 1;
+                            _overloadDrainAddTimer = 0;
+                        }
                     }
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }

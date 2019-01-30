@@ -42,6 +42,7 @@ namespace DBZMOD
         public int kiRegenTimer;
         public int kiRegen;
         public int kaiokenLevel = 0;
+        public float kiDamageMulti = 1f;
 
         // kiMax is now a property that gets reset when it's accessed and less than or equal to zero, to retro fix nasty bugs
         // there's no point changing this value as it only resets itself if it doesn't line up with fragment ki max.
@@ -88,7 +89,6 @@ namespace DBZMOD
         public int rageDecreaseTimer = 0;
         public int formUnlockChance;
         public int overallFormUnlockChance;
-        public bool isOverloading;
         // public BuffInfo[] CurrentTransformations = new BuffInfo[2];
 
         //Input vars
@@ -479,6 +479,11 @@ namespace DBZMOD
             return 1f + (GetPowerWishesUsed() / 10f);
         }
 
+        public bool IsOverloading()
+        {
+            return overloadCurrent == overloadMax;
+        }
+
         public void HandlePowerWishMultipliers()
         {
             player.meleeDamage *= PowerWishMulti();
@@ -796,6 +801,17 @@ namespace DBZMOD
             {
                 transformationFrameTimer = 0;
             }
+            KiBar.visible = true;
+            if (ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
+            {
+                int soundTimer = 0;
+                soundTimer++;
+                if (soundTimer > 300)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DBReady"));
+                    soundTimer = 0;
+                }
+            }
         }
 
         public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
@@ -825,7 +841,10 @@ namespace DBZMOD
             // try to update positional audio?
             SoundHelper.UpdateTrackedSound(auraSoundInfo, player.position);
         }
-
+        private bool wasInOverloadingState = false;
+        private int overloadCooldownTimer = 0;
+        private float overloadBlastTimer;
+        private int overloadScaleCheckTimer = 0;
         private void HandleOverloadCounters()
         {
             // clamp overload current values to 0/max
@@ -835,12 +854,12 @@ namespace DBZMOD
             if (IsPlayerLegendary())
             {
                 // is the player in a legendary transform step (that isn't SSJ1)?
-                if (TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
+                if (TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player) && overloadCurrent <= overloadMax)
                 {
                     overloadTimer++;
                     if (TransformationHelper.IsLSSJ1(player))
                     {
-                        if (overloadTimer >= 60)
+                        if (overloadTimer >= 45)
                         {
                             overloadCurrent += 1;
                             overloadTimer = 0;
@@ -848,23 +867,34 @@ namespace DBZMOD
                     }
                     if (TransformationHelper.IsLSSJ2(player))
                     {
-                        if (overloadTimer >= 25)
+                        if (overloadTimer >= 20)
                         {
                             overloadCurrent += 1;
                             overloadTimer = 0;
                         }
-                    }   
+                    }
+
+                    wasInOverloadingState = true;
                 }
-                else
+                else if (wasInOverloadingState || IsOverloading())
                 {
                     // player isn't in legendary form, cools the player overload down
-                    overloadTimer++;
-                    if (overloadTimer >= 4)
+                    overloadCooldownTimer++;
+                    if (overloadCooldownTimer > 180)
                     {
-                        overloadCurrent -= 1;
-                        overloadTimer = 0;
+                        overloadTimer++;
+                        if (overloadTimer >= 4)
+                        {
+                            overloadCurrent -= 1;
+                            overloadTimer = 0;
+                        }
                     }
                 }
+            }
+
+            if (wasInOverloadingState && overloadCurrent == 0)
+            {
+                wasInOverloadingState = false;
             }
 
             if(TransformationHelper.IsLSSJ(player) || overloadCurrent > 0)
@@ -875,18 +905,55 @@ namespace DBZMOD
             {
                 OverloadBar.visible = false;
             }
-            //OverloadBar.visible = false;
-            KiBar.visible = true;
-            if(ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
+
+            if (overloadCurrent >= ((float)overloadMax * .7f))
             {
-                int soundTimer = 0;
-                soundTimer++;
-                if(soundTimer > 300)
+                const float aurawidth = 2.0f;
+
+                for (int i = 0; i < 20; i++)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/DBReady"));
-                    soundTimer = 0;
+                    float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * aurawidth))).X;
+                    float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
+
+                    Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 74, 0f, -2f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+
+                    if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
+                    {
+                        tDust.scale *= 0.75f;
+                    }
+
+                    tDust.velocity.Y++;
+
+                    Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
+                    dir.Normalize();
+
+                    tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
+                    tDust.noGravity = true;
                 }
             }
+            
+            if (IsOverloading())
+            {
+                
+                overloadScaleCheckTimer++;
+                overloadBlastTimer++;
+                if (overloadBlastTimer > 2)
+                {
+                    Vector2 velocity = Vector2.UnitY.RotateRandom(MathHelper.TwoPi) * 25;
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, velocity.X, velocity.Y,
+                        mod.ProjectileType("LegendaryBlast"), 0, 0, player.whoAmI);
+                    overloadBlastTimer = 0;
+                }
+
+                if (overloadScaleCheckTimer > 20)
+                {
+                    kiDamageMulti = Main.rand.NextFloat(0.5f, 2f);
+                    overloadScaleCheckTimer = 0;
+                }
+
+            }
+
+            //OverloadBar.visible = false;
         }
 
         private void HandleBlackFusionMultiplier()
@@ -2833,6 +2900,7 @@ namespace DBZMOD
             base.NaturalLifeRegen(ref regen);
 
             HandlePowerWishPlayerHealth();
+            HandleOverloadHealthChange();
         }        
 
         public override void UpdateBadLifeRegen()
@@ -2867,6 +2935,14 @@ namespace DBZMOD
         public void HandlePowerWishPlayerHealth()
         {
             player.statLifeMax2 = player.statLifeMax2 + GetPowerWishesUsed() * 20;
+        }
+
+        private float overloadHealthChange = 0f;
+        public void HandleOverloadHealthChange()
+        {
+            overloadHealthChange = Main.rand.NextFloat(0.3f, 1.5f);
+            player.statLifeMax *= (int)overloadHealthChange;
+            player.statLifeMax2 *= (int)overloadHealthChange;
         }
 
         public Texture2D hair;
