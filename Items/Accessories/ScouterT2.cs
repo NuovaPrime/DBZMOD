@@ -8,9 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A Piece of equipment used for scanning powerlevels.'"
-               + "\nIncreased Ki Damage and Hunter effect."
-               + "\n-Tier 2-");
+            Tooltip.SetDefault("'A Piece of equipment used for scanning powerlevels.'\nIncreased Ki Damage and Hunter effect.\n-Tier 2-");
             DisplayName.SetDefault("Green Scouter");
         }
 

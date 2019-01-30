@@ -9,8 +9,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("10% Increased ki cast speed" +
-                "\n6% Increased ki damage");
+            Tooltip.SetDefault("10% Increased ki cast speed\n6% Increased ki damage");
             DisplayName.SetDefault("Worn Gloves");
         }
 

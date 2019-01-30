@@ -8,11 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A charm that harnesses the true power of a saiyan.'" +
-                "\n8% increased ki damage" +
-                "\nTaking fatal damage will instead return you to 50 hp" +
-                "\nand grant x2 damage for a short time." +
-                "\n2 Minute cooldown");
+            Tooltip.SetDefault("'A charm that harnesses the true power of a saiyan.'\n8% increased ki damage\nTaking fatal damage will instead return you to 50 hp\nand grant x2 damage for a short time.\n2 Minute cooldown");
             DisplayName.SetDefault("Zenkai Charm");
         }
 

@@ -7,8 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The emblem seems to have weird writing inscribed on it.'"
-               + "\n15% Increased Ki Damage.");
+            Tooltip.SetDefault("'The emblem seems to have weird writing inscribed on it.'\n15% Increased Ki Damage.");
             DisplayName.SetDefault("Spiritual Emblem");
         }
 

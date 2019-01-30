@@ -9,11 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("13% Increased Ki Damage"
-                + "\n9% Increased Ki Crit Chance" +
-                               "\n+300 Max Ki" +
-                               "\nIncreased Ki Regen" +
-                               "\n12% Increased movement speed");
+            Tooltip.SetDefault("13% Increased Ki Damage\n9% Increased Ki Crit Chance\n+300 Max Ki\nIncreased Ki Regen\n12% Increased movement speed");
             DisplayName.SetDefault("Demon Leggings");
         }
 

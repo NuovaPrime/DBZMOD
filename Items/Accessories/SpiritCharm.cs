@@ -8,14 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'An emblem enscribed with markings of the dragon.'"
-               + "\n20% Increased Ki Damage" +
-               "\nAll damage increased by 14%" +
-               "\n+500 Maximum ki" +
-               "\n12% reduced damage" +
-               "\n+3 max minions" +
-               "\nGreatly increased life regen" +
-               "\nAll crit increased by 12%.");
+            Tooltip.SetDefault("'An emblem enscribed with markings of the dragon.'\n20% Increased Ki Damage\nAll damage increased by 14%\n+500 Maximum ki\n12% reduced damage\n+3 max minions\nGreatly increased life regen\nAll crit increased by 12%.");
             DisplayName.SetDefault("Spirit Charm");
         }
 

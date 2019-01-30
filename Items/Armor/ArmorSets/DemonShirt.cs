@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("18% Increased Ki Damage"
-                + "\n14% Increased Ki Crit Chance" +
-                               "\n+700 Max Ki" +
-                               "\n+1 Maximum Charges");
+            Tooltip.SetDefault("18% Increased Ki Damage\n14% Increased Ki Crit Chance\n+700 Max Ki\n+1 Maximum Charges");
             DisplayName.SetDefault("Demon Shirt");
         }
 
