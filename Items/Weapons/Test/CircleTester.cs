@@ -9,12 +9,13 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Effects
 {
-	public class circletester : ModItem
+	public class CircleTester : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Circle Spawner");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 25;

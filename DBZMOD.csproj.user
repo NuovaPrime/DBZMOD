@@ -6,7 +6,7 @@
     <StartWorkingDirectory>D:\Steam\steamapps\common\Terraria\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <PublishUrlHistory>publish\</PublishUrlHistory>
     <InstallUrlHistory />
     <SupportUrlHistory />
