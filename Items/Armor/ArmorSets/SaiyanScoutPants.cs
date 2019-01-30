@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("2% Increased Ki Damage"
-                + "\n2% Increased Ki Knockback" +
-                               "\n+6% Increased movement speed");
+            Tooltip.SetDefault("2% Increased Ki Damage\n2% Increased Ki Knockback\n+6% Increased movement speed");
             DisplayName.SetDefault("Saiyan Scout Pants");
         }
 

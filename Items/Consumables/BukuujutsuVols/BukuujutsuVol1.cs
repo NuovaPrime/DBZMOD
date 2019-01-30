@@ -34,8 +34,7 @@ namespace DBZMOD.Items.Consumables.BukuujutsuVols
             MyPlayer.ModPlayer(player).flightUnlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked flight."
-                + "\nBind a key to flight toggle to use it.");
+                Main.NewText("You have unlocked flight.\nBind a key to flight toggle to use it.");
                 return true;
             }
             return true;

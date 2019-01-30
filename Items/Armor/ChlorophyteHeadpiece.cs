@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("16% Increased Ki Damage"
-                + "\n12% Increased Ki Crit Chance" +
-                "\nMaximum Ki increased by 500.");
+            Tooltip.SetDefault("16% Increased Ki Damage\n12% Increased Ki Crit Chance\nMaximum Ki increased by 500.");
             DisplayName.SetDefault("Chlorophyte Headpiece");
         }
 

@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Armor.Vanity
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("24% Increased Ki Damage"
-                + "\n20% Increased Ki Crit Chance" +
-                               "\n+1000 Max Ki" +
-                               "\n+2 Maximum Charges");
+            Tooltip.SetDefault("24% Increased Ki Damage\n20% Increased Ki Crit Chance\n+1000 Max Ki\n+2 Maximum Charges");
             DisplayName.SetDefault("Canadian Demon Shirt");
         }
 

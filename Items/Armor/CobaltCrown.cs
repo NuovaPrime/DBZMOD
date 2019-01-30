@@ -9,8 +9,7 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased Ki Damage"
-                + "\n6% Increased Ki Crit Chance");
+            Tooltip.SetDefault("9% Increased Ki Damage\n6% Increased Ki Crit Chance");
             DisplayName.SetDefault("Cobalt Crown");
         }
 

@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("14% Increased Ki Damage"
-                + "\n9% Increased Ki Crit Chance" +
-                "\nMaximum Ki increased by 250.");
+            Tooltip.SetDefault("14% Increased Ki Damage\n9% Increased Ki Crit Chance\nMaximum Ki increased by 250.");
             DisplayName.SetDefault("Titanium Cap");
         }
 

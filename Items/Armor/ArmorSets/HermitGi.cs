@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("5% Increased Ki Damage"
-                + "\n3% Increased Ki Crit Chance" +
-                               "\nIncreased ki regen");
+            Tooltip.SetDefault("5% Increased Ki Damage\n3% Increased Ki Crit Chance\nIncreased ki regen");
             DisplayName.SetDefault("Turtle Hermit Gi");
         }
 

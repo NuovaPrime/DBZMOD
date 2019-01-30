@@ -28,9 +28,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Taking fatal damage will instead restore you to max life with x2 damage for a short time," +
-                "\n1 minute cooldown." +
-                "\n+150 Max Life";
+            player.setBonus = "Taking fatal damage will instead restore you to max life with x2 damage for a short time,\n1 minute cooldown.\n+150 Max Life";
             player.statLifeMax2 += 150;
             MyPlayer.ModPlayer(player).eliteSaiyanBonus = true;
         }
