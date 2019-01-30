@@ -875,7 +875,8 @@ namespace DBZMOD
             {
                 OverloadBar.visible = false;
             }
-            //OverloadBar.visible = false;
+
+            // OverloadBar.visible = false;
             KiBar.visible = true;
             if(ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
             {

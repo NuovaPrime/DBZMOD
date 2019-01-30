@@ -40,16 +40,16 @@ namespace DBZMOD.Util
                 if (item == null)
                     continue;
 
-                if (item.type.Equals(type))
+                if (!item.type.Equals(type))
+                    continue;
+                
+                if (item.stack.Equals(1))
                 {
-                    if (item.stack.Equals(1))
-                    {
-                        item.TurnToAir();
-                    }
-                    else
-                    {
-                        item.stack -= 1;
-                    }
+                    item.TurnToAir();
+                }
+                else
+                {
+                    item.stack -= 1;
                 }
             }
         }
@@ -59,10 +59,13 @@ namespace DBZMOD.Util
             for (int i = 0; i < player.inventory.Length; i++)
             {
                 Item item = player.inventory[i];
-                if (item?.modItem == null)
+                if (item == null)
                     continue;
-                if (item.modItem is KiPotion potion)
+                if (item.modItem == null)
+                    continue;
+                if (item.modItem is KiPotion)
                 {
+                    KiPotion potion = (KiPotion)item.modItem;
                     potion.ConsumeItem(player);
                 }
             }
@@ -92,7 +95,7 @@ namespace DBZMOD.Util
             return
             (
                 from item in inventory
-                where item?.modItem != null
+                where item != null && item.modItem != null
                 where item.modItem is DragonBallItem
                 select (DragonBallItem)item.modItem
             ).Any(
@@ -105,7 +108,9 @@ namespace DBZMOD.Util
             List<int> dragonBallTypeAlreadyRemoved = new List<int>();
             foreach (var item in player.inventory)
             {
-                if (item?.modItem == null)
+                if (item == null)
+                    continue;
+                if (item.modItem == null)
                     continue;
                 if (item.modItem is DragonBallItem)
                 {

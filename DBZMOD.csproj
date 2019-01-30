@@ -87,7 +87,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Buffs\ArmorCooldown.cs" />
-    <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
     <Compile Include="Buffs\BuffKeyNames.cs" />
     <Compile Include="Buffs\EnhancedReserves.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
@@ -115,7 +114,6 @@
     <Compile Include="Buffs\TransExhaustionBuff.cs" />
     <Compile Include="Buffs\UIOmenBuff.cs" />
     <Compile Include="Buffs\UnknownLegendary.cs" />
-    <Compile Include="Buffs\SSJBuffs\USSJBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
     <Compile Include="Config\ConfigModel.cs" />
