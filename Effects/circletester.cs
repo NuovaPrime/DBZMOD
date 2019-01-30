@@ -32,11 +32,11 @@ namespace DBZMOD.Effects
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
+		//public override void AddRecipes()
+		//{
+		//	ModRecipe recipe = new ModRecipe(mod);
+		//	recipe.SetResult(this);
+		//	recipe.AddRecipe();
+		//}
 	}
 }

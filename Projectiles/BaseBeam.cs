@@ -304,8 +304,6 @@ namespace DBZMOD.Projectiles
 
         public bool DoCollisionCheck(Rectangle targetHitbox)
         {
-            Player player = Main.player[projectile.owner];
-            Vector2 unit = projectile.velocity;
             float tailPoint = 0f;
             float bodyPoint = 0f;
             float headPoint = 0f;

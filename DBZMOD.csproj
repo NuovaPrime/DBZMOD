@@ -133,6 +133,7 @@
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
     <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Effects\circletester.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
     <Compile Include="Enums\AuraID.cs" />
