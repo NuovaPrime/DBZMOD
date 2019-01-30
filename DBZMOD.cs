@@ -43,7 +43,7 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public bool expandedSentriesLoaded;
-        public static DBZMOD instance;
+        internal static DBZMOD instance;
 
         internal static CircleShader circle;
 

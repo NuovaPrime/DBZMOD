@@ -300,6 +300,7 @@
     <Compile Include="Items\Misc\Choco2.cs" />
     <Compile Include="Items\Misc\Choco3.cs" />
     <Compile Include="Items\Misc\CoffeeCandy.cs" />
+    <Compile Include="Items\Misc\Keyboard.cs" />
     <Compile Include="Items\Misc\SSJGUnlockItem.cs" />
     <Compile Include="Items\NimbusWhistle.cs" />
     <Compile Include="Items\Materials\KiCrystals\PridefulKiCrystal.cs" />
