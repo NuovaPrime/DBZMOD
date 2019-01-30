@@ -133,6 +133,7 @@
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
     <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
     <Compile Include="Items\Weapons\Test\CircleTester.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />

@@ -20,13 +20,17 @@ namespace DBZMOD.Items.Consumables.Potions
             item.rare = 4;
             item.potion = false;
             isKiPotion = true;
-            kiHeal = 5100;
+        }
+
+        public override int GetKiHealAmount()
+        {
+            return 5100;
         }
 
         public override void SetStaticDefaults()
         {
+            base.SetStaticDefaults();
             DisplayName.SetDefault("Overflowing Ki Potion");
-            Tooltip.SetDefault("Restores 5100 Ki.");
         }
 		
 		 public override void AddRecipes()

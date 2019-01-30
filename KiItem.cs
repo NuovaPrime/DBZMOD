@@ -194,35 +194,7 @@ namespace DBZMOD
             }
         }
     }
-    public abstract class KiPotion : ModItem
-    {
-        public int kiHeal;
-        public int potioncooldown = 3600;
-        public bool isKiPotion;
-        public override bool CloneNewInstances
-        {
-            get { return true; }
-        }
-        public override bool UseItem(Player player)
-        {
-            MyPlayer.ModPlayer(player).AddKi(kiHeal, false, false);
-            player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
-            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kiHeal, false, false);
-            return true;
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            if (player.HasBuff(mod.BuffType("KiPotionSickness")))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-    }
+    
     public abstract class PatreonItem : ModItem
     {
         public bool isArmorPiece;

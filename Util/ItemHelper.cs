@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DBZMOD.Items.Consumables.Potions;
 using DBZMOD.Items.DragonBalls;
 using Terraria;
 
@@ -29,6 +30,42 @@ namespace DBZMOD.Util
                     return true;
             }
             return false;
+        }
+
+        public static void ConsumeOneItem(int type, Player player)
+        {
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                Item item = player.inventory[i];
+                if (item == null)
+                    continue;
+
+                if (item.type.Equals(type))
+                {
+                    if (item.stack.Equals(1))
+                    {
+                        item.TurnToAir();
+                    }
+                    else
+                    {
+                        item.stack -= 1;
+                    }
+                }
+            }
+        }
+
+        public static void ConsumeKiPotion(int type, Player player)
+        {
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                Item item = player.inventory[i];
+                if (item?.modItem == null)
+                    continue;
+                if (item.modItem is KiPotion potion)
+                {
+                    potion.ConsumeItem(player);
+                }
+            }
         }
 
         public static int GetItemTypeFromName(string name)
