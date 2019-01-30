@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using DBZMOD.Extensions;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -55,7 +56,8 @@ namespace DBZMOD.Util
                 Vector2 randomPositionOnBeam = tailPosition - (tailSize / 2f) + variance * velocity + randomLengthOnBeam * velocity;
                 Dust tDust = Dust.NewDustDirect(randomPositionOnBeam, (int)tailSize.X, (int)tailSize.Y, dustId, 0f, 0f, 213, default(Color), 1f);
                 float angleVariance = Main.rand.NextFloat() < 0.5f ? -90 : 90f;
-                tDust.velocity = DegreesToVector(VectorToDegrees(velocity) + angleVariance) * (tailSize.Y / 40f);
+                float resultVectorDegrees = velocity.VectorToDegrees() + angleVariance;
+                tDust.velocity = resultVectorDegrees.DegreesToVector() * (tailSize.Y / 40f);
                 tDust.noGravity = true;
             }
         }
@@ -68,50 +70,14 @@ namespace DBZMOD.Util
             {
                 //float angle = Main.rand.NextFloat(-62.5f, 62.5f);
                 Vector2 backDraftVector = velocity * -1f;
-                Vector2 backDraft = DegreesToVector(VectorToDegrees(backDraftVector) + Main.rand.NextFloat(-45f, 45f));
+                float resultDegrees = backDraftVector.VectorToDegrees() + Main.rand.NextFloat(-45f, 45f);
+                Vector2 backDraft = resultDegrees.DegreesToVector();
                 //float angleRad = MathHelper.ToRadians(angle);
                 //Vector2 backdraftWithRandomization = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad)) + backDraft;
                 Dust tDust = Dust.NewDustDirect(endPosition - new Vector2(8f, 8f), 30, 30, dustId, 0f, 0f, 213, default(Color), 1.0f);
                 tDust.velocity = backDraft * 15f;
                 tDust.noGravity = true;
             }
-        }
-
-        public static float VectorToRadians(Vector2 vector)
-        {
-            return (float)Math.Atan2(vector.Y, vector.X);
-        }
-
-        public static float VectorToDegrees(Vector2 vector)
-        {
-            return MathHelper.ToDegrees(VectorToRadians(vector));
-        }
-
-        public static Vector2 DegreesToVector(float degrees)
-        {
-            return RadiansToVector(MathHelper.ToRadians(degrees));
-        }
-
-        public static Vector2 RadiansToVector(float angleRad)
-        {
-            return new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
-        }
-
-        // starts the kill routine for beams that lets them detach from the charge ball and fade incrementally.
-
-        public static int GetTileX(float xCoord)
-        {
-            return (int)Math.Min(Main.maxTilesX - 1, Math.Max(1, xCoord / 16f));
-        }
-
-        public static int GetTileY(float yCoord)
-        {
-            return (int)Math.Min(Main.maxTilesY - 1, Math.Max(1, yCoord / 16f));
-        }
-
-        public static bool IsInWorldBounds(Vector2 hitVector)
-        {
-            return hitVector.X >= 0 && hitVector.X <= Main.maxTilesX * 16f && hitVector.Y >= 0 && hitVector.Y <= Main.maxTilesY * 16f;
         }
 
         // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
@@ -122,58 +88,42 @@ namespace DBZMOD.Util
             // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
             if (step.X < 0)
             {
-                while (position1.X >= position2.X && IsInWorldBounds(position1))
+                while (position1.X >= position2.X && position1.IsInWorldBounds())
                 {
                     position1 += step;
-                    isColliding = IsPositionInTile(position1);
+                    isColliding = position1.IsPositionInTile();
                     if (isColliding)
                         break;
                 }
             } else if (step.X > 0)
             {
-                while (position1.X <= position2.X && IsInWorldBounds(position1))
+                while (position1.X <= position2.X && position1.IsInWorldBounds())
                 {
                     position1 += step;
-                    isColliding = IsPositionInTile(position1);
+                    isColliding = position1.IsPositionInTile();
                     if (isColliding)
                         break;
                 }
             } else if (step.Y < 0)
             {
-                while (position1.Y >= position2.Y && IsInWorldBounds(position1))
+                while (position1.Y >= position2.Y && position1.IsInWorldBounds())
                 {
                     position1 += step;
-                    isColliding = IsPositionInTile(position1);
+                    isColliding = position1.IsPositionInTile();
                     if (isColliding)
                         break;
                 }
             } else if (step.Y > 0)
             {
-                while (position1.Y <= position2.Y && IsInWorldBounds(position1))
+                while (position1.Y <= position2.Y && position1.IsInWorldBounds())
                 {
                     position1 += step;
-                    isColliding = IsPositionInTile(position1);
+                    isColliding = position1.IsPositionInTile();
                     if (isColliding)
                         break;
                 }
             }
             return !isColliding;
-        }
-
-        public static bool IsPositionInTile(Vector2 position)
-        {
-            var tilePoint = new Point(GetTileX(position.X), GetTileY(position.Y));
-            var tile = Framing.GetTileSafely(tilePoint.X, tilePoint.Y);
-            if (tile == null)
-                return false;
-            // dunno if this works.
-            if (Main.tileSolidTop[tile.type])
-                return false;
-            if (tile.active() && Main.tileSolid[tile.type])
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

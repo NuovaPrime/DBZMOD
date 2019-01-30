@@ -137,6 +137,7 @@
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Extensions\PlayerExtensions.cs" />
     <Compile Include="Extensions\ProjectileExtensions.cs" />
+    <Compile Include="Extensions\CoordinateExtensions.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
     <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
