@@ -99,6 +99,7 @@
     <Compile Include="Buffs\KiPotionSickness.cs" />
     <Compile Include="Buffs\KiStimulantBuff.cs" />
     <Compile Include="Buffs\LegendaryTrait.cs" />
+    <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
     <Compile Include="Buffs\SSJBuffs\LSSJ2Buff.cs" />
     <Compile Include="Buffs\SSJBuffs\LSSJBuff.cs" />
     <Compile Include="Buffs\MREBuff.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Buffs\SSJBuffs\SSJ3Buff.cs" />
     <Compile Include="Buffs\SSJBuffs\SSJGBuff.cs" />
     <Compile Include="Buffs\SSJBuffs\SuperKaiokenBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\USSJBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Buffs\TransExhaustionBuff.cs" />
     <Compile Include="Buffs\UIOmenBuff.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -7,7 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Effects
+namespace DBZMOD.Items.Weapons.Test
 {
 	public class CircleTester : ModItem
 	{
@@ -33,11 +34,15 @@ namespace DBZMOD.Effects
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 		}
-		//public override void AddRecipes()
-		//{
-		//	ModRecipe recipe = new ModRecipe(mod);
-		//	recipe.SetResult(this);
-		//	recipe.AddRecipe();
-		//}
-	}
+
+        public override void AddRecipes()
+        {
+            if (DebugHelper.IsDebugModeOn())
+            {
+                ModRecipe recipe = new ModRecipe(mod);
+                recipe.SetResult(this);
+                recipe.AddRecipe();
+            }
+        }
+    }
 }
