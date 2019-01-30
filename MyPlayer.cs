@@ -24,6 +24,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
+    // TODO : Change this class name.
     public class MyPlayer : ModPlayer
     {
         #region Variables

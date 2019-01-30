@@ -469,7 +469,7 @@ namespace DBZMOD.Extensions
                 return FormBuffHelper.ssj1;
 
             // the player is legendary and doing a legendary step up.
-            if (currentTransformation.IsLssj() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
@@ -481,7 +481,7 @@ namespace DBZMOD.Extensions
             }
 
             // the player isn't legendary and is doing a normal step up.
-            if (currentTransformation.IsSsj() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
@@ -501,7 +501,7 @@ namespace DBZMOD.Extensions
             BuffInfo currentTransformation = player.GetCurrentTransformation(true, false);
 
             // the player is legendary and doing a legendary step down.
-            if (currentTransformation.IsLssj() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
@@ -513,7 +513,7 @@ namespace DBZMOD.Extensions
             }
 
             // the player isn't legendary and is doing a normal step down.
-            if (currentTransformation.IsSsj() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {

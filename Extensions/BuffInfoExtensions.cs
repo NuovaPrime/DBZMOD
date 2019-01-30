@@ -9,7 +9,7 @@ namespace DBZMOD.Extensions
     /// </summary>
     public static class BuffInfoExtensions
     {
-        public static bool IsSsj(this BuffInfo buff)
+        public static bool IsSSJ(this BuffInfo buff)
         {
             return FormBuffHelper.ssjBuffs.Contains(buff);
         }
@@ -41,15 +41,15 @@ namespace DBZMOD.Extensions
 
         public static bool IsAnythingOtherThanKaioken(this BuffInfo buff)
         {
-            return buff.IsLssj() || buff.IsSsj() || buff.IsSsjg() || buff.IsDevBuffed() || buff.IsAscended();
+            return buff.IsLSSJ() || buff.IsSSJ() || buff.IsSSJG() || buff.IsDevBuffed() || buff.IsAscended();
         }
 
-        public static bool IsLssj(this BuffInfo buff)
+        public static bool IsLSSJ(this BuffInfo buff)
         {
             return FormBuffHelper.legendaryBuffs.Contains(buff);
         }
 
-        public static bool IsSsjg(this BuffInfo buff)
+        public static bool IsSSJG(this BuffInfo buff)
         {
             return FormBuffHelper.ssjg.GetBuffId() == buff.GetBuffId();
         }
