@@ -2939,11 +2939,14 @@ namespace DBZMOD
             player.statLifeMax2 = player.statLifeMax2 + GetPowerWishesUsed() * 20;
         }
 
-        private float overloadHealthChange = 0f;
+        private float overloadHealthChange = 1f;
         public void HandleOverloadHealthChange()
         {
-            overloadHealthChange = Main.rand.NextFloat(0.3f, 1.5f);
-            player.statLifeMax2 = (int)Math.Ceiling(player.statLifeMax2 * overloadHealthChange);
+            if (IsOverloading())
+            {
+                overloadHealthChange = Main.rand.NextFloat(0.3f, 1.5f);
+                player.statLifeMax2 = (int)Math.Ceiling(player.statLifeMax2 * overloadHealthChange);
+            }
         }
 
         public Texture2D hair;
