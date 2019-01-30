@@ -1966,9 +1966,11 @@ namespace DBZMOD
             if (wishActive)
             {
                 WishMenu.menuVisible = true;
-            } else if (DebugHelper.IsDebugModeOn() && quickKi.JustPressed)
+            }
+
+            if (quickKi.JustPressed)
             {
-                WishMenu.menuVisible = !WishMenu.menuVisible;
+                ItemHelper.ConsumeKiPotion(player);
             }
 
             // freeform instant transmission requires book 2.
