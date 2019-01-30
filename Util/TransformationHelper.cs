@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DBZMOD.Buffs;
+using DBZMOD.Config;
 using DBZMOD.Network;
 using Terraria;
 using Terraria.ID;
@@ -28,6 +29,16 @@ namespace DBZMOD.Util
                 }
                 return _modInstance;
             }
+        }
+
+        public static string GetASSJNamePreference()
+        {
+            return ConfigModel.isSaiyanGradeNames ? "Super Saiyan Grade 2" : "Ascended Super Saiyan";
+        }
+
+        public static string GetUSSJNamePreference()
+        {
+            return ConfigModel.isSaiyanGradeNames ? "Super Saiyan Grade 3" : "Ultra Super Saiyan";
         }
 
         public static List<BuffInfo> BuffInfoList
@@ -123,7 +134,7 @@ namespace DBZMOD.Util
             get
             {
                 if (assj == null)
-                    assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, "Ascended Super Saiyan", defaultTransformationTextColor);
+                    assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, GetASSJNamePreference(), defaultTransformationTextColor);
                 return assj;
             }
         }
@@ -134,7 +145,7 @@ namespace DBZMOD.Util
             get
             {
                 if (ussj == null)
-                    ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, "Ultra Super Saiyan", defaultTransformationTextColor);
+                    ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, GetUSSJNamePreference(), defaultTransformationTextColor);
                 return ussj;
             }
         }

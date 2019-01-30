@@ -2943,8 +2943,7 @@ namespace DBZMOD
         public void HandleOverloadHealthChange()
         {
             overloadHealthChange = Main.rand.NextFloat(0.3f, 1.5f);
-            player.statLifeMax *= (int)overloadHealthChange;
-            player.statLifeMax2 *= (int)overloadHealthChange;
+            player.statLifeMax2 = (int)Math.Ceiling(player.statLifeMax2 * overloadHealthChange);
         }
 
         public Texture2D hair;
