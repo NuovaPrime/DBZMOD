@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.14f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.14f;
                 player.thorns = .3f;
                 player.GetModPlayer<MyPlayer>(mod).bloodstainedBandana = true;
             }

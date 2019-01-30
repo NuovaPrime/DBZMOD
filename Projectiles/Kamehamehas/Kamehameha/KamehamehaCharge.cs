@@ -36,7 +36,7 @@ namespace DBZMOD.Projectiles.Kamehamehas.Kamehameha
             beamFadeInTime = 300f;
 
             // the type of dust that should spawn when charging or decaying
-            dustType = 169;
+            dustType = 15;
 
             // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
             rotationSlowness = 15f;

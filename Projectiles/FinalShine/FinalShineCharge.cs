@@ -36,7 +36,7 @@ namespace DBZMOD.Projectiles.FinalShine
             beamFadeInTime = 300f;
 
             // the type of dust that should spawn when charging or decaying
-            dustType = 169;
+            dustType = 74;
 
             // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
             rotationSlowness = 15f;

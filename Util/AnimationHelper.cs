@@ -105,13 +105,9 @@ namespace DBZMOD.Util
             {
                 return;
             }
-            if (!modPlayer.isTransformationAnimationPlaying)
-            {
-                modPlayer.transformationFrameTimer = 0;
-                return;
-            }
 
-            modPlayer.transformationFrameTimer++;
+            if (!modPlayer.isTransformationAnimationPlaying)
+                return;
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)

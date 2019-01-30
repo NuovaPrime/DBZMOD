@@ -131,6 +131,7 @@
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="Effects\Animations\Aura\AuraAnimations.cs" />
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
+    <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Items\Misc\Choco2.cs" />
     <Compile Include="Items\Misc\Choco3.cs" />
     <Compile Include="Items\Misc\CoffeeCandy.cs" />
+    <Compile Include="Items\Misc\Keyboard.cs" />
     <Compile Include="Items\Misc\SSJGUnlockItem.cs" />
     <Compile Include="Items\NimbusWhistle.cs" />
     <Compile Include="Items\Materials\KiCrystals\PridefulKiCrystal.cs" />
@@ -539,6 +541,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Buffs\DevBuffs\SSJSBuff.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryBlast.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb1.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb2.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb3.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryPillar.png" />
+    <Content Include="Effects\Animations\Cutscenes\RageBall.png" />
+    <Content Include="Effects\Animations\Cutscenes\YellowBall.png" />
+    <Content Include="Effects\Animations\Transform\SSJ.png" />
+    <Content Include="Effects\Animations\Transform\SSJ3.png" />
+    <Content Include="Effects\Animations\Transform\SSJG.png" />
+    <Content Include="Effects\Animations\Transform\SSJSpectrum.png" />
     <Content Include="Hairs\Dev\SSJSHair.png" />
     <Content Include="Hairs\God\SSJBEHair.png" />
     <Content Include="Hairs\God\SSJBHair.png" />
@@ -630,7 +643,6 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Effects\Animations\Transform\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>

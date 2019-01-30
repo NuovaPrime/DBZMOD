@@ -35,14 +35,14 @@ namespace DBZMOD.Projectiles
         }
 
         // multiplier representing increased ki cost gradient as the player continues to fire the beam, to put the kibosh on firing infinitely.
-        private float KiDrainMultiplier()
+        private float KiDrainMultiplier(MyPlayer modPlayer)
         {
-            return 1f + Math.Max(0f, ((CurrentFireTime - minimumFireFrames) / minimumFireFrames));
+            return (1f + Math.Min(3.0f, Math.Max(0f, (CurrentFireTime - minimumFireFrames) / minimumFireFrames))) * modPlayer.kiDrainMulti;
         }
 
         // Rate at which Ki is drained while firing the beam *without a charge*
         // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        protected int FireKiDrainRate() { return (int)Math.Ceiling(GetBeamPowerMultiplier() * KiDrainMultiplier() * (chargeKiDrainPerSecond * 2f / (60f / FIRE_KI_DRAIN_WINDOW))); }
+        protected int FireKiDrainRate(MyPlayer modPlayer) { return (int)Math.Ceiling(GetBeamPowerMultiplier() * KiDrainMultiplier(modPlayer) * (chargeKiDrainPerSecond * 2f / (60f / FIRE_KI_DRAIN_WINDOW))); }
 
         // the rate at which firing drains the charge level of the ball, play with this for balance.
         protected float FireDecayRate() { return GetBeamPowerMultiplier() * fireChargeDrainPerSecond / 60f; }
@@ -83,7 +83,7 @@ namespace DBZMOD.Projectiles
                 {
                     if (DBZMOD.IsTickRateElapsed(FIRE_KI_DRAIN_WINDOW))
                     {
-                        modPlayer.AddKi(-FireKiDrainRate(), true, false);
+                        modPlayer.AddKi(-FireKiDrainRate(modPlayer), true, false);
                     }
                 }
                 else

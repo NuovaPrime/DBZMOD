@@ -26,7 +26,16 @@ namespace DBZMOD
     {
         #region Variables
         //Player vars
-        public float kiDamage;
+        // regression safe property accessor for Ki Damage until web gets off his buttocks
+        // intended to fix compatibility with AllDamage and Leveled, temporarily.
+        public float KiDamage;
+
+        public float kiDamage
+        {
+            get { return KiDamage; }
+            set { KiDamage = value; }
+        }
+
         public float kiKbAddition;
         public float kiSpeedAddition;
         public int kiCrit;
@@ -175,7 +184,7 @@ namespace DBZMOD
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
-        public string playerTrait = null;
+        public string playerTrait = "";
         public bool demonBonus;
         public int orbGrabRange;
         public int orbHealAmount;
@@ -298,15 +307,20 @@ namespace DBZMOD
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
+                NetworkHelper.playerSync.RequestAllDragonBallLocations(256, Main.myPlayer);
             }
+        }
 
-            DBZWorld.GetWorld().HandleRetrogradeCleanup();
-
-            // Send sync to connecting players
-            if (Main.netMode == NetmodeID.Server)
+        public override void PlayerConnect(Player player)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                DebugHelper.Log($"Sending Player {player.whoAmI} Dragon Ball Cached Locations.");
-                NetworkHelper.playerSync.SendAllDragonBallLocations();
+                if (player.whoAmI != Main.myPlayer)
+                {
+                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
+
+                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
+                }
             }
         }
 
@@ -472,7 +486,7 @@ namespace DBZMOD
             player.magicDamage *= PowerWishMulti();
             player.minionDamage *= PowerWishMulti();
             player.thrownDamage *= PowerWishMulti();
-            kiDamage *= PowerWishMulti();
+            KiDamage *= PowerWishMulti();
             if (DBZMOD.instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
@@ -626,7 +640,7 @@ namespace DBZMOD
 
             if (adamantiteBonus)
             {
-                kiDamage += 7;
+                KiDamage += 7;
             }
 
             if (!traitChecked)
@@ -771,8 +785,17 @@ namespace DBZMOD
             HandleKaiokenDefenseDebuff();
 
             // if the player is in mid-transformation, totally neuter horizontal velocity
+            // also handle the frame counter advancement here.
             if (isTransformationAnimationPlaying)
+            {
                 player.velocity = new Vector2(0, player.velocity.Y);
+
+                transformationFrameTimer++;
+            }
+            else
+            {
+                transformationFrameTimer = 0;
+            }
         }
 
         public void HandleAuraStartupSound(AuraAnimationInfo aura, bool isCharging)
@@ -815,43 +838,44 @@ namespace DBZMOD
                 if (TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
                 {
                     overloadTimer++;
-                    if (overloadTimer >= 60)
+                    if (TransformationHelper.IsLSSJ1(player))
                     {
-                        overloadCurrent += 1;
-                        overloadTimer = 0;
+                        if (overloadTimer >= 60)
+                        {
+                            overloadCurrent += 1;
+                            overloadTimer = 0;
+                        }
                     }
+                    if (TransformationHelper.IsLSSJ2(player))
+                    {
+                        if (overloadTimer >= 25)
+                        {
+                            overloadCurrent += 1;
+                            overloadTimer = 0;
+                        }
+                    }   
                 }
                 else
                 {
                     // player isn't in legendary form, cools the player overload down
                     overloadTimer++;
-                    if (overloadTimer >= 30)
+                    if (overloadTimer >= 4)
                     {
-                        overloadCurrent -= 2;
+                        overloadCurrent -= 1;
                         overloadTimer = 0;
                     }
                 }
             }
 
-            /*if(LSSJAchieved)
+            if(TransformationHelper.IsLSSJ(player) || overloadCurrent > 0)
             {
                 OverloadBar.visible = true;
             }
             else
             {
-                if(eliteSaiyanBonus)
-                {
-                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 3600);
-                }
-                else
-                {
-                    player.AddBuff(mod.BuffType("ZenkaiCooldown"), 7200);
-                }
-            }
                 OverloadBar.visible = false;
-            
-            }*/
-            OverloadBar.visible = false;
+            }
+            //OverloadBar.visible = false;
             KiBar.visible = true;
             if(ItemHelper.PlayerHasAllDragonBalls(player) && !wishActive)
             {
@@ -892,7 +916,7 @@ namespace DBZMOD
                 player.magicDamage *= blackFusionIncrease;
                 player.minionDamage *= blackFusionIncrease;
                 player.thrownDamage *= blackFusionIncrease;
-                kiDamage *= blackFusionIncrease;
+                KiDamage *= blackFusionIncrease;
                 player.statDefense *= (int)blackFusionIncrease;
                 if (DBZMOD.instance.thoriumLoaded)
                 {
@@ -1347,22 +1371,35 @@ namespace DBZMOD
             player.eyeColor = eyeColor;
         }
 
-        public string ChooseTrait()
+        private readonly Dictionary<string, int> _traitPool = new Dictionary<string, int>()
+        {
+            { "Prodigy", 4 }
+            , { "Legendary", 1 }
+            , { "", 15 }
+        };
+
+        public void ChooseTrait()
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 4);
-            traitChooser.Add("Legendary", 1);
-            traitChooser.Add(null, 15);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
+            }
             traitChecked = true;
-            return playerTrait = traitChooser;
-
+            playerTrait = traitChooser;
         }
 
-        public string ChooseTraitNoLimits()
+        public string ChooseTraitNoLimits(string oldTrait)
         {
             var traitChooser = new WeightedRandom<string>();
-            traitChooser.Add("Prodigy", 1);
-            traitChooser.Add("Legendary", 1);
+            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
+            {
+                if (traitWithWeight.Key.Equals(oldTrait))
+                    continue;
+                if (string.IsNullOrEmpty(traitWithWeight.Key))
+                    continue;
+                traitChooser.Add(traitWithWeight.Key, 1);
+            }
             return playerTrait = traitChooser;
 
         }
@@ -1448,7 +1485,7 @@ namespace DBZMOD
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(2) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
             if (metamoranSash)
@@ -1470,7 +1507,7 @@ namespace DBZMOD
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(3) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
                 }
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
@@ -2194,7 +2231,7 @@ namespace DBZMOD
 
         public override void ResetEffects()
         {
-            kiDamage = 1f;
+            KiDamage = 1f;
             kiKbAddition = 0f;
             kiChargeRate = 1;
             if (kiEssence1)            
@@ -2784,19 +2821,6 @@ namespace DBZMOD
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
             base.OnHitAnything(x, y, victim);
-        }
-
-        public override void PlayerConnect(Player player)
-        {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                if (player.whoAmI != Main.myPlayer)
-                {
-                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
-
-                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
-                }
-            }
         }
 
         public override void UpdateLifeRegen()

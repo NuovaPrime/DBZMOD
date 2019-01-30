@@ -9,19 +9,6 @@ namespace DBZMOD.Util
     public static class SoundHelper
     {
         public static uint invalidSlot = (uint)ReLogic.Utilities.SlotId.Invalid.ToFloat();
-        public static DBZMOD mod;
-        public static DBZMOD Mod
-        {
-            get
-            {
-                if (mod == null)
-                {
-                    mod = DBZMOD.instance;
-                }
-
-                return mod;
-            }
-        }
 
         public static void PlayVanillaSound(int soundId, Player player = null, float volume = 1f, float pitchVariance = 0f)
         {
@@ -94,7 +81,7 @@ namespace DBZMOD.Util
             {
                 sound = Main.PlaySound(style, location);
             }
-            slotId = (uint)Mod.GetSoundSlot(SoundType.Custom, soundId);
+            slotId = (uint)DBZMOD.instance.GetSoundSlot(SoundType.Custom, soundId);
             return new KeyValuePair<uint, SoundEffectInstance>(slotId, sound);
         }
 
@@ -107,7 +94,7 @@ namespace DBZMOD.Util
 
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)
         {
-            return Mod.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
+            return DBZMOD.instance.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
         }
 
         public static KeyValuePair<uint, SoundEffectInstance> KillTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo)

@@ -14,7 +14,7 @@ namespace DBZMOD.UI
 		{
 			overloadbar = new ResourceBar(ResourceBarMode.Overload, 9, 64);
 			overloadbar.Left.Set(725f, 0f);
-			overloadbar.Top.Set(46f, 0f);
+			overloadbar.Top.Set(48f, 0f);
             overloadbar.OnMouseDown += new UIElement.MouseEvent(DragStart);
 			overloadbar.OnMouseUp += new UIElement.MouseEvent(DragEnd);
 			Append(overloadbar);

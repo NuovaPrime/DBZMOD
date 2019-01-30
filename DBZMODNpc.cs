@@ -580,7 +580,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.RedDevil || npc.type == NPCID.Demon || npc.type == NPCID.VoodooDemon)
                 {
-                    if (Main.rand.Next(3) == 0)
+                    if (Main.rand.Next(2) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DemonicSoul"), Main.rand.Next(1, 3));
                 }
             }
@@ -686,7 +686,7 @@ namespace DBZMOD
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor)
                 {
-                    if (Main.rand.Next(100) == 0)
+                    if (Main.rand.Next(30) == 0)
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BurningEnergyAmulet"));
                 }
             }

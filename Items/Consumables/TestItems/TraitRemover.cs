@@ -31,7 +31,7 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).playerTrait = null;
+            MyPlayer.ModPlayer(player).playerTrait = "";
             return true;
 
         }
