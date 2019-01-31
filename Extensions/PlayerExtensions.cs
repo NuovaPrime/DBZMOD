@@ -471,7 +471,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.legendaryBuffs[i] == currentTransformation && i < FormBuffHelper.legendaryBuffs.Length - 1)
+                    if (FormBuffHelper.legendaryBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.legendaryBuffs.Length - 1)
                     {
                         return FormBuffHelper.legendaryBuffs[i + 1];
                     }
@@ -483,7 +483,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ssjBuffs[i] == currentTransformation && i < FormBuffHelper.ssjBuffs.Length - 1)
+                    if (FormBuffHelper.ssjBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.ssjBuffs.Length - 1)
                     {
                         return FormBuffHelper.ssjBuffs[i + 1];
                     }
@@ -503,7 +503,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.legendaryBuffs[i] == currentTransformation && i > 0)
+                    if (FormBuffHelper.legendaryBuffs[i].Equals(currentTransformation) && i > 0)
                     {
                         return FormBuffHelper.legendaryBuffs[i - 1];
                     }
@@ -515,7 +515,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ssjBuffs[i] == currentTransformation && i > 0)
+                    if (FormBuffHelper.ssjBuffs[i].Equals(currentTransformation) && i > 0)
                     {
                         return FormBuffHelper.ssjBuffs[i - 1];
                     }
@@ -527,7 +527,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ascensionBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ascensionBuffs[i] == currentTransformation && i > 0)
+                    if (FormBuffHelper.ascensionBuffs[i].Equals(currentTransformation) && i > 0)
                     {
                         return FormBuffHelper.ascensionBuffs[i - 1];
                     }
@@ -546,7 +546,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ascensionBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ascensionBuffs[i] == currentTransformation && i < FormBuffHelper.ascensionBuffs.Length - 1)
+                    if (FormBuffHelper.ascensionBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.ascensionBuffs.Length - 1)
                     {
                         return FormBuffHelper.ascensionBuffs[i + 1];
                     }
