@@ -40,6 +40,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
             recipe.AddIngredient(null, "KiBlast");
             recipe.AddIngredient(ItemID.PixieDust, 18);
             recipe.AddIngredient(null, "AngerKiCrystal", 15);
+            recipe.AddTile(null, "ZTable");
             recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

@@ -75,6 +75,12 @@ namespace DBZMOD
                 _initialized = true;
                 HandleRetrogradeCleanup();
             }
+            else
+            {
+                // every 10 seconds, check dragon ball locations, but don't run the full cleanup detail.
+                if (Main.netMode != NetmodeID.MultiplayerClient && DBZMOD.IsTickRateElapsed(600))
+                    CleanupAndRegenerateDragonBalls(false);
+            }
 
         }
 
@@ -512,7 +518,7 @@ namespace DBZMOD
             return false;
         }
 
-        public bool TryPlacingDragonBall(int whichDragonBall, int offsetX, int offsetY, Player ignorePlayer = null)
+        public bool TryPlacingDragonBall(int whichDragonBall, int offsetX, int offsetY)
         {            
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonBall))
@@ -521,9 +527,16 @@ namespace DBZMOD
             int dragonBallType = GetDbType(whichDragonBall);
             if (!TileObject.CanPlace(offsetX, offsetY, dragonBallType, 0, -1, out tileObjectOut, true,
                 false)) return false;
-            // precache dragon ball location if successful to prevent it from having to fetch it.
-            GetWorld().CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY));
+
+            CacheDragonBallLocation(whichDragonBall, new Point(offsetX, offsetY));
+
             WorldGen.PlaceObject(offsetX, offsetY, dragonBallType, true);
+            NetMessage.SendTileSquare(-1, offsetX, offsetY, 1, TileChangeType.None);
+            if (Main.netMode == NetmodeID.Server)
+            {
+                NetworkHelper.playerSync.SendAllDragonBallLocations();
+            }
+
             return true;
         }
 
@@ -570,46 +583,48 @@ namespace DBZMOD
         {
             // only fire this server side or single player.
             if (Main.netMode != NetmodeID.MultiplayerClient)
-                DoBrutalCleanup();
-
+                CleanupAndRegenerateDragonBalls(true);
         }
 
-        public void DoBrutalCleanup()
+        public void CleanupAndRegenerateDragonBalls(bool isCleanupNeeded)
         {
-            DebugHelper.Log("Server is running cleanup routine.");
-            int invalidCount = 0;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
             Point[] dragonBallFirstFound = Enumerable.Repeat(Point.Zero, 7).ToArray();
-            
-            // destroy all but the first located dragon ball of any given type in the world, with no items.
-            for (var i = 0; i < Main.maxTilesX; i++)
+
+            if (isCleanupNeeded)
             {
-                for (var j = 0; j < Main.maxTilesY; j++)
+                DebugHelper.Log("Server is running cleanup routine.");
+                // destroy all but the first located dragon ball of any given type in the world, with no items.
+                for (var i = 0; i < Main.maxTilesX; i++)
                 {
-                    var tile = Main.tile[i, j];
-                    // var tile = Framing.GetTileSafely(i, j);
-                    if (tile == null)
-                        continue;
-                    if (!tile.active())
-                        continue;
-                    var dbNum = GetDragonBallNumberFromType(tile.type);
-                    if (dbNum == 0)
-                        continue;
-                    var thisDragonBallLocation = new Point(i, j);
-                    if (dragonBallFirstFound[dbNum - 1].Equals(Point.Zero))
+                    for (var j = 0; j < Main.maxTilesY; j++)
                     {
-                        dragonBallFirstFound[dbNum - 1] = thisDragonBallLocation;
-                    }
-                    else
-                    {
-                        invalidCount++;
-                        WorldGen.KillTile(i, j, false, false, true);
+                        var tile = Main.tile[i, j];
+                        // var tile = Framing.GetTileSafely(i, j);
+                        if (tile == null)
+                            continue;
+                        if (!tile.active())
+                            continue;
+                        var dbNum = GetDragonBallNumberFromType(tile.type);
+                        if (dbNum == 0)
+                            continue;
+                        var thisDragonBallLocation = new Point(i, j);
+                        if (dragonBallFirstFound[dbNum - 1].Equals(Point.Zero))
+                        {
+                            dragonBallFirstFound[dbNum - 1] = thisDragonBallLocation;
+                        }
+                        else
+                        {
+                            WorldGen.KillTile(i, j, false, false, true);
+                        }
                     }
                 }
             }
-            if (invalidCount > 0)
+            else
             {
-                DebugHelper.Log("Server is running cleanup routine.");
-                Main.NewText($"Found { invalidCount } bad Dragon Balls. Sorry for the trouble. Should be cleaned up!");
+                dragonBallFirstFound = CachedDragonBallLocations;
+                DebugHelper.Log("Server is running dragon ball confirmation routine.");
             }
 
             // figure out if new dragon balls need to be spawned (are any missing?)
@@ -617,8 +632,9 @@ namespace DBZMOD
             {
                 // check that the found locations are still valid
                 Point testLocation = dragonBallFirstFound[i];
-                if (!IsDragonBallLocation(testLocation.X, testLocation.Y)) 
+                if (!IsDragonBallLocation(testLocation.X, testLocation.Y))
                 {
+                    DebugHelper.Log($"Server thinks dragon ball {i + 1} is missing.");
                     // if this isn't a dragon ball, erase it.
                     dragonBallFirstFound[i] = Point.Zero;
                     CacheDragonBallLocation(i + 1, Point.Zero);
@@ -649,11 +665,6 @@ namespace DBZMOD
         public void CacheDragonBallLocation(int whichDragonBall, Point location)
         {
             CachedDragonBallLocations[whichDragonBall - 1] = location;
-            if (Main.netMode == NetmodeID.Server)
-            {
-                // sync new dragon ball location to everyone.
-                NetworkHelper.playerSync.SendDragonBallChange(whichDragonBall, location);
-            }
         }
 
         public bool IsDragonBallLocation(int i, int j)
@@ -721,8 +732,14 @@ namespace DBZMOD
             return 0;
         }
 
+        // the following walls are *natural* [not placed] dungeon walls and the lihzard temple wall, respectively.
+        // these prevent the dragon ball from spawning.
+        private static readonly int[] _invalidDragonBallWalls = new int[] { 7, 9, 94, 95, 96, 97, 98, 99, 87 };
         public static bool IsInvalidTileForDragonBallPlacement(Tile tile)
         {
+            // quick wall check
+            if (_invalidDragonBallWalls.Contains(tile.wall))
+                return false;
             return tile.type == TileID.SmallPiles
                 || tile.type == TileID.LargePiles
                 || tile.type == TileID.LargePiles2
@@ -737,7 +754,13 @@ namespace DBZMOD
             var underworldHeight = Main.maxTilesY - 220;
             
             var surfaceHeight = (int)Math.Floor(Main.worldSurface * 0.30f);
-            
+
+            // restrict debug mode dragon ball spawns to the surface, for testing purposes
+            if (DebugHelper.IsDebugModeOn())
+            {
+                underworldHeight = (int)Math.Floor(surfaceHeight / 0.30f);
+            }
+
             while (true)
             {
                 int thresholdX = (int)Math.Floor(Main.maxTilesX * 0.1f);

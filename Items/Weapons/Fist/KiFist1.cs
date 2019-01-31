@@ -60,7 +60,7 @@ namespace DBZMOD.Items.Weapons.Fist
             {
                 if (line2.mod == "Terraria" && line2.Name == "Tooltip0")
                 {
-                    line2.text = line2.text + "\nScales with your progression." + tooltip;
+                    line2.text = $"{line2.text}\nScales with your progression.{tooltip}";
                 }
             }
             base.ModifyTooltips(tooltips);

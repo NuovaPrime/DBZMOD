@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("13% Increased Ki Damage"
-                + "\n11% Increased Ki Crit Chance" +
-                "\nMaximum Ki increased by 300.");
+            Tooltip.SetDefault("13% Increased Ki Damage\n11% Increased Ki Crit Chance\nMaximum Ki increased by 300.");
             DisplayName.SetDefault("Hallowed Fedora");
         }
 
@@ -31,15 +29,14 @@ namespace DBZMOD.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "9% Increased Ki Damage" +
-                "\n+200 Max Ki";
-            MyPlayer.ModPlayer(player).kiDamage += 0.09f;
+            player.setBonus = "9% Increased Ki Damage\n+200 Max Ki";
+            MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).kiMax2 += 200;
         }
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.13f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.13f;
             MyPlayer.ModPlayer(player).kiCrit += 11;
             MyPlayer.ModPlayer(player).kiMax2 += 300;
         }

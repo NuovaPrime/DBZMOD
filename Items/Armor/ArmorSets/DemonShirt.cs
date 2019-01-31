@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("18% Increased Ki Damage"
-                + "\n14% Increased Ki Crit Chance" +
-                               "\n+700 Max Ki" +
-                               "\n+1 Maximum Charges");
+            Tooltip.SetDefault("18% Increased Ki Damage\n14% Increased Ki Crit Chance\n+700 Max Ki\n+1 Maximum Charges");
             DisplayName.SetDefault("Demon Shirt");
         }
 
@@ -42,7 +39,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.18f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.18f;
             MyPlayer.ModPlayer(player).kiCrit += 14;
             MyPlayer.ModPlayer(player).kiMax2 += 700;
             MyPlayer.ModPlayer(player).chargeLimitAdd += 1;

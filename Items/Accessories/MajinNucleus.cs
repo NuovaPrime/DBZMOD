@@ -7,10 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The pulsing nucleus of a invicible being.'" +
-                "\nMassivly increased health regen" +
-                "\nMassivly increased ki regen" +
-                "\n-1500 max ki");
+            Tooltip.SetDefault("'The pulsing nucleus of a invicible being.'\nMassivly increased health regen\nMassivly increased ki regen\n-1500 max ki");
             DisplayName.SetDefault("Majin Nucleus");
         }
 

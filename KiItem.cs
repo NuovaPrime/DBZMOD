@@ -5,7 +5,9 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -115,7 +117,7 @@ namespace DBZMOD
 
         public override void GetWeaponDamage(Player player, ref int damage)
         {            
-            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).kiDamage);
+            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).KiDamage);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)
@@ -154,7 +156,7 @@ namespace DBZMOD
 
         public override bool UseItem(Player player)
         {
-            if(TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
+            if(player.IsLSSJ() && !player.IsSSJ1())
             {
                 int i = Main.rand.Next(1, 4);
                 MyPlayer.ModPlayer(player).overloadCurrent += i;
@@ -194,35 +196,7 @@ namespace DBZMOD
             }
         }
     }
-    public abstract class KiPotion : ModItem
-    {
-        public int kiHeal;
-        public int potioncooldown = 3600;
-        public bool isKiPotion;
-        public override bool CloneNewInstances
-        {
-            get { return true; }
-        }
-        public override bool UseItem(Player player)
-        {
-            MyPlayer.ModPlayer(player).AddKi(kiHeal, false, false);
-            player.AddBuff(mod.BuffType("KiPotionSickness"), potioncooldown);
-            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), kiHeal, false, false);
-            return true;
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            if (player.HasBuff(mod.BuffType("KiPotionSickness")))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-    }
+    
     public abstract class PatreonItem : ModItem
     {
         public bool isArmorPiece;

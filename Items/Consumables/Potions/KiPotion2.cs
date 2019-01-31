@@ -20,15 +20,20 @@ namespace DBZMOD.Items.Consumables.Potions
             item.rare = 3;
             item.potion = false;
             isKiPotion = true;
-            kiHeal = 640;
+        }
+
+        public override int GetKiHealAmount()
+        {
+            return 640;
         }
 
         public override void SetStaticDefaults()
         {
+            base.SetStaticDefaults();
             DisplayName.SetDefault("Ki Potion");
-            Tooltip.SetDefault("Restores 640 Ki.");
         }
-		 public override void AddRecipes()
+
+		public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "CalmKiCrystal", 1);

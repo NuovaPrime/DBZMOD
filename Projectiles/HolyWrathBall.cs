@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DBZMOD.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -100,7 +101,7 @@ namespace DBZMOD.Projectiles
                     float angleRad = MathHelper.ToRadians(angle);
                     Vector2 dustPosition = new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
 
-                    Dust tDust = Dust.NewDustDirect(projectile.Center + (dustPosition * (40 + 110 * projectile.scale)), projectile.width, projectile.height, 15, 0f, 0f, 213, default(Color), 2.0f);
+                    Dust tDust = Dust.NewDustDirect(projectile.Center + (dustPosition * (40 + 110 * projectile.scale)), projectile.width, projectile.height, 169, 0f, 0f, 213, default(Color), 1.5f);
                     tDust.velocity = Vector2.Normalize((projectile.Center + projectile.Size / 2f) - tDust.position) * 2;
                     tDust.noGravity = true;
                 }
@@ -117,7 +118,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                ProjectileHelper.ApplyChannelingSlowdown(player);
+                player.ApplyChannelingSlowdown();
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
@@ -132,7 +133,7 @@ namespace DBZMOD.Projectiles
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)Math.Ceiling(projectile.scale * 30f);
+                projectile.damage *= (int)Math.Ceiling(projectile.scale / 3);
             }
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;

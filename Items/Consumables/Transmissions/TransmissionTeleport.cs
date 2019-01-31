@@ -34,8 +34,7 @@ namespace DBZMOD.Items.Consumables.Transmissions
             MyPlayer.ModPlayer(player).isInstantTransmission2Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked Instant Transmission Lv2 (Supreme Kai Teleportation)."
-                + "\nUse your Instant Transmission hotkey and cursor to seek a remote destination.");
+                Main.NewText("You have unlocked Instant Transmission Lv2 (Supreme Kai Teleportation).\nUse your Instant Transmission hotkey and cursor to seek a remote destination.");
                 return true;
             }
             return true;

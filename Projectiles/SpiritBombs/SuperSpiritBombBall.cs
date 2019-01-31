@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Destruction;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -79,7 +80,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
 
             if (player.channel && modPlayer.isMassiveBlastCharging)
             {
-                projectile.scale = BASE_SCALE + SCALE_INCREASE * HeldTime;
+                projectile.scale = BASE_SCALE + SCALE_INCREASE * (HeldTime / 3f);
                 projectile.position = player.Center + new Vector2(0, -40 - (projectile.scale * 17));
                 HeldTime++;
 
@@ -116,7 +117,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-5, true, false);
-                ProjectileHelper.ApplyChannelingSlowdown(player);
+                player.ApplyChannelingSlowdown();
                 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

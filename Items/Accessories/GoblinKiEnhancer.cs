@@ -7,9 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A relic of the ancient goblins.'" +
-                "\n+500 Max ki" +
-                "\nGetting hit grants massively increased ki regen for a short time.");
+            Tooltip.SetDefault("'A relic of the ancient goblins.'\n+500 Max ki\nGetting hit grants massively increased ki regen for a short time.");
             DisplayName.SetDefault("Goblin Ki Enhancer");
         }
 

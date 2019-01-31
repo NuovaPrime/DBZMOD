@@ -1,10 +1,12 @@
 ﻿using System;
+using DBZMOD.Extensions;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using DBZMOD.Util;
 using DBZMOD.Projectiles;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -72,31 +74,31 @@ namespace DBZMOD
                     mRotationDir -= Vector2.UnitX;
                 }
 
-                if (player.velocity.Length() > 0.5f)
-                {
-                    SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
-                }
-
-                if (TransformationHelper.IsSSJ(player) && !TransformationHelper.IsSSJG(player))
+                if (player.IsSSJ() && !player.IsSSJG())
                 {
                     flightDustType = 170;
                 }
-                else if (TransformationHelper.IsLSSJ(player))
+                else if (player.IsLSSJ())
                 {
                     flightDustType = 107;
                 }
-                else if (TransformationHelper.IsSSJG(player))
+                else if (player.IsSSJG())
                 {
                     flightDustType = 174;
                 }
-                else if (TransformationHelper.IsAnyKaioken(player))
+                else if (player.IsAnyKaioken())
                 {
                     flightDustType = 182;
                 }
                 else
                 {
                     flightDustType = 267;
-                }                
+                }
+
+                if (player.velocity.Length() > 0.5f)
+                {
+                    SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
+                }
 
                 //calculate velocity
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);

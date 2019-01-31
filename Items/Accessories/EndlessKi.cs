@@ -7,9 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The hearts of the gods above gods.'" +
-                "\n+1500000 Max Ki" +
-                "\nNear Infinite Ki Regen");
+            Tooltip.SetDefault("'The hearts of the gods above gods.'\n+1500000 Max Ki\nNear Infinite Ki Regen");
             DisplayName.SetDefault("Endless Ki");
         }
 

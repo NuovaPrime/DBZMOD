@@ -34,9 +34,7 @@ namespace DBZMOD.Items.Consumables.Transmissions
             MyPlayer.ModPlayer(player).isInstantTransmission3Unlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked Instant Transmission Lv3."
-                + "\nInstant Transmission free roaming costs " +
-                "\nare significantly reduced.");
+                Main.NewText("You have unlocked Instant Transmission Lv3.\nInstant Transmission free roaming costs\nare significantly reduced.");
                 return true;
             }
             return true;

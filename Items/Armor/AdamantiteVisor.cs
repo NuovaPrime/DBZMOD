@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("12% Increased Ki Damage"
-                + "\n10% Increased Ki Crit Chance" +
-                "\nMaximum Ki increased by 250.");
+            Tooltip.SetDefault("12% Increased Ki Damage\n10% Increased Ki Crit Chance\nMaximum Ki increased by 250.");
             DisplayName.SetDefault("Adamantite Visor");
         }
 
@@ -32,12 +30,12 @@ namespace DBZMOD.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "7% Increased Ki Damage";
-            MyPlayer.ModPlayer(player).kiDamage += 0.07f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.07f;
         }
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.12f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.12f;
             MyPlayer.ModPlayer(player).kiCrit += 10;
             MyPlayer.ModPlayer(player).kiMax2 += 250;
         }

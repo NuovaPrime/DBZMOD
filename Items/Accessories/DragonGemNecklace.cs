@@ -7,8 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'Infused with the essence of the dragon.'" +
-                "\nAll effects of the previous necklaces, some enhanced.");
+            Tooltip.SetDefault("'Infused with the essence of the dragon.'\nAll effects of the previous necklaces, some enhanced.");
             DisplayName.SetDefault("Dragon Gem Necklace");
         }
 
@@ -25,7 +24,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.08f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.08f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 250;
                 player.endurance += 0.09f;
                 player.meleeDamage += 0.09f;

@@ -8,11 +8,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("20% Increased Ki Damage"
-                + "\n16% Increased Ki Crit Chance" +
-                               "\n+500 Max Ki" +
-                               "\nIncreased Ki Regen" +
-                               "\n18% Increased movement speed");
+            Tooltip.SetDefault("20% Increased Ki Damage\n16% Increased Ki Crit Chance\n+500 Max Ki\nIncreased Ki Regen\n18% Increased movement speed");
             DisplayName.SetDefault("Black Fusion Pants");
         }
 
@@ -26,7 +22,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.20f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.20f;
             MyPlayer.ModPlayer(player).kiCrit += 16;
             MyPlayer.ModPlayer(player).kiMax2 += 500;
             MyPlayer.ModPlayer(player).kiRegen += 2;

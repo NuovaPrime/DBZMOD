@@ -1,11 +1,13 @@
 ﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Extensions;
 using DBZMOD.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -216,7 +218,7 @@ namespace DBZMOD
                     Player player = Main.LocalPlayer;
                     MyPlayer modPlayer = MyPlayer.ModPlayer(player);
                     modPlayer.kaiokenLevel = 0;
-                    TransformationHelper.EndTransformations(player);
+                    player.EndTransformations();
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
                     CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
@@ -580,7 +582,7 @@ namespace DBZMOD
             {
                 if (npc.type == NPCID.RedDevil || npc.type == NPCID.Demon || npc.type == NPCID.VoodooDemon)
                 {
-                    if (Main.rand.Next(3) == 0)
+                    if (Main.rand.Next(2) == 0)
                             Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DemonicSoul"), Main.rand.Next(1, 3));
                 }
             }
@@ -686,7 +688,7 @@ namespace DBZMOD
             {
                 if (Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)].ZoneMeteor)
                 {
-                    if (Main.rand.Next(100) == 0)
+                    if (Main.rand.Next(30) == 0)
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BurningEnergyAmulet"));
                 }
             }

@@ -22,7 +22,7 @@ namespace DBZMOD.Projectiles
             rotationSlowness = 60f;
 
             // vector to reposition the beam tail down if it feels too low or too high on the character sprite
-            offsetY = new Vector2(0, 4f);            
+            offsetY = new Vector2(0, 4f);
 
             // the maximum travel distance the beam can go
             maxBeamDistance = 2000f;
@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles
             beamSpeed = 30f;
 
             // the type of dust to spawn when the beam is firing
-            dustType = 169;
+            dustType = 174;
 
             // the frequency at which to spawn dust when the beam is firing
             dustFrequency = 0.6f;

@@ -10,8 +10,7 @@ namespace DBZMOD.Buffs.DevBuffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
-            Description.SetDefault("69x Damage, 69x Speed, Gives infinite ki regen" +
-                "\n'A form far beyond comprehension, only available to the true god Nuova.'");
+            Description.SetDefault("69x Damage, 69x Speed, Gives infinite ki regen\n'A form far beyond comprehension, only available to the true god Nuova.'");
         }
         public override void Update(Player player, ref int buffIndex)
         {

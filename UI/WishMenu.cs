@@ -4,6 +4,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 
 namespace DBZMOD.UI
@@ -23,8 +24,7 @@ namespace DBZMOD.UI
         private UIImageButton _wishButtonSkill;
         private UIImageButton _wishButtonAwakening;
         private UIImageButton _grantButton;
-        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire." +
-            "\nCertain wishes have limits.";
+        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire.\nCertain wishes have limits.";
         private static string _wishTextValue = "";
 
 
@@ -199,7 +199,7 @@ namespace DBZMOD.UI
             if (usedWish)
             {
                 wishSelection = WishSelectionID.None;
-                ItemHelper.DestroyPlayerDragonBalls(modPlayer.player);
+                modPlayer.player.DestroyOneOfEachDragonBall();
                 modPlayer.wishActive = false;
                 Main.PlaySound(SoundID.MenuClose);
             }
@@ -239,8 +239,9 @@ namespace DBZMOD.UI
         private static void DoGeneticWish()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            string oldTrait = modPlayer.playerTrait;
             modPlayer.playerTrait = null;
-            modPlayer.ChooseTraitNoLimits();
+            modPlayer.ChooseTraitNoLimits(oldTrait);
             menuVisible = false;
             modPlayer.wishActive = false;
         }

@@ -8,11 +8,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("24% Increased Ki Damage"
-                + "\n20% Increased Ki Crit Chance" +
-                               "\n+1000 Max Ki" +
-                               "\n+2 Maximum Charges" +
-                               "\nIncreased Ki Charge Rate");
+            Tooltip.SetDefault("24% Increased Ki Damage\n20% Increased Ki Crit Chance\n+1000 Max Ki\n+2 Maximum Charges\nIncreased Ki Charge Rate");
             DisplayName.SetDefault("Black Fusion Shirt");
         }
 
@@ -37,14 +33,13 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "All damage is slowly increased while a boss is alive, limits at 300%." +
-                              "\n+100 Max Life";
+            player.setBonus = "All damage is slowly increased while a boss is alive, limits at 300%.\n+100 Max Life";
             player.statLifeMax2 += 100;
             MyPlayer.ModPlayer(player).blackFusionBonus = true;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).kiCrit += 20;
             MyPlayer.ModPlayer(player).kiMax2 += 1000;
             MyPlayer.ModPlayer(player).kiChargeRate += 2;

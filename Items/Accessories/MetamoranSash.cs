@@ -8,10 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'Your own bad energy will be your undoing!'" +
-                "\n10% Increased Ki damage" +
-				"\n30% Reduced Ki usage" +
-                "\n15% chance to do double damage.");
+            Tooltip.SetDefault("'Your own bad energy will be your undoing!'\n10% Increased Ki damage\n30% Reduced Ki usage\n15% chance to do double damage.");
             DisplayName.SetDefault("Metamoran Sash");
         }
 
@@ -29,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.1f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.1f;
 				player.GetModPlayer<MyPlayer>(mod).kiDrainMulti -= 0.3f;
                 player.GetModPlayer<MyPlayer>(mod).metamoranSash = true;
             }

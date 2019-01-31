@@ -7,10 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A glowing amulet that radiates with extreme heat.'" +
-                "\n5% Increased Ki damage" +
-                "\n+200 Max ki" +
-                "\nCharging grants a aura of fire around you.");
+            Tooltip.SetDefault("'A glowing amulet that radiates with extreme heat.'\n5% Increased Ki damage\n+200 Max ki\nCharging grants a aura of fire around you.");
             DisplayName.SetDefault("Burning Energy Amulet");
         }
 
@@ -26,7 +23,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.05f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.05f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 200;
                 player.GetModPlayer<MyPlayer>(mod).burningEnergyAmulet = true;
             }

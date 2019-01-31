@@ -1,7 +1,9 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Extensions;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Projectiles.AuraProjectiles
 {
@@ -93,7 +95,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
             Player player = Main.player[projectile.owner];
             if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
-                TransformationHelper.DoTransform(player, TransformationHelper.SSJ2, DBZMOD.instance);
+                player.DoTransform(FormBuffHelper.ssj2, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;
             }
             else

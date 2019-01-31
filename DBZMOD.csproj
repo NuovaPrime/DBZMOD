@@ -131,7 +131,17 @@
     <Compile Include="Dusts\StarMuzzleFlash.cs" />
     <Compile Include="Effects\Animations\Aura\AuraAnimations.cs" />
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
+    <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Extensions\BuffInfoExtensions.cs" />
+    <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Extensions\PlayerExtensions.cs" />
+    <Compile Include="Extensions\ProjectileExtensions.cs" />
+    <Compile Include="Extensions\CoordinateExtensions.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
+    <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
+    <Compile Include="Items\Weapons\Test\CircleTester.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
     <Compile Include="Enums\AuraID.cs" />
@@ -299,6 +309,7 @@
     <Compile Include="Items\Misc\Choco2.cs" />
     <Compile Include="Items\Misc\Choco3.cs" />
     <Compile Include="Items\Misc\CoffeeCandy.cs" />
+    <Compile Include="Items\Misc\Keyboard.cs" />
     <Compile Include="Items\Misc\SSJGUnlockItem.cs" />
     <Compile Include="Items\NimbusWhistle.cs" />
     <Compile Include="Items\Materials\KiCrystals\PridefulKiCrystal.cs" />
@@ -426,6 +437,7 @@
     <Compile Include="Projectiles\KiBeamProjectile.cs" />
     <Compile Include="Projectiles\KiBlastProjectile.cs" />
     <Compile Include="Projectiles\KiSpark.cs" />
+    <Compile Include="Projectiles\LSSJs\LegendaryBlast.cs" />
     <Compile Include="Projectiles\LSSJs\LSSJ2PillarStart.cs" />
     <Compile Include="Projectiles\LSSJs\LSSJAuraBall.cs" />
     <Compile Include="Projectiles\LSSJs\LSSJAuraLaser.cs" />
@@ -490,9 +502,8 @@
     <Compile Include="Util\InstantTransmissionMapHelper.cs" />
     <Compile Include="Util\ProjectileHelper.cs" />
     <Compile Include="Util\SoundHelper.cs" />
-    <Compile Include="Util\TransformationHelper.cs" />
+    <Compile Include="Util\FormBuffHelper.cs" />
     <Compile Include="Util\ControlHelper.cs" />
-    <Compile Include="Util\HomingHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />
@@ -539,6 +550,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Buffs\DevBuffs\SSJSBuff.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryBlast.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb1.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb2.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryOrb3.png" />
+    <Content Include="Effects\Animations\Cutscenes\Legendary1\LegendaryPillar.png" />
+    <Content Include="Effects\Animations\Cutscenes\RageBall.png" />
+    <Content Include="Effects\Animations\Cutscenes\YellowBall.png" />
+    <Content Include="Effects\Animations\Transform\SSJ.png" />
+    <Content Include="Effects\Animations\Transform\SSJ3.png" />
+    <Content Include="Effects\Animations\Transform\SSJG.png" />
+    <Content Include="Effects\Animations\Transform\SSJSpectrum.png" />
     <Content Include="Hairs\Dev\SSJSHair.png" />
     <Content Include="Hairs\God\SSJBEHair.png" />
     <Content Include="Hairs\God\SSJBHair.png" />
@@ -630,7 +652,6 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Effects\Animations\Transform\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>

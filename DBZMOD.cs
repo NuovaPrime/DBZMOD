@@ -43,7 +43,7 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public bool expandedSentriesLoaded;
-        public static DBZMOD instance;
+        internal static DBZMOD instance;
 
         internal static CircleShader circle;
 
@@ -55,6 +55,8 @@ namespace DBZMOD
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
+
+            instance = this;
         }
 
         public override void Unload()
@@ -78,7 +80,6 @@ namespace DBZMOD
 
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);
-            instance = this;
 
             tremorLoaded = ModLoader.GetMod("Tremor") != null;
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;

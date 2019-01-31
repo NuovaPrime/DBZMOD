@@ -1,8 +1,10 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
+using DBZMOD.Extensions;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
+using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
@@ -17,6 +19,7 @@ namespace DBZMOD.Buffs
         public float kiDrainRate;
         public float kiDrainRateWithMastery;
         private int _kiDrainAddTimer;
+        private int _overloadDrainAddTimer;
         public bool realismModeOn;
         public int baseDefenceBonus;
         public int precentDefenceBonus;
@@ -26,16 +29,16 @@ namespace DBZMOD.Buffs
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             KiDrainAdd(player);
-            if(TransformationHelper.IsAnyKaioken(player) || TransformationHelper.IsSSJG(player))
+            if(player.IsAnyKaioken() || player.IsSSJG())
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
-            } else if (TransformationHelper.IsLSSJ1(player) || TransformationHelper.IsLSSJ2(player))
+            } else if (player.IsLSSJ1() || player.IsLSSJ2())
             {                
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (TransformationHelper.IsSSJ1(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsSSJ2(player) || TransformationHelper.IsAssj(player) || TransformationHelper.IsUssj(player))
+            } else if (player.IsSSJ1() || player.IsSSJ2() || player.IsSSJ2() || player.IsAssj() || player.IsUssj())
             {
                 Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
-            } else if (TransformationHelper.IsSpectrum(player))
+            } else if (player.IsSpectrum())
             {
                 var rainbow = Main.DiscoColor;
                 Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 512f, rainbow.G / 512f, rainbow.B / 512f);
@@ -63,16 +66,16 @@ namespace DBZMOD.Buffs
             float projectedKiDrain = actualKiDrain * kiDrainMultiplier;
 
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (TransformationHelper.IsAnythingOtherThanKaioken(player))
+            if (player.IsAnythingOtherThanKaioken())
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted(projectedKiDrain))
                 {
-                    if (TransformationHelper.IsSuperKaioken(player))
+                    if (player.IsSuperKaioken())
                     {
                         modPlayer.kaiokenLevel = 0;
                     }
-                    TransformationHelper.EndTransformations(player);
+                    player.EndTransformations();
                 }
                 else
                 {
@@ -98,7 +101,7 @@ namespace DBZMOD.Buffs
             player.magicDamage *= GetHalvedDamageBonus();
             player.minionDamage *= GetHalvedDamageBonus();
             player.thrownDamage *= GetHalvedDamageBonus();
-            modPlayer.kiDamage *= damageMulti;
+            modPlayer.KiDamage *= damageMulti;
 
             // cross mod support stuff
             if (DBZMOD.instance.thoriumLoaded)
@@ -175,7 +178,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == TransformationHelper.Kaioken.GetBuffId() || Type == TransformationHelper.SuperKaioken.GetBuffId())
+            if (Type == FormBuffHelper.kaioken.GetBuffId() || Type == FormBuffHelper.superKaioken.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {
@@ -204,15 +207,15 @@ namespace DBZMOD.Buffs
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
             if (kiDrainPerSecond > 0)
             {
-                displayString = string.Format("{0}\nKi Drain: {1}/s", displayString, (int)Math.Round(kiDrainPerSecond, 0));
+                displayString = $"{displayString}\nKi Drain: {(int)Math.Round(kiDrainPerSecond, 0)}/s";
                 if (kiDrainPerSecondWithMastery > 0)
                 {
-                    displayString = string.Format("{0}, {1}/s when mastered", displayString, (int)Math.Round(kiDrainPerSecondWithMastery, 0));
+                    displayString = $"{displayString}, {(int) Math.Round(kiDrainPerSecondWithMastery, 0)}/s when mastered";
                 }
             }
             if (healthDrainRate > 0)
             {
-                displayString = string.Format("{0}\nLife Drain: -{1}/s.", displayString, healthDrainRate / 2);
+                displayString = $"{displayString}\nLife Drain: -{healthDrainRate / 2}/s.";
             }
             return displayString;
         }
