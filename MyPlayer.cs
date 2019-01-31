@@ -21,6 +21,7 @@ using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
 using DBZMOD.Projectiles;
+using DBZMOD.Transformations;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
@@ -502,7 +503,7 @@ namespace DBZMOD
             bool isMessageDisplayed = masteryMessagesDisplayed[masteryFormBuffKeyName];
             string masteryMessage = string.Empty;
             Color messageColor = new Color(232, 242, 50);
-            if (masteryFormBuffKeyName.Equals(FormBuffHelper.ssj1.buffKeyName))
+            if (masteryFormBuffKeyName.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
             {
                 if (masteryLevel >= 0.5f && !assjAchieved)
                 {
@@ -525,7 +526,7 @@ namespace DBZMOD
             if (masteryLevel >= 1.0f && !isMessageDisplayed)
             {
                 masteryMessagesDisplayed[masteryFormBuffKeyName] = true;
-                string formName = FormBuffHelper.GetBuffByKeyName(masteryFormBuffKeyName).transformationText;
+                string formName = FormBuffHelper.GetBuffByKeyName(masteryFormBuffKeyName).TransformationText;
                 Main.NewText($"You've achieved mastery in {formName} form.");
             }
         }
@@ -545,7 +546,7 @@ namespace DBZMOD
                         lssj2Achieved = true;
                         isTransforming = true;
                         LSSJ2Transformation();
-                        UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                        UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
                         lssj2Timer = 0;
                         player.EndTransformations();
                     }
@@ -573,22 +574,22 @@ namespace DBZMOD
 
             if (ssj1Achieved)
             {
-                UI.TransMenu.ssj1On = true;
+                UI.TransformationMenu.ssj1On = true;
             }
 
             if (ssj2Achieved)
             {
-                UI.TransMenu.ssj2On = true;
+                UI.TransformationMenu.ssj2On = true;
             }
 
             if (ssj3Achieved)
             {
-                UI.TransMenu.ssj3On = true;
+                UI.TransformationMenu.ssj3On = true;
             }
 
             if (player.IsPlayerTransformed())
             {
-                if (!(player.IsKaioken() && kaiokenLevel == 5) && !player.HasBuff(FormBuffHelper.lssj2.GetBuffId()))
+                if (!(player.IsKaioken() && kaiokenLevel == 5) && !player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
                 {
                     lightningFrameTimer++;
                 }
@@ -616,7 +617,7 @@ namespace DBZMOD
             #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                foreach (var formWithMastery in FormBuffHelper.AllBuffs().Where(x => x.hasMastery).Select(x => x.masteryBuffKeyName).Distinct())
+                foreach (var formWithMastery in FormBuffHelper.AllBuffs().Where(x => x.HasMastery).Select(x => x.MasteryBuffKeyName).Distinct())
                 {
                     HandleMasteryEvents(formWithMastery);
                 }
@@ -636,7 +637,7 @@ namespace DBZMOD
 
             if (lssjAchieved)
             {
-                UI.TransMenu.lssjOn = true;
+                UI.TransformationMenu.lssjOn = true;
             }
 
             if (IsPlayerLegendary() && !lssjAchieved && NPC.downedBoss1)
@@ -1451,7 +1452,7 @@ namespace DBZMOD
                 ssj1Achieved = true;
                 isTransforming = true;
                 SSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1461,7 +1462,7 @@ namespace DBZMOD
                 ssj2Achieved = true;
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1471,7 +1472,7 @@ namespace DBZMOD
                 lssjAchieved = true;
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1481,7 +1482,7 @@ namespace DBZMOD
                 ssj3Achieved = true;
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1491,7 +1492,7 @@ namespace DBZMOD
                 lssj2Achieved = true;
                 isTransforming = true;
                 LSSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
                 lssj2Timer = 0;
                 player.EndTransformations();
             }
@@ -1587,7 +1588,7 @@ namespace DBZMOD
             tag.Add("KiEssence3", kiEssence3);
             tag.Add("KiEssence4", kiEssence4);
             tag.Add("KiEssence5", kiEssence5);
-            tag.Add("MenuSelection", (int)UI.TransMenu.menuSelection);
+            tag.Add("MenuSelection", (int)UI.TransformationMenu.menuSelection);
             tag.Add("IsMasteryRetrofitted", isMasteryRetrofitted);
             foreach (var key in masteryLevels.Keys)
             {
@@ -1662,35 +1663,35 @@ namespace DBZMOD
             kiEssence3 = tag.Get<bool>("KiEssence3");
             kiEssence4 = tag.Get<bool>("KiEssence4");
             kiEssence5 = tag.Get<bool>("KiEssence5");
-            UI.TransMenu.menuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
+            UI.TransformationMenu.menuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
 
             isMasteryRetrofitted = tag.ContainsKey("IsMasteryRetrofitted") ? tag.Get<bool>("IsMasteryRetrofitted") : false;
             if (!isMasteryRetrofitted)
             {
                 // retroactive mastery ported to new mastery system
                 var masteryLevel1 = tag.Get<float>("MasteryLevel1");
-                masteryLevels[FormBuffHelper.ssj1.buffKeyName] = masteryLevel1;
+                masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteryLevel1;
                 var masteryLevel2 = tag.Get<float>("MasteryLevel2");
-                masteryLevels[FormBuffHelper.ssj2.buffKeyName] = masteryLevel2;
+                masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteryLevel2;
                 var masteryLevel3 = tag.Get<float>("MasteryLevel3");
-                masteryLevels[FormBuffHelper.ssj3.buffKeyName] = masteryLevel3;
+                masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteryLevel3;
                 var masteryLevelGod = tag.Get<float>("MasteryLevelGod");
-                masteryLevels[FormBuffHelper.ssjg.buffKeyName] = masteryLevelGod;
+                masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelGod;
                 var masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-                masteryLevels[FormBuffHelper.ssjb.buffKeyName] = masteryLevelBlue;
+                masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelBlue;
                 var masteredMessage1 = tag.Get<bool>("MasteredMessage1");
-                masteryMessagesDisplayed[FormBuffHelper.ssj1.buffKeyName] = masteredMessage1;
+                masteryMessagesDisplayed[DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteredMessage1;
                 var masteredMessage2 = tag.Get<bool>("MasteredMessage2");
-                masteryMessagesDisplayed[FormBuffHelper.ssj2.buffKeyName] = masteredMessage2;
+                masteryMessagesDisplayed[DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteredMessage2;
                 var masteredMessage3 = tag.Get<bool>("MasteredMessage3");
-                masteryMessagesDisplayed[FormBuffHelper.ssj3.buffKeyName] = masteredMessage3;
+                masteryMessagesDisplayed[DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteredMessage3;
                 var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-                masteryMessagesDisplayed[FormBuffHelper.ssjg.buffKeyName] = masteredMessageGod;
+                masteryMessagesDisplayed[DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteredMessageGod;
                 var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-                masteryMessagesDisplayed[FormBuffHelper.ssjb.buffKeyName] = masteredMessageBlue;
+                masteryMessagesDisplayed[DBZMOD.instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;
                 // prime the dictionary with any missing entries
-                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.hasMastery)
-                    .Select(x => x.masteryBuffKeyName).Distinct())
+                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
+                    .Select(x => x.MasteryBuffKeyName).Distinct())
                 {
                     if (!masteryLevels.ContainsKey(key))
                     {
@@ -1706,8 +1707,8 @@ namespace DBZMOD
             else
             {
                 // new mastery system/dynamic loading. Overwrites the old one if it exists.
-                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.hasMastery)
-                    .Select(x => x.masteryBuffKeyName).Distinct())
+                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
+                    .Select(x => x.MasteryBuffKeyName).Distinct())
                 {
                     if (tag.ContainsKey($"MasteryLevel{key}"))
                     {
@@ -1807,7 +1808,7 @@ namespace DBZMOD
 
         public void HandleTransformations()
         {
-            BuffInfo targetTransformation = null;
+            TransformationDefinition targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
@@ -1829,7 +1830,7 @@ namespace DBZMOD
                 }
                 else
                 {
-                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransMenu.menuSelection);
+                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransformationMenu.menuSelection);
                 }
             }
             else if (IsPoweringDownOneStep() && !player.IsKaioken())
@@ -1890,7 +1891,7 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        BuffInfo transformation = player.IsAnythingOtherThanKaioken() ? FormBuffHelper.superKaioken : FormBuffHelper.kaioken;
+                        TransformationDefinition transformation = player.IsAnythingOtherThanKaioken() ? DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition : DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition;
                         if (player.CanTransform(transformation))
                         {
                             kaiokenLevel++;
@@ -2036,7 +2037,7 @@ namespace DBZMOD
 
             if (transMenu.JustPressed)
             {
-                UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
+                UI.TransformationMenu.menuvisible = !UI.TransformationMenu.menuvisible;
             }
 
             /*if (ProgressionMenuKey.JustPressed)
@@ -2051,7 +2052,7 @@ namespace DBZMOD
                 player.EndTransformations();
                 if (playerWasSuperKaioken)
                 {
-                    player.DoTransform(FormBuffHelper.ssj1, mod);
+                    player.DoTransform(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition, mod);
                 }
                 kaiokenLevel = 0;
                 SoundHelper.PlayCustomSound("Sounds/PowerDown", player, .3f);
@@ -2477,14 +2478,14 @@ namespace DBZMOD
                     ssj1Achieved = true;
                     isTransforming = true;
                     SSJTransformation();
-                    UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
+                    UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
                     rageCurrent = 0;
                     player.EndTransformations();
                     return false;
                 }
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[FormBuffHelper.ssj1.buffKeyName] >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2492,13 +2493,13 @@ namespace DBZMOD
                 ssj2Achieved = true;
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(FormBuffHelper.ssj1.GetBuffId()) && masteryLevels[FormBuffHelper.ssj1.buffKeyName] >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2506,13 +2507,13 @@ namespace DBZMOD
                 lssjAchieved = true;
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(FormBuffHelper.ssj2.GetBuffId()) && masteryLevels[FormBuffHelper.ssj2.buffKeyName] >= 1)
+            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2520,7 +2521,7 @@ namespace DBZMOD
                 ssj3Achieved = true;
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -2927,7 +2928,7 @@ namespace DBZMOD
                 float drainMult = isKaioCrystalEquipped ? 0.5f : 1f;
                 
                 // recalculate the final health drain rate and reduce regen by that amount
-                var healthDrain = (int)Math.Ceiling(TransBuff.GetTotalHealthDrain(player) * drainMult);
+                var healthDrain = (int)Math.Ceiling(TransformationBuff.GetTotalHealthDrain(player) * drainMult);
                 player.lifeRegen -= healthDrain;
             }
         }

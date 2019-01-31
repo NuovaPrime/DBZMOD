@@ -61,7 +61,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            player.DoTransform(FormBuffHelper.ssj1, DBZMOD.instance);
+            player.DoTransform(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition, DBZMOD.instance);
             MyPlayer.ModPlayer(player).isTransforming = false;
         }
     }

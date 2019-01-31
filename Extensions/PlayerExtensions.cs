@@ -8,6 +8,7 @@ using DBZMOD.Items.DragonBalls;
 using DBZMOD.Models;
 using DBZMOD.Network;
 using DBZMOD.Projectiles;
+using DBZMOD.Transformations;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -221,7 +222,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsPlayerTransformed(this Player player)
         {
-            foreach (BuffInfo buff in FormBuffHelper.AllBuffs())
+            foreach (TransformationDefinition buff in FormBuffHelper.AllBuffs())
             {
                 if (player.HasBuff(buff.GetBuffId()))
                     return true;
@@ -230,9 +231,9 @@ namespace DBZMOD.Extensions
             return false;
         }
 
-        public static bool PlayerHasBuffIn(this Player player, BuffInfo[] buffs)
+        public static bool PlayerHasBuffIn(this Player player, TransformationDefinition[] buffs)
         {
-            foreach (BuffInfo buff in buffs)
+            foreach (TransformationDefinition buff in buffs)
             {
                 if (player.HasBuff(buff.GetBuffId()))
                     return true;
@@ -248,22 +249,22 @@ namespace DBZMOD.Extensions
 
         public static bool IsSSJ2(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.ssj2.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId());
         }
 
         public static bool IsSSJ3(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.ssj3.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId());
         }
 
         public static bool IsSpectrum(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.spectrum.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition.GetBuffId());
         }
 
         public static bool IsKaioken(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.kaioken.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId());
         }
 
         public static bool IsAnyKaioken(this Player player)
@@ -293,7 +294,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsAscended(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.assj.GetBuffId()) || player.HasBuff(FormBuffHelper.ussj.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId()) || player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
         }
 
         public static bool IsTransformBlocked(this Player player)
@@ -302,7 +303,7 @@ namespace DBZMOD.Extensions
             return modPlayer.isTransforming || modPlayer.IsPlayerImmobilized() || modPlayer.IsKiDepleted();
         }
 
-        public static bool CanTransform(this Player player, BuffInfo buff)
+        public static bool CanTransform(this Player player, TransformationDefinition buff)
         {
             if (buff == null)
                 return false;
@@ -311,27 +312,27 @@ namespace DBZMOD.Extensions
                 return false;
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (buff == FormBuffHelper.ssj1)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition)
                 return modPlayer.ssj1Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.ssj2)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.ssj3)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.ssjg)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.lssj)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition)
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.lssj2)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition)
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.assj)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition)
                 return (player.IsSSJ1() || player.IsUssj()) && modPlayer.assjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.ussj)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.USSJDefinition)
                 return player.IsAssj() && modPlayer.ussjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.kaioken)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition)
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken();
-            if (buff == FormBuffHelper.superKaioken)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition)
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken() && !player.IsExhaustedFromTransformation();
-            if (buff == FormBuffHelper.spectrum)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition)
                 return player.name == "Nuova";
             return false;
         }
@@ -339,33 +340,33 @@ namespace DBZMOD.Extensions
         public static void AddKaiokenExhaustion(this Player player, int multiplier)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(FormBuffHelper.kaiokenFatigue.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
+            player.AddBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
             modPlayer.kaiokenTimer = 0f;
         }
 
         public static void AddTransformationExhaustion(this Player player)
         {
-            player.AddBuff(FormBuffHelper.transformationExhaustion.GetBuffId(), 600);
+            player.AddBuff(DBZMOD.instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId(), 600);
         }
 
-        public static bool IsExhaustedFromTransformation(this Player player) { return player.HasBuff(FormBuffHelper.transformationExhaustion.GetBuffId()); }
-        public static bool IsTiredFromKaioken(this Player player) { return player.HasBuff(FormBuffHelper.kaiokenFatigue.GetBuffId()); }
+        public static bool IsExhaustedFromTransformation(this Player player) { return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId()); }
+        public static bool IsTiredFromKaioken(this Player player) { return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId()); }
 
         public static void ClearAllTransformations(this Player player)
         {
-            foreach (BuffInfo buff in FormBuffHelper.AllBuffs())
+            foreach (TransformationDefinition buff in FormBuffHelper.AllBuffs())
             {
                 // don't clear buffs the player doesn't have, obviously.
                 if (!player.HasBuff(buff.GetBuffId()))
                     continue;
 
-                player.RemoveTransformation(buff.buffKeyName);
+                player.RemoveTransformation(buff.UnlocalizedName);
             }
         }
 
         public static void RemoveTransformation(this Player player, string buffKeyName)
         {
-            BuffInfo buff = FormBuffHelper.GetBuffByKeyName(buffKeyName);
+            TransformationDefinition buff = FormBuffHelper.GetBuffByKeyName(buffKeyName);
 
             player.ClearBuff(buff.GetBuffId());
 
@@ -375,7 +376,7 @@ namespace DBZMOD.Extensions
             }
         }
 
-        public static void DoTransform(this Player player, BuffInfo buff, Mod mod)
+        public static void DoTransform(this Player player, TransformationDefinition buff, Mod mod)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
@@ -384,9 +385,9 @@ namespace DBZMOD.Extensions
                 return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
-            if (buff == FormBuffHelper.superKaioken)
+            if (buff == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition)
             {
-                player.RemoveTransformation(FormBuffHelper.kaioken.buffKeyName);
+                player.RemoveTransformation(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.UnlocalizedName);
             }
 
             // remove all *transformation* buffs from the player.
@@ -394,7 +395,7 @@ namespace DBZMOD.Extensions
             player.EndTransformations();
 
             // add whatever buff it is for a really long time.
-            player.AddTransformation(buff.buffKeyName, FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION);
+            player.AddTransformation(buff.UnlocalizedName, FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION);
         }
 
         public static void EndTransformations(this Player player)
@@ -412,11 +413,11 @@ namespace DBZMOD.Extensions
 
         public static void AddTransformation(this Player player, string buffKeyName, int duration)
         {            
-            BuffInfo buff = FormBuffHelper.GetBuffByKeyName(buffKeyName);
+            TransformationDefinition buff = FormBuffHelper.GetBuffByKeyName(buffKeyName);
             player.AddBuff(buff.GetBuffId(), FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, false);
 
-            if (!String.IsNullOrEmpty(buff.transformationText))
-                CombatText.NewText(player.Hitbox, buff.transformationTextColor, buff.transformationText, false, false);
+            if (!String.IsNullOrEmpty(buff.TransformationText))
+                CombatText.NewText(player.Hitbox, buff.TransformationTextColor, buff.TransformationText, false, false);
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer) {
                 NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, buffKeyName, duration);
@@ -426,9 +427,9 @@ namespace DBZMOD.Extensions
             player.GetModPlayer<MyPlayer>().isTransformationAnimationPlaying = true;
         }
 
-        public static BuffInfo GetCurrentTransformation(this Player player, bool isIgnoringKaioken, bool isIgnoringNonKaioken)
+        public static TransformationDefinition GetCurrentTransformation(this Player player, bool isIgnoringKaioken, bool isIgnoringNonKaioken)
         {
-            foreach (BuffInfo buff in FormBuffHelper.AllBuffs())
+            foreach (TransformationDefinition buff in FormBuffHelper.AllBuffs())
             {
                 if (buff.IsKaioken() && isIgnoringKaioken)
                     continue;
@@ -446,17 +447,17 @@ namespace DBZMOD.Extensions
             return null;
         }
 
-        public static BuffInfo GetNextTransformationStep(this Player player)
+        public static TransformationDefinition GetNextTransformationStep(this Player player)
         {
-            BuffInfo currentTransformation = player.GetCurrentTransformation(false, false);
-            BuffInfo currentNonKaioTransformation = player.GetCurrentTransformation(true, false);
+            TransformationDefinition currentTransformation = player.GetCurrentTransformation(false, false);
+            TransformationDefinition currentNonKaioTransformation = player.GetCurrentTransformation(true, false);
             if (currentTransformation.IsKaioken())
             {
                 // player was in kaioken, trying to power up. Go to super kaioken but set the player's kaioken level to 1 because that's how things are now.
                 if (currentNonKaioTransformation == null && player.GetModPlayer<MyPlayer>().hasSSJ1)
                 {
                     player.GetModPlayer<MyPlayer>().kaiokenLevel = 1;
-                    return FormBuffHelper.superKaioken;
+                    return DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition;
                 }
 
                 // insert handler for SSJBK here
@@ -466,7 +467,7 @@ namespace DBZMOD.Extensions
 
             // SSJ1 is always the starting point if there isn't a current form tree to step through.
             if (currentTransformation == null)
-                return FormBuffHelper.ssj1;
+                return DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition;
 
             // the player is legendary and doing a legendary step up.
             if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
@@ -496,9 +497,9 @@ namespace DBZMOD.Extensions
             return null;
         }
 
-        public static BuffInfo GetPreviousTransformationStep(this Player player)
+        public static TransformationDefinition GetPreviousTransformationStep(this Player player)
         {
-            BuffInfo currentTransformation = player.GetCurrentTransformation(true, false);
+            TransformationDefinition currentTransformation = player.GetCurrentTransformation(true, false);
 
             // the player is legendary and doing a legendary step down.
             if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
@@ -540,9 +541,9 @@ namespace DBZMOD.Extensions
             return null;
         }
 
-        public static BuffInfo GetNextAscensionStep(this Player player)
+        public static TransformationDefinition GetNextAscensionStep(this Player player)
         {
-            BuffInfo currentTransformation = player.GetCurrentTransformation(true, false);
+            TransformationDefinition currentTransformation = player.GetCurrentTransformation(true, false);
 
             if (currentTransformation.IsAscended() || player.IsSSJ1())
             {
@@ -560,7 +561,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsSuperKaioken(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.superKaioken.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId());
         }
 
         public static bool IsLSSJ(this Player player)
@@ -570,32 +571,32 @@ namespace DBZMOD.Extensions
 
         public static bool IsLSSJ1(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.lssj.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId());
         }
 
         public static bool IsLSSJ2(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.lssj2.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId());
         }
 
         public static bool IsSSJG(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.ssjg.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.GetBuffId());
         }
 
         public static bool IsSSJ1(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.ssj1.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId());
         }
 
         public static bool IsAssj(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.assj.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId());
         }
 
         public static bool IsUssj(this Player player)
         {
-            return player.HasBuff(FormBuffHelper.ussj.GetBuffId());
+            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
         }
 
         public static void DrawAura(this MyPlayer modPlayer, AuraAnimationInfo aura)
@@ -626,11 +627,11 @@ namespace DBZMOD.Extensions
 
         public static string GetCurrentFormForMastery(this Player player)
         {
-            foreach (BuffInfo buff in FormBuffHelper.AllBuffs().Where(x => x.hasMastery))
+            foreach (TransformationDefinition buff in FormBuffHelper.AllBuffs().Where(x => x.HasMastery))
             {
                 if (player.HasBuff(buff.GetBuffId()))
                 {
-                    return buff.masteryBuffKeyName;
+                    return buff.MasteryBuffKeyName;
                 }
             }
 

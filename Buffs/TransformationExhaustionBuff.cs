@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
 {
-    public class TransExhaustionBuff : ModBuff
+    public class TransformationExhaustionBuff : ModBuff
     {
         public override void SetDefaults()
         {

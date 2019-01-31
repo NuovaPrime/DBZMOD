@@ -142,15 +142,15 @@ namespace DBZMOD.Util
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.HasBuff(FormBuffHelper.ssj2.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
-            if (drawPlayer.HasBuff(FormBuffHelper.lssj.GetBuffId()) || drawPlayer.HasBuff(FormBuffHelper.lssj2.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
             }
-            if (drawPlayer.HasBuff(FormBuffHelper.ssj3.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }

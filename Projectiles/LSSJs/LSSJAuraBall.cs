@@ -90,12 +90,12 @@ namespace DBZMOD.Projectiles.LSSJs
             Player player = Main.player[projectile.owner];
             if (MyPlayer.ModPlayer(player).isTransforming)
             {
-                player.DoTransform(FormBuffHelper.lssj2, DBZMOD.instance);
+                player.DoTransform(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;
             }
             else
             {
-                player.DoTransform(FormBuffHelper.lssj, DBZMOD.instance);
+                player.DoTransform(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition, DBZMOD.instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;
             }
         }

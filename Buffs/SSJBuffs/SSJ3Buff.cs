@@ -3,7 +3,7 @@ using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SSJ3Buff : TransBuff
+    public class SSJ3Buff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -23,7 +23,7 @@ namespace DBZMOD.Buffs.SSJBuffs
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            bool isMastered = modPlayer.masteryLevels[FormBuffHelper.ssj3.masteryBuffKeyName] >= 1f;
+            bool isMastered = modPlayer.masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.MasteryBuffKeyName] >= 1f;
 
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)

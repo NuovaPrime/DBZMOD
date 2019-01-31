@@ -8,7 +8,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
-    public abstract class TransBuff : ModBuff
+    public abstract class TransformationBuff : ModBuff
     {
         public float damageMulti;
         public float speedMulti;
@@ -178,7 +178,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == FormBuffHelper.kaioken.GetBuffId() || Type == FormBuffHelper.superKaioken.GetBuffId())
+            if (Type == DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {

@@ -34,7 +34,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override bool UseItem(Player player)
         {
             MyPlayer.ModPlayer(player).SSJGTransformation();
-            UI.TransMenu.menuSelection = MenuSelectionID.SSJG;
+            UI.TransformationMenu.menuSelection = MenuSelectionID.SSJG;
             MyPlayer.ModPlayer(player).ssjgAchieved = true;
             MyPlayer.ModPlayer(player).isTransforming = true;
             return true;

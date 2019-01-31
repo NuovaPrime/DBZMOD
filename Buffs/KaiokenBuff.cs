@@ -5,7 +5,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
-    public class KaiokenBuff : TransBuff
+    public class KaiokenBuff : TransformationBuff
     {
         public override void SetDefaults()
         {

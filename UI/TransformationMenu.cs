@@ -7,10 +7,11 @@ using DBZMOD.Enums;
 using DBZMOD.Util;
 using System;
 using DBZMOD.Models;
+using DBZMOD.Transformations;
 
 namespace DBZMOD.UI
 {
-    internal class TransMenu : EasyMenu
+    internal class TransformationMenu : EasyMenu
     {
         public static bool menuvisible = false;
         private UIText _titleText;
@@ -240,9 +241,9 @@ namespace DBZMOD.UI
             if (player.ssj1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
@@ -260,9 +261,9 @@ namespace DBZMOD.UI
             if (player.ssj2Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ2;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
@@ -279,9 +280,9 @@ namespace DBZMOD.UI
             if (player.ssj3Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ3;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
@@ -298,9 +299,9 @@ namespace DBZMOD.UI
             if (player.lssjAchieved)
             {
                 menuSelection = MenuSelectionID.LSSJ1;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
@@ -318,9 +319,9 @@ namespace DBZMOD.UI
             if (player.lssj2Achieved)
             {
                 menuSelection = MenuSelectionID.LSSJ2;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
@@ -337,9 +338,9 @@ namespace DBZMOD.UI
             if (player.ssjgAchieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJG;
-                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.transformationText;
-                string keyName = buff.masteryBuffKeyName;
+                TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.TransformationText;
+                string keyName = buff.MasteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");

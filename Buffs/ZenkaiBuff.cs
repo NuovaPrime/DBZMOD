@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs
 {
-    public class ZenkaiBuff : TransBuff
+    public class ZenkaiBuff : TransformationBuff
     {
         public override void SetDefaults()
         {

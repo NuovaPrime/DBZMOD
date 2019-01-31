@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SSJGBuff : TransBuff
+    public class SSJGBuff : TransformationBuff
     {
         public override void SetDefaults()
         {

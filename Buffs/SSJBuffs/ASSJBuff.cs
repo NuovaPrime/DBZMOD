@@ -3,7 +3,7 @@ using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class ASSJBuff : TransBuff
+    public class ASSJBuff : TransformationBuff
     {
         public override void SetDefaults()
         {
