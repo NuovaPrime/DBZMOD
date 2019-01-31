@@ -26,24 +26,20 @@ namespace DBZMOD.Util
 
         // the following are cached info classes that get passed around for all sorts of things.
         public static readonly BuffInfo 
-            ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor),
-            assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, GetASSJNamePreference(), defaultTransformationTextColor),
-            ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, GetUSSJNamePreference(), defaultTransformationTextColor),
-            ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor),
-            ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor),
-
-            ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor),
-            ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor),
-            
-            lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor),
-            lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor),
-            
+            ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, true, BuffKeyNames.ssj1),
+            assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, GetASSJNamePreference(), defaultTransformationTextColor, true, BuffKeyNames.ssj1),
+            ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, GetUSSJNamePreference(), defaultTransformationTextColor, true, BuffKeyNames.ssj1),
+            ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, true, BuffKeyNames.ssj2),
+            ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, true, BuffKeyNames.ssj3),
+            ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor, true, BuffKeyNames.ssjg),
+            ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor, true),
+            lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, true, BuffKeyNames.lssj),
+            lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, true, BuffKeyNames.lssj2),
             kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaioken, null, defaultTransformationTextColor),
-            superKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.superKaioken, null, defaultTransformationTextColor),
+            superKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.superKaioken, null, defaultTransformationTextColor, true, BuffKeyNames.ssj1),
             kaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor),
-            
             transformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor),
-            spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor);
+            spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, true, BuffKeyNames.spectrum);
 
         public static readonly BuffInfo[]
             buffInfoList = {ssj1, ssj2, ssj3, ssjg, lssj, lssj2, assj, ussj, kaioken, superKaioken, kaiokenFatigue, transformationExhaustion, spectrum},
