@@ -57,7 +57,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsAscended(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition) || buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition)));
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition) || buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition);
         }
     }
 }
