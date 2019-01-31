@@ -1816,21 +1816,19 @@ namespace DBZMOD
                 if (player.IsPlayerTransformed())
                 {
                     // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-                    if (IsAscendingTransformation())
-                    {
-                        if (CanAscend())
-                        {
-                            targetTransformation = player.GetNextAscensionStep();
-                        }
-                    }
-                    else
-                    {
-                        targetTransformation = player.GetNextTransformationStep();
-                    }
+                    if (IsAscendingTransformation() && CanAscend())
+                        targetTransformation = player.GetNextAscensionStep();
                 }
                 else
                 {
+                    // first attempt to step up to the selected form in the menu.
                     targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransformationMenu.menuSelection);
+                }
+
+                // if for any reason we haven't gotten our transformation target, try the next step instead.
+                if (targetTransformation == null)
+                {
+                    targetTransformation = player.GetNextTransformationStep();
                 }
             }
             else if (IsPoweringDownOneStep() && !player.IsKaioken())
