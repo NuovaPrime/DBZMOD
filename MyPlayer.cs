@@ -83,14 +83,9 @@ namespace DBZMOD
         public bool hasSSJ1;
         public int transformCooldown;
 
-        public bool assjAchieved;
-        public bool ussjAchieved;
-        public bool ssj2Achieved;
-        public bool ssj3Achieved;
-        public bool lssjAchieved;
-        public bool ssjgAchieved;
-        public bool lssj2Achieved;
-        public bool lssjgAchieved = false;
+        public bool
+            ssj2Achieved, ssj3Achieved, assjAchieved, ussjAchieved, 
+            lssjAchieved, ssjgAchieved, lssj2Achieved, lssjgAchieved = false;
 
         public int lssj2Timer;
         public int rageCurrent = 0;
@@ -114,23 +109,13 @@ namespace DBZMOD
 
         //mastery vars
         public float 
-            masteryLevel1,
-            masteryLevel2,
-            masteryLevel3,
-
-            masteryLevelGod,
-            masteryLevelBlue,
-
-            masteryMaxFlight = 1,
-            masteryLevelFlight = 0;
+            masteryLevel1, masteryLevel2, masteryLevel3,
+            masteryLevelGod, masteryLevelBlue,
+            masteryMaxFlight = 1, masteryLevelFlight = 0;
 
         public bool 
-            masteredMessage1,
-            masteredMessage2,
-            masteredMessage3,
-
-            masteredMessageGod,
-            masteredMessageBlue;
+            masteredMessage1, masteredMessage2, masteredMessage3,
+            masteredMessageGod, masteredMessageBlue;
 
         public int masteryTimer = 0;
 

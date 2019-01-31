@@ -138,6 +138,7 @@
     <Compile Include="Extensions\PlayerExtensions.cs" />
     <Compile Include="Extensions\ProjectileExtensions.cs" />
     <Compile Include="Extensions\CoordinateExtensions.cs" />
+    <Compile Include="IHasUnlocalizedName.cs" />
     <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
     <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
@@ -366,6 +367,7 @@
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="DBZWorld.cs" />
+    <Compile Include="Manager.cs" />
     <Compile Include="Models\AuraAnimationInfo.cs" />
     <Compile Include="KiProjectile.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
@@ -488,6 +490,8 @@
     <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
     <Compile Include="Buffs\TransBuff.cs" />
+    <Compile Include="Transformations\TransformationDefinition.cs" />
+    <Compile Include="Transformations\TransformationDefinitionManager.cs" />
     <Compile Include="UI\EasyMenu.cs" />
     <Compile Include="UI\KiBar.cs" />
     <Compile Include="UI\KiResource.cs" />
