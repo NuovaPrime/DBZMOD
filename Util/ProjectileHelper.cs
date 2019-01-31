@@ -81,60 +81,83 @@ namespace DBZMOD.Util
             }
         }
 
+        public static Vector2 GetClosestTileCollisionInRay(Vector2 start, Vector2 end)
+        {
+            Vector2 collisionPoint = end;
+            float closestPoint = float.MaxValue;
+            Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
+            {
+                Tile tile = Main.tile[x, y];
+                bool isPassingTiles = tile == null || tile.inActive() || !Main.tile[x, y].active() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type];
+                if (!isPassingTiles)
+                {
+                    Vector2 comparisonPoint = new Vector2(x, y) * 16f + new Vector2(8f, 8f);
+                    float distance = Vector2.Distance(comparisonPoint, collisionPoint);
+                    if (distance < closestPoint)
+                    {
+                        collisionPoint = comparisonPoint;
+                        closestPoint = distance;
+                    }
+                }
+
+                return isPassingTiles;
+            });
+            return collisionPoint;
+        }
+
         public static bool CanHitLine(Vector2 start, Vector2 end)
         {
-            bool flag = Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
+            return Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
             {
                 Tile tile = Main.tile[x, y];
                 return tile == null || tile.inActive() || !Main.tile[x, y].active() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type];
             });
-            return flag;
         }
 
-        // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
-        public static bool OldCanHitLine(Vector2 position1, Vector2 position2)
-        {
-            var step = Vector2.Normalize(position2 - position1) * 8f;
-            bool isColliding = false;
-            // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
-            if (step.X < 0)
-            {
-                while (position1.X >= position2.X && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            } else if (step.X > 0)
-            {
-                while (position1.X <= position2.X && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            } else if (step.Y < 0)
-            {
-                while (position1.Y >= position2.Y && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            } else if (step.Y > 0)
-            {
-                while (position1.Y <= position2.Y && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            }
-            return !isColliding;
-        }
+        //// shameless appropriation of vanilla collision check with modifications to be more.. lasery.
+        //public static bool OldCanHitLine(Vector2 position1, Vector2 position2)
+        //{
+        //    var step = Vector2.Normalize(position2 - position1) * 8f;
+        //    bool isColliding = false;
+        //    // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
+        //    if (step.X < 0)
+        //    {
+        //        while (position1.X >= position2.X && position1.IsInWorldBounds())
+        //        {
+        //            position1 += step;
+        //            isColliding = position1.IsPositionInTile();
+        //            if (isColliding)
+        //                break;
+        //        }
+        //    } else if (step.X > 0)
+        //    {
+        //        while (position1.X <= position2.X && position1.IsInWorldBounds())
+        //        {
+        //            position1 += step;
+        //            isColliding = position1.IsPositionInTile();
+        //            if (isColliding)
+        //                break;
+        //        }
+        //    } else if (step.Y < 0)
+        //    {
+        //        while (position1.Y >= position2.Y && position1.IsInWorldBounds())
+        //        {
+        //            position1 += step;
+        //            isColliding = position1.IsPositionInTile();
+        //            if (isColliding)
+        //                break;
+        //        }
+        //    } else if (step.Y > 0)
+        //    {
+        //        while (position1.Y <= position2.Y && position1.IsInWorldBounds())
+        //        {
+        //            position1 += step;
+        //            isColliding = position1.IsPositionInTile();
+        //            if (isColliding)
+        //                break;
+        //        }
+        //    }
+        //    return !isColliding;
+        //}
     }
 }

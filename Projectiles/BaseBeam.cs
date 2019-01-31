@@ -405,17 +405,13 @@ namespace DBZMOD.Projectiles
             // tracked distance is with collision, and resets distance if it's too high.
             Distance += beamSpeed;
             float trackedDistance;
+            
+            Vector2 origin = TailPositionStart() + projectile.velocity * (maxBeamDistance + headSize.Y * projectile.scale);
 
-            for (trackedDistance = maxBeamDistance; trackedDistance >= 1f; trackedDistance /= 2f)
-            {
-                Vector2 origin = TailPositionStart() + projectile.velocity * (trackedDistance + headSize.Y * projectile.scale);
-                
-                if (!ProjectileHelper.CanHitLine(TailPositionStart(), origin))
-                {
-                    trackedDistance *= 2f;
-                    break;
-                }
-            }
+            Vector2 collisionPoint = ProjectileHelper.GetClosestTileCollisionInRay(TailPositionStart(), origin);
+
+            trackedDistance = Vector2.Distance(collisionPoint, TailPositionStart());
+
 
             // handle animation frames on animated beams
             if (isBeamSegmentAnimated)
