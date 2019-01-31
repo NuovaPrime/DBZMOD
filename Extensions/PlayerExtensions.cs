@@ -623,5 +623,18 @@ namespace DBZMOD.Extensions
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
+
+        public static string GetCurrentFormForMastery(this Player player)
+        {
+            foreach (BuffInfo buff in FormBuffHelper.AllBuffs().Where(x => x.hasMastery))
+            {
+                if (player.HasBuff(buff.GetBuffId()))
+                {
+                    return buff.masteryBuffKeyName;
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }

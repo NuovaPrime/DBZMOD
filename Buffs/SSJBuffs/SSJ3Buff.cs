@@ -23,7 +23,7 @@ namespace DBZMOD.Buffs.SSJBuffs
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            bool isMastered = modPlayer.masteryLevels[TransformationHelper.SSJ3.masteryBuffKeyName] >= 1f;
+            bool isMastered = modPlayer.masteryLevels[FormBuffHelper.ssj3.masteryBuffKeyName] >= 1f;
 
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)

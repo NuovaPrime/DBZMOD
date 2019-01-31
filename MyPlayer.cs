@@ -331,7 +331,7 @@ namespace DBZMOD
             HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
             SetKi(_kiCurrent + kiAmount);
         }
-        
+
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             if (isFormDrain)
@@ -502,7 +502,7 @@ namespace DBZMOD
             bool isMessageDisplayed = masteryMessagesDisplayed[masteryFormBuffKeyName];
             string masteryMessage = string.Empty;
             Color messageColor = new Color(232, 242, 50);
-            if (masteryFormBuffKeyName.Equals(TransformationHelper.SSJ1.buffKeyName))
+            if (masteryFormBuffKeyName.Equals(FormBuffHelper.ssj1.buffKeyName))
             {
                 if (masteryLevel >= 0.5f && !assjAchieved)
                 {
@@ -525,7 +525,7 @@ namespace DBZMOD
             if (masteryLevel >= 1.0f && !isMessageDisplayed)
             {
                 masteryMessagesDisplayed[masteryFormBuffKeyName] = true;
-                string formName = TransformationHelper.GetBuffByKeyName(masteryFormBuffKeyName).displayName;
+                string formName = FormBuffHelper.GetBuffByKeyName(masteryFormBuffKeyName).transformationText;
                 Main.NewText($"You've achieved mastery in {formName} form.");
             }
         }
@@ -616,7 +616,7 @@ namespace DBZMOD
             #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                foreach (var formWithMastery in TransformationHelper.AllBuffs().Where(x => x.hasMastery).Select(x => x.masteryBuffKeyName).Distinct())
+                foreach (var formWithMastery in FormBuffHelper.AllBuffs().Where(x => x.hasMastery).Select(x => x.masteryBuffKeyName).Distinct())
                 {
                     HandleMasteryEvents(formWithMastery);
                 }
@@ -1669,27 +1669,27 @@ namespace DBZMOD
             {
                 // retroactive mastery ported to new mastery system
                 var masteryLevel1 = tag.Get<float>("MasteryLevel1");
-                masteryLevels[TransformationHelper.SSJ1.buffKeyName] = masteryLevel1;
+                masteryLevels[FormBuffHelper.ssj1.buffKeyName] = masteryLevel1;
                 var masteryLevel2 = tag.Get<float>("MasteryLevel2");
-                masteryLevels[TransformationHelper.SSJ2.buffKeyName] = masteryLevel2;
+                masteryLevels[FormBuffHelper.ssj2.buffKeyName] = masteryLevel2;
                 var masteryLevel3 = tag.Get<float>("MasteryLevel3");
-                masteryLevels[TransformationHelper.SSJ3.buffKeyName] = masteryLevel3;
+                masteryLevels[FormBuffHelper.ssj3.buffKeyName] = masteryLevel3;
                 var masteryLevelGod = tag.Get<float>("MasteryLevelGod");
-                masteryLevels[TransformationHelper.SSJG.buffKeyName] = masteryLevelGod;
+                masteryLevels[FormBuffHelper.ssjg.buffKeyName] = masteryLevelGod;
                 var masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-                masteryLevels[TransformationHelper.Ssjb.buffKeyName] = masteryLevelBlue;
+                masteryLevels[FormBuffHelper.ssjb.buffKeyName] = masteryLevelBlue;
                 var masteredMessage1 = tag.Get<bool>("MasteredMessage1");
-                masteryMessagesDisplayed[TransformationHelper.SSJ1.buffKeyName] = masteredMessage1;
+                masteryMessagesDisplayed[FormBuffHelper.ssj1.buffKeyName] = masteredMessage1;
                 var masteredMessage2 = tag.Get<bool>("MasteredMessage2");
-                masteryMessagesDisplayed[TransformationHelper.SSJ2.buffKeyName] = masteredMessage2;
+                masteryMessagesDisplayed[FormBuffHelper.ssj2.buffKeyName] = masteredMessage2;
                 var masteredMessage3 = tag.Get<bool>("MasteredMessage3");
-                masteryMessagesDisplayed[TransformationHelper.SSJ3.buffKeyName] = masteredMessage3;
+                masteryMessagesDisplayed[FormBuffHelper.ssj3.buffKeyName] = masteredMessage3;
                 var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-                masteryMessagesDisplayed[TransformationHelper.SSJG.buffKeyName] = masteredMessageGod;
+                masteryMessagesDisplayed[FormBuffHelper.ssjg.buffKeyName] = masteredMessageGod;
                 var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-                masteryMessagesDisplayed[TransformationHelper.Ssjb.buffKeyName] = masteredMessageBlue;
+                masteryMessagesDisplayed[FormBuffHelper.ssjb.buffKeyName] = masteredMessageBlue;
                 // prime the dictionary with any missing entries
-                foreach (var key in TransformationHelper.AllBuffs().Where(x => x.hasMastery)
+                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.hasMastery)
                     .Select(x => x.masteryBuffKeyName).Distinct())
                 {
                     if (!masteryLevels.ContainsKey(key))
@@ -1706,7 +1706,7 @@ namespace DBZMOD
             else
             {
                 // new mastery system/dynamic loading. Overwrites the old one if it exists.
-                foreach (var key in TransformationHelper.AllBuffs().Where(x => x.hasMastery)
+                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.hasMastery)
                     .Select(x => x.masteryBuffKeyName).Distinct())
                 {
                     if (tag.ContainsKey($"MasteryLevel{key}"))
@@ -2484,7 +2484,7 @@ namespace DBZMOD
                 }
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[TransformationHelper.SSJ1.buffKeyName] >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[FormBuffHelper.ssj1.buffKeyName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2498,7 +2498,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(FormBuffHelper.ssj1.GetBuffId()) && masteryLevels[TransformationHelper.SSJ1.buffKeyName] >= 1)
+            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(FormBuffHelper.ssj1.GetBuffId()) && masteryLevels[FormBuffHelper.ssj1.buffKeyName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -2512,7 +2512,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(FormBuffHelper.ssj2.GetBuffId()) && masteryLevels[TransformationHelper.SSJ2.buffKeyName] >= 1)
+            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(FormBuffHelper.ssj2.GetBuffId()) && masteryLevels[FormBuffHelper.ssj2.buffKeyName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;

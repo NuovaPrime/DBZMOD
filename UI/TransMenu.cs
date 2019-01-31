@@ -240,8 +240,8 @@ namespace DBZMOD.UI
             if (player.ssj1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
@@ -260,8 +260,8 @@ namespace DBZMOD.UI
             if (player.ssj2Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ2;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
@@ -279,8 +279,8 @@ namespace DBZMOD.UI
             if (player.ssj3Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ3;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
@@ -298,8 +298,8 @@ namespace DBZMOD.UI
             if (player.lssjAchieved)
             {
                 menuSelection = MenuSelectionID.LSSJ1;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
@@ -318,8 +318,8 @@ namespace DBZMOD.UI
             if (player.lssj2Achieved)
             {
                 menuSelection = MenuSelectionID.LSSJ2;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
@@ -337,8 +337,8 @@ namespace DBZMOD.UI
             if (player.ssjgAchieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJG;
-                BuffInfo buff = TransformationHelper.GetBuffFromMenuSelection(menuSelection);
-                string displayName = buff.displayName;
+                BuffInfo buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
+                string displayName = buff.transformationText;
                 string keyName = buff.masteryBuffKeyName;
                 float masteryLevel = player.masteryLevels.ContainsKey(keyName) ? player.masteryLevels[keyName] : 0f;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);

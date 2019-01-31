@@ -8,7 +8,7 @@ namespace DBZMOD.Models
     {
         public string buffKeyName;
         public MenuSelectionID menuId;
-        public string displayName;
+        public string transformationText;
         public Color transformationTextColor;
         public bool hasMastery;
         public string masteryBuffKeyName;
@@ -26,7 +26,7 @@ namespace DBZMOD.Models
         {
             this.menuId = menuId;
             this.buffKeyName = buffKey;
-            this.displayName = transText;
+            this.transformationText = transText;
             this.transformationTextColor = transTextColor;
             this.hasMastery = canBeMastered;
             this.masteryBuffKeyName = masterFormBuffKeyName;
