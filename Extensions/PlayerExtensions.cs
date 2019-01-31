@@ -302,7 +302,7 @@ namespace DBZMOD.Extensions
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             return modPlayer.isTransforming || modPlayer.IsPlayerImmobilized() || modPlayer.IsKiDepleted();
         }
-
+        
         public static bool CanTransform(this Player player, TransformationDefinition buff)
         {
             if (buff == null)
@@ -312,27 +312,27 @@ namespace DBZMOD.Extensions
                 return false;
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition))
                 return modPlayer.ssj1Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition))
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition))
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition))
                 return (player.IsSSJ1() || player.IsUssj()) && modPlayer.assjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.USSJDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition))
                 return player.IsAssj() && modPlayer.ussjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition))
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition))
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken() && !player.IsExhaustedFromTransformation();
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition))
                 return player.name == "Nuova";
             return false;
         }
@@ -381,11 +381,11 @@ namespace DBZMOD.Extensions
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
-            if (buff == player.GetCurrentTransformation(true, false) || buff == player.GetCurrentTransformation(false, true))
+            if (buff.Equals(player.GetCurrentTransformation(true, false)) || buff.Equals(player.GetCurrentTransformation(false, true)))
                 return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
-            if (buff == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition)
+            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition))
             {
                 player.RemoveTransformation(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.UnlocalizedName);
             }
@@ -401,9 +401,6 @@ namespace DBZMOD.Extensions
         public static void EndTransformations(this Player player)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            // automatically applies debuffs.
-            // skk qualifies as "non" kaioken.
-            var currentBuff = player.GetCurrentTransformation(false, true);
             player.ClearAllTransformations();
             modPlayer.isTransformationAnimationPlaying = false;
             modPlayer.transformationFrameTimer = 0;

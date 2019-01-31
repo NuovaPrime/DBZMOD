@@ -52,12 +52,12 @@ namespace DBZMOD.Extensions
 
         public static bool IsSSJG(this TransformationDefinition buff)
         {
-            return DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.GetBuffId() == buff.GetBuffId();
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition);
         }
 
         public static bool IsAscended(this TransformationDefinition buff)
         {
-            return buff == DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition || buff == DBZMOD.instance.TransformationDefinitionManager.USSJDefinition;
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition) || buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition)));
         }
     }
 }

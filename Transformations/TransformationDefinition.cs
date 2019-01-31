@@ -42,5 +42,10 @@ namespace DBZMOD.Transformations
         public Color TransformationTextColor { get; }
 
         public string MasteryBuffKeyName { get; }
+
+        public bool Equals(TransformationDefinition transformationDefinition)
+        {
+            return this.UnlocalizedName.Equals(transformationDefinition.UnlocalizedName);
+        }
     }
 }
