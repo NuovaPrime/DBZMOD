@@ -45,7 +45,7 @@ namespace DBZMOD.Transformations
 
         public bool Equals(TransformationDefinition transformationDefinition)
         {
-            return this.UnlocalizedName.Equals(transformationDefinition.UnlocalizedName);
+            return this.UnlocalizedName.Equals(transformationDefinition?.UnlocalizedName);
         }
     }
 }

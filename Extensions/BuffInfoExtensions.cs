@@ -12,17 +12,17 @@ namespace DBZMOD.Extensions
     {
         public static bool IsSSJ(this TransformationDefinition buff)
         {
-            return FormBuffHelper.ssjBuffs.Contains(buff);
+            return FormBuffHelper.ssjBuffs.Any(x => x.Equals(buff));
         }
 
         public static bool IsSpectrum(this TransformationDefinition buff)
         {
-            return DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition.GetBuffId() == buff.GetBuffId();
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition);
         }
 
         public static bool IsKaioken(this TransformationDefinition buff)
         {
-            return buff.GetBuffId() == DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId();
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition);
         }
 
         public static bool IsAnyKaioken(this TransformationDefinition buff)
@@ -32,7 +32,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsSuperKaioken(this TransformationDefinition buff)
         {
-            return buff.GetBuffId() == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId();
+            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition);
         }
 
         public static bool IsDevBuffed(this TransformationDefinition buff)
@@ -47,7 +47,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsLSSJ(this TransformationDefinition buff)
         {
-            return FormBuffHelper.legendaryBuffs.Contains(buff);
+            return FormBuffHelper.legendaryBuffs.Any(x => x.Equals(buff));
         }
 
         public static bool IsSSJG(this TransformationDefinition buff)
