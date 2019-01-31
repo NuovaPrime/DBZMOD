@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using DBZMOD.Extensions;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 
@@ -80,8 +81,18 @@ namespace DBZMOD.Util
             }
         }
 
+        public static bool CanHitLine(Vector2 start, Vector2 end)
+        {
+            bool flag = Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
+            {
+                Tile tile = Main.tile[x, y];
+                return tile == null || tile.inActive() || !Main.tile[x, y].active() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type];
+            });
+            return flag;
+        }
+
         // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
-        public static bool CanHitLine(Vector2 position1, Vector2 position2)
+        public static bool OldCanHitLine(Vector2 position1, Vector2 position2)
         {
             var step = Vector2.Normalize(position2 - position1) * 8f;
             bool isColliding = false;
