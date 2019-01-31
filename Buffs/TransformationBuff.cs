@@ -1,6 +1,7 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
+using DBZMOD.Transformations;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,7 +9,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
-    public abstract class TransBuff : ModBuff
+    public abstract class TransformationBuff : ModBuff
     {
         public float damageMulti;
         public float speedMulti;
@@ -223,6 +224,8 @@ namespace DBZMOD.Buffs
             var healthDrain = KaiokenBuff.GetHealthDrain(player.GetModPlayer<MyPlayer>()) + SuperKaiokenBuff.GetHealthDrain(player);
             return healthDrain;
         }
+
+        public abstract TransformationDefinition TransformationDefinition { get; }
     }
 }
 

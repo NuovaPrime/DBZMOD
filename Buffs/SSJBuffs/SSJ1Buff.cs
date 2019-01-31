@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SSJ1Buff : TransBuff
+    public class SSJ1Buff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -25,7 +25,9 @@ namespace DBZMOD.Buffs.SSJBuffs
             
             kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
             base.Update(player, ref buffIndex);
-        }        
+        }
+
+
     }
 }
 
