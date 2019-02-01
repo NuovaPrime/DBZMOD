@@ -16,7 +16,7 @@ namespace DBZMOD.Network
 
         protected ModPacket GetPacket(byte packetType, int fromWho)
         {
-            var p = global::DBZMOD.DBZMOD.instance.GetPacket();
+            var p = global::DBZMOD.DBZMOD.Instance.GetPacket();
             p.Write(HandlerType);
             p.Write(packetType);
             // this seems to fuck shit up and I don't understand why blushie put it in the example.

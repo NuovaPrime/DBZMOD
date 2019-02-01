@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Players;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
@@ -16,7 +17,7 @@ namespace DBZMOD.Util
 
         public void HandleDrawingKiBeacons()
         {
-            Texture2D texture = DBZMOD.instance.GetTexture("UI/KiBeaconMap");
+            Texture2D texture = DBZMOD.Instance.GetTexture("UI/KiBeaconMap");
 
             // desperation starts here
             foreach (var beaconLocation in DBZWorld.GetWorld().kiBeacons)

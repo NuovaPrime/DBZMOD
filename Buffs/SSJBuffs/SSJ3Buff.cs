@@ -1,4 +1,5 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Players;
+using DBZMOD.Util;
 using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
@@ -23,7 +24,7 @@ namespace DBZMOD.Buffs.SSJBuffs
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            bool isMastered = modPlayer.masteryLevels[DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.MasteryBuffKeyName] >= 1f;
+            bool isMastered = modPlayer.masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.MasteryBuffKeyName] >= 1f;
 
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)

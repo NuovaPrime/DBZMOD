@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DBZMOD.Extensions;
+using DBZMOD.Players;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;

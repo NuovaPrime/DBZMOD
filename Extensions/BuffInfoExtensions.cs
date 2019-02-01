@@ -17,12 +17,12 @@ namespace DBZMOD.Extensions
 
         public static bool IsSpectrum(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition);
+            return buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition);
         }
 
         public static bool IsKaioken(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition);
+            return buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition);
         }
 
         public static bool IsAnyKaioken(this TransformationDefinition buff)
@@ -32,7 +32,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsSuperKaioken(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition);
+            return buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition);
         }
 
         public static bool IsDevBuffed(this TransformationDefinition buff)
@@ -52,12 +52,12 @@ namespace DBZMOD.Extensions
 
         public static bool IsSSJG(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition);
+            return buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
         }
 
         public static bool IsAscended(this TransformationDefinition buff)
         {
-            return buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition) || buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition);
+            return buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition) || buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
         }
     }
 }

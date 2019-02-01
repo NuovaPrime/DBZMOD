@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using DBZMOD.Players;
 
 namespace DBZMOD.Models
 {
@@ -50,7 +51,7 @@ namespace DBZMOD.Models
 
         public Texture2D GetTexture()
         {
-            return DBZMOD.instance.GetTexture(auraAnimationSpriteName);
+            return DBZMOD.Instance.GetTexture(auraAnimationSpriteName);
         }
 
         public int GetHeight()

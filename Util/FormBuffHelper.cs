@@ -104,6 +104,6 @@ namespace DBZMOD.Util
             return transformationDefinitionList.Where(x => x.UnlocalizedName != BuffKeyNames.kaiokenFatigue && x.UnlocalizedName != BuffKeyNames.transformationExhaustion).ToList();
         }
 
-        public static TransformationDefinitionManager TransformationDefinitionManager => DBZMOD.instance.TransformationDefinitionManager;
+        public static TransformationDefinitionManager TransformationDefinitionManager => DBZMOD.Instance.TransformationDefinitionManager;
     }
 }

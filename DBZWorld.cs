@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using DBZMOD.Items.DragonBalls;
 using DBZMOD.Network;
+using DBZMOD.Players;
 using DBZMOD.Util;
 
 namespace DBZMOD
@@ -22,7 +23,7 @@ namespace DBZMOD
         // helper utility method for snagging the currently loaded world.
         public static DBZWorld GetWorld()
         {
-            return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
+            return DBZMOD.Instance.GetModWorld("DBZWorld") as DBZWorld;
         }
 
         public override TagCompound Save()
@@ -713,7 +714,7 @@ namespace DBZMOD
             if (dbTypes[whichDragonBall - 1].HasValue)
                     return dbTypes[whichDragonBall - 1].Value;
             var dragonBallWord = GetDragonBallNumberName(whichDragonBall);
-            dbTypes[whichDragonBall - 1] = DBZMOD.instance?.TileType($"{dragonBallWord}StarDBTile");
+            dbTypes[whichDragonBall - 1] = DBZMOD.Instance?.TileType($"{dragonBallWord}StarDBTile");
             if (dbTypes[whichDragonBall - 1].HasValue)
                 return dbTypes[whichDragonBall - 1].Value;
             return 0;

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using DBZMOD.Extensions;
+using DBZMOD.Players;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -22,7 +23,7 @@ namespace DBZMOD.Util
             var player = drawInfo.drawPlayer;
             var modPlayer = player.GetModPlayer<MyPlayer>();
 
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
             {
                 return;
@@ -44,7 +45,7 @@ namespace DBZMOD.Util
                 return;
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
             {
                 return;
@@ -104,7 +105,7 @@ namespace DBZMOD.Util
         public static DrawData TransformationAnimationDrawData(PlayerDrawInfo drawInfo, string transformationSpriteSheet, int frameCounterLimit, int numberOfFrames, int yOffset)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
             int frame = modPlayer.transformationFrameTimer / frameCounterLimit;
             Texture2D texture = mod.GetTexture(transformationSpriteSheet);
@@ -122,7 +123,7 @@ namespace DBZMOD.Util
         public static DrawData LightningEffectDrawData(PlayerDrawInfo drawInfo, string lightningTexture)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
             int frame = modPlayer.lightningFrameTimer / 5;
             Texture2D texture = mod.GetTexture(lightningTexture);
@@ -136,21 +137,21 @@ namespace DBZMOD.Util
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
             {
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
-            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
             }
-            if (drawPlayer.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
@@ -168,7 +169,7 @@ namespace DBZMOD.Util
 
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
             {
                 return;
@@ -216,7 +217,7 @@ namespace DBZMOD.Util
         public static DrawData DragonRadarDrawData(PlayerDrawInfo drawInfo, string dragonRadarSprite, int yOffset, float angleInRadians, float distance, Vector2 location)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
             float radarArrowScale = (modPlayer.isHoldingDragonRadarMk1 ? 1f : (modPlayer.isHoldingDragonRadarMk2 ? 1.25f : 1.5f));
             Texture2D texture = mod.GetTexture(dragonRadarSprite);

@@ -1,4 +1,5 @@
 ﻿using DBZMOD.Extensions;
+using DBZMOD.Players;
 using Terraria;
 using DBZMOD.Util;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;

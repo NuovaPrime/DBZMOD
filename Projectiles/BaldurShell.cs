@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Players;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 

@@ -17,8 +17,8 @@ namespace DBZMOD.Util
         /// <param name="name">The internal name of the item.</param>
         public static int GetItemTypeFromName(string name)
         {
-            if (DBZMOD.instance.GetItem(name) != null && DBZMOD.instance.GetItem(name).item != null)
-                return DBZMOD.instance.GetItem(name).item.type;
+            if (DBZMOD.Instance.GetItem(name) != null && DBZMOD.Instance.GetItem(name).item != null)
+                return DBZMOD.Instance.GetItem(name).item.type;
 
             return -1;
         }

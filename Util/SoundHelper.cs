@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
+using DBZMOD.Players;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -81,7 +82,7 @@ namespace DBZMOD.Util
             {
                 sound = Main.PlaySound(style, location);
             }
-            slotId = (uint)DBZMOD.instance.GetSoundSlot(SoundType.Custom, soundId);
+            slotId = (uint)DBZMOD.Instance.GetSoundSlot(SoundType.Custom, soundId);
             return new KeyValuePair<uint, SoundEffectInstance>(slotId, sound);
         }
 
@@ -94,7 +95,7 @@ namespace DBZMOD.Util
 
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)
         {
-            return DBZMOD.instance.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
+            return DBZMOD.Instance.GetLegacySoundSlot(SoundType.Custom, soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
         }
 
         public static KeyValuePair<uint, SoundEffectInstance> KillTrackedSound(KeyValuePair<uint, SoundEffectInstance> soundInfo)

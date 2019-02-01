@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DBZMOD.Destruction;
 using DBZMOD.Extensions;
+using DBZMOD.Players;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;

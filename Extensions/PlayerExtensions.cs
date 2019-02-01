@@ -7,6 +7,7 @@ using DBZMOD.Items.Consumables.Potions;
 using DBZMOD.Items.DragonBalls;
 using DBZMOD.Models;
 using DBZMOD.Network;
+using DBZMOD.Players;
 using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
 using DBZMOD.Util;
@@ -249,22 +250,22 @@ namespace DBZMOD.Extensions
 
         public static bool IsSSJ2(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId());
         }
 
         public static bool IsSSJ3(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId());
         }
 
         public static bool IsSpectrum(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition.GetBuffId());
         }
 
         public static bool IsKaioken(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId());
         }
 
         public static bool IsAnyKaioken(this Player player)
@@ -294,7 +295,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsAscended(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId()) || player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId()) || player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
         }
 
         public static bool IsTransformBlocked(this Player player)
@@ -312,27 +313,27 @@ namespace DBZMOD.Extensions
                 return false;
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition))
                 return modPlayer.ssj1Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ2Definition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJ3Definition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition))
                 return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition))
                 return (player.IsSSJ1() || player.IsUssj()) && modPlayer.assjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition))
                 return player.IsAssj() && modPlayer.ussjAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition))
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition))
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken() && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SpectrumDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition))
                 return player.name == "Nuova";
             return false;
         }
@@ -340,17 +341,17 @@ namespace DBZMOD.Extensions
         public static void AddKaiokenExhaustion(this Player player, int multiplier)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
+            player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
             modPlayer.kaiokenTimer = 0f;
         }
 
         public static void AddTransformationExhaustion(this Player player)
         {
-            player.AddBuff(DBZMOD.instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId(), 600);
+            player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId(), 600);
         }
 
-        public static bool IsExhaustedFromTransformation(this Player player) { return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId()); }
-        public static bool IsTiredFromKaioken(this Player player) { return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId()); }
+        public static bool IsExhaustedFromTransformation(this Player player) { return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId()); }
+        public static bool IsTiredFromKaioken(this Player player) { return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId()); }
 
         public static void ClearAllTransformations(this Player player)
         {
@@ -385,9 +386,9 @@ namespace DBZMOD.Extensions
                 return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
-            if (buff.Equals(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition))
+            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition))
             {
-                player.RemoveTransformation(DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.UnlocalizedName);
+                player.RemoveTransformation(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.UnlocalizedName);
             }
 
             // remove all *transformation* buffs from the player.
@@ -454,7 +455,7 @@ namespace DBZMOD.Extensions
                 if (currentNonKaioTransformation == null && player.GetModPlayer<MyPlayer>().hasSSJ1)
                 {
                     player.GetModPlayer<MyPlayer>().kaiokenLevel = 1;
-                    return DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition;
+                    return DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition;
                 }
 
                 // insert handler for SSJBK here
@@ -464,7 +465,7 @@ namespace DBZMOD.Extensions
 
             // SSJ1 is always the starting point if there isn't a current form tree to step through.
             if (currentTransformation == null)
-                return DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition;
+                return DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
 
             // the player is legendary and doing a legendary step up.
             if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
@@ -558,7 +559,7 @@ namespace DBZMOD.Extensions
 
         public static bool IsSuperKaioken(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId());
         }
 
         public static bool IsLSSJ(this Player player)
@@ -568,32 +569,32 @@ namespace DBZMOD.Extensions
 
         public static bool IsLSSJ1(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId());
         }
 
         public static bool IsLSSJ2(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId());
         }
 
         public static bool IsSSJG(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJGDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.GetBuffId());
         }
 
         public static bool IsSSJ1(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId());
         }
 
         public static bool IsAssj(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId());
         }
 
         public static bool IsUssj(this Player player)
         {
-            return player.HasBuff(DBZMOD.instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
+            return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
         }
 
         public static void DrawAura(this MyPlayer modPlayer, AuraAnimationInfo aura)

@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD.Players;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs

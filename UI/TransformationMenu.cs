@@ -7,6 +7,7 @@ using DBZMOD.Enums;
 using DBZMOD.Util;
 using System;
 using DBZMOD.Models;
+using DBZMOD.Players;
 using DBZMOD.Transformations;
 
 namespace DBZMOD.UI

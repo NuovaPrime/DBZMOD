@@ -114,11 +114,11 @@ namespace DBZMOD.Destruction
             // mostly dirt, sometimes rocks.
             if (Main.rand.NextFloat() < 0.6)
             {
-                Projectile.NewProjectile(xOffset, yOffset, 0, -10f, DBZMOD.instance.ProjectileType("DirtBlockDestruction"), parentProjectile.damage, 0f, parentProjectile.owner);
+                Projectile.NewProjectile(xOffset, yOffset, 0, -10f, DBZMOD.Instance.ProjectileType("DirtBlockDestruction"), parentProjectile.damage, 0f, parentProjectile.owner);
             }
             else
             {
-                Projectile.NewProjectile(xOffset, yOffset, 0, -10f, DBZMOD.instance.ProjectileType("StoneBlockDestruction"), parentProjectile.damage, 0f, parentProjectile.owner);
+                Projectile.NewProjectile(xOffset, yOffset, 0, -10f, DBZMOD.Instance.ProjectileType("StoneBlockDestruction"), parentProjectile.damage, 0f, parentProjectile.owner);
             }
         }
 

@@ -371,13 +371,14 @@
     <Compile Include="Models\AuraAnimationInfo.cs" />
     <Compile Include="KiProjectile.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
-    <Compile Include="MyPlayer.cs" />
+    <Compile Include="Players\MyPlayer.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
     <Compile Include="Network\PlayerPacketHandler.cs" />
     <Compile Include="Network\PacketHandler.cs" />
     <Compile Include="Network\TransformationPacketHandler.cs" />
     <Compile Include="NPCs\MajinSlime.cs" />
     <Compile Include="NPCs\MajinZombie.cs" />
+    <Compile Include="Players\MyPlayer.Save.cs" />
     <Compile Include="Prefixes\BalancedPrefix.cs" />
     <Compile Include="Prefixes\BoostedPrefix.cs" />
     <Compile Include="Prefixes\CondensedPrefix.cs" />
@@ -490,6 +491,7 @@
     <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
     <Compile Include="Buffs\TransformationBuff.cs" />
+    <Compile Include="Transformations\PlayerTransformation.cs" />
     <Compile Include="Transformations\TransformationDefinitionManager.cs" />
     <Compile Include="UI\EasyMenu.cs" />
     <Compile Include="UI\KiBar.cs" />
@@ -538,6 +540,7 @@
       <HintPath>Lib\ReLogic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="Terraria">
       <HintPath>Lib\Terraria.exe</HintPath>
     </Reference>

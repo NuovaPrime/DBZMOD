@@ -6,6 +6,7 @@ using Terraria.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using DBZMOD.Extensions;
+using DBZMOD.Players;
 using DBZMOD.Util;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 

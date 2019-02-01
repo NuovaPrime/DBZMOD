@@ -12,6 +12,7 @@ using System.IO;
 using DBZMOD.Config;
 using DBZMOD.Managers;
 using DBZMOD.Network;
+using DBZMOD.Players;
 using DBZMOD.Transformations;
 using DBZMOD.Util;
 
@@ -38,8 +39,6 @@ namespace DBZMOD
 
         private static InstantTransmissionMapHelper _instantTransmissionMapTeleporter;
 
-        internal static DBZMOD instance;
-
         internal static CircleShader circle;
 
         private ResourceBar _resourceBar;
@@ -61,7 +60,7 @@ namespace DBZMOD
                 AutoloadSounds = true
             };
 
-            instance = this;
+            Instance = this;
         }
 
         public override void Unload()
@@ -71,7 +70,7 @@ namespace DBZMOD
             Gfx.UnloadGfx();
             KiBar.visible = false;
             OverloadBar.visible = false;
-            instance = null;
+            Instance = null;
             TransformationMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
             WishMenu.menuVisible = false;
@@ -296,6 +295,8 @@ namespace DBZMOD
                 return _transformationDefinitionManager;
             }
         }
+
+        internal static DBZMOD Instance { get; private set; }
     }
 }
  

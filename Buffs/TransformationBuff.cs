@@ -1,6 +1,7 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
+using DBZMOD.Players;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
@@ -104,23 +105,23 @@ namespace DBZMOD.Buffs
             modPlayer.KiDamage *= damageMulti;
 
             // cross mod support stuff
-            if (DBZMOD.instance.thoriumLoaded)
+            if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
-            if (DBZMOD.instance.tremorLoaded)
+            if (DBZMOD.Instance.tremorLoaded)
             {
                 TremorEffects(player);
             }
-            if (DBZMOD.instance.enigmaLoaded)
+            if (DBZMOD.Instance.enigmaLoaded)
             {
                 EnigmaEffects(player);
             }
-            if (DBZMOD.instance.battlerodsLoaded)
+            if (DBZMOD.Instance.battlerodsLoaded)
             {
                 BattleRodEffects(player);
             }
-            if (DBZMOD.instance.expandedSentriesLoaded)
+            if (DBZMOD.Instance.expandedSentriesLoaded)
             {
                 ExpandedSentriesEffects(player);
             }
@@ -178,7 +179,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == DBZMOD.instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
+            if (Type == DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {
