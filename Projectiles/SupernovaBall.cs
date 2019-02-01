@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Extensions;
-using DBZMOD.Players;
+using DBZMOD;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;

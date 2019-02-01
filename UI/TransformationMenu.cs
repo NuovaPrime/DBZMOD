@@ -7,7 +7,7 @@ using DBZMOD.Enums;
 using DBZMOD.Util;
 using System;
 using DBZMOD.Models;
-using DBZMOD.Players;
+using DBZMOD;
 using DBZMOD.Transformations;
 
 namespace DBZMOD.UI
@@ -172,7 +172,7 @@ namespace DBZMOD.UI
 
             Player player = Main.LocalPlayer;
 
-            _lockedImage1.ImageScale = !modplayer.ssj1Achieved ? 1.0f : 0.0f;
+            _lockedImage1.ImageScale = !modplayer.SSJ1Achieved ? 1.0f : 0.0f;
 
             if (player.name == "Nuova")
             {
@@ -185,9 +185,9 @@ namespace DBZMOD.UI
 
             if (modplayer.IsPlayerLegendary())
             {
-                _lockedImageL1.ImageScale = !modplayer.lssjAchieved ? 1.0f : 0.0f;
+                _lockedImageL1.ImageScale = !modplayer.LSSJAchieved ? 1.0f : 0.0f;
 
-                _lockedImageL2.ImageScale = !modplayer.lssj2Achieved ? 1.0f : 0.0f;
+                _lockedImageL2.ImageScale = !modplayer.LSSJ2Achieved ? 1.0f : 0.0f;
 
                 _lockedImage2.ImageScale = 1.0f;
 
@@ -203,7 +203,7 @@ namespace DBZMOD.UI
 
                 _unknownImageL1.ImageScale = 0.0f;
 
-                _unknownImageL2.ImageScale = !modplayer.lssjAchieved ? 1.0f : 0.0f;
+                _unknownImageL2.ImageScale = !modplayer.LSSJAchieved ? 1.0f : 0.0f;
             }
             else
             {
@@ -212,11 +212,11 @@ namespace DBZMOD.UI
                 _unknownImage2.ImageScale = 0.0f;
                 _unknownImage3.ImageScale = 0.0f;
                 _unknownImageG.ImageScale = 0.0f;
-                _lockedImage2.ImageScale = !modplayer.ssj2Achieved ? 1.0f : 0.0f;
+                _lockedImage2.ImageScale = !modplayer.SSJ2Achieved ? 1.0f : 0.0f;
 
-                _lockedImage3.ImageScale = !modplayer.ssj3Achieved ? 1.0f : 0.0f;
+                _lockedImage3.ImageScale = !modplayer.SSJ3Achieved ? 1.0f : 0.0f;
 
-                _lockedImageG.ImageScale = !modplayer.ssjgAchieved ? 1.0f : 0.0f;
+                _lockedImageG.ImageScale = !modplayer.SSJGAchieved ? 1.0f : 0.0f;
 
                 _lockedImageL1.ImageScale = 1.0f;
                 _lockedImageL2.ImageScale = 0.0f;
@@ -239,7 +239,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.ssj1Achieved)
+            if (player.SSJ1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -259,7 +259,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ2(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.ssj2Achieved && !player.IsPlayerLegendary())
+            if (player.SSJ2Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ2;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -269,7 +269,7 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
-            else if (!player.lssjAchieved)
+            else if (!player.LSSJAchieved)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("One may awaken their true power through extreme pressure while ascended.");
@@ -278,7 +278,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ3(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.ssj3Achieved && !player.IsPlayerLegendary())
+            if (player.SSJ3Achieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJ3;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -288,7 +288,7 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
-            else if (!player.lssjAchieved)
+            else if (!player.LSSJAchieved)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The power of an ancient foe may be the key to unlocking greater power.");
@@ -297,7 +297,7 @@ namespace DBZMOD.UI
         private void TrySelectingLSSJ(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.lssjAchieved)
+            if (player.LSSJAchieved)
             {
                 menuSelection = MenuSelectionID.LSSJ1;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -307,7 +307,7 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
-            else if (!player.ssj2Achieved)
+            else if (!player.SSJ2Achieved)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The rarest saiyans may be able to achieve a form beyond anything a normal saiyan could obtain.");
@@ -317,7 +317,7 @@ namespace DBZMOD.UI
         private void TrySelectingLSSJ2(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.lssj2Achieved)
+            if (player.LSSJ2Achieved)
             {
                 menuSelection = MenuSelectionID.LSSJ2;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -327,7 +327,7 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
-            else if (!player.lssj2Achieved)
+            else if (!player.LSSJ2Achieved)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("A legendary saiyan sometimes may lose complete control upon being pushed into a critical state.");
@@ -336,7 +336,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJG(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.ssjgAchieved && !player.IsPlayerLegendary())
+            if (player.SSJGAchieved && !player.IsPlayerLegendary())
             {
                 menuSelection = MenuSelectionID.SSJG;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);
@@ -346,7 +346,7 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 Main.NewText($"{displayName} Mastery: {Math.Round(100f * masteryLevel, 2)}%");
             }
-            else if (!player.lssjAchieved)
+            else if (!player.LSSJAchieved)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");

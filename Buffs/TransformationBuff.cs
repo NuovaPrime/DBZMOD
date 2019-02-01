@@ -1,7 +1,7 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
-using DBZMOD.Players;
+using DBZMOD;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;

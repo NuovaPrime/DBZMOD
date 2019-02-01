@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using DBZMOD.Items.DragonBalls;
 using DBZMOD.Network;
-using DBZMOD.Players;
+using DBZMOD;
 using DBZMOD.Util;
 
 namespace DBZMOD

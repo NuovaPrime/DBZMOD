@@ -1,5 +1,5 @@
 ﻿using DBZMOD.Extensions;
-using DBZMOD.Players;
+using DBZMOD;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -42,7 +42,9 @@ namespace DBZMOD.Items.Misc
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             modPlayer.SSJGTransformation();
             modPlayer.isTransforming = true;
-            modPlayer.ssjgAchieved = true;
+
+            DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.Unlock(player);
+
             Main.NewText("You feel enveloped in a divine energy.");
             return false;
         }

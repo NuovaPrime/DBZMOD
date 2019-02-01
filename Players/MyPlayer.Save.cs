@@ -8,7 +8,7 @@ using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader.IO;
 
-namespace DBZMOD.Players
+namespace DBZMOD
 {
     public partial class MyPlayer
     {    
@@ -106,13 +106,27 @@ namespace DBZMOD.Players
                     {
                         TransformationDefinition transformationDefinition = DBZMOD.Instance.TransformationDefinitionManager[i];
 
-                        if (tag.ContainsKey(transformationDefinition.UnlocalizedName))
+                        if (tag.ContainsKey(transformationDefinition.GetUnlockedTagCompoundKey()))
+                            PlayerTransformations.Add(transformationDefinition, new PlayerTransformation(transformationDefinition, tag.Get<float>(transformationDefinition.GetMasteryTagCompoundKey())));
                     }
                 }
             }
             else
             {
                 SaveVersion = latestVersion;
+
+                // TODO Add mastery check.
+                if (tag.Get<bool>("SSJ1Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition));
+                if (tag.Get<bool>("ASSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition));
+                if (tag.Get<bool>("USSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition));
+
+                if (tag.Get<bool>("SSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition));
+                if (tag.Get<bool>("SSJ3Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition));
+
+                if (tag.Get<bool>("LSSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition));
+                if (tag.Get<bool>("LSSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition));
+
+                if (tag.Get<bool>("ssjgAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition));
             }
 
             fragment1 = tag.Get<bool>("Fragment1");
@@ -126,18 +140,6 @@ namespace DBZMOD.Players
             kaioFragment3 = tag.Get<bool>("KaioFragment3");
             kaioFragment4 = tag.Get<bool>("KaioFragment4");
             kaioAchieved = tag.Get<bool>("KaioAchieved");
-
-            ssj1Achieved = tag.Get<bool>("SSJ1Achieved");
-            assjAchieved = tag.Get<bool>("ASSJAchieved");
-            ussjAchieved = tag.Get<bool>("USSJAchieved");
-
-            ssj2Achieved = tag.Get<bool>("SSJ2Achieved");
-            ssj3Achieved = tag.Get<bool>("SSJ3Achieved");
-
-            ssjgAchieved = tag.Get<bool>("ssjgAchieved");
-
-            lssjAchieved = tag.Get<bool>("LSSJAchieved");
-            lssj2Achieved = tag.Get<bool>("LSSJ2Achieved");
 
             if (tag.ContainsKey("KiCurrentFloat"))
             {

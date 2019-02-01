@@ -1,5 +1,5 @@
 ﻿using DBZMOD.Enums;
-using DBZMOD.Players;
+using DBZMOD;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -35,7 +35,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             MyPlayer.ModPlayer(player).SSJTransformation();
             UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
-            MyPlayer.ModPlayer(player).ssj1Achieved = true;
+            DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.Unlock(player);
             MyPlayer.ModPlayer(player).isTransforming = true;
             return true;
 

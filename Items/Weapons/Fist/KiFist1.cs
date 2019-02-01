@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DBZMOD.Players;
+using DBZMOD;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

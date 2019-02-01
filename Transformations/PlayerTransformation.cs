@@ -2,6 +2,14 @@
 {
     public class PlayerTransformation
     {
+        public PlayerTransformation()
+        {
+        }
+
+        public PlayerTransformation(TransformationDefinition transformationDefinition) : this(transformationDefinition, 0f)
+        {
+        }
+
         public PlayerTransformation(TransformationDefinition transformationDefinition, float mastery)
         {
             TransformationDefinition = transformationDefinition;

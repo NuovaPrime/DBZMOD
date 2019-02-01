@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using DBZMOD.Extensions;
-using DBZMOD.Players;
+using DBZMOD;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

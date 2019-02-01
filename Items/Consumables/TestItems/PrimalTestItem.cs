@@ -1,5 +1,5 @@
 using System;
-using DBZMOD.Players;
+using DBZMOD;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

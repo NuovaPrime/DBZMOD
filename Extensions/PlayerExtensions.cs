@@ -7,7 +7,7 @@ using DBZMOD.Items.Consumables.Potions;
 using DBZMOD.Items.DragonBalls;
 using DBZMOD.Models;
 using DBZMOD.Network;
-using DBZMOD.Players;
+using DBZMOD;
 using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
 using DBZMOD.Util;
@@ -314,21 +314,21 @@ namespace DBZMOD.Extensions
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition))
-                return modPlayer.ssj1Achieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.SSJ1Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition))
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj2Achieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition))
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssj3Achieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
-                return !modPlayer.IsPlayerLegendary() && modPlayer.ssjgAchieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
-                return modPlayer.IsPlayerLegendary() && modPlayer.lssjAchieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition))
-                return modPlayer.IsPlayerLegendary() && modPlayer.lssj2Achieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition))
-                return (player.IsSSJ1() || player.IsUssj()) && modPlayer.assjAchieved && !player.IsExhaustedFromTransformation();
+                return (player.IsSSJ1() || player.IsUssj()) && modPlayer.ASSJAchieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition))
-                return player.IsAssj() && modPlayer.ussjAchieved && !player.IsExhaustedFromTransformation();
+                return player.IsAssj() && modPlayer.USSJAchieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition))
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition))

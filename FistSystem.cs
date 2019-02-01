@@ -6,7 +6,7 @@ using Terraria.GameInput;
 using Microsoft.Xna.Framework;
 using DBZMOD.Util;
 using DBZMOD.Enums;
-using DBZMOD.Players;
+using DBZMOD;
 
 namespace DBZMOD
 {

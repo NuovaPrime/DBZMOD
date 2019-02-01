@@ -24,7 +24,7 @@ using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
-namespace DBZMOD.Players
+namespace DBZMOD
 {
     // TODO Change this class name.
     public partial class MyPlayer : ModPlayer
@@ -79,17 +79,33 @@ namespace DBZMOD.Players
         //Transformation vars
         public bool isTransforming;
         public int ssjAuraBeamTimer;
-        public bool hasSSJ1;
         public int transformCooldown;
-        public bool assjAchieved;
-        public bool ussjAchieved;
-        public bool ssj2Achieved;
-        public bool ssj3Achieved;
-        public bool lssjAchieved = false;
-        public bool ssjgAchieved = false;
-        public int lssj2Timer;
-        public bool lssj2Achieved = false;
+
+        public bool hasSSJ1;
+
+        [Obsolete]
+        public bool SSJ1Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition);
+        [Obsolete]
+        public bool ASSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition);
+        [Obsolete]
+        public bool USSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
+
+        [Obsolete]
+        public bool SSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
+        [Obsolete]
+        public bool SSJ3Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
+
+        [Obsolete]
+        public bool LSSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
+        [Obsolete]
+        public bool LSSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
+
         public bool lssjgAchieved = false;
+
+        [Obsolete]
+        public bool SSJGAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
+
+        public int lssj2Timer;
         public int rageCurrent = 0;
         public int rageDecreaseTimer = 0;
         public int formUnlockChance;
@@ -124,7 +140,6 @@ namespace DBZMOD.Players
         //unsorted vars
         public int drawX;
         public int drawY;
-        public bool ssj1Achieved;
         public bool scouterT2;
         public bool scouterT3;
         public bool scouterT4;
@@ -503,14 +518,14 @@ namespace DBZMOD.Players
             Color messageColor = new Color(232, 242, 50);
             if (masteryFormBuffKeyName.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
             {
-                if (masteryLevel >= 0.5f && !assjAchieved)
+                if (masteryLevel >= 0.5f && !ASSJAchieved)
                 {
-                    assjAchieved = true;
+                    DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.TryUnlock(this);
                     masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.";
                 }
-                else if (masteryLevel >= 0.75f && !ussjAchieved)
+                else if (masteryLevel >= 0.75f && !USSJAchieved)
                 {
-                    ussjAchieved = true;
+                    DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.Unlock(this);
                     masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.";
                 }
             }
@@ -531,9 +546,10 @@ namespace DBZMOD.Players
 
         public override void PostUpdate()
         {
-            if (lssjAchieved && !lssj2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;
+                
                 if (lssj2Timer >= 300)
                 {
                     if (Main.rand.Next(8) == 0)
@@ -541,7 +557,9 @@ namespace DBZMOD.Players
                         Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
                         player.statLife = player.statLifeMax2 / 2;
                         player.HealEffect(player.statLifeMax2 / 2);
-                        lssj2Achieved = true;
+
+                        DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.TryUnlock(this);
+
                         isTransforming = true;
                         LSSJ2Transformation();
                         UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
@@ -570,17 +588,17 @@ namespace DBZMOD.Players
                 ssjAuraBeamTimer++;
             }
 
-            if (ssj1Achieved)
+            if (SSJ1Achieved)
             {
                 UI.TransformationMenu.ssj1On = true;
             }
 
-            if (ssj2Achieved)
+            if (SSJ2Achieved)
             {
                 UI.TransformationMenu.ssj2On = true;
             }
 
-            if (ssj3Achieved)
+            if (SSJ3Achieved)
             {
                 UI.TransformationMenu.ssj3On = true;
             }
@@ -633,16 +651,16 @@ namespace DBZMOD.Players
                 ChooseTrait();
             }
 
-            if (lssjAchieved)
+            if (LSSJAchieved)
             {
                 UI.TransformationMenu.lssjOn = true;
             }
 
-            if (IsPlayerLegendary() && !lssjAchieved && NPC.downedBoss1)
+            if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
-            else if (IsPlayerLegendary() && lssjAchieved)
+            else if (IsPlayerLegendary() && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
@@ -1442,52 +1460,63 @@ namespace DBZMOD.Players
 
         }
 
+        // TODO Remove all this in favor of auto checks.
         public void AwakeningFormUnlock()
         {
-            if (!ssj1Achieved)
+            if (!SSJ1Achieved)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
-                ssj1Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJTransformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj1Achieved && !ssj2Achieved && !IsPlayerLegendary())
+            else if (SSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
-                ssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.Unlock(this); 
+
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj1Achieved && IsPlayerLegendary() && !lssjAchieved)
+            else if (SSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                lssjAchieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj2Achieved && !ssj3Achieved)
+            else if (SSJ2Achieved && !SSJ3Achieved)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
-                ssj3Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (lssjAchieved && !lssj2Achieved)
+            else if (LSSJAchieved && !LSSJ2Achieved)
             {
                 Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
-                lssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.Unlock(this);
+
                 isTransforming = true;
                 LSSJ2Transformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
@@ -2219,6 +2248,7 @@ namespace DBZMOD.Players
             eliteSaiyanBonus = false;
         }
 
+        // TODO Change this in favor of auto checking.
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             
@@ -2251,7 +2281,7 @@ namespace DBZMOD.Players
                 return false;
             }
 
-            if (isAnyBossAlive && !ssj1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+            if (isAnyBossAlive && !SSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
                 if (rageCurrent >= 3)
                 {
@@ -2266,7 +2296,9 @@ namespace DBZMOD.Players
                     Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                     player.statLife = player.statLifeMax2 / 2;
                     player.HealEffect(player.statLifeMax2 / 2);
-                    ssj1Achieved = true;
+
+                    DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                     isTransforming = true;
                     SSJTransformation();
                     UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
@@ -2276,12 +2308,14 @@ namespace DBZMOD.Players
                 }
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                ssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
@@ -2290,12 +2324,14 @@ namespace DBZMOD.Players
                 return false;
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                lssjAchieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
@@ -2304,12 +2340,14 @@ namespace DBZMOD.Players
                 return false;
             }
 
-            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
+            if (isGolemAlive && SSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                ssj3Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;

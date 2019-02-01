@@ -12,7 +12,7 @@ using System.IO;
 using DBZMOD.Config;
 using DBZMOD.Managers;
 using DBZMOD.Network;
-using DBZMOD.Players;
+using DBZMOD;
 using DBZMOD.Transformations;
 using DBZMOD.Util;
 

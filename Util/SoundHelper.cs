@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
-using DBZMOD.Players;
+using DBZMOD;
 using Terraria;
 using Terraria.ModLoader;
 

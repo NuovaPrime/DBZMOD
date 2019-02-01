@@ -1,6 +1,6 @@
 ﻿using System;
 using DBZMOD.Enums;
-using DBZMOD.Players;
+using DBZMOD;
 using Microsoft.Xna.Framework;
 using Terraria;
 
@@ -35,15 +35,31 @@ namespace DBZMOD.Transformations
             UnlockRequirements = unlockRequirements;
         }
 
-        public bool TryUnlock(Player player)
+        /// <summary>Forces the transformation to be obtained without any cutscenes being played or requirements being checked.</summary>
+        /// <param name="player">The <see cref="Player"/> to give the transformation to.</param>
+        /// /// <returns>true if the transformation was unlocked; otherwise false.</returns>
+        public bool Unlock(Player player) => Unlock(player.GetModPlayer<MyPlayer>());
+
+        /// <summary>Forces the transformation to be obtained without any cutscenes being played or requirements being checked.</summary>
+        /// <param name="player">The <see cref="MyPlayer"/> to give the transformation to.</param>
+        /// <returns>true if the transformation was unlocked; otherwise false.</returns>
+        public bool Unlock(MyPlayer player)
         {
-            MyPlayer dbzPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.PlayerTransformations.ContainsKey(this)) return false;
 
-            if (!UnlockRequirements.Invoke(dbzPlayer)) return false;
-
-            dbzPlayer.PlayerTransformations.Add(this, new PlayerTransformation(this, 0f));
+            player.PlayerTransformations.Add(this, new PlayerTransformation(this, 0f));
             return true;
         }
+
+        /// <summary>Tries to unlock the transformation for the player by checking if the requirements are met.</summary>
+        /// <param name="player">The <see cref="Player"/> to give the transformation to.</param>
+        /// <returns>true if the transformation was unlocked; otherwise false.</returns>
+        public bool TryUnlock(Player player) => TryUnlock(player.GetModPlayer<MyPlayer>());
+
+        /// <summary>Tries to unlock the transformation for the player by checking if the requirements are met.</summary>
+        /// <param name="player">The <see cref="MyPlayer"/> to give the transformation to.</param>
+        /// <returns>true if the transformation was unlocked; otherwise false.</returns>
+        public bool TryUnlock(MyPlayer player) => UnlockRequirements.Invoke(player) && Unlock(player);
 
         public int GetBuffId()
         {
@@ -53,7 +69,7 @@ namespace DBZMOD.Transformations
         public string GetUnlockedTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_HASUNLOCKED_SUFFIX;
 
         public string GetMasteryTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_MASTERY_SUFFIX;
-        
+
         public string UnlocalizedName { get; }
 
         public MenuSelectionID MenuId { get; }
@@ -68,9 +84,6 @@ namespace DBZMOD.Transformations
 
         public Predicate<MyPlayer> UnlockRequirements { get; }
 
-        public bool Equals(TransformationDefinition transformationDefinition)
-        {
-            return UnlocalizedName == transformationDefinition?.UnlocalizedName;
-        }
+        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
     }
 }
