@@ -313,8 +313,9 @@ namespace DBZMOD.Extensions
                 return false;
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition))
-                return modPlayer.SSJ1Achieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.IsSSJ1Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition))
                 return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition))
@@ -335,6 +336,7 @@ namespace DBZMOD.Extensions
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken() && !player.IsExhaustedFromTransformation();
             if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition))
                 return player.name == "Nuova";
+
             return false;
         }
 
