@@ -86,7 +86,7 @@ namespace DBZMOD.Util
             float closestPoint = distance + beamSpeed;
             Vector2 end = start + (distance + beamSpeed) * velocity;
             Tuple<bool, float> resultCollisionData = new Tuple<bool, float>(false, closestPoint);
-            Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
+            Utils.PlotTileLine(start, end, 0.0001f, delegate (int x, int y)
             {
                 DebugHelper.Log($"Plotting line at {x} {y}");
                 bool isSolidTiles = Collision.SolidTiles(x, x, y, y);

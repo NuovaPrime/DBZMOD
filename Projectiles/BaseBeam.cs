@@ -368,9 +368,9 @@ namespace DBZMOD.Projectiles
             UpdateBeamPlayerItemUse(player);
 
             // Vector2 origin = TailPositionStart() + projectile.velocity * (maxBeamDistance + headSize.Y * projectile.scale);
-            Tuple<bool, float> collisionData = ProjectileHelper.GetClosestTileCollisionInRay(TailPositionStart(), projectile.velocity, Distance, beamSpeed);
+            Tuple<bool, float> collisionData = ProjectileHelper.GetClosestTileCollisionInRay(TailPositionCollisionStart(), projectile.velocity, Distance, beamSpeed);
             bool isColliding = collisionData.Item1;
-            float trackedDistance = collisionData.Item2;
+            Distance = collisionData.Item2;
 
             // handle animation frames on animated beams
             if (isBeamSegmentAnimated)
@@ -387,7 +387,6 @@ namespace DBZMOD.Projectiles
             {
                 var dustVector = HeadPositionCollisionEnd();
                 ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
-                Distance = trackedDistance;
             }
 
             if (Distance < tailSize.Y + beamSize.Y + headSize.Y)
