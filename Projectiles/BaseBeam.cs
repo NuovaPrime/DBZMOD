@@ -246,9 +246,6 @@ namespace DBZMOD.Projectiles
             return BodyPositionEnd() + (headSize.Y * 0.2f) * projectile.scale * projectile.velocity;
         }
 
-        private const float BEAM_ENTITY_DISTANCE_GRADIENT = 1f;
-        // Alceris hack, since collision is already handled outside of the Collider now, this always returns true
-        // and gets trumped by whatever is returned from CanHit methods.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             return true;
@@ -256,70 +253,40 @@ namespace DBZMOD.Projectiles
 
         public override bool? CanHitNPC(NPC target)
         {
-            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.dontTakeDamage && !target.friendly;
-            if (isAnyCollision && isEntityColliding)
-            {
-                while (DoCollisionCheck(target.Hitbox))
-                {
-                    if (Distance < 0f)
-                        break;
-                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
-                }
-            }
-
-            if (target.immune[projectile.owner] > 0) return false;
-            return isAnyCollision;
+            if (target.dontTakeDamage || target.friendly)
+                return false;
+            return CanHitEntity(target);
         }
 
         public override bool CanHitPlayer(Player target)
         {
-            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.immune;
-            if (isAnyCollision && isEntityColliding)
-            {
-                while (DoCollisionCheck(target.Hitbox))
-                {
-                    if (Distance < 0f)
-                        break;
-                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
-                }
-            }
-
-            return isAnyCollision;
+            if (target.immune)
+                return false;
+            return CanHitEntity(target);
         }
 
         public override bool CanHitPvp(Player target)
-        {            
-            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && target.hostile && target.team != Main.player[projectile.owner].team;
-            if (isAnyCollision && isEntityColliding)
-            {
-                while (DoCollisionCheck(target.Hitbox))
-                {
-                    if (Distance < 0f)
-                        break;
-                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
-                }
-            }
-
-            if (target.immune) return false;
-            return isAnyCollision;
+        {
+            if (target.immune || target.hostile || target.team == Main.player[projectile.owner].team)
+                return false;
+            return CanHitEntity(target);
         }
 
-        public bool DoCollisionCheck(Rectangle targetHitbox)
+        public bool CanHitEntity(Entity e)
         {
-            float tailPoint = 0f;
-            float bodyPoint = 0f;
-            float headPoint = 0f;
+            if (!e.active)
+                return false; Tuple<bool, float> collisionData = ProjectileHelper.GetCollisionData(TailPositionCollisionStart(), TailPositionEnd(), BodyPositionEnd(), HeadPositionCollisionEnd(), tailSize.X, beamSize.X, headSize.X, maxBeamDistance, e.Hitbox);
+            bool isAnyCollision = collisionData.Item1;
+            float collisionDistance = collisionData.Item2;
+            if (isAnyCollision && isEntityColliding)
+            {
+                if (collisionDistance < Distance)
+                {
+                    Distance = collisionDistance + 8f; // arbitrary padding
+                }
+                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadPositionCollisionEnd());
+            }
 
-            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionCollisionStart(), TailPositionEnd(), tailSize.X, ref tailPoint);
-
-            bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionEnd(), BodyPositionEnd(), beamSize.X, ref bodyPoint);
-
-            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionCollisionEnd(), headSize.X, ref headPoint);
-
-            bool isAnyCollision = tailCollision || headCollision || bodyCollision;
-
-            // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
-            // It will look for collisions on the given line using AABB
             return isAnyCollision;
         }
 
@@ -400,18 +367,10 @@ namespace DBZMOD.Projectiles
 
             UpdateBeamPlayerItemUse(player);
 
-            // handle the distance routine
-            // the difference between distance and tracked distance is that distance is the actual travel.
-            // tracked distance is with collision, and resets distance if it's too high.
-            Distance += beamSpeed;
-            float trackedDistance;
-            
-            Vector2 origin = TailPositionStart() + projectile.velocity * (maxBeamDistance + headSize.Y * projectile.scale);
-
-            Vector2 collisionPoint = ProjectileHelper.GetClosestTileCollisionInRay(TailPositionStart(), origin);
-
-            trackedDistance = Vector2.Distance(collisionPoint, TailPositionStart());
-
+            // Vector2 origin = TailPositionStart() + projectile.velocity * (maxBeamDistance + headSize.Y * projectile.scale);
+            Tuple<bool, float> collisionData = ProjectileHelper.GetClosestTileCollisionInRay(TailPositionStart(), projectile.velocity, Distance, beamSpeed);
+            bool isColliding = collisionData.Item1;
+            float trackedDistance = collisionData.Item2;
 
             // handle animation frames on animated beams
             if (isBeamSegmentAnimated)
@@ -424,14 +383,21 @@ namespace DBZMOD.Projectiles
             }
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
-            if (Distance >= trackedDistance)
+            if (isColliding)
             {
-                var dustVector = TailPositionStart() + (trackedDistance + headSize.Y - StepLength()) * projectile.velocity;
-                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);                    
+                var dustVector = HeadPositionCollisionEnd();
+                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+                Distance = trackedDistance;
             }
 
-            // throttle distance by collision
-            Distance = Math.Min(trackedDistance, Distance);
+            if (Distance < tailSize.Y + beamSize.Y + headSize.Y)
+            {
+                projectile.scale = Math.Max(0.01f, Distance) / (tailSize.Y + beamSize.Y + headSize.Y);
+            }
+            else if (!IsDetached)
+            {
+                projectile.scale = Math.Min(1.0f, projectile.scale * 1.1f);
+            }
 
             // shoot sweet sweet particles
             for (var i = 0; i < fireParticleDensity; i++)
