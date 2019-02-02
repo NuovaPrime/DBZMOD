@@ -81,9 +81,9 @@ namespace DBZMOD.Util
             }
         }
 
-        public static Rectangle GetClosestTileCollisionInRay(Vector2 tailStart, Vector2 bodyStart, Vector2 headStart, Vector2 headEnd)
+        public static Rectangle GetClosestTileCollisionInRay(Vector2 tailStart, Vector2 headEnd)
         {
-            Rectangle tileHitbox = new Rectangle(0, 0, 0, 0);
+            Rectangle tileHitbox = Rectangle.Empty;
             float closestTile = float.MaxValue;
             Utils.PlotTileLine(tailStart, headEnd, 0f, delegate (int x, int y)
             {
@@ -100,32 +100,53 @@ namespace DBZMOD.Util
                 }
                 return !isSolidTiles;
             });
-
+            if (tileHitbox.Equals(Rectangle.Empty))
+            {
+                DebugHelper.Log("Not striking tile!");
+            }
             return tileHitbox;
         }
 
         public static Tuple<bool, float> GetCollisionData(Vector2 tailStart, Vector2 bodyStart, Vector2 headStart, Vector2 headEnd, float tailWidth, float bodyWidth, float headWidth, float maxDistance, Rectangle targetHitbox)
         {
-            float tailPoint = maxDistance;
-            float bodyPoint = maxDistance;
-            float headPoint = maxDistance;
+            // tile collision here
+            if (bodyStart.Equals(Vector2.Zero) && headStart.Equals(Vector2.Zero))
+            {
+                float entirePoint = maxDistance;
+                bool entireCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                    tailStart, headEnd, 0f, ref entirePoint);
 
-            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), tailStart, bodyStart, tailWidth, ref tailPoint);
+                if (entireCollision)
+                    return new Tuple<bool, float>(true, entirePoint);
 
-            if (tailCollision)
-                return new Tuple<bool, float>(true, tailPoint);
+                return new Tuple<bool, float>(false, maxDistance);
+            }
+            else
+            {
+                float tailPoint = maxDistance;
+                float bodyPoint = maxDistance;
+                float headPoint = maxDistance;
 
-            bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), bodyStart, headStart, bodyWidth, ref bodyPoint);
+                bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                    tailStart, bodyStart, tailWidth, ref tailPoint);
 
-            if (bodyCollision)
-                return new Tuple<bool, float>(true, bodyPoint);
+                if (tailCollision)
+                    return new Tuple<bool, float>(true, tailPoint);
 
-            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), headStart, headEnd, headWidth, ref headPoint);
+                bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                    bodyStart, headStart, bodyWidth, ref bodyPoint);
 
-            if (headCollision)
-                return new Tuple<bool, float>(true, headPoint);
+                if (bodyCollision)
+                    return new Tuple<bool, float>(true, bodyPoint);
 
-            return new Tuple<bool, float>(false, maxDistance);
+                bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                    headStart, headEnd, headWidth, ref headPoint);
+
+                if (headCollision)
+                    return new Tuple<bool, float>(true, headPoint);
+
+                return new Tuple<bool, float>(false, maxDistance);
+            }
         }
 
         public static bool CanHitLine(Vector2 start, Vector2 end)
@@ -137,50 +158,54 @@ namespace DBZMOD.Util
             });
         }
 
-        //// shameless appropriation of vanilla collision check with modifications to be more.. lasery.
-        //public static bool OldCanHitLine(Vector2 position1, Vector2 position2)
-        //{
-        //    var step = Vector2.Normalize(position2 - position1) * 8f;
-        //    bool isColliding = false;
-        //    // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
-        //    if (step.X < 0)
-        //    {
-        //        while (position1.X >= position2.X && position1.IsInWorldBounds())
-        //        {
-        //            position1 += step;
-        //            isColliding = position1.IsPositionInTile();
-        //            if (isColliding)
-        //                break;
-        //        }
-        //    } else if (step.X > 0)
-        //    {
-        //        while (position1.X <= position2.X && position1.IsInWorldBounds())
-        //        {
-        //            position1 += step;
-        //            isColliding = position1.IsPositionInTile();
-        //            if (isColliding)
-        //                break;
-        //        }
-        //    } else if (step.Y < 0)
-        //    {
-        //        while (position1.Y >= position2.Y && position1.IsInWorldBounds())
-        //        {
-        //            position1 += step;
-        //            isColliding = position1.IsPositionInTile();
-        //            if (isColliding)
-        //                break;
-        //        }
-        //    } else if (step.Y > 0)
-        //    {
-        //        while (position1.Y <= position2.Y && position1.IsInWorldBounds())
-        //        {
-        //            position1 += step;
-        //            isColliding = position1.IsPositionInTile();
-        //            if (isColliding)
-        //                break;
-        //        }
-        //    }
-        //    return !isColliding;
-        //}
+        // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
+        public static bool GetRayLength(Vector2 position1, Vector2 position2)
+        {
+            var newLength = 0f;
+            var step = Vector2.Normalize(position2 - position1) * 8f;
+            bool isColliding = false;
+            // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
+            if (step.X < 0)
+            {
+                while (position1.X >= position2.X && position1.IsInWorldBounds())
+                {
+                    position1 += step;
+                    isColliding = position1.IsPositionInTile();
+                    if (isColliding)
+                        break;
+                }
+            }
+            else if (step.X > 0)
+            {
+                while (position1.X <= position2.X && position1.IsInWorldBounds())
+                {
+                    position1 += step;
+                    isColliding = position1.IsPositionInTile();
+                    if (isColliding)
+                        break;
+                }
+            }
+            else if (step.Y < 0)
+            {
+                while (position1.Y >= position2.Y && position1.IsInWorldBounds())
+                {
+                    position1 += step;
+                    isColliding = position1.IsPositionInTile();
+                    if (isColliding)
+                        break;
+                }
+            }
+            else if (step.Y > 0)
+            {
+                while (position1.Y <= position2.Y && position1.IsInWorldBounds())
+                {
+                    position1 += step;
+                    isColliding = position1.IsPositionInTile();
+                    if (isColliding)
+                        break;
+                }
+            }
+            return !isColliding;
+        }
     }
 }
