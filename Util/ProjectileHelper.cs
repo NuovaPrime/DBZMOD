@@ -81,50 +81,27 @@ namespace DBZMOD.Util
             }
         }
 
-        public static Tuple<bool, float> GetClosestTileCollisionInRay(Vector2 start, Vector2 velocity, float distance, float beamSpeed)
+        public static Rectangle GetClosestTileCollisionInRay(Vector2 tailStart, Vector2 bodyStart, Vector2 headStart, Vector2 headEnd)
         {
-            float closestPoint = distance + beamSpeed;
-            Vector2 end = start + (distance + beamSpeed) * velocity;
-            Tuple<bool, float> resultCollisionData = new Tuple<bool, float>(false, closestPoint);
-            Utils.PlotTileLine(start, end, 0.0001f, delegate (int x, int y)
+            Rectangle tileHitbox = new Rectangle(0, 0, 0, 0);
+            float closestTile = float.MaxValue;
+            Utils.PlotTileLine(tailStart, headEnd, 0f, delegate (int x, int y)
             {
-                DebugHelper.Log($"Plotting line at {x} {y}");
                 bool isSolidTiles = Collision.SolidTiles(x, x, y, y);
                 if (isSolidTiles)
                 {
-                    Rectangle tileHitbox = new Rectangle(x * 16, y * 16, 16, 16); // slightly larger than a tile
-                    Tuple<bool, float> collisionData = GetTileCollisionData(start, end, tileHitbox);
-                    bool isColliding = collisionData.Item1;
-                    float collisionLength = collisionData.Item2;
-                    if (isColliding && collisionLength < closestPoint)
+                    Vector2 centerPoint = new Vector2(x * 16f + 8f, y * 16f + 8f);
+                    float newDistance = Vector2.Distance(centerPoint, tailStart);
+                    if (newDistance < closestTile)
                     {
-                        DebugHelper.Log($"Collision constrained at {x} {y} at {collisionLength} distance");
-                        resultCollisionData = collisionData;
-                        closestPoint = collisionLength;
+                        tileHitbox = new Rectangle(x * 16, y * 16, 16, 16);
+                        closestTile = newDistance;
                     }
                 }
                 return !isSolidTiles;
             });
 
-            if (resultCollisionData.Item1)
-            {
-                DebugHelper.Log($"Final beam collision occurring {distance} distance");
-            }
-
-            return resultCollisionData;
-        }
-
-        public static Tuple<bool, float> GetTileCollisionData(Vector2 startPoint, Vector2 endPoint, Rectangle targetHitbox)
-        {
-            float maxDistance = Vector2.Distance(startPoint, endPoint);
-            float beamPoint = maxDistance;
-
-            bool beamCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), startPoint, endPoint, 0f, ref beamPoint);
-
-            if (beamCollision)
-                return new Tuple<bool, float>(true, beamPoint);
-
-            return new Tuple<bool, float>(false, maxDistance);
+            return tileHitbox;
         }
 
         public static Tuple<bool, float> GetCollisionData(Vector2 tailStart, Vector2 bodyStart, Vector2 headStart, Vector2 headEnd, float tailWidth, float bodyWidth, float headWidth, float maxDistance, Rectangle targetHitbox)
