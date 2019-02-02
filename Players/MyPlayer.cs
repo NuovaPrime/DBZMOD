@@ -83,28 +83,6 @@ namespace DBZMOD
 
         public bool hasSSJ1;
 
-        [Obsolete]
-        public bool SSJ1Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition);
-        [Obsolete]
-        public bool ASSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition);
-        [Obsolete]
-        public bool USSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
-
-        [Obsolete]
-        public bool SSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
-        [Obsolete]
-        public bool SSJ3Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
-
-        [Obsolete]
-        public bool LSSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
-        [Obsolete]
-        public bool LSSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
-
-        public bool lssjgAchieved = false;
-
-        [Obsolete]
-        public bool SSJGAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
-
         public int lssj2Timer;
         public int rageCurrent = 0;
         public int rageDecreaseTimer = 0;
@@ -2843,5 +2821,27 @@ namespace DBZMOD
         }
         
         public Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
+
+        [Obsolete]
+        public bool SSJ1Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition);
+        [Obsolete]
+        public bool ASSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition);
+        [Obsolete]
+        public bool USSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
+
+        [Obsolete]
+        public bool SSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
+        [Obsolete]
+        public bool SSJ3Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
+
+        [Obsolete]
+        public bool LSSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
+        [Obsolete]
+        public bool LSSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
+
+        public bool lssjgAchieved = false;
+
+        [Obsolete]
+        public bool SSJGAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
     }
 }
