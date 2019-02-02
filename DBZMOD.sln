@@ -15,8 +15,8 @@ Global
 		Nuova C Drive|x86 = Nuova C Drive|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
-		Web's|Any CPU = Web's|Any CPU
-		Web's|x86 = Web's|x86
+		Webmilio|Any CPU = Webmilio|Any CPU
+		Webmilio|x86 = Webmilio|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -35,10 +35,10 @@ Global
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|x86.ActiveCfg = Release|x86
 		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Release|x86.Build.0 = Release|x86
-		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Web's|Any CPU.ActiveCfg = Web's|Any CPU
-		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Web's|Any CPU.Build.0 = Web's|Any CPU
-		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Web's|x86.ActiveCfg = Web's|x86
-		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Web's|x86.Build.0 = Web's|x86
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Webmilio|Any CPU.ActiveCfg = Webmilio|Any CPU
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Webmilio|Any CPU.Build.0 = Webmilio|Any CPU
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Webmilio|x86.ActiveCfg = Webmilio|x86
+		{31EFD09E-37C1-4CB4-9050-1388F949EFC5}.Webmilio|x86.Build.0 = Webmilio|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

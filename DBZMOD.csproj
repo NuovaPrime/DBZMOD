@@ -90,13 +90,13 @@
   <PropertyGroup>
     <RootNamespace>DBZMOD</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Web%27s|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Webmilio|x86' ">
     <OutputPath>bin\x86\Web%27s\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Web%27s|AnyCPU'">
-    <OutputPath>bin\Webs\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Webmilio|AnyCPU' ">
+    <OutputPath>bin\Webmilio\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>default</LangVersion>
     <Optimize>false</Optimize>
@@ -702,7 +702,7 @@
 "D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
 exit 0
 )
-if "$(ConfigurationName)"=="Web's" (
+if "$(ConfigurationName)"=="Webmilio" (
 "D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
 exit 0
 )
