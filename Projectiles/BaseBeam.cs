@@ -176,9 +176,12 @@ namespace DBZMOD.Projectiles
             return false;
         }
 
+        // this handles scaling the beam down by the wall distance
+        private float wallDistanceScaling = 1.0f;
+
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White, projectile.scale);
+            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White, projectile.scale * wallDistanceScaling);
         }
 
         // The core function of drawing a laser
@@ -186,14 +189,17 @@ namespace DBZMOD.Projectiles
         {               
             // half pi subtracted from the rotation.
             float rotation = projectile.velocity.ToRotation() - 1.57f;
-            
+            Vector2 trueTailStart = TailStart() - TailHeldWallDistanceScaleOffset();
+            Vector2 trueTailEnd = TailEnd() - (TailHeldWallDistanceScaleOffset() + TailRecessionWallDistanceScaleOffset());
+            Vector2 trueBodyEnd = BodyEnd() - (TailHeldWallDistanceScaleOffset() + TailRecessionWallDistanceScaleOffset());
+
             // draw the beam tail
-            spriteBatch.Draw(texture, TailStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
+            spriteBatch.Draw(texture, trueTailStart - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
                         
             // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
-            for (float i = 0f; i < Distance; i += beamSize.Y)
+            for (float i = 0f; i < Distance / scale; i += beamSize.Y)
             {
-                Vector2 origin = TailEnd() + i * projectile.velocity;
+                Vector2 origin = trueTailEnd + i * scale * projectile.velocity;
                 
                 if (_beamSegmentAnimation > 0)
                 {
@@ -207,17 +213,27 @@ namespace DBZMOD.Projectiles
             }
 
             // draw the beam head
-            spriteBatch.Draw(texture, BodyEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(headSize.X * .5f, headSize.Y * .5f), scale, 0, 0f);
+            spriteBatch.Draw(texture, trueBodyEnd - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(headSize.X * .5f, headSize.Y * .5f), scale, 0, 0f);
         }
 
-        public Vector2 TailCollisionStart()
+        public Vector2 TailHeldWallDistanceScaleOffset()
         {
-            return projectile.position + offsetY + 16f  * projectile.velocity;
+            return TailHeldOffset() * (1f - wallDistanceScaling);
+        }
+
+        public Vector2 TailHeldOffset()
+        {
+            return (TailHeldDistance * projectile.scale * projectile.velocity);
         }
 
         public Vector2 TailStart()
         {
-            return projectile.position + offsetY + (TailHeldDistance * projectile.scale * projectile.velocity);
+            return projectile.position + offsetY + TailHeldOffset();
+        }
+
+        public Vector2 TailRecessionWallDistanceScaleOffset()
+        {
+            return TailRecession() * (1f - wallDistanceScaling) * projectile.velocity;
         }
 
         public float TailRecession()
@@ -232,7 +248,7 @@ namespace DBZMOD.Projectiles
 
         public float BodyExtension()
         {
-            return Math.Max(0f, Distance * projectile.scale);
+            return Math.Max(0f, Distance);
         }
 
         public Vector2 BodyEnd()
@@ -278,7 +294,7 @@ namespace DBZMOD.Projectiles
 
         public float TrueDistance()
         {
-            return BodyExtension() + HeadExtension() + TailRecession();
+            return (BodyExtension() + HeadExtension() + TailRecession());
         }
 
         public bool CanHitEntity(Entity e)
@@ -292,7 +308,7 @@ namespace DBZMOD.Projectiles
             {
                 if (collisionDistance < TrueDistance())
                 {
-                    Distance = collisionDistance + beamSpeed; // arbitrary padding
+                    Distance = (collisionDistance + beamSpeed); // arbitrary padding
                 }
                 ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadEnd());
             }
@@ -392,22 +408,9 @@ namespace DBZMOD.Projectiles
             // lazy strats for fixing weird beam issues start here, warning hax.
             if (!struckTile.Equals(Rectangle.Empty))
             {
-                Tuple<bool, float> collisionData = ProjectileHelper.GetCollisionData(
-                    TailStart(), Vector2.Zero, Vector2.Zero, HeadEnd(),
-                    tailSize.X, beamSize.X, headSize.X, Distance, struckTile);
+                Tuple<bool, float> collisionData = ProjectileHelper.GetCollisionData(TailStart(), Vector2.Zero, Vector2.Zero, HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, struckTile);
                 isColliding = collisionData.Item1;
-                Distance = collisionData.Item2 - (HeadExtension() + TailRecession());
-
-                if (lazyLastStruckTileDistance < Distance)
-                {
-                    Distance = lazyLastStruckTileDistance;
-                }
-
-                lazyLastStruckTileDistance = Distance;
-            }
-            else
-            {
-                lazyLastStruckTileDistance = float.MaxValue;
+                Distance = Math.Min(maxBeamDistance, (collisionData.Item2 - HeadExtension()));
             }
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
@@ -417,17 +420,19 @@ namespace DBZMOD.Projectiles
                 ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);}
             else
             {
-                Distance = Math.Min(maxBeamDistance, Distance + beamSpeed);
+                Distance = Math.Min(maxBeamDistance, (Distance + beamSpeed));
                 DebugHelper.Log($"Not colliding: Projectile distance set to {Distance}");
             }
 
-            //if (Distance <= tailSize.Y + beamSize.Y + headSize.Y)
+            // shrinks the beam when it's near a wall, this looks like crap at the moment.
+            //if (Distance <= Vector2.Distance(TailStart(), HeadEnd()))
             //{
-            //    projectile.scale = Math.Max(0.01f, Distance) / (tailSize.Y + beamSize.Y + headSize.Y);
+            //    if (Distance > 0f)
+            //        wallDistanceScaling = Distance / Vector2.Distance(TailStart(), HeadEnd());
             //}
             //else if (!IsDetached)
             //{
-            //    projectile.scale = Math.Min(1.0f, projectile.scale * 1.1f);
+            //    wallDistanceScaling = Math.Min(1.0f, projectile.scale * 1.1f);
             //}
 
             // shoot sweet sweet particles

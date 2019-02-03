@@ -119,6 +119,9 @@ namespace DBZMOD.Util
                 if (entireCollision)
                     return new Tuple<bool, float>(true, entirePoint);
 
+                if (entirePoint != maxDistance)
+                    return new Tuple<bool, float>(true, maxDistance);
+
                 return new Tuple<bool, float>(false, maxDistance);
             }
             else
