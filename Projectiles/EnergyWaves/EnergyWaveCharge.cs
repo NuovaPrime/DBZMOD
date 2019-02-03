@@ -26,7 +26,7 @@ namespace DBZMOD.Projectiles.EnergyWaves
             decayChargeLevelPerSecond = 1f;
 
             // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
-            minimumFireFrames = 120;
+            // minimumFireFrames = 120;
 
             // this is the beam the charge beam fires when told to.
             beamProjectileName = "EnergyWaveBeam";
@@ -35,7 +35,7 @@ namespace DBZMOD.Projectiles.EnergyWaves
             dustType = 15;
 
             // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-            initialBeamCooldown = 180;
+            // initialBeamCooldown = 180;
 
             // the charge ball is just a single texture.
             // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.

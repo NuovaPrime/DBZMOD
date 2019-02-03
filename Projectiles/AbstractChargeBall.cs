@@ -33,7 +33,7 @@ namespace DBZMOD.Projectiles
         public float decayChargeLevelPerSecond = 1f;
 
         // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
-        public int minimumFireFrames = 120;
+        public int minimumFireFrames = 30;
 
         // this is the beam the charge beam fires when told to.
         public string beamProjectileName = "BaseBeamProj";
@@ -85,7 +85,7 @@ namespace DBZMOD.Projectiles
         protected float rotationSlowness = 15f;
 
         // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-        protected int initialBeamCooldown = 180;
+        protected int initialBeamCooldown = 60;
 
         // this field determines whether the beam tracks the player, "rooting" the tail origin to the player.
         protected bool isBeamOriginTracking = true;
@@ -224,7 +224,6 @@ namespace DBZMOD.Projectiles
 
         public Vector2 GetChargeBallPosition()
         {
-            Player player = Main.player[projectile.owner];
             Vector2 positionOffset = channelingOffset + projectile.velocity * ChargeBallHeldDistance;
             return Main.player[projectile.owner].Center + positionOffset;
         }
@@ -232,14 +231,21 @@ namespace DBZMOD.Projectiles
         // The core function of drawing a charge ball
         public void DrawChargeBall(SpriteBatch spriteBatch, Texture2D texture, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color))
         {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+            int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
+            DBZMOD.circle.ApplyShader(radius);
             float r = projectile.velocity.ToRotation() + rotation;
             spriteBatch.Draw(texture, GetChargeBallPosition() - Main.screenPosition,
                 new Rectangle(0, 0, chargeSize.X, chargeSize.Y), color, r, new Vector2(chargeSize.X * .5f, chargeSize.Y * .5f), scale, 0, 0.99f);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
         public void HandleChargeBallSize()
         {
-            projectile.scale = ChargeLevel / chargeLimit;
+            // the math square roots here cause the charge level to have a much more immediate size impact.
+            projectile.scale = (float)(Math.Pow(ChargeLevel, 0.35f) / Math.Pow(chargeLimit, 0.35f)) * 1.3f;
         }
 
         private bool _wasCharging = false;
@@ -289,6 +295,11 @@ namespace DBZMOD.Projectiles
             // increment the charge timer if channeling and apply slowdown effect
             if (player.channel && projectile.active && modPlayer.isMouseRightHeld && !IsSustainingFire)
             {
+                // shoot some dust into the ball to show it's charging, and to look cool.
+                // Also generates light.
+                if (!IsSustainingFire)
+                    ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
+
                 // the player can hold the charge all they like once it's fully charged up. Currently this doesn't incur a movespeed debuff either.
                 if (ChargeLevel < finalChargeLimit && !modPlayer.IsKiDepleted())
                 {
@@ -305,10 +316,6 @@ namespace DBZMOD.Projectiles
 
                     // slow down the player while charging.
                     player.ApplyChannelingSlowdown();
-
-                    // shoot some dust into the ball to show it's charging, and to look cool.
-                    if (!IsSustainingFire)
-                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
                 }
             }
 

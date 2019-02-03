@@ -197,9 +197,9 @@ namespace DBZMOD.Projectiles
             spriteBatch.Draw(texture, trueTailStart - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
                         
             // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
-            for (float i = 0f; i < Distance / scale; i += beamSize.Y)
+            for (float i = -1f; i < Distance / scale; i += beamSize.Y - 1f)
             {
-                Vector2 origin = trueTailEnd + i * scale * projectile.velocity;
+                Vector2 origin = trueTailEnd + i * projectile.velocity;
                 
                 if (_beamSegmentAnimation > 0)
                 {
@@ -292,11 +292,6 @@ namespace DBZMOD.Projectiles
             return CanHitEntity(target);
         }
 
-        public float TrueDistance()
-        {
-            return (BodyExtension() + HeadExtension() + TailRecession());
-        }
-
         public bool CanHitEntity(Entity e)
         {
             if (!e.active)
@@ -306,10 +301,7 @@ namespace DBZMOD.Projectiles
             float collisionDistance = collisionData.Item2;
             if (isAnyCollision && isEntityColliding)
             {
-                if (collisionDistance < TrueDistance())
-                {
-                    Distance = (collisionDistance + beamSpeed); // arbitrary padding
-                }
+                Distance = (collisionDistance + beamSpeed); // arbitrary padding
                 ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadEnd());
             }
 
