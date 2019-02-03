@@ -594,7 +594,7 @@ namespace DBZMOD
 
             if (isCleanupNeeded)
             {
-                DebugHelper.Log("Server is running cleanup routine.");
+                // DebugHelper.Log("Server is running cleanup routine.");
                 // destroy all but the first located dragon ball of any given type in the world, with no items.
                 for (var i = 0; i < Main.maxTilesX; i++)
                 {
@@ -624,7 +624,7 @@ namespace DBZMOD
             else
             {
                 dragonBallFirstFound = CachedDragonBallLocations;
-                DebugHelper.Log("Server is running dragon ball confirmation routine.");
+                // DebugHelper.Log("Server is running dragon ball confirmation routine.");
             }
 
             // figure out if new dragon balls need to be spawned (are any missing?)
@@ -634,7 +634,7 @@ namespace DBZMOD
                 Point testLocation = dragonBallFirstFound[i];
                 if (!IsDragonBallLocation(testLocation.X, testLocation.Y))
                 {
-                    DebugHelper.Log($"Server thinks dragon ball {i + 1} is missing.");
+                    // DebugHelper.Log($"Server thinks dragon ball {i + 1} is missing.");
                     // if this isn't a dragon ball, erase it.
                     dragonBallFirstFound[i] = Point.Zero;
                     CacheDragonBallLocation(i + 1, Point.Zero);

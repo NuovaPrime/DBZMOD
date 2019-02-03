@@ -197,7 +197,7 @@ namespace DBZMOD.Projectiles
             spriteBatch.Draw(texture, trueTailStart - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
                         
             // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
-            for (float i = -1f; i < Distance / scale; i += beamSize.Y - 1f)
+            for (float i = -1f; i < Distance; i += beamSize.Y - 1f)
             {
                 Vector2 origin = trueTailEnd + i * projectile.velocity;
                 
@@ -413,7 +413,7 @@ namespace DBZMOD.Projectiles
             else
             {
                 Distance = Math.Min(maxBeamDistance, (Distance + beamSpeed));
-                DebugHelper.Log($"Not colliding: Projectile distance set to {Distance}");
+                // DebugHelper.Log($"Not colliding: Projectile distance set to {Distance}");
             }
 
             // shrinks the beam when it's near a wall, this looks like crap at the moment.

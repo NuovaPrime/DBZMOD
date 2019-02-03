@@ -57,7 +57,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
             var modPlayer = player.GetModPlayer<MyPlayer>();
             //var inUse = modPlayer.isMassiveBlastInUse;
             var inUse = player.IsMassiveBlastInUse();
-            DebugHelper.Log(string.Format("Player is trying to use {0} and Massive Blast In Use? {1}", DisplayName, inUse));
+            // DebugHelper.Log(string.Format("Player is trying to use {0} and Massive Blast In Use? {1}", DisplayName, inUse));
             return !inUse;
         }
     }

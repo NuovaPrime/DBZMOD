@@ -102,7 +102,7 @@ namespace DBZMOD.Util
             });
             if (tileHitbox.Equals(Rectangle.Empty))
             {
-                DebugHelper.Log("Not striking tile!");
+                // DebugHelper.Log("Not striking tile!");
             }
             return tileHitbox;
         }
