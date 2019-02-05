@@ -53,6 +53,9 @@ namespace DBZMOD.Projectiles
         // The sound effect used by the projectile when charging up.
         public string chargeSoundKey = "Sounds/EnergyWaveCharge";
 
+        // The volume of the charge sound
+        public float chargeSoundVolume = 1f;
+
         // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
         public int chargeSoundDelay = 120;
 
@@ -323,7 +326,7 @@ namespace DBZMOD.Projectiles
             if (!_wasCharging && isCharging && ChargeSoundCooldown == 0f)
             {
                 if (!Main.dedServ)
-                    chargeSoundSlotId = SoundHelper.PlayCustomSound(chargeSoundKey, projectile.Center);
+                    chargeSoundSlotId = SoundHelper.PlayCustomSound(chargeSoundKey, projectile.Center, chargeSoundVolume);
                 ChargeSoundCooldown = chargeSoundDelay;
             }
             else

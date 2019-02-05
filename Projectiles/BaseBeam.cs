@@ -42,6 +42,9 @@ namespace DBZMOD.Projectiles
         // the speed at which the beam head travels through space
         public float beamSpeed = 24f;
 
+        // the volume of the beam firing audio
+        public float beamSoundVolume = 1f;
+
         // the type of dust to spawn when the beam is firing
         public int dustType = 169;
 
@@ -419,7 +422,7 @@ namespace DBZMOD.Projectiles
             // Handle the audio playing, note this positionally tracks at the head position end for effect.
             if (_justFired)
             {
-                beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadEnd());
+                beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadEnd(), beamSoundVolume);
                 projectile.scale = 0.30f;
             }
 

@@ -72,24 +72,17 @@ namespace DBZMOD.Util
                 return new KeyValuePair<uint, SoundEffectInstance>(invalidSlot, null);
 
             var slotId = invalidSlot;
-            var style = GetCustomStyle(soundId, volume, pitchVariance);
+            var style = GetCustomStyle(soundId).WithVolume(volume).WithPitchVariance(pitchVariance);
             SoundEffectInstance sound = null;
             if (location == Vector2.Zero)
             {
-                sound = Main.PlaySound(style);                
+                sound = Main.PlaySound(style);
             } else
             {
                 sound = Main.PlaySound(style, location);
             }
             slotId = (uint)DBZMOD.instance.GetSoundSlot(SoundType.Custom, soundId);
             return new KeyValuePair<uint, SoundEffectInstance>(slotId, sound);
-        }
-
-        public static void PlayCustomSound(ReLogic.Utilities.SlotId slotId)
-        {            
-            var sound = Main.GetActiveSound(slotId);
-            if (!sound.IsPlaying)
-                sound.Resume();
         }
 
         public static Terraria.Audio.LegacySoundStyle GetCustomStyle(string soundId, float volume = 1f, float pitchVariance = 0f)

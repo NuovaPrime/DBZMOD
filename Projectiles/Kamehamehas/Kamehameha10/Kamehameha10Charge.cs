@@ -55,6 +55,8 @@ namespace DBZMOD.Projectiles.Kamehamehas.Kamehameha10
             // The sound effect used by the projectile when charging up.
             chargeSoundKey = "Sounds/Kamehameha10Charge";
 
+            chargeSoundVolume = 0.2f;
+
             // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
             chargeSoundDelay = 120;
 
