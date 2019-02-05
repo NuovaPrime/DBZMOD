@@ -149,6 +149,7 @@
     <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
     <Compile Include="Effects\Animations\Cutscenes\Legendary1\Circle.cs" />
     <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Enums\BeamHitLocation.cs" />
     <Compile Include="Extensions\BuffInfoExtensions.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Extensions\PlayerExtensions.cs" />

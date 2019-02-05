@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using Terraria;
 using Terraria.DataStructures;
@@ -81,12 +82,14 @@ namespace DBZMOD.Util
             }
         }
 
-        public static Rectangle GetClosestTileCollisionInRay(Vector2 tailStart, Vector2 headEnd)
+        public static Rectangle GetClosestTileCollisionInBeam(Vector2 tailStart, Vector2 headEnd)
         {
             Rectangle tileHitbox = Rectangle.Empty;
             float closestTile = float.MaxValue;
             Utils.PlotTileLine(tailStart, headEnd, 0f, delegate (int x, int y)
             {
+                //if (!tileHitbox.Equals(Rectangle.Empty))
+                //    return false;
                 bool isSolidTiles = Collision.SolidTiles(x, x, y, y);
                 if (isSolidTiles)
                 {
@@ -100,115 +103,59 @@ namespace DBZMOD.Util
                 }
                 return !isSolidTiles;
             });
-            if (tileHitbox.Equals(Rectangle.Empty))
-            {
-                // DebugHelper.Log("Not striking tile!");
-            }
+            //if (tileHitbox.Equals(Rectangle.Empty))
+            //{
+            //    // DebugHelper.Log("Not striking tile!");
+            //}
             return tileHitbox;
         }
 
-        public static Tuple<bool, float> GetCollisionData(Vector2 tailStart, Vector2 bodyStart, Vector2 headStart, Vector2 headEnd, float tailWidth, float bodyWidth, float headWidth, float maxDistance, Rectangle targetHitbox)
+        public static Rectangle GetClosestTileCollisionByForwardSampling(Vector2 beamEnd, float beamSpeed, Vector2 velocity)
         {
-            // tile collision here
-            if (bodyStart.Equals(Vector2.Zero) && headStart.Equals(Vector2.Zero))
+            // roughly the safe forward projection to know you're about to hit a block, soon-ish. Most beam speeds are at 15f at the time of writing
+            float step = 3f;
+            float polls = 0;
+            while (true)
             {
-                float entirePoint = maxDistance;
-                bool entireCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
-                    tailStart, headEnd, 0f, ref entirePoint);
-
-                if (entireCollision)
-                    return new Tuple<bool, float>(true, entirePoint);
-
-                if (entirePoint != maxDistance)
-                    return new Tuple<bool, float>(true, maxDistance);
-
-                return new Tuple<bool, float>(false, maxDistance);
+                polls++;
+                Vector2 pollVector = beamEnd + (step * polls * velocity);
+                if (pollVector.IsInWorldBounds() && pollVector.IsPositionInTile())
+                {
+                    Point tileCoords = pollVector.ToTileCoordinates();
+                    return new Rectangle(tileCoords.X, tileCoords.Y, 16, 16);
+                }
+                if (polls * step > beamSpeed)
+                    break;
             }
-            else
-            {
-                float tailPoint = maxDistance;
-                float bodyPoint = maxDistance;
-                float headPoint = maxDistance;
 
-                bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
-                    tailStart, bodyStart, tailWidth, ref tailPoint);
-
-                if (tailCollision)
-                    return new Tuple<bool, float>(true, tailPoint);
-
-                bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
-                    bodyStart, headStart, bodyWidth, ref bodyPoint);
-
-                if (bodyCollision)
-                    return new Tuple<bool, float>(true, bodyPoint);
-
-                bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
-                    headStart, headEnd, headWidth, ref headPoint);
-
-                if (headCollision)
-                    return new Tuple<bool, float>(true, headPoint);
-
-                return new Tuple<bool, float>(false, maxDistance);
-            }
+            return Rectangle.Empty;
         }
 
-        public static bool CanHitLine(Vector2 start, Vector2 end)
+        public static Tuple<bool, float, BeamHitLocation> GetCollisionData(Vector2 tailStart, Vector2 beamStart, Vector2 headStart, Vector2 headEnd, float tailWidth, float beamWidth, float headWidth, float maxDistance, Rectangle targetHitbox)
         {
-            return Utils.PlotTileLine(start, end, 0f, delegate (int x, int y)
-            {
-                Tile tile = Main.tile[x, y];
-                return tile == null || tile.inActive() || !Main.tile[x, y].active() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type];
-            });
-        }
+            float tailPoint = Vector2.Distance(tailStart, beamStart);
+            float beamPoint = maxDistance;
+            float headPoint = Vector2.Distance(headStart, headEnd);
 
-        // shameless appropriation of vanilla collision check with modifications to be more.. lasery.
-        public static bool GetRayLength(Vector2 position1, Vector2 position2)
-        {
-            var newLength = 0f;
-            var step = Vector2.Normalize(position2 - position1) * 8f;
-            bool isColliding = false;
-            // since the step loop is going to depend on quadrant/direction, I took the cowardly approach and divided it into four quadrants.
-            if (step.X < 0)
-            {
-                while (position1.X >= position2.X && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            }
-            else if (step.X > 0)
-            {
-                while (position1.X <= position2.X && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            }
-            else if (step.Y < 0)
-            {
-                while (position1.Y >= position2.Y && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            }
-            else if (step.Y > 0)
-            {
-                while (position1.Y <= position2.Y && position1.IsInWorldBounds())
-                {
-                    position1 += step;
-                    isColliding = position1.IsPositionInTile();
-                    if (isColliding)
-                        break;
-                }
-            }
-            return !isColliding;
+            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                tailStart, beamStart, tailWidth, ref tailPoint);
+
+            if (tailCollision)
+                return new Tuple<bool, float, BeamHitLocation>(true, tailPoint, BeamHitLocation.Tail);
+
+            bool beamCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                beamStart, headStart, beamWidth, ref beamPoint);
+
+            if (beamCollision)
+                return new Tuple<bool, float, BeamHitLocation>(true, beamPoint, BeamHitLocation.Beam);
+
+            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                headStart, headEnd, headWidth, ref headPoint);
+
+            if (headCollision)
+                return new Tuple<bool, float, BeamHitLocation>(true, maxDistance, BeamHitLocation.Head);
+
+            return new Tuple<bool, float, BeamHitLocation>(false, maxDistance, BeamHitLocation.Unspecified);
         }
     }
 }

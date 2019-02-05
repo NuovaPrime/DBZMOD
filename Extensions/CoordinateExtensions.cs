@@ -29,15 +29,15 @@ namespace DBZMOD.Extensions
             return new Vector2((float)Math.Cos(angleRad), (float)Math.Sin(angleRad));
         }
 
-        //public static int GetTileX(this float xCoord)
-        //{
-        //    return (int)Math.Min(Main.maxTilesX - 1, Math.Max(1, xCoord / 16f));
-        //}
+        public static int GetTileX(this float xCoord)
+        {
+            return (int)Math.Min(Main.maxTilesX - 1, Math.Max(1, xCoord / 16f));
+        }
 
-        //public static int GetTileY(this float yCoord)
-        //{
-        //    return (int)Math.Min(Main.maxTilesY - 1, Math.Max(1, yCoord / 16f));
-        //}
+        public static int GetTileY(this float yCoord)
+        {
+            return (int)Math.Min(Main.maxTilesY - 1, Math.Max(1, yCoord / 16f));
+        }
 
         public static bool IsInWorldBounds(this Vector2 hitVector)
         {
@@ -46,19 +46,17 @@ namespace DBZMOD.Extensions
 
         public static bool IsPositionInTile(this Vector2 position)
         {
-            return Collision.GetTilesIn(position, position).Count > 0;
-            //var tilePoint = new Point(position.X.GetTileX(), position.Y.GetTileY());
-            //var tile = Framing.GetTileSafely(tilePoint.X, tilePoint.Y);
-            //if (tile == null)
-            //    return false;
-            //// dunno if this works.
-            //if (Main.tileSolidTop[tile.type])
-            //    return false;
-            //if (tile.active() && Main.tileSolid[tile.type])
-            //{
-            //    return true;
-            //}
-            //return false;
+            var tilePoint = new Point(position.X.GetTileX(), position.Y.GetTileY());
+            var tile = Main.tile[tilePoint.X, tilePoint.Y];
+            if (tile == null)
+                return false;
+            if (Main.tileSolidTop[tile.type])
+                return false;
+            if (tile.active() && !tile.inActive() && Main.tileSolid[tile.type])
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

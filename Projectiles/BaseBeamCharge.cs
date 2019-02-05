@@ -33,7 +33,8 @@ namespace DBZMOD.Projectiles
 
         private int GetBeamDamage()
         {
-            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier());
+            // Convenient place to set the damage multiplier of all beams by a flat coefficient for tuning - this is beam damage halved.
+            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier() / 3f);
         }
 
         // multiplier representing increased ki cost gradient as the player continues to fire the beam, to put the kibosh on firing infinitely.
@@ -146,11 +147,6 @@ namespace DBZMOD.Projectiles
             // less than 0 fire time means on cooldown, try to "decrease" cooldown by 1, stopping at 0 if applicable.
             if (CurrentFireTime < 0)
                 CurrentFireTime = Math.Max(0, CurrentFireTime + 1f);
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }
