@@ -196,6 +196,27 @@ namespace DBZMOD
             }
         }
     }
+
+    public abstract class SupportItem : KiItem
+    {
+        public override bool CloneNewInstances
+        {
+            get
+            {
+                return true;
+            }
+        }
+        /*public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            TooltipLine indicate = new TooltipLine(mod, "", "");
+            string[] text2 = indicate.text.Split(' ');
+            indicate.text = "-- Support --";
+            indicate.overrideColor = new Color(69, 255, 56);
+            tooltips.Add(indicate);
+
+            base.ModifyTooltips(tooltips);
+        }*/
+    }
     
     public abstract class PatreonItem : ModItem
     {

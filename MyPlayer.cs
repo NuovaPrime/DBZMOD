@@ -74,6 +74,12 @@ namespace DBZMOD
         public int overloadTimer;
         public float chargeMoveSpeed;
 
+
+        //Support Subclass vars
+        
+        //multiplier on healing, resets to 1f each frame.
+        public float healMulti = 1f;
+
         //Transformation vars
         public bool isTransforming;
         public int ssjAuraBeamTimer;
@@ -2396,6 +2402,7 @@ namespace DBZMOD
             isHoldingDragonRadarMk2 = false;
             isHoldingDragonRadarMk3 = false;
             eliteSaiyanBonus = false;
+            healMulti = 1f;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)

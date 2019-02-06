@@ -158,6 +158,7 @@
     <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
     <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
+    <Compile Include="Items\Support\Skills\GuardianMending.cs" />
     <Compile Include="Items\Weapons\Test\CircleTester.cs" />
     <Compile Include="Effects\WishSky.cs" />
     <Compile Include="Effects\GodSky.cs" />
@@ -486,6 +487,7 @@
     <Compile Include="Projectiles\Kamehamehas\SuperKamehameha\SuperKamehamehaBeam.cs" />
     <Compile Include="Projectiles\SupernovaBall.cs" />
     <Compile Include="Projectiles\SpiritBombs\SuperSpiritBombBall.cs" />
+    <Compile Include="Projectiles\Support\GuardianMendingProj.cs" />
     <Compile Include="Projectiles\TransmissionLinesProj.cs" />
     <Compile Include="Projectiles\TrapShooterExplosion.cs" />
     <Compile Include="Projectiles\TrapShooterProjectile.cs" />
@@ -601,6 +603,7 @@
     <Content Include="Items\Accessories\Infusers\InfuserTopaz.png" />
     <Content Include="Items\Accessories\Vanity\GreenPotara.png" />
     <Content Include="Items\Accessories\Vanity\GreenPotara_Face.png" />
+    <Content Include="Items\Support\Skills\GuardianMending.png" />
     <Content Include="Lib\ExpandedSentries.dll" />
     <Content Include="Lib\Laugicality.dll" />
     <Content Include="Lib\ThoriumMod.dll" />
@@ -669,6 +672,8 @@
     <Content Include="UI\Buttons\UIOButtonImage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Items\Support\Accessories\" />
+    <Folder Include="Items\Support\Armor\" />
     <Folder Include="Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>
