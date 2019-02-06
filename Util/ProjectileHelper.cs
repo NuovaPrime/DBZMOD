@@ -1,4 +1,5 @@
-﻿using DBZMOD.Projectiles;
+﻿
+using DBZMOD.Projectiles;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

@@ -21,7 +21,7 @@ namespace DBZMOD.Projectiles
 
         private float GetBeamPowerMultiplier()
         {
-            return ChargeLevel;
+            return (float)Math.Sqrt(ChargeLevel);
         }
 
         private int GetBeamDamage()
@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles
         }
 
         // the rate at which firing drains the charge level of the ball, play with this for balance.
-        protected float FireDecayRate() { return (float)Math.Sqrt(GetBeamPowerMultiplier()) / 60f; }
+        protected float FireDecayRate() { return GetBeamPowerMultiplier() / 60f; }
 
         public Projectile myProjectile = null;
 
