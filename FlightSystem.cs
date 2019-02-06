@@ -156,13 +156,13 @@ namespace DBZMOD
                 if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
                 {
                     var beamCharge = proj.modProjectile as BaseBeamCharge;
-                    if (beamCharge.IsSustainingFire)
+                    if (beamCharge.IsFired)
                     {
                         isExistingBeamFiring = true;
                     }
                 }
             }
-            return modPlayer.isHoldingKiWeapon && ((modPlayer.isMouseLeftHeld && isExistingBeamFiring) || modPlayer.isMouseRightHeld);
+            return modPlayer.isHoldingKiWeapon && (modPlayer.isMouseLeftHeld || isExistingBeamFiring);
         }
 
         public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)

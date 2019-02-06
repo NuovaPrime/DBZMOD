@@ -1053,7 +1053,7 @@ namespace DBZMOD
                     if (proj.modProjectile != null && (proj.modProjectile is BaseBeamCharge))
                     {
                         var charge = proj.modProjectile as BaseBeamCharge;
-                        if (charge.IsSustainingFire)
+                        if (charge.IsFired)
                         {
                             mouseVector = charge.myProjectile.velocity;
                         }

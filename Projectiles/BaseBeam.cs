@@ -314,7 +314,7 @@ namespace DBZMOD.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             base.OnHitNPC(target, damage, knockback, crit);
-            target.velocity = target.velocity / 1.5f; // beams neuter movement!
+            target.velocity = target.velocity / 1.75f; // beams neuter movement!
             target.immune[projectile.owner] = immunityFrameOverride;            
         }
 
@@ -331,21 +331,9 @@ namespace DBZMOD.Projectiles
         private Vector2 _originalMouseVector = Vector2.Zero;
         private Vector2 _originalScreenPosition = Vector2.Zero;
 
-        // private int framesSinceCollision = 30;
-        // The AI of the projectile
-        public override void AI()
+        // capture the current mouse vector, to normalize movement prior to updating the charge ball location.
+        private void HandleBeamMouseCoordinates(Player player)
         {
-            Player player = Main.player[projectile.owner];
-
-            ProcessKillRoutine(player);
-
-            // stationary beams are instantaneously "detached", they behave weirdly.
-            if (isStationaryBeam && !IsDetached)
-            {
-                DetachmentTimer = 1;
-            }
-
-            // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
             if (projectile.owner == Main.myPlayer)
             {
                 Vector2 mouseVector = Main.MouseWorld;
@@ -385,19 +373,10 @@ namespace DBZMOD.Projectiles
 
                 _oldScreenPosition = screenPosition;
             }
+        }
 
-            UpdateBeamPlayerItemUse(player);
-
-            // handle animation frames on animated beams
-            if (isBeamSegmentAnimated)
-            {
-                _beamSegmentAnimation += 8;
-                if (_beamSegmentAnimation >= beamSize.Y)
-                {
-                    _beamSegmentAnimation = 0;
-                }
-            }
-
+        private void HandleTileCollision()
+        {
             bool isColliding = IsTileColliding();
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
@@ -405,7 +384,8 @@ namespace DBZMOD.Projectiles
             {
                 // framesSinceCollision = -5;
                 var dustVector = HeadEnd();
-                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);}
+                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+            }
             else
             {
                 // framesSinceCollision = Math.Min(50, framesSinceCollision + 1);
@@ -418,20 +398,64 @@ namespace DBZMOD.Projectiles
             {
                 ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
             }
+        }
 
-            // Handle the audio playing, note this positionally tracks at the head position end for effect.
+        // handle animation frames on animated beams
+        private void HandleBeamSegmentAnimation()
+        {
+            if (isBeamSegmentAnimated)
+            {
+                _beamSegmentAnimation += 8;
+                if (_beamSegmentAnimation >= beamSize.Y)
+                {
+                    _beamSegmentAnimation = 0;
+                }
+            }
+        }
+
+        // stationary beams are instantaneously "detached", they behave weirdly.
+        private void SetIsDetached()
+        {
+            if (isStationaryBeam && !IsDetached)
+            {
+                DetachmentTimer = 1;
+            }
+        }
+
+        // Handle the audio playing, note this positionally tracks at the head position end for effect.
+        private void HandleFiringSound()
+        {
             if (_justFired)
             {
                 beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadEnd(), beamSoundVolume);
-                projectile.scale = 0.30f;
+                _justFired = false;
             }
+        }
 
-            _justFired = false;
+        // private int framesSinceCollision = 30;
+        // The AI of the projectile
+        public override void AI()
+        {
+            Player player = Main.player[projectile.owner];
+
+            ProcessKillRoutine(player);
+
+            SetIsDetached();
+
+            HandleBeamMouseCoordinates(player);
+
+            UpdateBeamPlayerItemUse(player);
+
+            HandleBeamSegmentAnimation();
+
+            HandleTileCollision();
+
+            HandleFiringSound();
 
             // Update tracked audio
             SoundHelper.UpdateTrackedSound(beamSoundSlotId, HeadEnd());
 
-            //Add lights
+            //Add lights along the beam's tile plot line
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
             Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), beamSize.Y, DelegateMethods.CastLight);
         }
@@ -468,7 +492,7 @@ namespace DBZMOD.Projectiles
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            // Multiplayer support here, only run this code if the client running it is the owner of the projectile
+            // Multi-player support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer && (!IsDetached || isStationaryBeam))
             {
                 Vector2 diff = mouseVector - projectile.position;
@@ -483,11 +507,6 @@ namespace DBZMOD.Projectiles
         {
             projectile.timeLeft = 2;
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-
-            if (!modPlayer.isMouseLeftHeld)
-            {
-                projectile.StartKillRoutine();
-            }
 
             if (IsDetached && FiringTime == 0)
             {
@@ -531,13 +550,11 @@ namespace DBZMOD.Projectiles
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.position = player.Center;
             int dir = projectile.direction;
+            
             player.ChangeDir(dir);
             player.heldProj = projectile.whoAmI;
-            if (modPlayer.isMouseLeftHeld)
-            {
-                player.itemTime = 2;
-                player.itemAnimation = 2;
-            }
+            player.itemTime = 2;
+            player.itemAnimation = 2;
             player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
         }
 
@@ -553,47 +570,21 @@ namespace DBZMOD.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
-            //damage = GetPlayerKiDamageAfterMultipliers(damage);
-        }
-
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPlayer(target, ref damage, ref crit);
             damage = GetPvpDamageReduction(damage);
-            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPvp(target, ref damage, ref crit);
             damage = GetPvpDamageReduction(damage);
-            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public int GetPvpDamageReduction(int damage)
         {
             return (int)Math.Ceiling(damage / 2f);
         }
-
-        public MyPlayer GetPlayerOwner()
-        {
-            var player = Main.player[projectile.owner];
-            if (player != null)
-            {
-                return player.GetModPlayer<MyPlayer>();
-            }
-            return null;
-        }
-
-        //public int GetPlayerKiDamageAfterMultipliers(int damage)
-        //{
-        //    if (GetPlayerOwner() == null)
-        //        return damage;
-        //    float kiMultiplier = GetPlayerOwner().KiDamage;
-        //    return (int)Math.Ceiling(damage * kiMultiplier);
-        //}
     }
 }

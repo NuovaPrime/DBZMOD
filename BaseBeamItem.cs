@@ -39,7 +39,8 @@ namespace DBZMOD
             player.GetModPlayer<MyPlayer>().isHoldingKiWeapon = true;
         }
 
-        public override bool AltFunctionUse(Player player)
+        // this is important, don't let the player left click, basically.
+        public override bool CanUseItem(Player player)
         {
             player.channel = true;
             if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
@@ -52,21 +53,8 @@ namespace DBZMOD
                     player.heldProj = proj.whoAmI;
                 }
             }
-            return base.AltFunctionUse(player);
-        }
 
-        // this is important, don't let the player left click, basically.
-        public override bool CanUseItem(Player player)
-        {
             return false;
         }
-
-        // this is important, don't let the player left click, basically. We spawn the projectile manually because of controls.
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-        {
-            return false;
-        }
-
-        
     }
 }
