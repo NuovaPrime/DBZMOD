@@ -172,7 +172,7 @@ namespace DBZMOD.UI
 
             Player player = Main.LocalPlayer;
 
-            _lockedImage1.ImageScale = !modplayer.SSJ1Achieved ? 1.0f : 0.0f;
+            _lockedImage1.ImageScale = !modplayer.IsSSJ1Achieved ? 1.0f : 0.0f;
 
             if (player.name == "Nuova")
             {
@@ -239,7 +239,7 @@ namespace DBZMOD.UI
         private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.SSJ1Achieved)
+            if (player.IsSSJ1Achieved)
             {
                 menuSelection = MenuSelectionID.SSJ1;
                 TransformationDefinition buff = FormBuffHelper.GetBuffFromMenuSelection(menuSelection);

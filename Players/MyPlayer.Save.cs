@@ -18,13 +18,17 @@ namespace DBZMOD
         {
             TagCompound tag = new TagCompound();
 
+            if (SaveVersion == null)
+                SaveVersion = latestVersion;
+
             tag.Add(nameof(SaveVersion), SaveVersion.ToString());
 
-            foreach (PlayerTransformation playerTransformation in PlayerTransformations.Values)
-            {
-                tag.Add(playerTransformation.TransformationDefinition.GetUnlockedTagCompoundKey(), true);
-                tag.Add(playerTransformation.TransformationDefinition.GetMasteryTagCompoundKey(), playerTransformation.Mastery);
-            }
+            if (PlayerTransformations != null)
+                foreach (PlayerTransformation playerTransformation in PlayerTransformations.Values)
+                {
+                    tag.Add(playerTransformation.TransformationDefinition.GetUnlockedTagCompoundKey(), true);
+                    tag.Add(playerTransformation.TransformationDefinition.GetMasteryTagCompoundKey(), playerTransformation.Mastery);
+                }
 
             tag.Add("Fragment1", fragment1);
             tag.Add("Fragment2", fragment2);
@@ -127,6 +131,72 @@ namespace DBZMOD
                 if (tag.Get<bool>("LSSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition));
 
                 if (tag.Get<bool>("ssjgAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition));
+
+                isMasteryRetrofitted = tag.ContainsKey("IsMasteryRetrofitted") && tag.Get<bool>("IsMasteryRetrofitted");
+                if (!isMasteryRetrofitted)
+                {
+                    // Retroactive mastery ported to new mastery system.
+                    var masteryLevel1 = tag.Get<float>("MasteryLevel1");
+                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteryLevel1;
+                    var masteryLevel2 = tag.Get<float>("MasteryLevel2");
+                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteryLevel2;
+                    var masteryLevel3 = tag.Get<float>("MasteryLevel3");
+                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteryLevel3;
+                    var masteryLevelGod = tag.Get<float>("MasteryLevelGod");
+                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelGod;
+                    var masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
+                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelBlue;
+                    var masteredMessage1 = tag.Get<bool>("MasteredMessage1");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteredMessage1;
+                    var masteredMessage2 = tag.Get<bool>("MasteredMessage2");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteredMessage2;
+                    var masteredMessage3 = tag.Get<bool>("MasteredMessage3");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteredMessage3;
+                    var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteredMessageGod;
+                    var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;
+
+                    // Prime the dictionary with any missing entries.
+                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
+                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    {
+                        if (!masteryLevels.ContainsKey(key))
+                        {
+                            masteryLevels[key] = 0f;
+                        }
+
+                        if (!masteryMessagesDisplayed.ContainsKey(key))
+                        {
+                            masteryMessagesDisplayed[key] = false;
+                        }
+                    }
+                }
+                else
+                {
+                    // New mastery system/dynamic loading. Overwrites the old one if it exists.
+                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
+                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    {
+                        if (tag.ContainsKey($"MasteryLevel{key}"))
+                        {
+                            masteryLevels[key] = tag.Get<float>($"MasteryLevel{key}");
+                        }
+                        else
+                        {
+                            masteryLevels[key] = 0f;
+                        }
+
+                        if (tag.ContainsKey($"MasteryMessagesDisplayed{key}"))
+                        {
+                            masteryMessagesDisplayed[key] = tag.Get<bool>($"MasteryMessagesDisplayed{key}");
+                        }
+                        else
+                        {
+                            masteryMessagesDisplayed[key] = false;
+                        }
+                    }
+                }
             }
 
             fragment1 = tag.Get<bool>("Fragment1");
@@ -159,72 +229,6 @@ namespace DBZMOD
             kiEssence5 = tag.Get<bool>("KiEssence5");
 
             UI.TransformationMenu.menuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
-
-            isMasteryRetrofitted = tag.ContainsKey("IsMasteryRetrofitted") ? tag.Get<bool>("IsMasteryRetrofitted") : false;
-            if (!isMasteryRetrofitted)
-            {
-                // retroactive mastery ported to new mastery system
-                var masteryLevel1 = tag.Get<float>("MasteryLevel1");
-                masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteryLevel1;
-                var masteryLevel2 = tag.Get<float>("MasteryLevel2");
-                masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteryLevel2;
-                var masteryLevel3 = tag.Get<float>("MasteryLevel3");
-                masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteryLevel3;
-                var masteryLevelGod = tag.Get<float>("MasteryLevelGod");
-                masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelGod;
-                var masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-                masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelBlue;
-                var masteredMessage1 = tag.Get<bool>("MasteredMessage1");
-                masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteredMessage1;
-                var masteredMessage2 = tag.Get<bool>("MasteredMessage2");
-                masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteredMessage2;
-                var masteredMessage3 = tag.Get<bool>("MasteredMessage3");
-                masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteredMessage3;
-                var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-                masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteredMessageGod;
-                var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-                masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;
-
-                // prime the dictionary with any missing entries
-                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                    .Select(x => x.MasteryBuffKeyName).Distinct())
-                {
-                    if (!masteryLevels.ContainsKey(key))
-                    {
-                        masteryLevels[key] = 0f;
-                    }
-
-                    if (!masteryMessagesDisplayed.ContainsKey(key))
-                    {
-                        masteryMessagesDisplayed[key] = false;
-                    }
-                }
-            }
-            else
-            {
-                // new mastery system/dynamic loading. Overwrites the old one if it exists.
-                foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                    .Select(x => x.MasteryBuffKeyName).Distinct())
-                {
-                    if (tag.ContainsKey($"MasteryLevel{key}"))
-                    {
-                        masteryLevels[key] = tag.Get<float>($"MasteryLevel{key}");
-                    }
-                    else
-                    {
-                        masteryLevels[key] = 0f;
-                    }
-
-                    if (tag.ContainsKey($"MasteryMessagesDisplayed{key}"))
-                    {
-                        masteryMessagesDisplayed[key] = tag.Get<bool>($"MasteryMessagesDisplayed{key}");
-                    }
-                    else
-                    {
-                        masteryMessagesDisplayed[key] = false;
-                    }
-                }
-            }
 
             jungleMessage = tag.Get<bool>("JungleMessage");
             hellMessage = tag.Get<bool>("HellMessage");
