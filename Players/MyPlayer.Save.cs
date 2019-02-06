@@ -94,7 +94,7 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
-            PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>(DBZMOD.Instance.TransformationDefinitionManager.Count);
+            PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>(DBZMOD.Instance.TransformationDefinitionManager.Count, new UnlocalizedNameComparer());
 
             if (tag.ContainsKey(nameof(SaveVersion)))
             {

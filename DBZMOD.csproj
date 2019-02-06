@@ -510,6 +510,7 @@
     <Compile Include="Util\FormBuffHelper.cs" />
     <Compile Include="Util\ControlHelper.cs" />
     <Compile Include="Util\ItemHelper.cs" />
+    <Compile Include="Util\UnlocalizedNameComparer.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />
   </ItemGroup>
