@@ -12,8 +12,8 @@ namespace DBZMOD.Projectiles.LSSJs
             projectile.hostile = false;
             projectile.friendly = true;
             projectile.tileCollide = false;
-            projectile.width = 44;
-            projectile.height = 66;
+            projectile.width = 34;
+            projectile.height = 34;
             projectile.aiStyle = 1;
             projectile.light = 1f;
             projectile.timeLeft = 150;
