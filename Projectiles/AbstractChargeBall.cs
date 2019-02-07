@@ -224,7 +224,7 @@ namespace DBZMOD.Projectiles
                     ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
 
                 // the player can hold the charge all they like once it's fully charged up. Currently this doesn't incur a movespeed debuff either.
-                if (ChargeLevel < finalChargeLimit && !modPlayer.IsKiDepleted())
+                if (ChargeLevel < finalChargeLimit && modPlayer.HasKi(ChargeKiDrainRate()))
                 {
                     isCharging = true;
 
@@ -239,6 +239,13 @@ namespace DBZMOD.Projectiles
 
                     // slow down the player while charging.
                     player.ApplyChannelingSlowdown();
+                }
+                else
+                {
+                    if (ChargeLevel == 0f)
+                    {
+                        projectile.Kill();
+                    }
                 }
             }
 

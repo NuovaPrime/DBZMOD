@@ -315,6 +315,7 @@ namespace DBZMOD.Projectiles
         {
             base.OnHitNPC(target, damage, knockback, crit);
             target.velocity = target.velocity / 1.75f; // beams neuter movement!
+            target.netUpdate = true;
             target.immune[projectile.owner] = immunityFrameOverride;            
         }
 
