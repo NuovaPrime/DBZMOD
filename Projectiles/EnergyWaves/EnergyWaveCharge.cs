@@ -10,9 +10,6 @@ namespace DBZMOD.Projectiles.EnergyWaves
             // the maximum charge level of the ball     
             chargeLimit = 3;
 
-            // the rate at which charge level increases while channeling
-            chargeRatePerSecond = 1f;
-
             // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
             // minimumFireFrames = 120;
 

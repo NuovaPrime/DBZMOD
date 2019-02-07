@@ -132,7 +132,7 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public float FiringTime
+        public float BeamIntensity
         {
             get
             {
@@ -185,6 +185,8 @@ namespace DBZMOD.Projectiles
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            if (projectile.scale == 0f)
+                return;
             DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White, projectile.scale * wallDistanceScaling);
         }
 
@@ -433,10 +435,14 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        // private int framesSinceCollision = 30;
+        private float originalBeamIntensity = 0f;
+
         // The AI of the projectile
         public override void AI()
         {
+            if (originalBeamIntensity == 0f)
+                originalBeamIntensity = BeamIntensity;
+
             Player player = Main.player[projectile.owner];
 
             ProcessKillRoutine(player);
@@ -453,12 +459,30 @@ namespace DBZMOD.Projectiles
 
             HandleFiringSound();
 
+            HandleIntensityScaling();
+
             // Update tracked audio
             SoundHelper.UpdateTrackedSound(beamSoundSlotId, HeadEnd());
 
             //Add lights along the beam's tile plot line
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
             Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), beamSize.Y, DelegateMethods.CastLight);
+        }
+
+        public float GetScaleMinimum()
+        {
+            return 0.05f;
+        }
+
+        public void HandleIntensityScaling()
+        {
+            float newScale = (float) Math.Min(1f, Math.Sqrt(BeamIntensity) * GetBeamIntensityThreshold() / Math.Sqrt(originalBeamIntensity));
+            if (newScale <= GetScaleMinimum())
+            {
+                projectile.scale = 0f;
+                return;
+            }
+            projectile.scale = newScale;
         }
 
         public bool IsTileColliding()
@@ -507,24 +531,10 @@ namespace DBZMOD.Projectiles
         public void ProcessKillRoutine(Player player)
         {
             projectile.timeLeft = 2;
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (IsDetached && FiringTime == 0)
+            if (IsDetached)
             {
                 DetachmentTimer++;
-                projectile.scale /= 1.1f;
-            }
-            else
-            {
-                if (projectile.scale < 1f)
-                {
-                    projectile.scale = Math.Min(1f, projectile.scale + 0.1f);
-                }
-            }
-
-            if (FiringTime > 0)
-            {
-                FiringTime--;
             }
 
             if (player.dead || DetachmentTimer >= beamFadeOutTime)
@@ -548,7 +558,6 @@ namespace DBZMOD.Projectiles
                 return;
             }
 
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.position = player.Center;
             int dir = projectile.direction;
             
@@ -571,16 +580,40 @@ namespace DBZMOD.Projectiles
             return false;
         }
 
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            if (crit)
+                damage *= 2;
+            damage = GetBeamIntensityDamage(damage);
+        }
+
+        public float GetBeamIntensityThreshold()
+        {
+            return 3f;
+        }
+
+        public int GetBeamIntensityDamage(int damage)
+        {
+            return (int)Math.Ceiling(damage * Math.Min(1d, (BeamIntensity * GetBeamIntensityThreshold() / originalBeamIntensity)));
+        }
+
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPlayer(target, ref damage, ref crit);
+            if (crit)
+                damage *= 2;
             damage = GetPvpDamageReduction(damage);
+            damage = GetBeamIntensityDamage(damage);
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPvp(target, ref damage, ref crit);
+            if (crit)
+                damage *= 2;
             damage = GetPvpDamageReduction(damage);
+            damage = GetBeamIntensityDamage(damage);
         }
 
         public int GetPvpDamageReduction(int damage)

@@ -64,6 +64,8 @@ namespace DBZMOD.Projectiles
                 if (ChargeLevel >= 0f)
                 {
                     ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
+                    BaseBeam projectileAsBeam = myProjectile.modProjectile as BaseBeam;
+                    projectileAsBeam.BeamIntensity = ChargeLevel;
                 }
 
                 // beam is no longer sustainable, and neither is the charge ball

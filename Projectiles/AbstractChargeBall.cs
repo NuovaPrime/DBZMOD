@@ -20,7 +20,10 @@ namespace DBZMOD.Projectiles
         // the maximum charge level of the ball     
         public float chargeLimit = 4;
 
-        public float chargeRatePerSecond = 2f;
+        public float ChargeRatePerSecond()
+        {
+            return (float)Math.Pow(chargeLimit, 0.4f);
+        }
 
         // this is the beam the charge beam fires when told to.
         public string beamProjectileName = "BaseBeamProj";
@@ -70,13 +73,13 @@ namespace DBZMOD.Projectiles
         protected bool isBeamOriginTracking = true;
 
         // the rate at which charge level increases while channeling
-        protected float ChargeRate() { return chargeRatePerSecond / 60f; }
+        protected float ChargeRate() { return ChargeRatePerSecond() / 60f; }
 
         // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
         protected const int CHARGE_KI_DRAIN_WINDOW = 2;
 
         // Rate at which Ki is drained while channeling
-        protected float ChargeKiDrainRate() { return projectile.damage * chargeRatePerSecond / (60f / CHARGE_KI_DRAIN_WINDOW); }
+        protected float ChargeKiDrainRate() { return projectile.damage * ChargeRatePerSecond() / (60f / CHARGE_KI_DRAIN_WINDOW); }
 
         // The sound slot used by the projectile to kill the sounds it's making
         protected KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
