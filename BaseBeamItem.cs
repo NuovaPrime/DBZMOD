@@ -45,13 +45,9 @@ namespace DBZMOD
             player.channel = true;
             if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
             {
-                if (!player.IsChargeBallRecaptured(item.shoot))
-                {
-                    int weaponDamage = item.damage;
-                    GetWeaponDamage(player, ref weaponDamage);
-                    var proj = Projectile.NewProjectileDirect(player.position, player.position, item.shoot, weaponDamage, item.knockBack, player.whoAmI);
-                    player.heldProj = proj.whoAmI;
-                }
+                int weaponDamage = item.damage;
+                GetWeaponDamage(player, ref weaponDamage);
+                Projectile.NewProjectileDirect(player.position, player.position, item.shoot, weaponDamage, item.knockBack, player.whoAmI);
             }
 
             return false;

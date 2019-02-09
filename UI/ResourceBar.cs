@@ -32,7 +32,7 @@ namespace DBZMOD.UI
 		}
 		private UIText _text;
 
-		Rectangle _barDestination;
+		Rectangle _barDraggableRectangle;
         Vector2 _drawPosition;
         private int _segments;
         public Texture2D texture;
@@ -50,15 +50,15 @@ namespace DBZMOD.UI
             }
         }
 
-        private Rectangle GetBarDestinationBasedOnResourceMode()
+        private Rectangle GetBarHitBoxForMovement()
         {
 
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    return new Rectangle(20, 0, (int)_width, (int)_height);
+                    return new Rectangle(6, 6, (int)_width - 2, (int)_height - 6);
                 case ResourceBarMode.Overload:
-                    return new Rectangle(15, 0, (int)_width, (int)_height);
+                    return new Rectangle(8, 4, (int)_width - 2, (int)_height - 6);
                 default:
                     return Rectangle.Empty;
             }
@@ -74,12 +74,12 @@ namespace DBZMOD.UI
 			_text = new UIText("0/0"); //text to show stat
 			_text.Width.Set(_width, 0f);
 			_text.Height.Set(_height, 0f);
-			_text.Top.Set(_height / 2 + 10, 0f); //center the UIText
-			_text.Left.Set(_width - 60, 0f);
+			_text.Top.Set(_stat.Equals(ResourceBarMode.Ki) ? 20f : 18f, 0f); //center the UIText
+			_text.Left.Set(_stat.Equals(ResourceBarMode.Ki) ? 14f : 16f, 0f);
 
 			Append(_text);
 
-            _barDestination = GetBarDestinationBasedOnResourceMode();
+            _barDraggableRectangle = GetBarHitBoxForMovement();
 		}
 
         private float GetPlayerResourceQuotient(MyPlayer player)
@@ -105,10 +105,10 @@ namespace DBZMOD.UI
 			float quotient = GetPlayerResourceQuotient(player);
 
 			Rectangle hitbox = GetInnerDimensions().ToRectangle();
-			hitbox.X += _barDestination.X;
-			hitbox.Y += _barDestination.Y;
-			hitbox.Width = _barDestination.Width;
-			hitbox.Height = _barDestination.Height;
+			hitbox.X += _barDraggableRectangle.X;
+			hitbox.Y += _barDraggableRectangle.Y;
+			hitbox.Width = _barDraggableRectangle.Width;
+			hitbox.Height = _barDraggableRectangle.Height;
 			_frameTimer++;
 			if (_frameTimer >= 20)
             {
@@ -124,13 +124,13 @@ namespace DBZMOD.UI
                     texture = Gfx.GetKiBar(player).KiBarFrame;
                     frameHeight = texture.Height / 4;
                     textureOffset = new Vector2(16, 8);
-                    _drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 4);
+                    _drawPosition = new Vector2(hitbox.X - 6, hitbox.Y - 6);
                     break;
                 case ResourceBarMode.Overload:
                     texture = Gfx.overloadBarFrame;
                     frameHeight = texture.Height / 4;
                     textureOffset = new Vector2(18, 6);
-                    _drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 4);
+                    _drawPosition = new Vector2(hitbox.X - 8, hitbox.Y - 4);
                     break;
 
                 default: texture = null;
@@ -138,28 +138,7 @@ namespace DBZMOD.UI
             }
             Rectangle sourceRectangle = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
 			spriteBatch.Draw(texture, _drawPosition, sourceRectangle, Color.White);
-
-			//_frameTimer2 += 3;
-			//if (_frameTimer2 >= 15)
-   //         {
-   //             _frameTimer2 = 0;
-   //         }
-            //if(player.player.IsPlayerTransformed())
-            //{
-            //             switch (_stat)
-            //             {
-            //                 case ResourceBarMode.Ki:
-            //                     Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
-            //                     int frameHeight2 = Gfx.kiBarLightning.Height / 3;
-            //                     int frame2 = _frameTimer / 5;
-            //                     Rectangle sourceRectangle2 = new Rectangle(0, frameHeight2 * frame2, Gfx.kiBarLightning.Width, frameHeight2);
-            //                     spriteBatch.Draw(Gfx.kiBarLightning, drawPosition2, sourceRectangle2, Color.White);
-            //                     break;
-            //                 case ResourceBarMode.Overload:
-            //                     break;
-            //             }	
-            //}
-
+            
             Texture2D barSegmentTexture = null;
             switch (_stat)
             {
@@ -233,7 +212,7 @@ namespace DBZMOD.UI
 
                     int averageOverload = (int)Math.Floor(_cleanAverageOverload.Sum() / 15f);
 
-                    _text.SetText("Overload:" + modPlayer.overloadCurrent + " / " + modPlayer.overloadMax);
+                    _text.SetText("Overload:" + averageOverload + " / " + modPlayer.overloadMax);
                     break;
 
                 default:

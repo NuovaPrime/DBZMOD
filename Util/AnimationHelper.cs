@@ -14,6 +14,18 @@ namespace DBZMOD.Util
 {
     public static class AnimationHelper
     {
+        public static void SetSpriteBatchForPlayerLayerCustomDraw(BlendState blendState, SamplerState samplerState)
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, blendState, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+
+        public static void ResetSpriteBatchForPlayerDrawLayers(SamplerState samplerState)
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+
         public static readonly PlayerLayer auraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
@@ -37,6 +49,30 @@ namespace DBZMOD.Util
             }
         });
 
+        // responsible for handling the custom draw routine of the charge bar during player charge attacks
+        private const string CHARGE_BAR_FRAME_TEXTURE = "UI/ChargeBarFrame";
+        private const string CHARGE_BAR_TEXTURE = "UI/ChargeBar";
+        public static readonly PlayerLayer kiChargeAttackEffects = new PlayerLayer("DBZMOD", "KiChargeAttackEffects", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
+        {
+            // ki charge bar effects only show up for the player using the attack.
+            if (drawInfo.drawPlayer.whoAmI != Main.myPlayer)
+                return;
+
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+
+            // abort if for some reason the max charge level is 0, this would be a divide by zero error anyway.
+            if (modPlayer.currentKiAttackMaxChargeLevel == 0f)
+                return;
+
+            if (drawInfo.shadow != 0f)
+            {
+                return;
+            }
+
+            Mod mod = DBZMOD.instance;
+            modPlayer.DrawKiAttackChargeBar(mod.GetTexture(CHARGE_BAR_FRAME_TEXTURE), mod.GetTexture(CHARGE_BAR_TEXTURE));
+        });
 
         public static readonly PlayerLayer transformationEffects = new PlayerLayer("DBZMOD", "TransformationEffects", null, delegate (PlayerDrawInfo drawInfo)
         {

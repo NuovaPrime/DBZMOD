@@ -72,7 +72,7 @@ namespace DBZMOD.Models
             Vector2 position = Vector2.Zero;
             float scale = GetAuraScale(modPlayer);
             int auraOffsetY = GetAuraOffsetY(modPlayer);
-            if (modPlayer.isFlying && !isPlayerMostlyStationary && !modPlayer.IsPlayerUsingKiWeapon())
+            if (modPlayer.isFlying && !isPlayerMostlyStationary && !modPlayer.isPlayerUsingKiWeapon)
             {
                 // ever so slightly shift the aura down a tad.
                 var forwardOffset = (int)Math.Floor(modPlayer.player.height * 0.75f);

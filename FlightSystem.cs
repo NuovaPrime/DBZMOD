@@ -191,7 +191,7 @@ namespace DBZMOD
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             float leanThrottle = 180;
             // make sure if the player is using a ki weapon during flight, we're facing a way that doesn't make it look extremely goofy
-            if (modPlayer.IsPlayerUsingKiWeapon())
+            if (modPlayer.isPlayerUsingKiWeapon)
             {
                 var directionInfo = GetFlightFacingDirectionAndPitchDirection(modPlayer);
                 // get flight rotation from octant
@@ -205,7 +205,7 @@ namespace DBZMOD
                 }                
             }
 
-            if (modPlayer.IsPlayerUsingKiWeapon())
+            if (modPlayer.isPlayerUsingKiWeapon)
             {
                 // we already got the lean throttle from above, and set the direction we needed to not look stupid
                 if (player.direction == 1)

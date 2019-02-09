@@ -164,51 +164,6 @@ namespace DBZMOD.Extensions
             }
         }
 
-        public static Projectile FindNearestOwnedProjectileOfType(this Player player, int type)
-        {
-            int closestProjectile = -1;
-            float distance = Single.MaxValue;
-            for(var i = 0; i < Main.projectile.Length; i++)
-            {
-                var proj = Main.projectile[i];
-
-                // abort if the projectile is invalid, the player isn't the owner, the projectile is inactive or the type doesn't match what we want.
-                if (proj == null || proj.owner != player.whoAmI || !proj.active || proj.type != type)
-                    continue;               
-                
-                var projDistance = proj.Distance(player.Center);
-                if (projDistance < distance)
-                {
-                    distance = projDistance;
-                    closestProjectile = i;
-                }
-            }
-            return closestProjectile == -1 ? null : Main.projectile[closestProjectile];
-        }
-
-        public static bool IsChargeBallRecaptured(this Player player, int type)
-        {   
-            // assume first that the player's already holding a proj
-            if (player.heldProj != -1)
-            {
-                var heldProj = Main.projectile[player.heldProj];
-                if (heldProj.modProjectile is AbstractChargeBall)
-                {
-                    return true;
-                }
-            }
-
-            // otherwise try to recapture the held projectile if possible.
-            var proj = player.FindNearestOwnedProjectileOfType(type);
-            if (proj != null)
-            {
-                // the part that matters
-                player.heldProj = proj.whoAmI;
-                return true;
-            }
-            return false;
-        }
-
         public static bool IsMassiveBlastInUse(this Player player)
         {            
             foreach(int massiveBlastType in ProjectileHelper.MassiveBlastProjectileTypes)
@@ -608,41 +563,37 @@ namespace DBZMOD.Extensions
             float rotation = rotationAndPosition.Item1;
             Vector2 position = rotationAndPosition.Item2;
 
-            SamplerState samplerState = Main.DefaultSamplerState;
-            if (player.mount.Active)
-            {
-                samplerState = Main.MountedSamplerState;
-            }
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, aura.blendState, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+            AnimationHelper.SetSpriteBatchForPlayerLayerCustomDraw(aura.blendState, player.GetPlayerSamplerState());
 
             // custom draw routine
             Main.spriteBatch.Draw(texture, position - Main.screenPosition, textureRectangle, Color.White, rotation, new Vector2(aura.GetWidth(), aura.GetHeight()) * 0.5f, scale, SpriteEffects.None, 0f);
 
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+            AnimationHelper.ResetSpriteBatchForPlayerDrawLayers(player.GetPlayerSamplerState());
         }
 
-        public static bool IsPlayerUsingKiWeapon(this MyPlayer modPlayer)
+        public static SamplerState GetPlayerSamplerState(this Player player)
         {
-            // try to figure out if the player is using a beam weapon actively.
-            // the reason we have to do this is because the IsMouseLeftHeld call isn't quite on time
-            // for the beam routine updates - we need to know if the charge ball is firing earlier than that.
-            bool isExistingBeamFiring = false;
-            if (modPlayer.player.heldProj > 0)
-            {
-                var proj = Main.projectile[modPlayer.player.heldProj];
-                if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
-                {
-                    var beamCharge = proj.modProjectile as BaseBeamCharge;
-                    if (beamCharge.IsFired)
-                    {
-                        isExistingBeamFiring = true;
-                    }
-                }
-            }
-            return modPlayer.isHoldingKiWeapon && (modPlayer.isMouseLeftHeld || isExistingBeamFiring);
+            return player.mount.Active ? Main.MountedSamplerState : Main.DefaultSamplerState;
+        }
+
+        public static void DrawKiAttackChargeBar(this MyPlayer modPlayer, Texture2D frameTexture, Texture2D fillTexture)
+        {
+            Player player = modPlayer.player;
+            float quotient = modPlayer.currentKiAttackChargeLevel / modPlayer.currentKiAttackMaxChargeLevel;
+            int drawX = (int)(player.position.X + player.width / 2f - Main.screenPosition.X);
+            int drawY = (int)(player.position.Y + player.height + 4f - Main.screenPosition.Y);
+            Vector2 frameDrawVector = new Vector2(drawX, drawY + 10);
+            Rectangle frameRectangle = new Rectangle(2, 2, frameTexture.Width - 4, frameTexture.Height - 4);
+            Vector2 fillDrawVector = new Vector2(drawX - 1, drawY + 12);
+            int fillFactor = (int)Math.Ceiling(quotient * (fillTexture.Width - 4));
+            Rectangle fillRectangle = new Rectangle(2, 2, fillFactor, fillTexture.Height - 4);
+
+            AnimationHelper.SetSpriteBatchForPlayerLayerCustomDraw(BlendState.AlphaBlend, player.GetPlayerSamplerState());
+
+            Main.spriteBatch.Draw(frameTexture, frameDrawVector, frameRectangle, Color.White, 0f, frameTexture.Size() * 0.5f, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(fillTexture, fillDrawVector, fillRectangle, Color.White, 0f, fillTexture.Size() * 0.5f, 1f, SpriteEffects.None, 0f);
+
+            AnimationHelper.ResetSpriteBatchForPlayerDrawLayers(player.GetPlayerSamplerState());
         }
     }
 }

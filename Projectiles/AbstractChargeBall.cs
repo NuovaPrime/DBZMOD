@@ -371,6 +371,18 @@ namespace DBZMOD.Projectiles
             SoundHelper.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 
+        public override void Kill(int timeLeft)
+        {
+            base.Kill(timeLeft);
+            if (projectile.owner != Main.myPlayer)
+                return;
+            var player = Main.player[projectile.owner];
+            var modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.currentKiAttackChargeLevel = 0f;
+            modPlayer.currentKiAttackMaxChargeLevel = 0f;
+            modPlayer.isPlayerUsingKiWeapon = false;
+        }
+
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)
         {
             var modPlayer = player.GetModPlayer<MyPlayer>();
@@ -380,7 +392,9 @@ namespace DBZMOD.Projectiles
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer)
             {
-                player.heldProj = projectile.whoAmI;
+                modPlayer.currentKiAttackChargeLevel = ChargeLevel;
+                modPlayer.currentKiAttackMaxChargeLevel = finalChargeLimit;
+                modPlayer.isPlayerUsingKiWeapon = true;
                 Vector2 diff = mouseVector - player.Center;
                 diff.Normalize();
                 projectile.velocity = diff;

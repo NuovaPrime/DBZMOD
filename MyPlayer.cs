@@ -68,6 +68,11 @@ namespace DBZMOD
         // 12/24/2018 changed Ki current to a float so that you could do more elaborate ki draining things and ki drain rates can be more consistent.
         private float _kiCurrent;
 
+        // helper fields to track whether the player is charging/using a charge attack, this is currently only for display purposes.
+        public bool isPlayerUsingKiWeapon = false;
+        public float currentKiAttackChargeLevel = 0f;
+        public float currentKiAttackMaxChargeLevel = 0f;
+
         public int kiChargeRate = 1;
         public int overloadMax = 100;
         public int overloadCurrent;
@@ -137,8 +142,6 @@ namespace DBZMOD
         public int immortalityRevivesLeft = 0;
 
         //unsorted vars
-        public int drawX;
-        public int drawY;
         public bool ssj1Achieved;
         public bool scouterT2;
         public bool scouterT3;
@@ -525,7 +528,6 @@ namespace DBZMOD
 
         public override void PostUpdate()
         {
-            
             if (lssjAchieved && !lssj2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;
@@ -1051,7 +1053,7 @@ namespace DBZMOD
             if (Main.myPlayer != player.whoAmI)
                 return Vector2.Zero;
             Vector2 mouseVector = Vector2.Normalize(Main.MouseWorld - player.Center);
-            if (player.heldProj > -1)
+            if (player.heldProj != -1)
             {
                 // player has a projectile, check to see if it's a charge ball or beam, that hijacks the octant for style.
                 var proj = Main.projectile[player.heldProj];
@@ -2847,6 +2849,12 @@ namespace DBZMOD
             {
                 AnimationHelper.dragonRadarEffects.visible = true;
                 layers.Add(AnimationHelper.dragonRadarEffects);
+            }
+
+            if (isPlayerUsingKiWeapon)
+            {
+                AnimationHelper.kiChargeAttackEffects.visible = true;
+                layers.Add(AnimationHelper.kiChargeAttackEffects);
             }
             
             AnimationHelper.auraEffect.visible = true;
