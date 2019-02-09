@@ -109,23 +109,6 @@ namespace DBZMOD.UI
 			hitbox.Y += _barDestination.Y;
 			hitbox.Width = _barDestination.Width;
 			hitbox.Height = _barDestination.Height;
-			int left = hitbox.Left;
-			int right = hitbox.Right;
-            int actualSegments = (int)Math.Ceiling(_segments * quotient);
-            Texture2D kiBar = Gfx.GetKiBar(player).KiBar;
-            for (int i = 0; i < actualSegments; i += 1)
-			{
-
-                if (i == actualSegments - 1)
-                {
-                    // we're on the last segment so render a partial
-                }
-                else
-                {
-                    // we're on a full segment, render the whole thing.
-                    spriteBatch.Draw(kiBar, new Rectangle(left + 22 + (i * 12), hitbox.Y - 8, kiBar.Width, kiBar.Height), default(Color));
-                }
-			}
 			_frameTimer++;
 			if (_frameTimer >= 20)
             {
@@ -134,16 +117,19 @@ namespace DBZMOD.UI
 
             int frameHeight = 0;
 			int frame = _frameTimer / 5;
+            Vector2 textureOffset = Vector2.Zero;
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
                     texture = Gfx.GetKiBar(player).KiBarFrame;
                     frameHeight = texture.Height / 4;
+                    textureOffset = new Vector2(16, 8);
                     _drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 4);
                     break;
                 case ResourceBarMode.Overload:
-                    texture = Gfx.overloadBar;
+                    texture = Gfx.overloadBarFrame;
                     frameHeight = texture.Height / 4;
+                    textureOffset = new Vector2(18, 6);
                     _drawPosition = new Vector2(hitbox.X - 36, hitbox.Y - 4);
                     break;
 
@@ -153,28 +139,68 @@ namespace DBZMOD.UI
             Rectangle sourceRectangle = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
 			spriteBatch.Draw(texture, _drawPosition, sourceRectangle, Color.White);
 
-			_frameTimer2 += 3;
-			if (_frameTimer2 >= 15)
+			//_frameTimer2 += 3;
+			//if (_frameTimer2 >= 15)
+   //         {
+   //             _frameTimer2 = 0;
+   //         }
+            //if(player.player.IsPlayerTransformed())
+            //{
+            //             switch (_stat)
+            //             {
+            //                 case ResourceBarMode.Ki:
+            //                     Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
+            //                     int frameHeight2 = Gfx.kiBarLightning.Height / 3;
+            //                     int frame2 = _frameTimer / 5;
+            //                     Rectangle sourceRectangle2 = new Rectangle(0, frameHeight2 * frame2, Gfx.kiBarLightning.Width, frameHeight2);
+            //                     spriteBatch.Draw(Gfx.kiBarLightning, drawPosition2, sourceRectangle2, Color.White);
+            //                     break;
+            //                 case ResourceBarMode.Overload:
+            //                     break;
+            //             }	
+            //}
+
+            Texture2D barSegmentTexture = null;
+            switch (_stat)
             {
-                _frameTimer2 = 0;
+                case ResourceBarMode.Ki:
+                    barSegmentTexture = Gfx.GetKiBar(player).KiBarSegment;
+                    break;
+                case ResourceBarMode.Overload:
+                    barSegmentTexture = Gfx.overloadBarSegment;
+                    break;
             }
-			//if(player.player.IsPlayerTransformed())
-			//{
-   //             switch (_stat)
-   //             {
-   //                 case ResourceBarMode.Ki:
-   //                     Vector2 drawPosition2 = new Vector2(hitbox.X - 32, hitbox.Y - 10);
-   //                     int frameHeight2 = Gfx.kiBarLightning.Height / 3;
-   //                     int frame2 = _frameTimer / 5;
-   //                     Rectangle sourceRectangle2 = new Rectangle(0, frameHeight2 * frame2, Gfx.kiBarLightning.Width, frameHeight2);
-   //                     spriteBatch.Draw(Gfx.kiBarLightning, drawPosition2, sourceRectangle2, Color.White);
-   //                     break;
-   //                 case ResourceBarMode.Overload:
-   //                     break;
-   //             }	
-			//}
-			
-		}
+
+            // pessimistic doj
+            if (barSegmentTexture != null)
+            {
+                // draw the segments last.
+                int actualSegments = (int) Math.Ceiling(_segments * quotient);
+                for (int i = 0; i < actualSegments; i += 1)
+                {
+                    Vector2 segmentOffsetX = new Vector2(i * 12, 0);
+                    Vector2 segmentPosition = _drawPosition + textureOffset + segmentOffsetX;
+                    if (i == actualSegments - 1)
+                    {
+                        float segmentValue = 1f / _segments;
+                        float segmentRemainder = quotient % segmentValue;
+                        float segmentQuotient = segmentRemainder / segmentValue;
+                        // if there's no remainder, it's a full segment, render the whole thing.
+                        if (segmentQuotient == 0f)
+                        {
+                            segmentQuotient = 1f;
+                        }
+                        // we're on a partial segment, render the whole thing.
+                        spriteBatch.Draw(barSegmentTexture, segmentPosition, new Rectangle(0, 0, (int) Math.Ceiling(barSegmentTexture.Width * segmentQuotient), barSegmentTexture.Height), Color.White);
+                    }
+                    else
+                    {
+                        // we're on a full segment, render the whole thing.
+                        spriteBatch.Draw(barSegmentTexture, segmentPosition, new Rectangle(0, 0, barSegmentTexture.Width, barSegmentTexture.Height), Color.White);
+                    }
+                }
+            }
+        }
 
         private static List<float> _cleanAverageKi = new List<float>();
         private static List<float> _cleanAverageOverload = new List<float>();

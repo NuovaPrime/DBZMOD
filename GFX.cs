@@ -11,14 +11,14 @@ namespace DBZMOD
 
         public class KiBarTexture
         {
-            public Texture2D KiBar;
+            public Texture2D KiBarSegment;
             public Texture2D KiBarFrame;
 
             public KiBarTexture(string traitType, Mod mod)
             {
                 string textureName = KI_BAR.Replace("/KiBar/KiBar", $"/KiBar/{traitType}KiBar");
                 string frameName = textureName + "Frame";
-                this.KiBar = mod.GetTexture(textureName);
+                this.KiBarSegment = mod.GetTexture(textureName);
                 this.KiBarFrame = mod.GetTexture(frameName);
             }
         }
@@ -44,7 +44,8 @@ namespace DBZMOD
         private const string BUTTON_DIRECTORY = "UI/Buttons/";
         private const string KI_BAR_DIRECTORY = UI_DIRECTORY + "KiBar/";
         private const string KI_BAR = KI_BAR_DIRECTORY + "KiBar";
-        private const string OVERLOAD_BAR = UI_DIRECTORY + "OverloadBar";
+        private const string OVERLOAD_BAR_SEGMENT = UI_DIRECTORY + "OverloadBar";
+        private const string OVERLOAD_BAR_FRAME = UI_DIRECTORY + "OverloadBarFrame";
         private const string BACK_PANEL = UI_DIRECTORY + "BackPanel";
         private const string WISH_BACK_PANEL = UI_DIRECTORY + "WishBackPanel";
         private const string GRANT_BUTTON = BUTTON_DIRECTORY + "GrantButton";
@@ -67,7 +68,8 @@ namespace DBZMOD
         private const string HAIR_DIRECTORY = "HAIR/";
 
         public static Dictionary<string, KiBarTexture> kiBarTextures;
-        public static Texture2D overloadBar;
+        public static Texture2D overloadBarSegment;
+        public static Texture2D overloadBarFrame;
         public static Texture2D bg;
         public static Texture2D backPanel;
         public static Texture2D wishBackPanel;
@@ -90,7 +92,8 @@ namespace DBZMOD
         public static void LoadGfx(Mod mod)
         {
             LoadKiBarTextures(mod);
-            overloadBar = mod.GetTexture(OVERLOAD_BAR);
+            overloadBarSegment = mod.GetTexture(OVERLOAD_BAR_SEGMENT);
+            overloadBarFrame = mod.GetTexture(OVERLOAD_BAR_FRAME);
             bg = mod.GetTexture(BG);
             backPanel = mod.GetTexture(BACK_PANEL);
             wishBackPanel = mod.GetTexture(WISH_BACK_PANEL);
@@ -115,7 +118,8 @@ namespace DBZMOD
         public static void UnloadGfx()
         {
             kiBarTextures.Clear();
-            overloadBar = null;
+            overloadBarSegment = null;
+            overloadBarFrame = null;
             bg = null;
             ssj1ButtonImage = null;
             ssj2ButtonImage = null;
