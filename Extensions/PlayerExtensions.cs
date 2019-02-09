@@ -623,5 +623,26 @@ namespace DBZMOD.Extensions
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
+
+        public static bool IsPlayerUsingKiWeapon(this MyPlayer modPlayer)
+        {
+            // try to figure out if the player is using a beam weapon actively.
+            // the reason we have to do this is because the IsMouseLeftHeld call isn't quite on time
+            // for the beam routine updates - we need to know if the charge ball is firing earlier than that.
+            bool isExistingBeamFiring = false;
+            if (modPlayer.player.heldProj > 0)
+            {
+                var proj = Main.projectile[modPlayer.player.heldProj];
+                if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
+                {
+                    var beamCharge = proj.modProjectile as BaseBeamCharge;
+                    if (beamCharge.IsFired)
+                    {
+                        isExistingBeamFiring = true;
+                    }
+                }
+            }
+            return modPlayer.isHoldingKiWeapon && (modPlayer.isMouseLeftHeld || isExistingBeamFiring);
+        }
     }
 }

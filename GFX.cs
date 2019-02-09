@@ -1,41 +1,73 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace DBZMOD
 {
+
     public static class Gfx
     {
+        private static readonly string[] traitKiBarTypes = new string[]{ "Corrupt", "Divine", "Legendary", "Pacifist", "Shinseiju", "Primal", "Prodigy", string.Empty };
+
+        public class KiBarTexture
+        {
+            public Texture2D KiBar;
+            public Texture2D KiBarFrame;
+
+            public KiBarTexture(string traitType, Mod mod)
+            {
+                string textureName = KI_BAR.Replace("/KiBar/KiBar", $"/KiBar/{traitType}KiBar");
+                string frameName = textureName + "Frame";
+                this.KiBar = mod.GetTexture(textureName);
+                this.KiBarFrame = mod.GetTexture(frameName);
+            }
+        }
+
+        public static KiBarTexture GetKiBar(MyPlayer player)
+        {
+            string playerTrait = player.playerTrait;
+            return kiBarTextures[playerTrait];
+        }
+
+        public static void LoadKiBarTextures(Mod mod)
+        {
+            kiBarTextures = new Dictionary<string, KiBarTexture>();
+            foreach (string kiBarType in traitKiBarTypes)
+            {
+                KiBarTexture kiBarTexture = new KiBarTexture(kiBarType, mod);
+                kiBarTextures[kiBarType] = kiBarTexture;
+            }
+        }
 
         private const string GUI_DIRECTORY = "GFX/";
         private const string UI_DIRECTORY = "UI/";
         private const string BUTTON_DIRECTORY = "UI/Buttons/";
-        private const string KIBAR = UI_DIRECTORY + "KiBar";
-        private const string OVERLOADBAR = UI_DIRECTORY + "OverloadBar";
-        private const string KIBARLIGHTNING = UI_DIRECTORY + "KiBarLightning";
-        private const string BACKPANEL = UI_DIRECTORY + "BackPanel";
-        private const string WISHBACKPANEL = UI_DIRECTORY + "WishBackPanel";
-        private const string GRANTBUTTON = BUTTON_DIRECTORY + "GrantButton";
+        private const string KI_BAR_DIRECTORY = UI_DIRECTORY + "KiBar/";
+        private const string KI_BAR = KI_BAR_DIRECTORY + "KiBar";
+        private const string OVERLOAD_BAR = UI_DIRECTORY + "OverloadBar";
+        private const string BACK_PANEL = UI_DIRECTORY + "BackPanel";
+        private const string WISH_BACK_PANEL = UI_DIRECTORY + "WishBackPanel";
+        private const string GRANT_BUTTON = BUTTON_DIRECTORY + "GrantButton";
         private const string SSJ1_BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage";
         private const string SSJ2_BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage";
         private const string SSJ3_BUTTON = BUTTON_DIRECTORY + "SSJ3ButtonImage";
-        private const string SSJGBUTTON = BUTTON_DIRECTORY + "SSJGButtonImage";
-        private const string LSSJBUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
+        private const string SSJG_BUTTON = BUTTON_DIRECTORY + "SSJGButtonImage";
+        private const string LSSJ_BUTTON = BUTTON_DIRECTORY + "LSSJButtonImage";
         private const string LSSJ2_BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage";
-        private const string SSJSBUTTON = BUTTON_DIRECTORY + "SSJSButtonImage";
-        private const string WISHFORPOWER = BUTTON_DIRECTORY + "WishforPower";
-        private const string WISHFORWEALTH = BUTTON_DIRECTORY + "WishforWealth";
-        private const string WISHFORIMMORTALITY = BUTTON_DIRECTORY + "WishforImmortality";
-        private const string WISHFORGENETICS = BUTTON_DIRECTORY + "WishforGenetics";
-        private const string WISHFORSKILL = BUTTON_DIRECTORY + "WishforSkill";
-        private const string WISHFORAWAKENING = BUTTON_DIRECTORY + "WishforAwakening";
+        private const string SSJS_BUTTON = BUTTON_DIRECTORY + "SSJSButtonImage";
+        private const string WISH_FOR_POWER = BUTTON_DIRECTORY + "WishforPower";
+        private const string WISH_FOR_WEALTH = BUTTON_DIRECTORY + "WishforWealth";
+        private const string WISH_FOR_IMMORTALITY = BUTTON_DIRECTORY + "WishforImmortality";
+        private const string WISH_FOR_GENETICS = BUTTON_DIRECTORY + "WishforGenetics";
+        private const string WISH_FOR_SKILL = BUTTON_DIRECTORY + "WishforSkill";
+        private const string WISH_FOR_AWAKENING = BUTTON_DIRECTORY + "WishforAwakening";
         private const string BG = UI_DIRECTORY + "Bg";
         private const string LOCKED = UI_DIRECTORY + "LockedImage";
         private const string UNKNOWN = UI_DIRECTORY + "UnknownImage";
         private const string HAIR_DIRECTORY = "HAIR/";
 
-        public static Texture2D kiBar;
+        public static Dictionary<string, KiBarTexture> kiBarTextures;
         public static Texture2D overloadBar;
-        public static Texture2D kiBarLightning;
         public static Texture2D bg;
         public static Texture2D backPanel;
         public static Texture2D wishBackPanel;
@@ -57,36 +89,33 @@ namespace DBZMOD
         public static Texture2D unknownImage;
         public static void LoadGfx(Mod mod)
         {
-            kiBar = mod.GetTexture(KIBAR);
-            overloadBar = mod.GetTexture(OVERLOADBAR);
-            kiBarLightning = mod.GetTexture(KIBARLIGHTNING);
+            LoadKiBarTextures(mod);
+            overloadBar = mod.GetTexture(OVERLOAD_BAR);
             bg = mod.GetTexture(BG);
-            backPanel = mod.GetTexture(BACKPANEL);
-            wishBackPanel = mod.GetTexture(WISHBACKPANEL);
-            grantButton = mod.GetTexture(GRANTBUTTON);
+            backPanel = mod.GetTexture(BACK_PANEL);
+            wishBackPanel = mod.GetTexture(WISH_BACK_PANEL);
+            grantButton = mod.GetTexture(GRANT_BUTTON);
             ssj1ButtonImage = mod.GetTexture(SSJ1_BUTTON);
             ssj2ButtonImage = mod.GetTexture(SSJ2_BUTTON);
             ssj3ButtonImage = mod.GetTexture(SSJ3_BUTTON);
-            ssjgButtonImage = mod.GetTexture(SSJGBUTTON);
-            lssjButtonImage = mod.GetTexture(LSSJBUTTON);
+            ssjgButtonImage = mod.GetTexture(SSJG_BUTTON);
+            lssjButtonImage = mod.GetTexture(LSSJ_BUTTON);
             lssj2ButtonImage = mod.GetTexture(LSSJ2_BUTTON);
-            ssjsButtonImage = mod.GetTexture(SSJSBUTTON);
+            ssjsButtonImage = mod.GetTexture(SSJS_BUTTON);
             lockedImage = mod.GetTexture(LOCKED);
             unknownImage = mod.GetTexture(UNKNOWN);
-            wishforPower = mod.GetTexture(WISHFORPOWER);
-            wishforWealth = mod.GetTexture(WISHFORWEALTH);
-            wishforImmortality = mod.GetTexture(WISHFORIMMORTALITY);
-            wishforGenetics = mod.GetTexture(WISHFORGENETICS);
-            wishforSkill = mod.GetTexture(WISHFORSKILL);
-            wishforAwakening = mod.GetTexture(WISHFORAWAKENING);
-
+            wishforPower = mod.GetTexture(WISH_FOR_POWER);
+            wishforWealth = mod.GetTexture(WISH_FOR_WEALTH);
+            wishforImmortality = mod.GetTexture(WISH_FOR_IMMORTALITY);
+            wishforGenetics = mod.GetTexture(WISH_FOR_GENETICS);
+            wishforSkill = mod.GetTexture(WISH_FOR_SKILL);
+            wishforAwakening = mod.GetTexture(WISH_FOR_AWAKENING);
         }
 
         public static void UnloadGfx()
         {
-            kiBar = null;
+            kiBarTextures.Clear();
             overloadBar = null;
-            kiBarLightning = null;
             bg = null;
             ssj1ButtonImage = null;
             ssj2ButtonImage = null;

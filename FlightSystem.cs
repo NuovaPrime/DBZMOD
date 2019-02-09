@@ -144,27 +144,6 @@ namespace DBZMOD
             }
         }
 
-        public static bool IsPlayerUsingKiWeapon(MyPlayer modPlayer)
-        {
-            // try to figure out if the player is using a beam weapon actively.
-            // the reason we have to do this is because the IsMouseLeftHeld call isn't quite on time
-            // for the beam routine updates - we need to know if the charge ball is firing earlier than that.
-            bool isExistingBeamFiring = false;
-            if (modPlayer.player.heldProj > 0)
-            {
-                var proj = Main.projectile[modPlayer.player.heldProj];
-                if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
-                {
-                    var beamCharge = proj.modProjectile as BaseBeamCharge;
-                    if (beamCharge.IsFired)
-                    {
-                        isExistingBeamFiring = true;
-                    }
-                }
-            }
-            return modPlayer.isHoldingKiWeapon && (modPlayer.isMouseLeftHeld || isExistingBeamFiring);
-        }
-
         public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)
         {
             int octantDirection = 0;
@@ -212,15 +191,13 @@ namespace DBZMOD
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             float leanThrottle = 180;
             // make sure if the player is using a ki weapon during flight, we're facing a way that doesn't make it look extremely goofy
-            if (IsPlayerUsingKiWeapon(modPlayer))
+            if (modPlayer.IsPlayerUsingKiWeapon())
             {
                 var directionInfo = GetFlightFacingDirectionAndPitchDirection(modPlayer);
                 // get flight rotation from octant
                 var octantDirection = directionInfo.Item1;
                 leanThrottle = directionInfo.Item2;
 
-                bool isPlayerHorizontal = mRotationDir.X != 0;
-                bool isMouseAbove = leanThrottle < 0;
                 int dir = octantDirection;
                 if (dir != player.direction && player.whoAmI == Main.myPlayer)
                 {                    
@@ -228,7 +205,7 @@ namespace DBZMOD
                 }                
             }
 
-            if (IsPlayerUsingKiWeapon(modPlayer))
+            if (modPlayer.IsPlayerUsingKiWeapon())
             {
                 // we already got the lean throttle from above, and set the direction we needed to not look stupid
                 if (player.direction == 1)

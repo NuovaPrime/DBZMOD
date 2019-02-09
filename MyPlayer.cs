@@ -525,6 +525,7 @@ namespace DBZMOD
 
         public override void PostUpdate()
         {
+            
             if (lssjAchieved && !lssj2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;

@@ -1,0 +1,9 @@
+visual updates
+ki bar - changes color with trait(I am not sure if we can change the image for color, tell me if we can't and I can supply a black/white version)
+overload - stays green
+
+draw the bar OVER the frame, calamity does this too and it allows for nicer images
+the notches are only visual 
+ki total/8 for amount of ki in each notch
+overload/6 for amount of overload in each notch
+ignore wish gui stuff

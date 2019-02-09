@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using DBZMOD.Extensions;
 
 namespace DBZMOD.Models
 {
@@ -71,7 +72,7 @@ namespace DBZMOD.Models
             Vector2 position = Vector2.Zero;
             float scale = GetAuraScale(modPlayer);
             int auraOffsetY = GetAuraOffsetY(modPlayer);
-            if (modPlayer.isFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
+            if (modPlayer.isFlying && !isPlayerMostlyStationary && !modPlayer.IsPlayerUsingKiWeapon())
             {
                 // ever so slightly shift the aura down a tad.
                 var forwardOffset = (int)Math.Floor(modPlayer.player.height * 0.75f);
