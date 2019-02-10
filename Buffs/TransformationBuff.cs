@@ -11,6 +11,7 @@ namespace DBZMOD.Buffs
 {
     public abstract class TransformationBuff : ModBuff
     {
+        private const int MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP = 1;
         public float damageMulti;
         public float speedMulti;
         public float kiDrainBuffMulti;
@@ -84,8 +85,8 @@ namespace DBZMOD.Buffs
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (player.IsAnythingOtherThanKaioken())
             {
-                // player ran out of ki, so make sure they fall out of any forms they might be in.
-                if (modPlayer.IsKiDepleted(projectedKiDrain))
+                // player can't support ten frames (arbitrary) of their current form, make them fall out of any forms they might be in.
+                if (modPlayer.IsKiDepleted(projectedKiDrain * MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP))
                 {
                     if (player.IsSuperKaioken())
                     {
