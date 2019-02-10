@@ -71,7 +71,7 @@ namespace DBZMOD.Util
                 return;
             }
 
-            Mod mod = DBZMOD.instance;
+            Mod mod = DBZMOD.Instance;
             modPlayer.DrawKiAttackChargeBar(mod.GetTexture(CHARGE_BAR_FRAME_TEXTURE), mod.GetTexture(CHARGE_BAR_TEXTURE));
         });
 
