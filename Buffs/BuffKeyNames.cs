@@ -29,7 +29,7 @@
         // the two debuffs from transforms
         public static string kaiokenFatigue = "TiredDebuff";
 
-        public static string transformationExhaustion = "TransExhaustionBuff";
+        public static string transformationExhaustion = "TransformationExhaustionBuff";
 
         public static string spectrum = "SSJSBuff";
     }
