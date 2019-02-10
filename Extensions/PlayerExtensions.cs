@@ -582,9 +582,9 @@ namespace DBZMOD.Extensions
             float quotient = modPlayer.currentKiAttackChargeLevel / modPlayer.currentKiAttackMaxChargeLevel;
             int drawX = (int)(player.position.X + player.width / 2f - Main.screenPosition.X);
             int drawY = (int)(player.position.Y + player.height + 4f - Main.screenPosition.Y);
-            Vector2 frameDrawVector = new Vector2(drawX, drawY + 10);
+            Vector2 frameDrawVector = new Vector2(drawX, drawY + 8);
             Rectangle frameRectangle = new Rectangle(2, 2, frameTexture.Width - 4, frameTexture.Height - 4);
-            Vector2 fillDrawVector = new Vector2(drawX - 1, drawY + 12);
+            Vector2 fillDrawVector = new Vector2(drawX - 1, drawY + 10);
             int fillFactor = (int)Math.Ceiling(quotient * (fillTexture.Width - 4));
             Rectangle fillRectangle = new Rectangle(2, 2, fillFactor, fillTexture.Height - 4);
 

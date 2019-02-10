@@ -313,11 +313,36 @@ namespace DBZMOD.Projectiles
         }
 
         // Set custom immunity time on hitting an NPC
+        // these variables help track velocity decay on a target.
+        private void HandleTargetCollisionSlowdown(NPC target)
+        {
+            if (Math.Abs(target.velocity.X) > 1f)
+            {
+                int coefficient = 1;
+                if (target.velocity.X < 0)
+                {
+                    coefficient = -1;
+                }
+                target.velocity.X = (float)Math.Sqrt(Math.Abs(target.velocity.X)) * coefficient;
+            }
+            if (Math.Abs(target.velocity.Y) > 1f)
+            {
+                int coefficient = 1;
+                if (target.velocity.Y < 0)
+                {
+                    coefficient = -1;
+                }
+                target.velocity.Y = (float)Math.Sqrt(Math.Abs(target.velocity.Y)) * coefficient;
+            }
+
+            target.netUpdate = true;
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             base.OnHitNPC(target, damage, knockback, crit);
-            target.velocity = target.velocity / 1.75f; // beams neuter movement!
-            target.netUpdate = true;
+
+            HandleTargetCollisionSlowdown(target);
             target.immune[projectile.owner] = immunityFrameOverride;            
         }
 
@@ -585,6 +610,7 @@ namespace DBZMOD.Projectiles
             if (crit)
                 damage *= 2;
             damage = GetBeamIntensityDamage(damage);
+            knockback = knockback + target.knockBackResist;
         }
 
         public float GetBeamIntensityThreshold()

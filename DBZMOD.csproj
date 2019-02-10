@@ -386,6 +386,7 @@
     <Compile Include="DBZWorld.cs" />
     <Compile Include="Models\AuraAnimationInfo.cs" />
     <Compile Include="KiProjectile.cs" />
+    <Compile Include="Models\HitstunInfo.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="MyPlayer.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
