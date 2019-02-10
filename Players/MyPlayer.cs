@@ -215,7 +215,7 @@ namespace DBZMOD
         public bool crystalliteFlow;
         public bool crystalliteAlleviate;
         public float chargeTimerMaxAdd;
-        public int kiDrainAddition;
+        //public int kiDrainAddition;
         public float kaiokenDrainMulti;
         public bool kaioCrystal;
         public bool luminousSectum;
@@ -607,10 +607,10 @@ namespace DBZMOD
                 lightningFrameTimer = 0;
             }
 
-            if (!player.IsPlayerTransformed())
-            {
-                kiDrainAddition = 0;
-            }
+            //if (!player.IsPlayerTransformed())
+            //{
+            //    kiDrainAddition = 0;
+            //}
 
             if (player.IsAnyKaioken())
             {

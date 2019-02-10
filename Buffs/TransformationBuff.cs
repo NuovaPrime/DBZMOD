@@ -54,13 +54,28 @@ namespace DBZMOD.Buffs
                               modPlayer.masteryLevels[this.Name] >= 1.0;
             float actualKiDrain = isMastered ? kiDrainRateWithMastery : kiDrainRate;
             float kiDrainMultiplier = 1f;
-            if (!isMastered && kiDrainMultiplier < 2.5f)
+            if (!isMastered)
             {
-                _kiDrainAddTimer++;
-                if (_kiDrainAddTimer >= 300)
+                if (kiDrainMultiplier < 2.5f)
                 {
-                    kiDrainMultiplier += 0.5f;
-                    _kiDrainAddTimer = 0;
+                    _kiDrainAddTimer++;
+                    if (_kiDrainAddTimer >= 300)
+                    {
+                        kiDrainMultiplier += 0.5f;
+                        _kiDrainAddTimer = 0;
+                    }
+                }
+            }
+            else
+            {
+                if (kiDrainMultiplier < 3f)
+                {
+                    _kiDrainAddTimer++;
+                    if (_kiDrainAddTimer >= 600)
+                    {
+                        kiDrainMultiplier += 1f;
+                        _kiDrainAddTimer = 0;
+                    }
                 }
             }
 
@@ -83,11 +98,12 @@ namespace DBZMOD.Buffs
                     modPlayer.AddKi((projectedKiDrain) * -1, false, true);
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }
-            } else
-            {
-                // the player isn't in a ki draining state anymore, reset KiDrainAddition
-                modPlayer.kiDrainAddition = 0;                
             }
+            //else
+            //{
+            //    // the player isn't in a ki draining state anymore, reset KiDrainAddition
+            //    modPlayer.kiDrainAddition = 0;                
+            //}
             
             player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
             player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
