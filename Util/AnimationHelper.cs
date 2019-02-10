@@ -191,7 +191,7 @@ namespace DBZMOD.Util
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((drawPlayer.IsKaioken() && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5) || drawPlayer.HasBuff(mod.BuffType("SSJ4Buff")))
+            if ((drawPlayer.IsKaioken() && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
