@@ -17,9 +17,9 @@ namespace DBZMOD.Models
         public string startupSoundName;
         public string loopSoundName;
         public int loopSoundDuration;
+        public int bottomEdgeOffset;
         public bool isKaiokenAura;
         public bool isFormAura;
-        public bool isStarting;
         public int startingFrames;
         public int startingFrameCounter;
         public DustDelegate doStartingDust;        
@@ -30,10 +30,30 @@ namespace DBZMOD.Models
         {
         }
 
-        public AuraAnimationInfo(AuraID id, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
+        /// <summary>
+        ///     Instantiate a template for aura animation info. This constructor passes in all the values an animation needs to do its job.
+        ///     Includes things like what sound to play, and some misc values that normalize aura behaviors.
+        /// </summary>
+        /// <param name="id">An identifier used in determining what auras should play or are playing.</param>
+        /// <param name="spriteName">The name of the texture being used by the animation.</param>
+        /// <param name="bottomEdgeOffset">How many pixels down to offset the sprite during animations. Used when a sprite sits too high naturally due to its sprite position.</param>
+        /// <param name="frames">The number of frames contained in the spritesheet, used to automatically handle animation as well as frame height.</param>
+        /// <param name="frameTimer">The speed at which the animation's frame timer should progress frames. Lower values mean faster animation.</param>
+        /// <param name="blendState">The blend state to be used during the draw call - typically either AlphaBlend or Additive.</param>
+        /// <param name="startupSound">The sound that should be played when powering up.</param>
+        /// <param name="loopSoundName">The sound that should be played during transformation, which loops.</param>
+        /// <param name="loopSoundDuration">The high-resolution duration of the sound that is looping, so that it loops without gaps.</param>
+        /// <param name="isForm">Whether the aura is for a form (transformation) vs charging up or a kaioken.</param>
+        /// <param name="isKaioken">Whether the aura is, specifically, kaioken, which has scaling and levels, making it different from other transformations.</param>
+        /// <param name="dustDelegate">The delegate responsible for creating dust when the player is in transformation.</param>
+        /// <param name="startingFrames">The number of startup frames that dust should play for when a transformation has startup dust.</param>
+        /// <param name="startingDustDelegate">The delegate responsible for creating dust when the player first transforms.</param>
+        /// <param name="priority">Deprecated rank of priority of the transformation, was to be used when auras could superimpose on one another, to determine draw order.</param>
+        public AuraAnimationInfo(AuraID id, string spriteName, int bottomEdgeOffset, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
             this.id = (int)id;
             auraAnimationSpriteName = spriteName;
+            this.bottomEdgeOffset = bottomEdgeOffset;
             this.frames = frames;
             frameTimerLimit = frameTimer;
             this.blendState = blendState;
@@ -127,14 +147,14 @@ namespace DBZMOD.Models
             var frameHeight = GetHeight();
             var scale = GetAuraScale(modPlayer);
             // easy automatic aura offset.
-            return (int)(-((frameHeight / 2) * scale - (modPlayer.player.height * 0.6f)));
+            return (int)Math.Ceiling(-((frameHeight / 2f) * scale - (modPlayer.player.height * 0.6f))) + bottomEdgeOffset;
         }
 
         public float GetAuraScale(MyPlayer modPlayer)
         {
             // universal scale handling
             // scale is based on kaioken level, which gets set to 0
-            var baseScale = 1.0f;
+            var baseScale = 0.8f;
 
             // special scaling for Kaioken auras only
             if (isKaiokenAura)

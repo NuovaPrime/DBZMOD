@@ -455,7 +455,8 @@ namespace DBZMOD.Extensions
         public static TransformationDefinition GetPreviousTransformationStep(this Player player)
         {
             TransformationDefinition currentTransformation = player.GetCurrentTransformation(true, false);
-
+            if (currentTransformation == null)
+                return null;
             // the player is legendary and doing a legendary step down.
             if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
