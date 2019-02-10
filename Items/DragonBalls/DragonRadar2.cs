@@ -1,4 +1,5 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD;
+using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
 

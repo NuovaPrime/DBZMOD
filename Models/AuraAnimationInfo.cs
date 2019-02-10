@@ -51,7 +51,7 @@ namespace DBZMOD.Models
 
         public Texture2D GetTexture()
         {
-            return DBZMOD.instance.GetTexture(auraAnimationSpriteName);
+            return DBZMOD.Instance.GetTexture(auraAnimationSpriteName);
         }
 
         public int GetHeight()

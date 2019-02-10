@@ -1,6 +1,7 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
+using DBZMOD;
 using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,7 +9,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
-    public abstract class TransBuff : ModBuff
+    public abstract class TransformationBuff : ModBuff
     {
         public float damageMulti;
         public float speedMulti;
@@ -47,11 +48,29 @@ namespace DBZMOD.Buffs
             //give bonus base defense
             player.statDefense += baseDefenceBonus;
             
+
+            // handle ki drain mastery
+            bool isMastered = modPlayer.masteryLevels.ContainsKey(this.Name) &&
+                              modPlayer.masteryLevels[this.Name] >= 1.0;
+            float actualKiDrain = isMastered ? kiDrainRateWithMastery : kiDrainRate;
+            float kiDrainMultiplier = 1f;
+            if (!isMastered && kiDrainMultiplier < 2.5f)
+            {
+                _kiDrainAddTimer++;
+                if (_kiDrainAddTimer >= 300)
+                {
+                    kiDrainMultiplier += 0.5f;
+                    _kiDrainAddTimer = 0;
+                }
+            }
+
+            float projectedKiDrain = actualKiDrain * kiDrainMultiplier;
+
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (player.IsAnythingOtherThanKaioken())
             {
                 // player ran out of ki, so make sure they fall out of any forms they might be in.
-                if (modPlayer.IsKiDepleted())
+                if (modPlayer.IsKiDepleted(projectedKiDrain))
                 {
                     if (player.IsSuperKaioken())
                     {
@@ -61,23 +80,7 @@ namespace DBZMOD.Buffs
                 }
                 else
                 {
-                    modPlayer.AddKi((kiDrainRate + modPlayer.kiDrainAddition) * -1, false, true);
-                    _kiDrainAddTimer++;
-                    if (_kiDrainAddTimer > 600)
-                    {
-                        modPlayer.kiDrainAddition += 1;
-                        _kiDrainAddTimer = 0;
-                    }
-
-                    if (modPlayer.IsOverloading())
-                    {
-                        _overloadDrainAddTimer++;
-                        if (_kiDrainAddTimer > 60)
-                        {
-                            modPlayer.kiDrainAddition += 1;
-                            _overloadDrainAddTimer = 0;
-                        }
-                    }
+                    modPlayer.AddKi((projectedKiDrain) * -1, false, true);
                     Lighting.AddLight(player.Center, 1f, 1f, 0f);
                 }
             } else
@@ -102,23 +105,23 @@ namespace DBZMOD.Buffs
             modPlayer.KiDamage *= damageMulti;
 
             // cross mod support stuff
-            if (DBZMOD.instance.thoriumLoaded)
+            if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
-            if (DBZMOD.instance.tremorLoaded)
+            if (DBZMOD.Instance.tremorLoaded)
             {
                 TremorEffects(player);
             }
-            if (DBZMOD.instance.enigmaLoaded)
+            if (DBZMOD.Instance.enigmaLoaded)
             {
                 EnigmaEffects(player);
             }
-            if (DBZMOD.instance.battlerodsLoaded)
+            if (DBZMOD.Instance.battlerodsLoaded)
             {
                 BattleRodEffects(player);
             }
-            if (DBZMOD.instance.expandedSentriesLoaded)
+            if (DBZMOD.Instance.expandedSentriesLoaded)
             {
                 ExpandedSentriesEffects(player);
             }
@@ -176,7 +179,7 @@ namespace DBZMOD.Buffs
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
-            if (Type == FormBuffHelper.kaioken.GetBuffId() || Type == FormBuffHelper.superKaioken.GetBuffId())
+            if (Type == DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
             {
                 switch (kaiokenLevel)
                 {

@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs
 {
-    public class UIOmenBuff : TransBuff
+    public class UIOmenBuff : TransformationBuff
     {
         public override void SetDefaults()
         {

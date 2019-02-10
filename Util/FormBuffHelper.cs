@@ -8,6 +8,7 @@ using DBZMOD.Buffs;
 using DBZMOD.Config;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
+using DBZMOD.Transformations;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -24,38 +25,57 @@ namespace DBZMOD.Util
 
         public static readonly Color godTransformationTextColor = new Color(229, 20, 51);
 
-        // the following are cached info classes that get passed around for all sorts of things.
-        public static readonly BuffInfo 
-            ssj1 = new BuffInfo(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor),
-            assj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.assj, GetASSJNamePreference(), defaultTransformationTextColor),
-            ussj = new BuffInfo(MenuSelectionID.None, BuffKeyNames.ussj, GetUSSJNamePreference(), defaultTransformationTextColor),
-            ssj2 = new BuffInfo(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor),
-            ssj3 = new BuffInfo(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor),
+        internal static TransformationDefinition[]
+            transformationDefinitionList =
+            {
+                TransformationDefinitionManager.KaiokenDefinition,
+                TransformationDefinitionManager.SuperKaiokenDefinition,
+                TransformationDefinitionManager.KaiokenFatigueDefinition,
 
-            ssjg = new BuffInfo(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor),
-            ssjb = new BuffInfo(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor),
-            
-            lssj = new BuffInfo(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor),
-            lssj2 = new BuffInfo(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor),
-            
-            kaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaioken, null, defaultTransformationTextColor),
-            superKaioken = new BuffInfo(MenuSelectionID.None, BuffKeyNames.superKaioken, null, defaultTransformationTextColor),
-            kaiokenFatigue = new BuffInfo(MenuSelectionID.None, BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor),
-            
-            transformationExhaustion = new BuffInfo(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor),
-            spectrum = new BuffInfo(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor);
+                TransformationDefinitionManager.SSJ1Definition,
+                TransformationDefinitionManager.ASSJDefinition,
+                TransformationDefinitionManager.USSJDefinition,
 
-        public static readonly BuffInfo[]
-            buffInfoList = {ssj1, ssj2, ssj3, ssjg, lssj, lssj2, assj, ussj, kaioken, superKaioken, kaiokenFatigue, transformationExhaustion, spectrum},
+                TransformationDefinitionManager.SSJ2Definition,
+                TransformationDefinitionManager.SSJ3Definition,
+                TransformationDefinitionManager.SSJGDefinition,
+
+                TransformationDefinitionManager.LSSJDefinition,
+                TransformationDefinitionManager.LSSJ2Definition,
+
+                TransformationDefinitionManager.TransformationExhaustionDefinition,
+                TransformationDefinitionManager.SpectrumDefinition
+            },
 
             // returns a list of transformation steps specific to non-legendary SSJ players
-            ssjBuffs = {ssj1, ssj2, ssj3, ssjg},
+            ssjBuffs =
+            {
+                TransformationDefinitionManager.SSJ1Definition,
+                TransformationDefinitionManager.SSJ2Definition,
+                TransformationDefinitionManager.SSJ3Definition,
+                TransformationDefinitionManager.SSJGDefinition
+            },
 
             // a list of transformation steps from SSJ1 through ascended SSJ forms
-            ascensionBuffs = { ssj1, assj, ussj },
+            ascensionBuffs =
+            {
+                TransformationDefinitionManager.SSJ1Definition,
+                TransformationDefinitionManager.ASSJDefinition,
+                TransformationDefinitionManager.USSJDefinition
+            },
 
             // a list of transformation steps specific to legendary SSJ players
-            legendaryBuffs = {ssj1, lssj, lssj2};
+            legendaryBuffs =
+            {
+                TransformationDefinitionManager.SSJ1Definition,
+                TransformationDefinitionManager.LSSJDefinition,
+                TransformationDefinitionManager.LSSJ2Definition
+            };
+
+        public static void Initialize()
+        {
+
+        }
 
         public static string GetASSJNamePreference()
         {
@@ -68,20 +88,22 @@ namespace DBZMOD.Util
         }
 
         // returns the buff Id of a transformation menu selection
-        public static BuffInfo GetBuffFromMenuSelection(MenuSelectionID menuId)
+        public static TransformationDefinition GetBuffFromMenuSelection(MenuSelectionID menuId)
         {
-            return buffInfoList.FirstOrDefault(x => x.menuId == menuId);
+            return transformationDefinitionList.FirstOrDefault(x => x.MenuId == menuId);
         }
 
-        public static BuffInfo GetBuffByKeyName(string keyName)
+        public static TransformationDefinition GetBuffByKeyName(string keyName)
         {
-            return buffInfoList.FirstOrDefault(x => x.buffKeyName == keyName);
+            return transformationDefinitionList.FirstOrDefault(x => x.UnlocalizedName == keyName);
         }
 
         // list containing all the form buffs that aren't debuffs.
-        public static List<BuffInfo> AllBuffs()
+        public static List<TransformationDefinition> AllBuffs()
         {
-            return buffInfoList.Where(x => x.buffKeyName != BuffKeyNames.kaiokenFatigue && x.buffKeyName != BuffKeyNames.transformationExhaustion).ToList();
+            return transformationDefinitionList.Where(x => x.UnlocalizedName != BuffKeyNames.kaiokenFatigue && x.UnlocalizedName != BuffKeyNames.transformationExhaustion).ToList();
         }
+
+        public static TransformationDefinitionManager TransformationDefinitionManager => DBZMOD.Instance.TransformationDefinitionManager;
     }
 }

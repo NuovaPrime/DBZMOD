@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using DBZMOD.Extensions;
 using DBZMOD.Items.Materials;
+using DBZMOD;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;

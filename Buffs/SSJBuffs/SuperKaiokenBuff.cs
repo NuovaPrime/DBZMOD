@@ -5,7 +5,7 @@ using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SuperKaiokenBuff : TransBuff
+    public class SuperKaiokenBuff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -25,9 +25,6 @@ namespace DBZMOD.Buffs.SSJBuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
-
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
             healthDrainRate = GetHealthDrain(player);
             base.Update(player, ref buffIndex);
         }

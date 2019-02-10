@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class LSSJ2Buff : TransBuff
+    public class LSSJ2Buff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -14,6 +14,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             speedMulti = 3.2f;
             kiDrainBuffMulti = 2.9f;
             kiDrainRate = 3;
+            kiDrainRateWithMastery = 2.25f;
             baseDefenceBonus = 12;
             Description.SetDefault(AssembleTransBuffDescription());
         }

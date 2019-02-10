@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SSJ2Buff : TransBuff
+    public class SSJ2Buff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -17,13 +17,6 @@ namespace DBZMOD.Buffs.SSJBuffs
             kiDrainRateWithMastery = 1;
             baseDefenceBonus = 8;
             Description.SetDefault(AssembleTransBuffDescription());
-        }
-        public override void Update(Player player, ref int buffIndex)
-        {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel2 >= 1;
-
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-            base.Update(player, ref buffIndex);
         }
     }
 }

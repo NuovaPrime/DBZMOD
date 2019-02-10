@@ -3,7 +3,7 @@ using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class ASSJBuff : TransBuff
+    public class ASSJBuff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -18,15 +18,6 @@ namespace DBZMOD.Buffs.SSJBuffs
             kiDrainBuffMulti = 1.4f;
             baseDefenceBonus = 5;
             Description.SetDefault(AssembleTransBuffDescription());
-        }
-
-        // per Nova's design, mastery applies to ASSJ and USSJ
-        public override void Update(Player player, ref int buffIndex)
-        {
-            bool isMastered = MyPlayer.ModPlayer(player).masteryLevel1 >= 1;
-
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
-            base.Update(player, ref buffIndex);
         }
     }
 }

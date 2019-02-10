@@ -1,8 +1,10 @@
-﻿using Terraria;
+﻿using DBZMOD;
+using DBZMOD.Util;
+using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {
-    public class SSJ3Buff : TransBuff
+    public class SSJ3Buff : TransformationBuff
     {
         public override void SetDefaults()
         {
@@ -18,12 +20,12 @@ namespace DBZMOD.Buffs.SSJBuffs
             baseDefenceBonus = 12;
             Description.SetDefault($"{AssembleTransBuffDescription()}\n(Life drains when below 30% Max Ki)");
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            bool isMastered = modPlayer.masteryLevel3 >= 1f;
+            bool isMastered = modPlayer.masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.MasteryBuffKeyName] >= 1f;
 
-            kiDrainRate = !isMastered ? kiDrainRate : kiDrainRateWithMastery;
             float kiQuotient = modPlayer.GetKi() / modPlayer.OverallKiMax();
             if (kiQuotient <= 0.3f)
             {

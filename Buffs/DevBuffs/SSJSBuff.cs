@@ -1,8 +1,9 @@
-﻿using Terraria;
+﻿using DBZMOD;
+using Terraria;
 
 namespace DBZMOD.Buffs.DevBuffs
 {
-    public class SSJSBuff : TransBuff
+    public class SSJSBuff : TransformationBuff
     {
         public override void SetDefaults()
         {

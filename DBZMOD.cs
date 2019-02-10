@@ -10,7 +10,10 @@ using DBZMOD.Effects;
 using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
+using DBZMOD.Managers;
 using DBZMOD.Network;
+using DBZMOD;
+using DBZMOD.Transformations;
 using DBZMOD.Util;
 
 namespace DBZMOD
@@ -19,7 +22,7 @@ namespace DBZMOD
     {
         private UIFlatPanel _uiFlatPanel;
 
-        private static TransMenu _transMenu;
+        private static TransformationMenu _transformationMenu;
         private static UserInterface _transMenuInterface;
 
         private static WishMenu _wishMenu;
@@ -36,6 +39,8 @@ namespace DBZMOD
 
         private static InstantTransmissionMapHelper _instantTransmissionMapTeleporter;
 
+        internal static CircleShader circle;
+
         private ResourceBar _resourceBar;
 
         public bool thoriumLoaded;
@@ -43,9 +48,8 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public bool expandedSentriesLoaded;
-        internal static DBZMOD instance;
 
-        internal static CircleShader circle;
+        private TransformationDefinitionManager _transformationDefinitionManager;
 
         public DBZMOD()
         {
@@ -56,20 +60,22 @@ namespace DBZMOD
                 AutoloadSounds = true
             };
 
-            instance = this;
+            Instance = this;
         }
 
         public override void Unload()
         {
+            TransformationDefinitionManager.Clear();
+
             Gfx.UnloadGfx();
             KiBar.visible = false;
             OverloadBar.visible = false;
-            instance = null;
-            TransMenu.menuvisible = false;
+            Instance = null;
+            TransformationMenu.menuvisible = false;
             ProgressionMenu.menuvisible = false;
             WishMenu.menuVisible = false;
-            TransMenu.ssj1On = false;
-            TransMenu.ssj2On = false;
+            TransformationMenu.ssj1On = false;
+            TransformationMenu.ssj2On = false;
             UIFlatPanel.backgroundTexture = null;
         }
 
@@ -123,10 +129,10 @@ namespace DBZMOD
 
         public static void ActivateTransMenu()
         {
-            _transMenu = new TransMenu();
-            _transMenu.Activate();
+            _transformationMenu = new TransformationMenu();
+            _transformationMenu.Activate();
             _transMenuInterface = new UserInterface();
-            _transMenuInterface.SetState(_transMenu);
+            _transMenuInterface.SetState(_transformationMenu);
         }
 
         public static void ActivateWishmenu()
@@ -176,7 +182,7 @@ namespace DBZMOD
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (_transMenuInterface != null && TransMenu.menuvisible)
+            if (_transMenuInterface != null && TransformationMenu.menuvisible)
             {
                 _transMenuInterface.Update(gameTime);
             }
@@ -218,7 +224,7 @@ namespace DBZMOD
                     "DBZMOD: Menus",
                     delegate
                     {
-                        if (TransMenu.menuvisible)
+                        if (TransformationMenu.menuvisible)
                         {
                             _transMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
@@ -278,6 +284,19 @@ namespace DBZMOD
         {
             return GetTicks() > 0 && GetTicks() % i == 0;
         }
+
+        public TransformationDefinitionManager TransformationDefinitionManager
+        {
+            get
+            {
+                if (_transformationDefinitionManager == null) _transformationDefinitionManager = new TransformationDefinitionManager();
+                if (!_transformationDefinitionManager.Initialized) _transformationDefinitionManager.DefaultInitialize();
+
+                return _transformationDefinitionManager;
+            }
+        }
+
+        internal static DBZMOD Instance { get; private set; }
     }
 }
  

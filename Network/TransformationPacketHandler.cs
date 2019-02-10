@@ -55,7 +55,7 @@ namespace DBZMOD.Network
                 } else
                 {
                     // make sure the player has the buff on every client                    
-                    player.DoTransform(FormBuffHelper.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.instance);
+                    player.DoTransform(FormBuffHelper.GetBuffByKeyName(buffKeyName), global::DBZMOD.DBZMOD.Instance);
                 }
             }
         }

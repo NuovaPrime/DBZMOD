@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DBZMOD;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Buffs
@@ -20,11 +21,11 @@ namespace DBZMOD.Buffs
             player.minionDamage *= 0.8f;
             player.thrownDamage *= 0.8f;
             MyPlayer.ModPlayer(player).KiDamage *= 0.8f;
-            if (DBZMOD.instance.thoriumLoaded)
+            if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
-            if (DBZMOD.instance.tremorLoaded)
+            if (DBZMOD.Instance.tremorLoaded)
             {
                 TremorEffects(player);
             }

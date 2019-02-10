@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DBZMOD.Buffs;
 using DBZMOD.Config;
 using Terraria;
@@ -20,12 +21,13 @@ using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
 using DBZMOD.Projectiles;
+using DBZMOD.Transformations;
 using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
-    // TODO : Change this class name.
-    public class MyPlayer : ModPlayer
+    // TODO Change this class name.
+    public partial class MyPlayer : ModPlayer
     {
         #region Variables
         //Player vars
@@ -88,17 +90,11 @@ namespace DBZMOD
         //Transformation vars
         public bool isTransforming;
         public int ssjAuraBeamTimer;
-        public bool hasSSJ1;
         public int transformCooldown;
-        public bool assjAchieved;
-        public bool ussjAchieved;
-        public bool ssj2Achieved;
-        public bool ssj3Achieved;
-        public bool lssjAchieved = false;
-        public bool ssjgAchieved = false;
+
+        public bool hasSSJ1;
+
         public int lssj2Timer;
-        public bool lssj2Achieved = false;
-        public bool lssjgAchieved = false;
         public int rageCurrent = 0;
         public int rageDecreaseTimer = 0;
         public int formUnlockChance;
@@ -119,19 +115,8 @@ namespace DBZMOD
         public static ModHotKey armorBonus;
 
         //mastery vars
-        public float masteryLevel1 = 0;
-        public bool masteredMessage1 = false;
-        public float masteryLevel2 = 0;
-        public bool masteredMessage2 = false;
-        public float masteryLevel3 = 0;
-        public bool masteredMessage3 = false;
-        public float masteryLevelGod = 0;
-        public bool masteredMessageGod = false;
-        public float masteryLevelBlue = 0;
-        public bool masteredMessageBlue = false;
-        public float masteryMaxFlight = 1;
-        public float masteryLevelFlight = 0;
-        public int masteryTimer = 0;
+        public Dictionary<string, float> masteryLevels = new Dictionary<string, float>();
+        public Dictionary<string, bool> masteryMessagesDisplayed = new Dictionary<string, bool>();
 
         //Wish vars
         public const int POWER_WISH_MAXIMUM = 5;
@@ -142,7 +127,6 @@ namespace DBZMOD
         public int immortalityRevivesLeft = 0;
 
         //unsorted vars
-        public bool ssj1Achieved;
         public bool scouterT2;
         public bool scouterT3;
         public bool scouterT4;
@@ -307,10 +291,8 @@ namespace DBZMOD
         public bool isDownHeld = false;
         #endregion
 
-        #region Classes
         ProgressionSystem _mProgressionSystem = new ProgressionSystem();
         FistSystem _mFistSystem = new FistSystem();
-        #endregion
         
         public override void OnEnterWorld(Player player)
         {
@@ -350,56 +332,42 @@ namespace DBZMOD
             HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
             SetKi(_kiCurrent + kiAmount);
         }
-        
+
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             if (isFormDrain)
             {
-                if (player.IsSSJ1() && masteryLevel1 < 1.0f)
+                var buff = player.GetCurrentFormForMastery();
+                if (!string.IsNullOrEmpty(buff))
                 {
-                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
-                }
-                if (player.IsAssj() && masteryLevel1 < 1.0f)
-                {
-                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
-                }
-                if (player.IsUssj() && masteryLevel1 < 1.0f)
-                {
-                    masteryLevel1 = GetMasteryIncreaseFromFormDrain(masteryLevel1);
-                }
-                if (player.IsSSJ2() && masteryLevel2 < 1.0f)
-                {
-                    masteryLevel2 = GetMasteryIncreaseFromFormDrain(masteryLevel2);
-                }
-                if (player.IsSSJ3() && masteryLevel3 < 1.0f)
-                {
-                    masteryLevel3 = GetMasteryIncreaseFromFormDrain(masteryLevel3);
+                    masteryLevels[buff] = GetMasteryIncreaseFromFormDrain(masteryLevels[buff]);
                 }
             }
 
             if (isWeaponDrain && kiAmount < 0)
             {
-                if (player.IsSSJ1() && masteryLevel1 < 1.0f)
+                var buff = player.GetCurrentFormForMastery();
+                if (!string.IsNullOrEmpty(buff))
                 {
-                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
-                }
-                if (player.IsAssj() && masteryLevel1 < 1.0f)
-                {
-                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
-                }
-                if (player.IsUssj() && masteryLevel1 < 1.0f)
-                {
-                    masteryLevel1 = GetMasteryIncreaseFromWeaponDrain(masteryLevel1, kiAmount);
-                }
-                if (player.IsSSJ2() && masteryLevel2 < 1.0f)
-                {
-                    masteryLevel2 = GetMasteryIncreaseFromWeaponDrain(masteryLevel2, kiAmount);
-                }
-                if (player.IsSSJ3() && masteryLevel3 < 1.0f)
-                {
-                    masteryLevel3 = GetMasteryIncreaseFromWeaponDrain(masteryLevel3, kiAmount);
+                    masteryLevels[buff] = GetMasteryIncreaseFromWeaponDrain(masteryLevels[buff], kiAmount);
                 }
             }
+        }
+
+        // currently doesn't use the damage received param. Included just in case.
+        public void HandleDamageReceivedMastery(int damageReceived)
+        {
+            var buff = player.GetCurrentFormForMastery();
+            if (!string.IsNullOrEmpty(buff))
+            {
+                masteryLevels[buff] = GetMasteryIncreaseFromDamageTaken(masteryLevels[buff]);
+            }
+        }
+
+        private const float DAMAGE_TAKEN_MASTERY_CONTRIBUTION = 0.00232f;
+        public float GetMasteryIncreaseFromDamageTaken(float currentMastery)
+        {
+            return Math.Min(1.0f, currentMastery + DAMAGE_TAKEN_MASTERY_CONTRIBUTION);
         }
 
         public float GetMasteryIncreaseFromWeaponDrain(float currentMastery, float kiAmount)
@@ -442,9 +410,9 @@ namespace DBZMOD
             return _kiCurrent;
         }
 
-        public bool IsKiDepleted()
+        public bool IsKiDepleted(float projectedKiDrain = 0f)
         {
-            return _kiCurrent <= 0;
+            return _kiCurrent - projectedKiDrain <= 0;
         }
 
         public bool HasKi(float kiAmount)
@@ -504,33 +472,71 @@ namespace DBZMOD
             player.minionDamage *= PowerWishMulti();
             player.thrownDamage *= PowerWishMulti();
             KiDamage *= PowerWishMulti();
-            if (DBZMOD.instance.thoriumLoaded)
+            if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
             }
-            if (DBZMOD.instance.tremorLoaded)
+            if (DBZMOD.Instance.tremorLoaded)
             {
                 TremorEffects(player);
             }
-            if (DBZMOD.instance.enigmaLoaded)
+            if (DBZMOD.Instance.enigmaLoaded)
             {
                 EnigmaEffects(player);
             }
-            if (DBZMOD.instance.battlerodsLoaded)
+            if (DBZMOD.Instance.battlerodsLoaded)
             {
                 BattleRodEffects(player);
             }
-            if (DBZMOD.instance.expandedSentriesLoaded)
+            if (DBZMOD.Instance.expandedSentriesLoaded)
             {
                 ExpandedSentriesEffects(player);
             }
         }
 
+        public void HandleMasteryEvents(string masteryFormBuffKeyName)
+        {
+            if (!masteryLevels.ContainsKey(masteryFormBuffKeyName) ||
+                masteryMessagesDisplayed.ContainsKey(masteryFormBuffKeyName))
+                return;
+            float masteryLevel = masteryLevels[masteryFormBuffKeyName];
+            bool isMessageDisplayed = masteryMessagesDisplayed[masteryFormBuffKeyName];
+            string masteryMessage = string.Empty;
+            Color messageColor = new Color(232, 242, 50);
+            if (masteryFormBuffKeyName.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
+            {
+                if (masteryLevel >= 0.5f && !ASSJAchieved)
+                {
+                    DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.TryUnlock(this);
+                    masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.";
+                }
+                else if (masteryLevel >= 0.75f && !USSJAchieved)
+                {
+                    DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.Unlock(this);
+                    masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(masteryMessage))
+            {
+                Main.NewText(masteryMessage, messageColor);
+            }
+
+            // handle general mastery messages here
+            if (masteryLevel >= 1.0f && !isMessageDisplayed)
+            {
+                masteryMessagesDisplayed[masteryFormBuffKeyName] = true;
+                string formName = FormBuffHelper.GetBuffByKeyName(masteryFormBuffKeyName).TransformationText;
+                Main.NewText($"You've achieved mastery in {formName} form.");
+            }
+        }
+
         public override void PostUpdate()
         {
-            if (lssjAchieved && !lssj2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;
+                
                 if (lssj2Timer >= 300)
                 {
                     if (Main.rand.Next(8) == 0)
@@ -538,10 +544,12 @@ namespace DBZMOD
                         Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
                         player.statLife = player.statLifeMax2 / 2;
                         player.HealEffect(player.statLifeMax2 / 2);
-                        lssj2Achieved = true;
+
+                        DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.TryUnlock(this);
+
                         isTransforming = true;
                         LSSJ2Transformation();
-                        UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                        UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
                         lssj2Timer = 0;
                         player.EndTransformations();
                     }
@@ -567,24 +575,24 @@ namespace DBZMOD
                 ssjAuraBeamTimer++;
             }
 
-            if (ssj1Achieved)
+            if (IsSSJ1Achieved)
             {
-                UI.TransMenu.ssj1On = true;
+                UI.TransformationMenu.ssj1On = true;
             }
 
-            if (ssj2Achieved)
+            if (SSJ2Achieved)
             {
-                UI.TransMenu.ssj2On = true;
+                UI.TransformationMenu.ssj2On = true;
             }
 
-            if (ssj3Achieved)
+            if (SSJ3Achieved)
             {
-                UI.TransMenu.ssj3On = true;
+                UI.TransformationMenu.ssj3On = true;
             }
 
             if (player.IsPlayerTransformed())
             {
-                if (!(player.IsKaioken() && kaiokenLevel == 5) && !player.HasBuff(FormBuffHelper.lssj2.GetBuffId()))
+                if (!(player.IsKaioken() && kaiokenLevel == 5) && !player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
                 {
                     lightningFrameTimer++;
                 }
@@ -612,40 +620,9 @@ namespace DBZMOD
             #region Mastery Messages
             if (player.whoAmI == Main.LocalPlayer.whoAmI)
             {
-                if (masteryLevel1 >= 0.5f && !assjAchieved)
+                foreach (var formWithMastery in FormBuffHelper.AllBuffs().Where(x => x.HasMastery).Select(x => x.MasteryBuffKeyName).Distinct())
                 {
-                    assjAchieved = true;
-                    Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.", 232, 242, 50);
-                }
-                else if (masteryLevel1 >= 0.75f && !ussjAchieved)
-                {
-                    ussjAchieved = true;
-                    Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.", 232, 242, 50);
-                }
-                else if (masteryLevel1 >= 1f && !masteredMessage1)
-                {
-                    masteredMessage1 = true;
-                    Main.NewText("Your SSJ1 has reached Max Mastery.", 232, 242, 50);
-                }
-                else if (masteryLevel2 >= 1f && !masteredMessage2)
-                {
-                    masteredMessage2 = true;
-                    Main.NewText("Your SSJ2 has reached Max Mastery.", 232, 242, 50);
-                }
-                else if (masteryLevel3 >= 1f && !masteredMessage3)
-                {
-                    masteredMessage3 = true;
-                    Main.NewText("Your SSJ3 has reached Max Mastery.", 232, 242, 50);
-                }
-                else if (masteryLevelGod >= 1f && !masteredMessageGod)
-                {
-                    masteredMessageGod = true;
-                    Main.NewText("Your SSJG has reached Max Mastery.", 232, 242, 50);
-                }
-                else if (masteryLevelBlue >= 1f && !masteredMessageBlue)
-                {
-                    masteredMessageBlue = true;
-                    Main.NewText("Your SSJB has reached Max Mastery.", 232, 242, 50);
+                    HandleMasteryEvents(formWithMastery);
                 }
             }
 
@@ -661,25 +638,16 @@ namespace DBZMOD
                 ChooseTrait();
             }
 
-            if (lssjAchieved)
+            if (LSSJAchieved)
             {
-                UI.TransMenu.lssjOn = true;
+                UI.TransformationMenu.lssjOn = true;
             }
 
-            if (masteryLevel1 > 1)
-                masteryLevel1 = 1;
-
-            if (masteryLevel2 > 1)
-                masteryLevel2 = 1;
-
-            if (masteryLevel3 > 1)
-                masteryLevel3 = 1;
-
-            if (IsPlayerLegendary() && !lssjAchieved && NPC.downedBoss1)
+            if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
-            else if (IsPlayerLegendary() && lssjAchieved)
+            else if (IsPlayerLegendary() && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
@@ -993,23 +961,23 @@ namespace DBZMOD
                 player.thrownDamage *= blackFusionIncrease;
                 KiDamage *= blackFusionIncrease;
                 player.statDefense *= (int)blackFusionIncrease;
-                if (DBZMOD.instance.thoriumLoaded)
+                if (DBZMOD.Instance.thoriumLoaded)
                 {
                     ThoriumEffects(player);
                 }
-                if (DBZMOD.instance.tremorLoaded)
+                if (DBZMOD.Instance.tremorLoaded)
                 {
                     TremorEffects(player);
                 }
-                if (DBZMOD.instance.enigmaLoaded)
+                if (DBZMOD.Instance.enigmaLoaded)
                 {
                     EnigmaEffects(player);
                 }
-                if (DBZMOD.instance.battlerodsLoaded)
+                if (DBZMOD.Instance.battlerodsLoaded)
                 {
                     BattleRodEffects(player);
                 }
-                if (DBZMOD.instance.expandedSentriesLoaded)
+                if (DBZMOD.Instance.expandedSentriesLoaded)
                 {
                     ExpandedSentriesEffects(player);
                 }
@@ -1479,55 +1447,66 @@ namespace DBZMOD
 
         }
 
+        // TODO Remove all this in favor of auto checks.
         public void AwakeningFormUnlock()
         {
-            if (!ssj1Achieved)
+            if (!IsSSJ1Achieved)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
-                ssj1Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj1Achieved && !ssj2Achieved && !IsPlayerLegendary())
+            else if (IsSSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
-                ssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.Unlock(this); 
+
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj1Achieved && IsPlayerLegendary() && !lssjAchieved)
+            else if (IsSSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
-                lssjAchieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (ssj2Achieved && !ssj3Achieved)
+            else if (SSJ2Achieved && !SSJ3Achieved)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
-                ssj3Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (lssjAchieved && !lssj2Achieved)
+            else if (LSSJAchieved && !LSSJ2Achieved)
             {
                 Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
-                lssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.Unlock(this);
+
                 isTransforming = true;
                 LSSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
                 lssj2Timer = 0;
                 player.EndTransformations();
             }
@@ -1595,155 +1574,6 @@ namespace DBZMOD
             player.ManageSpecialBiomeVisuals("DBZMOD:WishSky", wishActive, player.Center);
         }
 
-        public override TagCompound Save()
-        {
-            TagCompound tag = new TagCompound();
-
-            tag.Add("Fragment1", fragment1);
-            tag.Add("Fragment2", fragment2);
-            tag.Add("Fragment3", fragment3);
-            tag.Add("Fragment4", fragment4);
-            tag.Add("Fragment5", fragment5);
-            tag.Add("KaioFragment1", kaioFragment1);
-            tag.Add("KaioFragment2", kaioFragment2);
-            tag.Add("KaioFragment3", kaioFragment3);
-            tag.Add("KaioFragment4", kaioFragment4);
-            tag.Add("KaioAchieved", kaioAchieved);
-            tag.Add("SSJ1Achieved", ssj1Achieved);
-            tag.Add("SSJ2Achieved", ssj2Achieved);
-            tag.Add("ASSJAchieved", assjAchieved);
-            tag.Add("USSJAchieved", ussjAchieved);
-            tag.Add("SSJ3Achieved", ssj3Achieved);
-            // changed save routine to save to a float, orphaning the original KiCurrent.
-            tag.Add("KiCurrentFloat", _kiCurrent);
-            tag.Add("RageCurrent", rageCurrent);
-            tag.Add("KiRegenRate", kiChargeRate);
-            tag.Add("KiEssence1", kiEssence1);
-            tag.Add("KiEssence2", kiEssence2);
-            tag.Add("KiEssence3", kiEssence3);
-            tag.Add("KiEssence4", kiEssence4);
-            tag.Add("KiEssence5", kiEssence5);
-            tag.Add("MenuSelection", (int)UI.TransMenu.menuSelection);
-            tag.Add("MasteryLevel1", masteryLevel1);
-            tag.Add("MasteryLevel2", masteryLevel2);
-            tag.Add("MasteryLevel3", masteryLevel3);
-            tag.Add("MasteryLevelGod", masteryLevelGod);
-            tag.Add("MasteryLevelBlue", masteryLevelBlue);
-            tag.Add("MasteredMessage1", masteredMessage1);
-            tag.Add("MasteredMessage2", masteredMessage2);
-            tag.Add("MasteredMessage3", masteredMessage3);
-            tag.Add("MasteredMessageGod", masteredMessageGod);
-            tag.Add("MasteredMessageBlue", masteredMessageBlue);
-            tag.Add("JungleMessage", jungleMessage);
-            tag.Add("HellMessage", hellMessage);
-            tag.Add("EvilMessage", evilMessage);
-            tag.Add("MushroomMessage", mushroomMessage);
-            tag.Add("traitChecked", traitChecked);
-            tag.Add("playerTrait", playerTrait);
-            tag.Add("LSSJAchieved", lssjAchieved);
-            tag.Add("flightUnlocked", flightUnlocked);
-            tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
-            tag.Add("flightUpgraded", flightUpgraded);
-            tag.Add("ssjgAchieved", ssjgAchieved);
-            tag.Add("LSSJ2Achieved", lssj2Achieved);
-            tag.Add("KiMax3", kiMax3);
-            tag.Add("FirstFourStarDBPickup", firstDragonBallPickup);
-            tag.Add("PowerWishesLeft", powerWishesLeft);
-            tag.Add("SkillWishesLeft", skillWishesLeft);
-            tag.Add("ImmortalityWishesLeft", immortalityWishesLeft);
-            tag.Add("AwakeningWishesLeft", awakeningWishesLeft);
-            tag.Add("ImmortalityRevivesLeft", immortalityRevivesLeft);
-            tag.Add("IsInstantTransmission1Unlocked", isInstantTransmission1Unlocked);
-            tag.Add("IsInstantTransmission2Unlocked", isInstantTransmission2Unlocked);
-            tag.Add("IsInstantTransmission3Unlocked", isInstantTransmission3Unlocked);
-            // added to store the player's original eye color if possible
-            if (originalEyeColor != null)
-            {
-                tag.Add("OriginalEyeColorR", originalEyeColor.Value.R);
-                tag.Add("OriginalEyeColorG", originalEyeColor.Value.G);
-                tag.Add("OriginalEyeColorB", originalEyeColor.Value.B);
-            }
-            //tag.Add("RealismMode", RealismMode);
-            return tag;
-        }
-
-        public override void Load(TagCompound tag)
-        {
-            fragment1 = tag.Get<bool>("Fragment1");
-            fragment2 = tag.Get<bool>("Fragment2");
-            fragment3 = tag.Get<bool>("Fragment3");
-            fragment4 = tag.Get<bool>("Fragment4");
-            fragment5 = tag.Get<bool>("Fragment5");
-            kaioFragment1 = tag.Get<bool>("KaioFragment1");
-            kaioFragment2 = tag.Get<bool>("KaioFragment2");
-            kaioFragment3 = tag.Get<bool>("KaioFragment3");
-            kaioFragment4 = tag.Get<bool>("KaioFragment4");
-            kaioAchieved = tag.Get<bool>("KaioAchieved");
-            ssj1Achieved = tag.Get<bool>("SSJ1Achieved");
-            ssj2Achieved = tag.Get<bool>("SSJ2Achieved");
-            assjAchieved = tag.Get<bool>("ASSJAchieved");
-            ussjAchieved = tag.Get<bool>("USSJAchieved");
-            ssj3Achieved = tag.Get<bool>("SSJ3Achieved");
-            if (tag.ContainsKey("KiCurrentFloat"))
-            {
-                _kiCurrent = tag.Get<float>("KiCurrentFloat");
-            } else
-            {
-                _kiCurrent = (float)tag.Get<int>("KiCurrent");
-            }
-            rageCurrent = tag.Get<int>("RageCurrent");
-            kiChargeRate = tag.Get<int>("KiRegenRate");
-            kiEssence1 = tag.Get<bool>("KiEssence1");
-            kiEssence2 = tag.Get<bool>("KiEssence2");
-            kiEssence3 = tag.Get<bool>("KiEssence3");
-            kiEssence4 = tag.Get<bool>("KiEssence4");
-            kiEssence5 = tag.Get<bool>("KiEssence5");
-            UI.TransMenu.menuSelection = (MenuSelectionID)tag.Get<int>("MenuSelection");
-            masteryLevel1 = tag.Get<float>("MasteryLevel1");
-            masteryLevel2 = tag.Get<float>("MasteryLevel2");
-            masteryLevel3 = tag.Get<float>("MasteryLevel3");
-            masteryLevelGod = tag.Get<float>("MasteryLevelGod");
-            masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-            masteredMessage1 = tag.Get<bool>("MasteredMessage1");
-            masteredMessage2 = tag.Get<bool>("MasteredMessage2");
-            masteredMessage3 = tag.Get<bool>("MasteredMessage3");
-            masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-            masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-            jungleMessage = tag.Get<bool>("JungleMessage");
-            hellMessage = tag.Get<bool>("HellMessage");
-            evilMessage = tag.Get<bool>("EvilMessage");
-            mushroomMessage = tag.Get<bool>("MushroomMessage");
-            traitChecked = tag.Get<bool>("traitChecked");
-            playerTrait = tag.Get<string>("playerTrait");
-            lssjAchieved = tag.Get<bool>("LSSJAchieved");
-            flightUnlocked = tag.Get<bool>("flightUnlocked");
-            flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");
-            flightUpgraded = tag.Get<bool>("flightUpgraded");
-            ssjgAchieved = tag.Get<bool>("ssjgAchieved");
-            lssj2Achieved = tag.Get<bool>("LSSJ2Achieved");
-            kiMax3 = tag.Get<int>("KiMax3");
-            firstDragonBallPickup = tag.Get<bool>("FirstFourStarDBPickup");
-            powerWishesLeft = tag.ContainsKey("PowerWishesLeft") ? tag.Get<int>("PowerWishesLeft") : 5;
-            // during debug, I wanted power wishes to rest so I can figure out if the damage mults work :(
-            if (DebugHelper.IsDebugModeOn())
-            {
-                powerWishesLeft = POWER_WISH_MAXIMUM;
-            }
-            skillWishesLeft = tag.ContainsKey("SkillWishesLeft") ? tag.Get<int>("SkillWishesLeft") : 3;
-            immortalityWishesLeft = tag.ContainsKey("ImmortalityWishesLeft") ? tag.Get<int>("ImmortalityWishesLeft") : 1;
-            awakeningWishesLeft = tag.ContainsKey("AwakeningWishesLeft") ? tag.Get<int>("AwakeningWishesLeft") : 3;
-            immortalityRevivesLeft = tag.ContainsKey("ImmortalityRevivesLeft") ? tag.Get<int>("ImmortalityRevivesLeft") : 0;
-            isInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
-            isInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
-            isInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
-            // load the player's original eye color if possible
-            if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
-            {
-                originalEyeColor = new Color(tag.Get<byte>("OriginalEyeColorR"), tag.Get<byte>("OriginalEyeColorG"), tag.Get<byte>("OriginalEyeColorB"));
-            }
-            //RealismMode = tag.Get<bool>("RealismMode");
-        }
-
         public ProgressionSystem GetProgressionSystem()
         {
             return _mProgressionSystem;
@@ -1787,7 +1617,7 @@ namespace DBZMOD
 
         public void HandleTransformations()
         {
-            BuffInfo targetTransformation = null;
+            TransformationDefinition targetTransformation = null;
 
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
@@ -1795,21 +1625,19 @@ namespace DBZMOD
                 if (player.IsPlayerTransformed())
                 {
                     // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-                    if (IsAscendingTransformation())
-                    {
-                        if (CanAscend())
-                        {
-                            targetTransformation = player.GetNextAscensionStep();
-                        }
-                    }
-                    else
-                    {
-                        targetTransformation = player.GetNextTransformationStep();
-                    }
+                    if (IsAscendingTransformation() && CanAscend())
+                        targetTransformation = player.GetNextAscensionStep();
                 }
                 else
                 {
-                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransMenu.menuSelection);
+                    // first attempt to step up to the selected form in the menu.
+                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransformationMenu.menuSelection);
+                }
+
+                // if for any reason we haven't gotten our transformation target, try the next step instead.
+                if (targetTransformation == null)
+                {
+                    targetTransformation = player.GetNextTransformationStep();
                 }
             }
             else if (IsPoweringDownOneStep() && !player.IsKaioken())
@@ -1870,7 +1698,7 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        BuffInfo transformation = player.IsAnythingOtherThanKaioken() ? FormBuffHelper.superKaioken : FormBuffHelper.kaioken;
+                        TransformationDefinition transformation = player.IsAnythingOtherThanKaioken() ? DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition : DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition;
                         if (player.CanTransform(transformation))
                         {
                             kaiokenLevel++;
@@ -2016,7 +1844,7 @@ namespace DBZMOD
 
             if (transMenu.JustPressed)
             {
-                UI.TransMenu.menuvisible = !UI.TransMenu.menuvisible;
+                UI.TransformationMenu.menuvisible = !UI.TransformationMenu.menuvisible;
             }
 
             /*if (ProgressionMenuKey.JustPressed)
@@ -2031,7 +1859,7 @@ namespace DBZMOD
                 player.EndTransformations();
                 if (playerWasSuperKaioken)
                 {
-                    player.DoTransform(FormBuffHelper.ssj1, mod);
+                    player.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition, mod);
                 }
                 kaiokenLevel = 0;
                 SoundHelper.PlayCustomSound("Sounds/PowerDown", player, .3f);
@@ -2186,8 +2014,8 @@ namespace DBZMOD
             }
             else
             {
-                Projectile.NewProjectile(originalPosition.X, originalPosition.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
-                Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(originalPosition.X, originalPosition.Y, 0f, 0f, DBZMOD.Instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, DBZMOD.Instance.ProjectileType("TransmissionLinesProj"), 0, 0, player.whoAmI);
                 
                 AddKi(-GetInstantTransmissionTeleportKiCost(), false, false);
                 return true;
@@ -2408,6 +2236,7 @@ namespace DBZMOD
             healMulti = 1f;
         }
 
+        // TODO Change this in favor of auto checking.
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             
@@ -2440,7 +2269,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && !ssj1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+            if (isAnyBossAlive && !IsSSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
                 if (rageCurrent >= 3)
                 {
@@ -2455,53 +2284,61 @@ namespace DBZMOD
                     Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                     player.statLife = player.statLifeMax2 / 2;
                     player.HealEffect(player.statLifeMax2 / 2);
-                    ssj1Achieved = true;
+
+                    DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                     isTransforming = true;
                     SSJTransformation();
-                    UI.TransMenu.menuSelection = MenuSelectionID.SSJ1;
+                    UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
                     rageCurrent = 0;
                     player.EndTransformations();
                     return false;
                 }
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !ssj2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevel1 >= 1)
+            if (isAnyBossAlive && IsSSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                ssj2Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isAnyBossAlive && ssj1Achieved && !lssjAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(FormBuffHelper.ssj1.GetBuffId()) && masteryLevel1 >= 1)
+            if (isAnyBossAlive && IsSSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                lssjAchieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isGolemAlive && ssj1Achieved && ssj2Achieved && !ssj3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(FormBuffHelper.ssj2.GetBuffId()) && masteryLevel2 >= 1)
+            if (isGolemAlive && IsSSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
                 player.HealEffect(player.statLifeMax2 / 2);
-                ssj3Achieved = true;
+
+                DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.Unlock(this);
+
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
                 player.EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -2572,31 +2409,6 @@ namespace DBZMOD
             HandleDamageReceivedMastery(damage);
 
             return true;
-        }
-
-        // currently doesn't use the damage received param. Included just in case.
-        public void HandleDamageReceivedMastery(int damageReceived)
-        {
-            if (player.IsSSJ1())
-            {
-                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
-            }
-            if (player.IsAssj())
-            {
-                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
-            }
-            if (player.IsUssj())
-            {
-                masteryLevel1 = Math.Min(1.0f, masteryLevel1 + 0.00232f);
-            }
-            if (player.IsSSJ2())
-            {
-                masteryLevel2 = Math.Min(1.0f, masteryLevel2 + 0.00232f);
-            }
-            if (player.IsSSJ3())
-            {
-                masteryLevel3 = Math.Min(1.0f, masteryLevel3 + 0.00232f);
-            }
         }
 
         public const float AURA_DUST_EFFECT_WIDTH = 2f;
@@ -2939,7 +2751,7 @@ namespace DBZMOD
                 float drainMult = isKaioCrystalEquipped ? 0.5f : 1f;
                 
                 // recalculate the final health drain rate and reduce regen by that amount
-                var healthDrain = (int)Math.Ceiling(TransBuff.GetTotalHealthDrain(player) * drainMult);
+                var healthDrain = (int)Math.Ceiling(TransformationBuff.GetTotalHealthDrain(player) * drainMult);
                 player.lifeRegen -= healthDrain;
             }
         }
@@ -3023,5 +2835,44 @@ namespace DBZMOD
                 hair = null;
             }
         }
+        
+        public Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
+
+        [Obsolete]
+        public bool IsSSJ1Achieved
+        {
+            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition); }
+        }
+
+        [Obsolete]
+        public bool ASSJAchieved
+        {
+            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition); }
+        }
+
+        [Obsolete]
+        public bool USSJAchieved
+        {
+            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition); }
+        }
+
+        [Obsolete]
+        public bool SSJ2Achieved
+        {
+            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition); }
+        }
+
+        [Obsolete]
+        public bool SSJ3Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
+
+        [Obsolete]
+        public bool LSSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
+        [Obsolete]
+        public bool LSSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
+
+        public bool lssjgAchieved = false;
+
+        [Obsolete]
+        public bool SSJGAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
     }
 }

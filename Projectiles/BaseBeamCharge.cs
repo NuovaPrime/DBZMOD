@@ -1,5 +1,6 @@
 using System;
 using DBZMOD.Extensions;
+using DBZMOD;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
+using DBZMOD;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;

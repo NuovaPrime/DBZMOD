@@ -1,5 +1,6 @@
 ﻿using DBZMOD.Items.DragonBalls;
 using DBZMOD.Network;
+using DBZMOD;
 using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;

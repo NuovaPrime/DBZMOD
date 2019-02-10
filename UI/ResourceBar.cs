@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DBZMOD.Extensions;
+using DBZMOD;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;

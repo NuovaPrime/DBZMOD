@@ -1,8 +1,9 @@
-﻿using Terraria;
+﻿using DBZMOD;
+using Terraria;
 
 namespace DBZMOD.Buffs
 {
-    public class ZenkaiBuff : TransBuff
+    public class ZenkaiBuff : TransformationBuff
     {
         public override void SetDefaults()
         {
