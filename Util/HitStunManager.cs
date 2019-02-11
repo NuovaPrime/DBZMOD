@@ -24,7 +24,7 @@ namespace DBZMOD.Util
 
         public void DoHitStun(NPC target, int duration, float slowedTo, float recoversDuringFramePercent)
         {
-            if (!IsExistingTrackedStun(target))
+            if (IsExistingTrackedStun(target))
             {
                 return;
             }

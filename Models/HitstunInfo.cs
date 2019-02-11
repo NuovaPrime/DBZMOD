@@ -69,6 +69,7 @@ namespace DBZMOD.Models
         public HitStunInfo(NPC target, int hitStunMaxDuration, float slowRatio, float velocityRestorationThreshold)
         {
             this.target = target;
+            this.targetId = target.whoAmI;
             originalVelocity = target.velocity.Length();
             maxDuration = hitStunMaxDuration;
             ticksAlive = 0;
@@ -92,14 +93,13 @@ namespace DBZMOD.Models
         public void ApplyHitstun()
         {
             float ticksLeftRatio = 1f - ((float)ticksAlive / maxDuration);
-            DebugHelper.Log($"Applying hitstun to {targetId} - {ticksLeftRatio}% remaining.");
             // the hit stun has no time left, it's time to start restoring velocity to the target
             if (ticksLeftRatio <= decaySlowRatio)
             {
                 int ticksRemaining = maxDuration - ticksAlive;
                 float recoveryCoefficient = 1f + (currentDecay / ticksRemaining);
-                target.velocity *= recoveryCoefficient;
-                DebugHelper.Log($"Recovering velocity by {(recoveryCoefficient - 1f) * 100f}%");
+                if (target.velocity.Length() < originalVelocity)
+                    target.velocity *= recoveryCoefficient;
                 target.netUpdate = true;
                 currentDecay -= (recoveryCoefficient - 1f);
             }
@@ -128,12 +128,14 @@ namespace DBZMOD.Models
 
                 if (intensityToApply > 0f)
                 {
-                    DebugHelper.Log($"Cutting velocity by {(1f - intensityToApply) * 100f}%");
                     target.velocity *= intensityToApply;
                     target.netUpdate = true;
                     currentDecay += (1 - intensityToApply);
                 }
             }
+
+            lastVelocity = target.velocity.Length();
+            ticksAlive++;
         }
     }
 }

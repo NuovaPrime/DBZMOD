@@ -146,6 +146,11 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        private int GetSlowDuration()
+        {
+            return (int)Math.Floor(BeamIntensity / (Math.Sqrt(originalBeamIntensity) / 60f));
+        }
+
         public bool IsDetached
         {
             get
@@ -327,17 +332,27 @@ namespace DBZMOD.Projectiles
         }
 
 
-        private const int BEAM_SLOWDOWN_DURATION = 15;
         private const float BEAM_SLOWDOWN_INTENSITY = 0.5f;
-        private const float BEAM_SLOW_RECOVERY_THRESHOLD = 0.2f;
+        private const float BEAM_SLOW_RECOVERY_THRESHOLD = 0.25f;
 
+        // Set custom immunity time on hitting an NPC
+        // these variables help track velocity decay on a target.
         // Set custom immunity time on hitting an NPC
         // these variables help track velocity decay on a target.
         private void HandleTargetCollisionSlowdown(NPC target)
         {
+            int slowDuration = GetSlowDuration();
+            // the beam is too weak to hitstun
+            if (slowDuration < 10)
+            {
+                return;
+            }
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.ApplyHitStun(target, BEAM_SLOWDOWN_DURATION, BEAM_SLOWDOWN_INTENSITY, BEAM_SLOW_RECOVERY_THRESHOLD);
+            float scalingSlowDown = 1f - (BEAM_SLOWDOWN_INTENSITY);
+            scalingSlowDown *= (float)Math.Sqrt(BeamIntensityPercentage);
+
+            modPlayer.ApplyHitStun(target, slowDuration, (1f - scalingSlowDown), BEAM_SLOW_RECOVERY_THRESHOLD);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -410,7 +425,7 @@ namespace DBZMOD.Projectiles
             bool isColliding = IsTileColliding();
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
-            if (isColliding && projectile.scale >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST)
+            if (isColliding && BeamIntensityPercentage >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST)
             {
                 // framesSinceCollision = -5;
                 var dustVector = HeadEnd();
@@ -426,7 +441,7 @@ namespace DBZMOD.Projectiles
             // shoot sweet sweet particles
             for (var i = 0; i < fireParticleDensity; i++)
             {
-                ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
+                ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency * BeamIntensityPercentage, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
             }
         }
 
@@ -459,6 +474,16 @@ namespace DBZMOD.Projectiles
             {
                 beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadEnd(), beamSoundVolume);
                 _justFired = false;
+            }
+        }
+
+        private float BeamIntensityPercentage
+        {
+            get
+            {
+                if (originalBeamIntensity == 0f)
+                    return 0f;
+                return BeamIntensity / originalBeamIntensity;
             }
         }
 
@@ -617,7 +642,7 @@ namespace DBZMOD.Projectiles
 
         public float GetBeamIntensityThreshold()
         {
-            return 3f;
+            return 5f;
         }
 
         public int GetBeamIntensityDamage(int damage)
