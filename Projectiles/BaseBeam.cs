@@ -335,15 +335,11 @@ namespace DBZMOD.Projectiles
         private const float BEAM_SLOWDOWN_INTENSITY = 0.5f;
         private const float BEAM_SLOW_RECOVERY_THRESHOLD = 0.25f;
 
-        // Set custom immunity time on hitting an NPC
-        // these variables help track velocity decay on a target.
-        // Set custom immunity time on hitting an NPC
-        // these variables help track velocity decay on a target.
         private void HandleTargetCollisionSlowdown(NPC target)
         {
             int slowDuration = GetSlowDuration();
             // the beam is too weak to hitstun
-            if (slowDuration < 10)
+            if (slowDuration * BEAM_SLOW_RECOVERY_THRESHOLD <= 1)
             {
                 return;
             }
