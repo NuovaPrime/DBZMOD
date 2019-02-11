@@ -186,7 +186,7 @@ namespace DBZMOD
         public int orbHealAmount;
         public bool isFlying;
 
-        public int flightUsageAdd;
+        public float flightKiConsumptionMultiplier;
         public float flightSpeedAdd;
         public bool earthenSigil;
         public bool earthenScarab;
@@ -2199,7 +2199,7 @@ namespace DBZMOD
             blackFusionBonus = false;
             chargeLimitAdd = 0;
             flightSpeedAdd = 0;
-            flightUsageAdd = 0;
+            flightKiConsumptionMultiplier = 1f;
             kiRegen = 0;
             earthenScarab = false;
             hermitBonus = false;

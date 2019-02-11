@@ -415,29 +415,32 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        private const float BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST = 0.2f;
+        //private int framesSinceCollision = 40;
+        private const float BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST = 0.025f;
         private void HandleTileCollision()
         {
             bool isColliding = IsTileColliding();
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
-            if (isColliding && BeamIntensityPercentage >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST)
+            if (isColliding)
             {
-                // framesSinceCollision = -5;
-                var dustVector = HeadEnd();
-                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+                //framesSinceCollision = -5;
+                if (BeamIntensityPercentage >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST) { 
+                    var dustVector = HeadEnd();
+                    ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+                }
             }
             else
             {
-                // framesSinceCollision = Math.Min(50, framesSinceCollision + 1);
-                float beamAcceleration = 1f; //Math.Max(0, Math.Min(1, framesSinceCollision * 0.02f));
+                //framesSinceCollision = Math.Min(50, framesSinceCollision + 1);
+                float beamAcceleration = 1f; // Math.Max(0, Math.Min(1, framesSinceCollision * 0.02f));
                 Distance = Math.Min(maxBeamDistance, Distance + beamAcceleration * beamSpeed);
             }
 
             // shoot sweet sweet particles
             for (var i = 0; i < fireParticleDensity; i++)
             {
-                ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency * BeamIntensityPercentage, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
+                ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
             }
         }
 

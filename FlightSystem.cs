@@ -15,7 +15,7 @@ namespace DBZMOD
     {
 
         //constants
-        const int FLIGHT_KI_DRAIN = 4;
+        const float FLIGHT_KI_DRAIN = 1f;
         const float BURST_SPEED = 0.5f;
         const float FLIGHT_SPEED = 0.3f;
 
@@ -47,9 +47,18 @@ namespace DBZMOD
 
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (modPlayer.isCharging ? 1 : 0);
-                int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.flightUsageAdd);
-                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.flightSpeedAdd;
-                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.flightSpeedAdd;
+                
+                // handle ki drain
+                float totalFlightUsage = Math.Max(1f, FLIGHT_KI_DRAIN * modPlayer.flightKiConsumptionMultiplier);
+                float flightCostMult = modPlayer.flightUpgraded ? 0.25f : (modPlayer.flightDampeningUnlocked ? 0.5f : 1f);
+                totalFlightUsage *= flightCostMult;
+                modPlayer.AddKi((totalFlightUsage * (1f + boostSpeed)) * -1, false, false);
+                float flightSpeedMult = (1f + boostSpeed);
+                flightSpeedMult *= modPlayer.flightUpgraded ? 1.25f : (modPlayer.flightDampeningUnlocked ? 1f : 0.75f);
+                float flightSpeed = FLIGHT_SPEED * flightSpeedMult;
+                                    
+                float totalHorizontalFlightSpeed = flightSpeed + (player.moveSpeed / 3) + modPlayer.flightSpeedAdd;
+                float totalVerticalFlightSpeed = flightSpeed + (Player.jumpSpeed / 2) + modPlayer.flightSpeedAdd;
 
                 if (modPlayer.isUpHeld)
                 {
@@ -120,22 +129,6 @@ namespace DBZMOD
                 float radRot = GetPlayerFlightRotation(mRotationDir, player);
 
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
-
-                //drain ki
-                if (!modPlayer.flightUpgraded)
-                {
-                    if (DBZMOD.IsTickRateElapsed(2))
-                    {
-                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1, false, false);                        
-                    }
-                }
-                else
-                {
-                    if (DBZMOD.IsTickRateElapsed(4))
-                    {
-                        modPlayer.AddKi(-1, false, false);                        
-                    }
-                }
             }
 
             // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.

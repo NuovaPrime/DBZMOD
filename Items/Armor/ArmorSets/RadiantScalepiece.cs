@@ -11,7 +11,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("24% Increased Ki Damage\n16% Increased Ki knockback\n+1500 Max Ki\n+4 Maximum Charges\nReduced flight ki usage");
+            Tooltip.SetDefault("24% Increased Ki Damage\n16% Increased Ki knockback\n+1500 Max Ki\n+4 Maximum Charges\nReduced flight ki usage by 25%");
             DisplayName.SetDefault("Radiant Scalepiece");
         }
 
@@ -42,7 +42,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
             MyPlayer.ModPlayer(player).kiKbAddition += 16;
             MyPlayer.ModPlayer(player).kiMax2 += 1500;
             MyPlayer.ModPlayer(player).chargeLimitAdd += 4;
-            MyPlayer.ModPlayer(player).flightUsageAdd += 1;
+            MyPlayer.ModPlayer(player).flightKiConsumptionMultiplier *= 0.75f;
 
         }
         public override Color? GetAlpha(Color lightColor)
