@@ -280,6 +280,9 @@ namespace DBZMOD
         // Aura tracking to play audio and stuff.
         public AuraAnimationInfo previousAura;
         public AuraAnimationInfo currentAura;
+
+        // player hitstun manager
+        private HitStunManager hitStunManager = new HitStunManager();
         #endregion
 
         #region Syncable Controls
@@ -531,8 +534,14 @@ namespace DBZMOD
             }
         }
 
+        public void ApplyHitStun(NPC target, int duration, float slowedTo, float recoversDuringFramePercent)
+        {
+            hitStunManager.DoHitStun(target, duration, slowedTo, recoversDuringFramePercent);
+        }
+
         public override void PostUpdate()
         {
+            hitStunManager.Update();
             if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;

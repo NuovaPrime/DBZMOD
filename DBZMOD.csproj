@@ -398,7 +398,7 @@
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Models\AuraAnimationInfo.cs" />
     <Compile Include="KiProjectile.cs" />
-    <Compile Include="Models\HitstunInfo.cs" />
+    <Compile Include="Models\HitStunInfo.cs" />
     <Compile Include="Mounts\NimbusMount.cs" />
     <Compile Include="Players\MyPlayer.cs" />
     <Compile Include="Network\NetworkHelper.cs" />
@@ -534,6 +534,7 @@
     <Compile Include="Transformations\TransformationDefinition.cs" />
     <Compile Include="Util\AnimationHelper.cs" />
     <Compile Include="Util\DebugHelper.cs" />
+    <Compile Include="Util\HitStunManager.cs" />
     <Compile Include="Util\InstantTransmissionMapHelper.cs" />
     <Compile Include="Util\ProjectileHelper.cs" />
     <Compile Include="Util\SoundHelper.cs" />

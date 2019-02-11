@@ -306,43 +306,43 @@ namespace DBZMOD.Projectiles
             Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, e.Hitbox);
             if (collisionData.Item1 && isEntityColliding)
             {
-                Distance = collisionData.Item2; // arbitrary padding
-                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadEnd());
+                bool isColliding = false;
+                // if the beam would kill this target in one hit, no collision!
+                if (e is NPC && projectile.damage <= ((NPC) e).lifeMax)
+                {
+                    isColliding = true;
+                } else if (e is Player && projectile.damage <= ((Player) e).statLifeMax2)
+                {
+                    isColliding = true;
+                }
+
+                if (isColliding)
+                {
+                    Distance = collisionData.Item2; // arbitrary padding
+                    ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadEnd());
+                }
             }
 
             return collisionData.Item1;
         }
 
+
+        private const int BEAM_SLOWDOWN_DURATION = 15;
+        private const float BEAM_SLOWDOWN_INTENSITY = 0.5f;
+        private const float BEAM_SLOW_RECOVERY_THRESHOLD = 0.2f;
+
         // Set custom immunity time on hitting an NPC
         // these variables help track velocity decay on a target.
         private void HandleTargetCollisionSlowdown(NPC target)
         {
-            if (Math.Abs(target.velocity.X) > 1f)
-            {
-                int coefficient = 1;
-                if (target.velocity.X < 0)
-                {
-                    coefficient = -1;
-                }
-                target.velocity.X = (float)Math.Sqrt(Math.Abs(target.velocity.X)) * coefficient;
-            }
-            if (Math.Abs(target.velocity.Y) > 1f)
-            {
-                int coefficient = 1;
-                if (target.velocity.Y < 0)
-                {
-                    coefficient = -1;
-                }
-                target.velocity.Y = (float)Math.Sqrt(Math.Abs(target.velocity.Y)) * coefficient;
-            }
-
-            target.netUpdate = true;
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.ApplyHitStun(target, BEAM_SLOWDOWN_DURATION, BEAM_SLOWDOWN_INTENSITY, BEAM_SLOW_RECOVERY_THRESHOLD);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             base.OnHitNPC(target, damage, knockback, crit);
-
             HandleTargetCollisionSlowdown(target);
             target.immune[projectile.owner] = immunityFrameOverride;            
         }
@@ -404,12 +404,13 @@ namespace DBZMOD.Projectiles
             }
         }
 
+        private const float BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST = 0.2f;
         private void HandleTileCollision()
         {
             bool isColliding = IsTileColliding();
 
             // if distance is about to be throttled, we're hitting something. Spawn some dust.
-            if (isColliding)
+            if (isColliding && projectile.scale >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST)
             {
                 // framesSinceCollision = -5;
                 var dustVector = HeadEnd();
@@ -526,11 +527,11 @@ namespace DBZMOD.Projectiles
 
             // only sample the second time if we didn't already detect collision in the beam routine
             // this picks up the pieces when the above method fails to properly detect collision, which happens for reasons I can't explain.
-            struckTile = ProjectileHelper.GetClosestTileCollisionByForwardSampling(BeamEnd(), beamSpeed, projectile.velocity);
-            if (!struckTile.Equals(Rectangle.Empty))
+            Tuple<float, Rectangle> struckTileWithOffset = ProjectileHelper.GetClosestTileCollisionByForwardSampling(HeadEnd(), beamSpeed, projectile.velocity);
+            if (!struckTileWithOffset.Item2.Equals(Rectangle.Empty))
             {
-                Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, struckTile);
-                Distance = collisionData.Item3 == BeamHitLocation.Tail ? 0f : Math.Min(maxBeamDistance, collisionData.Item2);
+                Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, struckTileWithOffset.Item2);
+                Distance = (collisionData.Item3 == BeamHitLocation.Tail ? 0f : Math.Min(collisionData.Item2 + struckTileWithOffset.Item1, maxBeamDistance));
                 return true;
             }
 

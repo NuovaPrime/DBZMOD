@@ -111,10 +111,10 @@ namespace DBZMOD.Util
             return tileHitbox;
         }
 
-        public static Rectangle GetClosestTileCollisionByForwardSampling(Vector2 beamEnd, float beamSpeed, Vector2 velocity)
+        public static Tuple<float, Rectangle> GetClosestTileCollisionByForwardSampling(Vector2 beamEnd, float beamSpeed, Vector2 velocity)
         {
             // roughly the safe forward projection to know you're about to hit a block, soon-ish. Most beam speeds are at 15f at the time of writing
-            float step = 3f;
+            float step = 1f;
             float polls = 0;
             while (true)
             {
@@ -123,13 +123,13 @@ namespace DBZMOD.Util
                 if (pollVector.IsInWorldBounds() && pollVector.IsPositionInTile())
                 {
                     Point tileCoords = pollVector.ToTileCoordinates();
-                    return new Rectangle(tileCoords.X, tileCoords.Y, 16, 16);
+                    return new Tuple<float, Rectangle>((polls - 1) * step, new Rectangle(tileCoords.X, tileCoords.Y, 16, 16));
                 }
                 if (polls * step > beamSpeed)
                     break;
             }
 
-            return Rectangle.Empty;
+            return new Tuple<float, Rectangle>(0f, Rectangle.Empty);
         }
 
         public static Tuple<bool, float, BeamHitLocation> GetCollisionData(Vector2 tailStart, Vector2 beamStart, Vector2 headStart, Vector2 headEnd, float tailWidth, float beamWidth, float headWidth, float maxDistance, Rectangle targetHitbox)
@@ -154,7 +154,7 @@ namespace DBZMOD.Util
                 headStart, headEnd, headWidth, ref headPoint);
 
             if (headCollision)
-                return new Tuple<bool, float, BeamHitLocation>(true, maxDistance, BeamHitLocation.Head);
+                return new Tuple<bool, float, BeamHitLocation>(true, maxDistance + headPoint, BeamHitLocation.Head);
 
             return new Tuple<bool, float, BeamHitLocation>(false, maxDistance, BeamHitLocation.Unspecified);
         }
