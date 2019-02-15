@@ -1,0 +1,240 @@
+1.0.2 Update Changelog
+
+ Fixes 
+
+1. Fixed bug where all ssj hairs would stay on after dying.
+
+2. Fixed bug where Kaioken Transformation|Super Kaioken could be used before unlocking kaioken.
+
+3. Fixed bug where there was 2 Z-Table's, although only one of them actually worked.
+
+1.0.3 Update Changelog
+
+ Fixes 
+
+1. Fixed bug where ssj hairs wouldn't disappear when powering down.
+
+2. Fixed bug where powering down from ssj kaioken wouldn't give the cooldown.
+
+1.0.4 Update Changelog
+
+1. Added Bukuujutsu Guide Vol 2 and Bukuujutsu Guide Vol 3
+2. Added Rage
+3. Added Kai Table
+4. Added Baldur Essentia, Earthen Arcanium, Ki Chip, Zenkai Charm and Majin Nucleus
+5. Added Ancient Legend Necklace and Ancient Legend Waistcape
+6. Added Prodigy Trait
+7. Added the Majin Slime
+8. Reduced the rate at which ki charge rate increases with the Earthen Scarab
+9. Halved the ki drain of all transformations
+10. Changed many recipes to use the new Kai Table
+11. New sprites for Earthen Shard, Radiant Totem, Earthen Scarab, Earthen Sigil and all the Scouters.
+12. Fixed a frame issue with Supernova
+13. Fixed a bug where Flight Ki usage reductions did nothing
+14. Fixed multiple cases where you could stack multiple forms
+15. Fixed bug where your hair was hidden with the Mythril Glasses
+
+1.0.4.1 Update Changelog
+
+1. New Sprites for all the Test Items
+2. Slightly changed the look of the dust while Flight|Flying
+3. Recipes crafted at the Z-Table can now also be crafted at the Kai Table
+4. Fixed bugs where Legendary Super Saiyan and Super Saiyan God couldn't be transformed into.
+5. Fixed bug where transforming would permanently change your eye color.
+
+1.0.4.2 Update Changelog
+
+1. Changed Super Saiyan 3 to be obtained at Golem instead of the Lunatic Cultist.
+2. Buffed drop amount of Soul of Entity, Demonic Soul, Astral Essentia and Pure Ki Crystal.
+3. Stable Ki Crystal now drops in the Forest, Desert and Snow biomes.
+4. Changed Ki Chip's tooltip to properly say ki charge rate instead of ki regen.
+5. Super Saiyan 3's health drain now only applies once you are below 30% health.
+6. Fixed bug where Super Kaioken wouldn't work
+7. Fixed bug where Super Saiyan 3 didn't require you to be in Super Saiyan 2 to achieve.
+8. Fixed bug where your Transformation Menu selection wouldn't save.
+9. Fixed bug where the Super Saiyan God spirit wouldn't drop.
+10. Fixed bug where the Z-Table and Kai Table wouldn't drop when broken.
+
+1.0.4.3 Update Changelog
+
+1. Actually Fixed Super kaioken
+2. Fixed bug where Adamantite Visor gave more ki damage than intended.
+3. Fixed bug where you couldn't die.
+4. Fixed bug where the zenkai cooldown didn't effect anything.
+
+1.0.5 Update Changelog
+
+1. Added Imperium Crystallite, Influunt Crystallite and Aspera Crystallite.
+2. Added Kaio Crystal and Baldur Essentia.
+3. Completely changed the unlock conditions of Super Saiyan 1, Super Saiyan 2, Legendary Super Saiyan and Super Saiyan 3.
+4. Increased the drop rates of Calm Ki Crystal, Prideful Ki Crystal, Angerful Ki Crystal and Pure Ki Crystal.
+5. Increased the drop rates of Astral Essentia and Soul of Entity.
+6. Demonic Soul now drops from Demons.
+7. Lowered crafting prices of Destructo Disk, Double Sunday, Energy Blast Barrage, Masenko, Energy Wave Volley, Galick Gun, Hellzone Grenade, Kamehameha,
+Big Bang Attack, Scattershot, Special Beam Cannon, Super Kamehameha, Trap Shooter, Destructo Disk Assault, Final Flash and Super Energy Barrage.
+8. Supernova and Kamehameha x10 now use Demonic Souls to craft.
+9. Changed name of Wide-lens scouter to Yellow Scouter.
+10. Satanic Cloth now takes 2 Demonic Soul's instead of 3.
+11. Fixed bug where you couldn't get Super Saiyan 3
+12. Fixed bug where any charge limit increasing items would max your max charges infinite.
+
+1.0.6 Update Changelog
+
+1. Added Luminous Sectum
+2. Added Ki Infusers
+3. Super Saiyan 3 now drains health when below 30% Ki.
+4. Added flavor text to Super Saiyan God.
+5. Lowered the defense of Saiyan Armor and Turtle Hermit Armor
+6. New sprite for Spiritual Emblem
+7. Fixed bug where you would slowly move forward when using any of the Crystallites.
+8. Fixed bug where you couldn't get a trait.
+9. Fixed a few clipping issues on some projectiles.
+10. Fixed a bug where the spawned projectiles in the Radiant Armor's set bonus did nothing.
+11. Fixed bug where Majin Nucleus didn't actually reduce Ki max by 1500. 
+12. Added cross-mod support for Expanded Sentries.
+13. Added Canadian Demon Armor
+14. Added MRE
+
+1.0.6.5 Update Changelog
+
+1. Flight now shows your aura and rotates it accordingly.
+2. The Nurse now fully heals your ki.
+3. Adjusted rarities for Amber Infuser and Amethyst Infuser
+4. Slightly changed the look of the Ki bar.
+5. Added the +4 break range to Radiant Pickaxe and Radiant Hamaxe
+6. Completely reworked Spirit Bomb and Super Spirit Bomb.
+7. Unlocking a transformation now disables all forms so it doesn't get auto disabled.
+8. Your ki bar now doesn't flicker due to ki regen.
+9. Fixed bug where the Kaio Crystal did nothing.
+10. Fixed bug where Ki Infusers applied to all damage types, not just Ki.
+
+V1.0.6.6
+
+1. Added flavor text to all the Ki Crystals.
+2. New sounds for Energy Wave, Final Flash and Special Beam Cannon.
+3. All Super Saiyan damage multipliers have been reduced by 50% for non-Ki damage.
+4. Drastically increased the homing range of the Radiant Armor and Luminous Sectum's projectiles.
+5. Increased the drop rate of Stable Ki Crystal's.
+6. Fixed bug where Kaio Crystal worked in the vanity slot.
+7. Fixed bug where Kaio Crystal worked on Super Saiyan 3's health drain.
+8. Fixed bug where your aura was misaligned while Flight|Flying downwards.
+9. Fixed bug where Super Saiyan 3's health drain still drained below 30% Ki.
+10. Fixed bug where the MRE lowered your health by 25.
+11. Fixed bug where Radiant Ki Scroll didn't need the Ancient Manipulator.
+
+V1.0.6.7
+
+1. Fixed major bug where any Accessories that decreased Ki max would make your ki go negative.
+2. Fixed bug where Kaioken gave no bonuses to any damage types except Ki.
+3. Adjusted Pure Ki Crystal's rarity.
+
+V1.0.7
+
+1. New sprites for the Scouters and the Radiant Glider
+2. New sprite for the Charging Aura.
+3. Nerfed Scattershot, Farmers Shotgun.
+4. Buffed Big Bang Attack, Trap Shooter
+5. Buffed all Beam attacks.
+6. Increased the time before all Massive Blast type weapons despawn.
+7. Added a bit of flavor text to Scrap Metal
+8. The Flight dust now changes according to your transformation.
+9. Fixed bug where your Ki max would be broken from various items.
+10. Fixed alot of sounds playing on the serverside, should fix some crashes and sound spam in multiplayer.
+11. Running out of ki now also disables Kaioken Technique#Super Kaioken|Super Kaioken.
+12. The Greater Ki Fragment and Master Ki Fragment's now drop from the correct bosses in expert.
+13. Fixed bug where the Spiritual Emblem didn't drop in Normal Mode.
+
+V1.0.7.1
+
+1. Drastically lowered the sounds of all Ki Attacks.
+2. Earthen Shard's now drop anywhere at a low chance.
+3. Buffed Ki Beam.
+4. The first kill of any boss now drops Ki Crystal's depending on the boss.
+5. Fixed bug where certain Accessories made your charge limits infinite.
+6. Fixed Legendary Trait not applying its x2 max Ki.
+7. Fixed debug text displaying when using the Radiant Glider
+8. Fixed various issues where bosses wouldn't drop their items at all or drop both at a time.
+
+V1.0.8.0
+
+1. Added a Configuration option to make Charging Aura|Charging a toggle.
+2. Added Black Diamond Shell, Buldarium Sigmite, Burning Energy Amulet, Ice Energy Talisman, Pure Energy Circlet and Bloodstained Bandana.
+3. Added Black Fusion Armor
+4. Flight now goes through platforms.
+5. Many new quick transforms, like going from Super Saiyan 3 to Super Saiyan God, etc.
+6. You can now step down a form by pressing Charging Aura|Charge and Power Down at the same time.
+7. New sprites for various Consumables, Consumables#Ki Potions|Ki Potions.
+8. Nerfed Demon Armor to be post-mechanical bosses.
+9. Added visual effects for the Battle Kit and Worn Gloves.
+10. Added a visual indication for flavor texts.
+11. Buffed flight time and vertical speed of the Nimbus Whistle|Nimbus
+12. Fixed flickering with the Ki Diffuser.
+13. The Charging Aura now disappears when you die or desync.
+14. Fixed Blinding Blade's homing.
+15. Fixed bug where you would sometime crash when reforging.
+16. Fixed Ki Diffuser giving buffs forever and such.
+17. Fixed bug where Destructo Disk Assault's mini disks did no damage.
+18. Fixed many issues where things wouldn't sync in multiplayer.
+19. Fixed crash issue with Dual Wielding.
+20. Fixed Destructo Disk being really loud.
+21. Fixed Dragon Crystal Infuser's rarity and value.
+22. Fixed issue where the Dryad's summoning items had no value.
+23. Added Time Ring and Potara Earrings.
+
+V1.0.9.0
+
+1. Added the Dragon Balls.
+2. Added Grandpa Gohan's House.
+3. Added Instant Transmission
+4. Added Saiyan Scout Armor and Elite Saiyan Armor.
+5. Added Dragon Radar MK1, Dragon Radar MK2 and Dragon Radar MK3.
+6. Added Refined Metal, Katchin Scale, I.T. Tome Vol 1, I.T. Tome Vol 2, I.T. Tome Vol 3, Ki Beacon and Energy Shot.
+7. Beams now work by charging with right click and firing with left click. You can stop charging at any time and you will slowly lose charge levels.
+8. Beams are now not multi-segmented, making them much more optimized and making them sync better.
+9. Beams rebalanced to adjust to new systems.
+10. Mastery is now listed as a percent instead of a normal number.
+11. Mastery is now obtained through taking damage while in the form, using ki attacks while in the form and just being in the form.
+12. Ambient form mastery speed has been drastically reduced.
+13. Buffed Turtle Hermit Armor, Saiyan Armor and Radiant Armor.
+14. Kaioken level/size scaling reimplemented.
+15. Kaioken nerfed and buffed at the same time. 10% damage per Kaioken level. -5% defense per Kaioken level. Health drain drastically reduced.
+16a. Changed when all Kaioken Kaioken levels are obtained.
+16b. Forms rebalanced for the viability of Kaioken and generally nerfed. Minor defense boosts per form level.
+17. Transformation speed bonuses now affect jump speed and vertical speeds (flying down is still capped)
+18. The ki bar color now changes depending on Genetics.
+19. Spirit Bomb and Super Spirit Bomb now fire relative to the player, instead of the cursor.
+20. Renamed Blighted Fang to Blood Thief and made it Tier 3. It is also now obtained from the Dryad instead of the Arms Dealer after Skeletron is dead.
+21. Gravity relative to things like water and space are now accounted for during flight (should fix weird floating).
+22. Fixed bug where you could get ssj3 before golem.
+23. Fixed various issues relating to Supernova and Holy Wrath.
+24. Added Metamoran Sash.
+
+V1.0.9.1
+
+1. Fixed bug where Dragon Balls wouldn't generate.
+2. Fixed bug where the dragon radars spawned Dragon Balls + didn't work.
+3. Fixed bug where wishing didn't remove the Dragon Balls.
+
+
+V1.0.9.2
+
+1. Allowed the use of Ascended Super Saiyan and Ultra Super Saiyan in unlocking Super Saiyan 2.
+2. Adjusted Instant Transmission map teleportation to be a bit more forgiving.
+3. New sprites for beams and changed hitboxes a bit.
+4. Increased drop rate of Burning Energy Amulet and Demonic Soul's.
+5. Adjusted Massive Blast Weapons, Spirit Bomb and Super Spirit Bomb now charge slower but deal higher damage, while Supernova and Holy Wrath charge faster but deal lower damage.
+6. The Genetic Reroll wish now can't give you the same trait as before.
+7. Cheating dragon balls no longer deletes them from your inventory.
+8. You can no longer place dragon balls in the world.
+9. The world places them every time one is broken, so the world always has 7.
+10. When you’re holding a [x-star] dragon ball, the dragon radar will only show you the ones you’re not holding already.
+11. When you collect all 7 dragon balls (in your inventory) instead of placing them in the world, just right click one of them.
+12. You can now close the menu by right clicking any of the dragon balls again.
+13. Dragon balls no longer spawn in the lihzahrd temple or the dungeon.
+14. Fixed bug where your beam charge balls lingered after dying.
+15. Fixed bug where you couldn't use Massive Blast type weapons more than once.
+16. Fixed bug where you could go over 100% Mastery
+17. Fixed bug where Katchin Scale's didn't drop in Expert Mode.
+18. Fixed bug where the Baldur Essentia and Buldarium Sigmite caused massive lag when charging.
+19. Fixed bug where you charged Ki while Flying, allowing for practically infinite flight.
+20. Fixed bug where Holy Wrath did an absurd amount of damage.
