@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -241,6 +242,7 @@ namespace DBZMOD
         public bool goblinKiEnhancer;
         public bool mechanicalAmplifier;
         public bool metamoranSash;
+		public bool metamoranSet;
         public bool blackFusionBonus;
         public bool eliteSaiyanBonus;
         public float blackFusionIncrease = 1f;
@@ -1552,6 +1554,13 @@ namespace DBZMOD
             if (metamoranSash)
             {
                 if (Main.rand.NextBool(15))
+                {
+                    damage *= 2;
+                }
+            }
+			if (metamoranSash)
+            {
+                if (Main.rand.NextBool(5))
                 {
                     damage *= 2;
                 }
