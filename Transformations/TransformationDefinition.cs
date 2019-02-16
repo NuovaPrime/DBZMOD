@@ -60,7 +60,14 @@ namespace DBZMOD.Transformations
         /// <summary>Tries to unlock the transformation for the player by checking if the requirements are met.</summary>
         /// <param name="player">The <see cref="MyPlayer"/> to give the transformation to.</param>
         /// <returns>true if the transformation was unlocked; otherwise false.</returns>
-        public bool TryUnlock(MyPlayer player) => UnlockRequirements.Invoke(player) && Unlock(player);
+        public bool TryUnlock(MyPlayer player)
+        {
+            for (int i = 0; i < PreviousTransformations.Length; i++)
+                if (!player.PlayerTransformations.ContainsKey(PreviousTransformations[i]))
+                    return false;
+
+            return UnlockRequirements.Invoke(player) && Unlock(player);
+        }
 
         public int GetBuffId()
         {
