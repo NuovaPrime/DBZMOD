@@ -2,6 +2,7 @@
 using DBZMOD.Extensions;
 using DBZMOD.Items.Materials;
 using DBZMOD.Utilities;
+using Leveled;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

@@ -29,17 +29,8 @@ namespace DBZMOD
     public partial class MyPlayer : ModPlayer
     {
         #region Variables
-        //Player vars
-        // regression safe property accessor for Ki Damage until web gets off his buttocks
-        // intended to fix compatibility with AllDamage and Leveled, temporarily.
-        public float KiDamage;
 
-        public float kiDamage
-        {
-            get { return KiDamage; }
-            set { KiDamage = value; }
-        }
-
+        public float kiDamage;
         public float kiKbAddition;
         public float kiSpeedAddition;
         public int kiCrit;
@@ -474,7 +465,7 @@ namespace DBZMOD
             player.magicDamage *= PowerWishMulti();
             player.minionDamage *= PowerWishMulti();
             player.thrownDamage *= PowerWishMulti();
-            KiDamage *= PowerWishMulti();
+            kiDamage *= PowerWishMulti();
             if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
@@ -639,7 +630,7 @@ namespace DBZMOD
 
             if (adamantiteBonus)
             {
-                KiDamage += 7;
+                kiDamage += 7;
             }
 
             if (!traitChecked)
@@ -968,7 +959,7 @@ namespace DBZMOD
                 player.magicDamage *= blackFusionIncrease;
                 player.minionDamage *= blackFusionIncrease;
                 player.thrownDamage *= blackFusionIncrease;
-                KiDamage *= blackFusionIncrease;
+                kiDamage *= blackFusionIncrease;
                 player.statDefense *= (int)blackFusionIncrease;
                 if (DBZMOD.Instance.thoriumLoaded)
                 {
@@ -1548,7 +1539,7 @@ namespace DBZMOD
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(2) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
                 }
             }
             if (metamoranSash)
@@ -1577,7 +1568,7 @@ namespace DBZMOD
                 CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), i, false, false);
                 if (Main.rand.Next(3) == 0)
                 {
-                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)KiDamage * 100, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
                 }
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
@@ -2152,7 +2143,7 @@ namespace DBZMOD
 
         public override void ResetEffects()
         {
-            KiDamage = 1f;
+            kiDamage = 1f;
             kiKbAddition = 0f;
             kiChargeRate = 1;
             if (kiEssence1)            
@@ -2851,7 +2842,13 @@ namespace DBZMOD
                 hair = null;
             }
         }
-        
+
+        public override void PreUpdateMovement()
+        {
+            if (DBZMOD.Leveled != null)
+                LeveledSupport.PlayerPreUpdateMovement(this);
+        }
+
         public Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
 
         [Obsolete]

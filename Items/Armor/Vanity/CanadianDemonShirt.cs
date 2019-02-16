@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Armor.Vanity
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
             MyPlayer.ModPlayer(player).kiCrit += 20;
             MyPlayer.ModPlayer(player).kiMax2 += 1000;
             MyPlayer.ModPlayer(player).chargeLimitAdd += 2;

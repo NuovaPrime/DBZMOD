@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.07f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.07f;
                 player.GetModPlayer<MyPlayer>(mod).kiKbAddition += 0.08f;
                 player.GetModPlayer<MyPlayer>(mod).turtleShell = true;
             }

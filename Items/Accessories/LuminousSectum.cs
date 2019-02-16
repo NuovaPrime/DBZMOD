@@ -23,7 +23,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.09f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.09f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 250;
                 player.GetModPlayer<MyPlayer>(mod).luminousSectum = true;
             }
