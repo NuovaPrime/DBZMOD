@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DBZMOD.Buffs;
 using DBZMOD.Config;
+using DBZMOD.Dynamicity;
 using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
@@ -24,12 +25,22 @@ namespace DBZMOD
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
-
+            
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetworkHelper.playerSync.RequestServerSendKiBeaconInitialSync(256, Main.myPlayer);
                 NetworkHelper.playerSync.RequestAllDragonBallLocations(256, Main.myPlayer);
             }
+        }
+
+        // Debug Method
+        internal void PrintTree(NodeTree<TransformationDefinition> tree, TransformationDefinition def)
+        {
+            ManyToManyNode<TransformationDefinition> mtmn = tree[def];
+            Main.NewText(mtmn.Current);
+
+            foreach (TransformationDefinition td in mtmn.Next)
+                PrintTree(tree, td);
         }
 
         public override void PlayerConnect(Player player)

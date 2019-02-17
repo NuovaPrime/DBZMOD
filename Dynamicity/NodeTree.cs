@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +39,7 @@ namespace DBZMOD.Dynamicity
 
         public int Count => Tree.Count;
 
-        protected Dictionary<T, ManyToManyNode<T>> Tree { get; set; }
+        internal Dictionary<T, ManyToManyNode<T>> Tree { get; set; }
 
         public ManyToManyNode<T> this[T item]
         {
@@ -53,7 +54,11 @@ namespace DBZMOD.Dynamicity
 
                 foreach (ManyToManyNode<T> node in Tree.Values)
                 {
-                    if (current < index) current = current + 1; // I didn't write current++ because ReSharper is telling me its not being used.
+                    if (current < index) // I didn't write current++ because ReSharper is telling me its not being used.
+                    {
+                        current++;
+                        continue;
+                    } 
 
                     return node;
                 }

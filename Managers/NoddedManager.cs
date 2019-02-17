@@ -8,7 +8,7 @@ namespace DBZMOD.Managers
         private bool _treeUpToDate = true;
         private NodeTree<T> _tree;
 
-        public override bool Add(T item)
+        public override T Add(T item)
         {
             _treeUpToDate = false;
             return base.Add(item);

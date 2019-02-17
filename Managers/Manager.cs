@@ -7,13 +7,13 @@ namespace DBZMOD.Managers
         protected readonly List<T> byIndex = new List<T>();
         protected readonly Dictionary<string, T> byNames = new Dictionary<string, T>();
 
-        public virtual bool Add(T item)
+        public virtual T Add(T item)
         {
-            if (byIndex.Contains(item) || byNames.ContainsKey(item.UnlocalizedName)) return false;
+            if (byIndex.Contains(item) || byNames.ContainsKey(item.UnlocalizedName)) return byNames[item.UnlocalizedName];
 
             byIndex.Add(item);
             byNames.Add(item.UnlocalizedName, item);
-            return true;
+            return item;
         }
 
         internal virtual void DefaultInitialize()
