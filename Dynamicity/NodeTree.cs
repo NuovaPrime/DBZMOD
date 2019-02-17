@@ -18,13 +18,17 @@ namespace DBZMOD.Dynamicity
             foreach (T item in items)
             {
                 if (!tree.ContainsKey(item))
-                    tree.Add(item, new ManyToManyNode<T>());
+                    tree.Add(item, new ManyToManyNode<T>(item));
 
                 tree[item].AddPrevious(item.Parents);
-                tree[item].Current = item;
 
-                for (int i = 0; i < item.Parents.Length; i++)
-                    tree[item.Parents[i]].AddNext(item);
+                foreach (T parent in item.Parents)
+                {
+                    if (!tree.ContainsKey(parent))
+                        tree.Add(parent, new ManyToManyNode<T>(parent));
+
+                    tree[parent].AddNext(item);
+                }
             }
 
             return new NodeTree<T>(tree);
@@ -32,7 +36,7 @@ namespace DBZMOD.Dynamicity
 
         public bool ContainsKey(T key) => Tree.ContainsKey(key);
 
-        public int Count() => Tree.Count;
+        public int Count => Tree.Count;
 
         protected Dictionary<T, ManyToManyNode<T>> Tree { get; set; }
 

@@ -7,6 +7,7 @@ using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
+using DBZMOD.Transformations;
 using DBZMOD.UI;
 using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
