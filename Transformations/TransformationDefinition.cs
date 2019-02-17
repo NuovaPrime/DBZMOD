@@ -1,4 +1,5 @@
 ﻿using System;
+using DBZMOD.Dynamicity;
 using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -6,7 +7,7 @@ using Terraria;
 namespace DBZMOD.Transformations
 {
     // helper class for storing all the details about a transformation that need to be referenced later.
-    public class TransformationDefinition : IHasUnlocalizedName
+    public class TransformationDefinition : IHasUnlocalizedName, IHasParents<TransformationDefinition>
     {
         internal const string
             TRANSFORMATIONDEFINITION_PREFIX = "TransformationDefinition_",
@@ -22,7 +23,7 @@ namespace DBZMOD.Transformations
         /// <param name="transTextColor">The color of the transformation text.</param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
-        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] previousTransformations)
+        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = buffKey;
 
@@ -33,7 +34,7 @@ namespace DBZMOD.Transformations
             MasteryBuffKeyName = masterFormBuffKeyName;
             UnlockRequirements = unlockRequirements;
 
-            PreviousTransformations = previousTransformations;
+            Parents = parents;
         }
 
         /// <summary>Forces the transformation to be obtained without any cutscenes being played or requirements being checked.</summary>
@@ -62,8 +63,8 @@ namespace DBZMOD.Transformations
         /// <returns>true if the transformation was unlocked; otherwise false.</returns>
         public bool TryUnlock(MyPlayer player)
         {
-            for (int i = 0; i < PreviousTransformations.Length; i++)
-                if (!player.PlayerTransformations.ContainsKey(PreviousTransformations[i]))
+            for (int i = 0; i < Parents.Length; i++)
+                if (!player.PlayerTransformations.ContainsKey(Parents[i]))
                     return false;
 
             return UnlockRequirements.Invoke(player) && Unlock(player);
@@ -92,7 +93,7 @@ namespace DBZMOD.Transformations
 
         public Predicate<MyPlayer> UnlockRequirements { get; }
 
-        public TransformationDefinition[] PreviousTransformations { get; }
+        public TransformationDefinition[] Parents { get; }
 
         public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
     }
