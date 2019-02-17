@@ -1,8 +1,5 @@
 ﻿using DBZMOD.Extensions;
-using DBZMOD;
 using Terraria;
-using DBZMOD.Util;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {

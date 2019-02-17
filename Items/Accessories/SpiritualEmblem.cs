@@ -1,5 +1,4 @@
-﻿﻿using DBZMOD;
- using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -26,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         {
             {
 
-                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.15f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.15f;
                 player.GetModPlayer<MyPlayer>(mod).spiritualEmblem = true;
             }
         }

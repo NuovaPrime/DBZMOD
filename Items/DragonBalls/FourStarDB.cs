@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace DBZMOD.Items.DragonBalls
 {
     public class FourStarDB : DragonBallItem

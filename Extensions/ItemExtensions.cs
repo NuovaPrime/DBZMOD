@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using DBZMOD.Items.DragonBalls;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Terraria;
 
 namespace DBZMOD.Extensions

@@ -7,17 +7,13 @@ using DBZMOD.Items.Consumables.Potions;
 using DBZMOD.Items.DragonBalls;
 using DBZMOD.Models;
 using DBZMOD.Network;
-using DBZMOD;
-using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using BuffInfoExtensions = DBZMOD.Extensions.BuffInfoExtensions;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Extensions
 {

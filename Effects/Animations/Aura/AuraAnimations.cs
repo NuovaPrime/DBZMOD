@@ -3,7 +3,6 @@ using DBZMOD.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using DBZMOD;
 using Terraria;
 
 namespace DBZMOD.Effects.Animations.Aura

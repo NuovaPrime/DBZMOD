@@ -1,12 +1,7 @@
 ﻿using DBZMOD.Extensions;
-using DBZMOD;
 using DBZMOD.UI;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using DBZMOD.Util;
-using Terraria.ID;
 
 namespace DBZMOD.Items.DragonBalls
 {

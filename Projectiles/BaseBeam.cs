@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DBZMOD.Enums;
-using DBZMOD.Extensions;
-using DBZMOD;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,7 +9,6 @@ using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ProjectileExtensions = DBZMOD.Extensions.ProjectileExtensions;
 
 namespace DBZMOD.Projectiles
 {

@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using DBZMOD.Extensions;
-using DBZMOD;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using DBZMOD.Util;
 
 namespace DBZMOD
 {

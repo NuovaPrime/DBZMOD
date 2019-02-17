@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using DBZMOD.Extensions;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Network
 {

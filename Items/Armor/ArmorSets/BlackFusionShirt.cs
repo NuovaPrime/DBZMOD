@@ -1,5 +1,4 @@
-﻿using DBZMOD;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Armor.ArmorSets
@@ -40,7 +39,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
             MyPlayer.ModPlayer(player).kiCrit += 20;
             MyPlayer.ModPlayer(player).kiMax2 += 1000;
             MyPlayer.ModPlayer(player).kiChargeRate += 2;

@@ -69,3 +69,4 @@ DBZMOD.csproj.user
 *.cache
 DBZMOD.sln.DotSettings.user
 packages/
+.vs/

@@ -1,6 +1,4 @@
-﻿using DBZMOD.Util;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 
 namespace DBZMOD.Models
 {

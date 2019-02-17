@@ -1,5 +1,4 @@
-﻿using DBZMOD;
-using Terraria;
+﻿using Terraria;
 
 namespace DBZMOD.Buffs
 {

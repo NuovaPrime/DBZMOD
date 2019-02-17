@@ -6,9 +6,6 @@ using Terraria.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using DBZMOD.Extensions;
-using DBZMOD;
-using DBZMOD.Util;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {
@@ -118,7 +115,7 @@ namespace DBZMOD
 
         public override void GetWeaponDamage(Player player, ref int damage)
         {            
-            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).KiDamage);
+            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).kiDamage);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)

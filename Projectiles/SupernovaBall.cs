@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Extensions;
-using DBZMOD;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using DBZMOD.Util;
 using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD.Projectiles

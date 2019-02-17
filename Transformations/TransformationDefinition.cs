@@ -1,13 +1,13 @@
 ﻿using System;
+using DBZMOD.Dynamicity;
 using DBZMOD.Enums;
-using DBZMOD;
 using Microsoft.Xna.Framework;
 using Terraria;
 
 namespace DBZMOD.Transformations
 {
     // helper class for storing all the details about a transformation that need to be referenced later.
-    public class TransformationDefinition : IHasUnlocalizedName
+    public class TransformationDefinition : IHasUnlocalizedName, IHasParents<TransformationDefinition>
     {
         internal const string
             TRANSFORMATIONDEFINITION_PREFIX = "TransformationDefinition_",
@@ -15,7 +15,7 @@ namespace DBZMOD.Transformations
             TRANSFORMATIONDEFINITION_MASTERY_SUFFIX = "_Mastery";
 
         /// <summary>
-        ///     Instantiate a new buff info, typically a form like ssj or kaioken.
+        ///     Instantiate a new buff info, typically a form like SSJ or Kaioken.
         /// </summary>
         /// <param name="menuId">The menu Id of the form, if it exists in the menu.</param>
         /// <param name="buffKey">The key name of the buff used in the mod.</param>
@@ -23,7 +23,7 @@ namespace DBZMOD.Transformations
         /// <param name="transTextColor">The color of the transformation text.</param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
-        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null)
+        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = buffKey;
 
@@ -33,6 +33,8 @@ namespace DBZMOD.Transformations
             HasMastery = canBeMastered;
             MasteryBuffKeyName = masterFormBuffKeyName;
             UnlockRequirements = unlockRequirements;
+
+            Parents = parents;
         }
 
         /// <summary>Forces the transformation to be obtained without any cutscenes being played or requirements being checked.</summary>
@@ -59,7 +61,14 @@ namespace DBZMOD.Transformations
         /// <summary>Tries to unlock the transformation for the player by checking if the requirements are met.</summary>
         /// <param name="player">The <see cref="MyPlayer"/> to give the transformation to.</param>
         /// <returns>true if the transformation was unlocked; otherwise false.</returns>
-        public bool TryUnlock(MyPlayer player) => UnlockRequirements.Invoke(player) && Unlock(player);
+        public bool TryUnlock(MyPlayer player)
+        {
+            for (int i = 0; i < Parents.Length; i++)
+                if (!player.PlayerTransformations.ContainsKey(Parents[i]))
+                    return false;
+
+            return UnlockRequirements.Invoke(player) && Unlock(player);
+        }
 
         public int GetBuffId()
         {
@@ -69,6 +78,10 @@ namespace DBZMOD.Transformations
         public string GetUnlockedTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_HASUNLOCKED_SUFFIX;
 
         public string GetMasteryTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_MASTERY_SUFFIX;
+
+        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
+
+        public override string ToString() => UnlocalizedName;
 
         public string UnlocalizedName { get; }
 
@@ -84,6 +97,6 @@ namespace DBZMOD.Transformations
 
         public Predicate<MyPlayer> UnlockRequirements { get; }
 
-        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
+        public TransformationDefinition[] Parents { get; }
     }
 }

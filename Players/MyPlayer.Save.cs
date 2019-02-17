@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DBZMOD.Enums;
 using DBZMOD.Transformations;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader.IO;
 

@@ -10,11 +10,10 @@ using DBZMOD.Effects;
 using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
-using DBZMOD.Managers;
 using DBZMOD.Network;
-using DBZMOD;
 using DBZMOD.Transformations;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
+using Leveled;
 
 namespace DBZMOD
 {
@@ -63,22 +62,6 @@ namespace DBZMOD
             Instance = this;
         }
 
-        public override void Unload()
-        {
-            TransformationDefinitionManager.Clear();
-
-            Gfx.UnloadGfx();
-            KiBar.visible = false;
-            OverloadBar.visible = false;
-            Instance = null;
-            TransformationMenu.menuvisible = false;
-            ProgressionMenu.menuvisible = false;
-            WishMenu.menuVisible = false;
-            TransformationMenu.ssj1On = false;
-            TransformationMenu.ssj2On = false;
-            UIFlatPanel.backgroundTexture = null;
-        }
-
         public override void Load()
         {
             // loads the mod's configuration file.
@@ -125,7 +108,33 @@ namespace DBZMOD
                 Filters.Scene["DBZMOD:WishSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.1f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:WishSky"] = new WishSky();
             }
-        }        
+        }
+
+        public override void Unload()
+        {
+            TransformationDefinitionManager.Clear();
+
+            Gfx.UnloadGfx();
+            KiBar.visible = false;
+            OverloadBar.visible = false;
+            Instance = null;
+            TransformationMenu.menuvisible = false;
+            ProgressionMenu.menuvisible = false;
+            WishMenu.menuVisible = false;
+            TransformationMenu.ssj1On = false;
+            TransformationMenu.ssj2On = false;
+            UIFlatPanel.backgroundTexture = null;
+
+            Leveled = null;
+        }
+
+        public override void PostSetupContent()
+        {
+            Leveled = ModLoader.GetMod("Leveled");
+
+            if (Leveled != null)
+                LeveledSupport.Initialize();
+        }
 
         public static void ActivateTransMenu()
         {
@@ -272,9 +281,9 @@ namespace DBZMOD
         // packet handling goes here
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-           NetworkHelper.HandlePacket(reader, whoAmI);
-        }       
-        
+            NetworkHelper.HandlePacket(reader, whoAmI);
+        }
+
         public static uint GetTicks()
         {
             return Main.GameUpdateCount;
@@ -297,7 +306,9 @@ namespace DBZMOD
         }
 
         internal static DBZMOD Instance { get; private set; }
+
+        internal static Mod Leveled { get; private set; }
     }
 }
- 
+
 

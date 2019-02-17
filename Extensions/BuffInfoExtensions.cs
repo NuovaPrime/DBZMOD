@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using DBZMOD.Models;
 using DBZMOD.Transformations;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 
 namespace DBZMOD.Extensions
 {

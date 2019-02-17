@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using DBZMOD.Util;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
+using DBZMOD.Utilities;
 using Terraria.ID;
 using Terraria.ModLoader;
 

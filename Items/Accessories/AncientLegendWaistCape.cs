@@ -1,5 +1,4 @@
-﻿﻿using DBZMOD;
- using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -26,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.06f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.06f;
                 player.GetModPlayer<MyPlayer>(mod).kiDrainMulti *= 0.86f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 -= 250;
                 player.GetModPlayer<MyPlayer>(mod).legendWaistcape = true;

@@ -1,4 +1,4 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Utilities;
 using Terraria;
 
 namespace DBZMOD.Buffs.SSJBuffs

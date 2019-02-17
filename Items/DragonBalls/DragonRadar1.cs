@@ -1,7 +1,4 @@
-﻿using System;
-using DBZMOD;
-using DBZMOD.Util;
-using Microsoft.Xna.Framework;
+﻿using DBZMOD.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 

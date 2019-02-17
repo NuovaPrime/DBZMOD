@@ -1,13 +1,9 @@
 ﻿using System;
 using DBZMOD.Extensions;
-using DBZMOD;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
-using DBZMOD.Util;
-using DBZMOD.Projectiles;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD
 {

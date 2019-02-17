@@ -1,5 +1,4 @@
-﻿﻿using DBZMOD;
- using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -35,7 +34,7 @@ namespace DBZMOD.Items.Accessories
 
         public void GivePlayerBonuses(Player player)
         {
-            player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.08f;
+            player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.08f;
             player.GetModPlayer<MyPlayer>(mod).scouterT3 = true;
             player.detectCreature = true;            
         }

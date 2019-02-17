@@ -1,12 +1,10 @@
 ﻿using DBZMOD.Extensions;
-using DBZMOD;
+using DBZMOD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using DBZMOD.Util;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Items.Misc
 {

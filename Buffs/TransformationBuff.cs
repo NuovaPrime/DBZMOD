@@ -1,11 +1,8 @@
 ﻿using System;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
-using DBZMOD;
-using DBZMOD.Util;
 using Terraria;
 using Terraria.ModLoader;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs
 {
@@ -119,7 +116,7 @@ namespace DBZMOD.Buffs
             player.magicDamage *= GetHalvedDamageBonus();
             player.minionDamage *= GetHalvedDamageBonus();
             player.thrownDamage *= GetHalvedDamageBonus();
-            modPlayer.KiDamage *= damageMulti;
+            modPlayer.kiDamage *= damageMulti;
 
             // cross mod support stuff
             if (DBZMOD.Instance.thoriumLoaded)

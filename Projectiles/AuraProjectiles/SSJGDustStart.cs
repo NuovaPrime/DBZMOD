@@ -1,10 +1,8 @@
 ﻿using DBZMOD.Extensions;
-using DBZMOD;
-using DBZMOD.Util;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Projectiles.AuraProjectiles
 {

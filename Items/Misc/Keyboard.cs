@@ -1,4 +1,4 @@
-﻿using DBZMOD.Util;
+﻿using DBZMOD.Utilities;
 using Terraria;
 using Terraria.ID;
 

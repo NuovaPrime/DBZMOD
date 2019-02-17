@@ -1,5 +1,4 @@
 ﻿using System;
-using DBZMOD;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;

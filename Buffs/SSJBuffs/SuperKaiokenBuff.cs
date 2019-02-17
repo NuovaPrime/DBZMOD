@@ -1,7 +1,5 @@
 using DBZMOD.Extensions;
-using DBZMOD.Util;
 using Terraria;
-using PlayerExtensions = DBZMOD.Extensions.PlayerExtensions;
 
 namespace DBZMOD.Buffs.SSJBuffs
 {

@@ -1,5 +1,4 @@
-﻿﻿using DBZMOD;
- using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -26,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.09f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.09f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 100;
                 player.GetModPlayer<MyPlayer>(mod).sapphireNecklace = true;
             }
