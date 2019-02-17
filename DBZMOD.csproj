@@ -1,0 +1,601 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8298EAB6-0586-4BDA-9483-83624B66B13A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBZMOD</RootNamespace>
+    <AssemblyName>DBZMOD</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WebMerc|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\WebMerc\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NuovaC|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NuovaC\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BaseBeamItem.cs" />
+    <Compile Include="Buffs\ArmorCooldown.cs" />
+    <Compile Include="Buffs\BuffKeyNames.cs" />
+    <Compile Include="Buffs\ChlorophyteRegen.cs" />
+    <Compile Include="Buffs\DemonBonus.cs" />
+    <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
+    <Compile Include="Buffs\DisgustingGoopBuff.cs" />
+    <Compile Include="Buffs\EnhancedReserves.cs" />
+    <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Buffs\KatchinFeet.cs" />
+    <Compile Include="Buffs\KiLanternBuff.cs" />
+    <Compile Include="Buffs\KiPotionSickness.cs" />
+    <Compile Include="Buffs\KiStimulantBuff.cs" />
+    <Compile Include="Buffs\LegendaryTrait.cs" />
+    <Compile Include="Buffs\MREBuff.cs" />
+    <Compile Include="Buffs\NimbusBuff.cs" />
+    <Compile Include="Buffs\ProdigyTrait.cs" />
+    <Compile Include="Buffs\SenzuCooldown.cs" />
+    <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\LSSJ2Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\LSSJBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ1Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ2Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJ3Buff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SSJGBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\SuperKaiokenBuff.cs" />
+    <Compile Include="Buffs\SSJBuffs\USSJBuff.cs" />
+    <Compile Include="Buffs\TiredDebuff.cs" />
+    <Compile Include="Buffs\TransformationBuff.cs" />
+    <Compile Include="Buffs\TransformationExhaustionBuff.cs" />
+    <Compile Include="Buffs\UIOmenBuff.cs" />
+    <Compile Include="Buffs\UnknownLegendary.cs" />
+    <Compile Include="Buffs\ZenkaiBuff.cs" />
+    <Compile Include="Buffs\ZenkaiCooldown.cs" />
+    <Compile Include="Config\ConfigModel.cs" />
+    <Compile Include="DBZMOD.cs" />
+    <Compile Include="DBZMODGlobalItem.cs" />
+    <Compile Include="DBZMODGlobalNPC.cs" />
+    <Compile Include="DBZWorld.cs" />
+    <Compile Include="Destruction\BaseFloatingDestructionProj.cs" />
+    <Compile Include="Destruction\DirtBlockDestruction.cs" />
+    <Compile Include="Destruction\StoneBlockDestruction.cs" />
+    <Compile Include="Dusts\LightningBlue.cs" />
+    <Compile Include="Dusts\MetalDust.cs" />
+    <Compile Include="Dusts\RadiantDust.cs" />
+    <Compile Include="Dusts\StarMuzzleFlash.cs" />
+    <Compile Include="Dynamicity\ICanBuildNodeTree.cs" />
+    <Compile Include="Dynamicity\IHasParents.cs" />
+    <Compile Include="Dynamicity\ManyToManyNode.cs" />
+    <Compile Include="Dynamicity\NodeTree.cs" />
+    <Compile Include="Effects\Animations\Aura\AuraAnimations.cs" />
+    <Compile Include="Effects\Animations\Aura\AuraDrawLayer.cs" />
+    <Compile Include="Effects\Animations\Cutscenes\LegendaryScenes\Circle.cs" />
+    <Compile Include="Effects\CircleShader.cs" />
+    <Compile Include="Effects\GodSky.cs" />
+    <Compile Include="Effects\WishSky.cs" />
+    <Compile Include="Enums\AuraID.cs" />
+    <Compile Include="Enums\BeamHitLocation.cs" />
+    <Compile Include="Enums\Controls.cs" />
+    <Compile Include="Enums\ControlStates.cs" />
+    <Compile Include="Enums\MenuSelectionID.cs" />
+    <Compile Include="Enums\PlayerVarSyncEnum.cs" />
+    <Compile Include="Enums\WishSelectionID.cs" />
+    <Compile Include="Extensions\BuffInfoExtensions.cs" />
+    <Compile Include="Extensions\CoordinateExtensions.cs" />
+    <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Extensions\PlayerExtensions.cs" />
+    <Compile Include="Extensions\ProjectileExtensions.cs" />
+    <Compile Include="FistSystem.cs" />
+    <Compile Include="FlightSystem.cs" />
+    <Compile Include="GFX.cs" />
+    <Compile Include="IHasUnlocalizedName.cs" />
+    <Compile Include="Items\Accessories\AmberNecklace.cs" />
+    <Compile Include="Items\Accessories\AmethystNecklace.cs" />
+    <Compile Include="Items\Accessories\AncientLegendNecklace.cs" />
+    <Compile Include="Items\Accessories\AncientLegendWaistCape.cs" />
+    <Compile Include="Items\Accessories\ArmCannon.cs" />
+    <Compile Include="Items\Accessories\BaldurEssentia.cs" />
+    <Compile Include="Items\Accessories\BattleKit.cs" />
+    <Compile Include="Items\Accessories\BlackDiamondShell.cs" />
+    <Compile Include="Items\Accessories\BloodstainedBandana.cs" />
+    <Compile Include="Items\Accessories\BuldariumSigmite.cs" />
+    <Compile Include="Items\Accessories\BurningEnergyAmulet.cs" />
+    <Compile Include="Items\Accessories\CrystalliteAlleviate.cs" />
+    <Compile Include="Items\Accessories\CrystalliteControl.cs" />
+    <Compile Include="Items\Accessories\CrystalliteFlow.cs" />
+    <Compile Include="Items\Accessories\DiamondNecklace.cs" />
+    <Compile Include="Items\Accessories\DragonGemNecklace.cs" />
+    <Compile Include="Items\Accessories\EarthenArcanium.cs" />
+    <Compile Include="Items\Accessories\EarthenScarab.cs" />
+    <Compile Include="Items\Accessories\EarthenSigil.cs" />
+    <Compile Include="Items\Accessories\EmeraldNecklace.cs" />
+    <Compile Include="Items\Accessories\EndlessKi.cs" />
+    <Compile Include="Items\Accessories\GoblinKiEnhancer.cs" />
+    <Compile Include="Items\Accessories\IceTalisman.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserAmber.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserAmethyst.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserDiamond.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserEmerald.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserRainbow.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserRuby.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserSapphire.cs" />
+    <Compile Include="Items\Accessories\Infusers\InfuserTopaz.cs" />
+    <Compile Include="Items\Accessories\KaioCrystal.cs" />
+    <Compile Include="Items\Accessories\KiChip.cs" />
+    <Compile Include="Items\Accessories\LargeTurtleShell.cs" />
+    <Compile Include="Items\Accessories\LuminousSectum.cs" />
+    <Compile Include="Items\Accessories\MajinNucleus.cs" />
+    <Compile Include="Items\Accessories\MetamoranSash.cs" />
+    <Compile Include="Items\Accessories\PureEnergyCirclet.cs" />
+    <Compile Include="Items\Accessories\RadiantGlider.cs" />
+    <Compile Include="Items\Accessories\RadiantTotem.cs" />
+    <Compile Include="Items\Accessories\RubyNecklace.cs" />
+    <Compile Include="Items\Accessories\SapphireNecklace.cs" />
+    <Compile Include="Items\Accessories\ScouterT2.cs" />
+    <Compile Include="Items\Accessories\ScouterT3.cs" />
+    <Compile Include="Items\Accessories\ScouterT4.cs" />
+    <Compile Include="Items\Accessories\ScouterT5.cs" />
+    <Compile Include="Items\Accessories\ScouterT6.cs" />
+    <Compile Include="Items\Accessories\SenzuBag.cs" />
+    <Compile Include="Items\Accessories\SpiritCharm.cs" />
+    <Compile Include="Items\Accessories\SpiritualEmblem.cs" />
+    <Compile Include="Items\Accessories\TimeRing.cs" />
+    <Compile Include="Items\Accessories\TopazNecklace.cs" />
+    <Compile Include="Items\Accessories\Vanity\GreenPotara.cs" />
+    <Compile Include="Items\Accessories\WornGloves.cs" />
+    <Compile Include="Items\Accessories\ZenkaiCharm.cs" />
+    <Compile Include="Items\Armor\AdamantiteVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\BlackFusionPants.cs" />
+    <Compile Include="Items\Armor\ArmorSets\BlackFusionShirt.cs" />
+    <Compile Include="Items\Armor\ArmorSets\DemonLeggings.cs" />
+    <Compile Include="Items\Armor\ArmorSets\DemonShirt.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanBreastplate.cs" />
+    <Compile Include="Items\Armor\ArmorSets\EliteSaiyanLeggings.cs" />
+    <Compile Include="Items\Armor\ArmorSets\HermitGi.cs" />
+    <Compile Include="Items\Armor\ArmorSets\HermitPants.cs" />
+    <Compile Include="Items\Armor\ArmorSets\MetamoranPants.cs" />
+    <Compile Include="Items\Armor\ArmorSets\MetamoranVest.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantGreaves.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantScalepiece.cs" />
+    <Compile Include="Items\Armor\ArmorSets\RadiantVisor.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanBreastplate.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanLeggings.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanScoutPants.cs" />
+    <Compile Include="Items\Armor\ArmorSets\SaiyanScoutScalemail.cs" />
+    <Compile Include="Items\Armor\ChlorophyteHeadpiece.cs" />
+    <Compile Include="Items\Armor\CobaltCrown.cs" />
+    <Compile Include="Items\Armor\HallowedFedora.cs" />
+    <Compile Include="Items\Armor\MythrilGlasses.cs" />
+    <Compile Include="Items\Armor\OrichalcumHat.cs" />
+    <Compile Include="Items\Armor\PalladiumBlindfoldCrown.cs" />
+    <Compile Include="Items\Armor\TitaniumCap.cs" />
+    <Compile Include="Items\Armor\Vanity\CanadianDemonLeggings.cs" />
+    <Compile Include="Items\Armor\Vanity\CanadianDemonShirt.cs" />
+    <Compile Include="Items\Armor\Vanity\GreenGodHead.cs" />
+    <Compile Include="Items\CoarseRock.cs" />
+    <Compile Include="Items\Consumables\BukuujutsuVols\BukuujutsuVol1.cs" />
+    <Compile Include="Items\Consumables\BukuujutsuVols\BukuujutsuVol2.cs" />
+    <Compile Include="Items\Consumables\BukuujutsuVols\BukuujutsuVol3.cs" />
+    <Compile Include="Items\Consumables\DisgustingGoop.cs" />
+    <Compile Include="Items\Consumables\KaioFragments\KaioFragment1.cs" />
+    <Compile Include="Items\Consumables\KaioFragments\KaioFragment2.cs" />
+    <Compile Include="Items\Consumables\KaioFragments\KaioFragment3.cs" />
+    <Compile Include="Items\Consumables\KaioFragments\KaioFragment4.cs" />
+    <Compile Include="Items\Consumables\KaioFragments\KaioFragmentFirst.cs" />
+    <Compile Include="Items\Consumables\KiEssences\KiEssence1.cs" />
+    <Compile Include="Items\Consumables\KiEssences\KiEssence2.cs" />
+    <Compile Include="Items\Consumables\KiEssences\KiEssence3.cs" />
+    <Compile Include="Items\Consumables\KiEssences\KiEssence4.cs" />
+    <Compile Include="Items\Consumables\KiEssences\KiEssence5.cs" />
+    <Compile Include="Items\Consumables\KiFragments\KiFragment1.cs" />
+    <Compile Include="Items\Consumables\KiFragments\KiFragment2.cs" />
+    <Compile Include="Items\Consumables\KiFragments\KiFragment3.cs" />
+    <Compile Include="Items\Consumables\KiFragments\KiFragment4.cs" />
+    <Compile Include="Items\Consumables\KiFragments\KiFragment5.cs" />
+    <Compile Include="Items\Consumables\MRE.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion1.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion2.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion3.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion4.cs" />
+    <Compile Include="Items\Consumables\Potions\KiPotion5.cs" />
+    <Compile Include="Items\Consumables\Potions\KiStimulant.cs" />
+    <Compile Include="Items\Consumables\SenzuBean.cs" />
+    <Compile Include="Items\Consumables\TestItems\DivineTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\LegendaryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\LSSJ2TestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\LSSJTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\ProdigyTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ2MasteryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ2TestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ3MasteryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJ3TestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJGTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJMasteryTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
+    <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="Items\Consumables\Transmissions\TransmissionPura.cs" />
+    <Compile Include="Items\Consumables\Transmissions\TransmissionTeleport.cs" />
+    <Compile Include="Items\Consumables\Transmissions\TransmissionVanish.cs" />
+    <Compile Include="Items\DBItem.cs" />
+    <Compile Include="Items\DragonBalls\DBNote.cs" />
+    <Compile Include="Items\DragonBalls\DragonBallItem.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar1.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar2.cs" />
+    <Compile Include="Items\DragonBalls\DragonRadar3.cs" />
+    <Compile Include="Items\DragonBalls\FiveStarDB.cs" />
+    <Compile Include="Items\DragonBalls\FourStarDB.cs" />
+    <Compile Include="Items\DragonBalls\OneStarDB.cs" />
+    <Compile Include="Items\DragonBalls\SevenStarDB.cs" />
+    <Compile Include="Items\DragonBalls\SixStarDB.cs" />
+    <Compile Include="Items\DragonBalls\ThreeStarDB.cs" />
+    <Compile Include="Items\DragonBalls\TwoStarDB.cs" />
+    <Compile Include="Items\EmptyNecklace.cs" />
+    <Compile Include="Items\KaiTableItem.cs" />
+    <Compile Include="Items\KatchinScale.cs" />
+    <Compile Include="Items\KiBeaconItem.cs" />
+    <Compile Include="Items\KiLanternItem.cs" />
+    <Compile Include="Items\KiOrb.cs" />
+    <Compile Include="Items\KiOrb2.cs" />
+    <Compile Include="Items\Materials\AstralEssentia.cs" />
+    <Compile Include="Items\Materials\DemonicSoul.cs" />
+    <Compile Include="Items\Materials\DivineThreads.cs" />
+    <Compile Include="Items\Materials\EarthenShard.cs" />
+    <Compile Include="Items\Materials\KiCrystals\AngerKiCrystal.cs" />
+    <Compile Include="Items\Materials\KiCrystals\CalmKiCrystal.cs" />
+    <Compile Include="Items\Materials\KiCrystals\KiCrystal.cs" />
+    <Compile Include="Items\Materials\KiCrystals\PridefulKiCrystal.cs" />
+    <Compile Include="Items\Materials\KiCrystals\PureKiCrystal.cs" />
+    <Compile Include="Items\Materials\KiCrystals\StableKiCrystal.cs" />
+    <Compile Include="Items\Materials\RadiantFragment.cs" />
+    <Compile Include="Items\Materials\SatanicCloth.cs" />
+    <Compile Include="Items\Materials\ScrapMetal.cs" />
+    <Compile Include="Items\Materials\SkeletalEssence.cs" />
+    <Compile Include="Items\Materials\SoulofEntity.cs" />
+    <Compile Include="Items\Misc\Choco1.cs" />
+    <Compile Include="Items\Misc\Choco2.cs" />
+    <Compile Include="Items\Misc\Choco3.cs" />
+    <Compile Include="Items\Misc\CoffeeCandy.cs" />
+    <Compile Include="Items\Misc\Keyboard.cs" />
+    <Compile Include="Items\Misc\SSJGUnlockItem.cs" />
+    <Compile Include="Items\NimbusWhistle.cs" />
+    <Compile Include="Items\RadiantFragmentBlockItem.cs" />
+    <Compile Include="Items\RefinedMetal.cs" />
+    <Compile Include="Items\Support\Skills\GuardianMending.cs" />
+    <Compile Include="Items\Tools\RadiantHamaxe.cs" />
+    <Compile Include="Items\Tools\RadiantPickaxe.cs" />
+    <Compile Include="Items\Weapons\Fist\KiFist1.cs" />
+    <Compile Include="Items\Weapons\Normal\FarmerShotgun.cs" />
+    <Compile Include="Items\Weapons\Normal\TrunksSword.cs" />
+    <Compile Include="Items\Weapons\Normal\YajirobesKatana.cs" />
+    <Compile Include="Items\Weapons\Test\CircleTester.cs" />
+    <Compile Include="Items\Weapons\Tier_1\EnergyWave.cs" />
+    <Compile Include="Items\Weapons\Tier_1\KiBeam.cs" />
+    <Compile Include="Items\Weapons\Tier_1\KiBlast.cs" />
+    <Compile Include="Items\Weapons\Tier_1\KiFist1.cs" />
+    <Compile Include="Items\Weapons\Tier_2\DestructoDisk.cs" />
+    <Compile Include="Items\Weapons\Tier_2\DoubleSunday.cs" />
+    <Compile Include="Items\Weapons\Tier_2\EnergyBlastBarrage.cs" />
+    <Compile Include="Items\Weapons\Tier_2\Masenko.cs" />
+    <Compile Include="Items\Weapons\Tier_2\SpiritBall.cs" />
+    <Compile Include="Items\Weapons\Tier_3\BlightedFang.cs" />
+    <Compile Include="Items\Weapons\Tier_3\DirtyFireworks.cs" />
+    <Compile Include="Items\Weapons\Tier_3\GalickGun.cs" />
+    <Compile Include="Items\Weapons\Tier_3\HellzoneGrenade.cs" />
+    <Compile Include="Items\Weapons\Tier_3\Kamehameha.cs" />
+    <Compile Include="Items\Weapons\Tier_4\BigBangAttack.cs" />
+    <Compile Include="Items\Weapons\Tier_4\EnergyShot.cs" />
+    <Compile Include="Items\Weapons\Tier_4\Scattershot.cs" />
+    <Compile Include="Items\Weapons\Tier_4\SpecialBeamCannon.cs" />
+    <Compile Include="Items\Weapons\Tier_4\SpiritBomb.cs" />
+    <Compile Include="Items\Weapons\Tier_4\SuperKamehameha.cs" />
+    <Compile Include="Items\Weapons\Tier_4\TrapShooter.cs" />
+    <Compile Include="Items\Weapons\Tier_5\DestructoDiskAssault.cs" />
+    <Compile Include="Items\Weapons\Tier_5\FinalFlash.cs" />
+    <Compile Include="Items\Weapons\Tier_5\Kamehamehax10.cs" />
+    <Compile Include="Items\Weapons\Tier_5\SuperEnergyBarrage.cs" />
+    <Compile Include="Items\Weapons\Tier_5\Supernova.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BlackBlitz.cs" />
+    <Compile Include="Items\Weapons\Tier_6\BlindingBlade.cs" />
+    <Compile Include="Items\Weapons\Tier_6\CandyLaser.cs" />
+    <Compile Include="Items\Weapons\Tier_6\FinalShine.cs" />
+    <Compile Include="Items\Weapons\Tier_6\HolyWrath.cs" />
+    <Compile Include="Items\Weapons\Tier_6\MajinExtinctionAttack.cs" />
+    <Compile Include="Items\Weapons\Tier_6\RadialJavelin.cs" />
+    <Compile Include="Items\Weapons\Tier_6\SuperSpiritBomb.cs" />
+    <Compile Include="Items\ZTableItem.cs" />
+    <Compile Include="KiItem.cs" />
+    <Compile Include="KiProjectile.cs" />
+    <Compile Include="LeveledSupport.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\NoddedManager.cs" />
+    <Compile Include="Models\AuraAnimationInfo.cs" />
+    <Compile Include="Models\HitstunInfo.cs" />
+    <Compile Include="Mounts\NimbusMount.cs" />
+    <Compile Include="Network\NetworkHelper.cs" />
+    <Compile Include="Network\PacketHandler.cs" />
+    <Compile Include="Network\PlayerPacketHandler.cs" />
+    <Compile Include="Network\TransformationPacketHandler.cs" />
+    <Compile Include="NPCs\MajinSlime.cs" />
+    <Compile Include="NPCs\MajinZombie.cs" />
+    <Compile Include="Players\MyPlayer.cs" />
+    <Compile Include="Players\MyPlayer.Hooks.cs" />
+    <Compile Include="Players\MyPlayer.Save.cs" />
+    <Compile Include="Prefixes\BalancedPrefix.cs" />
+    <Compile Include="Prefixes\BoostedPrefix.cs" />
+    <Compile Include="Prefixes\CondensedPrefix.cs" />
+    <Compile Include="Prefixes\DestructivePrefix.cs" />
+    <Compile Include="Prefixes\DistractedPrefix.cs" />
+    <Compile Include="Prefixes\FlashyPrefix.cs" />
+    <Compile Include="Prefixes\FlawedPrefix.cs" />
+    <Compile Include="Prefixes\InfusedPrefix.cs" />
+    <Compile Include="Prefixes\MasteredPrefix.cs" />
+    <Compile Include="Prefixes\MystifyingPrefix.cs" />
+    <Compile Include="Prefixes\NegatedPrefix.cs" />
+    <Compile Include="Prefixes\OutrageousPrefix.cs" />
+    <Compile Include="Prefixes\PoweredPrefix.cs" />
+    <Compile Include="Prefixes\TranscendedPrefix.cs" />
+    <Compile Include="Prefixes\UnstablePrefix.cs" />
+    <Compile Include="ProgressionSystem.cs" />
+    <Compile Include="Projectiles\AbstractChargeBall.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjBeam.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjBeamHead.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJ1AuraProjStart.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJ3LightPillar.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJAuraBall.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJEnergyBarrageProj.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJGDustCenter.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJGDustStart.cs" />
+    <Compile Include="Projectiles\AuraProjectiles\SSJRockProjStart.cs" />
+    <Compile Include="Projectiles\BaldurShell.cs" />
+    <Compile Include="Projectiles\BaseBeam.cs" />
+    <Compile Include="Projectiles\BaseBeamCharge.cs" />
+    <Compile Include="Projectiles\BigBangAttack\BigBangAttackProjectile.cs" />
+    <Compile Include="Projectiles\BigBangAttack\BigBangAttackProjectile2.cs" />
+    <Compile Include="Projectiles\BlackBlitz.cs" />
+    <Compile Include="Projectiles\BlackBlitzLong.cs" />
+    <Compile Include="Projectiles\BlightedFangProj.cs" />
+    <Compile Include="Projectiles\BlindingBladeProj.cs" />
+    <Compile Include="Projectiles\CandyLaserBlast.cs" />
+    <Compile Include="Projectiles\CandyLaserTrail.cs" />
+    <Compile Include="Projectiles\DestructoDiskAssault\DestructoDiskAssaultMini.cs" />
+    <Compile Include="Projectiles\DestructoDiskAssault\DestructoDiskAssaultProj.cs" />
+    <Compile Include="Projectiles\DestructoDiskProjectile.cs" />
+    <Compile Include="Projectiles\DirtyFireworksProjectile.cs" />
+    <Compile Include="Projectiles\DoubleSundayBeam.cs" />
+    <Compile Include="Projectiles\DoubleSundayCharge.cs" />
+    <Compile Include="Projectiles\EnergyBlastBarrageProjectile.cs" />
+    <Compile Include="Projectiles\EnergyShotBlast.cs" />
+    <Compile Include="Projectiles\EnergyWaves\EnergyWaveBeam.cs" />
+    <Compile Include="Projectiles\EnergyWaves\EnergyWaveCharge.cs" />
+    <Compile Include="Projectiles\EnergyWaves\EnergyWaveVolleyBlast.cs" />
+    <Compile Include="Projectiles\EnergyWaves\EnergyWaveVolleyTrail.cs" />
+    <Compile Include="Projectiles\FinalFlash\FinalFlashBeam.cs" />
+    <Compile Include="Projectiles\FinalFlash\FinalFlashCharge.cs" />
+    <Compile Include="Projectiles\FinalShine\FinalShineBeam.cs" />
+    <Compile Include="Projectiles\FinalShine\FinalShineCharge.cs" />
+    <Compile Include="Projectiles\Fists\KiFistProj.cs" />
+    <Compile Include="Projectiles\GalickGunBeam.cs" />
+    <Compile Include="Projectiles\GalickGunCharge.cs" />
+    <Compile Include="Projectiles\HellzoneGrenadeProjectile.cs" />
+    <Compile Include="Projectiles\HellzoneGrenadeProjectile2.cs" />
+    <Compile Include="Projectiles\HolyWrathBall.cs" />
+    <Compile Include="Projectiles\HolyWrathExplosion.cs" />
+    <Compile Include="Projectiles\Kamehamehas\BigBangKamehameha\BigBangKamehamehaBall.cs" />
+    <Compile Include="Projectiles\Kamehamehas\BigBangKamehameha\BigBangKamehamehaBlast.cs" />
+    <Compile Include="Projectiles\Kamehamehas\BigBangKamehameha\BigBangKamehamehaTrail.cs" />
+    <Compile Include="Projectiles\Kamehamehas\Kamehameha10\Kamehameha10Beam.cs" />
+    <Compile Include="Projectiles\Kamehamehas\Kamehameha10\Kamehameha10Charge.cs" />
+    <Compile Include="Projectiles\Kamehamehas\Kamehameha\KamehamehaBeam.cs" />
+    <Compile Include="Projectiles\Kamehamehas\Kamehameha\KamehamehaCharge.cs" />
+    <Compile Include="Projectiles\Kamehamehas\SuperKamehameha\SuperKamehamehaBeam.cs" />
+    <Compile Include="Projectiles\Kamehamehas\SuperKamehameha\SuperKamehamehaCharge.cs" />
+    <Compile Include="Projectiles\KiBeamProjectile.cs" />
+    <Compile Include="Projectiles\KiBlastProjectile.cs" />
+    <Compile Include="Projectiles\KiSpark.cs" />
+    <Compile Include="Projectiles\LSSJs\LegendaryBlast.cs" />
+    <Compile Include="Projectiles\LSSJs\LSSJ2PillarStart.cs" />
+    <Compile Include="Projectiles\LSSJs\LSSJAuraBall.cs" />
+    <Compile Include="Projectiles\LSSJs\LSSJAuraLaser.cs" />
+    <Compile Include="Projectiles\LSSJs\LSSJAuraLaserBlack.cs" />
+    <Compile Include="Projectiles\LSSJs\LSSJBarrageProj.cs" />
+    <Compile Include="Projectiles\MajinBall.cs" />
+    <Compile Include="Projectiles\MakankosappoBeam.cs" />
+    <Compile Include="Projectiles\MakankosappoCharge.cs" />
+    <Compile Include="Projectiles\MasenkoBeam.cs" />
+    <Compile Include="Projectiles\MasenkoCharge.cs" />
+    <Compile Include="Projectiles\RadialJavelinProj.cs" />
+    <Compile Include="Projectiles\RadiantSpark.cs" />
+    <Compile Include="Projectiles\RockProjectile.cs" />
+    <Compile Include="Projectiles\ScattershotBlast.cs" />
+    <Compile Include="Projectiles\SpiritBallProjectile.cs" />
+    <Compile Include="Projectiles\SpiritBombs\SpiritBombBall.cs" />
+    <Compile Include="Projectiles\SpiritBombs\SuperSpiritBombBall.cs" />
+    <Compile Include="Projectiles\SuperEnergyBarrageExplosion.cs" />
+    <Compile Include="Projectiles\SuperEnergyBarrageProj.cs" />
+    <Compile Include="Projectiles\SupernovaBall.cs" />
+    <Compile Include="Projectiles\Support\GuardianMendingProj.cs" />
+    <Compile Include="Projectiles\TransmissionLinesProj.cs" />
+    <Compile Include="Projectiles\TrapShooterExplosion.cs" />
+    <Compile Include="Projectiles\TrapShooterProjectile.cs" />
+    <Compile Include="Tiles\DragonBalls\DragonBallTile.cs" />
+    <Compile Include="Tiles\DragonBalls\FiveStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\FourStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\OneStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\SevenStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\SixStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\ThreeStarDBTile.cs" />
+    <Compile Include="Tiles\DragonBalls\TwoStarDBTile.cs" />
+    <Compile Include="Tiles\KaiTable.cs" />
+    <Compile Include="Tiles\KiBeaconTile.cs" />
+    <Compile Include="Tiles\KiLantern.cs" />
+    <Compile Include="Tiles\RadiantFragmentBlock.cs" />
+    <Compile Include="Tiles\Wasteland\CoarseRockTile.cs" />
+    <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
+    <Compile Include="Tiles\ZTable.cs" />
+    <Compile Include="Transformations\PlayerTransformation.cs" />
+    <Compile Include="Transformations\TransformationDefinition.cs" />
+    <Compile Include="Transformations\TransformationDefinitionManager.cs" />
+    <Compile Include="UI\EasyMenu.cs" />
+    <Compile Include="UI\KiBar.cs" />
+    <Compile Include="UI\KiResource.cs" />
+    <Compile Include="UI\OverloadBar.cs" />
+    <Compile Include="UI\ProgressionMenu.cs" />
+    <Compile Include="UI\ResourceBar.cs" />
+    <Compile Include="UI\TransformationMenu.cs" />
+    <Compile Include="UI\WishMenu.cs" />
+    <Compile Include="Utilities\AnimationHelper.cs" />
+    <Compile Include="Utilities\CompatibilityHelper.cs" />
+    <Compile Include="Utilities\ControlHelper.cs" />
+    <Compile Include="Utilities\DebugHelper.cs" />
+    <Compile Include="Utilities\FormBuffHelper.cs" />
+    <Compile Include="Utilities\HitStunManager.cs" />
+    <Compile Include="Utilities\InstantTransmissionMapHelper.cs" />
+    <Compile Include="Utilities\ItemHelper.cs" />
+    <Compile Include="Utilities\ProjectileHelper.cs" />
+    <Compile Include="Utilities\SoundHelper.cs" />
+    <Compile Include="Utilities\UnlocalizedNameComparer.cs" />
+    <Compile Include="Waters\NamekWater.cs" />
+    <Compile Include="Waters\NamekWaterfall.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ExpandedSentries">
+      <HintPath>Lib\ExpandedSentries.dll</HintPath>
+    </Reference>
+    <Reference Include="Laugicality">
+      <HintPath>Lib\Laugicality.dll</HintPath>
+    </Reference>
+    <Reference Include="Leveled">
+      <HintPath>Lib\Leveled.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Game\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Graphics\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Xact\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Xact.dll</HintPath>
+    </Reference>
+    <Reference Include="ReLogic">
+      <HintPath>Lib\ReLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Terraria">
+      <HintPath>Lib\Terraria.exe</HintPath>
+    </Reference>
+    <Reference Include="ThoriumMod">
+      <HintPath>Lib\ThoriumMod.dll</HintPath>
+    </Reference>
+    <Reference Include="Tremor">
+      <HintPath>Lib\Tremor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnuBattleRods">
+      <HintPath>Lib\UnuBattleRods.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\Animations\Transform\" />
+    <Folder Include="Items\Consumables\Capsules\" />
+    <Folder Include="Items\Support\Accessories\" />
+    <Folder Include="Items\Support\Armor\" />
+    <Folder Include="Mounts\SpacePods\" />
+    <Folder Include="Sounds\" />
+    <Folder Include="Tails\" />
+    <Folder Include="UI\Buttons\" />
+    <Folder Include="UI\KiBar\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build.txt" />
+    <Content Include="description.txt" />
+    <Content Include="Destruction\BaseFloatingDestructionProj.png" />
+    <Content Include="Destruction\DirtBlockDestruction.png" />
+    <Content Include="Destruction\StoneBlockDestruction.png" />
+    <Content Include="Dusts\LightningBlue.png" />
+    <Content Include="Dusts\LightningGreen.png" />
+    <Content Include="Dusts\LightningRed.png" />
+    <Content Include="Dusts\LightningYellow.png" />
+    <Content Include="Dusts\MetalDust.png" />
+    <Content Include="Dusts\RadiantDust.png" />
+    <Content Include="Dusts\StarMuzzleFlash.png" />
+    <Content Include="Hairs\Dev\SSJSHair.png" />
+    <Content Include="Hairs\God\SSJBEHair.png" />
+    <Content Include="Hairs\God\SSJBHair.png" />
+    <Content Include="Hairs\God\SSJBKKHair.png" />
+    <Content Include="Hairs\God\SSJRHair.png" />
+    <Content Include="Hairs\HairStyles\SaiyanStyle1.png" />
+    <Content Include="Hairs\HairStyles\SaiyanStyle2.png" />
+    <Content Include="Hairs\HairStyles\SaiyanStyle3.png" />
+    <Content Include="Hairs\HairStyles\SaiyanStyle4.png" />
+    <Content Include="Hairs\HairStyles\Style5.png" />
+    <Content Include="Hairs\LSSJ\LSSJ2Hair.png" />
+    <Content Include="Hairs\LSSJ\LSSJHair.png" />
+    <Content Include="Hairs\SSJ\ASSJHair.png" />
+    <Content Include="Hairs\SSJ\SSJ1Hair.png" />
+    <Content Include="Hairs\SSJ\SSJ1KaiokenHair.png" />
+    <Content Include="Hairs\SSJ\SSJ2Hair.png" />
+    <Content Include="Hairs\SSJ\SSJ3Hair.png" />
+    <Content Include="Hairs\SSJ\SSJ4\SSJ4_Arms.png" />
+    <Content Include="Hairs\SSJ\SSJ4\SSJ4_Body.png" />
+    <Content Include="Hairs\SSJ\SSJ4\SSJ4_Eyes.png" />
+    <Content Include="Hairs\SSJ\USSJHair.png" />
+    <Content Include="ThreadChangelog.txt" />
+    <Content Include="WIkiChangelog.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)"=="WebMerc" (
+"D:\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
+exit 0
+)
+if "$(ConfigurationName)"=="NuovaC" (
+"C:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"
+exit 0
+)</PostBuildEvent>
+  </PropertyGroup>
+</Project>
