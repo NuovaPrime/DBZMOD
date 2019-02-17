@@ -8,6 +8,11 @@ namespace DBZMOD.Dynamicity
         {
         }
 
+        public ManyToManyNode(T current)
+        {
+            Current = current;
+        }
+
         public ManyToManyNode(List<T> previous, T current, List<T> next)
         {
             Previous = previous;
@@ -43,10 +48,10 @@ namespace DBZMOD.Dynamicity
                     Next.Add(next[i]);
         }
 
-        public List<T> Previous { get; set; }
+        public List<T> Previous { get; set; } = new List<T>();
 
         public T Current { get; set; }
 
-        public List<T> Next { get; set; }
+        public List<T> Next { get; set; } = new List<T>();
     }
 }

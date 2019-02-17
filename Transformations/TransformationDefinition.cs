@@ -79,6 +79,10 @@ namespace DBZMOD.Transformations
 
         public string GetMasteryTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_MASTERY_SUFFIX;
 
+        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
+
+        public override string ToString() => UnlocalizedName;
+
         public string UnlocalizedName { get; }
 
         public MenuSelectionID MenuId { get; }
@@ -94,7 +98,5 @@ namespace DBZMOD.Transformations
         public Predicate<MyPlayer> UnlockRequirements { get; }
 
         public TransformationDefinition[] Parents { get; }
-
-        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
     }
 }
