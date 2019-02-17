@@ -1,6 +1,6 @@
 ﻿namespace DBZMOD.Dynamicity
 {
-    public interface IHasParents<T>
+    public interface IHasParents<out T>
     {
         T[] Parents { get; }
     }

@@ -2,7 +2,7 @@
 
 namespace DBZMOD.Dynamicity
 {
-    public class ManyToManyNode<T> where T : class
+    public class ManyToManyNode<T>
     {
         public ManyToManyNode()
         {
