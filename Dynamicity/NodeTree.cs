@@ -37,6 +37,32 @@ namespace DBZMOD.Dynamicity
 
         public bool ContainsKey(T key) => Tree.ContainsKey(key);
 
+        #region Debug Methods
+
+        /// <summary>Prints the Tree in chat starting at the root.</summary>
+        internal void PrintTree()
+        {
+            foreach (ManyToManyNode<T> mtmn in Tree.Values)
+            {
+                if (mtmn.Previous.Count > 0) continue;
+
+                PrintTree(mtmn.Current);
+            }
+        }
+
+        /// <summary>Prints a Tree in chat starting at the given <see cref="T"/>.</summary>
+        /// <param name="def">The <see cref="T"/> to start at.</param>
+        internal void PrintTree(T def)
+        {
+            ManyToManyNode<T> mtmn = this[def];
+            Terraria.Main.NewText(mtmn.Current);
+
+            foreach (T td in mtmn.Next)
+                PrintTree(td);
+        }
+
+        #endregion
+
         public int Count => Tree.Count;
 
         internal Dictionary<T, ManyToManyNode<T>> Tree { get; set; }

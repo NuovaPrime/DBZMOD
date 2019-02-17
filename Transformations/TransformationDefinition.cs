@@ -2,6 +2,7 @@
 using DBZMOD.Dynamicity;
 using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 
 namespace DBZMOD.Transformations
@@ -23,13 +24,15 @@ namespace DBZMOD.Transformations
         /// <param name="transTextColor">The color of the transformation text.</param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
-        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] parents)
+        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, Texture2D buffIcon, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = buffKey;
 
             MenuId = menuId;
             TransformationText = transText;
             TransformationTextColor = transTextColor;
+            BuffIcon = buffIcon;
+
             HasMastery = canBeMastered;
             MasteryBuffKeyName = masterFormBuffKeyName;
             UnlockRequirements = unlockRequirements;
@@ -92,6 +95,8 @@ namespace DBZMOD.Transformations
         public bool HasMastery { get; }
 
         public Color TransformationTextColor { get; }
+
+        public Texture2D BuffIcon { get; }
 
         public string MasteryBuffKeyName { get; }
 

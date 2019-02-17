@@ -33,16 +33,6 @@ namespace DBZMOD
             }
         }
 
-        // Debug Method
-        internal void PrintTree(NodeTree<TransformationDefinition> tree, TransformationDefinition def)
-        {
-            ManyToManyNode<TransformationDefinition> mtmn = tree[def];
-            Main.NewText(mtmn.Current);
-
-            foreach (TransformationDefinition td in mtmn.Next)
-                PrintTree(tree, td);
-        }
-
         public override void PlayerConnect(Player player)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
