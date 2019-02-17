@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
 using System;
+using System.Collections.Generic;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 
@@ -12,36 +13,43 @@ namespace DBZMOD.UI
 {
     internal class TransformationMenu : EasyMenu
     {
-        public static bool menuvisible = false;
-        private UIText _titleText;
+        public static bool menuVisible = false;
+
         public UIImage backPanelImage;
-        private UIImageButton _ssjButtonTexture;
-        private UIImageButton _ssj2ButtonTexture;
-        private UIImageButton _ssj3ButtonTexture;
-        private UIImageButton _lssjButtonTexture;
-        private UIImageButton _lssj2ButtonTexture;
-        private UIImageButton _ssjgButtonTexture;
-        private UIImageButton _ssjSButtonTexture;
-        private UIImage _lockedImage1;
-        private UIImage _lockedImage2;
-        private UIImage _lockedImage3;
-        private UIImage _lockedImageG;
-        private UIImage _lockedImageL1;
-        private UIImage _lockedImageL2;
-        private UIImage _unknownImage2;
-        private UIImage _unknownImage3;
-        private UIImage _unknownImageG;
-        private UIImage _unknownImageL1;
-        private UIImage _unknownImageL2;
+        private UIText _titleText;
+
+        /*
+            private UIImageButton _ssjButtonTexture;
+            private UIImageButton _ssj2ButtonTexture;
+            private UIImageButton _ssj3ButtonTexture;
+            private UIImageButton _lssjButtonTexture;
+            private UIImageButton _lssj2ButtonTexture;
+            private UIImageButton _ssjgButtonTexture;
+            private UIImageButton _ssjSButtonTexture;
+            private UIImage _lockedImage1;
+            private UIImage _lockedImage2;
+            private UIImage _lockedImage3;
+            private UIImage _lockedImageG;
+            private UIImage _lockedImageL1;
+            private UIImage _lockedImageL2;
+            private UIImage _unknownImage2;
+            private UIImage _unknownImage3;
+            private UIImage _unknownImageG;
+            private UIImage _unknownImageL1;
+            private UIImage _unknownImageL2;
+
+            public static bool ssj1On;
+            public static bool ssj2On;
+            public static bool ssj3On;
+            public static bool lssjOn;
+        */
+
+        private readonly Dictionary<TransformationDefinition, UIImagePair> _imagePairs = new Dictionary<TransformationDefinition, UIImagePair>();
 
         public static TransformationDefinition SelectedTransformation { get; set; }
 
-        public static bool ssj1On;
-        public static bool ssj2On;
-        public static bool ssj3On;
-        public static bool lssjOn;
-        public const float PADDINGX = 5f;
-        public const float PADDINGY = 30f;
+        public const float PADDINGX = 30f;
+        public const float PADDINGY = PADDINGX;
 
         public override void OnInitialize()
         {
@@ -50,8 +58,8 @@ namespace DBZMOD.UI
             // TODO : Fix panel not being drageable all over its surface.
 
             backPanel = new UIPanel();
-            backPanel.Width.Set(306f, 0f);
-            backPanel.Height.Set(306f, 0f);
+            backPanel.Width.Set(Gfx.backPanel.Width, 0f);
+            backPanel.Height.Set(Gfx.backPanel.Height, 0f);
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
@@ -67,7 +75,8 @@ namespace DBZMOD.UI
             backPanel.Append(backPanelImage);
             float row1OffsetX = 0.0f;
 
-            InitText(ref _titleText, "Transformation Tree", 1, 100, -32, Color.White);
+            // 125 is the width of the text ?
+            InitText(ref _titleText, "Transformation Tree", 1, Gfx.backPanel.Bounds.X, -32, Color.White);
 
             TransformationDefinitionManager tDefMan = DBZMOD.Instance.TransformationDefinitionManager;
 
@@ -79,11 +88,19 @@ namespace DBZMOD.UI
                 TransformationDefinition def = tDefMan[i];
                 if (def.BuffIcon == null) continue;
 
-                UIImageButton btn = null;
+                UIImageButton transformationButton = null;
+                UIImage lockedImage = null, unknownImage = null;
 
-                InitButton(ref btn, def.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(def, evt, element)), 
+                InitButton(ref transformationButton, def.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(def, evt, element)), 
                     row1OffsetX, PADDINGY, backPanelImage);
+                
+                InitImage(ref lockedImage, Gfx.lockedImage, 0, 0, transformationButton);
+                lockedImage.ImageScale = 0f;
 
+                InitImage(ref unknownImage, Gfx.unknownImage, 0, 0, transformationButton);
+                unknownImage.ImageScale = 0f;
+
+                _imagePairs.Add(def, new UIImagePair(transformationButton, lockedImage, unknownImage));
                 row1OffsetX += def.BuffIcon.Width + 15;
             }
 
@@ -185,11 +202,18 @@ namespace DBZMOD.UI
         {
             base.Update(gameTime);
 
-            MyPlayer modplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-
-            Player player = Main.LocalPlayer;
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
             // TODO Make this use Dynamicity
+
+            TransformationDefinitionManager tDefMan = DBZMOD.Instance.TransformationDefinitionManager;
+            for (int i = 0; i < tDefMan.Count; i++)
+            {
+                TransformationDefinition def = tDefMan[i];
+
+                if (def.BuffIcon == null) continue;
+                _imagePairs[def].lockedImage.ImageScale = player.PlayerTransformations.ContainsKey(def) ? 0f : 1f;
+            }
 
             //_lockedImage1.ImageScale = !modplayer.IsSSJ1Achieved ? 1.0f : 0.0f;
 
@@ -254,10 +278,10 @@ namespace DBZMOD.UI
                 if (SelectedTransformation != def)
                 {
                     SelectedTransformation = def;
-                    Main.NewText($"Selected {def.TransformationText}");
+                    Main.NewText($"Selected {def.TransformationText}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
                 }
-
-                Main.NewText($"{def.TransformationText} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+                else
+                    Main.NewText($"{def.TransformationText} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
             }
             else if (def.SelectionRequirementsFailed.Invoke(player, def))
             {
@@ -393,5 +417,18 @@ namespace DBZMOD.UI
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
         }*/
+    }
+
+    struct UIImagePair
+    {
+        public UIImageButton button;
+        public UIImage lockedImage, unknownImage;
+
+        public UIImagePair(UIImageButton button, UIImage lockedImage, UIImage unknownImage)
+        {
+            this.button = button;
+            this.lockedImage = lockedImage;
+            this.unknownImage = unknownImage;
+        }
     }
 }

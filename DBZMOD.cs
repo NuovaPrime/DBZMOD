@@ -118,11 +118,9 @@ namespace DBZMOD
             KiBar.visible = false;
             OverloadBar.visible = false;
             Instance = null;
-            TransformationMenu.menuvisible = false;
+            TransformationMenu.menuVisible = false;
             ProgressionMenu.menuvisible = false;
             WishMenu.menuVisible = false;
-            TransformationMenu.ssj1On = false;
-            TransformationMenu.ssj2On = false;
             UIFlatPanel.backgroundTexture = null;
 
             Leveled = null;
@@ -191,7 +189,7 @@ namespace DBZMOD
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (_transMenuInterface != null && TransformationMenu.menuvisible)
+            if (_transMenuInterface != null && TransformationMenu.menuVisible)
             {
                 _transMenuInterface.Update(gameTime);
             }
@@ -233,7 +231,7 @@ namespace DBZMOD
                     "DBZMOD: Menus",
                     delegate
                     {
-                        if (TransformationMenu.menuvisible)
+                        if (TransformationMenu.menuVisible)
                         {
                             _transMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }

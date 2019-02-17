@@ -199,7 +199,7 @@ namespace DBZMOD
 
             if (transMenu.JustPressed)
             {
-                UI.TransformationMenu.menuvisible = !UI.TransformationMenu.menuvisible;
+                UI.TransformationMenu.menuVisible = !UI.TransformationMenu.menuVisible;
             }
 
             /*if (ProgressionMenuKey.JustPressed)
@@ -773,21 +773,6 @@ namespace DBZMOD
                 ssjAuraBeamTimer++;
             }
 
-            if (IsSSJ1Achieved)
-            {
-                UI.TransformationMenu.ssj1On = true;
-            }
-
-            if (SSJ2Achieved)
-            {
-                UI.TransformationMenu.ssj2On = true;
-            }
-
-            if (SSJ3Achieved)
-            {
-                UI.TransformationMenu.ssj3On = true;
-            }
-
             if (player.IsPlayerTransformed())
             {
                 if (!(player.IsKaioken() && kaiokenLevel == 5) && !player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
@@ -834,11 +819,6 @@ namespace DBZMOD
             if (!traitChecked)
             {
                 ChooseTrait();
-            }
-
-            if (LSSJAchieved)
-            {
-                UI.TransformationMenu.lssjOn = true;
             }
 
             if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
