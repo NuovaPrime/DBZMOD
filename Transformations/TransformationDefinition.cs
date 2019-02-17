@@ -87,7 +87,7 @@ namespace DBZMOD.Transformations
                 if (!player.PlayerTransformations.ContainsKey(Parents[i]))
                     return false;
 
-            return UnlockRequirements.Invoke(player) && Unlock(player);
+            return CanPlayerUnlock(player) && Unlock(player);
         }
 
         #endregion
@@ -113,8 +113,19 @@ namespace DBZMOD.Transformations
 
         internal bool PlayerHasTransformationAndNotLegendary(MyPlayer player) => PlayerHasTransformation(player) && !player.IsPlayerLegendary();
 
-        public string UnlocalizedName { get; }
+        public bool CanPlayerUnlock(MyPlayer player)
+        {
+            for (int i = 0; i < Parents.Length; i++)
+                if (!player.HasTransformation(Parents[i]))
+                    return false;
 
+            return UnlockRequirements == null || UnlockRequirements.Invoke(player);
+        }
+
+        public bool MeetsSelectionRequirements(MyPlayer player) => PlayerHasTransformation(player) && SelectionRequirements.Invoke(player, this);
+
+
+        public string UnlocalizedName { get; }
 
         public string TransformationText { get; }
 
@@ -127,14 +138,14 @@ namespace DBZMOD.Transformations
 
         public string TransformationFailureText { get; }
 
-        public Func<MyPlayer, TransformationDefinition, bool> SelectionRequirements { get; }
+        internal Func<MyPlayer, TransformationDefinition, bool> SelectionRequirements { get; }
 
-        public Func<MyPlayer, TransformationDefinition, bool> SelectionRequirementsFailed { get; }
+        internal Func<MyPlayer, TransformationDefinition, bool> SelectionRequirementsFailed { get; }
 
 
         public string MasteryBuffKeyName { get; }
 
-        public Predicate<MyPlayer> UnlockRequirements { get; }
+        internal Predicate<MyPlayer> UnlockRequirements { get; }
 
         public TransformationDefinition[] Parents { get; }
     }

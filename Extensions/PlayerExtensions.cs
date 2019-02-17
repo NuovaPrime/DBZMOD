@@ -261,7 +261,7 @@ namespace DBZMOD.Extensions
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition)
-                return modPlayer.IsSSJ1Achieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.SSJ1Achived && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition)

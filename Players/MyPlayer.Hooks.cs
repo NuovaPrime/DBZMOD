@@ -383,7 +383,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && !IsSSJ1Achieved && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+            if (isAnyBossAlive && !SSJ1Achived && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
                 if (rageCurrent >= 3)
                 {
@@ -410,7 +410,7 @@ namespace DBZMOD
                 }
             }
 
-            if (isAnyBossAlive && IsSSJ1Achieved && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -426,7 +426,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && IsSSJ1Achieved && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -442,7 +442,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isGolemAlive && IsSSJ1Achieved && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
+            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;

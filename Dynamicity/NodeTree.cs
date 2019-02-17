@@ -7,9 +7,10 @@ namespace DBZMOD.Dynamicity
 {
     public class NodeTree<T> where T : IHasParents<T>
     {
-        protected NodeTree(Dictionary<T, ManyToManyNode<T>> tree)
+        protected NodeTree(Dictionary<T, ManyToManyNode<T>> tree, Dictionary<T, ManyToManyNode<T>> rootedTree)
         {
             Tree = tree;
+            RootedTree = rootedTree;
         }
 
         public static NodeTree<T> BuildTree(List<T> items)
@@ -32,7 +33,13 @@ namespace DBZMOD.Dynamicity
                 }
             }
 
-            return new NodeTree<T>(tree);
+            Dictionary<T, ManyToManyNode<T>> rootedTree = new Dictionary<T, ManyToManyNode<T>>();
+
+            foreach (KeyValuePair<T, ManyToManyNode<T>> kvp in tree)
+                if (kvp.Value.Previous.Count == 0)
+                    rootedTree.Add(kvp.Key, kvp.Value);
+
+            return new NodeTree<T>(tree, rootedTree);
         }
 
         public bool ContainsKey(T key) => Tree.ContainsKey(key);
@@ -66,6 +73,9 @@ namespace DBZMOD.Dynamicity
         public int Count => Tree.Count;
 
         internal Dictionary<T, ManyToManyNode<T>> Tree { get; set; }
+
+        /// <summary>Contains the tree with only the root items as keys.</summary>
+        internal Dictionary<T, ManyToManyNode<T>> RootedTree { get; set; }
 
         public ManyToManyNode<T> this[T item]
         {
