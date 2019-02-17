@@ -1,4 +1,6 @@
-﻿using DBZMOD.Buffs;
+﻿using System.Collections.Generic;
+using DBZMOD.Buffs;
+using DBZMOD.Dynamicity;
 using DBZMOD.Enums;
 using DBZMOD.Managers;
 using DBZMOD.Utilities;
@@ -33,6 +35,25 @@ namespace DBZMOD.Transformations
 
             Add(TransformationExhaustionDefinition = new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor));
             Add(SpectrumDefinition = new TransformationDefinition(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, true, BuffKeyNames.spectrum));
+        }
+
+        public Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> BuildTransformationTree()
+        {
+            Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree = new Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>>();
+
+            foreach (TransformationDefinition def in byIndex)
+            {
+                if (!tree.ContainsKey(def))
+                    tree.Add(def, new ManyToManyNode<TransformationDefinition>());
+
+                tree[def].AddPrevious(def.PreviousTransformations);
+                tree[def].Current = def;
+
+                for (int i = 0; i < def.PreviousTransformations.Length; i++)
+                    tree[def.PreviousTransformations[i]].AddNext(def);
+            }
+
+            return tree;
         }
 
         public TransformationDefinition KaiokenDefinition { get; private set; }
