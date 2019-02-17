@@ -34,22 +34,24 @@ namespace DBZMOD.UI
         private UIImage _unknownImageL1;
         private UIImage _unknownImageL2;
 
+        public static TransformationDefinition SelectedTransformation { get; set; }
 
-        public static MenuSelectionID menuSelection;
         public static bool ssj1On;
         public static bool ssj2On;
         public static bool ssj3On;
         public static bool lssjOn;
-        public const float PADDINGX = 10f;
+        public const float PADDINGX = 5f;
         public const float PADDINGY = 30f;
 
         public override void OnInitialize()
         {
             base.OnInitialize();
 
+            // TODO : Fix panel not being drageable all over its surface.
+
             backPanel = new UIPanel();
             backPanel.Width.Set(306f, 0f);
-            backPanel.Height.Set(128f, 0f);
+            backPanel.Height.Set(306f, 0f);
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
@@ -65,10 +67,27 @@ namespace DBZMOD.UI
             backPanel.Append(backPanelImage);
             float row1OffsetX = 0.0f;
 
-            InitText(ref _titleText, "Transformation Tree", 1, 55, -32, Color.White);
+            InitText(ref _titleText, "Transformation Tree", 1, 100, -32, Color.White);
+
+            TransformationDefinitionManager tDefMan = DBZMOD.Instance.TransformationDefinitionManager;
 
             row1OffsetX = PADDINGX;
-            InitButton(ref _ssjButtonTexture, Gfx.ssj1ButtonImage, new MouseEvent(TrySelectingSSJ1),
+
+            int j = 0;
+            for (int i = 0; i < tDefMan.Count; i++)
+            {
+                TransformationDefinition def = tDefMan[i];
+                if (def.BuffIcon == null) continue;
+
+                UIImageButton btn = null;
+
+                InitButton(ref btn, def.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(def, evt, element)), 
+                    row1OffsetX, PADDINGY, backPanelImage);
+
+                row1OffsetX += def.BuffIcon.Width + 15;
+            }
+
+            /*InitButton(ref _ssjButtonTexture, Gfx.ssj1ButtonImage, new MouseEvent(TrySelectingSSJ1),
                 row1OffsetX - 2,
                 PADDINGY - 20,
                 backPanelImage);
@@ -156,10 +175,10 @@ namespace DBZMOD.UI
                 0,
                 _lssj2ButtonTexture);
 
-            InitButton(ref _ssjSButtonTexture, Gfx.ssjsButtonImage, new MouseEvent(TrySelectingSsjs),
+            InitButton(ref _ssjSButtonTexture, Gfx.ssjsButtonImage, new MouseEvent(TrySelectingSSJS),
                 PADDINGX + 14 + Gfx.ssj1ButtonImage.Width,
                 PADDINGY + 55,
-                backPanelImage);
+                backPanelImage);*/
         }
 
         public override void Update(GameTime gameTime)
@@ -170,9 +189,11 @@ namespace DBZMOD.UI
 
             Player player = Main.LocalPlayer;
 
-            _lockedImage1.ImageScale = !modplayer.IsSSJ1Achieved ? 1.0f : 0.0f;
+            // TODO Make this use Dynamicity
 
-            if (player.name == "Nuova")
+            //_lockedImage1.ImageScale = !modplayer.IsSSJ1Achieved ? 1.0f : 0.0f;
+
+            /*if (player.name == "Nuova")
             {
                 _ssjSButtonTexture.SetVisibility(1.0f, 0.5f);
             }
@@ -219,22 +240,35 @@ namespace DBZMOD.UI
                 _lockedImageL1.ImageScale = 1.0f;
                 _lockedImageL2.ImageScale = 0.0f;
 
+            }*/
+        }
+
+        private void TrySelectingTransformation(TransformationDefinition def, UIMouseEvent evt, UIElement listeningElement)
+        {
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+
+            if (player.PlayerTransformations.ContainsKey(def))
+            {
+                SoundHelper.PlayVanillaSound(SoundID.MenuTick);
+
+                if (SelectedTransformation != def)
+                {
+                    SelectedTransformation = def;
+                    Main.NewText($"Selected {def.TransformationText}");
+                }
+
+                Main.NewText($"{def.TransformationText} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+            }
+            else if (def.SelectionRequirementsFailed.Invoke(player, def))
+            {
+                SoundHelper.PlayVanillaSound(SoundID.MenuClose);
+
+                if (def.TransformationFailureText == null) return;
+                Main.NewText(def.TransformationFailureText);
             }
         }
 
-        /*
-            Menu Selection ID's
-            1 = SSJ1
-            2 = SSJ2
-            3 = SSJ3
-            4 = LSSJ1
-            5 = SSJG
-            6 = LSSJ2
-            7 = SSJB/SSJBE
-            8 = LSSJG
-            9 = UI/MUI
-         */
-        private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
+        /*private void TrySelectingSSJ1(UIMouseEvent evt, UIElement listeningelement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if (player.IsSSJ1Achieved)
@@ -350,7 +384,7 @@ namespace DBZMOD.UI
                 Main.NewText("The godlike power of the lunar star could awaken something beyond mortal comprehension.");
             }
         }
-        private void TrySelectingSsjs(UIMouseEvent evt, UIElement listeningelement)
+        private void TrySelectingSSJS(UIMouseEvent evt, UIElement listeningelement)
         {
             Player player = Main.LocalPlayer;
             if (player.name == "Nuova")
@@ -358,7 +392,6 @@ namespace DBZMOD.UI
                 menuSelection = MenuSelectionID.Spectrum;
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             }
-        }
-
+        }*/
     }
 }

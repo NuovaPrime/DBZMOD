@@ -1151,7 +1151,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJTransformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1163,7 +1163,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1175,7 +1175,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1187,7 +1187,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1199,7 +1199,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJ2Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition;
                 lssj2Timer = 0;
                 player.EndTransformations();
             }
@@ -1280,7 +1280,7 @@ namespace DBZMOD
                 else
                 {
                     // first attempt to step up to the selected form in the menu.
-                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransformationMenu.menuSelection);
+                    targetTransformation = UI.TransformationMenu.SelectedTransformation;
                 }
 
                 // if for any reason we haven't gotten our transformation target, try the next step instead.

@@ -16,25 +16,30 @@ namespace DBZMOD.Transformations
 
         internal override void DefaultInitialize()
         {
-            KaiokenDefinition = Add(new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.kaioken, null, defaultTransformationTextColor, null));
-            SuperKaiokenDefinition = Add(new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.superKaioken, null, defaultTransformationTextColor, null, true, BuffKeyNames.ssj1));
-            KaiokenFatigueDefinition = Add(new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor, null));
+            KaiokenDefinition = Add(new TransformationDefinition(BuffKeyNames.kaioken, null, defaultTransformationTextColor));
+            SuperKaiokenDefinition = Add(new TransformationDefinition(BuffKeyNames.superKaioken, null, defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1));
+            KaiokenFatigueDefinition = Add(new TransformationDefinition(BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor));
 
-            SSJ1Definition = Add( new TransformationDefinition(MenuSelectionID.SSJ1, BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, Gfx.ssj1ButtonImage, true, BuffKeyNames.ssj1));
-            ASSJDefinition = Add(new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.assj, FormBuffHelper.GetASSJNamePreference(), defaultTransformationTextColor, null, true, BuffKeyNames.ssj1, null, SSJ1Definition));
-            USSJDefinition = Add( new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.ussj, FormBuffHelper.GetUSSJNamePreference(), defaultTransformationTextColor, null, true, BuffKeyNames.ssj1, null, ASSJDefinition));
+            SSJ1Definition = Add(new TransformationDefinition(BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, Gfx.ssj1ButtonImage, "Only through failure with a powerful foe will true power awaken.", true, BuffKeyNames.ssj1));
+            ASSJDefinition = Add(new TransformationDefinition(BuffKeyNames.assj, FormBuffHelper.GetASSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: SSJ1Definition));
+            USSJDefinition = Add(new TransformationDefinition(BuffKeyNames.ussj, FormBuffHelper.GetUSSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: ASSJDefinition));
 
-            SSJ2Definition = Add(new TransformationDefinition(MenuSelectionID.SSJ2, BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, Gfx.ssj2ButtonImage, true, BuffKeyNames.ssj2, null, SSJ1Definition));
-            SSJ3Definition = Add(new TransformationDefinition(MenuSelectionID.SSJ3, BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, Gfx.ssj3ButtonImage, true, BuffKeyNames.ssj3, null, SSJ2Definition));
+            SSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, Gfx.ssj2ButtonImage, "One may awaken their true power through extreme pressure while ascended.", true, BuffKeyNames.ssj2, 
+                selectionRequirements: (p, t) => t.PlayerHasTransformation(p), selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));
+            SSJ3Definition = Add(new TransformationDefinition(BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, Gfx.ssj3ButtonImage, "The power of an ancient foe may be the key to unlocking greater power.", true, BuffKeyNames.ssj3, 
+                selectionRequirements: (p, t) => t.PlayerHasTransformationAndNotLegendary(p), selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ2Definition));
 
-            SSJGDefinition = Add(new TransformationDefinition(MenuSelectionID.SSJG, BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor, Gfx.ssjgButtonImage, true, BuffKeyNames.ssjg, null, SSJ1Definition));
-            SSJBDefinition = Add(new TransformationDefinition(MenuSelectionID.Ssjb, BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, true, BuffKeyNames.ssjb, null, SSJ1Definition));
+            SSJGDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor, Gfx.ssjgButtonImage, "The godlike power of the lunar star could awaken something beyond mortal comprehension.", true, BuffKeyNames.ssjg, null, 
+                selectionRequirements: (p, t) => t.PlayerHasTransformationAndNotLegendary(p), selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));
+            SSJBDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, "Set Text Here", true, BuffKeyNames.ssjb, null,
+                selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));
 
-            LSSJDefinition = Add(new TransformationDefinition(MenuSelectionID.LSSJ1, BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, Gfx.lssjButtonImage, true, BuffKeyNames.lssj));
-            LSSJ2Definition = Add(new TransformationDefinition(MenuSelectionID.LSSJ2, BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, Gfx.lssj2ButtonImage, true, BuffKeyNames.lssj2, null, LSSJDefinition));
+            LSSJDefinition = Add(new TransformationDefinition(BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, Gfx.lssjButtonImage, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj, parents: SSJ1Definition));
+            LSSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, Gfx.lssj2ButtonImage, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj2, parents: LSSJDefinition));
 
-            TransformationExhaustionDefinition = Add(new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor, null));
-            SpectrumDefinition = Add(new TransformationDefinition(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, null, true, BuffKeyNames.spectrum));
+            TransformationExhaustionDefinition = Add(new TransformationDefinition(BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor));
+            SpectrumDefinition = Add(new TransformationDefinition(BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.spectrum,
+                selectionRequirements: (p, t) => p.player.name == "Nuova", selectionRequirementsFailed: (p, t) => false));
         }
 
         public TransformationDefinition KaiokenDefinition { get; private set; }

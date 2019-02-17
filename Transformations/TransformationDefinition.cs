@@ -18,20 +18,35 @@ namespace DBZMOD.Transformations
         /// <summary>
         ///     Instantiate a new buff info, typically a form like SSJ or Kaioken.
         /// </summary>
-        /// <param name="menuId">The menu Id of the form, if it exists in the menu.</param>
-        /// <param name="buffKey">The key name of the buff used in the mod.</param>
+        /// <param name="unlocalizedName">The key name of the buff used in the mod.</param>
         /// <param name="transText">The text displayed when transforming.</param>
         /// <param name="transTextColor">The color of the transformation text.</param>
+        /// <param name="buffIcon">The icon to display in the Transformation Menu; leave as null if you don't want to display the transformation.</param>
+        /// <param name="transformationFailureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
-        public TransformationDefinition(MenuSelectionID menuId, string buffKey, string transText, Color transTextColor, Texture2D buffIcon, bool canBeMastered = false, string masterFormBuffKeyName = null, Predicate<MyPlayer> unlockRequirements = null, params TransformationDefinition[] parents)
+        /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
+        /// <param name="selectionRequirements">The requirements to select the form in the interface. Checked after verifying if the player has the transformation. Leaving this value null will default to checking wether or not the player has unlocked the transformation.</param>
+        /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
+        public TransformationDefinition(string unlocalizedName, string transText, Color transTextColor, Texture2D buffIcon = null, string transformationFailureText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
+            Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, params TransformationDefinition[] parents)
         {
-            UnlocalizedName = buffKey;
+            UnlocalizedName = unlocalizedName;
 
-            MenuId = menuId;
             TransformationText = transText;
             TransformationTextColor = transTextColor;
+
             BuffIcon = buffIcon;
+            TransformationFailureText = transformationFailureText;
+
+            if (selectionRequirements == null)
+                selectionRequirements = (p, t) => PlayerHasTransformation(p);
+
+            if (selectionRequirementsFailed == null)
+                selectionRequirementsFailed = (p, t) => true;
+
+            SelectionRequirements = selectionRequirements;
+            SelectionRequirementsFailed = selectionRequirementsFailed;
 
             HasMastery = canBeMastered;
             MasteryBuffKeyName = masterFormBuffKeyName;
@@ -39,6 +54,8 @@ namespace DBZMOD.Transformations
 
             Parents = parents;
         }
+
+        #region Unlocking
 
         /// <summary>Forces the transformation to be obtained without any cutscenes being played or requirements being checked.</summary>
         /// <param name="player">The <see cref="Player"/> to give the transformation to.</param>
@@ -73,22 +90,31 @@ namespace DBZMOD.Transformations
             return UnlockRequirements.Invoke(player) && Unlock(player);
         }
 
+        #endregion
+
         public int GetBuffId()
         {
             return DBZMOD.Instance.BuffType(this.UnlocalizedName);
         }
 
+        #region Save
+
         public string GetUnlockedTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_HASUNLOCKED_SUFFIX;
 
         public string GetMasteryTagCompoundKey() => TRANSFORMATIONDEFINITION_PREFIX + UnlocalizedName + TRANSFORMATIONDEFINITION_MASTERY_SUFFIX;
 
-        public bool Equals(TransformationDefinition transformationDefinition) => UnlocalizedName == transformationDefinition?.UnlocalizedName;
+        #endregion
+
+        public float GetPlayerMastery(MyPlayer player) => player.PlayerTransformations[this].Mastery;
 
         public override string ToString() => UnlocalizedName;
 
+        internal bool PlayerHasTransformation(MyPlayer player) => player.PlayerTransformations.ContainsKey(this);
+
+        internal bool PlayerHasTransformationAndNotLegendary(MyPlayer player) => PlayerHasTransformation(player) && !player.IsPlayerLegendary();
+
         public string UnlocalizedName { get; }
 
-        public MenuSelectionID MenuId { get; }
 
         public string TransformationText { get; }
 
@@ -96,7 +122,15 @@ namespace DBZMOD.Transformations
 
         public Color TransformationTextColor { get; }
 
+
         public Texture2D BuffIcon { get; }
+
+        public string TransformationFailureText { get; }
+
+        public Func<MyPlayer, TransformationDefinition, bool> SelectionRequirements { get; }
+
+        public Func<MyPlayer, TransformationDefinition, bool> SelectionRequirementsFailed { get; }
+
 
         public string MasteryBuffKeyName { get; }
 
