@@ -9,9 +9,6 @@ namespace DBZMOD.Managers
 
         public NodeTree<T> BuildNodeTree() => NodeTree<T>.BuildTree(byIndex);
 
-        public NodeTree<T> Tree
-        {
-            get { return _tree ?? (_tree = BuildNodeTree()); }
-        }
+        public NodeTree<T> Tree => _tree ?? (_tree = BuildNodeTree());
     }
 }
