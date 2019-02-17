@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace DBZMOD.Transformations
 {
-    public class TransformationDefinitionManager : Manager<TransformationDefinition>
+    public class TransformationDefinitionManager : Manager<TransformationDefinition>, ICanBuildNodeTree<TransformationDefinition>
     {
         public static readonly Color 
             defaultTransformationTextColor = new Color(219, 219, 48),
@@ -36,10 +36,10 @@ namespace DBZMOD.Transformations
             Add(TransformationExhaustionDefinition = new TransformationDefinition(MenuSelectionID.None, BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor));
             Add(SpectrumDefinition = new TransformationDefinition(MenuSelectionID.Spectrum, BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, true, BuffKeyNames.spectrum));
 
-            BuildTransformationTree();
+            BuildNodeTree();
         }
 
-        public Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> BuildTransformationTree() => NodeTree.BuildTree<TransformationDefinition>(byIndex);
+        public NodeTree<TransformationDefinition> BuildNodeTree() => NodeTree<TransformationDefinition>.BuildTree(byIndex);
 
         public TransformationDefinition KaiokenDefinition { get; private set; }
         public TransformationDefinition SuperKaiokenDefinition { get; private set; }
