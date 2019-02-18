@@ -20,13 +20,14 @@ namespace DBZMOD.UI
         private UIText _titleText;
 
         private readonly Dictionary<TransformationDefinition, UIImagePair> _imagePairs = new Dictionary<TransformationDefinition, UIImagePair>();
+        private readonly Dictionary<TransformationDefinition, Point> _imagePositions = new Dictionary<TransformationDefinition, Point>();
 
         public static TransformationDefinition SelectedTransformation { get; set; }
 
-        public const float
-            PADDINGX = 30f,
+        public const int
+            PADDINGX = 30,
             PADDINGY = PADDINGX,
-            SMALL_SPACE = 15f;
+            SMALL_SPACE = 15;
 
         public override void OnInitialize()
         {
@@ -51,7 +52,7 @@ namespace DBZMOD.UI
             backPanelImage.Top.Set(-12, 0f);
             backPanel.Append(backPanelImage);
 
-            float
+            int
                 rowXOffset = PADDINGX,
                 rowYOffset = PADDINGY;
 
@@ -68,16 +69,16 @@ namespace DBZMOD.UI
                 RecursiveDrawTransformation(tDefTree.Tree, rootedTree.Value, ref rowXOffset, ref rowYOffset);
 
                 rowXOffset = PADDINGX;
-                rowYOffset += rootedTree.Key.BuffIcon.Height + SMALL_SPACE;
+                //rowYOffset += rootedTree.Key.BuffIcon.Height + SMALL_SPACE;
             }
         }
 
-        private void RecursiveDrawTransformation(Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree, ManyToManyNode<TransformationDefinition> mtmn, ref float xOffset, ref float yOffset)
+        private void RecursiveDrawTransformation(Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree, ManyToManyNode<TransformationDefinition> mtmn, ref int xOffset, ref int yOffset)
         {
             if (mtmn.Current.BuffIcon == null) return;
 
             UIImageButton transformationButton = null;
-            UIImage lockedImage = null, unknownImage = null;
+            UIImage unknownImage = null, unknownImageGray = null, lockedImage = null;
 
             InitButton(ref transformationButton, mtmn.Current.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(mtmn.Current, evt, element)),
                 xOffset, yOffset, backPanelImage);
@@ -85,10 +86,17 @@ namespace DBZMOD.UI
             InitImage(ref unknownImage, Gfx.unknownImage, 0, 0, transformationButton);
             unknownImage.ImageScale = 0f;
 
-            InitImage(ref lockedImage, Gfx.lockedImage, 0, 0, unknownImage);
+            InitImage(ref unknownImageGray, Gfx.unknownImageGray, 0, 0, unknownImage);
+            unknownImage.ImageScale = 0f;
+
+            InitImage(ref lockedImage, Gfx.lockedImage, 0, 0, unknownImageGray);
             lockedImage.ImageScale = 0f;
 
-            _imagePairs.Add(mtmn.Current, new UIImagePair(transformationButton, lockedImage, unknownImage));
+            _imagePairs.Add(mtmn.Current, new UIImagePair(transformationButton, unknownImage, unknownImageGray, lockedImage));
+            _imagePositions.Add(mtmn.Current, new Point(xOffset, yOffset));
+            xOffset += mtmn.Current.BuffIcon.Width + SMALL_SPACE;
+
+            int localXOffset = xOffset;
 
             for (int i = 0; i < mtmn.Next.Count; i++)
             {
@@ -99,9 +107,9 @@ namespace DBZMOD.UI
 
                 if (i + 1 < mtmn.Next.Count)
                     yOffset += mtmn.Current.BuffIcon.Height + SMALL_SPACE;
-            }
 
-            xOffset += mtmn.Current.BuffIcon.Width + SMALL_SPACE;
+                xOffset = localXOffset;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -114,8 +122,9 @@ namespace DBZMOD.UI
             {
                 bool unlockable = kvp.Key.CanPlayerUnlock(player);
 
-                //kvp.Value.lockedImage.ImageScale = unlockable ? 0f : 1f;
-                //kvp.Value.unknownImage.ImageScale = unlockable && player.HasTransformation(kvp.Key) ? 0f : 1f;
+                kvp.Value.unknownImage.ImageScale = unlockable ? 0f : 1f;
+                kvp.Value.unknownImageGray.ImageScale = unlockable && player.HasTransformation(kvp.Key) ? 0f : 1f;
+                kvp.Value.lockedImage.ImageScale = unlockable ? 0f : 1f;
             }
         }
 
@@ -148,13 +157,14 @@ namespace DBZMOD.UI
     struct UIImagePair
     {
         public UIImageButton button;
-        public UIImage lockedImage, unknownImage;
+        public UIImage unknownImage, unknownImageGray, lockedImage;
 
-        public UIImagePair(UIImageButton button, UIImage lockedImage, UIImage unknownImage)
+        public UIImagePair(UIImageButton button, UIImage unknownImage, UIImage unknownImageGray, UIImage lockedImage)
         {
             this.button = button;
-            this.lockedImage = lockedImage;
             this.unknownImage = unknownImage;
+            this.unknownImageGray = unknownImageGray;
+            this.lockedImage = lockedImage;
         }
     }
 }
