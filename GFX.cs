@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using Tremor.Items;
 
 namespace DBZMOD
 {
@@ -44,10 +45,13 @@ namespace DBZMOD
         private const string BUTTON_DIRECTORY = "UI/Buttons/";
         private const string KI_BAR_DIRECTORY = UI_DIRECTORY + "KiBar/";
         private const string KI_BAR = KI_BAR_DIRECTORY + "KiBar";
+        private const string HAIR_MENU_DIRECTORY = UI_DIRECTORY + "HairMenu/";
         private const string OVERLOAD_BAR_SEGMENT = UI_DIRECTORY + "OverloadBar";
         private const string OVERLOAD_BAR_FRAME = UI_DIRECTORY + "OverloadBarFrame";
         private const string BACK_PANEL = UI_DIRECTORY + "BackPanel";
         private const string WISH_BACK_PANEL = UI_DIRECTORY + "WishBackPanel";
+        private const string HAIR_BACK_PANEL = HAIR_MENU_DIRECTORY + "HairBackPanel";
+        private const string HAIR_CONFIRM_BUTTON = HAIR_MENU_DIRECTORY + "ConfirmButton";
         private const string GRANT_BUTTON = BUTTON_DIRECTORY + "GrantButton";
         private const string SSJ1_BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage";
         private const string SSJ2_BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage";
@@ -73,6 +77,8 @@ namespace DBZMOD
         public static Texture2D bg;
         public static Texture2D backPanel;
         public static Texture2D wishBackPanel;
+        public static Texture2D hairBackPanel;
+        public static Texture2D hairConfirmButton;
         public static Texture2D grantButton;
         public static Texture2D ssj1ButtonImage;
         public static Texture2D ssj2ButtonImage;
@@ -97,6 +103,8 @@ namespace DBZMOD
             bg = mod.GetTexture(BG);
             backPanel = mod.GetTexture(BACK_PANEL);
             wishBackPanel = mod.GetTexture(WISH_BACK_PANEL);
+            hairBackPanel = mod.GetTexture(HAIR_BACK_PANEL);
+            hairConfirmButton = mod.GetTexture(HAIR_CONFIRM_BUTTON);
             grantButton = mod.GetTexture(GRANT_BUTTON);
             ssj1ButtonImage = mod.GetTexture(SSJ1_BUTTON);
             ssj2ButtonImage = mod.GetTexture(SSJ2_BUTTON);
@@ -130,6 +138,8 @@ namespace DBZMOD
             ssjsButtonImage = null;
             lockedImage = null;
             backPanel = null;
+            hairBackPanel = null;
+            hairConfirmButton = null;
             unknownImage = null;
             wishBackPanel = null;
             wishforPower = null;

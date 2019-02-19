@@ -13,6 +13,7 @@ using DBZMOD.Config;
 using DBZMOD.Network;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
+using DBZMOD.UI.HairMenu;
 using Leveled;
 
 namespace DBZMOD
@@ -26,6 +27,9 @@ namespace DBZMOD
 
         private static WishMenu _wishMenu;
         private static UserInterface _wishMenuInterface;
+
+        private static HairMenu _hairMenu;
+        private static UserInterface _hairMenuInterface;
 
         private static KiBar _kibar;
         private static UserInterface _kiBarInterface;
@@ -98,6 +102,7 @@ namespace DBZMOD
                 ActivateProgressionMenu();
                 ActivateKiBar();
                 ActivateOverloadBar();
+                ActivateHairMenu();
 
                 _instantTransmissionMapTeleporter = new InstantTransmissionMapHelper();
 
@@ -124,6 +129,7 @@ namespace DBZMOD
             TransformationMenu.ssj1On = false;
             TransformationMenu.ssj2On = false;
             UIFlatPanel.backgroundTexture = null;
+            HairMenu.menuVisible = false;
 
             Leveled = null;
         }
@@ -176,6 +182,14 @@ namespace DBZMOD
             _overloadBarInterface.SetState(_overloadbar);
         }
 
+        public static void ActivateHairMenu()
+        {
+            _hairMenu = new HairMenu();
+            _hairMenu.Activate();
+            _hairMenuInterface = new UserInterface();
+            _hairMenuInterface.SetState(_hairMenu);
+        }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Ki Fragment", new int[]
@@ -199,6 +213,11 @@ namespace DBZMOD
             if (_wishMenuInterface != null && WishMenu.menuVisible)
             {
                 _wishMenuInterface.Update(gameTime);
+            }
+
+            if (_hairMenuInterface != null && HairMenu.menuVisible)
+            {
+                _hairMenuInterface.Update(gameTime);
             }
 
             if (_progressionMenuInterface != null && ProgressionMenu.menuvisible)
@@ -246,6 +265,11 @@ namespace DBZMOD
                         if (WishMenu.menuVisible)
                         {
                             _wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                        }
+
+                        if (HairMenu.menuVisible)
+                        {
+                            _hairMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;
