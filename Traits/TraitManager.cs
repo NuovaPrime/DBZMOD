@@ -1,4 +1,5 @@
-﻿using DBZMOD.Managers;
+﻿using DBZMOD.Buffs;
+using DBZMOD.Managers;
 
 namespace DBZMOD.Traits
 {

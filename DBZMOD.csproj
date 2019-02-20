@@ -471,6 +471,10 @@
     <Compile Include="Tiles\Wasteland\CoarseRockTile.cs" />
     <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
+    <Compile Include="Traits\DivineTrait.cs" />
+    <Compile Include="Traits\LegendaryTrait.cs" />
+    <Compile Include="Traits\PrimalTrait.cs" />
+    <Compile Include="Traits\ProdigyTrait.cs" />
     <Compile Include="Traits\Trait.cs" />
     <Compile Include="Traits\TraitManager.cs" />
     <Compile Include="Transformations\PlayerTransformation.cs" />
