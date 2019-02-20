@@ -471,6 +471,8 @@
     <Compile Include="Tiles\Wasteland\CoarseRockTile.cs" />
     <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
+    <Compile Include="Traits\Trait.cs" />
+    <Compile Include="Traits\TraitManager.cs" />
     <Compile Include="Transformations\PlayerTransformation.cs" />
     <Compile Include="Transformations\TransformationDefinition.cs" />
     <Compile Include="Transformations\TransformationDefinitionManager.cs" />

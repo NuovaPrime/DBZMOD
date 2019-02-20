@@ -11,6 +11,7 @@ using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
 using DBZMOD.Network;
+using DBZMOD.Traits;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 using Leveled;
@@ -49,6 +50,7 @@ namespace DBZMOD
         public bool expandedSentriesLoaded;
 
         private TransformationDefinitionManager _transformationDefinitionManager;
+        private TraitManager _traitManager;
 
         public DBZMOD()
         {
@@ -300,6 +302,17 @@ namespace DBZMOD
                 if (!_transformationDefinitionManager.Initialized) _transformationDefinitionManager.DefaultInitialize();
 
                 return _transformationDefinitionManager;
+            }
+        }
+
+        public TraitManager TraitManager
+        {
+            get
+            {
+                if (_traitManager == null) _traitManager = new TraitManager();
+                if (!_traitManager.Initialized) _traitManager.DefaultInitialize();
+
+                return _traitManager;
             }
         }
 
