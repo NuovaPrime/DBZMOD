@@ -16,6 +16,15 @@ namespace DBZMOD.Managers
             return item;
         }
 
+        public virtual bool Remove(T item)
+        {
+            if (!byIndex.Contains(item)) return false;
+
+            byIndex.Remove(item);
+            byNames.Remove(item.UnlocalizedName);
+            return true;
+        }
+
         internal virtual void DefaultInitialize()
         {
             Initialized = true;

@@ -55,7 +55,6 @@ namespace DBZMOD.UI
             imageToInitialise.Left.Set(offsetX, 0f);
             imageToInitialise.Top.Set(offsetY, 0f);
 
-
             if (parentElement == null)
             {
                 backPanel.Append(imageToInitialise);
@@ -114,10 +113,12 @@ namespace DBZMOD.UI
         {
             base.DrawSelf(spriteBatch);
             Vector2 mousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
+
             if (backPanel.ContainsPoint(mousePosition))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+
             if (dragging)
             {
                 backPanel.Left.Set(mousePosition.X - _offset.X, 0f);

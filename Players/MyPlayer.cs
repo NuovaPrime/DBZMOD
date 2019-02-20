@@ -1124,20 +1124,13 @@ namespace DBZMOD
             player.eyeColor = eyeColor;
         }
 
-        private readonly Dictionary<string, int> _traitPool = new Dictionary<string, int>()
-        {
-            { "Prodigy", 4 }
-            , { "Legendary", 1 }
-            , { "", 15 }
-        };
-
         public void ChooseTrait()
         {
             var traitChooser = new WeightedRandom<string>();
+
             foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
-            {
                 traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
-            }
+
             traitChecked = true;
             playerTrait = traitChooser;
         }
@@ -1160,7 +1153,7 @@ namespace DBZMOD
         // TODO Remove all this in favor of auto checks.
         public void AwakeningFormUnlock()
         {
-            if (!IsSSJ1Achieved)
+            if (!SSJ1Achived)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
 
@@ -1168,11 +1161,11 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJTransformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ1;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (IsSSJ1Achieved && !SSJ2Achieved && !IsPlayerLegendary())
+            else if (SSJ1Achived && !SSJ2Achieved && !IsPlayerLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
 
@@ -1180,11 +1173,11 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ2;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (IsSSJ1Achieved && IsPlayerLegendary() && !LSSJAchieved)
+            else if (SSJ1Achived && IsPlayerLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
 
@@ -1192,7 +1185,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ1;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1204,7 +1197,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.SSJ3;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition;
                 player.EndTransformations();
                 rageCurrent = 0;
             }
@@ -1216,7 +1209,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJ2Transformation();
-                UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
+                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition;
                 lssj2Timer = 0;
                 player.EndTransformations();
             }
@@ -1297,7 +1290,7 @@ namespace DBZMOD
                 else
                 {
                     // first attempt to step up to the selected form in the menu.
-                    targetTransformation = FormBuffHelper.GetBuffFromMenuSelection(UI.TransformationMenu.menuSelection);
+                    targetTransformation = UI.TransformationMenu.SelectedTransformation;
                 }
 
                 // if for any reason we haven't gotten our transformation target, try the next step instead.
@@ -1853,6 +1846,8 @@ namespace DBZMOD
             SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
+        public bool HasTransformation(TransformationDefinition transformationDefinition) => PlayerTransformations.ContainsKey(transformationDefinition);
+
         public void CheckPlayerForTransformationStateDebuffApplication()
         {
             if (!DebugHelper.IsDebugModeOn())
@@ -1883,6 +1878,7 @@ namespace DBZMOD
             if (aura == null)
                 return;
             // doubled frame timer while charging.
+            
             if (isCharging && aura.id != (int)AuraID.Charge)
                 auraFrameTimer++;
 
@@ -1898,43 +1894,29 @@ namespace DBZMOD
             }
         }
 
-        public Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
+        internal Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
 
         [Obsolete]
-        public bool IsSSJ1Achieved
-        {
-            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition); }
-        }
+        public bool SSJ1Achived => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition);
 
         [Obsolete]
-        public bool ASSJAchieved
-        {
-            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition); }
-        }
+        public bool ASSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition);
 
         [Obsolete]
-        public bool USSJAchieved
-        {
-            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition); }
-        }
+        public bool USSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
 
         [Obsolete]
-        public bool SSJ2Achieved
-        {
-            get { return PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition); }
-        }
+        public bool SSJ2Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
 
         [Obsolete]
-        public bool SSJ3Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
+        public bool SSJ3Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
 
         [Obsolete]
-        public bool LSSJAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
+        public bool LSSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
         [Obsolete]
-        public bool LSSJ2Achieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
-
-        public bool lssjgAchieved = false;
+        public bool LSSJ2Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
 
         [Obsolete]
-        public bool SSJGAchieved => PlayerTransformations.ContainsKey(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
+        public bool SSJGAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
     }
 }

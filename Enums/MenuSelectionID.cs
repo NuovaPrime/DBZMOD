@@ -9,7 +9,7 @@
         LSSJ1 = 4,
         SSJG = 5,
         LSSJ2 = 6,
-        Ssjb = 7,
+        SSJB = 7,
         Lssjg = 8,
         UI = 9,
         Spectrum = 69

@@ -11,6 +11,7 @@ using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
 using DBZMOD.Network;
+using DBZMOD.Traits;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 using DBZMOD.UI.HairMenu;
@@ -53,6 +54,7 @@ namespace DBZMOD
         public bool expandedSentriesLoaded;
 
         private TransformationDefinitionManager _transformationDefinitionManager;
+        private TraitManager _traitManager;
 
         public DBZMOD()
         {
@@ -94,7 +96,7 @@ namespace DBZMOD
 
             if (!Main.dedServ)
             {
-                Gfx.LoadGfx(this);
+                GFX.LoadGfx(this);
                 KiBar.visible = true;
 
                 ActivateTransMenu();
@@ -119,15 +121,13 @@ namespace DBZMOD
         {
             TransformationDefinitionManager.Clear();
 
-            Gfx.UnloadGfx();
+            GFX.UnloadGfx();
             KiBar.visible = false;
             OverloadBar.visible = false;
             Instance = null;
-            TransformationMenu.menuvisible = false;
+            TransformationMenu.menuVisible = false;
             ProgressionMenu.menuvisible = false;
             WishMenu.menuVisible = false;
-            TransformationMenu.ssj1On = false;
-            TransformationMenu.ssj2On = false;
             UIFlatPanel.backgroundTexture = null;
             HairMenu.menuVisible = false;
 
@@ -205,7 +205,7 @@ namespace DBZMOD
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (_transMenuInterface != null && TransformationMenu.menuvisible)
+            if (_transMenuInterface != null && TransformationMenu.menuVisible)
             {
                 _transMenuInterface.Update(gameTime);
             }
@@ -252,7 +252,7 @@ namespace DBZMOD
                     "DBZMOD: Menus",
                     delegate
                     {
-                        if (TransformationMenu.menuvisible)
+                        if (TransformationMenu.menuVisible)
                         {
                             _transMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
@@ -326,6 +326,17 @@ namespace DBZMOD
                 if (!_transformationDefinitionManager.Initialized) _transformationDefinitionManager.DefaultInitialize();
 
                 return _transformationDefinitionManager;
+            }
+        }
+
+        public TraitManager TraitManager
+        {
+            get
+            {
+                if (_traitManager == null) _traitManager = new TraitManager();
+                if (!_traitManager.Initialized) _traitManager.DefaultInitialize();
+
+                return _traitManager;
             }
         }
 
