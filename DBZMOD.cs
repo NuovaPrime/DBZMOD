@@ -90,7 +90,7 @@ namespace DBZMOD
 
             if (!Main.dedServ)
             {
-                Gfx.LoadGfx(this);
+                GFX.LoadGfx(this);
                 KiBar.visible = true;
 
                 ActivateTransMenu();
@@ -114,7 +114,7 @@ namespace DBZMOD
         {
             TransformationDefinitionManager.Clear();
 
-            Gfx.UnloadGfx();
+            GFX.UnloadGfx();
             KiBar.visible = false;
             OverloadBar.visible = false;
             Instance = null;

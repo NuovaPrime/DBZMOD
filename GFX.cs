@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace DBZMOD
 {
 
-    public static class Gfx
+    public static class GFX
     {
         private static readonly string[] traitKiBarTypes = new string[]{ "Corrupt", "Divine", "Legendary", "Pacifist", "Shinseiju", "Primal", "Prodigy", string.Empty };
 
@@ -67,21 +67,36 @@ namespace DBZMOD
             LOCKED = UI_DIRECTORY + "LockedImage",
             UNKNOWN = UI_DIRECTORY + "UnknownImage",
             UNKNOWN_GRAY = UI_DIRECTORY + "UnknownImageGray",
+            WHITE_SQUARE = UI_DIRECTORY + "WhiteSquare",
             HAIR_DIRECTORY = "HAIR/";
 
         public static Dictionary<string, KiBarTexture> kiBarTextures;
-        public static Texture2D overloadBarSegment;
-        public static Texture2D overloadBarFrame;
-        public static Texture2D bg;
-        public static Texture2D backPanel;
-        public static Texture2D wishBackPanel;
-        public static Texture2D grantButton;
-        public static Texture2D ssj1ButtonImage, ssj2ButtonImage, ssj3ButtonImage, ssjgButtonImage;
-        public static Texture2D lssjButtonImage, lssj2ButtonImage;
-        public static Texture2D ssjsButtonImage;
-        public static Texture2D wishforPower, wishforWealth, wishforImmortality, wishforGenetics, wishforSkill, wishforAwakening;
-        public static Texture2D lockedImage;
-        public static Texture2D unknownImage, unknownImageGray;
+
+        public static Texture2D
+            overloadBarSegment,
+            overloadBarFrame,
+            bg,
+            backPanel,
+            wishBackPanel,
+            grantButton,
+            ssj1ButtonImage,
+            ssj2ButtonImage,
+            ssj3ButtonImage,
+            ssjgButtonImage,
+            lssjButtonImage,
+            lssj2ButtonImage,
+            ssjsButtonImage,
+            wishforPower,
+            wishforWealth,
+            wishforImmortality,
+            wishforGenetics,
+            wishforSkill,
+            wishforAwakening,
+            lockedImage,
+            unknownImage,
+            unknownImageGray,
+            whiteSquare;
+        
 
         public static void LoadGfx(Mod mod)
         {
@@ -103,6 +118,7 @@ namespace DBZMOD
 
             unknownImage = mod.GetTexture(UNKNOWN);
             unknownImageGray = mod.GetTexture(UNKNOWN_GRAY);
+            whiteSquare = mod.GetTexture(WHITE_SQUARE);
 
             wishforPower = mod.GetTexture(WISH_FOR_POWER);
             wishforWealth = mod.GetTexture(WISH_FOR_WEALTH);

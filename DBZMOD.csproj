@@ -119,6 +119,7 @@
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Extensions\PlayerExtensions.cs" />
     <Compile Include="Extensions\ProjectileExtensions.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="FistSystem.cs" />
     <Compile Include="FlightSystem.cs" />
     <Compile Include="GFX.cs" />

@@ -7,6 +7,7 @@ using DBZMOD.Enums;
 using System;
 using System.Collections.Generic;
 using DBZMOD.Dynamicity;
+using DBZMOD.Extensions;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 
@@ -21,6 +22,7 @@ namespace DBZMOD.UI
 
         private readonly Dictionary<TransformationDefinition, UIImagePair> _imagePairs = new Dictionary<TransformationDefinition, UIImagePair>();
         private readonly Dictionary<TransformationDefinition, Point> _imagePositions = new Dictionary<TransformationDefinition, Point>();
+        private readonly List<Vector2[]> _polyLinesToDraw = new List<Vector2[]>();
 
         public static TransformationDefinition SelectedTransformation { get; set; }
 
@@ -36,8 +38,8 @@ namespace DBZMOD.UI
             // TODO : Fix panel not being drageable all over its surface.
 
             backPanel = new UIPanel();
-            backPanel.Width.Set(Gfx.backPanel.Width, 0f);
-            backPanel.Height.Set(Gfx.backPanel.Height, 0f);
+            backPanel.Width.Set(GFX.backPanel.Width, 0f);
+            backPanel.Height.Set(GFX.backPanel.Height, 0f);
             backPanel.Left.Set(Main.screenWidth / 2f - backPanel.Width.Pixels / 2f, 0f);
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
@@ -45,9 +47,9 @@ namespace DBZMOD.UI
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
             Append(backPanel);
 
-            backPanelImage = new UIImage(Gfx.backPanel);
-            backPanelImage.Width.Set(Gfx.backPanel.Width, 0f);
-            backPanelImage.Height.Set(Gfx.backPanel.Height, 0f);
+            backPanelImage = new UIImage(GFX.backPanel);
+            backPanelImage.Width.Set(GFX.backPanel.Width, 0f);
+            backPanelImage.Height.Set(GFX.backPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
             backPanel.Append(backPanelImage);
@@ -57,7 +59,7 @@ namespace DBZMOD.UI
                 rowYOffset = PADDINGY;
 
             // 125 is the width of the text ?
-            InitText(ref _titleText, "Transformation Tree", 1, Gfx.backPanel.Bounds.X, -32, Color.White);
+            InitText(ref _titleText, "Transformation Tree", 1, GFX.backPanel.Bounds.X, -32, Color.White);
 
             NodeTree<TransformationDefinition> tDefTree = DBZMOD.Instance.TransformationDefinitionManager.Tree;
 
@@ -83,13 +85,13 @@ namespace DBZMOD.UI
             InitButton(ref transformationButton, mtmn.Current.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(mtmn.Current, evt, element)),
                 xOffset, yOffset, backPanelImage);
 
-            InitImage(ref unknownImage, Gfx.unknownImage, 0, 0, transformationButton);
+            InitImage(ref unknownImage, GFX.unknownImage, 0, 0, transformationButton);
             unknownImage.ImageScale = 0f;
 
-            InitImage(ref unknownImageGray, Gfx.unknownImageGray, 0, 0, unknownImage);
+            InitImage(ref unknownImageGray, GFX.unknownImageGray, 0, 0, unknownImage);
             unknownImage.ImageScale = 0f;
 
-            InitImage(ref lockedImage, Gfx.lockedImage, 0, 0, unknownImageGray);
+            InitImage(ref lockedImage, GFX.lockedImage, 0, 0, unknownImageGray);
             lockedImage.ImageScale = 0f;
 
             _imagePairs.Add(mtmn.Current, new UIImagePair(transformationButton, unknownImage, unknownImageGray, lockedImage));
@@ -102,6 +104,18 @@ namespace DBZMOD.UI
             {
                 TransformationDefinition nextDef = mtmn.Next[i];
                 if (nextDef.BuffIcon == null) continue;
+
+                List<Vector2> points = new List<Vector2>();
+                points.Add(_imagePositions[mtmn.Current].ToVector2());
+
+                for (int j = 0; j < mtmn.Previous.Count; j++)
+                {
+                    if (mtmn.Previous[j].BuffIcon == null) continue;
+
+                    points.Add(_imagePositions[mtmn.Previous[j]].ToVector2());
+                }
+
+                _polyLinesToDraw.Add(points.ToArray());
 
                 RecursiveDrawTransformation(tree, tree[nextDef], ref xOffset, ref yOffset);
 
@@ -126,6 +140,10 @@ namespace DBZMOD.UI
                 kvp.Value.unknownImageGray.ImageScale = unlockable && player.HasTransformation(kvp.Key) ? 0f : 1f;
                 kvp.Value.lockedImage.ImageScale = unlockable ? 0f : 1f;
             }
+
+            for (int i = 0; i < _polyLinesToDraw.Count; i++)
+                if (_polyLinesToDraw[i].Length > 1)
+                Main.spriteBatch.DrawPolyLine(_polyLinesToDraw[i], Color.White);
         }
 
         private static void TrySelectingTransformation(TransformationDefinition def, UIMouseEvent evt, UIElement listeningElement)

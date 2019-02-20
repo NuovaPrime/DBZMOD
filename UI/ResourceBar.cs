@@ -118,13 +118,13 @@ namespace DBZMOD.UI
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    texture = Gfx.GetKiBar(player).KiBarFrame;
+                    texture = GFX.GetKiBar(player).KiBarFrame;
                     frameHeight = texture.Height / 4;
                     textureOffset = new Vector2(16, 8);
                     _drawPosition = new Vector2(hitbox.X - 6, hitbox.Y - 6);
                     break;
                 case ResourceBarMode.Overload:
-                    texture = Gfx.overloadBarFrame;
+                    texture = GFX.overloadBarFrame;
                     frameHeight = texture.Height / 4;
                     textureOffset = new Vector2(18, 6);
                     _drawPosition = new Vector2(hitbox.X - 8, hitbox.Y - 4);
@@ -140,10 +140,10 @@ namespace DBZMOD.UI
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    barSegmentTexture = Gfx.GetKiBar(player).KiBarSegment;
+                    barSegmentTexture = GFX.GetKiBar(player).KiBarSegment;
                     break;
                 case ResourceBarMode.Overload:
-                    barSegmentTexture = Gfx.overloadBarSegment;
+                    barSegmentTexture = GFX.overloadBarSegment;
                     break;
             }
 

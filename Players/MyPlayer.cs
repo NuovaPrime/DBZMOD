@@ -1868,6 +1868,7 @@ namespace DBZMOD
             if (aura == null)
                 return;
             // doubled frame timer while charging.
+            
             if (isCharging && aura.id != (int)AuraID.Charge)
                 auraFrameTimer++;
 
