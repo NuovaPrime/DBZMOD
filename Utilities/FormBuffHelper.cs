@@ -80,12 +80,6 @@ namespace DBZMOD.Utilities
             return ConfigModel.isSaiyanGradeNames ? "Super Saiyan Grade 3" : "Ultra Super Saiyan";
         }
 
-        // returns the buff Id of a transformation menu selection
-        public static TransformationDefinition GetBuffFromMenuSelection(MenuSelectionID menuId)
-        {
-            return transformationDefinitionList.FirstOrDefault(x => x.MenuId == menuId);
-        }
-
         public static TransformationDefinition GetBuffByKeyName(string keyName)
         {
             return transformationDefinitionList.FirstOrDefault(x => x.UnlocalizedName == keyName);

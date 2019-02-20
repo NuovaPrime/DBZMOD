@@ -7,9 +7,10 @@ namespace DBZMOD.Dynamicity
 {
     public class NodeTree<T> where T : IHasParents<T>
     {
-        protected NodeTree(Dictionary<T, ManyToManyNode<T>> tree)
+        protected NodeTree(Dictionary<T, ManyToManyNode<T>> tree, Dictionary<T, ManyToManyNode<T>> rootedTree)
         {
             Tree = tree;
+            RootedTree = rootedTree;
         }
 
         public static NodeTree<T> BuildTree(List<T> items)
@@ -32,14 +33,49 @@ namespace DBZMOD.Dynamicity
                 }
             }
 
-            return new NodeTree<T>(tree);
+            Dictionary<T, ManyToManyNode<T>> rootedTree = new Dictionary<T, ManyToManyNode<T>>();
+
+            foreach (KeyValuePair<T, ManyToManyNode<T>> kvp in tree)
+                if (kvp.Value.Previous.Count == 0)
+                    rootedTree.Add(kvp.Key, kvp.Value);
+
+            return new NodeTree<T>(tree, rootedTree);
         }
 
         public bool ContainsKey(T key) => Tree.ContainsKey(key);
 
+        #region Debug Methods
+
+        /// <summary>Prints the Tree in chat starting at the root.</summary>
+        internal void PrintTree()
+        {
+            foreach (ManyToManyNode<T> mtmn in Tree.Values)
+            {
+                if (mtmn.Previous.Count > 0) continue;
+
+                PrintTree(mtmn.Current);
+            }
+        }
+
+        /// <summary>Prints a Tree in chat starting at the given <see cref="T"/>.</summary>
+        /// <param name="def">The <see cref="T"/> to start at.</param>
+        internal void PrintTree(T def)
+        {
+            ManyToManyNode<T> mtmn = this[def];
+            Terraria.Main.NewText(mtmn.Current);
+
+            foreach (T td in mtmn.Next)
+                PrintTree(td);
+        }
+
+        #endregion
+
         public int Count => Tree.Count;
 
         internal Dictionary<T, ManyToManyNode<T>> Tree { get; set; }
+
+        /// <summary>Contains the tree with only the root items as keys.</summary>
+        internal Dictionary<T, ManyToManyNode<T>> RootedTree { get; set; }
 
         public ManyToManyNode<T> this[T item]
         {

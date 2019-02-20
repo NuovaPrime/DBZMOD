@@ -26,14 +26,14 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("LSSJ2 Test Item");
-            Tooltip.SetDefault("Manually activates the lssj2 transformation cutscene and unlocks it.");
+            Tooltip.SetDefault("Manually activates the LSSJ2 transformation cutscene and unlocks it.");
         }
 
 
         public override bool UseItem(Player player)
         {
             MyPlayer.ModPlayer(player).LSSJ2Transformation();
-            UI.TransformationMenu.menuSelection = MenuSelectionID.LSSJ2;
+            UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition;
 
             DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.Unlock(player);
 

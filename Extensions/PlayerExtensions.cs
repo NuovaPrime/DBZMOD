@@ -239,11 +239,6 @@ namespace DBZMOD.Extensions
             return player.IsSSJ1(); // || IsSSJB(player) || IsSSJR(player)
         }
 
-        public static bool CanTransform(this Player player, MenuSelectionID menuId)
-        {
-            return CanTransform(player, FormBuffHelper.GetBuffFromMenuSelection(menuId));
-        }
-
         public static bool IsAscended(this Player player)
         {
             return player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.GetBuffId()) || player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.GetBuffId());
@@ -265,27 +260,27 @@ namespace DBZMOD.Extensions
             
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition))
-                return modPlayer.IsSSJ1Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition)
+                return modPlayer.SSJ1Achived && !player.IsExhaustedFromTransformation();
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition)
                 return !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition)
                 return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition)
                 return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition)
                 return (player.IsSSJ1() || player.IsUssj()) && modPlayer.ASSJAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition)
                 return player.IsAssj() && modPlayer.USSJAchieved && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition)
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition)
                 return modPlayer.kaioAchieved && !player.IsTiredFromKaioken() && !player.IsExhaustedFromTransformation();
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SpectrumDefinition)
                 return player.name == "Nuova";
 
             return false;
@@ -335,11 +330,11 @@ namespace DBZMOD.Extensions
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
             
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
-            if (buff.Equals(player.GetCurrentTransformation(true, false)) || buff.Equals(player.GetCurrentTransformation(false, true)))
+            if (buff == player.GetCurrentTransformation(true, false) || buff == player.GetCurrentTransformation(false, true))
                 return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
-            if (buff.Equals(DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition))
+            if (buff == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition)
             {
                 player.RemoveTransformation(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.UnlocalizedName);
             }
@@ -425,7 +420,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.legendaryBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.legendaryBuffs.Length - 1)
+                    if (FormBuffHelper.legendaryBuffs[i] == currentTransformation && i < FormBuffHelper.legendaryBuffs.Length - 1)
                     {
                         return FormBuffHelper.legendaryBuffs[i + 1];
                     }
@@ -437,7 +432,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ssjBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.ssjBuffs.Length - 1)
+                    if (FormBuffHelper.ssjBuffs[i] == currentTransformation && i < FormBuffHelper.ssjBuffs.Length - 1)
                     {
                         return FormBuffHelper.ssjBuffs[i + 1];
                     }
@@ -457,7 +452,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.legendaryBuffs[i].Equals(currentTransformation) && i > 0)
+                    if (FormBuffHelper.legendaryBuffs[i] == currentTransformation && i > 0)
                     {
                         return FormBuffHelper.legendaryBuffs[i - 1];
                     }
@@ -469,7 +464,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ssjBuffs[i].Equals(currentTransformation) && i > 0)
+                    if (FormBuffHelper.ssjBuffs[i] == currentTransformation && i > 0)
                     {
                         return FormBuffHelper.ssjBuffs[i - 1];
                     }
@@ -481,7 +476,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ascensionBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ascensionBuffs[i].Equals(currentTransformation) && i > 0)
+                    if (FormBuffHelper.ascensionBuffs[i] == currentTransformation && i > 0)
                     {
                         return FormBuffHelper.ascensionBuffs[i - 1];
                     }
@@ -500,7 +495,7 @@ namespace DBZMOD.Extensions
             {
                 for (int i = 0; i < FormBuffHelper.ascensionBuffs.Length; i++)
                 {
-                    if (FormBuffHelper.ascensionBuffs[i].Equals(currentTransformation) && i < FormBuffHelper.ascensionBuffs.Length - 1)
+                    if (FormBuffHelper.ascensionBuffs[i] == currentTransformation && i < FormBuffHelper.ascensionBuffs.Length - 1)
                     {
                         return FormBuffHelper.ascensionBuffs[i + 1];
                     }
