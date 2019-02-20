@@ -141,9 +141,10 @@ namespace DBZMOD.UI
                 kvp.Value.lockedImage.ImageScale = unlockable ? 0f : 1f;
             }
 
-            for (int i = 0; i < _polyLinesToDraw.Count; i++)
+            // Disabled as it crashes with SpriteBatch.
+            /*for (int i = 0; i < _polyLinesToDraw.Count; i++)
                 if (_polyLinesToDraw[i].Length > 1)
-                Main.spriteBatch.DrawPolyLine(_polyLinesToDraw[i], Color.White);
+                    Main.spriteBatch.DrawPolyLine(_polyLinesToDraw[i], Color.White);*/
         }
 
         private static void TrySelectingTransformation(TransformationDefinition def, UIMouseEvent evt, UIElement listeningElement)
