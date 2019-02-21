@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using DBZMOD.Traits;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
-using Tremor.Items;
 
 namespace DBZMOD
 {
@@ -80,11 +79,11 @@ namespace DBZMOD
             WHITE_SQUARE = UI_DIRECTORY + "WhiteSquare",
             HAIR_DIRECTORY = "HAIR/",
             STYLE_PREVIEWS_DIRECTORY = HAIR_MENU_DIRECTORY + "StylePreviews/",
-            STYLE_ONE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style1",
-            STYLE_TWO_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style2",
-            STYLE_THREE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style3",
-            STYLE_FOUR_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style4",
-            STYLE_FIVE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style5",
+            STYLE_ONE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style1/",
+            STYLE_TWO_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style2/",
+            STYLE_THREE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style3/",
+            STYLE_FOUR_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style4/",
+            STYLE_FIVE_DIRECTORY = STYLE_PREVIEWS_DIRECTORY + "Style5/",
             STYLE_ONE_BASE = STYLE_ONE_DIRECTORY + "Base",
             STYLE_ONE_SSJ = STYLE_ONE_DIRECTORY + "SuperSaiyan1",
             STYLE_ONE_SSJ2 = STYLE_ONE_DIRECTORY + "SuperSaiyan2",
