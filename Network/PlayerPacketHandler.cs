@@ -255,7 +255,6 @@ namespace DBZMOD.Network
             SendChangedEvilMessage(toWho, fromWho, fromWho, modPlayer.evilMessage);
             SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.mushroomMessage);
             SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.isHoldingKiWeapon);
-            SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
             SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.PlayerTrait);
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.isFlying);
             SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.powerWishesLeft);
@@ -789,14 +788,6 @@ namespace DBZMOD.Network
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(player.isHoldingKiWeapon);
-                        packet.Send(-1, fromWho);
-                    }
-                    break;
-                case PlayerVarSyncEnum.TraitChecked:
-                    player.traitChecked = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        packet.Write(player.traitChecked);
                         packet.Send(-1, fromWho);
                     }
                     break;

@@ -56,8 +56,11 @@ namespace DBZMOD.Traits
 
             int roll = Main.rand.Next(0, 100);
 
-            if (roll > totalWeight)
-                return traitChooser;
+            if (roll <= totalWeight)
+            {
+                Trait trait = traitChooser;
+                return trait;
+            }
 
             return Default;
         }
