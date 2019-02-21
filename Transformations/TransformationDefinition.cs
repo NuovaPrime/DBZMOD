@@ -1,6 +1,5 @@
 ﻿using System;
 using DBZMOD.Dynamicity;
-using DBZMOD.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +7,7 @@ using Terraria;
 namespace DBZMOD.Transformations
 {
     // helper class for storing all the details about a transformation that need to be referenced later.
-    public class TransformationDefinition : IHasUnlocalizedName, IHasParents<TransformationDefinition>
+    public abstract class TransformationDefinition : IHasUnlocalizedName, IHasParents<TransformationDefinition>
     {
         internal const string
             TRANSFORMATIONDEFINITION_PREFIX = "TransformationDefinition_",
@@ -28,16 +27,17 @@ namespace DBZMOD.Transformations
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
         /// <param name="selectionRequirements">The requirements to select the form in the interface. Checked after verifying if the player has the transformation. Leaving this value null will default to checking wether or not the player has unlocked the transformation.</param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
-        public TransformationDefinition(string unlocalizedName, string transText, Color transTextColor,
-            float damageMultiplier, float speedMultiplier, float defenseBonus, float kiSkillDrainMultiplier, float kiDrainRate, float kiDrainRateMastery,
+        protected TransformationDefinition(string unlocalizedName, string transText, Color transTextColor,
+            float baseDamageMultiplier, float baseSpeedMultiplier, float baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate = 0,
             Texture2D buffIcon = null, string transformationFailureText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
             Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;
-
             TransformationText = transText;
-            TransformationTextColor = transTextColor;
 
+            BaseDamageMultiplier = baseDamageMultiplier;
+
+            TransformationTextColor = transTextColor;
             BuffIcon = buffIcon;
             TransformationFailureText = transformationFailureText;
 
@@ -94,10 +94,7 @@ namespace DBZMOD.Transformations
 
         #endregion
 
-        public int GetBuffId()
-        {
-            return DBZMOD.Instance.BuffType(this.UnlocalizedName);
-        }
+        public int GetBuffId() => DBZMOD.Instance.BuffType(this.UnlocalizedName);
 
         #region Save
 
@@ -133,8 +130,13 @@ namespace DBZMOD.Transformations
 
         public bool HasMastery { get; }
 
-        public Color TransformationTextColor { get; }
+        public float BaseDamageMultiplier { get; }
+        public virtual float DamageMultiplier => BaseDamageMultiplier;
 
+        public virtual float 
+
+
+        public Color TransformationTextColor { get; }
 
         public Texture2D BuffIcon { get; }
 

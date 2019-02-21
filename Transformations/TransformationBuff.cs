@@ -2,6 +2,7 @@
 using DBZMOD.Buffs;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
+using DBZMOD.Transformations.Kaioken;
 using Terraria;
 using Terraria.ModLoader;
 

@@ -5,12 +5,13 @@ namespace DBZMOD.Transformations.Kaioken
 {
     public class KaiokenBuff : TransformationBuff
     {
+        public KaiokenBuff() : base(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition)
+        {
+        }
+
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Kaioken");
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = false;            
+            base.SetDefaults();     
             Description.SetDefault(AssembleTransBuffDescription());
         }
 

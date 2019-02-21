@@ -59,7 +59,7 @@
     <Compile Include="Buffs\DevBuffs\SSJSBuff.cs" />
     <Compile Include="Buffs\DisgustingGoopBuff.cs" />
     <Compile Include="Buffs\EnhancedReserves.cs" />
-    <Compile Include="Buffs\KaiokenBuff.cs" />
+    <Compile Include="Transformations\Kaioken\KaiokenBuff.cs" />
     <Compile Include="Buffs\KatchinFeet.cs" />
     <Compile Include="Buffs\KiLanternBuff.cs" />
     <Compile Include="Buffs\KiPotionSickness.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
     <Compile Include="Buffs\SSJBuffs\LSSJ2Buff.cs" />
     <Compile Include="Buffs\SSJBuffs\LSSJBuff.cs" />
+    <Compile Include="Transformations\Kaioken\KaiokenTransformation.cs" />
     <Compile Include="Transformations\SSJ1\SSJ1Buff.cs" />
     <Compile Include="Buffs\SSJBuffs\SSJ2Buff.cs" />
     <Compile Include="Buffs\SSJBuffs\SSJ3Buff.cs" />
