@@ -254,6 +254,7 @@ namespace DBZMOD
             kiDamage = 1f;
             kiKbAddition = 0f;
             kiChargeRate = 1;
+
             if (kiEssence1)
                 kiChargeRate += 1;
             if (kiEssence2)
@@ -264,6 +265,7 @@ namespace DBZMOD
                 kiChargeRate += 2;
             if (kiEssence5)
                 kiChargeRate += 3;
+
             scouterT2 = false;
             scouterT3 = false;
             scouterT4 = false;
@@ -342,8 +344,9 @@ namespace DBZMOD
             mechanicalAmplifier = false;
             metamoranSash = false;
             kiMax2 = 0;
-            bool hasLegendaryBuff = player.HasBuff(mod.BuffType("LegendaryTrait")) || player.HasBuff(mod.BuffType("UnknownLegendary"));
-            kiMaxMult = hasLegendaryBuff ? 2f : 1f;
+
+            kiMaxMult = PlayerTrait == DBZMOD.Instance.TraitManager.Legendary ? 2f : 1f;
+
             isHoldingDragonRadarMk1 = false;
             isHoldingDragonRadarMk2 = false;
             isHoldingDragonRadarMk3 = false;

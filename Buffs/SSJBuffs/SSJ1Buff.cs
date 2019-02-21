@@ -10,6 +10,7 @@ namespace DBZMOD.Buffs.SSJBuffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
+
             damageMulti = 1.50f;
             speedMulti = 1.50f;
             kiDrainBuffMulti = 1.25f;
