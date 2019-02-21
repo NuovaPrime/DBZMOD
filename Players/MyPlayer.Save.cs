@@ -236,7 +236,10 @@ namespace DBZMOD
             mushroomMessage = tag.Get<bool>("MushroomMessage");
 
             string playerTrait = tag.Get<string>("playerTrait");
-            if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))
+
+            if (playerTrait == "")
+                PlayerTrait = DBZMOD.Instance.TraitManager.Default;
+            else if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))
                 PlayerTrait = DBZMOD.Instance.TraitManager[char.ToLower(playerTrait[0]) + playerTrait.Substring(1)];
             else
                 PlayerTrait = DBZMOD.Instance.TraitManager[playerTrait];
