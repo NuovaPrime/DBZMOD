@@ -92,7 +92,7 @@ namespace DBZMOD
 
             if (!Main.dedServ)
             {
-                GFX.LoadGfx(this);
+                GFX.LoadGFX(this);
                 KiBar.visible = true;
 
                 ActivateTransMenu();
@@ -310,7 +310,7 @@ namespace DBZMOD
             get
             {
                 if (_traitManager == null) _traitManager = new TraitManager();
-                if (!_traitManager.Initialized) _traitManager.DefaultInitialize();
+                if (!_traitManager.Initialized) _traitManager.DefaultInitialize();
 
                 return _traitManager;
             }

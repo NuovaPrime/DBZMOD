@@ -31,9 +31,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).playerTrait = "Prodigy";
+            MyPlayer.ModPlayer(player).PlayerTrait = DBZMOD.Instance.TraitManager.Prodigy;
             return true;
-
         }
     }
 }

@@ -14,6 +14,7 @@ namespace DBZMOD.UI
 		Ki,
         Overload
 	}
+
 	class ResourceBar : UIElement
 	{
 		private ResourceBarMode _stat;
@@ -21,6 +22,7 @@ namespace DBZMOD.UI
 		private float _height;
 		private int _frameTimer;
 		private int _frameTimer2;
+
 		public ResourceBar(ResourceBarMode stat, int height, int width)
 		{
 			this._stat = stat;
@@ -118,7 +120,7 @@ namespace DBZMOD.UI
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    texture = GFX.GetKiBar(player).KiBarFrame;
+                    texture = GFX.GetKiBar(player).kiBarFrame;
                     frameHeight = texture.Height / 4;
                     textureOffset = new Vector2(16, 8);
                     _drawPosition = new Vector2(hitbox.X - 6, hitbox.Y - 6);
@@ -140,7 +142,7 @@ namespace DBZMOD.UI
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    barSegmentTexture = GFX.GetKiBar(player).KiBarSegment;
+                    barSegmentTexture = GFX.GetKiBar(player).kiBarSegment;
                     break;
                 case ResourceBarMode.Overload:
                     barSegmentTexture = GFX.overloadBarSegment;
@@ -180,6 +182,7 @@ namespace DBZMOD.UI
 
         private static List<float> _cleanAverageKi = new List<float>();
         private static List<float> _cleanAverageOverload = new List<float>();
+
         public override void Update(GameTime gameTime)
 		{            
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();

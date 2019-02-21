@@ -25,7 +25,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (MyPlayer.ModPlayer(player).IsLegendary())
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -44,7 +44,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
                 }
 
             }
-            else if(!MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            else if(!MyPlayer.ModPlayer(player).IsLegendary())
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -91,7 +91,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (!MyPlayer.ModPlayer(player).IsLegendary())
             {
                 player.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition, DBZMOD.Instance);
                 MyPlayer.ModPlayer(player).isTransforming = false;

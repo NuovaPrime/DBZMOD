@@ -25,6 +25,10 @@ namespace DBZMOD.Managers
             return true;
         }
 
+        public virtual bool Contains(T item) => byIndex.Contains(item);
+
+        public virtual bool Contains(string unlocalizedName) => byNames.ContainsKey(unlocalizedName);
+
         internal virtual void DefaultInitialize()
         {
             Initialized = true;

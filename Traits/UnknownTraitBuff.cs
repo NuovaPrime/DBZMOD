@@ -1,9 +1,10 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Traits
 {
-    public class UnknownLegendary : ModBuff
+    public sealed class UnknownTraitBuff : ModBuff
     {
         public override void SetDefaults()
         {
@@ -11,7 +12,7 @@ namespace DBZMOD.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = false;
-            Description.SetDefault("Your body seems a bit special.");
+            Description.SetDefault("Your body seems a bit special." + (new Random().Next(0, 100) > 90 ? "\nYou should go get that checked out." : ""));
         }
     }
 }

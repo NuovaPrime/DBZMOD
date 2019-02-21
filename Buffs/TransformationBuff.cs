@@ -123,10 +123,6 @@ namespace DBZMOD.Buffs
             {
                 ThoriumEffects(player);
             }
-            if (DBZMOD.Instance.tremorLoaded)
-            {
-                TremorEffects(player);
-            }
             if (DBZMOD.Instance.enigmaLoaded)
             {
                 EnigmaEffects(player);
@@ -155,11 +151,6 @@ namespace DBZMOD.Buffs
         {
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= GetHalvedDamageBonus();
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= GetHalvedDamageBonus();
-        }
-
-        public void TremorEffects(Player player)
-        {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= GetHalvedDamageBonus();
         }
 
         public void EnigmaEffects(Player player)

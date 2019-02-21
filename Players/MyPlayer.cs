@@ -17,6 +17,8 @@ using DBZMOD.Network;
 using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
+using DBZMOD.Traits;
+using DBZMOD.Traits.Primal;
 
 namespace DBZMOD
 {
@@ -165,7 +167,6 @@ namespace DBZMOD
         public bool palladiumBonus;
         public bool adamantiteBonus;
         public bool traitChecked = false;
-        public string playerTrait = "";
         public bool demonBonus;
         public int orbGrabRange;
         public int orbHealAmount;
@@ -353,16 +354,6 @@ namespace DBZMOD
             return (0.000001f * -kiAmount) * GetProdigyMasteryMultiplier();
         }
 
-        public float GetProdigyMasteryMultiplier()
-        {
-            return IsProdigy() ? 2f : 1f;
-        }
-
-        public bool IsProdigy()
-        {
-            return playerTrait == "Prodigy";
-        }
-
         public void SetKi(float kiAmount, bool isSync = false)
         {
             // this might seem weird, but remote clients aren't allowed to set eachothers ki. This prevents desync issues.
@@ -406,11 +397,6 @@ namespace DBZMOD
             return player.GetModPlayer<MyPlayer>();
         }
 
-        public bool IsPlayerLegendary()
-        {
-            return playerTrait != null && playerTrait.Equals("Legendary");
-        }
-
         public bool IsPlayerImmobilized()
         {
             return player.frozen || player.stoned || player.HasBuff(BuffID.Cursed);
@@ -440,13 +426,10 @@ namespace DBZMOD
             player.minionDamage *= PowerWishMulti();
             player.thrownDamage *= PowerWishMulti();
             kiDamage *= PowerWishMulti();
+
             if (DBZMOD.Instance.thoriumLoaded)
             {
                 ThoriumEffects(player);
-            }
-            if (DBZMOD.Instance.tremorLoaded)
-            {
-                TremorEffects(player);
             }
             if (DBZMOD.Instance.enigmaLoaded)
             {
@@ -541,7 +524,7 @@ namespace DBZMOD
             overloadCurrent = (int)Math.Max(0, Math.Min(overloadMax, overloadCurrent));
 
             // does the player have the legendary trait
-            if (IsPlayerLegendary())
+            if (IsLegendary())
             {
                 // is the player in a legendary transform step (that isn't SSJ1)?
                 if (player.IsLSSJ() && !player.IsSSJ1() && overloadCurrent <= overloadMax)
@@ -679,10 +662,6 @@ namespace DBZMOD
                 {
                     ThoriumEffects(player);
                 }
-                if (DBZMOD.Instance.tremorLoaded)
-                {
-                    TremorEffects(player);
-                }
                 if (DBZMOD.Instance.enigmaLoaded)
                 {
                     EnigmaEffects(player);
@@ -806,8 +785,6 @@ namespace DBZMOD
         public bool? syncHellMessage;
         public bool? syncEvilMessage;
         public bool? syncIsHoldingKiWeapon;
-        public bool? syncTraitChecked;
-        public string syncPlayerTrait;
         public bool? syncIsFlying;
         public bool? syncIsTransformationAnimationPlaying;
         public float? syncKiCurrent;
@@ -931,10 +908,10 @@ namespace DBZMOD
                 syncTraitChecked = traitChecked;
             }
 
-            if (syncPlayerTrait != playerTrait)
+            if (syncPlayerTrait != PlayerTrait)
             {
-                NetworkHelper.playerSync.SendChangedPlayerTrait(256, player.whoAmI, player.whoAmI, playerTrait);
-                syncPlayerTrait = playerTrait;
+                NetworkHelper.playerSync.SendChangedPlayerTrait(256, player.whoAmI, player.whoAmI, PlayerTrait);
+                syncPlayerTrait = PlayerTrait;
             }
 
             if (syncIsFlying != isFlying)
@@ -1073,11 +1050,6 @@ namespace DBZMOD
             player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= PowerWishMulti();
         }
 
-        public void TremorEffects(Player player)
-        {
-            player.GetModPlayer<Tremor.MPlayer>(ModLoader.GetMod("Tremor")).alchemicalDamage *= PowerWishMulti();
-        }
-
         public void EnigmaEffects(Player player)
         {
             player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= PowerWishMulti();
@@ -1107,32 +1079,6 @@ namespace DBZMOD
             player.eyeColor = eyeColor;
         }
 
-        public void ChooseTrait()
-        {
-            var traitChooser = new WeightedRandom<string>();
-
-            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
-                traitChooser.Add(traitWithWeight.Key, traitWithWeight.Value);
-
-            traitChecked = true;
-            playerTrait = traitChooser;
-        }
-
-        public string ChooseTraitNoLimits(string oldTrait)
-        {
-            var traitChooser = new WeightedRandom<string>();
-            foreach (KeyValuePair<string, int> traitWithWeight in _traitPool)
-            {
-                if (traitWithWeight.Key.Equals(oldTrait))
-                    continue;
-                if (string.IsNullOrEmpty(traitWithWeight.Key))
-                    continue;
-                traitChooser.Add(traitWithWeight.Key, 1);
-            }
-            return playerTrait = traitChooser;
-
-        }
-
         // TODO Remove all this in favor of auto checks.
         public void AwakeningFormUnlock()
         {
@@ -1148,7 +1094,7 @@ namespace DBZMOD
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (SSJ1Achived && !SSJ2Achieved && !IsPlayerLegendary())
+            else if (SSJ1Achived && !SSJ2Achieved && !IsLegendary())
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
 
@@ -1160,7 +1106,7 @@ namespace DBZMOD
                 player.EndTransformations();
                 rageCurrent = 0;
             }
-            else if (SSJ1Achived && IsPlayerLegendary() && !LSSJAchieved)
+            else if (SSJ1Achived && IsLegendary() && !LSSJAchieved)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
 
@@ -1876,30 +1822,5 @@ namespace DBZMOD
                 auraCurrentFrame = 0;
             }
         }
-
-        internal Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
-
-        [Obsolete]
-        public bool SSJ1Achived => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition);
-
-        [Obsolete]
-        public bool ASSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition);
-
-        [Obsolete]
-        public bool USSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition);
-
-        [Obsolete]
-        public bool SSJ2Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
-
-        [Obsolete]
-        public bool SSJ3Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition);
-
-        [Obsolete]
-        public bool LSSJAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
-        [Obsolete]
-        public bool LSSJ2Achieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition);
-
-        [Obsolete]
-        public bool SSJGAchieved => HasTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition);
     }
 }

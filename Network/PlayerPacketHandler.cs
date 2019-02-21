@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using DBZMOD.Enums;
+using DBZMOD.Traits;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -255,7 +256,7 @@ namespace DBZMOD.Network
             SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.mushroomMessage);
             SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.isHoldingKiWeapon);
             SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
-            SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
+            SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.PlayerTrait);
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.isFlying);
             SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.powerWishesLeft);
             SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.isTransformationAnimationPlaying);
@@ -460,12 +461,12 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedPlayerTrait(int toWho, int fromWho, int whichPlayer, string playerTrait)
+        public void SendChangedPlayerTrait(int toWho, int fromWho, int whichPlayer, Trait trait)
         {
             var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.PlayerTrait);
             packet.Write(whichPlayer);
-            packet.Write(playerTrait);
+            packet.Write(trait.UnlocalizedName);
             packet.Send(toWho, fromWho);
         }
 
@@ -800,12 +801,14 @@ namespace DBZMOD.Network
                     }
                     break;
                 case PlayerVarSyncEnum.PlayerTrait:
-                    player.playerTrait = reader.ReadString();
+                    player.PlayerTrait = DBZMOD.Instance.TraitManager[reader.ReadString()];
+
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.playerTrait);
+                        packet.Write(player.PlayerTrait.UnlocalizedName);
                         packet.Send(-1, fromWho);
                     }
+
                     break;
                 case PlayerVarSyncEnum.IsFlying:
                     player.isFlying = reader.ReadBoolean();
