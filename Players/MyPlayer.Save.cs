@@ -50,7 +50,7 @@ namespace DBZMOD
             tag.Add("KiEssence4", kiEssence4);
             tag.Add("KiEssence5", kiEssence5);
 
-            tag.Add(nameof(UI.TransformationMenu.SelectedTransformation), UI.TransformationMenu.SelectedTransformation == null ? "" : UI.TransformationMenu.SelectedTransformation.UnlocalizedName);
+            tag.Add(nameof(UI.TransformationMenu.SelectedTransformation), UI.TransformationMenu.SelectedTransformation == null ? null : UI.TransformationMenu.SelectedTransformation.UnlocalizedName);
 
             tag.Add("IsMasteryRetrofitted", isMasteryRetrofitted);
 
