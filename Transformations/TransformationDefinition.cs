@@ -28,7 +28,9 @@ namespace DBZMOD.Transformations
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
         /// <param name="selectionRequirements">The requirements to select the form in the interface. Checked after verifying if the player has the transformation. Leaving this value null will default to checking wether or not the player has unlocked the transformation.</param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
-        public TransformationDefinition(string unlocalizedName, string transText, Color transTextColor, Texture2D buffIcon = null, string transformationFailureText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
+        public TransformationDefinition(string unlocalizedName, string transText, Color transTextColor,
+            float damageMultiplier, float speedMultiplier, float defenseBonus, float kiSkillDrainMultiplier, float kiDrainRate, float kiDrainRateMastery,
+            Texture2D buffIcon = null, string transformationFailureText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
             Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;

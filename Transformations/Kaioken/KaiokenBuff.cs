@@ -1,7 +1,7 @@
 using DBZMOD.Extensions;
 using Terraria;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Transformations.Kaioken
 {
     public class KaiokenBuff : TransformationBuff
     {
