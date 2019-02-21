@@ -820,11 +820,6 @@ namespace DBZMOD
                 kiDamage += 7;
             }
 
-            if (!traitChecked)
-            {
-                PlayerTrait = DBZMOD.Instance.TraitManager.GetRandomTrait();
-            }
-
             if (PlayerTrait != null && PlayerTrait.BuffName != null)
             {
                 if (PlayerTrait.CanSee(this))
