@@ -64,10 +64,13 @@
     <Compile Include="Buffs\KiLanternBuff.cs" />
     <Compile Include="Buffs\KiPotionSickness.cs" />
     <Compile Include="Buffs\KiStimulantBuff.cs" />
-    <Compile Include="Buffs\LegendaryTrait.cs" />
+    <Compile Include="Players\MyPlayer.Traits.cs" />
+    <Compile Include="Players\MyPlayer.Transformations.cs" />
+    <Compile Include="Traits\DefaultTrait.cs" />
+    <Compile Include="Traits\Legendary\LegendaryTraitBuff.cs" />
     <Compile Include="Buffs\MREBuff.cs" />
     <Compile Include="Buffs\NimbusBuff.cs" />
-    <Compile Include="Buffs\ProdigyTrait.cs" />
+    <Compile Include="Traits\Prodigy\ProdigyTraitBuff.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
     <Compile Include="Buffs\SSJBuffs\ASSJBuff.cs" />
     <Compile Include="Buffs\SSJBuffs\LSSJ2Buff.cs" />
@@ -82,7 +85,7 @@
     <Compile Include="Buffs\TransformationBuff.cs" />
     <Compile Include="Buffs\TransformationExhaustionBuff.cs" />
     <Compile Include="Buffs\UIOmenBuff.cs" />
-    <Compile Include="Buffs\UnknownLegendary.cs" />
+    <Compile Include="Traits\UnknownTraitBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
     <Compile Include="Config\ConfigModel.cs" />
@@ -471,11 +474,12 @@
     <Compile Include="Tiles\Wasteland\CoarseRockTile.cs" />
     <Compile Include="Tiles\Wasteland\CoarseRockWall.cs" />
     <Compile Include="Tiles\ZTable.cs" />
-    <Compile Include="Traits\DivineTrait.cs" />
-    <Compile Include="Traits\LegendaryTrait.cs" />
-    <Compile Include="Traits\PrimalTrait.cs" />
-    <Compile Include="Traits\ProdigyTrait.cs" />
+    <Compile Include="Traits\Divine\DivineTrait.cs" />
+    <Compile Include="Traits\Legendary\LegendaryTrait.cs" />
+    <Compile Include="Traits\Primal\PrimalTrait.cs" />
+    <Compile Include="Traits\Prodigy\ProdigyTrait.cs" />
     <Compile Include="Traits\Trait.cs" />
+    <Compile Include="Traits\TraitBuff.cs" />
     <Compile Include="Traits\TraitManager.cs" />
     <Compile Include="Transformations\PlayerTransformation.cs" />
     <Compile Include="Transformations\TransformationDefinition.cs" />
@@ -538,9 +542,6 @@
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>
-    </Reference>
-    <Reference Include="Tremor">
-      <HintPath>Lib\Tremor.dll</HintPath>
     </Reference>
     <Reference Include="UnuBattleRods">
       <HintPath>Lib\UnuBattleRods.dll</HintPath>

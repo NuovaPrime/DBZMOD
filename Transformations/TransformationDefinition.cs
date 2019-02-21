@@ -111,7 +111,7 @@ namespace DBZMOD.Transformations
 
         internal bool PlayerHasTransformation(MyPlayer player) => player.PlayerTransformations.ContainsKey(this);
 
-        internal bool PlayerHasTransformationAndNotLegendary(MyPlayer player) => PlayerHasTransformation(player) && !player.IsPlayerLegendary();
+        internal bool PlayerHasTransformationAndNotLegendary(MyPlayer player) => PlayerHasTransformation(player) && !player.IsLegendary();
 
         public bool CanPlayerUnlock(MyPlayer player)
         {

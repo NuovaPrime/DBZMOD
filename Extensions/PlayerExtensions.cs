@@ -263,15 +263,15 @@ namespace DBZMOD.Extensions
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition)
                 return modPlayer.SSJ1Achived && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsLegendary() && modPlayer.SSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJ3Achieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsLegendary() && modPlayer.SSJ3Achieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition)
-                return !modPlayer.IsPlayerLegendary() && modPlayer.SSJGAchieved && !player.IsExhaustedFromTransformation();
+                return !modPlayer.IsLegendary() && modPlayer.SSJGAchieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition)
-                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJAchieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.IsLegendary() && modPlayer.LSSJAchieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition)
-                return modPlayer.IsPlayerLegendary() && modPlayer.LSSJ2Achieved && !player.IsExhaustedFromTransformation();
+                return modPlayer.IsLegendary() && modPlayer.LSSJ2Achieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition)
                 return (player.IsSSJ1() || player.IsUssj()) && modPlayer.ASSJAchieved && !player.IsExhaustedFromTransformation();
             if (buff == DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition)
@@ -416,7 +416,7 @@ namespace DBZMOD.Extensions
                 return DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
 
             // the player is legendary and doing a legendary step up.
-            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
@@ -428,7 +428,7 @@ namespace DBZMOD.Extensions
             }
 
             // the player isn't legendary and is doing a normal step up.
-            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {
@@ -448,7 +448,7 @@ namespace DBZMOD.Extensions
             TransformationDefinition currentTransformation = player.GetCurrentTransformation(true, false);
 
             // the player is legendary and doing a legendary step down.
-            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsLSSJ() && MyPlayer.ModPlayer(player).IsLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.legendaryBuffs.Length; i++)
                 {
@@ -460,7 +460,7 @@ namespace DBZMOD.Extensions
             }
 
             // the player isn't legendary and is doing a normal step down.
-            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            if (currentTransformation.IsSSJ() && !MyPlayer.ModPlayer(player).IsLegendary())
             {
                 for (int i = 0; i < FormBuffHelper.ssjBuffs.Length; i++)
                 {

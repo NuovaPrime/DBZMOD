@@ -25,16 +25,16 @@ namespace DBZMOD.Transformations
             USSJDefinition = Add(new TransformationDefinition(BuffKeyNames.ussj, FormBuffHelper.GetUSSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: ASSJDefinition));
 
             SSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, GFX.ssj2ButtonImage, "One may awaken their true power through extreme pressure while ascended.", true, BuffKeyNames.ssj2, 
-                p => p.SSJ1Achived && !p.IsPlayerLegendary(), parents: SSJ1Definition));
+                p => p.SSJ1Achived && !p.IsLegendary(), parents: SSJ1Definition));
             SSJ3Definition = Add(new TransformationDefinition(BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, GFX.ssj3ButtonImage, "The power of an ancient foe may be the key to unlocking greater power.", true, BuffKeyNames.ssj3, 
-                p => p.SSJ2Achieved && !p.IsPlayerLegendary(), parents: SSJ2Definition));
+                p => p.SSJ2Achieved && !p.IsLegendary(), parents: SSJ2Definition));
 
             SSJGDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor, GFX.ssjgButtonImage, "The godlike power of the lunar star could awaken something beyond mortal comprehension.", true, BuffKeyNames.ssjg,
-                p => !p.IsPlayerLegendary(), selectionRequirements: (p, t) => t.PlayerHasTransformationAndNotLegendary(p), parents: SSJ1Definition));
+                p => !p.IsLegendary(), selectionRequirements: (p, t) => t.PlayerHasTransformationAndNotLegendary(p), parents: SSJ1Definition));
             SSJBDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, "Set Text Here", true, BuffKeyNames.ssjb, null,
                 selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));
 
-            LSSJDefinition = Add(new TransformationDefinition(BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, GFX.lssjButtonImage, unlockRequirements: p => p.IsPlayerLegendary(), canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj, parents: SSJ1Definition));
+            LSSJDefinition = Add(new TransformationDefinition(BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, GFX.lssjButtonImage, unlockRequirements: p => p.IsLegendary(), canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj, parents: SSJ1Definition));
             LSSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, GFX.lssj2ButtonImage, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj2, parents: LSSJDefinition));
 
             TransformationExhaustionDefinition = Add(new TransformationDefinition(BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor));

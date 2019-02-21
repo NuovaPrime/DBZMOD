@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DBZMOD.Traits;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Tremor.Items;
@@ -8,35 +9,40 @@ namespace DBZMOD
 
     public static class GFX
     {
-        private static readonly string[] traitKiBarTypes = new string[]{ "Corrupt", "Divine", "Legendary", "Pacifist", "Shinseiju", "Primal", "Prodigy", string.Empty };
-
         public class KiBarTexture
         {
-            public Texture2D KiBarSegment;
-            public Texture2D KiBarFrame;
+            public Texture2D 
+                kiBarSegment,
+                kiBarFrame;
 
-            public KiBarTexture(string traitType, Mod mod)
+            public KiBarTexture(Trait trait, Mod mod)
             {
-                string textureName = KI_BAR.Replace("/KiBar/KiBar", $"/KiBar/{traitType}KiBar");
+                string fileName = char.ToUpper(trait.UnlocalizedName[0]) + trait.UnlocalizedName.Substring(1);
+
+                string textureName = KI_BAR.Replace("/KiBar/KiBar", $"/KiBar/{fileName}KiBar");
                 string frameName = textureName + "Frame";
-                this.KiBarSegment = mod.GetTexture(textureName);
-                this.KiBarFrame = mod.GetTexture(frameName);
+                this.kiBarSegment = mod.GetTexture(textureName);
+                this.kiBarFrame = mod.GetTexture(frameName);
             }
         }
 
         public static KiBarTexture GetKiBar(MyPlayer player)
         {
-            string playerTrait = player.playerTrait;
-            return kiBarTextures[playerTrait];
+            return KiBarTextures[player.PlayerTrait];
         }
 
         public static void LoadKiBarTextures(Mod mod)
         {
-            kiBarTextures = new Dictionary<string, KiBarTexture>();
-            foreach (string kiBarType in traitKiBarTypes)
+            KiBarTextures = new Dictionary<Trait, KiBarTexture>();
+
+            // TODO Remove null check
+
+            for (int i = 0; i < DBZMOD.Instance.TraitManager.Count; i++)
             {
-                KiBarTexture kiBarTexture = new KiBarTexture(kiBarType, mod);
-                kiBarTextures[kiBarType] = kiBarTexture;
+                Trait trait = DBZMOD.Instance.TraitManager[i];
+
+                string processedTraitName = char.ToUpper(trait.UnlocalizedName[0]) + trait.UnlocalizedName.Substring(1);
+                KiBarTextures.Add(trait, new KiBarTexture(trait, mod));
             }
         }
 
@@ -106,7 +112,7 @@ namespace DBZMOD
             STYLE_FIVE_SSJ4 = STYLE_FIVE_DIRECTORY + "SuperSaiyan4";
 
 
-        public static Dictionary<string, KiBarTexture> kiBarTextures;
+        public static Dictionary<Trait, KiBarTexture> KiBarTextures { get; set; }
 
         public static Texture2D
             overloadBarSegment,
@@ -160,7 +166,7 @@ namespace DBZMOD
             style5SSJ3Preview,
             style5SSJ4Preview;
 
-        public static void LoadGfx(Mod mod)
+        public static void LoadGFX(Mod mod)
         {
             LoadKiBarTextures(mod);
             overloadBarSegment = mod.GetTexture(OVERLOAD_BAR_SEGMENT);
@@ -220,7 +226,7 @@ namespace DBZMOD
 
         public static void UnloadGfx()
         {
-            kiBarTextures.Clear();
+            KiBarTextures.Clear();
             overloadBarSegment = null;
             overloadBarFrame = null;
             bg = null;

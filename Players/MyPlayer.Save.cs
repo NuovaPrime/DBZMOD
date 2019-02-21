@@ -67,7 +67,7 @@ namespace DBZMOD
             tag.Add("EvilMessage", evilMessage);
             tag.Add("MushroomMessage", mushroomMessage);
             tag.Add("traitChecked", traitChecked);
-            tag.Add("playerTrait", playerTrait);
+            tag.Add("playerTrait", PlayerTrait.UnlocalizedName);
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
             tag.Add("flightUpgraded", flightUpgraded);
@@ -236,7 +236,13 @@ namespace DBZMOD
             evilMessage = tag.Get<bool>("EvilMessage");
             mushroomMessage = tag.Get<bool>("MushroomMessage");
             traitChecked = tag.Get<bool>("traitChecked");
-            playerTrait = tag.Get<string>("playerTrait");
+
+            string playerTrait = tag.Get<string>("playerTrait");
+            if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))
+                PlayerTrait = DBZMOD.Instance.TraitManager[char.ToLower(playerTrait[0]) + playerTrait.Substring(1)];
+            else
+                PlayerTrait = DBZMOD.Instance.TraitManager[playerTrait];
+
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");
             flightUpgraded = tag.Get<bool>("flightUpgraded");

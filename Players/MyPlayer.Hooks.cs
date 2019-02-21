@@ -8,6 +8,7 @@ using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
+using DBZMOD.Traits;
 using DBZMOD.Transformations;
 using DBZMOD.UI;
 using DBZMOD.Utilities;
@@ -410,7 +411,7 @@ namespace DBZMOD
                 }
             }
 
-            if (isAnyBossAlive && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsPlayerLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny && (player.IsSSJ1() || player.IsAssj() || player.IsUssj()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -426,7 +427,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (isAnyBossAlive && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedMechBossAny && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -442,7 +443,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsPlayerLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
+            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -731,7 +732,7 @@ namespace DBZMOD
         public override void PostUpdate()
         {
             hitStunManager.Update();
-            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsPlayerLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
+            if (LSSJAchieved && !LSSJ2Achieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedFishron && player.statLife <= (player.statLifeMax2 * 0.10))
             {
                 lssj2Timer++;
 
@@ -818,22 +819,27 @@ namespace DBZMOD
 
             if (!traitChecked)
             {
-                ChooseTrait();
+                PlayerTrait = DBZMOD.Instance.TraitManager.GetRandomTrait();
             }
 
-            if (IsPlayerLegendary() && !LSSJAchieved && NPC.downedBoss1)
+            if (PlayerTrait != null && PlayerTrait.BuffName != null)
+            {
+                if (PlayerTrait.CanSee(this))
+                {
+                    player.AddBuff(PlayerTrait.GetBuffType(mod), 3);
+                    player.ClearBuff(mod.BuffType<UnknownTraitBuff>());
+                }
+                else player.AddBuff(mod.BuffType<UnknownTraitBuff>(), 3);
+            }
+
+            if (IsLegendary() && !LSSJAchieved && NPC.downedBoss1)
             {
                 player.AddBuff(mod.BuffType("UnknownLegendary"), 3);
             }
-            else if (IsPlayerLegendary() && LSSJAchieved)
+            else if (IsLegendary() && LSSJAchieved)
             {
                 player.AddBuff(mod.BuffType("LegendaryTrait"), 3);
                 player.ClearBuff(mod.BuffType("UnknownLegendary"));
-            }
-
-            if (playerTrait == "Prodigy" && NPC.downedBoss1)
-            {
-                player.AddBuff(mod.BuffType("ProdigyTrait"), 3);
             }
 
             if (kiRegen >= 1)
