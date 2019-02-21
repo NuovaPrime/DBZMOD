@@ -49,7 +49,9 @@ namespace DBZMOD
             tag.Add("KiEssence3", kiEssence3);
             tag.Add("KiEssence4", kiEssence4);
             tag.Add("KiEssence5", kiEssence5);
-            tag.Add(nameof(UI.TransformationMenu.SelectedTransformation), UI.TransformationMenu.SelectedTransformation.UnlocalizedName);
+
+            tag.Add(nameof(UI.TransformationMenu.SelectedTransformation), UI.TransformationMenu.SelectedTransformation == null ? "" : UI.TransformationMenu.SelectedTransformation.UnlocalizedName);
+
             tag.Add("IsMasteryRetrofitted", isMasteryRetrofitted);
 
             foreach (var key in masteryLevels.Keys)
@@ -227,7 +229,7 @@ namespace DBZMOD
             kiEssence4 = tag.Get<bool>("KiEssence4");
             kiEssence5 = tag.Get<bool>("KiEssence5");
 
-            if (tag.ContainsKey(nameof(UI.TransformationMenu.SelectedTransformation)))
+            if (tag.ContainsKey(nameof(UI.TransformationMenu.SelectedTransformation)) && !string.IsNullOrWhiteSpace(tag.Get<string>(nameof(UI.TransformationMenu.SelectedTransformation))))
                 UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager[tag.Get<string>(nameof(UI.TransformationMenu.SelectedTransformation))];
 
             jungleMessage = tag.Get<bool>("JungleMessage");
