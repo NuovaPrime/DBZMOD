@@ -1,16 +1,15 @@
 ﻿using Terraria;
 
-namespace DBZMOD.Buffs.SSJBuffs
+namespace DBZMOD.Transformations.SSJ1
 {
     public class SSJ1Buff : TransformationBuff
     {
+        public SSJ1Buff() : base(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition)
+        {
+        }
+
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Super Saiyan");
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = false;
-
             damageMulti = 1.50f;
             speedMulti = 1.50f;
             kiDrainBuffMulti = 1.25f;

@@ -1,13 +1,19 @@
 ﻿using System;
+using DBZMOD.Buffs;
 using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Transformations
 {
     public abstract class TransformationBuff : ModBuff
     {
+        protected TransformationBuff(TransformationDefinition transformationDefinition)
+        {
+            TransformationDefinition = transformationDefinition;
+        }
+
         private const int MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP = 1;
         public float damageMulti;
         public float speedMulti;
@@ -137,6 +143,15 @@ namespace DBZMOD.Buffs
             }
         }
 
+        public override void SetDefaults()
+        {
+            DisplayName.SetDefault("Super Saiyan");
+
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.debuff[Type] = false;
+        }
+
         public float GetModifiedSpeedMultiplier(MyPlayer modPlayer)
         {
             return 1f + ((speedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
@@ -181,6 +196,7 @@ namespace DBZMOD.Buffs
         }
 
         public int kaiokenLevel = 0;
+
         public string AssembleTransBuffDescription()
         {
             string kaiokenName = string.Empty;
@@ -231,6 +247,8 @@ namespace DBZMOD.Buffs
             var healthDrain = KaiokenBuff.GetHealthDrain(player.GetModPlayer<MyPlayer>()) + SuperKaiokenBuff.GetHealthDrain(player);
             return healthDrain;
         }
+
+        public TransformationDefinition TransformationDefinition { get; }
     }
 }
 

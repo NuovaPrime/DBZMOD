@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Buffs
+namespace DBZMOD.Transformations
 {
     public class TransformationExhaustionBuff : ModBuff
     {

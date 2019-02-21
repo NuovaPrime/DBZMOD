@@ -20,7 +20,7 @@ namespace DBZMOD.Transformations
             SuperKaiokenDefinition = Add(new TransformationDefinition(BuffKeyNames.superKaioken, null, defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1));
             KaiokenFatigueDefinition = Add(new TransformationDefinition(BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor));
 
-            SSJ1Definition = Add(new TransformationDefinition(BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, GFX.ssj1ButtonImage, "Only through failure with a powerful foe will true power awaken.", true, BuffKeyNames.ssj1));
+            SSJ1Definition = Add(new TransformationDefinition(BuffKeyNames.ssj1, "Super Saiyan", defaultTransformationTextColor, GFX.ssj1ButtonImage, "Only through failure with a powerful foe will true power awaken.", true, BuffKeyNames.ssj1));
             ASSJDefinition = Add(new TransformationDefinition(BuffKeyNames.assj, FormBuffHelper.GetASSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: SSJ1Definition));
             USSJDefinition = Add(new TransformationDefinition(BuffKeyNames.ussj, FormBuffHelper.GetUSSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: ASSJDefinition));
 

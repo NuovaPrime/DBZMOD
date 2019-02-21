@@ -6,10 +6,9 @@ namespace DBZMOD.Buffs.SSJBuffs
     {
         public override void SetDefaults()
         {
+            base.SetDefaults();
             DisplayName.SetDefault("Legendary Super Saiyan");
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = false;
+            
             damageMulti = 2.30f;
             speedMulti = 2.30f;
             kiDrainBuffMulti = 2.1f;
