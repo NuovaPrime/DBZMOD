@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
-using DBZMOD.Enums.Hair_Enums;
+using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using DBZMOD.Utilities;
 
