@@ -66,8 +66,7 @@ namespace DBZMOD
             tag.Add("HellMessage", hellMessage);
             tag.Add("EvilMessage", evilMessage);
             tag.Add("MushroomMessage", mushroomMessage);
-            tag.Add("traitChecked", traitChecked);
-            tag.Add("playerTrait", PlayerTrait.UnlocalizedName);
+            tag.Add("playerTrait", PlayerTrait == null ? DBZMOD.Instance.TraitManager.GetRandomTrait().UnlocalizedName : PlayerTrait.UnlocalizedName);
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
             tag.Add("flightUpgraded", flightUpgraded);
@@ -235,7 +234,6 @@ namespace DBZMOD
             hellMessage = tag.Get<bool>("HellMessage");
             evilMessage = tag.Get<bool>("EvilMessage");
             mushroomMessage = tag.Get<bool>("MushroomMessage");
-            traitChecked = tag.Get<bool>("traitChecked");
 
             string playerTrait = tag.Get<string>("playerTrait");
             if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))

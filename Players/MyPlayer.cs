@@ -182,7 +182,6 @@ namespace DBZMOD
         public bool senzuBag;
         public bool palladiumBonus;
         public bool adamantiteBonus;
-        public bool traitChecked = false;
         public bool demonBonus;
         public int orbGrabRange;
         public int orbHealAmount;
@@ -917,12 +916,6 @@ namespace DBZMOD
             {
                 NetworkHelper.playerSync.SendChangedIsHoldingKiWeapon(256, player.whoAmI, player.whoAmI, isHoldingKiWeapon);
                 syncIsHoldingKiWeapon = isHoldingKiWeapon;
-            }
-
-            if (syncTraitChecked != traitChecked)
-            {
-                NetworkHelper.playerSync.SendChangedTraitChecked(256, player.whoAmI, player.whoAmI, traitChecked);
-                syncTraitChecked = traitChecked;
             }
 
             if (syncPlayerTrait != PlayerTrait)
