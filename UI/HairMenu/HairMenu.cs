@@ -14,6 +14,7 @@ namespace DBZMOD.UI.HairMenu
         public static bool menuVisible;
         private UIText _titleText;
         private UIImageButton _confirmButton;
+        private UIImageButton _style1BaseButton;
         public UIImage backPanelImage;
 
         public static BaseHairSelectionID baseHairSelectionId;
@@ -29,17 +30,17 @@ namespace DBZMOD.UI.HairMenu
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
 
-            backPanelImage = new UIImage(Gfx.hairBackPanel);
-            backPanelImage.Width.Set(Gfx.hairBackPanel.Width, 0f);
-            backPanelImage.Height.Set(Gfx.hairBackPanel.Height, 0f);
+            backPanelImage = new UIImage(GFX.hairBackPanel);
+            backPanelImage.Width.Set(GFX.hairBackPanel.Width, 0f);
+            backPanelImage.Height.Set(GFX.hairBackPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
 
             InitText(ref _titleText, "Hair Selection Menu", 0.66f, 8, -4, Color.White, backPanelImage);
 
-            /*InitButton(ref _wishButtonPower, Gfx.wishforPower, new MouseEvent(SelectButtonPower), 10, 22, backPanelImage);
+            InitButton(ref _style1BaseButton, GFX.style1BasePreview, new MouseEvent((evt, element) => SelectBaseHair(1, evt, element)), 10, 22, backPanelImage);
 
-            InitButton(ref _wishButtonWealth, Gfx.wishforWealth, new MouseEvent(SelectButtonWealth), 55, 22, backPanelImage);
+            /*InitButton(ref _wishButtonWealth, Gfx.wishforWealth, new MouseEvent(SelectButtonWealth), 55, 22, backPanelImage);
 
             InitButton(ref _wishButtonImmortality, Gfx.wishforImmortality, new MouseEvent(SelectButtonImmortality), 100, 22, backPanelImage);
 
@@ -49,7 +50,7 @@ namespace DBZMOD.UI.HairMenu
 
             InitButton(ref _wishButtonAwakening, Gfx.wishforAwakening, new MouseEvent(SelectButtonAwakening), 235, 22, backPanelImage);*/
 
-            InitButton(ref _confirmButton, Gfx.hairConfirmButton, new MouseEvent(ConfirmHair), Gfx.hairBackPanel.Width - Gfx.hairConfirmButton.Width - 12, Gfx.hairBackPanel.Height - Gfx.hairConfirmButton.Height - 7, backPanelImage);
+            InitButton(ref _confirmButton, GFX.hairConfirmButton, new MouseEvent(ConfirmHair), GFX.hairBackPanel.Width - GFX.hairConfirmButton.Width - 12, GFX.hairBackPanel.Height - GFX.hairConfirmButton.Height - 7, backPanelImage);
             
 
             backPanel.Append(backPanelImage);
@@ -60,6 +61,13 @@ namespace DBZMOD.UI.HairMenu
         private void ConfirmHair(UIMouseEvent evt, UIElement listeningElement)
         {
 
+        }
+        private void SelectBaseHair(int Choice, UIMouseEvent evt, UIElement listeningElement)
+        {
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+
+            player.baseHairStyle = Choice;
+            SoundHelper.PlayVanillaSound(SoundID.MenuTick);
         }
     }
 }
