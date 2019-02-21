@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBZMOD.Enums.Hair_Enums
+namespace DBZMOD.Enums
 {
     public enum BaseHairSelectionID : int
     {
