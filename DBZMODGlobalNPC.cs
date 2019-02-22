@@ -804,6 +804,11 @@ namespace DBZMOD
                 shop.item[nextSlot].value = 200000;
                 nextSlot++;
             }
+            if (type == NPCID.Stylist)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType<Items.Consumables.HairStylingKit>());
+                nextSlot++;
+            }
         }
     }
 }

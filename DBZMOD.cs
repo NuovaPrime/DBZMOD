@@ -245,7 +245,7 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-            int index2 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
+            int index2 = layers.FindIndex(layer => layer.Name.Contains("Hotbar"));
             if (index2 != -1)
             {
                 layers.Insert(index2, new LegacyGameInterfaceLayer(

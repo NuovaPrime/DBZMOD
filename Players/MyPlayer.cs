@@ -75,6 +75,7 @@ namespace DBZMOD
         public int ssj2HairStyle = 1;
         public int ssj3HairStyle = 1;
         public int ssj4HairStyle = 1;
+        public bool hairChecked = false;
 
         //Hair styles
         //0 = Base hair
@@ -89,6 +90,7 @@ namespace DBZMOD
 
         //multiplier on healing, resets to 1f each frame.
         public float healMulti = 1f;
+
 
         //Transformation vars
         public bool isTransforming;
@@ -641,7 +643,11 @@ namespace DBZMOD
 
             }
 
-            HairMenu.menuVisible = true;
+            if(!hairChecked)
+            {
+                HairMenu.menuVisible = true;
+            }
+            
             //OverloadBar.visible = false;
         }
 

@@ -58,6 +58,7 @@ namespace DBZMOD
             WISH_BACK_PANEL = UI_DIRECTORY + "WishBackPanel",
             HAIR_BACK_PANEL = HAIR_MENU_DIRECTORY + "HairBackPanel",
             HAIR_CONFIRM_BUTTON = HAIR_MENU_DIRECTORY + "ConfirmButton",
+            KEEP_HAIR_BUTTON = HAIR_MENU_DIRECTORY + "KeepHairButton",
             GRANT_BUTTON = BUTTON_DIRECTORY + "GrantButton",
             SSJ1_BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage",
             SSJ2_BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage",
@@ -121,6 +122,7 @@ namespace DBZMOD
             wishBackPanel,
             hairBackPanel,
             hairConfirmButton,
+            keepHairButton,
             grantButton,
             ssj1ButtonImage,
             ssj2ButtonImage,
@@ -175,6 +177,7 @@ namespace DBZMOD
             wishBackPanel = mod.GetTexture(WISH_BACK_PANEL);
             hairBackPanel = mod.GetTexture(HAIR_BACK_PANEL);
             hairConfirmButton = mod.GetTexture(HAIR_CONFIRM_BUTTON);
+            keepHairButton = mod.GetTexture(KEEP_HAIR_BUTTON);
             grantButton = mod.GetTexture(GRANT_BUTTON);
             ssj1ButtonImage = mod.GetTexture(SSJ1_BUTTON);
             ssj2ButtonImage = mod.GetTexture(SSJ2_BUTTON);
@@ -240,6 +243,7 @@ namespace DBZMOD
             backPanel = null;
             hairBackPanel = null;
             hairConfirmButton = null;
+            keepHairButton = null;
             unknownImage = null;
             wishBackPanel = null;
             wishforPower = null;

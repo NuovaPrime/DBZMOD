@@ -6,6 +6,7 @@ using Terraria.UI;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using DBZMOD.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DBZMOD.UI.HairMenu
 {
@@ -20,6 +21,7 @@ namespace DBZMOD.UI.HairMenu
         private UIText _raditzText;
         private UIText _brolyText;
         private UIImageButton _confirmButton;
+        private UIHoverImageButton _keepHairButton;
         #region Style buttons
         private UIImageButton _style1BaseButton;
         private UIImageButton _style1SSJButton;
@@ -149,7 +151,9 @@ namespace DBZMOD.UI.HairMenu
             InitButton(ref _wishButtonAwakening, Gfx.wishforAwakening, new MouseEvent(SelectButtonAwakening), 235, 22, backPanelImage);*/
 
             InitButton(ref _confirmButton, GFX.hairConfirmButton, new MouseEvent(ConfirmHair), GFX.hairBackPanel.Width - GFX.hairConfirmButton.Width - 12, GFX.hairBackPanel.Height - GFX.hairConfirmButton.Height - 7, backPanelImage);
-            
+
+            InitHoverTextButton(ref _keepHairButton, GFX.keepHairButton, new MouseEvent((evt, element) => SelectBaseHair(0, evt, element)), 12, 372, backPanelImage, "Use the hair you chose at character creation for your base form hairstyle instead of the above ones.");
+
 
             backPanel.Append(backPanelImage);
 
@@ -158,10 +162,12 @@ namespace DBZMOD.UI.HairMenu
 
         private void ConfirmHair(UIMouseEvent evt, UIElement listeningElement)
         {
-            if(baseChecked && ssjChecked && ssj2Checked && ssj3Checked && ssj4Checked)
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if (baseChecked && ssjChecked && ssj2Checked && ssj3Checked && ssj4Checked)
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
                 menuVisible = false;
+                player.hairChecked = true;
             }
             else
             {
