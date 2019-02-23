@@ -1,8 +1,6 @@
 ﻿using System;
-using DBZMOD.Buffs;
-using DBZMOD.Buffs.SSJBuffs;
 using DBZMOD.Extensions;
-using DBZMOD.Transformations.Kaioken;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -10,58 +8,44 @@ namespace DBZMOD.Transformations
 {
     public abstract class TransformationBuff : ModBuff
     {
+        private const int MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP = 1;
+        private int _kiDrainAddTimer;
+        public bool realismModeOn;
+        public int precentDefenceBonus;
+
         protected TransformationBuff(TransformationDefinition transformationDefinition)
         {
             TransformationDefinition = transformationDefinition;
         }
 
-        private const int MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP = 1;
-        public float damageMulti;
-        public float speedMulti;
-        public float kiDrainBuffMulti;
-        public float ssjLightValue;
-        public int healthDrainRate;
-        public int overallHealthDrainRate;
-        public float kiDrainRate;
-        public float kiDrainRateWithMastery;
-        private int _kiDrainAddTimer;
-        private int _overloadDrainAddTimer;
-        public bool realismModeOn;
-        public int baseDefenceBonus;
-        public int precentDefenceBonus;
-
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            
-            KiDrainAdd(player);
-            if(player.IsAnyKaioken() || player.IsSSJG())
-            {
-                Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0f, 0f);
-            } else if (player.IsLSSJ1() || player.IsLSSJ2())
-            {                
-                Lighting.AddLight(player.Center + player.velocity * 8f, 0f, 0.2f, 0f);
-            } else if (player.IsSSJ1() || player.IsSSJ2() || player.IsSSJ2() || player.IsAssj() || player.IsUssj())
-            {
-                Lighting.AddLight(player.Center + player.velocity * 8f, 0.2f, 0.2f, 0f);
-            } else if (player.IsSpectrum())
-            {
-                var rainbow = Main.DiscoColor;
-                Lighting.AddLight(player.Center + player.velocity * 8f, rainbow.R / 512f, rainbow.G / 512f, rainbow.B / 512f);
-            }
 
-            //give bonus base defense
-            player.statDefense += baseDefenceBonus;
-            
+            modPlayer.player.lifeRegen -= (int) TransformationDefinition.GetHealthDrainRate(modPlayer);
+            modPlayer.kiDrainMulti = TransformationDefinition.GetKiSkillDrainMultiplier(modPlayer);
 
+            Vector2 lightPosition = player.Center + player.velocity * 8f;
+            float lightingR = 0f, lightingB = 0f, lightingG = 0f;
+
+            TransformationDefinition.GetPlayerLightModifier(ref lightingR, ref lightingG, ref lightingB);
+
+            if (lightingR > 0f || lightingG > 0f || lightingB > 0f)
+                Lighting.AddLight(lightPosition, lightingR, lightingG, lightingB);
+
+            // Give bonus base defense
+            player.statDefense += TransformationDefinition.GetDefenseBonus(player.GetModPlayer<MyPlayer>());
+            
             // handle ki drain mastery
             bool isMastered = modPlayer.masteryLevels.ContainsKey(this.Name) &&
                               modPlayer.masteryLevels[this.Name] >= 1.0;
-            float actualKiDrain = isMastered ? kiDrainRateWithMastery : kiDrainRate;
+
+            float actualKiDrain = isMastered ? TransformationDefinition.GetKiDrainRateMastery(modPlayer) : TransformationDefinition.GetKiDrainRate(modPlayer);
+
             float kiDrainMultiplier = 1f;
             if (!isMastered)
             {
-                if (kiDrainMultiplier < 2.5f)
+                if (kiDrainMultiplier < 3f)
                 {
                     _kiDrainAddTimer++;
                     if (_kiDrainAddTimer >= 300)
@@ -71,7 +55,7 @@ namespace DBZMOD.Transformations
                     }
                 }
             }
-            else
+            /*else // Mastered forms do not drain more over time.
             {
                 if (kiDrainMultiplier < 3f)
                 {
@@ -82,21 +66,21 @@ namespace DBZMOD.Transformations
                         _kiDrainAddTimer = 0;
                     }
                 }
-            }
+            }*/
 
             float projectedKiDrain = actualKiDrain * kiDrainMultiplier;
 
+            TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
-            if (player.IsAnythingOtherThanKaioken())
+            if (!DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(transformation))
             {
                 // player can't support ten frames (arbitrary) of their current form, make them fall out of any forms they might be in.
                 if (modPlayer.IsKiDepleted(projectedKiDrain * MINIMUM_TRANSFORMATION_FRAMES_FOR_KI_COST_UPKEEP))
                 {
-                    if (player.IsSuperKaioken())
-                    {
+                    if (transformation == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition)
                         modPlayer.kaiokenLevel = 0;
-                    }
-                    player.EndTransformations();
+
+                    modPlayer.EndTransformations();
                 }
                 else
                 {
@@ -109,85 +93,100 @@ namespace DBZMOD.Transformations
             //    // the player isn't in a ki draining state anymore, reset KiDrainAddition
             //    modPlayer.kiDrainAddition = 0;                
             //}
-            
-            player.moveSpeed *= GetModifiedSpeedMultiplier(modPlayer);
-            player.maxRunSpeed *= GetModifiedSpeedMultiplier(modPlayer);
-            player.runAcceleration *= GetModifiedSpeedMultiplier(modPlayer);
+
+            float speedMultiplier = TransformationDefinition.GetSpeedMultiplier(modPlayer);
+
+            player.moveSpeed *= speedMultiplier;
+            player.maxRunSpeed *= speedMultiplier;
+            player.runAcceleration *= speedMultiplier;
+
             if (player.jumpSpeedBoost < 1f)
                 player.jumpSpeedBoost = 1f;
-            player.jumpSpeedBoost *= GetModifiedSpeedMultiplier(modPlayer);
 
-            // set player damage  mults
-            player.meleeDamage *= GetHalvedDamageBonus();
-            player.rangedDamage *= GetHalvedDamageBonus();
-            player.magicDamage *= GetHalvedDamageBonus();
-            player.minionDamage *= GetHalvedDamageBonus();
-            player.thrownDamage *= GetHalvedDamageBonus();
-            modPlayer.kiDamage *= damageMulti;
+            player.jumpSpeedBoost *= speedMultiplier;
+
+            // Set player damage mults
+            float
+                damageMultiplier = TransformationDefinition.GetDamageMultiplier(modPlayer),
+                halvedDamageMultiplier = GetHalvedDamageBonus(damageMultiplier);
+
+            player.meleeDamage *= halvedDamageMultiplier;
+            player.rangedDamage *= halvedDamageMultiplier;
+            player.magicDamage *= halvedDamageMultiplier;
+            player.minionDamage *= halvedDamageMultiplier;
+            player.thrownDamage *= halvedDamageMultiplier;
+            modPlayer.kiDamage *= damageMultiplier;
 
             // cross mod support stuff
             if (DBZMOD.Instance.thoriumLoaded)
             {
-                ThoriumEffects(player);
+                ThoriumEffects(player, damageMultiplier);
             }
             if (DBZMOD.Instance.enigmaLoaded)
             {
-                EnigmaEffects(player);
+                EnigmaEffects(player, damageMultiplier);
             }
             if (DBZMOD.Instance.battlerodsLoaded)
             {
-                BattleRodEffects(player);
+                BattleRodEffects(player, damageMultiplier);
             }
             if (DBZMOD.Instance.expandedSentriesLoaded)
             {
-                ExpandedSentriesEffects(player);
+                ExpandedSentriesEffects(player, damageMultiplier);
             }
         }
 
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Super Saiyan");
+            if (TransformationDefinition != null)
+            {
+                DisplayName.SetDefault(TransformationDefinition.TransformationText);
 
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = false;
+                Main.buffNoTimeDisplay[Type] = true;
+                Main.buffNoSave[Type] = true;
+                Main.debuff[Type] = false;
+
+                // TODO Make this dynamics
+                Description.SetDefault("Buff Text");
+            }
         }
 
-        public float GetModifiedSpeedMultiplier(MyPlayer modPlayer)
+        public override void ModifyBuffTip(ref string tip, ref int rare)
         {
-            return 1f + ((speedMulti - 1f) * modPlayer.bonusSpeedMultiplier);
+            tip = AssembleTransBuffDescription(Main.player[Main.myPlayer].GetModPlayer<MyPlayer>()) + (TransformationDefinition.ExtraTooltipText != null ? "\n" + TransformationDefinition.ExtraTooltipText : "");
         }
 
-        public float GetHalvedDamageBonus()
+        public float GetModifiedSpeedMultiplier(MyPlayer modPlayer, float speedMultiplier)
         {
-            return 1f + ((damageMulti - 1f) * 0.5f);
+            return 1f + (speedMultiplier - 1f) * modPlayer.bonusSpeedMultiplier;
         }
 
-        public void ThoriumEffects(Player player)
+        public float GetHalvedDamageBonus(float damageMultiplier) => 1f + (damageMultiplier - 1f) * 0.5f;
+
+        #region Mod Support
+
+        public void ThoriumEffects(Player player, float damageMultiplier)
         {
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= GetHalvedDamageBonus();
-            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= GetHalvedDamageBonus();
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).symphonicDamage *= damageMultiplier;
+            player.GetModPlayer<ThoriumMod.ThoriumPlayer>(ModLoader.GetMod("ThoriumMod")).radiantBoost *= damageMultiplier;
         }
 
-        public void EnigmaEffects(Player player)
+        public void EnigmaEffects(Player player, float damageMultiplier)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= GetHalvedDamageBonus();
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= damageMultiplier;
         }
 
-        public void BattleRodEffects(Player player)
+        public void BattleRodEffects(Player player, float damageMultiplier)
         {
-            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= GetHalvedDamageBonus();
+            player.GetModPlayer<UnuBattleRods.FishPlayer>(ModLoader.GetMod("UnuBattleRods")).bobberDamage *= damageMultiplier;
         }
 
-        public void ExpandedSentriesEffects(Player player)
+        public void ExpandedSentriesEffects(Player player, float damageMultiplier)
         {
-            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= GetHalvedDamageBonus();
+            player.GetModPlayer<ExpandedSentries.ESPlayer>(ModLoader.GetMod("ExpandedSentries")).sentryDamage *= damageMultiplier;
         }
 
-        private void KiDrainAdd(Player player)
-        {
-            MyPlayer.ModPlayer(player).kiDrainMulti = kiDrainBuffMulti;
-        }
+        #endregion
 
         public string GetPercentForDisplay(string currentDisplayString, string text, int percent)
         {
@@ -198,9 +197,10 @@ namespace DBZMOD.Transformations
 
         public int kaiokenLevel = 0;
 
-        public string AssembleTransBuffDescription()
+        public string AssembleTransBuffDescription(MyPlayer player)
         {
             string kaiokenName = string.Empty;
+
             if (Type == DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
             {
                 switch (kaiokenLevel)
@@ -217,17 +217,22 @@ namespace DBZMOD.Transformations
                     case 5:
                         kaiokenName = "(x20)\n";
                         break;
+                    default: break;
                 }
             }
-            int percentDamageMult = (int)Math.Round(damageMulti * 100f, 0) - 100;
-            int percentSpeedMult = (int)Math.Round(speedMulti * 100f, 0) - 100;
-            float kiDrainPerSecond = 60f * kiDrainRate;
-            float kiDrainPerSecondWithMastery = 60f * kiDrainRateWithMastery;
-            int percentKiDrainMulti = (int)Math.Round(kiDrainBuffMulti * 100f, 0) - 100;
+
+            int percentDamageMult = (int)Math.Round(TransformationDefinition.GetDamageMultiplier(player) * 100f, 0) - 100;
+            int percentSpeedMult = (int)Math.Round(TransformationDefinition.GetSpeedMultiplier(player) * 100f, 0) - 100;
+
+            float kiDrainPerSecond = 60f * TransformationDefinition.GetKiDrainRate(player);
+            float kiDrainPerSecondWithMastery = 60f * TransformationDefinition.GetKiDrainRateMastery(player);
+            int percentKiDrainMulti = (int)Math.Round(TransformationDefinition.GetKiSkillDrainMultiplier(player) * 100f, 0) - 100;
+
             string displayString = kaiokenName;
             displayString = GetPercentForDisplay(displayString, "Damage", percentDamageMult);
             displayString = GetPercentForDisplay(displayString, " Speed", percentSpeedMult);
             displayString = GetPercentForDisplay(displayString, "\nKi Costs", percentKiDrainMulti);
+
             if (kiDrainPerSecond > 0)
             {
                 displayString = $"{displayString}\nKi Drain: {(int)Math.Round(kiDrainPerSecond, 0)}/s";
@@ -236,17 +241,14 @@ namespace DBZMOD.Transformations
                     displayString = $"{displayString}, {(int) Math.Round(kiDrainPerSecondWithMastery, 0)}/s when mastered";
                 }
             }
+
+            float healthDrainRate = TransformationDefinition.GetHealthDrainRate(player);
             if (healthDrainRate > 0)
             {
                 displayString = $"{displayString}\nLife Drain: -{healthDrainRate / 2}/s.";
             }
-            return displayString;
-        }
 
-        public static int GetTotalHealthDrain(Player player)
-        {
-            var healthDrain = KaiokenBuff.GetHealthDrain(player.GetModPlayer<MyPlayer>()) + SuperKaiokenBuff.GetHealthDrain(player);
-            return healthDrain;
+            return displayString;
         }
 
         public TransformationDefinition TransformationDefinition { get; }

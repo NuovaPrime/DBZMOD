@@ -300,24 +300,27 @@ namespace DBZMOD
             HandleKiDrainMasteryContribution(kiAmount, isWeaponDrain, isFormDrain);
             SetKi(_kiCurrent + kiAmount);
         }
-
+        
+        // TODO Change these
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
             if (isFormDrain)
             {
-                var buff = player.GetCurrentFormForMastery();
-                if (!string.IsNullOrEmpty(buff))
-                {
-                    masteryLevels[buff] = GetMasteryIncreaseFromFormDrain(masteryLevels[buff]);
-                }
+                TransformationDefinition transformation = GetCurrentTransformation();
+                if (transformation == null) return;
+
+                if (transformation.GetKiDrainRate(this) == 0 && transformation.GetKiDrainRateMastery(this) == 0)
+                    return;
+
+                masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromFormDrain(masteryLevels[transformation.MasteryBuffKeyName]);
             }
 
             if (isWeaponDrain && kiAmount < 0)
             {
-                var buff = player.GetCurrentFormForMastery();
-                if (!string.IsNullOrEmpty(buff))
+                TransformationDefinition transformation = GetCurrentTransformation();
+                if (transformation != null)
                 {
-                    masteryLevels[buff] = GetMasteryIncreaseFromWeaponDrain(masteryLevels[buff], kiAmount);
+                    masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromWeaponDrain(masteryLevels[transformation.MasteryBuffKeyName], kiAmount);
                 }
             }
         }
@@ -325,10 +328,10 @@ namespace DBZMOD
         // currently doesn't use the damage received param. Included just in case.
         public void HandleDamageReceivedMastery(int damageReceived)
         {
-            var buff = player.GetCurrentFormForMastery();
-            if (!string.IsNullOrEmpty(buff))
+            TransformationDefinition transformation = GetCurrentTransformation();
+            if (transformation != null)
             {
-                masteryLevels[buff] = GetMasteryIncreaseFromDamageTaken(masteryLevels[buff]);
+                masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromDamageTaken(masteryLevels[transformation.MasteryBuffKeyName]);
             }
         }
 
@@ -444,15 +447,18 @@ namespace DBZMOD
             }
         }
 
+        // TODO Untangle this
         public void HandleMasteryEvents(string masteryFormBuffKeyName)
         {
             if (!masteryLevels.ContainsKey(masteryFormBuffKeyName) ||
                 masteryMessagesDisplayed.ContainsKey(masteryFormBuffKeyName))
                 return;
+
             float masteryLevel = masteryLevels[masteryFormBuffKeyName];
             bool isMessageDisplayed = masteryMessagesDisplayed[masteryFormBuffKeyName];
             string masteryMessage = string.Empty;
             Color messageColor = new Color(232, 242, 50);
+
             if (masteryFormBuffKeyName.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
             {
                 if (masteryLevel >= 0.5f && !ASSJAchieved)
@@ -476,8 +482,7 @@ namespace DBZMOD
             if (masteryLevel >= 1.0f && !isMessageDisplayed)
             {
                 masteryMessagesDisplayed[masteryFormBuffKeyName] = true;
-                string formName = FormBuffHelper.GetBuffByKeyName(masteryFormBuffKeyName).TransformationText;
-                Main.NewText($"You've achieved mastery in {formName} form.");
+                Main.NewText($"You've achieved mastery in {DBZMOD.Instance.TransformationDefinitionManager[masteryFormBuffKeyName].TransformationText} form.");
             }
         }
 
@@ -517,29 +522,25 @@ namespace DBZMOD
         private int overloadCooldownTimer = 0;
         private float overloadBlastTimer;
         private int overloadScaleCheckTimer = 0;
+
+        // TODO Clean up
         private void HandleOverloadCounters()
         {
+            TransformationDefinition transformation = GetCurrentTransformation();
             // clamp overload current values to 0/max
             overloadCurrent = (int)Math.Max(0, Math.Min(overloadMax, overloadCurrent));
 
             // does the player have the legendary trait
             if (IsLegendary())
             {
+                // TODO Change this
                 // is the player in a legendary transform step (that isn't SSJ1)?
-                if (player.IsLSSJ() && !player.IsSSJ1() && overloadCurrent <= overloadMax)
+                if (transformation == TransformationDefinitionManager.LSSJDefinition && transformation != TransformationDefinitionManager.SSJ1Definition && overloadCurrent <= overloadMax)
                 {
                     overloadTimer++;
-                    if (player.IsLSSJ1())
+                    if (IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
                     {
                         if (overloadTimer >= 45)
-                        {
-                            overloadCurrent += 1;
-                            overloadTimer = 0;
-                        }
-                    }
-                    if (player.IsLSSJ2())
-                    {
-                        if (overloadTimer >= 20)
                         {
                             overloadCurrent += 1;
                             overloadTimer = 0;
@@ -569,7 +570,7 @@ namespace DBZMOD
                 wasInOverloadingState = false;
             }
 
-            if(player.IsLSSJ() || overloadCurrent > 0)
+            if(IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition) || overloadCurrent > 0)
             {
                 OverloadBar.visible = true;
             }
@@ -683,7 +684,7 @@ namespace DBZMOD
 
         public void HandleKaiokenDefenseDebuff()
         {
-            if (player.IsAnyKaioken())
+            if (DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(GetCurrentTransformation()))
             {
                 float defenseMultiplier = 1f - (kaiokenLevel * 0.05f);
                 player.statDefense = (int)Math.Ceiling(player.statDefense * defenseMultiplier);
@@ -1084,7 +1085,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJTransformation();
                 UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
-                player.EndTransformations();
+                EndTransformations();
                 rageCurrent = 0;
             }
             else if (SSJ1Achived && !SSJ2Achieved && !IsLegendary())
@@ -1096,7 +1097,7 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ2Transformation();
                 UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
-                player.EndTransformations();
+                EndTransformations();
                 rageCurrent = 0;
             }
             else if (SSJ1Achived && IsLegendary() && !LSSJAchieved)
@@ -1108,7 +1109,7 @@ namespace DBZMOD
                 isTransforming = true;
                 LSSJTransformation();
                 UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
-                player.EndTransformations();
+                EndTransformations();
                 rageCurrent = 0;
             }
             else if (SSJ2Achieved && !SSJ3Achieved)
@@ -1120,20 +1121,8 @@ namespace DBZMOD
                 isTransforming = true;
                 SSJ3Transformation();
                 UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition;
-                player.EndTransformations();
+                EndTransformations();
                 rageCurrent = 0;
-            }
-            else if (LSSJAchieved && !LSSJ2Achieved)
-            {
-                Main.NewText("Something uncontrollable is coming from deep inside.", Color.Green);
-
-                DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.Unlock(this);
-
-                isTransforming = true;
-                LSSJ2Transformation();
-                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition;
-                lssj2Timer = 0;
-                player.EndTransformations();
             }
         }
 
@@ -1191,60 +1180,24 @@ namespace DBZMOD
             return powerDown.JustPressed && energyCharge.Current;
         }
 
+        // TODO Change this
         public bool CanAscend()
         {
-            return player.IsSSJ1() || player.IsAssj();
+            TransformationDefinition transformation = GetCurrentTransformation();
+            return transformation == TransformationDefinitionManager.SSJ1Definition || transformation == TransformationDefinitionManager.ASSJDefinition;
         }
 
-        public void HandleTransformations()
-        {
-            TransformationDefinition targetTransformation = null;
-
-            // player has just pressed the normal transform button one time, which serves two functions.
-            if (IsTransformingUpOneStep())
-            {
-                if (player.IsPlayerTransformed())
-                {
-                    // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-                    if (IsAscendingTransformation() && CanAscend())
-                        targetTransformation = player.GetNextAscensionStep();
-                }
-                else
-                {
-                    // first attempt to step up to the selected form in the menu.
-                    targetTransformation = UI.TransformationMenu.SelectedTransformation;
-                }
-
-                // if for any reason we haven't gotten our transformation target, try the next step instead.
-                if (targetTransformation == null)
-                {
-                    targetTransformation = player.GetNextTransformationStep();
-                }
-            }
-            else if (IsPoweringDownOneStep() && !player.IsKaioken())
-            {
-                // player is powering down a transformation state.
-                targetTransformation = player.GetPreviousTransformationStep();
-            }
-
-            // if we made it this far without a target, it means for some reason we can't change transformations.
-            if (targetTransformation == null)
-                return;
-
-            // finally, check that the transformation is really valid and then do it.
-            if (player.CanTransform(targetTransformation))
-                player.DoTransform(targetTransformation, mod);
-        }
-
+        // TODO Change this
         public bool CanIncreaseKaiokenLevel()
         {
             // immediately handle aborts from super kaioken states
-            if (player.IsSuperKaioken())
+            if (IsPlayerTransformation(TransformationDefinitionManager.SuperKaiokenDefinition))
                 return false;
 
-            if (player.IsAnythingOtherThanKaioken())
+            // TODO Chagne this
+            if (!IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition))
             {
-                return player.IsValidKaiokenForm() && kaiokenLevel == 0 && kaioAchieved;
+                return kaiokenLevel == 0 && kaioAchieved;
             }
 
             switch (kaiokenLevel)
@@ -1265,10 +1218,12 @@ namespace DBZMOD
 
         public void HandleKaioken()
         {
+            bool isKaioken = IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition);
+
             if (kaiokenKey.JustPressed)
             {
                 var canIncreaseKaiokenLevel = CanIncreaseKaiokenLevel();
-                if (player.IsKaioken())
+                if (isKaioken)
                 {
                     if (canIncreaseKaiokenLevel)
                     {
@@ -1279,17 +1234,18 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        TransformationDefinition transformation = player.IsAnythingOtherThanKaioken() ? DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition : DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition;
-                        if (player.CanTransform(transformation))
+                        TransformationDefinition transformation = !isKaioken ? (TransformationDefinition) TransformationDefinitionManager.SuperKaiokenDefinition : TransformationDefinitionManager.KaiokenDefinition;
+
+                        if (CanTransform(transformation))
                         {
                             kaiokenLevel++;
-                            player.DoTransform(transformation, mod);
+                            DoTransform(transformation);
                         }
                     }
                 }
             } else if (IsPoweringDownOneStep())
             {
-                if (player.IsKaioken() && kaiokenLevel > 1)
+                if (isKaioken && kaiokenLevel > 1)
                 {
                     kaiokenLevel--;
                 }
@@ -1777,8 +1733,10 @@ namespace DBZMOD
                 wasKaioken = isKaioken;
                 wasTransformed = isTransformed;
 
-                isKaioken = player.IsAnyKaioken();
-                isTransformed = player.IsAnythingOtherThanKaioken();
+                TransformationDefinition transformation = GetCurrentTransformation();
+
+                isKaioken = TransformationDefinitionManager.IsKaioken(transformation);
+                isTransformed = IsPlayerTransformed();
                 // this way, we can apply exhaustion debuffs correctly.
                 if (wasKaioken && !isKaioken)
                 {
@@ -1786,9 +1744,10 @@ namespace DBZMOD
                     player.AddKaiokenExhaustion(wasSsjkk ? 2 : 1);
                     kaiokenLevel = 0; // make triple sure the Kaio level gets reset.
                 }
+
                 if (wasTransformed && !isTransformed)
                 {
-                    player.AddTransformationExhaustion();
+                    //player.AddTransformationExhaustion();
                 }
             }
         }

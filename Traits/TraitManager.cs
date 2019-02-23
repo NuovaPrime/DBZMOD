@@ -21,6 +21,8 @@ namespace DBZMOD.Traits
             Legendary = Add(new LegendaryTrait());
             Primal = Add(new PrimalTrait());
             Prodigy = Add(new ProdigyTrait());
+
+            base.DefaultInitialize();
         }
 
         public override Trait Add(Trait item)

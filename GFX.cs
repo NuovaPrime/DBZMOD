@@ -56,13 +56,17 @@ namespace DBZMOD
             BACK_PANEL = UI_DIRECTORY + "BackPanel",
             WISH_BACK_PANEL = UI_DIRECTORY + "WishBackPanel",
             GRANT_BUTTON = BUTTON_DIRECTORY + "GrantButton",
+            
             SSJ1_BUTTON = BUTTON_DIRECTORY + "SSJ1ButtonImage",
             SSJ2_BUTTON = BUTTON_DIRECTORY + "SSJ2ButtonImage",
             SSJ3_BUTTON = BUTTON_DIRECTORY + "SSJ3ButtonImage",
+            SSJ4_BUTTON = BUTTON_DIRECTORY + "SSJ4ButtonImage",
+
             SSJG_BUTTON = BUTTON_DIRECTORY + "SSJGButtonImage",
+            SSJB_BUTTON = BUTTON_DIRECTORY + "SSJBButtonImage",
+
             LSSJ_BUTTON = BUTTON_DIRECTORY + "LSSJButtonImage",
-            LSSJ2_BUTTON = BUTTON_DIRECTORY + "LSSJ2ButtonImage",
-            SSJS_BUTTON = BUTTON_DIRECTORY + "SSJSButtonImage",
+            
             WISH_FOR_POWER = BUTTON_DIRECTORY + "WishforPower",
             WISH_FOR_WEALTH = BUTTON_DIRECTORY + "WishforWealth",
             WISH_FOR_IMMORTALITY = BUTTON_DIRECTORY + "WishforImmortality",
@@ -85,13 +89,17 @@ namespace DBZMOD
             backPanel,
             wishBackPanel,
             grantButton,
+            
             ssj1ButtonImage,
             ssj2ButtonImage,
             ssj3ButtonImage,
+            ssj4ButtonImage,
+
             ssjgButtonImage,
+            ssjbButtonImage,
+            
             lssjButtonImage,
-            lssj2ButtonImage,
-            ssjsButtonImage,
+            
             wishforPower,
             wishforWealth,
             wishforImmortality,
@@ -113,13 +121,17 @@ namespace DBZMOD
             backPanel = mod.GetTexture(BACK_PANEL);
             wishBackPanel = mod.GetTexture(WISH_BACK_PANEL);
             grantButton = mod.GetTexture(GRANT_BUTTON);
+
             ssj1ButtonImage = mod.GetTexture(SSJ1_BUTTON);
             ssj2ButtonImage = mod.GetTexture(SSJ2_BUTTON);
             ssj3ButtonImage = mod.GetTexture(SSJ3_BUTTON);
+            ssj4ButtonImage = mod.GetTexture(SSJ4_BUTTON);
+
             ssjgButtonImage = mod.GetTexture(SSJG_BUTTON);
+            ssjbButtonImage = mod.GetTexture(SSJB_BUTTON);
+
             lssjButtonImage = mod.GetTexture(LSSJ_BUTTON);
-            lssj2ButtonImage = mod.GetTexture(LSSJ2_BUTTON);
-            ssjsButtonImage = mod.GetTexture(SSJS_BUTTON);
+
             lockedImage = mod.GetTexture(LOCKED);
 
             unknownImage = mod.GetTexture(UNKNOWN);
@@ -134,19 +146,21 @@ namespace DBZMOD
             wishforAwakening = mod.GetTexture(WISH_FOR_AWAKENING);
         }
 
-        public static void UnloadGfx()
+        public static void UnloadGFX()
         {
             KiBarTextures.Clear();
             overloadBarSegment = null;
             overloadBarFrame = null;
             bg = null;
+
             ssj1ButtonImage = null;
             ssj2ButtonImage = null;
             ssj3ButtonImage = null;
-            lssjButtonImage = null;
-            lssj2ButtonImage = null;
+
             ssjgButtonImage = null;
-            ssjsButtonImage = null;
+
+            lssjButtonImage = null;
+
             lockedImage = null;
             backPanel = null;
             unknownImage = null;

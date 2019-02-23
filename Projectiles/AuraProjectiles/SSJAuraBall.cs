@@ -90,17 +90,18 @@ namespace DBZMOD.Projectiles.AuraProjectiles
 
         public override void Kill(int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
-            if (!MyPlayer.ModPlayer(player).IsLegendary())
+            MyPlayer modPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+
+            if (modPlayer.IsLegendary())
             {
-                player.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition, DBZMOD.Instance);
-                MyPlayer.ModPlayer(player).isTransforming = false;
+                modPlayer.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
+                modPlayer.isTransforming = false;
             }
             else
             {
-                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(modPlayer.player.Center.X - 40, modPlayer.player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, modPlayer.player.whoAmI);
                 // this being set to false prior to the aura ball dying tells it to go LSSJ instead of LSSJ2 - weird choice, but I'm not going to argue with it.
-                MyPlayer.ModPlayer(player).isTransforming = false;
+                modPlayer.isTransforming = false;
             }
         }
     }

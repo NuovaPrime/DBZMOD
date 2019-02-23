@@ -129,7 +129,6 @@ namespace DBZMOD
                 if (tag.Get<bool>("SSJ3Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition));
 
                 if (tag.Get<bool>("LSSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition));
-                if (tag.Get<bool>("LSSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition));
 
                 if (tag.Get<bool>("ssjgAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition));
 
@@ -155,46 +154,51 @@ namespace DBZMOD
                     masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteredMessage3;
                     var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
                     masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteredMessageGod;
-                    var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;
+                    /*var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;*/
 
+                    // TODO Change masteryLevels to use TransformationDefinition.
                     // Prime the dictionary with any missing entries.
-                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    for (int i = 0; i < DBZMOD.Instance.TransformationDefinitionManager.Count; i++)
                     {
-                        if (!masteryLevels.ContainsKey(key))
+                        TransformationDefinition transformation = DBZMOD.Instance.TransformationDefinitionManager[i];
+                        if (transformation == null || !transformation.HasMastery) continue;
+
+                        if (!masteryLevels.ContainsKey(transformation.MasteryBuffKeyName))
                         {
-                            masteryLevels[key] = 0f;
+                            masteryLevels[transformation.MasteryBuffKeyName] = 0f;
                         }
 
-                        if (!masteryMessagesDisplayed.ContainsKey(key))
+                        if (!masteryMessagesDisplayed.ContainsKey(transformation.MasteryBuffKeyName))
                         {
-                            masteryMessagesDisplayed[key] = false;
+                            masteryMessagesDisplayed[transformation.MasteryBuffKeyName] = false;
                         }
                     }
                 }
                 else
                 {
                     // New mastery system/dynamic loading. Overwrites the old one if it exists.
-                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    for (int i = 0; i < DBZMOD.Instance.TransformationDefinitionManager.Count; i++)
                     {
-                        if (tag.ContainsKey($"MasteryLevel{key}"))
+                        TransformationDefinition transformation = DBZMOD.Instance.TransformationDefinitionManager[i];
+                        if (transformation == null || !transformation.HasMastery) continue;
+
+                        if (tag.ContainsKey($"MasteryLevel{transformation.MasteryBuffKeyName}"))
                         {
-                            masteryLevels[key] = tag.Get<float>($"MasteryLevel{key}");
+                            masteryLevels[transformation.MasteryBuffKeyName] = tag.Get<float>($"MasteryLevel{transformation.MasteryBuffKeyName}");
                         }
                         else
                         {
-                            masteryLevels[key] = 0f;
+                            masteryLevels[transformation.MasteryBuffKeyName] = 0f;
                         }
 
-                        if (tag.ContainsKey($"MasteryMessagesDisplayed{key}"))
+                        if (tag.ContainsKey($"MasteryMessagesDisplayed{transformation.MasteryBuffKeyName}"))
                         {
-                            masteryMessagesDisplayed[key] = tag.Get<bool>($"MasteryMessagesDisplayed{key}");
+                            masteryMessagesDisplayed[transformation.MasteryBuffKeyName] = tag.Get<bool>($"MasteryMessagesDisplayed{transformation.MasteryBuffKeyName}");
                         }
                         else
                         {
-                            masteryMessagesDisplayed[key] = false;
+                            masteryMessagesDisplayed[transformation.MasteryBuffKeyName] = false;
                         }
                     }
                 }

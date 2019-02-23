@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DBZMOD.Dynamicity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,26 +21,50 @@ namespace DBZMOD.Transformations
         /// <param name="unlocalizedName">The key name of the buff used in the mod.</param>
         /// <param name="transText">The text displayed when transforming.</param>
         /// <param name="transTextColor">The color of the transformation text.</param>
-        /// <param name="buffIcon">The icon to display in the Transformation Menu; leave as null if you don't want to display the transformation.</param>
+        /// <param name="baseDamageMultiplier"></param>
+        /// <param name="baseSpeedMultiplier"></param>
+        /// <param name="baseDefenseBonus"></param>
+        /// <param name="baseKiSkillDrainMultiplier"></param>
+        /// <param name="baseKiDrainRate"></param>
+        /// <param name="baseKiDrainRateMastery"></param>
+        /// <param name="baseHealthDrainRate"></param>
+        /// <param name="appearance"></param>
+        /// <param name="buff"></param>
+        /// <param name="buffIconGetter">The icon to display in the Transformation Menu; leave as null if you don't want to display the transformation.</param>
         /// <param name="transformationFailureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
+        /// <param name="extraTooltipText"></param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
         /// <param name="selectionRequirements">The requirements to select the form in the interface. Checked after verifying if the player has the transformation. Leaving this value null will default to checking wether or not the player has unlocked the transformation.</param>
+        /// <param name="selectionRequirementsFailed"></param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
         protected TransformationDefinition(string unlocalizedName, string transText, Color transTextColor,
-            float baseDamageMultiplier, float baseSpeedMultiplier, float baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate = 0,
-            Texture2D buffIcon = null, string transformationFailureText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
+            float baseDamageMultiplier, float baseSpeedMultiplier, int baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate,
+            TransformationAppearanceDefinition appearance,
+            Type buff, Func<Texture2D> buffIconGetter = null, string transformationFailureText = null, string extraTooltipText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
             Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;
             TransformationText = transText;
 
             BaseDamageMultiplier = baseDamageMultiplier;
+            BaseSpeedMultiplier = baseSpeedMultiplier;
+            BaseDefenseBonus = baseDefenseBonus;
+            BaseKiSkillDrainMultiplier = baseKiSkillDrainMultiplier;
+            BaseKiDrainRate = baseKiDrainRate;
+            BaseKiDrainRateMastery = baseKiDrainRateMastery;
+            BaseHealthDrainRate = baseHealthDrainRate;
 
             TransformationTextColor = transTextColor;
-            BuffIcon = buffIcon;
+
+            Buff = buff;
+            BuffIconGetter = buffIconGetter;
+
             TransformationFailureText = transformationFailureText;
+            ExtraTooltipText = extraTooltipText;
+
+            Appearance = appearance;
 
             if (selectionRequirements == null)
                 selectionRequirements = (p, t) => PlayerHasTransformation(p);
@@ -106,7 +131,6 @@ namespace DBZMOD.Transformations
 
         public float GetPlayerMastery(MyPlayer player) => player.PlayerTransformations[this].Mastery;
 
-        public override string ToString() => UnlocalizedName;
 
         internal bool PlayerHasTransformation(MyPlayer player) => player.PlayerTransformations.ContainsKey(this);
 
@@ -123,6 +147,35 @@ namespace DBZMOD.Transformations
 
         public bool MeetsSelectionRequirements(MyPlayer player) => PlayerHasTransformation(player) && SelectionRequirements.Invoke(player, this);
 
+        #region Stat Affecting Methods
+
+        public virtual float GetDamageMultiplier(MyPlayer player) => ModifiedDamageMultiplier;
+
+        public virtual float GetSpeedMultiplier(MyPlayer player) => ModifiedSpeedMultiplier;
+
+        public virtual int GetDefenseBonus(MyPlayer player) => ModifiedDefenseBonus;
+
+        public virtual float GetKiSkillDrainMultiplier(MyPlayer player) => ModifiedKiSkillDrainMultiplier;
+
+        public virtual float GetKiDrainRate(MyPlayer player) => ModifiedKiDrainRate;
+
+        public virtual float GetKiDrainRateMastery(MyPlayer player) => ModifiedKiDrainRateMastery;
+
+        public virtual float GetHealthDrainRate(MyPlayer player) => ModifiedHealthDrainRate;
+
+        public virtual void GetPlayerLightModifier(ref float lightingRed, ref float lightingGreen, ref float lightingBlue)
+        {
+            if (Appearance.lightColor == null) return;
+
+            lightingRed = Appearance.lightColor.red;
+            lightingGreen = Appearance.lightColor.green;
+            lightingBlue = Appearance.lightColor.blue;
+        }
+
+        #endregion
+
+        public override string ToString() => UnlocalizedName;
+
 
         public string UnlocalizedName { get; }
 
@@ -130,17 +183,41 @@ namespace DBZMOD.Transformations
 
         public bool HasMastery { get; }
 
+        #region Stat Affecting Properties
+
         public float BaseDamageMultiplier { get; }
-        public virtual float DamageMultiplier => BaseDamageMultiplier;
+        public virtual float ModifiedDamageMultiplier => BaseDamageMultiplier;
 
-        public virtual float 
+        public float BaseSpeedMultiplier { get; }
+        public virtual float ModifiedSpeedMultiplier => BaseSpeedMultiplier;
 
+        public int BaseDefenseBonus { get; }
+        public virtual int ModifiedDefenseBonus => BaseDefenseBonus;
+
+        public float BaseKiSkillDrainMultiplier { get; }
+        public virtual float ModifiedKiSkillDrainMultiplier => BaseKiSkillDrainMultiplier;
+
+        public float BaseKiDrainRate { get; }
+        public virtual float ModifiedKiDrainRate => BaseKiDrainRate;
+
+        public float BaseKiDrainRateMastery { get; }
+        public virtual float ModifiedKiDrainRateMastery => BaseKiDrainRateMastery;
+
+        public float BaseHealthDrainRate { get; }
+        public virtual float ModifiedHealthDrainRate => BaseHealthDrainRate;
+
+        #endregion
+
+        public TransformationAppearanceDefinition Appearance { get; }
 
         public Color TransformationTextColor { get; }
 
-        public Texture2D BuffIcon { get; }
+        public Type Buff { get; }
+        public Func<Texture2D> BuffIconGetter { get; }
 
         public string TransformationFailureText { get; }
+
+        public string ExtraTooltipText { get; }
 
         internal Func<MyPlayer, TransformationDefinition, bool> SelectionRequirements { get; }
 
@@ -152,5 +229,9 @@ namespace DBZMOD.Transformations
         internal Predicate<MyPlayer> UnlockRequirements { get; }
 
         public TransformationDefinition[] Parents { get; }
+
+
+        // TODO Complete many transformations
+        //protected virtual List<TransformationDefinition> CompatibleTransformations { get; } = new List<TransformationDefinition>();
     }
 }

@@ -8,7 +8,8 @@ namespace DBZMOD
     {
         public static void Initialize()
         {
-            NPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
+            if (!NPCStats.temporaryStrVarHooks.ContainsKey(typeof(KiProjectile)))
+                NPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
         }
 
         public static void PlayerPreUpdateMovement(MyPlayer player)
