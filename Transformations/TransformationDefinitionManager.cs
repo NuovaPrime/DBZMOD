@@ -12,7 +12,9 @@ using DBZMOD.Transformations.SSJ.SSJ2;
 using DBZMOD.Transformations.SSJ.SSJ3;
 using DBZMOD.Transformations.SSJ.SSJ4s.SSJ4;
 using DBZMOD.Transformations.SSJ.SSJBs.SSJB;
+using DBZMOD.Transformations.SSJ.SSJBs.SSJR;
 using DBZMOD.Transformations.SSJ.SSJG;
+using DBZMOD.Transformations.UltraInstincts.Omen;
 using Microsoft.Xna.Framework;
 
 namespace DBZMOD.Transformations
@@ -24,7 +26,9 @@ namespace DBZMOD.Transformations
         public static readonly Color 
             defaultTransformationTextColor = new Color(219, 219, 48),
             godTransformationTextColor = new Color(229, 20, 51),
-            blueTransformationTextColor = new Color(51, 20, 229);
+            blueTransformationTextColor = new Color(51, 20, 229),
+            roseTransformationTextColor = new Color(244, 69, 209),
+            uiOmenTransformationTextColor = new Color(225, 255, 255);
 
         internal override void DefaultInitialize()
         {
@@ -41,9 +45,13 @@ namespace DBZMOD.Transformations
             SSJ4Definition = Add(new SSJ4Transformation(SSJ3Definition)) as SSJ4Transformation;
 
             SSJGDefinition = Add(new SSJGTransformation(SSJ3Definition)) as SSJGTransformation;
-            SSJBDefinition = Add(new SSJBTransformation(SSJ3Definition)) as SSJBTransformation;
+            SSJBDefinition = Add(new SSJBTransformation(SSJGDefinition)) as SSJBTransformation;
+            SSJRDefinition = Add(new SSJRTransformation(SSJGDefinition)) as SSJRTransformation;
             /*SSJBDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, "Set Text Here", true, BuffKeyNames.ssjb, null,
                 selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));*/
+
+            // TODO Add SSJB and SSJR as parents.
+            UIOmenTransformation = Add(new UIOmenTransformation()) as UIOmenTransformation;
 
             LSSJDefinition = Add(new LSSJ1Transformation(SSJ1Definition)) as LSSJ1Transformation;
 
@@ -78,6 +86,9 @@ namespace DBZMOD.Transformations
 
         public SSJGTransformation SSJGDefinition { get; private set; }
         public SSJBTransformation SSJBDefinition { get; private set; }
+        public SSJRTransformation SSJRDefinition { get; private set; }
+
+        public UIOmenTransformation UIOmenTransformation { get; private set; }
 
         public LSSJ1Transformation LSSJDefinition { get; private set; }
 

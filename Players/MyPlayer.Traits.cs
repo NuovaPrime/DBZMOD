@@ -24,5 +24,7 @@ namespace DBZMOD
         #endregion
 
         public Trait PlayerTrait { get; set; }
+
+        public TraitManager TraitManager => DBZMOD.Instance.TraitManager;
     }
 }

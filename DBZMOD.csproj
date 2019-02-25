@@ -70,11 +70,14 @@
     <Compile Include="Items\Consumables\TestItems\SSJ3TestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJ4TestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJBTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\SSJRTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJGTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJMasteryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
+    <Compile Include="Traits\Primal\PrimalTraitBuff.cs" />
     <Compile Include="Transformations\Exhaustion\TransformationExhaustionTransformation.cs" />
     <Compile Include="Transformations\Kaiokens\Kaioken\KaiokenBuff.cs" />
     <Compile Include="Buffs\KatchinFeet.cs" />
@@ -104,6 +107,8 @@
     <Compile Include="Transformations\SSJ\SSJBs\SSJBKiLeak.cs" />
     <Compile Include="Transformations\SSJ\SSJBs\SSJB\SSJBBuff.cs" />
     <Compile Include="Transformations\SSJ\SSJBs\SSJB\SSJBTransformation.cs" />
+    <Compile Include="Transformations\SSJ\SSJBs\SSJR\SSJRBuff.cs" />
+    <Compile Include="Transformations\SSJ\SSJBs\SSJR\SSJRTransformation.cs" />
     <Compile Include="Transformations\SSJ\SSJG\SSJGBuff.cs" />
     <Compile Include="Transformations\SSJ\SSJ3\SSJ3Transformation.cs" />
     <Compile Include="Transformations\Kaiokens\SuperKaioken\SuperKaiokenBuff.cs" />
@@ -500,6 +505,7 @@
     <Compile Include="Transformations\PlayerTransformation.cs" />
     <Compile Include="Transformations\TransformationDefinition.cs" />
     <Compile Include="Transformations\TransformationDefinitionManager.cs" />
+    <Compile Include="Transformations\UltraInstincts\Omen\UIOmenTransformation.cs" />
     <Compile Include="UI\EasyMenu.cs" />
     <Compile Include="UI\KiBar.cs" />
     <Compile Include="UI\KiResource.cs" />
@@ -553,6 +559,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Terraria">
       <HintPath>Lib\Terraria.exe</HintPath>
@@ -574,10 +581,10 @@
     <Folder Include="Tails\" />
     <Folder Include="Transformations\LSSJ\LW\" />
     <Folder Include="Transformations\LSSJ\SSJC\" />
+    <Folder Include="Transformations\Mystic\" />
     <Folder Include="Transformations\SSJ\SSJ4s\FPSSJ4\" />
     <Folder Include="Transformations\SSJ\SSJBs\SSJBE\" />
     <Folder Include="Transformations\SSJ\SSJBs\SSJBKK\" />
-    <Folder Include="Transformations\SSJ\SSJBs\SSJR\" />
     <Folder Include="UI\Buttons\" />
     <Folder Include="UI\KiBar\" />
   </ItemGroup>

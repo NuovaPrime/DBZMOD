@@ -27,6 +27,9 @@ namespace DBZMOD
 
         public static KiBarTexture GetKiBar(MyPlayer player)
         {
+            if (player.PlayerTrait == null)
+                return KiBarTextures[DBZMOD.Instance.TraitManager.Default];
+
             return KiBarTextures[player.PlayerTrait];
         }
 
@@ -64,6 +67,9 @@ namespace DBZMOD
 
             SSJG_BUTTON = BUTTON_DIRECTORY + "SSJGButtonImage",
             SSJB_BUTTON = BUTTON_DIRECTORY + "SSJBButtonImage",
+            SSJR_BUTTON = BUTTON_DIRECTORY + "SSJRButtonImage",
+
+            UIOMEN_BUTTON = BUTTON_DIRECTORY + "UIOmenButtonImage",
 
             LSSJ_BUTTON = BUTTON_DIRECTORY + "LSSJButtonImage",
             
@@ -97,7 +103,10 @@ namespace DBZMOD
 
             ssjgButtonImage,
             ssjbButtonImage,
+            ssjrButtonImage,
             
+            uiOmenButtonImage,
+
             lssjButtonImage,
             
             wishforPower,
@@ -129,6 +138,9 @@ namespace DBZMOD
 
             ssjgButtonImage = mod.GetTexture(SSJG_BUTTON);
             ssjbButtonImage = mod.GetTexture(SSJB_BUTTON);
+            ssjrButtonImage = mod.GetTexture(SSJR_BUTTON);
+
+            uiOmenButtonImage = mod.GetTexture(UIOMEN_BUTTON);
 
             lssjButtonImage = mod.GetTexture(LSSJ_BUTTON);
 

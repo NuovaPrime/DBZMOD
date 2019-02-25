@@ -37,8 +37,8 @@ namespace DBZMOD.Transformations
             player.statDefense += TransformationDefinition.GetDefenseBonus(player.GetModPlayer<MyPlayer>());
             
             // handle ki drain mastery
-            bool isMastered = modPlayer.masteryLevels.ContainsKey(this.Name) &&
-                              modPlayer.masteryLevels[this.Name] >= 1.0;
+            bool isMastered = modPlayer.PlayerTransformations.ContainsKey(TransformationDefinition) &&
+                              modPlayer.PlayerTransformations[TransformationDefinition].Mastery >= 1.0;
 
             float actualKiDrain = isMastered ? TransformationDefinition.GetKiDrainRateMastery(modPlayer) : TransformationDefinition.GetKiDrainRate(modPlayer);
 
@@ -134,13 +134,16 @@ namespace DBZMOD.Transformations
             {
                 ExpandedSentriesEffects(player, damageMultiplier);
             }
+
+            if (player.buffTime[buffIndex] == 0)
+                TransformationDefinition.OnTransformationBuffLost(modPlayer, ref buffIndex);
         }
 
         public override void SetDefaults()
         {
             if (TransformationDefinition != null)
             {
-                DisplayName.SetDefault(TransformationDefinition.TransformationText);
+                DisplayName.SetDefault(TransformationDefinition.Text);
 
                 Main.buffNoTimeDisplay[Type] = true;
                 Main.buffNoSave[Type] = true;
@@ -220,7 +223,7 @@ namespace DBZMOD.Transformations
                     default: break;
                 }
             }
-
+            
             int percentDamageMult = (int)Math.Round(TransformationDefinition.GetDamageMultiplier(player) * 100f, 0) - 100;
             int percentSpeedMult = (int)Math.Round(TransformationDefinition.GetSpeedMultiplier(player) * 100f, 0) - 100;
 

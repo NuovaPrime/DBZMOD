@@ -42,7 +42,10 @@ namespace DBZMOD.Effects.Animations.Aura
         public static AuraAnimationInfo ssj4Aura = new AuraAnimationInfo(AuraID.SSJ4, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
 
         public static AuraAnimationInfo ssjgAura = new AuraAnimationInfo(AuraID.SSJG, GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        public static AuraAnimationInfo ssjbAura = new AuraAnimationInfo(AuraID.SSJG, GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+        public static AuraAnimationInfo ssjbAura = new AuraAnimationInfo(AuraID.SSJB, GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+        public static AuraAnimationInfo ssjrAura = new AuraAnimationInfo(AuraID.SSJR, GetAnimationSpriteName("SSJRAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+
+        public static AuraAnimationInfo uiOmenAura = new AuraAnimationInfo(AuraID.UIOmen, GetAnimationSpriteName("UIOmenAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
         public static AuraAnimationInfo createFalseUIAura = new AuraAnimationInfo(AuraID.FalseUI, GetAnimationSpriteName("FalseUIAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoFalseUIDust), 0, null, 1);
         public static AuraAnimationInfo createKaiokenAura = new AuraAnimationInfo(AuraID.Kaioken, GetAnimationSpriteName("KaiokenAura"), 4, 3, BlendState.AlphaBlend, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);

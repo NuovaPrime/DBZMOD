@@ -149,7 +149,7 @@ namespace DBZMOD.Extensions
         {            
             foreach(int massiveBlastType in ProjectileHelper.MassiveBlastProjectileTypes)
             {
-                if (player.ownedProjectileCounts[massiveBlastType] > 0)
+                if (massiveBlastType < player.ownedProjectileCounts.Length && player.ownedProjectileCounts[massiveBlastType] > 0)
                     return true;
             }
             return false;

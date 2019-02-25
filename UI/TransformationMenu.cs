@@ -30,7 +30,7 @@ namespace DBZMOD.UI
         public const int
             PADDINGX = 30,
             PADDINGY = PADDINGX,
-            SMALL_SPACE = 15;
+            SMALL_SPACE = 4;
 
         public override void OnInitialize()
         {
@@ -125,7 +125,7 @@ namespace DBZMOD.UI
                 RecursiveDrawTransformation(tree, tree[nextDef], ref xOffset, ref yOffset);
 
                 if (i + 1 < mtmn.Next.Count)
-                    yOffset += buffIcon.Height + SMALL_SPACE;
+                    yOffset += buffIcon.Height + SMALL_SPACE * 2;
 
                 xOffset = localXOffset;
             }
@@ -163,17 +163,17 @@ namespace DBZMOD.UI
                 if (SelectedTransformation != def)
                 {
                     SelectedTransformation = def;
-                    Main.NewText($"Selected {def.TransformationText}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+                    Main.NewText($"Selected {def.Text}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
                 }
                 else
-                    Main.NewText($"{def.TransformationText} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+                    Main.NewText($"{def.Text} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
             }
             else if (def.SelectionRequirementsFailed.Invoke(player, def))
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
 
-                if (def.TransformationFailureText == null) return;
-                Main.NewText(def.TransformationFailureText);
+                if (def.FailureText == null) return;
+                Main.NewText(def.FailureText);
             }
         }
     }

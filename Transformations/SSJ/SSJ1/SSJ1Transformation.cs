@@ -15,7 +15,7 @@ namespace DBZMOD.Transformations.SSJ.SSJ1
             1.50f, 1.50f, 4, 1.25f, 1, 0.5f, 0f,
             new TransformationAppearanceDefinition(AuraAnimations.ssj1Aura, new ReadOnlyColor(LIGHTING_RED, LIGHTING_GREEN, LIGHTING_BLUE), "Hairs/SSJ/SSJ1Hair", null, null, Color.Turquoise), 
             typeof(SSJ1Buff),
-            buffIconGetter: () => GFX.ssj1ButtonImage, transformationFailureText: "Only through failure with a powerful foe will true power awaken.", canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1)
+            buffIconGetter: () => GFX.ssj1ButtonImage, failureText: "Only through failure with a powerful foe will true power awaken.", canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1)
         {
         }
     }

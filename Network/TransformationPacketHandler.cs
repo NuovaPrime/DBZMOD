@@ -25,12 +25,12 @@ namespace DBZMOD.Network
             }
         }
 
-        public void SendFormChanges(int toWho, int fromWho, int whichPlayer, string buffKeyName, int duration)
+        public void SendFormChanges(int toWho, int fromWho, int whichPlayer, string transformationUnlocalizedName, int duration)
         {
             ModPacket packet = GetPacket(SYNC_TRANSFORMATIONS, fromWho);  
             // this indicates we're the originator of the packet. include our player.
             packet.Write(whichPlayer);
-            packet.Write(buffKeyName);
+            packet.Write(transformationUnlocalizedName);
             packet.Write(duration);
             packet.Send(toWho, fromWho);
         }

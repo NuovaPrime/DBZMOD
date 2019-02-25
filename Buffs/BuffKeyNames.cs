@@ -8,12 +8,17 @@
             ussj = "USSJBuff",
             ssj1Kaioken = "SSJ1KaiokenBuff",
 
+            mystic,
+
             ssj2 = "SSJ2Buff",
             ssj3 = "SSJ3Buff",
             ssj4 = "SSJ4Buff",
 
             ssjg = "SSJGBuff",
             ssjb = "SSJBBuff",
+            ssjr = "SSJRBuff",
+
+            uiOmen = "UIOmenBuff",
 
             lssj = "LSSJBuff",
             

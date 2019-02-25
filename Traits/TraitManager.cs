@@ -52,11 +52,18 @@ namespace DBZMOD.Traits
 
             for (int i = 0; i < byIndex.Count; i++)
             {
+                if (byIndex[i].Percentage < 0) continue;
+
                 totalWeight += byIndex[i].Percentage;
                 traitChooser.Add(byIndex[i], byIndex[i].Percentage);
             }
 
-            int roll = Main.rand.Next(0, 100);
+            UnifiedRandom rand = Main.rand;
+
+            if (rand == null)
+                rand = new UnifiedRandom();
+
+            int roll = rand.Next(0, 100);
 
             if (roll <= totalWeight)
             {
@@ -73,7 +80,7 @@ namespace DBZMOD.Traits
 
             for (int i = 0; i < byIndex.Count; i++)
             {
-                if (byIndex[i] == oldTrait || byIndex[i] == Default) continue;
+                if (byIndex[i] == oldTrait || byIndex[i] == Default || byIndex[i].Percentage < 0) continue;
                 traitChooser.Add(byIndex[i]);
             }
 

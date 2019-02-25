@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using DBZMOD.Buffs;
 using DBZMOD.Config;
-using DBZMOD.Dynamicity;
 using DBZMOD.Effects.Animations.Aura;
-using DBZMOD.Enums;
 using DBZMOD.Extensions;
 using DBZMOD.Network;
 using DBZMOD.Traits;
@@ -196,12 +192,12 @@ namespace DBZMOD
             {
                 float oldSpeedMult = bonusSpeedMultiplier;
                 bonusSpeedMultiplier = GetNextSpeedMultiplier();
-                CombatText.NewText(player.Hitbox, new Color(255, 255, 255), string.Format("Speed bonus {0}!", (bonusSpeedMultiplier == 0f) ? "off" : ((int)Math.Ceiling(bonusSpeedMultiplier * 100f)).ToString() + "%"), false, false);
+                CombatText.NewText(player.Hitbox, new Color(255, 255, 255), string.Format("Speed bonus {0}!", (bonusSpeedMultiplier == 0f) ? "off" : ((int)Math.Ceiling(bonusSpeedMultiplier * 100f)) + "%"), false, false);
             }
 
             if (transMenu.JustPressed)
             {
-                UI.TransformationMenu.menuVisible = !UI.TransformationMenu.menuVisible;
+                TransformationMenu.menuVisible = !TransformationMenu.menuVisible;
             }
 
             /*if (ProgressionMenuKey.JustPressed)
@@ -212,13 +208,15 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && IsPlayerTransformed())
             {
-                var playerWasSuperKaioken = IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition);
+                var playerWasSuperKaioken = IsPlayerTransformation(TransformationDefinitionManager.SuperKaiokenDefinition);
                 EndTransformations();
 
+                // TODO Make this dynamic.
                 if (playerWasSuperKaioken)
                 {
                     DoTransform(TransformationDefinitionManager.SSJ1Definition);
                 }
+
                 kaiokenLevel = 0;
                 SoundHelper.PlayCustomSound("Sounds/PowerDown", player, .3f);
             }
@@ -359,20 +357,19 @@ namespace DBZMOD
         // TODO Change this in favor of auto checking.
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-
-            bool isAnyBossAlive = false;
+            List<NPC> activeBosses = new List<NPC>();
             bool isGolemAlive = false;
+
+
             foreach (NPC npc in Main.npc)
             {
                 if (npc.boss && npc.active)
-                {
-                    isAnyBossAlive = true;
-                }
+                    activeBosses.Add(npc);
+
                 if (npc.type == NPCID.Golem)
-                {
                     isGolemAlive = true;
-                }
             }
+
             if (zenkaiCharm && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
             {
                 player.statLife = 50;
@@ -380,6 +377,7 @@ namespace DBZMOD
                 player.AddBuff(mod.BuffType("ZenkaiBuff"), 300);
                 return false;
             }
+
             if (eliteSaiyanBonus && !zenkaiCharmActive && !player.HasBuff(mod.BuffType("ZenkaiCooldown")))
             {
                 int healamount = (player.statLifeMax + player.statLifeMax2);
@@ -389,7 +387,11 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && !SSJ1Achived && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
+            TransformationDefinition transformation = GetCurrentTransformation();
+            if (transformation != null)
+                transformation.OnPlayerPreKill(this, activeBosses, damage, hitDirection, pvp, ref playSound, ref genGore, ref damageSource);
+
+            if (activeBosses.Count > 0 && !SSJ1Achived && player.whoAmI == Main.myPlayer && NPC.downedBoss3)
             {
                 if (rageCurrent >= 3)
                 {
@@ -399,26 +401,28 @@ namespace DBZMOD
                 {
                     formUnlockChance = 20;
                 }
-                if ((Main.rand.Next(overallFormUnlockChance) == 0))
+
+                if (Main.rand.Next(overallFormUnlockChance) == 0)
                 {
                     Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
                     player.statLife = player.statLifeMax2 / 2;
                     player.HealEffect(player.statLifeMax2 / 2);
 
-                    TransformationDefinitionManager.LSSJDefinition.Unlock(this);
+                    TransformationDefinitionManager.LSSJDefinition.TryUnlock(this);
 
                     isTransforming = true;
                     SSJTransformation();
-                    UI.TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ1Definition;
+                    TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ1Definition;
+                    TransformationDefinitionManager.SSJ1Definition.TryUnlock(this);
                     rageCurrent = 0;
                     EndTransformations();
                     return false;
                 }
             }
 
-            if (isAnyBossAlive && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny && 
+            if (activeBosses.Count > 0 && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny && 
                 (IsPlayerTransformation(TransformationDefinitionManager.SSJ1Definition) || IsPlayerTransformation(TransformationDefinitionManager.SSJ2Definition) || IsPlayerTransformation(TransformationDefinitionManager.SSJ3Definition) && 
-                                                                                            masteryLevels[TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1))
+                                                                                            PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery >= 1))
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
                 player.statLife = player.statLifeMax2 / 2;
@@ -428,13 +432,14 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ2Definition;
+                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ2Definition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isAnyBossAlive && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedMechBossAny && player.HasBuff(TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && masteryLevels[TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] >= 1)
+            if (activeBosses.Count > 0 && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedMechBossAny && player.HasBuff(TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && 
+                PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
                 player.statLife = player.statLifeMax2 / 2;
@@ -444,13 +449,14 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransformationMenu.SelectedTransformation = TransformationDefinitionManager.LSSJDefinition;
+                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.LSSJDefinition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
             }
 
-            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && masteryLevels[TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] >= 1)
+            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && 
+                PlayerTransformations[TransformationDefinitionManager.SSJ2Definition].Mastery >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
                 player.statLife = player.statLifeMax2 / 2;
@@ -460,7 +466,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ3Definition;
+                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ3Definition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -475,7 +481,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isAnyBossAlive && player.whoAmI == Main.myPlayer)
+            if (activeBosses.Count > 0 && player.whoAmI == Main.myPlayer)
             {
                 rageCurrent += 1;
                 return true;
@@ -574,6 +580,7 @@ namespace DBZMOD
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
             if (hair < 0)
                 return;
+
             if (this.hair != null)
             {
                 layers[hair] = new PlayerLayer(mod.Name, "TransHair",
@@ -582,7 +589,7 @@ namespace DBZMOD
                         Player player = draw.drawPlayer;
 
                         Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), Color.White), draw.shadow);
-                        DrawData data = new DrawData(this.hair, new Vector2((float)((int)(draw.position.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.position.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 4f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
+                        DrawData data = new DrawData(this.hair, new Vector2((int)(draw.position.X - Main.screenPosition.X - player.bodyFrame.Width / 2 + player.width / 2), (int)(draw.position.Y - Main.screenPosition.Y + player.height - player.bodyFrame.Height + 4f)) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
                         data.shader = draw.hairShader;
                         Main.playerDrawData.Add(data);
                     });
@@ -732,7 +739,7 @@ namespace DBZMOD
 
             #region Mastery Messages
 
-            if (player.whoAmI == Main.LocalPlayer.whoAmI)
+            if (player.whoAmI == Main.LocalPlayer.whoAmI && PlayerTransformations != null)
             {
                 foreach (KeyValuePair<TransformationDefinition, PlayerTransformation> kvp in PlayerTransformations)
                 {

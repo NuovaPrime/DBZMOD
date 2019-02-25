@@ -102,8 +102,7 @@ namespace DBZMOD
         public static ModHotKey armorBonus;
 
         //mastery vars
-        public Dictionary<string, float> masteryLevels = new Dictionary<string, float>();
-        public Dictionary<string, bool> masteryMessagesDisplayed = new Dictionary<string, bool>();
+        public Dictionary<TransformationDefinition, bool> masteryMessagesDisplayed = new Dictionary<TransformationDefinition, bool>();
 
         //Wish vars
         public const int POWER_WISH_MAXIMUM = 5;
@@ -129,7 +128,6 @@ namespace DBZMOD
         public bool kaioFragment3;
         public bool kaioFragment4;
         public bool chlorophyteHeadPieceActive;
-        public bool kaioAchieved;
         public bool kiEssence1;
         public bool kiEssence2;
         public bool kiEssence3;
@@ -312,16 +310,22 @@ namespace DBZMOD
                 if (transformation.GetKiDrainRate(this) == 0 && transformation.GetKiDrainRateMastery(this) == 0)
                     return;
 
-                masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromFormDrain(masteryLevels[transformation.MasteryBuffKeyName]);
+                //masteryLevels[transformation.MasteryBuffKeyName] = 0;
+                PlayerTransformation playerTransformation = PlayerTransformations[transformation];
+
+                playerTransformation.Mastery = GetMasteryIncreaseFromFormDrain(playerTransformation.Mastery);
+                transformation.OnMasteryGained(this, playerTransformation.Mastery);
             }
 
             if (isWeaponDrain && kiAmount < 0)
             {
                 TransformationDefinition transformation = GetCurrentTransformation();
-                if (transformation != null)
-                {
-                    masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromWeaponDrain(masteryLevels[transformation.MasteryBuffKeyName], kiAmount);
-                }
+                if (transformation == null) return;
+
+                PlayerTransformation playerTransformation = PlayerTransformations[transformation];
+
+                playerTransformation.Mastery = GetMasteryIncreaseFromWeaponDrain(playerTransformation.Mastery, kiAmount);
+                transformation.OnMasteryGained(this, playerTransformation.Mastery);
             }
         }
 
@@ -329,16 +333,16 @@ namespace DBZMOD
         public void HandleDamageReceivedMastery(int damageReceived)
         {
             TransformationDefinition transformation = GetCurrentTransformation();
-            if (transformation != null)
-            {
-                masteryLevels[transformation.MasteryBuffKeyName] = GetMasteryIncreaseFromDamageTaken(masteryLevels[transformation.MasteryBuffKeyName]);
-            }
+            if (transformation == null) return;
+
+            PlayerTransformations[transformation].Mastery = GetMasteryIncreaseFromDamageTaken(PlayerTransformations[transformation].Mastery);
+            transformation.OnMasteryGained(this, PlayerTransformations[transformation].Mastery);
         }
 
         private const float DAMAGE_TAKEN_MASTERY_CONTRIBUTION = 0.00232f;
         public float GetMasteryIncreaseFromDamageTaken(float currentMastery)
         {
-            return Math.Min(1.0f, currentMastery + DAMAGE_TAKEN_MASTERY_CONTRIBUTION);
+          return Math.Min(1.0f, currentMastery + DAMAGE_TAKEN_MASTERY_CONTRIBUTION);
         }
 
         public float GetMasteryIncreaseFromWeaponDrain(float currentMastery, float kiAmount)
@@ -450,23 +454,26 @@ namespace DBZMOD
         // TODO Untangle this
         public void HandleMasteryEvents(string masteryFormBuffKeyName)
         {
-            if (!masteryLevels.ContainsKey(masteryFormBuffKeyName) ||
-                masteryMessagesDisplayed.ContainsKey(masteryFormBuffKeyName))
+            TransformationDefinition transformation = GetCurrentTransformation();
+
+            if (transformation == null || !masteryMessagesDisplayed.ContainsKey(transformation))
                 return;
 
-            float masteryLevel = masteryLevels[masteryFormBuffKeyName];
-            bool isMessageDisplayed = masteryMessagesDisplayed[masteryFormBuffKeyName];
+            PlayerTransformation playerTransformation = PlayerTransformations[transformation];
+
+            bool isMessageDisplayed = masteryMessagesDisplayed[transformation];
             string masteryMessage = string.Empty;
+
             Color messageColor = new Color(232, 242, 50);
 
             if (masteryFormBuffKeyName.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
             {
-                if (masteryLevel >= 0.5f && !ASSJAchieved)
+                if (playerTransformation.Mastery >= 0.5f && !ASSJAchieved)
                 {
                     DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.TryUnlock(this);
                     masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.";
                 }
-                else if (masteryLevel >= 0.75f && !USSJAchieved)
+                else if (playerTransformation.Mastery >= 0.75f && !USSJAchieved)
                 {
                     DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.Unlock(this);
                     masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.";
@@ -479,10 +486,10 @@ namespace DBZMOD
             }
 
             // handle general mastery messages here
-            if (masteryLevel >= 1.0f && !isMessageDisplayed)
+            if (playerTransformation.Mastery >= 1.0f && !isMessageDisplayed)
             {
-                masteryMessagesDisplayed[masteryFormBuffKeyName] = true;
-                Main.NewText($"You've achieved mastery in {DBZMOD.Instance.TransformationDefinitionManager[masteryFormBuffKeyName].TransformationText} form.");
+                masteryMessagesDisplayed[transformation] = true;
+                Main.NewText($"You've achieved mastery in {DBZMOD.Instance.TransformationDefinitionManager[masteryFormBuffKeyName].Text} form.");
             }
         }
 
@@ -1197,13 +1204,13 @@ namespace DBZMOD
             // TODO Chagne this
             if (!IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition))
             {
-                return kaiokenLevel == 0 && kaioAchieved;
+                return kaiokenLevel == 0 && HasTransformation(TransformationDefinitionManager.KaiokenDefinition);
             }
 
             switch (kaiokenLevel)
             {
                 case 0:
-                    return kaioAchieved;
+                    return HasTransformation(TransformationDefinitionManager.KaiokenDefinition);
                 case 1:
                     return kaioFragment1;
                 case 2:
@@ -1234,7 +1241,7 @@ namespace DBZMOD
                 {
                     if (canIncreaseKaiokenLevel)
                     {
-                        TransformationDefinition transformation = !isKaioken ? (TransformationDefinition) TransformationDefinitionManager.SuperKaiokenDefinition : TransformationDefinitionManager.KaiokenDefinition;
+                        TransformationDefinition transformation = isKaioken ? (TransformationDefinition) TransformationDefinitionManager.SuperKaiokenDefinition : TransformationDefinitionManager.KaiokenDefinition;
 
                         if (CanTransform(transformation))
                         {

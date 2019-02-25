@@ -14,6 +14,11 @@
         SSJ4 = 14,
 
         SSJG = 5,
+        SSJB = 15,
+        SSJR = 16,
+        
+        UIOmen = 17,
+
         LSSJ = 6,
 
         Spectrum = 8,

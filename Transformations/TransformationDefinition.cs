@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Dynamicity;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace DBZMOD.Transformations
 {
@@ -19,8 +21,8 @@ namespace DBZMOD.Transformations
         ///     Instantiate a new buff info, typically a form like SSJ or Kaioken.
         /// </summary>
         /// <param name="unlocalizedName">The key name of the buff used in the mod.</param>
-        /// <param name="transText">The text displayed when transforming.</param>
-        /// <param name="transTextColor">The color of the transformation text.</param>
+        /// <param name="text">The text displayed when transforming.</param>
+        /// <param name="textColor">The color of the transformation text.</param>
         /// <param name="baseDamageMultiplier"></param>
         /// <param name="baseSpeedMultiplier"></param>
         /// <param name="baseDefenseBonus"></param>
@@ -30,23 +32,25 @@ namespace DBZMOD.Transformations
         /// <param name="baseHealthDrainRate"></param>
         /// <param name="appearance"></param>
         /// <param name="buff"></param>
+        /// <param name="duration"></param>
         /// <param name="buffIconGetter">The icon to display in the Transformation Menu; leave as null if you don't want to display the transformation.</param>
-        /// <param name="transformationFailureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
+        /// <param name="failureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
         /// <param name="extraTooltipText"></param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
+        /// <param name="transformationRequirements"></param>
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
-        /// <param name="selectionRequirements">The requirements to select the form in the interface. Checked after verifying if the player has the transformation. Leaving this value null will default to checking wether or not the player has unlocked the transformation.</param>
         /// <param name="selectionRequirementsFailed"></param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
-        protected TransformationDefinition(string unlocalizedName, string transText, Color transTextColor,
+        protected TransformationDefinition(string unlocalizedName, string text, Color textColor,
             float baseDamageMultiplier, float baseSpeedMultiplier, int baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate,
             TransformationAppearanceDefinition appearance,
-            Type buff, Func<Texture2D> buffIconGetter = null, string transformationFailureText = null, string extraTooltipText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
-            Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, params TransformationDefinition[] parents)
+            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
+            Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, bool requiresAllParents = true, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;
-            TransformationText = transText;
+            Text = text;
+            TextColor = textColor;
 
             BaseDamageMultiplier = baseDamageMultiplier;
             BaseSpeedMultiplier = baseSpeedMultiplier;
@@ -56,29 +60,30 @@ namespace DBZMOD.Transformations
             BaseKiDrainRateMastery = baseKiDrainRateMastery;
             BaseHealthDrainRate = baseHealthDrainRate;
 
-            TransformationTextColor = transTextColor;
-
             Buff = buff;
+            Duration = duration;
+
             BuffIconGetter = buffIconGetter;
 
-            TransformationFailureText = transformationFailureText;
+            FailureText = failureText;
             ExtraTooltipText = extraTooltipText;
 
             Appearance = appearance;
 
-            if (selectionRequirements == null)
-                selectionRequirements = (p, t) => PlayerHasTransformation(p);
+            if (unlockRequirements == null)
+                unlockRequirements = p => true;
+
+            UnlockRequirements = unlockRequirements;
 
             if (selectionRequirementsFailed == null)
                 selectionRequirementsFailed = (p, t) => true;
 
-            SelectionRequirements = selectionRequirements;
             SelectionRequirementsFailed = selectionRequirementsFailed;
 
             HasMastery = canBeMastered;
             MasteryBuffKeyName = masterFormBuffKeyName;
-            UnlockRequirements = unlockRequirements;
 
+            RequiresAllParents = requiresAllParents;
             Parents = parents;
         }
 
@@ -131,21 +136,42 @@ namespace DBZMOD.Transformations
 
         public float GetPlayerMastery(MyPlayer player) => player.PlayerTransformations[this].Mastery;
 
+        #region Usability Methods
 
         internal bool PlayerHasTransformation(MyPlayer player) => player.PlayerTransformations.ContainsKey(this);
 
         internal bool PlayerHasTransformationAndNotLegendary(MyPlayer player) => PlayerHasTransformation(player) && !player.IsLegendary();
 
+        /// <summary>Checks wether or not the player has all/any parents (depends on <see cref="RequiresAllParents"/>. If this check passes, it executes the <see cref="UnlockRequirements"/> for any specific requirements.</summary>
+        /// <param name="player"></param>
+        /// <returns>true if the palyer can unlock the transformation; otherwise false.</returns>
         public bool CanPlayerUnlock(MyPlayer player)
         {
             for (int i = 0; i < Parents.Length; i++)
-                if (!player.HasTransformation(Parents[i]))
+            {
+                if (RequiresAllParents & !player.HasTransformation(Parents[i]))
                     return false;
 
-            return UnlockRequirements == null || UnlockRequirements.Invoke(player);
+                if (!RequiresAllParents && player.HasTransformation(Parents[i]))
+                    return true;
+            }
+
+            return UnlockRequirements.Invoke(player);
         }
 
-        public bool MeetsSelectionRequirements(MyPlayer player) => PlayerHasTransformation(player) && SelectionRequirements.Invoke(player, this);
+        /// <summary>Checks wether or not the player unlocked the transformation and meets the transformation requirements in <see cref="MeetsTransformationRequirements"/>.</summary>
+        /// <param name="player"></param>
+        /// <returns>true if the player can transform into this transformation; otherwise false.</returns>
+        public bool CanTransformInto(MyPlayer player) => player.HasTransformation(this) && MeetsTransformationRequirements(player);
+
+        public virtual bool MeetsSelectionRequirements(MyPlayer player) => PlayerHasTransformation(player) && UnlockRequirements.Invoke(player);
+
+        /// <summary>The specific transformation requirements, f.e. UI Omen requires the player to be low on health and fighting a boss with substantial health.</summary>
+        /// <param name="player"></param>
+        /// <returns>true if not overriden or if the player meets the transformation requirements; otherwise false.</returns>
+        public virtual bool MeetsTransformationRequirements(MyPlayer player) => UnlockRequirements.Invoke(player);
+
+        #endregion
 
         #region Stat Affecting Methods
 
@@ -174,12 +200,30 @@ namespace DBZMOD.Transformations
 
         #endregion
 
+        #region MyRegion
+
+        public virtual void OnPlayerTransformed(MyPlayer player) { }
+
+        /// <summary>Called whenever the player loses the buff associated to the transformation.</summary>
+        /// <param name="player">The player in question.</param>
+        /// <param name="buffIndex"></param>
+        public virtual void OnTransformationBuffLost(MyPlayer player, ref int buffIndex) { }
+
+        public virtual void OnMasteryGained(MyPlayer player, float mastery) { }
+
+        public virtual void OnPlayerUpdate(MyPlayer player) { }
+
+        public virtual void OnPlayerPreKill(MyPlayer player, List<NPC> activeBosses, double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource) { }
+
+        #endregion
+
         public override string ToString() => UnlocalizedName;
 
 
         public string UnlocalizedName { get; }
 
-        public string TransformationText { get; }
+        public string Text { get; }
+        public Color TextColor { get; }
 
         public bool HasMastery { get; }
 
@@ -210,12 +254,12 @@ namespace DBZMOD.Transformations
 
         public TransformationAppearanceDefinition Appearance { get; }
 
-        public Color TransformationTextColor { get; }
-
         public Type Buff { get; }
+        public int Duration { get; }
+
         public Func<Texture2D> BuffIconGetter { get; }
 
-        public string TransformationFailureText { get; }
+        public string FailureText { get; }
 
         public string ExtraTooltipText { get; }
 
@@ -228,8 +272,10 @@ namespace DBZMOD.Transformations
 
         internal Predicate<MyPlayer> UnlockRequirements { get; }
 
-        public TransformationDefinition[] Parents { get; }
 
+        public bool RequiresAllParents { get; }
+
+        public TransformationDefinition[] Parents { get; }
 
         // TODO Complete many transformations
         //protected virtual List<TransformationDefinition> CompatibleTransformations { get; } = new List<TransformationDefinition>();

@@ -11,7 +11,7 @@ namespace DBZMOD.Transformations.SSJ.SSJ3
             2.9f, 2.9f, 12, 1.95f, 2.65f, 1.325f, 0f,
             new TransformationAppearanceDefinition(AuraAnimations.ssj3Aura, new ReadOnlyColor(SSJ1Transformation.LIGHTING_RED, SSJ1Transformation.LIGHTING_GREEN, SSJ1Transformation.LIGHTING_BLUE), "Hairs/SSJ/SSJ3Hair", null, null, Color.Turquoise),
             typeof(SSJ3Buff),
-            buffIconGetter: () => GFX.ssj3ButtonImage, transformationFailureText: "", extraTooltipText: "(Life drains when below 30% Max Ki)", canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj3,
+            buffIconGetter: () => GFX.ssj3ButtonImage, failureText: "", extraTooltipText: "(Life drains when below 30% Max Ki)", canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj3,
             unlockRequirements: p => !p.IsLegendary(), parents: parents
             )
         {
@@ -20,7 +20,7 @@ namespace DBZMOD.Transformations.SSJ.SSJ3
         public override float GetHealthDrainRate(MyPlayer player)
         {
             if (player.GetKi() / player.OverallKiMax() <= 0.3f)
-                return ModifiedHealthDrainRate + (player.masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.MasteryBuffKeyName] >= 1f ? 10 : 20);
+                return ModifiedHealthDrainRate + (player.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition].Mastery >= 1f ? 10 : 20);
 
             return ModifiedHealthDrainRate;
         }

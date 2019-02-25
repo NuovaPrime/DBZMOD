@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DBZMOD.Dynamicity;
 using DBZMOD.Network;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
@@ -30,18 +31,19 @@ namespace DBZMOD
             if (transformation == null || IsTransformBlocked() || IsExhaustedFromTransformation())
                 return false;
 
-            return transformation.MeetsSelectionRequirements(this);
+            return transformation.CanTransformInto(this);
         }
 
         public void AddTransformation(TransformationDefinition transformation, int duration)
         {
             player.AddBuff(transformation.GetBuffId(), duration, false);
+            transformation.OnPlayerTransformed(this);
 
-            if (!string.IsNullOrWhiteSpace(transformation.TransformationText))
-                CombatText.NewText(player.Hitbox, transformation.TransformationTextColor, transformation.TransformationText, false, false);
+            if (!string.IsNullOrWhiteSpace(transformation.Text))
+                CombatText.NewText(player.Hitbox, transformation.TextColor, transformation.Text, false, false);
 
             if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, transformation.MasteryBuffKeyName, duration);
+                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, transformation.UnlocalizedName, duration);
 
             isTransformationAnimationPlaying = true;
         }
@@ -52,15 +54,15 @@ namespace DBZMOD
             if (transformation == GetCurrentTransformation()) return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
-            if (transformation == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition)
-                RemoveTransformation(DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition);
+            if (transformation == TransformationDefinitionManager.SuperKaiokenDefinition)
+                RemoveTransformation(TransformationDefinitionManager.KaiokenDefinition);
 
             // remove all *transformation* buffs from the player.
             // this needs to know we're powering down a step or not
             EndTransformations();
 
             // add whatever buff it is for a really long time.
-            AddTransformation(transformation, FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION);
+            AddTransformation(transformation, transformation.Duration);
         }
 
         public void EndTransformations()
@@ -98,15 +100,31 @@ namespace DBZMOD
             {
                 if (transformation != null)
                 {
+                    NodeTree<TransformationDefinition> tree = TransformationDefinitionManager.Tree;
+                    ManyToManyNode<TransformationDefinition> mtmn = tree[transformation];
+
+                    if (mtmn.Next.Count == 0) return;
+                    
+                    // Find the first available transformation.
+                    for (int i = 0; i < mtmn.Next.Count; i++)
+                    {
+                        // TODO Verify this is the actual method to use.
+                        if (CanTransform(mtmn.Next[i]))
+                        {
+                            targetTransformation = mtmn.Next[i];
+                            break;
+                        }
+                    }
+
                     // TODO Dynamicize this
                     // player is ascending transformation, pushing for ASSJ or USSJ depending on what form they're in.
-                    if (IsAscendingTransformation() && CanAscend())
+                    /*if (IsAscendingTransformation() && CanAscend())
                     {
                         if (transformation == TransformationDefinitionManager.SSJ1Definition)
                             targetTransformation = TransformationDefinitionManager.ASSJDefinition;
                         else if (transformation == TransformationDefinitionManager.ASSJDefinition)
                             targetTransformation = TransformationDefinitionManager.USSJDefinition;
-                    }
+                    }*/
                 }
                 else
                 {
@@ -121,7 +139,7 @@ namespace DBZMOD
                     targetTransformation = player.GetNextTransformationStep();
                 }*/
             }
-            else if (IsPoweringDownOneStep() && transformation != TransformationDefinitionManager.KaiokenDefinition)
+            else if (IsPoweringDownOneStep() && transformation != null && transformation != TransformationDefinitionManager.KaiokenDefinition)
             {
                 if (transformation.Parents.Length == 1)
                     // player is powering down a transformation state.

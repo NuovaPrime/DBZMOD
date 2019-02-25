@@ -2,7 +2,8 @@
 {
     public sealed class PrimalTrait : Trait
     {
-        public PrimalTrait() : base("primal", "Primal", "You're a big monkey man.", 3, null)
+        // TODO Make weight 3
+        public PrimalTrait() : base("primal", "Primal", "You're a big monkey man.", -1, null)
         {
         }
     }
