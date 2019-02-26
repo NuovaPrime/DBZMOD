@@ -529,6 +529,7 @@ namespace DBZMOD
             return true;
         }
 
+        [Obsolete]
         public override void SetupStartInventory(IList<Item> items)
         {
             Item item8 = new Item();
