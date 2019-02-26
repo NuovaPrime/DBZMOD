@@ -12,6 +12,7 @@ namespace DBZMOD
 {
     public partial class MyPlayer
     {
+        [Obsolete("This method will be deprecated in favor of IsTransformedInto() and ActiveTransformations[].")]
         public TransformationDefinition GetCurrentTransformation()
         {
             for (int i = 0; i < player.buffType.Length; i++)
@@ -28,7 +29,7 @@ namespace DBZMOD
 
         public bool CanTransform(TransformationDefinition transformation)
         {
-            if (transformation == null || IsTransformBlocked() || IsExhaustedFromTransformation())
+            if (transformation == null || IsTransformBlocked() || IsExhaustedFromTransformation() || IsTransformedInto(transformation))
                 return false;
 
             return transformation.CanTransformInto(this);
@@ -37,6 +38,8 @@ namespace DBZMOD
         public void AddTransformation(TransformationDefinition transformation, int duration)
         {
             player.AddBuff(transformation.GetBuffId(), duration, false);
+            ActiveTransformations.Add(transformation);
+
             transformation.OnPlayerTransformed(this);
 
             if (!string.IsNullOrWhiteSpace(transformation.Text))
@@ -51,7 +54,7 @@ namespace DBZMOD
         public void DoTransform(TransformationDefinition transformation)
         {
             // don't.. try to apply the same transformation. This just stacks projectile auras and looks dumb.
-            if (transformation == GetCurrentTransformation()) return;
+            if (IsTransformedInto(transformation)) return;
 
             // make sure to swap kaioken with super kaioken when appropriate.
             if (transformation == TransformationDefinitionManager.SuperKaiokenDefinition)
@@ -76,10 +79,8 @@ namespace DBZMOD
 
         public void ClearAllTransformations()
         {
-            TransformationDefinition transformation = GetCurrentTransformation();
-
-            if (transformation != null)
-                RemoveTransformation(transformation);
+            for (int i = 0; i < ActiveTransformations.Count; i++)
+                RemoveTransformation(ActiveTransformations[i]);
         }
 
         public void RemoveTransformation(TransformationDefinition transformation)
@@ -95,6 +96,7 @@ namespace DBZMOD
             TransformationDefinition targetTransformation = null;
             TransformationDefinition transformation = GetCurrentTransformation();
 
+            // TODO Handle all of the multi-transformation aspects.
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
@@ -139,7 +141,7 @@ namespace DBZMOD
                     targetTransformation = player.GetNextTransformationStep();
                 }*/
             }
-            else if (IsPoweringDownOneStep() && transformation != null && transformation != TransformationDefinitionManager.KaiokenDefinition)
+            else if (IsPoweringDownOneStep() && IsPlayerTransformed() && transformation != TransformationDefinitionManager.KaiokenDefinition)
             {
                 if (transformation.Parents.Length == 1)
                     // player is powering down a transformation state.
@@ -183,14 +185,20 @@ namespace DBZMOD
 
         #endregion
 
-        public bool IsPlayerTransformed() => GetCurrentTransformation() != null;
+        #region Shortcut Properties and Methods
 
-        public bool IsPlayerTransformation(TransformationDefinition transformation) => GetCurrentTransformation() == transformation;
+        public bool IsPlayerTransformed() => ActiveTransformations.Count > 0;
+
+        public bool IsTransformedInto(TransformationDefinition transformation) => ActiveTransformations.Contains(transformation);
 
         public bool IsTransformBlocked() => isTransforming || IsPlayerImmobilized() || IsKiDepleted();
 
+        #endregion
+
         public bool IsExhaustedFromTransformation() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId());
         public bool IsTiredFromKaioken() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId());
+
+        public List<TransformationDefinition> ActiveTransformations { get; } = new List<TransformationDefinition>();
 
         internal Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
 

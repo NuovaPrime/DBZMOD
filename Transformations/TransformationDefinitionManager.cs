@@ -72,6 +72,15 @@ namespace DBZMOD.Transformations
 
         public bool IsKaioken(TransformationDefinition transformation) => _kaiokens.Contains(transformation);
 
+        public bool IsKaioken(IList<TransformationDefinition> transformations)
+        {
+            for (int i = 0; i < transformations.Count; i++)
+                if (IsKaioken(transformations[i]))
+                    return true;
+
+            return false;
+        }
+
         public KaiokenTransformation KaiokenDefinition { get; private set; }
         public SuperKaiokenTransformation SuperKaiokenDefinition { get; private set; }
         public KaiokenFatigueTransformation KaiokenFatigueDefinition { get; private set; }

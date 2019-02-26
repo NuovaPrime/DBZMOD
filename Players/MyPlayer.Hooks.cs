@@ -19,9 +19,9 @@ namespace DBZMOD
 {
     public partial class MyPlayer
     {
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld(Player ply)
         {
-            base.OnEnterWorld(player);
+            base.OnEnterWorld(ply);
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -30,15 +30,15 @@ namespace DBZMOD
             }
         }
 
-        public override void PlayerConnect(Player player)
+        public override void PlayerConnect(Player ply)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                if (player.whoAmI != Main.myPlayer)
+                if (ply.whoAmI != Main.myPlayer)
                 {
-                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(player.whoAmI, Main.myPlayer);
+                    NetworkHelper.playerSync.SendPlayerInfoToPlayerFromOtherPlayer(ply.whoAmI, Main.myPlayer);
 
-                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, player.whoAmI);
+                    NetworkHelper.playerSync.RequestPlayerSendTheirInfo(256, Main.myPlayer, ply.whoAmI);
                 }
             }
         }
@@ -55,11 +55,14 @@ namespace DBZMOD
                 return;
             }
 
-            ReadOnlyColor hairColor = transformation.Appearance.hairColor;
+            if (transformation.Appearance.hair == null)
+                return;
+
+            ReadOnlyColor hairColor = transformation.Appearance.hair.hairColor;
             if (hairColor != null)
                 drawInfo.hairColor = hairColor;
 
-            if (transformation.Appearance.hairShader.HasValue)
+            if (transformation.Appearance.hair.hairShader.HasValue)
                 drawInfo.hairShader = 1;
 
             if (transformation.Appearance.eyeColor != null)
@@ -208,7 +211,7 @@ namespace DBZMOD
             // power down handling
             if (IsCompletelyPoweringDown() && IsPlayerTransformed())
             {
-                var playerWasSuperKaioken = IsPlayerTransformation(TransformationDefinitionManager.SuperKaiokenDefinition);
+                var playerWasSuperKaioken = IsTransformedInto(TransformationDefinitionManager.SuperKaiokenDefinition);
                 EndTransformations();
 
                 // TODO Make this dynamic.
@@ -421,7 +424,7 @@ namespace DBZMOD
             }
 
             if (activeBosses.Count > 0 && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny && 
-                (IsPlayerTransformation(TransformationDefinitionManager.SSJ1Definition) || IsPlayerTransformation(TransformationDefinitionManager.SSJ2Definition) || IsPlayerTransformation(TransformationDefinitionManager.SSJ3Definition) && 
+                (IsTransformedInto(TransformationDefinitionManager.SSJ1Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ2Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ3Definition) && 
                                                                                             PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery >= 1))
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
@@ -586,6 +589,7 @@ namespace DBZMOD
                 layers[hair] = new PlayerLayer(mod.Name, "TransHair",
                     delegate (PlayerDrawInfo draw)
                     {
+                        // TODO Change this to use HairAppearance class.
                         Player player = draw.drawPlayer;
 
                         Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), Color.White), draw.shadow);
@@ -677,8 +681,8 @@ namespace DBZMOD
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (transformation.Appearance.hairTexture != null)
-                        hair = mod.GetTexture(transformation.Appearance.hairTexture);
+                    if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairTexture != null)
+                        hair = mod.GetTexture(transformation.Appearance.hair.hairTexture);
                     else
                         hair = null;
                 }
@@ -732,20 +736,17 @@ namespace DBZMOD
             //    kiDrainAddition = 0;
             //}
 
-            if (TransformationDefinitionManager.IsKaioken(GetCurrentTransformation()))
+            if (TransformationDefinitionManager.IsKaioken(ActiveTransformations))
             {
                 kaiokenTimer += 1.5f;
             }
 
             #region Mastery Messages
 
-            if (player.whoAmI == Main.LocalPlayer.whoAmI && PlayerTransformations != null)
-            {
-                foreach (KeyValuePair<TransformationDefinition, PlayerTransformation> kvp in PlayerTransformations)
-                {
-                    HandleMasteryEvents(kvp.Key.MasteryBuffKeyName);
-                }
-            }
+            // TODO Reduce CPU time by only handling the current transformation.
+            if (player.whoAmI == Main.LocalPlayer.whoAmI && PlayerTransformations.Count > 0 && ActiveTransformations.Count > 0)
+                for (int i = 0; i < ActiveTransformations.Count; i++)
+                    HandleMasteryEvents(ActiveTransformations[i]);
 
             #endregion            
 
@@ -893,7 +894,9 @@ namespace DBZMOD
             {
                 transformationFrameTimer = 0;
             }
+
             KiBar.visible = true;
+
             if (player.IsCarryingAllDragonBalls() && !wishActive)
             {
                 int soundTimer = 0;

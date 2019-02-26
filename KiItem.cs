@@ -156,7 +156,7 @@ namespace DBZMOD
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            if(modPlayer.IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+            if(modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
             {
                 int i = Main.rand.Next(1, 4);
                 modPlayer.overloadCurrent += i;

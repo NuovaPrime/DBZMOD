@@ -452,10 +452,8 @@ namespace DBZMOD
         }
 
         // TODO Untangle this
-        public void HandleMasteryEvents(string masteryFormBuffKeyName)
+        public void HandleMasteryEvents(TransformationDefinition transformation)
         {
-            TransformationDefinition transformation = GetCurrentTransformation();
-
             if (transformation == null || !masteryMessagesDisplayed.ContainsKey(transformation))
                 return;
 
@@ -466,7 +464,7 @@ namespace DBZMOD
 
             Color messageColor = new Color(232, 242, 50);
 
-            if (masteryFormBuffKeyName.Equals(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName))
+            if (transformation == TransformationDefinitionManager.SSJ1Definition)
             {
                 if (playerTransformation.Mastery >= 0.5f && !ASSJAchieved)
                 {
@@ -489,7 +487,7 @@ namespace DBZMOD
             if (playerTransformation.Mastery >= 1.0f && !isMessageDisplayed)
             {
                 masteryMessagesDisplayed[transformation] = true;
-                Main.NewText($"You've achieved mastery in {DBZMOD.Instance.TransformationDefinitionManager[masteryFormBuffKeyName].Text} form.");
+                Main.NewText($"You've achieved mastery in {transformation.Text} form.");
             }
         }
 
@@ -545,7 +543,7 @@ namespace DBZMOD
                 if (transformation == TransformationDefinitionManager.LSSJDefinition && transformation != TransformationDefinitionManager.SSJ1Definition && overloadCurrent <= overloadMax)
                 {
                     overloadTimer++;
-                    if (IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+                    if (IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
                     {
                         if (overloadTimer >= 45)
                         {
@@ -577,7 +575,7 @@ namespace DBZMOD
                 wasInOverloadingState = false;
             }
 
-            if(IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition) || overloadCurrent > 0)
+            if(IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition) || overloadCurrent > 0)
             {
                 OverloadBar.visible = true;
             }
@@ -1198,11 +1196,11 @@ namespace DBZMOD
         public bool CanIncreaseKaiokenLevel()
         {
             // immediately handle aborts from super kaioken states
-            if (IsPlayerTransformation(TransformationDefinitionManager.SuperKaiokenDefinition))
+            if (IsTransformedInto(TransformationDefinitionManager.SuperKaiokenDefinition))
                 return false;
 
             // TODO Chagne this
-            if (!IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition))
+            if (!IsTransformedInto(TransformationDefinitionManager.KaiokenDefinition))
             {
                 return kaiokenLevel == 0 && HasTransformation(TransformationDefinitionManager.KaiokenDefinition);
             }
@@ -1225,7 +1223,7 @@ namespace DBZMOD
 
         public void HandleKaioken()
         {
-            bool isKaioken = IsPlayerTransformation(TransformationDefinitionManager.KaiokenDefinition);
+            bool isKaioken = IsTransformedInto(TransformationDefinitionManager.KaiokenDefinition);
 
             if (kaiokenKey.JustPressed)
             {

@@ -71,6 +71,7 @@ namespace DBZMOD.Transformations
             float projectedKiDrain = actualKiDrain * kiDrainMultiplier;
 
             TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
+
             // if the player is in any ki-draining state, handles ki drain and power down when ki is depleted
             if (!DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(transformation))
             {

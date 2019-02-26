@@ -37,15 +37,13 @@ namespace DBZMOD.Transformations
         /// <param name="failureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
         /// <param name="extraTooltipText"></param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
-        /// <param name="masterFormBuffKeyName">What form the buff's ki cost is associated with for mastery (like ASSJ and USSJ being SSJ1, for example)</param>
-        /// <param name="transformationRequirements"></param>
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
         /// <param name="selectionRequirementsFailed"></param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
         protected TransformationDefinition(string unlocalizedName, string text, Color textColor,
             float baseDamageMultiplier, float baseSpeedMultiplier, int baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate,
             TransformationAppearanceDefinition appearance,
-            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, string masterFormBuffKeyName = null, 
+            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, bool showInMenu = false, 
             Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, bool requiresAllParents = true, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;
@@ -81,7 +79,7 @@ namespace DBZMOD.Transformations
             SelectionRequirementsFailed = selectionRequirementsFailed;
 
             HasMastery = canBeMastered;
-            MasteryBuffKeyName = masterFormBuffKeyName;
+            ShowInMenu = showInMenu;
 
             RequiresAllParents = requiresAllParents;
             Parents = parents;
@@ -268,7 +266,7 @@ namespace DBZMOD.Transformations
         internal Func<MyPlayer, TransformationDefinition, bool> SelectionRequirementsFailed { get; }
 
 
-        public string MasteryBuffKeyName { get; }
+        public bool ShowInMenu { get; }
 
         internal Predicate<MyPlayer> UnlockRequirements { get; }
 

@@ -1,6 +1,7 @@
 ﻿using Leveled;
 using Leveled.NPCs;
 using Leveled.Players;
+#pragma warning disable 612
 
 namespace DBZMOD
 {
@@ -19,4 +20,4 @@ namespace DBZMOD
             player.kiDamage *= LeveledMain.DamageMultiplier((int) leveledPlayer.Spirit.Total, leveledPlayer.Level);
         }
     }
-}
+} 

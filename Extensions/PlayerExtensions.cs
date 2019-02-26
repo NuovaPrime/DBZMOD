@@ -108,11 +108,15 @@ namespace DBZMOD.Extensions
         public static AuraAnimationInfo GetAuraEffectOnPlayer(this MyPlayer modPlayer)
         {
             TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
+
+            if (modPlayer.ActiveTransformations.Count == 0)
+                return null;
+
             if (modPlayer.player.dead)
                 return null;
 
             if (transformation != null)
-                return transformation.Appearance.auraAnimationInfo;
+                return transformation.Appearance.auraAnimation;
 
             if (modPlayer.isCharging)
                 return AuraAnimations.createChargeAura;

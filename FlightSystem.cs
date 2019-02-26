@@ -81,19 +81,19 @@ namespace DBZMOD
                 }
 
                 // TODO Add in TransformationAppearance class.
-                if (modPlayer.IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition) && !modPlayer.IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
+                if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition) && !modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
                 {
                     flightDustType = 170;
                 }
-                else if (modPlayer.IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
                 {
                     flightDustType = 107;
                 }
-                else if (modPlayer.IsPlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
+                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
                 {
                     flightDustType = 174;
                 }
-                else if (DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(modPlayer.GetCurrentTransformation()))
+                else if (DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(modPlayer.ActiveTransformations))
                 {
                     flightDustType = 182;
                 }

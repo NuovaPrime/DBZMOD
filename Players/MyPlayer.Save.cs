@@ -206,14 +206,14 @@ namespace DBZMOD
                         TransformationDefinition transformation = DBZMOD.Instance.TransformationDefinitionManager[i];
                         if (transformation == null || !transformation.HasMastery) continue;
 
-                        if (tag.ContainsKey($"MasteryLevel{transformation.MasteryBuffKeyName}"))
-                            PlayerTransformations[transformation].Mastery = tag.Get<float>($"MasteryLevel{transformation.MasteryBuffKeyName}");
+                        if (tag.ContainsKey($"MasteryLevel{transformation.UnlocalizedName}"))
+                            PlayerTransformations[transformation].Mastery = tag.Get<float>($"MasteryLevel{transformation.UnlocalizedName}");
                         else
                             PlayerTransformations[transformation].Mastery = 0f;
 
-                        if (tag.ContainsKey($"MasteryMessagesDisplayed{transformation.MasteryBuffKeyName}"))
+                        if (tag.ContainsKey($"MasteryMessagesDisplayed{transformation.UnlocalizedName}"))
                         {
-                            masteryMessagesDisplayed[transformation] = tag.Get<bool>($"MasteryMessagesDisplayed{transformation.MasteryBuffKeyName}");
+                            masteryMessagesDisplayed[transformation] = tag.Get<bool>($"MasteryMessagesDisplayed{transformation.UnlocalizedName}");
                         }
                         else
                         {

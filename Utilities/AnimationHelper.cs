@@ -90,9 +90,9 @@ namespace DBZMOD.Utilities
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJ1Definition) && 
-                !modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJGDefinition) && 
-                !modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJ3Definition))
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ1Definition) && 
+                !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition) && 
+                !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ3Definition))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -100,7 +100,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJ3Definition) && !modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJGDefinition))
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ3Definition) && !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -108,7 +108,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (modPlayer.IsPlayerTransformation(modPlayer.TransformationDefinitionManager.SSJGDefinition))
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 6;
                 var numberOfFrames = 6;
@@ -181,6 +181,7 @@ namespace DBZMOD.Utilities
             }
 
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+
             if (modPlayer.TransformationDefinitionManager.IsKaioken(modPlayer.GetCurrentTransformation()) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5)
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
