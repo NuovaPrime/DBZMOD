@@ -31,10 +31,11 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            player.AddBuff(mod.BuffType("UIOmenBuff"), 180000);
-            Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("FalseUIAuraProj"), 0, 0, player.whoAmI);
-            return true;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            UI.TransformationMenu.SelectedTransformation = modPlayer.TransformationDefinitionManager.UIOmenTransformation;
 
+            modPlayer.TransformationDefinitionManager.UIOmenTransformation.Unlock(player);
+            return true;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace DBZMOD
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.isFlying)
@@ -80,19 +80,20 @@ namespace DBZMOD
                     mRotationDir -= Vector2.UnitX;
                 }
 
-                if (player.IsSSJ() && !player.IsSSJG())
+                // TODO Add in TransformationAppearance class.
+                if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition) && !modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
                 {
                     flightDustType = 170;
                 }
-                else if (player.IsLSSJ())
+                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
                 {
                     flightDustType = 107;
                 }
-                else if (player.IsSSJG())
+                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
                 {
                     flightDustType = 174;
                 }
-                else if (player.IsAnyKaioken())
+                else if (DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(modPlayer.ActiveTransformations))
                 {
                     flightDustType = 182;
                 }

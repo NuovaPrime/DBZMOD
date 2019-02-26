@@ -33,13 +33,15 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		DisplayName.SetDefault("Ki Blast");
 		}
 
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player ply, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
 			speedX = perturbedSpeed.X;
 			speedY = perturbedSpeed.Y;
-			return true;
-			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 40f * item.scale;
+
+		    return true;
+
+		    /*position += Vector2.Normalize(new Vector2(speedX, speedY)) * 40f * item.scale;
 			int a = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, item.shoot, item.damage, item.knockBack, item.owner, 0f, 0f);
 			Main.projectile[a].scale = 2;
 			Main.projectile[a].rotation = Main.projectile[a].velocity.ToRotation();
@@ -50,46 +52,45 @@ namespace DBZMOD.Items.Weapons.Tier_1
 			Main.dust[dust].scale = 0.8f;
 			Main.dust[dust].position = position - Main.dust[dust].scale * new Vector2(4, 4);
 
-			return false;
+			return false;*/
 		}
 		
-		public override void UseStyle(Player player)
+		public override void UseStyle(Player ply)
 		{
-			player.itemLocation.X = player.position.X + (float)player.width * 0.5f;// - (float)Main.itemTexture[item.type].Width * 0.5f;// - (float)(player.direction * 2);
-			player.itemLocation.Y = player.MountedCenter.Y + player.gravDir * (float)Main.itemTexture[item.type].Height * 0.5f;
+			ply.itemLocation.X = ply.position.X + (float)ply.width * 0.5f;// - (float)Main.itemTexture[item.type].Width * 0.5f;// - (float)(player.direction * 2);
+			ply.itemLocation.Y = ply.MountedCenter.Y + ply.gravDir * (float)Main.itemTexture[item.type].Height * 0.5f;
 
-			float relativeX = (float)Main.mouseX + Main.screenPosition.X - player.Center.X;
-			float relativeY = (float)Main.mouseY + Main.screenPosition.Y - player.Center.Y;
-			if (player.gravDir == -1f)
-			{
-				relativeY = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY - player.Center.Y;
-			}
+			float relativeX = (float)Main.mouseX + Main.screenPosition.X - ply.Center.X;
+			float relativeY = (float)Main.mouseY + Main.screenPosition.Y - ply.Center.Y;
+
+			if (ply.gravDir == -1f)
+			    relativeY = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY - ply.Center.Y;
 
 			if (relativeX - relativeY > 0)
 			{
 				if (relativeX + relativeY > 0)
 				{
-					player.itemRotation = 0;
+					ply.itemRotation = 0;
 				}
 				else
 				{
 
-					player.itemRotation = player.direction * -MathHelper.Pi / 2;
-					player.itemLocation.X += player.direction * 2;
-					player.itemLocation.Y -= 10;
+					ply.itemRotation = ply.direction * -MathHelper.Pi / 2;
+					ply.itemLocation.X += ply.direction * 2;
+					ply.itemLocation.Y -= 10;
 				}
 			}
 			else
 			{
 				if (relativeX + relativeY > 0)
 				{
-					player.itemRotation = player.direction * MathHelper.Pi / 2;
-					player.itemLocation.X += player.direction * 2;
+					ply.itemRotation = ply.direction * MathHelper.Pi / 2;
+					ply.itemLocation.X += ply.direction * 2;
 					Main.rand.Next(0, 100);
 				}
 				else
 				{
-					player.itemRotation = 0;
+					ply.itemRotation = 0;
 				}
 			}
 		}

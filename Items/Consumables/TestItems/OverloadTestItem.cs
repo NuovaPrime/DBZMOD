@@ -31,7 +31,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).overloadCurrent = MyPlayer.ModPlayer(player).overloadMax;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.overloadCurrent = modPlayer.overloadMax;
             return true;
 
         }

@@ -1,65 +1,106 @@
 ﻿using System.Collections.Generic;
-using DBZMOD.Buffs;
-using DBZMOD.Dynamicity;
-using DBZMOD.Enums;
 using DBZMOD.Managers;
-using DBZMOD.Utilities;
+using DBZMOD.Transformations.Exhaustion;
+using DBZMOD.Transformations.Kaiokens.Kaioken;
+using DBZMOD.Transformations.Kaiokens.SuperKaioken;
+using DBZMOD.Transformations.Kaiokens.KaoikenFatigue;
+using DBZMOD.Transformations.LSSJ.LSSJ1;
+using DBZMOD.Transformations.SSJ.SSJ1;
+using DBZMOD.Transformations.SSJ.SSJ1.ASSJ;
+using DBZMOD.Transformations.SSJ.SSJ1.USSJ;
+using DBZMOD.Transformations.SSJ.SSJ2;
+using DBZMOD.Transformations.SSJ.SSJ3;
+using DBZMOD.Transformations.SSJ.SSJ4s.SSJ4;
+using DBZMOD.Transformations.SSJ.SSJBs.SSJB;
+using DBZMOD.Transformations.SSJ.SSJBs.SSJR;
+using DBZMOD.Transformations.SSJ.SSJG;
+using DBZMOD.Transformations.UltraInstincts.Omen;
 using Microsoft.Xna.Framework;
 
 namespace DBZMOD.Transformations
 {
     public class TransformationDefinitionManager : NoddedManager<TransformationDefinition>
     {
+        private readonly List<TransformationDefinition> _kaiokens = new List<TransformationDefinition>();
+
         public static readonly Color 
             defaultTransformationTextColor = new Color(219, 219, 48),
-            godTransformationTextColor = new Color(229, 20, 51);
+            godTransformationTextColor = new Color(229, 20, 51),
+            blueTransformationTextColor = new Color(51, 20, 229),
+            roseTransformationTextColor = new Color(244, 69, 209),
+            uiOmenTransformationTextColor = new Color(225, 255, 255);
 
         internal override void DefaultInitialize()
         {
-            KaiokenDefinition = Add(new TransformationDefinition(BuffKeyNames.kaioken, null, defaultTransformationTextColor));
-            SuperKaiokenDefinition = Add(new TransformationDefinition(BuffKeyNames.superKaioken, null, defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1));
-            KaiokenFatigueDefinition = Add(new TransformationDefinition(BuffKeyNames.kaiokenFatigue, null, defaultTransformationTextColor));
+            KaiokenDefinition = Add(new KaiokenTransformation(), true) as KaiokenTransformation;
+            SuperKaiokenDefinition = Add(new SuperKaiokenTransformation(), true) as SuperKaiokenTransformation;
+            KaiokenFatigueDefinition = Add(new KaiokenFatigueTransformation()) as KaiokenFatigueTransformation;
 
-            SSJ1Definition = Add(new TransformationDefinition(BuffKeyNames.ssj1, "Super Saiyan 1", defaultTransformationTextColor, GFX.ssj1ButtonImage, "Only through failure with a powerful foe will true power awaken.", true, BuffKeyNames.ssj1));
-            ASSJDefinition = Add(new TransformationDefinition(BuffKeyNames.assj, FormBuffHelper.GetASSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: SSJ1Definition));
-            USSJDefinition = Add(new TransformationDefinition(BuffKeyNames.ussj, FormBuffHelper.GetUSSJNamePreference(), defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.ssj1, parents: ASSJDefinition));
+            SSJ1Definition = Add(new SSJ1Transformation()) as SSJ1Transformation;
+            ASSJDefinition = Add(new ASSJTransformation(SSJ1Definition)) as ASSJTransformation;
+            USSJDefinition = Add(new USSJTransformation(ASSJDefinition)) as USSJTransformation;
 
-            SSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.ssj2, "Super Saiyan 2", defaultTransformationTextColor, GFX.ssj2ButtonImage, "One may awaken their true power through extreme pressure while ascended.", true, BuffKeyNames.ssj2, 
-                p => p.SSJ1Achived && !p.IsLegendary(), parents: SSJ1Definition));
-            SSJ3Definition = Add(new TransformationDefinition(BuffKeyNames.ssj3, "Super Saiyan 3", defaultTransformationTextColor, GFX.ssj3ButtonImage, "The power of an ancient foe may be the key to unlocking greater power.", true, BuffKeyNames.ssj3, 
-                p => p.SSJ2Achieved && !p.IsLegendary(), parents: SSJ2Definition));
+            SSJ2Definition = Add(new SSJ2Transformation(SSJ1Definition)) as SSJ2Transformation;
+            SSJ3Definition = Add(new SSJ3Transformation(SSJ2Definition)) as SSJ3Transformation;
+            SSJ4Definition = Add(new SSJ4Transformation(SSJ3Definition)) as SSJ4Transformation;
 
-            SSJGDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjg, "Super Saiyan God", godTransformationTextColor, GFX.ssjgButtonImage, "The godlike power of the lunar star could awaken something beyond mortal comprehension.", true, BuffKeyNames.ssjg,
-                p => !p.IsLegendary(), selectionRequirements: (p, t) => t.PlayerHasTransformationAndNotLegendary(p), parents: SSJ1Definition));
-            SSJBDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, "Set Text Here", true, BuffKeyNames.ssjb, null,
-                selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));
+            SSJGDefinition = Add(new SSJGTransformation(SSJ3Definition)) as SSJGTransformation;
+            SSJBDefinition = Add(new SSJBTransformation(SSJGDefinition)) as SSJBTransformation;
+            SSJRDefinition = Add(new SSJRTransformation(SSJGDefinition)) as SSJRTransformation;
+            /*SSJBDefinition = Add(new TransformationDefinition(BuffKeyNames.ssjb, null, defaultTransformationTextColor, null, "Set Text Here", true, BuffKeyNames.ssjb, null,
+                selectionRequirementsFailed: (p, t) => !p.LSSJAchieved, parents: SSJ1Definition));*/
 
-            LSSJDefinition = Add(new TransformationDefinition(BuffKeyNames.lssj, "Legendary Super Saiyan", defaultTransformationTextColor, GFX.lssjButtonImage, unlockRequirements: p => p.IsLegendary(), canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj, parents: SSJ1Definition));
-            LSSJ2Definition = Add(new TransformationDefinition(BuffKeyNames.lssj2, "Legendary Super Saiyan 2", defaultTransformationTextColor, GFX.lssj2ButtonImage, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.lssj2, parents: LSSJDefinition));
+            // TODO Add SSJB and SSJR as parents.
+            UIOmenTransformation = Add(new UIOmenTransformation()) as UIOmenTransformation;
 
-            TransformationExhaustionDefinition = Add(new TransformationDefinition(BuffKeyNames.transformationExhaustion, null, defaultTransformationTextColor));
-            SpectrumDefinition = Add(new TransformationDefinition(BuffKeyNames.spectrum, "Super Saiyan Spectrum", defaultTransformationTextColor, canBeMastered: true, masterFormBuffKeyName: BuffKeyNames.spectrum,
-                selectionRequirements: (p, t) => p.player.name == "Nuova", selectionRequirementsFailed: (p, t) => false));
+            LSSJDefinition = Add(new LSSJ1Transformation(SSJ1Definition)) as LSSJ1Transformation;
+
+            TransformationExhaustionDefinition = Add(new TransformationExhaustionTransformation()) as TransformationExhaustionTransformation;
+
+            base.DefaultInitialize();
         }
 
-        public TransformationDefinition KaiokenDefinition { get; private set; }
-        public TransformationDefinition SuperKaiokenDefinition { get; private set; }
-        public TransformationDefinition KaiokenFatigueDefinition { get; private set; }
+        public TransformationDefinition Add(TransformationDefinition item, bool isKaioken)
+        {
+            TransformationDefinition transformation = base.Add(item);
 
-        public TransformationDefinition SSJ1Definition { get; private set; } 
-        public TransformationDefinition ASSJDefinition { get; private set; }
-        public TransformationDefinition USSJDefinition { get; private set; }
+            if (item == transformation)
+                _kaiokens.Add(item);
 
-        public TransformationDefinition SSJ2Definition { get; private set; }
-        public TransformationDefinition SSJ3Definition { get; private set; }
+            return transformation;
+        }
 
-        public TransformationDefinition SSJGDefinition { get; private set; }
-        public TransformationDefinition SSJBDefinition { get; private set; }
+        public bool IsKaioken(TransformationDefinition transformation) => _kaiokens.Contains(transformation);
 
-        public TransformationDefinition LSSJDefinition { get; private set; }
-        public TransformationDefinition LSSJ2Definition { get; private set; }
+        public bool IsKaioken(IList<TransformationDefinition> transformations)
+        {
+            for (int i = 0; i < transformations.Count; i++)
+                if (IsKaioken(transformations[i]))
+                    return true;
 
-        public TransformationDefinition TransformationExhaustionDefinition { get; private set; }
-        public TransformationDefinition SpectrumDefinition { get; private set; }
+            return false;
+        }
+
+        public KaiokenTransformation KaiokenDefinition { get; private set; }
+        public SuperKaiokenTransformation SuperKaiokenDefinition { get; private set; }
+        public KaiokenFatigueTransformation KaiokenFatigueDefinition { get; private set; }
+
+        public SSJ1Transformation SSJ1Definition { get; private set; } 
+        public ASSJTransformation ASSJDefinition { get; private set; }
+        public USSJTransformation USSJDefinition { get; private set; }
+
+        public SSJ2Transformation SSJ2Definition { get; private set; }
+        public SSJ3Transformation SSJ3Definition { get; private set; }
+        public SSJ4Transformation SSJ4Definition { get; private set; }
+
+        public SSJGTransformation SSJGDefinition { get; private set; }
+        public SSJBTransformation SSJBDefinition { get; private set; }
+        public SSJRTransformation SSJRDefinition { get; private set; }
+
+        public UIOmenTransformation UIOmenTransformation { get; private set; }
+
+        public LSSJ1Transformation LSSJDefinition { get; private set; }
+
+        public TransformationExhaustionTransformation TransformationExhaustionDefinition { get; private set; }
     }
 }

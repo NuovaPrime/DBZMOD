@@ -85,17 +85,10 @@ namespace DBZMOD.Projectiles.LSSJs
 
         public override void Kill(int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).isTransforming)
-            {
-                player.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition, DBZMOD.Instance);
-                MyPlayer.ModPlayer(player).isTransforming = false;
-            }
-            else
-            {
-                player.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition, DBZMOD.Instance);
-                MyPlayer.ModPlayer(player).isTransforming = false;
-            }
+            MyPlayer modPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+
+            modPlayer.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
+            modPlayer.isTransforming = false;
         }
     }
 }

@@ -10,11 +10,14 @@ using Terraria.ModLoader.IO;
 namespace DBZMOD
 {
     public partial class MyPlayer
-    {    
+    {
         internal static readonly Version latestVersion = new Version(1, 0, 0, 0);
 
         public override TagCompound Save()
         {
+            if (PlayerTransformations == null)
+                PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>();
+
             TagCompound tag = new TagCompound();
 
             if (SaveVersion == null)
@@ -22,12 +25,11 @@ namespace DBZMOD
 
             tag.Add(nameof(SaveVersion), SaveVersion.ToString());
 
-            if (PlayerTransformations != null)
-                foreach (PlayerTransformation playerTransformation in PlayerTransformations.Values)
-                {
-                    tag.Add(playerTransformation.TransformationDefinition.GetUnlockedTagCompoundKey(), true);
-                    tag.Add(playerTransformation.TransformationDefinition.GetMasteryTagCompoundKey(), playerTransformation.Mastery);
-                }
+            foreach (PlayerTransformation playerTransformation in PlayerTransformations.Values)
+            {
+                tag.Add(playerTransformation.TransformationDefinition.GetUnlockedTagCompoundKey(), true);
+                tag.Add(playerTransformation.TransformationDefinition.GetMasteryTagCompoundKey(), playerTransformation.Mastery);
+            }
 
             tag.Add("Fragment1", fragment1);
             tag.Add("Fragment2", fragment2);
@@ -38,7 +40,6 @@ namespace DBZMOD
             tag.Add("KaioFragment2", kaioFragment2);
             tag.Add("KaioFragment3", kaioFragment3);
             tag.Add("KaioFragment4", kaioFragment4);
-            tag.Add("KaioAchieved", kaioAchieved);
 
             // changed save routine to save to a float, orphaning the original KiCurrent.
             tag.Add("KiCurrentFloat", _kiCurrent);
@@ -54,9 +55,9 @@ namespace DBZMOD
 
             tag.Add("IsMasteryRetrofitted", isMasteryRetrofitted);
 
-            foreach (var key in masteryLevels.Keys)
+            foreach (KeyValuePair<TransformationDefinition, PlayerTransformation> kvp in PlayerTransformations)
             {
-                tag.Add($"MasteryLevel{key}", masteryLevels[key]);
+                tag.Add($"MasteryLevel{kvp.Key.UnlocalizedName}", kvp.Value.Mastery);
             }
 
             foreach (var key in masteryMessagesDisplayed.Keys)
@@ -72,7 +73,7 @@ namespace DBZMOD
             tag.Add("flightUnlocked", flightUnlocked);
             tag.Add("flightDampeningUnlocked", flightDampeningUnlocked);
             tag.Add("flightUpgraded", flightUpgraded);
-            
+
             tag.Add("KiMax3", kiMax3);
             tag.Add("FirstFourStarDBPickup", firstDragonBallPickup);
             tag.Add("PowerWishesLeft", powerWishesLeft);
@@ -99,7 +100,7 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
-            PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>(DBZMOD.Instance.TransformationDefinitionManager.Count, new UnlocalizedNameComparer());
+            PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>();
 
             if (tag.ContainsKey(nameof(SaveVersion)))
             {
@@ -111,7 +112,8 @@ namespace DBZMOD
                     {
                         TransformationDefinition transformationDefinition = DBZMOD.Instance.TransformationDefinitionManager[i];
 
-                        if (tag.ContainsKey(transformationDefinition.GetUnlockedTagCompoundKey()))
+                        // TODO Make sure this is OK (not losing any transformations)
+                        if (tag.ContainsKey(transformationDefinition.GetUnlockedTagCompoundKey()) && !PlayerTransformations.ContainsKey(transformationDefinition))
                             PlayerTransformations.Add(transformationDefinition, new PlayerTransformation(transformationDefinition, tag.Get<float>(transformationDefinition.GetMasteryTagCompoundKey())));
                     }
                 }
@@ -121,80 +123,101 @@ namespace DBZMOD
                 SaveVersion = latestVersion;
 
                 // TODO Add mastery check.
-                if (tag.Get<bool>("SSJ1Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition));
-                if (tag.Get<bool>("ASSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition));
-                if (tag.Get<bool>("USSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition));
+                if (tag.Get<bool>("SSJ1Achieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.SSJ1Definition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.SSJ1Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition));
+                if (tag.Get<bool>("ASSJAchieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.ASSJDefinition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.ASSJDefinition, new PlayerTransformation(TransformationDefinitionManager.ASSJDefinition));
+                if (tag.Get<bool>("USSJAchieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.USSJDefinition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.USSJDefinition, new PlayerTransformation(TransformationDefinitionManager.USSJDefinition));
 
-                if (tag.Get<bool>("SSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition));
-                if (tag.Get<bool>("SSJ3Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition));
+                if (tag.Get<bool>("SSJ2Achieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.SSJ2Definition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.SSJ2Definition, new PlayerTransformation(TransformationDefinitionManager.SSJ2Definition));
+                if (tag.Get<bool>("SSJ3Achieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.SSJ3Definition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.SSJ3Definition, new PlayerTransformation(TransformationDefinitionManager.SSJ3Definition));
 
-                if (tag.Get<bool>("LSSJAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition));
-                if (tag.Get<bool>("LSSJ2Achieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition));
+                if (tag.Get<bool>("LSSJAchieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.LSSJDefinition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.LSSJDefinition, new PlayerTransformation(TransformationDefinitionManager.LSSJDefinition));
 
-                if (tag.Get<bool>("ssjgAchieved")) PlayerTransformations.Add(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition, new PlayerTransformation(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition));
+                if (tag.Get<bool>("ssjgAchieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.SSJGDefinition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.SSJGDefinition, new PlayerTransformation(TransformationDefinitionManager.SSJGDefinition));
+
+                if (tag.Get<bool>("KaioAchieved") && !PlayerTransformations.ContainsKey(TransformationDefinitionManager.KaiokenDefinition))
+                    PlayerTransformations.Add(TransformationDefinitionManager.KaiokenDefinition, new PlayerTransformation(TransformationDefinitionManager.KaiokenDefinition));
 
                 isMasteryRetrofitted = tag.ContainsKey("IsMasteryRetrofitted") && tag.Get<bool>("IsMasteryRetrofitted");
                 if (!isMasteryRetrofitted)
                 {
+                    // TODO Endure this
                     // Retroactive mastery ported to new mastery system.
-                    var masteryLevel1 = tag.Get<float>("MasteryLevel1");
-                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteryLevel1;
-                    var masteryLevel2 = tag.Get<float>("MasteryLevel2");
-                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteryLevel2;
-                    var masteryLevel3 = tag.Get<float>("MasteryLevel3");
-                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteryLevel3;
-                    var masteryLevelGod = tag.Get<float>("MasteryLevelGod");
-                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelGod;
-                    var masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
-                    masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteryLevelBlue;
-                    var masteredMessage1 = tag.Get<bool>("MasteredMessage1");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.UnlocalizedName] = masteredMessage1;
-                    var masteredMessage2 = tag.Get<bool>("MasteredMessage2");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.UnlocalizedName] = masteredMessage2;
-                    var masteredMessage3 = tag.Get<bool>("MasteredMessage3");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.UnlocalizedName] = masteredMessage3;
-                    var masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.UnlocalizedName] = masteredMessageGod;
-                    var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
-                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;
+                    float masteryLevel1 = tag.Get<float>("MasteryLevel1");
+                    PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery = masteryLevel1;
 
+                    float masteryLevel2 = tag.Get<float>("MasteryLevel2");
+                    PlayerTransformations[TransformationDefinitionManager.SSJ2Definition].Mastery = masteryLevel2;
+
+                    float masteryLevel3 = tag.Get<float>("MasteryLevel3");
+                    PlayerTransformations[TransformationDefinitionManager.SSJ3Definition].Mastery = masteryLevel3;
+
+                    float masteryLevelGod = tag.Get<float>("MasteryLevelGod");
+                    PlayerTransformations[TransformationDefinitionManager.SSJGDefinition].Mastery = masteryLevelGod;
+
+                    float masteryLevelBlue = tag.Get<float>("MasteryLevelBlue");
+                    PlayerTransformations[TransformationDefinitionManager.SSJGDefinition].Mastery = masteryLevelBlue;
+
+                    bool masteredMessage1 = tag.Get<bool>("MasteredMessage1");
+                    masteryMessagesDisplayed[TransformationDefinitionManager.SSJ1Definition] = masteredMessage1;
+
+                    bool masteredMessage2 = tag.Get<bool>("MasteredMessage2");
+                    masteryMessagesDisplayed[TransformationDefinitionManager.SSJ2Definition] = masteredMessage2;
+
+                    bool masteredMessage3 = tag.Get<bool>("MasteredMessage3");
+                    masteryMessagesDisplayed[TransformationDefinitionManager.SSJ3Definition] = masteredMessage3;
+
+                    bool masteredMessageGod = tag.Get<bool>("MasteredMessageGod");
+                    masteryMessagesDisplayed[TransformationDefinitionManager.SSJGDefinition] = masteredMessageGod;
+
+                    /*var masteredMessageBlue = tag.Get<bool>("MasteredMessageBlue");
+                    masteryMessagesDisplayed[DBZMOD.Instance.TransformationDefinitionManager.SSJBDefinition.UnlocalizedName] = masteredMessageBlue;*/
+
+                    // TODO Change masteryLevels to use TransformationDefinition.
                     // Prime the dictionary with any missing entries.
-                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    for (int i = 0; i < DBZMOD.Instance.TransformationDefinitionManager.Count; i++)
                     {
-                        if (!masteryLevels.ContainsKey(key))
+                        TransformationDefinition transformation = DBZMOD.Instance.TransformationDefinitionManager[i];
+                        if (transformation == null || !transformation.HasMastery) continue;
+
+                        if (!PlayerTransformations.ContainsKey(transformation))
                         {
-                            masteryLevels[key] = 0f;
+                            PlayerTransformations.Add(transformation, new PlayerTransformation(transformation));
+                            PlayerTransformations[transformation].Mastery = 0f;
                         }
 
-                        if (!masteryMessagesDisplayed.ContainsKey(key))
+                        if (!masteryMessagesDisplayed.ContainsKey(transformation))
                         {
-                            masteryMessagesDisplayed[key] = false;
+                            masteryMessagesDisplayed[transformation] = false;
                         }
                     }
                 }
                 else
                 {
                     // New mastery system/dynamic loading. Overwrites the old one if it exists.
-                    foreach (var key in FormBuffHelper.AllBuffs().Where(x => x.HasMastery)
-                        .Select(x => x.MasteryBuffKeyName).Distinct())
+                    for (int i = 0; i < DBZMOD.Instance.TransformationDefinitionManager.Count; i++)
                     {
-                        if (tag.ContainsKey($"MasteryLevel{key}"))
-                        {
-                            masteryLevels[key] = tag.Get<float>($"MasteryLevel{key}");
-                        }
-                        else
-                        {
-                            masteryLevels[key] = 0f;
-                        }
+                        TransformationDefinition transformation = DBZMOD.Instance.TransformationDefinitionManager[i];
+                        if (transformation == null || !transformation.HasMastery) continue;
 
-                        if (tag.ContainsKey($"MasteryMessagesDisplayed{key}"))
+                        if (tag.ContainsKey($"MasteryLevel{transformation.UnlocalizedName}"))
+                            PlayerTransformations[transformation].Mastery = tag.Get<float>($"MasteryLevel{transformation.UnlocalizedName}");
+                        else
+                            PlayerTransformations[transformation].Mastery = 0f;
+
+                        if (tag.ContainsKey($"MasteryMessagesDisplayed{transformation.UnlocalizedName}"))
                         {
-                            masteryMessagesDisplayed[key] = tag.Get<bool>($"MasteryMessagesDisplayed{key}");
+                            masteryMessagesDisplayed[transformation] = tag.Get<bool>($"MasteryMessagesDisplayed{transformation.UnlocalizedName}");
                         }
                         else
                         {
-                            masteryMessagesDisplayed[key] = false;
+                            masteryMessagesDisplayed[transformation] = false;
                         }
                     }
                 }
@@ -210,7 +233,6 @@ namespace DBZMOD
             kaioFragment2 = tag.Get<bool>("KaioFragment2");
             kaioFragment3 = tag.Get<bool>("KaioFragment3");
             kaioFragment4 = tag.Get<bool>("KaioFragment4");
-            kaioAchieved = tag.Get<bool>("KaioAchieved");
 
             if (tag.ContainsKey("KiCurrentFloat"))
             {
@@ -238,10 +260,12 @@ namespace DBZMOD
             mushroomMessage = tag.Get<bool>("MushroomMessage");
 
             string playerTrait = tag.Get<string>("playerTrait");
-            if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))
-                PlayerTrait = DBZMOD.Instance.TraitManager[char.ToLower(playerTrait[0]) + playerTrait.Substring(1)];
+            if (string.IsNullOrWhiteSpace(playerTrait))
+                PlayerTrait = TraitManager.Default;
+            else if (!DBZMOD.Instance.TraitManager.Contains(playerTrait))
+                PlayerTrait = TraitManager[char.ToLower(playerTrait[0]) + playerTrait.Substring(1)];
             else
-                PlayerTrait = DBZMOD.Instance.TraitManager[playerTrait];
+                PlayerTrait = TraitManager[playerTrait];
 
             flightUnlocked = tag.Get<bool>("flightUnlocked");
             flightDampeningUnlocked = tag.Get<bool>("flightDampeningUnlocked");

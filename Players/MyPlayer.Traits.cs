@@ -17,8 +17,14 @@ namespace DBZMOD
 
         public bool IsProdigy() => PlayerTrait == DBZMOD.Instance.TraitManager.Prodigy;
 
+        public bool IsPrimal() => PlayerTrait == DBZMOD.Instance.TraitManager.Primal;
+
+        public bool IsDivine() => PlayerTrait == DBZMOD.Instance.TraitManager.Divine;
+
         #endregion
 
         public Trait PlayerTrait { get; set; }
+
+        public TraitManager TraitManager => DBZMOD.Instance.TraitManager;
     }
 }

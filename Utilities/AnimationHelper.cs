@@ -48,6 +48,7 @@ namespace DBZMOD.Utilities
         // responsible for handling the custom draw routine of the charge bar during player charge attacks
         private const string CHARGE_BAR_FRAME_TEXTURE = "UI/ChargeBarFrame";
         private const string CHARGE_BAR_TEXTURE = "UI/ChargeBar";
+
         public static readonly PlayerLayer kiChargeAttackEffects = new PlayerLayer("DBZMOD", "KiChargeAttackEffects", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
         {
             // ki charge bar effects only show up for the player using the attack.
@@ -74,8 +75,10 @@ namespace DBZMOD.Utilities
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
+
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+
             Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
             {
@@ -87,7 +90,9 @@ namespace DBZMOD.Utilities
 
             bool isAnyAnimationPlaying = false;
             // ssj 1 through 3. (forcibly exclude ssj3 and god form)
-            if (drawPlayer.IsSSJ() && !drawPlayer.IsSSJG() && !drawPlayer.IsSSJ3())
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ1Definition) && 
+                !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition) && 
+                !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ3Definition))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -95,7 +100,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (drawPlayer.IsSSJ3() && !drawPlayer.IsSSJG())
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ3Definition) && !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 4;
                 var numberOfFrames = 4;
@@ -103,7 +108,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
-            if (drawPlayer.IsSSJG())
+            if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 6;
                 var numberOfFrames = 6;
@@ -116,14 +121,6 @@ namespace DBZMOD.Utilities
 				Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/LSSJ", frameCounterLimit, numberOfFrames, yOffset));
 				isAnyAnimationPlaying = modPlayer.IsTransformationAnimationPlaying;
             }*/
-            if (drawPlayer.IsSpectrum())
-            {
-                var frameCounterLimit = 4;
-                var numberOfFrames = 7;
-                var yOffset = -18;
-                Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJSpectrum", frameCounterLimit, numberOfFrames, yOffset));
-                isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
-            }
 
             // if we made it this far, we don't want to get stuck in a transformation animation state just because one doesn't exist
             // cancel it so we can move on and show auras.
@@ -178,15 +175,14 @@ namespace DBZMOD.Utilities
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningBlue"));
             }
-            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.LSSJ2Definition.GetBuffId()))
-            {
-                Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningGreen"));
-            }
             if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningYellow"));
             }
-            if ((drawPlayer.IsKaioken() && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5))
+
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+
+            if (modPlayer.TransformationDefinitionManager.IsKaioken(modPlayer.GetCurrentTransformation()) && drawPlayer.GetModPlayer<MyPlayer>().kaiokenLevel == 5)
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
