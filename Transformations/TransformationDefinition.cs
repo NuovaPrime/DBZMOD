@@ -198,7 +198,7 @@ namespace DBZMOD.Transformations
 
         #endregion
 
-        #region MyRegion
+        #region Hooks
 
         public virtual void OnPlayerTransformed(MyPlayer player) { }
 

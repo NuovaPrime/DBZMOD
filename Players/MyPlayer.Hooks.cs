@@ -623,6 +623,7 @@ namespace DBZMOD
 
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
+
             base.OnHitAnything(x, y, victim);
         }
 
