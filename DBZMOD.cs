@@ -178,14 +178,17 @@ namespace DBZMOD
 
         public override void AddRecipeGroups()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Ki Fragment", new int[]
             {
-            ItemType("KiFragment1"),
-            ItemType("KiFragment2"),
-            ItemType("KiFragment3"),
-            ItemType("KiFragment4"),
-            ItemType("KiFragment5")
+                ItemType("KiFragment1"),
+                ItemType("KiFragment2"),
+                ItemType("KiFragment3"),
+                ItemType("KiFragment4"),
+                ItemType("KiFragment5")
             });
+#pragma warning restore CS0618 // Type or member is obsolete
+
             RecipeGroup.RegisterGroup("DBZMOD:KiFragment", group);
         }
 

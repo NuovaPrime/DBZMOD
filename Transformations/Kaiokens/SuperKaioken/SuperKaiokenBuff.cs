@@ -11,8 +11,8 @@ namespace DBZMOD.Transformations.Kaiokens.SuperKaioken
         
         public override void SetDefaults()
         {
+
             base.SetDefaults();
-            kaiokenLevel = 1;
         }
     }
 }

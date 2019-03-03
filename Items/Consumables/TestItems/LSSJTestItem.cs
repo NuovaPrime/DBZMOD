@@ -31,12 +31,13 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            MyPlayer.ModPlayer(player).LSSJTransformation();
-            UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.LSSJTransformation();
+            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
 
             DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(player);
 
-            MyPlayer.ModPlayer(player).isTransforming = true;
+            modPlayer.isTransforming = true;
             return true;
 
         }

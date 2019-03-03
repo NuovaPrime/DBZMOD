@@ -137,7 +137,7 @@ namespace DBZMOD.Transformations
             }
 
             if (player.buffTime[buffIndex] == 0)
-                TransformationDefinition.OnTransformationBuffLost(modPlayer, ref buffIndex);
+                TransformationDefinition.OnTransformationBuffExpired(modPlayer, ref buffIndex);
         }
 
         public override void SetDefaults()
@@ -199,15 +199,13 @@ namespace DBZMOD.Transformations
             return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
-        public int kaiokenLevel = 0;
-
         public string AssembleTransBuffDescription(MyPlayer player)
         {
             string kaiokenName = string.Empty;
 
             if (Type == DBZMOD.Instance.TransformationDefinitionManager.KaiokenDefinition.GetBuffId() || Type == DBZMOD.Instance.TransformationDefinitionManager.SuperKaiokenDefinition.GetBuffId())
             {
-                switch (kaiokenLevel)
+                switch (player.kaiokenLevel)
                 {
                     case 2:
                         kaiokenName = "(x3)\n";

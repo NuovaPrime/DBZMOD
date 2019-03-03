@@ -43,7 +43,7 @@ namespace DBZMOD.Transformations
         protected TransformationDefinition(string unlocalizedName, string text, Color textColor,
             float baseDamageMultiplier, float baseSpeedMultiplier, int baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate,
             TransformationAppearanceDefinition appearance,
-            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, bool showInMenu = false, 
+            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, bool exhaustsPlayer = true, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, bool showInMenu = false, 
             Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, bool requiresAllParents = true, params TransformationDefinition[] parents)
         {
             UnlocalizedName = unlocalizedName;
@@ -60,6 +60,7 @@ namespace DBZMOD.Transformations
 
             Buff = buff;
             Duration = duration;
+            ExhaustsPlayer = exhaustsPlayer;
 
             BuffIconGetter = buffIconGetter;
 
@@ -203,15 +204,30 @@ namespace DBZMOD.Transformations
         public virtual void OnPlayerTransformed(MyPlayer player) { }
 
         /// <summary>Called whenever the player loses the buff associated to the transformation.</summary>
-        /// <param name="player">The player in question.</param>
+        /// <param name="player"></param>
         /// <param name="buffIndex"></param>
-        public virtual void OnTransformationBuffLost(MyPlayer player, ref int buffIndex) { }
+        public virtual void OnTransformationBuffExpired(MyPlayer player, ref int buffIndex) { }
 
+        public virtual void OnTransformationEnded(MyPlayer player) { }
+
+        /// <summary>Called whenever the player gains mastery associated to the transformation.</summary>
+        /// <param name="player"></param>
+        /// <param name="mastery"></param>
         public virtual void OnMasteryGained(MyPlayer player, float mastery) { }
 
         public virtual void OnPlayerUpdate(MyPlayer player) { }
 
         public virtual void OnPlayerPreKill(MyPlayer player, List<NPC> activeBosses, double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource) { }
+
+        /// <summary>Called whenever the player tries to ascend from his current transformation to the next one.</summary>
+        /// <param name="player"></param>
+        /// <returns>true if the player can ascend; otherwise false.</returns>
+        public virtual bool OnPlayerTryAscend(MyPlayer player) => true;
+
+        /// <summary>Called whenever the player tries to descend from his current transformations to the previous one.</summary>
+        /// <param name="player"></param>
+        /// <returns>true if the player can descend; otherwise false.</returns>
+        public virtual bool OnPlayerTryDescend(MyPlayer player) => true;
 
         #endregion
 
@@ -254,6 +270,7 @@ namespace DBZMOD.Transformations
 
         public Type Buff { get; }
         public int Duration { get; }
+        public bool ExhaustsPlayer { get; }
 
         public Func<Texture2D> BuffIconGetter { get; }
 

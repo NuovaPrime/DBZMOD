@@ -81,6 +81,8 @@ namespace DBZMOD
         {
             for (int i = 0; i < ActiveTransformations.Count; i++)
                 RemoveTransformation(ActiveTransformations[i]);
+
+            ActiveTransformations.Clear();
         }
 
         public void RemoveTransformation(TransformationDefinition transformation)
@@ -96,11 +98,14 @@ namespace DBZMOD
             TransformationDefinition targetTransformation = null;
             TransformationDefinition transformation = GetCurrentTransformation();
 
+            if (ActiveTransformations.Count > 0 || PreviousTransformations.Count > 0)
+                PreviousTransformations = new List<TransformationDefinition>(ActiveTransformations);
+
             // TODO Handle all of the multi-transformation aspects.
             // player has just pressed the normal transform button one time, which serves two functions.
             if (IsTransformingUpOneStep())
             {
-                if (transformation != null)
+                if (transformation != null && transformation.OnPlayerTryAscend(this))
                 {
                     NodeTree<TransformationDefinition> tree = TransformationDefinitionManager.Tree;
                     ManyToManyNode<TransformationDefinition> mtmn = tree[transformation];
@@ -131,7 +136,7 @@ namespace DBZMOD
                 else
                 {
                     // first attempt to step up to the selected form in the menu.
-                    targetTransformation = UI.TransformationMenu.SelectedTransformation;
+                    targetTransformation = SelectedTransformation;
                 }
 
                 // TODO Add this again maybe ?
@@ -141,7 +146,7 @@ namespace DBZMOD
                     targetTransformation = player.GetNextTransformationStep();
                 }*/
             }
-            else if (IsPoweringDownOneStep() && IsPlayerTransformed() && transformation != TransformationDefinitionManager.KaiokenDefinition)
+            else if (IsPoweringDownOneStep() && IsPlayerTransformed() && transformation.OnPlayerTryDescend(this) && transformation != TransformationDefinitionManager.KaiokenDefinition)
             {
                 if (transformation.Parents.Length == 1)
                     // player is powering down a transformation state.
@@ -154,7 +159,48 @@ namespace DBZMOD
 
             // finally, check that the transformation is really valid and then do it.
             if (CanTransform(targetTransformation))
+            {
+                TransformationDefinition lastTransformation = transformation;
                 DoTransform(targetTransformation);
+                
+                if (lastTransformation != null)
+                    lastTransformation.OnTransformationEnded(this);
+            }
+        }
+
+        public void CheckPlayerForTransformationStateDebuffApplication()
+        {
+            if (!DebugHelper.IsDebugModeOn())
+            {
+                TransformationDefinition transformation = GetCurrentTransformation();
+
+                bool isKaioken = TransformationDefinitionManager.IsKaioken(transformation);
+
+                // this way, we can apply exhaustion debuffs correctly.
+                if (wasKaioken && !isKaioken)
+                {
+                    bool wasSSJKK = PreviousTransformations.Contains(TransformationDefinitionManager.SuperKaiokenDefinition);
+                    AddKaiokenExhaustion(wasSSJKK ? 2 : 1);
+                    kaiokenLevel = 0; // make triple sure the Kaio level gets reset.
+                }
+
+                bool exhaustsPlayer = false;
+                isTransformed = IsPlayerTransformed();
+
+                for (int i = 0; i < PreviousTransformations.Count; i++)
+                    if (PreviousTransformations[i].ExhaustsPlayer)
+                    {
+                        exhaustsPlayer = true;
+                        break;
+                    }
+
+                if (exhaustsPlayer && !isTransformed)
+                {
+                    AddTransformationExhaustion();
+                }
+
+                wasKaioken = isKaioken;
+            }
         }
 
         #region Transformation Achieved Hooks
@@ -195,10 +241,22 @@ namespace DBZMOD
 
         #endregion
 
+        public void AddKaiokenExhaustion(int multiplier)
+        {
+            player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId(), (int)Math.Ceiling(kaiokenTimer * multiplier));
+            kaiokenTimer = 0f;
+        }
+
+        public void AddTransformationExhaustion() => player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId(), 600);
+
         public bool IsExhaustedFromTransformation() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId());
         public bool IsTiredFromKaioken() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId());
 
         public List<TransformationDefinition> ActiveTransformations { get; } = new List<TransformationDefinition>();
+
+        public List<TransformationDefinition> PreviousTransformations { get; private set; } = new List<TransformationDefinition>();
+
+        public TransformationDefinition SelectedTransformation { get; set; }
 
         internal Dictionary<TransformationDefinition, PlayerTransformation> PlayerTransformations { get; private set; }
 

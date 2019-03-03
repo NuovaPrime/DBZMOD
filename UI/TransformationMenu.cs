@@ -25,8 +25,6 @@ namespace DBZMOD.UI
         private readonly Dictionary<TransformationDefinition, Point> _imagePositions = new Dictionary<TransformationDefinition, Point>();
         private readonly List<Vector2[]> _polyLinesToDraw = new List<Vector2[]>();
 
-        public static TransformationDefinition SelectedTransformation { get; set; }
-
         public const int
             PADDINGX = 30,
             PADDINGY = PADDINGX,
@@ -160,9 +158,9 @@ namespace DBZMOD.UI
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
 
-                if (SelectedTransformation != def)
+                if (player.SelectedTransformation != def)
                 {
-                    SelectedTransformation = def;
+                    player.SelectedTransformation = def;
                     Main.NewText($"Selected {def.Text}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
                 }
                 else

@@ -1,4 +1,3 @@
-using DBZMOD.Extensions;
 using Terraria;
 
 namespace DBZMOD.Transformations.Kaiokens.Kaioken
@@ -37,9 +36,10 @@ namespace DBZMOD.Transformations.Kaiokens.Kaioken
         }
 
         public override void Update(Player player, ref int buffIndex)
-        {   
+        {
             // makes it so that kaioken is basically just one buff.
-            var modPlayer = player.GetModPlayer <MyPlayer>();
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
             CheckKaiokenName(modPlayer);
 
             if (modPlayer.kaiokenLevel == 0)
@@ -48,7 +48,6 @@ namespace DBZMOD.Transformations.Kaiokens.Kaioken
                 return;
             }
 
-            kaiokenLevel = modPlayer.kaiokenLevel;
             base.Update(player, ref buffIndex);
         }
 

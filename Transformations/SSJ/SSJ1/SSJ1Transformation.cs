@@ -1,6 +1,7 @@
 ﻿using DBZMOD.Buffs;
 using DBZMOD.Effects.Animations.Aura;
 using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace DBZMOD.Transformations.SSJ.SSJ1
 {
@@ -17,6 +18,20 @@ namespace DBZMOD.Transformations.SSJ.SSJ1
             typeof(SSJ1Buff),
             buffIconGetter: () => GFX.ssj1ButtonImage, failureText: "Only through failure with a powerful foe will true power awaken.", canBeMastered: true)
         {
+        }
+
+        public override void OnMasteryGained(MyPlayer player, float mastery)
+        {
+            if (mastery >= 0.5f && !player.ASSJAchieved)
+            {
+                DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.TryUnlock(player);
+                Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.");
+            }
+            else if (mastery >= 0.75f && !player.USSJAchieved)
+            {
+                DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.Unlock(player);
+                Main.NewText("Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.");
+            }
         }
     }
 }
