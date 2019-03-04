@@ -83,14 +83,15 @@ namespace DBZMOD.UI
 
         private float GetPlayerResourceQuotient(MyPlayer player)
         {
-            float averageResource = (float)Math.Floor(_cleanAverageKi.Sum() / 15f);
+            float averageKiResource = (float)Math.Floor(_cleanAverageKi.Sum() / 15f);
+            float averageOverloadResource = (float)Math.Floor(_cleanAverageOverload.Sum() / 15f);
             //Calculate quotient
             switch (_stat)
             {
                 case ResourceBarMode.Ki:
-                    return Utils.Clamp(averageResource / player.OverallKiMax(), 0, 1);
+                    return Utils.Clamp(averageKiResource / player.OverallKiMax(), 0, 1);
                 case ResourceBarMode.Overload:
-                    return Utils.Clamp(averageResource / player.overloadMax, 0, 1);
+                    return Utils.Clamp(averageOverloadResource / player.overloadMax, 0, 1);
                 default:
                     return 0f;
             }

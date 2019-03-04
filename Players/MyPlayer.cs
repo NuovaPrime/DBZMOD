@@ -19,6 +19,7 @@ using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 using DBZMOD.Traits;
 using DBZMOD.Traits.Primal;
+using Terraria.Localization;
 
 namespace DBZMOD
 {
@@ -524,6 +525,7 @@ namespace DBZMOD
             SoundHelper.UpdateTrackedSound(auraSoundInfo, player.position);
         }
         private bool wasInOverloadingState = false;
+        private bool overloadingMessageSent = false;
         private int overloadCooldownTimer = 0;
         private float overloadBlastTimer;
         private int overloadScaleCheckTimer = 0;
@@ -573,6 +575,7 @@ namespace DBZMOD
             if (wasInOverloadingState && overloadCurrent == 0)
             {
                 wasInOverloadingState = false;
+                overloadingMessageSent = false;
             }
 
             if(IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition) || overloadCurrent > 0)
@@ -584,29 +587,20 @@ namespace DBZMOD
                 OverloadBar.visible = false;
             }
 
-            if (overloadCurrent >= ((float)overloadMax * .7f))
+            if (overloadCurrent >= ((float)overloadMax * .7f) && !IsOverloading())
             {
-                const float aurawidth = 2.0f;
-
-                for (int i = 0; i < 20; i++)
+                DoAuraDust(2f, 74);
+            }
+            if(IsOverloading() && !overloadingMessageSent)
+            {
+                if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * aurawidth))).X;
-                    float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
-
-                    Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, 74, 0f, -2f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
-
-                    if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
-                    {
-                        tDust.scale *= 0.75f;
-                    }
-
-                    tDust.velocity.Y++;
-
-                    Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
-                    dir.Normalize();
-
-                    tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
-                    tDust.noGravity = true;
+                    Main.NewText("Your energy is overloading!.", 69, 244, 46);
+                }
+                else
+                {
+                    DoBroadcastMessage(NetworkText.FromLiteral(player.name + "s energy is overloading!"), new Color(69, 244, 46));
+                    overloadingMessageSent = true;
                 }
             }
             
@@ -626,12 +620,44 @@ namespace DBZMOD
                 if (overloadScaleCheckTimer > 20)
                 {
                     kiDamageMulti = Main.rand.NextFloat(0.5f, 2f);
+                    kiMaxMult = Main.rand.NextFloat(0.3f, 1.7f);
                     overloadScaleCheckTimer = 0;
                 }
 
             }
 
             //OverloadBar.visible = false;
+        }
+
+        public void DoAuraDust(float auraWidth, int dustType)
+        {
+            float aurawidth = auraWidth;
+
+            for (int i = 0; i < 20; i++)
+            {
+                float xPos = ((Vector2.UnitX * 5.0f) + (Vector2.UnitX * (Main.rand.Next(-10, 10) * aurawidth))).X;
+                float yPos = ((Vector2.UnitY * player.height) - (Vector2.UnitY * Main.rand.Next(0, player.height))).Y - 0.5f;
+
+                Dust tDust = Dust.NewDustDirect(player.position + new Vector2(xPos, yPos), 1, 1, dustType, 0f, -2f, 0, new Color(0, 0, 0, 0), 0.4f * Main.rand.Next(1, 4));
+
+                if ((Math.Abs((tDust.position - (player.position + (Vector2.UnitX * 7.0f))).X)) < 10)
+                {
+                    tDust.scale *= 0.75f;
+                }
+
+                tDust.velocity.Y++;
+
+                Vector2 dir = -(tDust.position - ((player.position + (Vector2.UnitX * 5.0f)) - (Vector2.UnitY * player.height)));
+                dir.Normalize();
+
+                tDust.velocity = new Vector2(dir.X * 2.0f, -1 * Main.rand.Next(1, 5));
+                tDust.noGravity = true;
+            }
+        }
+
+        public void DoBroadcastMessage(NetworkText text, Color textColor)
+        {
+            NetMessage.BroadcastChatMessage(text, textColor);
         }
 
         private void HandleBlackFusionMultiplier()

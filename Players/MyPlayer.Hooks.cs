@@ -632,7 +632,7 @@ namespace DBZMOD
             base.NaturalLifeRegen(ref regen);
 
             HandlePowerWishPlayerHealth();
-            HandleOverloadHealthChange();
+            //HandleOverloadHealthChange();
         }
 
         public override void UpdateBadLifeRegen()
@@ -664,7 +664,7 @@ namespace DBZMOD
             player.statLifeMax2 = player.statLifeMax2 + GetPowerWishesUsed() * 20;
         }
 
-        private float overloadHealthChange = 1f;
+        /*private float overloadHealthChange = 1f;
         public void HandleOverloadHealthChange()
         {
             if (IsOverloading())
@@ -672,7 +672,7 @@ namespace DBZMOD
                 overloadHealthChange = Main.rand.NextFloat(0.3f, 1.5f);
                 player.statLifeMax2 = (int)Math.Ceiling(player.statLifeMax2 * overloadHealthChange);
             }
-        }
+        }*/
 
         public override void PreUpdate()
         {
