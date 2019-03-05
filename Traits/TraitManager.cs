@@ -1,3 +1,5 @@
+using DBZMOD.Buffs;
+using DBZMOD.Managers;
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Managers;

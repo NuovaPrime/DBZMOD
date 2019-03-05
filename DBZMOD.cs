@@ -14,6 +14,7 @@ using DBZMOD.Network;
 using DBZMOD.Traits;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
+using DBZMOD.UI.HairMenu;
 using Leveled;
 
 namespace DBZMOD
@@ -27,6 +28,9 @@ namespace DBZMOD
 
         private static WishMenu _wishMenu;
         private static UserInterface _wishMenuInterface;
+
+        private static HairMenu _hairMenu;
+        private static UserInterface _hairMenuInterface;
 
         private static KiBar _kibar;
         private static UserInterface _kiBarInterface;
@@ -100,6 +104,7 @@ namespace DBZMOD
                 ActivateProgressionMenu();
                 ActivateKiBar();
                 ActivateOverloadBar();
+                ActivateHairMenu();
 
                 _instantTransmissionMapTeleporter = new InstantTransmissionMapHelper();
 
@@ -124,6 +129,7 @@ namespace DBZMOD
             ProgressionMenu.menuvisible = false;
             WishMenu.menuVisible = false;
             UIFlatPanel.backgroundTexture = null;
+            HairMenu.menuVisible = false;
 
             Leveled = null;
         }
@@ -176,6 +182,14 @@ namespace DBZMOD
             _overloadBarInterface.SetState(_overloadbar);
         }
 
+        public static void ActivateHairMenu()
+        {
+            _hairMenu = new HairMenu();
+            _hairMenu.Activate();
+            _hairMenuInterface = new UserInterface();
+            _hairMenuInterface.SetState(_hairMenu);
+        }
+
         public override void AddRecipeGroups()
         {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -204,6 +218,11 @@ namespace DBZMOD
                 _wishMenuInterface.Update(gameTime);
             }
 
+            if (_hairMenuInterface != null && HairMenu.menuVisible)
+            {
+                _hairMenuInterface.Update(gameTime);
+            }
+
             if (_progressionMenuInterface != null && ProgressionMenu.menuvisible)
             {
                 _progressionMenu.Update(gameTime);
@@ -229,7 +248,7 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-            int index2 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
+            int index2 = layers.FindIndex(layer => layer.Name.Contains("Hotbar"));
             if (index2 != -1)
             {
                 layers.Insert(index2, new LegacyGameInterfaceLayer(
@@ -249,6 +268,11 @@ namespace DBZMOD
                         if (WishMenu.menuVisible)
                         {
                             _wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
+                        }
+
+                        if (HairMenu.menuVisible)
+                        {
+                            _hairMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;

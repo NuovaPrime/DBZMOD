@@ -85,6 +85,8 @@ namespace DBZMOD
             tag.Add("IsInstantTransmission1Unlocked", isInstantTransmission1Unlocked);
             tag.Add("IsInstantTransmission2Unlocked", isInstantTransmission2Unlocked);
             tag.Add("IsInstantTransmission3Unlocked", isInstantTransmission3Unlocked);
+            tag.Add("HairChecked", hairChecked);
+
             // added to store the player's original eye color if possible
             if (originalEyeColor != null)
             {
@@ -288,6 +290,8 @@ namespace DBZMOD
             isInstantTransmission1Unlocked = tag.ContainsKey("IsInstantTransmission1Unlocked") ? tag.Get<bool>("IsInstantTransmission1Unlocked") : false;
             isInstantTransmission2Unlocked = tag.ContainsKey("IsInstantTransmission2Unlocked") ? tag.Get<bool>("IsInstantTransmission2Unlocked") : false;
             isInstantTransmission3Unlocked = tag.ContainsKey("IsInstantTransmission3Unlocked") ? tag.Get<bool>("IsInstantTransmission3Unlocked") : false;
+            hairChecked = tag.Get<bool>("HairChecked");
+
             // load the player's original eye color if possible
             if (tag.ContainsKey("OriginalEyeColorR") && tag.ContainsKey("OriginalEyeColorG") && tag.ContainsKey("OriginalEyeColorB"))
             {

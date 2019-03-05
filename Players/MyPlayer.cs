@@ -16,6 +16,7 @@ using DBZMOD.Extensions;
 using DBZMOD.Network;
 using DBZMOD.Projectiles;
 using DBZMOD.Transformations;
+using DBZMOD.UI.HairMenu;
 using DBZMOD.Utilities;
 using DBZMOD.Traits;
 using DBZMOD.Traits.Primal;
@@ -69,11 +70,28 @@ namespace DBZMOD
         public int overloadTimer;
         public float chargeMoveSpeed;
 
+        //player hair vars
+        public int baseHairStyle = 0; //reset to 0 because a base hair of 0 is the hair you started with on char creation, this is the only option that has it
+        public int ssj1HairStyle = 1;
+        public int ssj2HairStyle = 1;
+        public int ssj3HairStyle = 1;
+        public int ssj4HairStyle = 1;
+        public bool hairChecked = false;
+
+        //Hair styles
+        //0 = Base hair
+        //1 = Goku Hair style
+        //2 = Gohan hair style
+        //3 = Vegeta hair style
+        //4 = Raditz hair style
+        //5 = Broly hair style
+
 
         //Support Subclass vars
-        
+
         //multiplier on healing, resets to 1f each frame.
         public float healMulti = 1f;
+
 
         //Transformation vars
         public bool isTransforming;
@@ -610,6 +628,11 @@ namespace DBZMOD
 
             }
 
+            if(!hairChecked)
+            {
+                HairMenu.menuVisible = true;
+            }
+            
             //OverloadBar.visible = false;
         }
 

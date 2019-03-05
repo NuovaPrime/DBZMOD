@@ -45,7 +45,27 @@ namespace DBZMOD.UI
                 parentElement.Append(buttonToInitialise);
             }
         }
-        
+
+        public void InitHoverTextButton(ref UIHoverImageButton buttonToInitialise, Texture2D buttonTexture, MouseEvent buttonOnClick, float offsetX = 0, float offsetY = 0, UIElement parentElement = null, string textOnHover = null)
+        {
+            buttonToInitialise = new UIHoverImageButton(buttonTexture, textOnHover);
+
+            buttonToInitialise.Width.Set(buttonTexture.Width, 0.0f);
+            buttonToInitialise.Height.Set(buttonTexture.Height, 0.0f);
+            buttonToInitialise.Left.Set(offsetX, 0f);
+            buttonToInitialise.Top.Set(offsetY, 0f);
+            buttonToInitialise.OnClick += buttonOnClick;
+
+            if (parentElement == null)
+            {
+                backPanel.Append(buttonToInitialise);
+            }
+            else
+            {
+                parentElement.Append(buttonToInitialise);
+            }
+        }
+
         public void InitImage(ref UIImage imageToInitialise, Texture2D imageTexture, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
             imageToInitialise = new UIImage(imageTexture);
