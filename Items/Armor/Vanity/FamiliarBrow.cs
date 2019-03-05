@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using System;
 
 namespace DBZMOD.Items.Armor.Vanity
