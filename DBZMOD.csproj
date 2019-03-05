@@ -117,7 +117,6 @@
     <Compile Include="Transformations\TransformationBuff.cs" />
     <Compile Include="Transformations\Exhaustion\TransformationExhaustionBuff.cs" />
     <Compile Include="Transformations\UltraInstincts\Omen\UIOmenBuff.cs" />
-    <Compile Include="Traits\UnknownTraitBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
     <Compile Include="Config\ConfigModel.cs" />

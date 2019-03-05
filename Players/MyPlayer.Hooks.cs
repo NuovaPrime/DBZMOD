@@ -687,43 +687,43 @@ namespace DBZMOD
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (player.IsSSJ1())
+                    if (transformation == TransformationDefinitionManager.SSJ1Definition)
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJHair" + GetSSJ1Style());
                     }
-                    else if (player.IsAssj())
+                    else if (transformation == TransformationDefinitionManager.ASSJDefinition)
                     {
                         hair = mod.GetTexture("Hairs/SSJ/ASSJHair" + GetASSJStyle());
                     }
-                    else if (player.IsUssj())
+                    else if (transformation == TransformationDefinitionManager.USSJDefinition)
                     {
-                        hair = mod.GetTexture("Hairs/SSJ/USSJHair" + GetASSJStyle());
+                        hair = mod.GetTexture("Hairs/SSJ/ASSJHair" + GetASSJStyle());
                     }
-                    else if (player.IsSuperKaioken())
+                    else if (transformation == TransformationDefinitionManager.SuperKaiokenDefinition)
                     {
                         hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair" + GetSSJKKStyle());
                     }
-                    else if (player.IsSSJ2())
+                    else if (transformation == TransformationDefinitionManager.SSJ2Definition)
                     {
                         hair = mod.GetTexture("Hairs/SSJ2/SSJ2Hair" + GetSSJ2Style());
                     }
-                    else if (player.IsSSJ3())
+                    else if (transformation == TransformationDefinitionManager.SSJ3Definition)
                     {
                         hair = mod.GetTexture("Hairs/SSJ3/SSJ3Hair" + GetSSJ3Style());
                     }
-                    else if (player.IsLSSJ1())
+                    else if (transformation == TransformationDefinitionManager.LSSJDefinition)
                     {
                         hair = mod.GetTexture("Hairs/LSSJ/LSSJHair" + GetLSSJStyle());
                     }
-                    else if (player.IsSpectrum())
+                    /*else if (transformation == TransformationDefinitionManager.SS)
                     {
                         hair = mod.GetTexture("Hairs/Dev/SSJSHair");
-                    }
-                    else if (!player.IsPlayerTransformed())
+                    }*/
+                    else if (transformation == null)
                     {
                         hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
                     }
-                    if (player.IsSSJG())
+                    if (transformation == TransformationDefinitionManager.SSJGDefinition)
                     {
                         hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
                     }
@@ -741,7 +741,7 @@ namespace DBZMOD
             {
                 hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
             }
-            if(!player.IsPlayerTransformed() || player.dead)
+            if(transformation == null || player.dead)
             {
                 hairColor = player.hairColor;
             }
