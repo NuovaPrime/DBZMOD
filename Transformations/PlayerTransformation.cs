@@ -14,6 +14,6 @@
 
         public TransformationDefinition TransformationDefinition { get; private set; }
 
-        public float Mastery { get; private set; }
+        public float Mastery { get; set; }
     }
 }

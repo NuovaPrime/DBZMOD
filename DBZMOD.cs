@@ -121,7 +121,7 @@ namespace DBZMOD
         {
             TransformationDefinitionManager.Clear();
 
-            GFX.UnloadGfx();
+            GFX.UnloadGFX();
             KiBar.visible = false;
             OverloadBar.visible = false;
             Instance = null;

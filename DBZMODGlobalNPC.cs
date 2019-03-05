@@ -213,14 +213,14 @@ namespace DBZMOD
             {
                 if (firstButton)
                 {
-                    Player player = Main.LocalPlayer;
-                    MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+                    MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+
                     modPlayer.kaiokenLevel = 0;
-                    player.EndTransformations();
+                    modPlayer.EndTransformations();
                     float kihealvalue = modPlayer.OverallKiMax() - modPlayer.GetKi();
                     modPlayer.AddKi(modPlayer.OverallKiMax(), false, false);
-                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
-                    SoundHelper.PlayVanillaSound(SoundID.MaxMana, player);
+                    CombatText.NewText(new Rectangle((int)modPlayer.player.position.X, (int)modPlayer.player.position.Y, modPlayer.player.width, modPlayer.player.height), new Color(51, 204, 255), (int)Math.Round(kihealvalue, 0), false, false);
+                    SoundHelper.PlayVanillaSound(SoundID.MaxMana, modPlayer.player);
                 }
             }
         }

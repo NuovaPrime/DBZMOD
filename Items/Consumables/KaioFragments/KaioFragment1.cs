@@ -37,7 +37,9 @@ namespace DBZMOD.Items.Consumables.KaioFragments
         }
         public override bool CanUseItem(Player player)
         {
-            if (MyPlayer.ModPlayer(player).kaioFragment1 || !MyPlayer.ModPlayer(player).kaioAchieved)
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (modPlayer.kaioFragment1 || !modPlayer.HasTransformation(modPlayer.TransformationDefinitionManager.KaiokenDefinition))
             {
                 return false;
             }

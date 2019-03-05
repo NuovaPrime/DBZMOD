@@ -1,6 +1,7 @@
 ﻿using Leveled;
 using Leveled.NPCs;
 using Leveled.Players;
+#pragma warning disable 612
 
 namespace DBZMOD
 {
@@ -8,7 +9,8 @@ namespace DBZMOD
     {
         public static void Initialize()
         {
-            NPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
+            if (!NPCStats.temporaryStrVarHooks.ContainsKey(typeof(KiProjectile)))
+                NPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
         }
 
         public static void PlayerPreUpdateMovement(MyPlayer player)
@@ -18,4 +20,4 @@ namespace DBZMOD
             player.kiDamage *= LeveledMain.DamageMultiplier((int) leveledPlayer.Spirit.Total, leveledPlayer.Level);
         }
     }
-}
+} 

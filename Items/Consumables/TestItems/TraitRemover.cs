@@ -33,6 +33,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             MyPlayer.ModPlayer(player).PlayerTrait = DBZMOD.Instance.TraitManager.Default;
             return true;
+
         }
     }
 }

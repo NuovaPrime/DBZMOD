@@ -35,9 +35,11 @@ namespace DBZMOD.Items.Misc
 
         public override bool OnPickup(Player player)
         {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             SoundHelper.PlayVanillaSound(SoundID.NPCDeath7, player);
-            player.EndTransformations();
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
+
+            // TODO Change this
+            modPlayer.EndTransformations();
             modPlayer.SSJGTransformation();
             modPlayer.isTransforming = true;
 

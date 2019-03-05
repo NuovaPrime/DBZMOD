@@ -10,6 +10,7 @@ using DBZMOD.Dynamicity;
 using DBZMOD.Extensions;
 using DBZMOD.Transformations;
 using DBZMOD.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DBZMOD.UI
 {
@@ -29,7 +30,7 @@ namespace DBZMOD.UI
         public const int
             PADDINGX = 30,
             PADDINGY = PADDINGX,
-            SMALL_SPACE = 15;
+            SMALL_SPACE = 4;
 
         public override void OnInitialize()
         {
@@ -66,7 +67,8 @@ namespace DBZMOD.UI
             foreach (KeyValuePair<TransformationDefinition, ManyToManyNode<TransformationDefinition>> rootedTree in tDefTree.RootedTree)
             {
                 // A root element of the transformation tree should always have an BuffIcon.
-                if (rootedTree.Key.BuffIcon == null) continue;
+                if (rootedTree.Key.BuffIconGetter == null)
+                    continue;
 
                 RecursiveDrawTransformation(tDefTree.Tree, rootedTree.Value, ref rowXOffset, ref rowYOffset);
 
@@ -77,12 +79,15 @@ namespace DBZMOD.UI
 
         private void RecursiveDrawTransformation(Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree, ManyToManyNode<TransformationDefinition> mtmn, ref int xOffset, ref int yOffset)
         {
-            if (mtmn.Current.BuffIcon == null) return;
+            if (mtmn.Current.BuffIconGetter == null) return;
+            Texture2D buffIcon = mtmn.Current.BuffIconGetter.Invoke();
+
+            if (buffIcon == null) return;
 
             UIImageButton transformationButton = null;
             UIImage unknownImage = null, unknownImageGray = null, lockedImage = null;
 
-            InitButton(ref transformationButton, mtmn.Current.BuffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(mtmn.Current, evt, element)),
+            InitButton(ref transformationButton, buffIcon, new MouseEvent((evt, element) => TrySelectingTransformation(mtmn.Current, evt, element)),
                 xOffset, yOffset, backPanelImage);
 
             InitImage(ref unknownImage, GFX.unknownImage, 0, 0, transformationButton);
@@ -96,21 +101,21 @@ namespace DBZMOD.UI
 
             _imagePairs.Add(mtmn.Current, new UIImagePair(transformationButton, unknownImage, unknownImageGray, lockedImage));
             _imagePositions.Add(mtmn.Current, new Point(xOffset, yOffset));
-            xOffset += mtmn.Current.BuffIcon.Width + SMALL_SPACE;
+            xOffset += buffIcon.Width + SMALL_SPACE;
 
             int localXOffset = xOffset;
 
             for (int i = 0; i < mtmn.Next.Count; i++)
             {
                 TransformationDefinition nextDef = mtmn.Next[i];
-                if (nextDef.BuffIcon == null) continue;
+                if (nextDef.BuffIconGetter == null) continue;
 
                 List<Vector2> points = new List<Vector2>();
                 points.Add(_imagePositions[mtmn.Current].ToVector2());
 
                 for (int j = 0; j < mtmn.Previous.Count; j++)
                 {
-                    if (mtmn.Previous[j].BuffIcon == null) continue;
+                    if (mtmn.Previous[j].BuffIconGetter == null) continue;
 
                     points.Add(_imagePositions[mtmn.Previous[j]].ToVector2());
                 }
@@ -120,7 +125,7 @@ namespace DBZMOD.UI
                 RecursiveDrawTransformation(tree, tree[nextDef], ref xOffset, ref yOffset);
 
                 if (i + 1 < mtmn.Next.Count)
-                    yOffset += mtmn.Current.BuffIcon.Height + SMALL_SPACE;
+                    yOffset += buffIcon.Height + SMALL_SPACE * 2;
 
                 xOffset = localXOffset;
             }
@@ -158,17 +163,17 @@ namespace DBZMOD.UI
                 if (SelectedTransformation != def)
                 {
                     SelectedTransformation = def;
-                    Main.NewText($"Selected {def.TransformationText}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+                    Main.NewText($"Selected {def.Text}, Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
                 }
                 else
-                    Main.NewText($"{def.TransformationText} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
+                    Main.NewText($"{def.Text} Mastery: {Math.Round(100f * def.GetPlayerMastery(player), 2)}%");
             }
             else if (def.SelectionRequirementsFailed.Invoke(player, def))
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
 
-                if (def.TransformationFailureText == null) return;
-                Main.NewText(def.TransformationFailureText);
+                if (def.FailureText == null) return;
+                Main.NewText(def.FailureText);
             }
         }
     }

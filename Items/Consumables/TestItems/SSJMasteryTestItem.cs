@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override bool UseItem(Player player)
         {
             var modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.MasteryBuffKeyName] = Math.Min(1.0f, modPlayer.masteryLevels[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.MasteryBuffKeyName] + 0.25f);
+            modPlayer.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition].Mastery += 0.25f;
             return true;
 
         }

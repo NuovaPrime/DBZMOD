@@ -154,11 +154,14 @@ namespace DBZMOD
 
         public override bool UseItem(Player player)
         {
-            if(player.IsLSSJ() && !player.IsSSJ1())
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            if(modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
             {
                 int i = Main.rand.Next(1, 4);
-                MyPlayer.ModPlayer(player).overloadCurrent += i;
+                modPlayer.overloadCurrent += i;
             }
+
             return true;
         }
 

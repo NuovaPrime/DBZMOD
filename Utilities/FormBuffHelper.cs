@@ -13,12 +13,7 @@ namespace DBZMOD.Utilities
     {
         public const int ABSURDLY_LONG_BUFF_DURATION = 666666;
 
-        // the typical color used for super saiyan transformation Text, except God
-        public static readonly Color defaultTransformationTextColor = new Color(219, 219, 48);
-
-        public static readonly Color godTransformationTextColor = new Color(229, 20, 51);
-
-        internal static TransformationDefinition[]
+        /*internal static TransformationDefinition[]
             transformationDefinitionList =
             {
                 TransformationDefinitionManager.KaiokenDefinition,
@@ -34,10 +29,8 @@ namespace DBZMOD.Utilities
                 TransformationDefinitionManager.SSJGDefinition,
 
                 TransformationDefinitionManager.LSSJDefinition,
-                TransformationDefinitionManager.LSSJ2Definition,
 
                 TransformationDefinitionManager.TransformationExhaustionDefinition,
-                TransformationDefinitionManager.SpectrumDefinition
             },
 
             // returns a list of transformation steps specific to non-legendary SSJ players
@@ -61,9 +54,8 @@ namespace DBZMOD.Utilities
             legendaryBuffs =
             {
                 TransformationDefinitionManager.SSJ1Definition,
-                TransformationDefinitionManager.LSSJDefinition,
-                TransformationDefinitionManager.LSSJ2Definition
-            };
+                TransformationDefinitionManager.LSSJDefinition
+            };*/
 
         public static void Initialize()
         {
@@ -78,17 +70,6 @@ namespace DBZMOD.Utilities
         public static string GetUSSJNamePreference()
         {
             return ConfigModel.isSaiyanGradeNames ? "Super Saiyan Grade 3" : "Ultra Super Saiyan";
-        }
-
-        public static TransformationDefinition GetBuffByKeyName(string keyName)
-        {
-            return transformationDefinitionList.FirstOrDefault(x => x.UnlocalizedName == keyName);
-        }
-
-        // list containing all the form buffs that aren't debuffs.
-        public static List<TransformationDefinition> AllBuffs()
-        {
-            return transformationDefinitionList.Where(x => x.UnlocalizedName != BuffKeyNames.kaiokenFatigue && x.UnlocalizedName != BuffKeyNames.transformationExhaustion).ToList();
         }
 
         public static TransformationDefinitionManager TransformationDefinitionManager => DBZMOD.Instance.TransformationDefinitionManager;
