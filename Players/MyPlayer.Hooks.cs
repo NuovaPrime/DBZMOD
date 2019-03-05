@@ -415,7 +415,7 @@ namespace DBZMOD
 
                     isTransforming = true;
                     SSJTransformation();
-                    TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ1Definition;
+                    SelectedTransformation = TransformationDefinitionManager.SSJ1Definition;
                     TransformationDefinitionManager.SSJ1Definition.TryUnlock(this);
                     rageCurrent = 0;
                     EndTransformations();
@@ -435,7 +435,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ2Transformation();
-                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ2Definition;
+                SelectedTransformation = TransformationDefinitionManager.SSJ2Definition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -452,7 +452,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJTransformation();
-                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.LSSJDefinition;
+                SelectedTransformation = TransformationDefinitionManager.LSSJDefinition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -469,7 +469,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ3Transformation();
-                TransformationMenu.SelectedTransformation = TransformationDefinitionManager.SSJ3Definition;
+                SelectedTransformation = TransformationDefinitionManager.SSJ3Definition;
                 EndTransformations();
                 rageCurrent = 0;
                 return false;
@@ -624,6 +624,7 @@ namespace DBZMOD
 
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
+
             base.OnHitAnything(x, y, victim);
         }
 
@@ -853,7 +854,7 @@ namespace DBZMOD
             {
                 if (!wasCharging)
                 {
-                    var chargeAuraEffects = AuraAnimations.createChargeAura;
+                    var chargeAuraEffects = AuraAnimations.chargeAura;
                     HandleAuraStartupSound(chargeAuraEffects, true);
                 }
             }

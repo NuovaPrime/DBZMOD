@@ -1,4 +1,5 @@
-﻿using DBZMOD.Extensions;
+﻿using DBZMOD.Effects.Animations.Aura;
+using DBZMOD.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -27,8 +28,8 @@ namespace DBZMOD.Utilities
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            var player = drawInfo.drawPlayer;
-            var modPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = drawInfo.drawPlayer;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)
@@ -36,7 +37,7 @@ namespace DBZMOD.Utilities
                 return;
             }
 
-            var aura = modPlayer.GetAuraEffectOnPlayer();
+            Models.AuraAnimationInfo aura = modPlayer.GetAuraEffectOnPlayer();
 
             if (aura != null)
             {
@@ -100,6 +101,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
+
             if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJ3Definition) && !modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 4;
@@ -108,6 +110,7 @@ namespace DBZMOD.Utilities
                 Main.playerDrawData.Add(TransformationAnimationDrawData(drawInfo, "Effects/Animations/Transform/SSJ3", frameCounterLimit, numberOfFrames, yOffset));
                 isAnyAnimationPlaying = modPlayer.isTransformationAnimationPlaying;
             }
+
             if (modPlayer.IsTransformedInto(modPlayer.TransformationDefinitionManager.SSJGDefinition))
             {
                 var frameCounterLimit = 6;

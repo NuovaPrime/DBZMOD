@@ -35,7 +35,7 @@ namespace DBZMOD.Items.Consumables.TestItems
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.SSJGTransformation();
 
-            UI.TransformationMenu.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJGDefinition;
+            modPlayer.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJGDefinition;
             modPlayer.TransformationDefinitionManager.SSJGDefinition.Unlock(player);
 
             MyPlayer.ModPlayer(player).isTransforming = true;

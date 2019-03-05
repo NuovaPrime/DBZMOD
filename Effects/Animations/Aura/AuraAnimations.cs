@@ -43,7 +43,7 @@ namespace DBZMOD.Effects.Animations.Aura
 
         public static AuraAnimationInfo ssjgAura = new AuraAnimationInfo(AuraID.SSJG, GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.AlphaBlend, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
         public static AuraAnimationInfo ssjbAura = new AuraAnimationInfo(AuraID.SSJB, GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        public static AuraAnimationInfo ssjrAura = new AuraAnimationInfo(AuraID.SSJR, GetAnimationSpriteName("SSJRAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+        public static AuraAnimationInfo ssjrAura = new AuraAnimationInfo(AuraID.SSJR, GetAnimationSpriteName("SSJRAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
         public static AuraAnimationInfo uiOmenAura = new AuraAnimationInfo(AuraID.UIOmen, GetAnimationSpriteName("UIOmenAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
@@ -53,7 +53,7 @@ namespace DBZMOD.Effects.Animations.Aura
         
         public static AuraAnimationInfo lssjAura = new AuraAnimationInfo(AuraID.LSSJ, GetAnimationSpriteName("LSSJAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
         
-        public static AuraAnimationInfo createChargeAura = new AuraAnimationInfo(AuraID.Charge, GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+        public static AuraAnimationInfo chargeAura = new AuraAnimationInfo(AuraID.Charge, GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
         public static void DoSSJ1Dust(MyPlayer modPlayer, AuraAnimationInfo aura)
         {
@@ -116,6 +116,24 @@ namespace DBZMOD.Effects.Animations.Aura
                 Dust dust = Dust.NewDustDirect(position, aura.GetWidth(), aura.GetHeight(), 91, 0f, 0f, 0, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B), 0.25f);
                 dust.noGravity = true;
             }
+        }
+
+        /// <summary>
+        ///     Return the aura effect currently active on the player.
+        /// </summary>
+        /// <param name="player">The player being checked</param>
+        public static AuraAnimationInfo GetAuraEffectOnPlayer(this MyPlayer player)
+        {
+            if (player.player.dead)
+                return null;
+
+            if (player.ActiveTransformations.Count > 0)
+                return player.ActiveTransformations[0].Appearance.auraAnimation;
+
+            if (player.isCharging && player.ActiveTransformations.Count == 0)
+                return chargeAura;
+
+            return null;
         }
     }
 }

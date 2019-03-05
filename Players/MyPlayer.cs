@@ -252,10 +252,8 @@ namespace DBZMOD
         public bool isTransformationAnimationPlaying = false;
 
         // bools used to apply transformation debuffs appropriately
-        public bool isKaioken;
         public bool wasKaioken;
         public bool isTransformed;
-        public bool wasTransformed;
 
         public int mouseWorldOctant = -1;
 
@@ -464,20 +462,6 @@ namespace DBZMOD
             string masteryMessage = string.Empty;
 
             Color messageColor = new Color(232, 242, 50);
-
-            if (transformation == TransformationDefinitionManager.SSJ1Definition)
-            {
-                if (playerTransformation.Mastery >= 0.5f && !ASSJAchieved)
-                {
-                    DBZMOD.Instance.TransformationDefinitionManager.ASSJDefinition.TryUnlock(this);
-                    masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in SSJ1\nto ascend.";
-                }
-                else if (playerTransformation.Mastery >= 0.75f && !USSJAchieved)
-                {
-                    DBZMOD.Instance.TransformationDefinitionManager.USSJDefinition.Unlock(this);
-                    masteryMessage = $"Your SSJ1 Mastery has been upgraded.\nHold charge and transform while in ASSJ\nto ascend.";
-                }
-            }
 
             if (!string.IsNullOrEmpty(masteryMessage))
             {
@@ -1107,6 +1091,7 @@ namespace DBZMOD
         // TODO Remove all this in favor of auto checks.
         public void AwakeningFormUnlock()
         {
+            // TODO Change this to have a certain order that is determined from the existing transformations.
             if (!SSJ1Achived)
             {
                 Main.NewText("The humiliation of failing drives you mad.", Color.Yellow);
@@ -1115,7 +1100,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJTransformation();
-                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
+                SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
                 EndTransformations();
                 rageCurrent = 0;
             }
@@ -1127,7 +1112,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ2Transformation();
-                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
+                SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
                 EndTransformations();
                 rageCurrent = 0;
             }
@@ -1139,7 +1124,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 LSSJTransformation();
-                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
+                SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
                 EndTransformations();
                 rageCurrent = 0;
             }
@@ -1151,7 +1136,7 @@ namespace DBZMOD
 
                 isTransforming = true;
                 SSJ3Transformation();
-                UI.TransformationMenu.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition;
+                SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition;
                 EndTransformations();
                 rageCurrent = 0;
             }
@@ -1756,32 +1741,6 @@ namespace DBZMOD
         }
 
         public bool HasTransformation(TransformationDefinition transformationDefinition) => PlayerTransformations.ContainsKey(transformationDefinition);
-
-        public void CheckPlayerForTransformationStateDebuffApplication()
-        {
-            if (!DebugHelper.IsDebugModeOn())
-            {
-                wasKaioken = isKaioken;
-                wasTransformed = isTransformed;
-
-                TransformationDefinition transformation = GetCurrentTransformation();
-
-                isKaioken = TransformationDefinitionManager.IsKaioken(transformation);
-                isTransformed = IsPlayerTransformed();
-                // this way, we can apply exhaustion debuffs correctly.
-                if (wasKaioken && !isKaioken)
-                {
-                    bool wasSsjkk = wasTransformed;
-                    player.AddKaiokenExhaustion(wasSsjkk ? 2 : 1);
-                    kaiokenLevel = 0; // make triple sure the Kaio level gets reset.
-                }
-
-                if (wasTransformed && !isTransformed)
-                {
-                    //player.AddTransformationExhaustion();
-                }
-            }
-        }
 
         public int auraFrameTimer = 0;
         public int auraCurrentFrame = 0;

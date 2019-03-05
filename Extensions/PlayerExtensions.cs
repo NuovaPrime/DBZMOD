@@ -101,29 +101,6 @@ namespace DBZMOD.Extensions
             }
         }
 
-        /// <summary>
-        ///     Return the aura effect currently active on the player.
-        /// </summary>
-        /// <param name="modPlayer">The player being checked</param>
-        public static AuraAnimationInfo GetAuraEffectOnPlayer(this MyPlayer modPlayer)
-        {
-            TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
-
-            if (modPlayer.ActiveTransformations.Count == 0)
-                return null;
-
-            if (modPlayer.player.dead)
-                return null;
-
-            if (transformation != null)
-                return transformation.Appearance.auraAnimation;
-
-            if (modPlayer.isCharging)
-                return AuraAnimations.createChargeAura;
-
-            return null;
-        }
-
         public static void ApplyChannelingSlowdown(this Player player)
         {
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
@@ -169,20 +146,6 @@ namespace DBZMOD.Extensions
 
             return false;
         }
-
-        public static void AddKaiokenExhaustion(this Player player, int multiplier)
-        {
-            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
-            player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId(), (int)Math.Ceiling(modPlayer.kaiokenTimer * multiplier));
-            modPlayer.kaiokenTimer = 0f;
-        }
-
-        public static void AddTransformationExhaustion(this Player player)
-        {
-            player.AddBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId(), 600);
-        }
-
-        
 
         public static void DrawAura(this MyPlayer modPlayer, AuraAnimationInfo aura)
         {

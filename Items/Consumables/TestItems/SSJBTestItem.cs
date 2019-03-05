@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         public override bool UseItem(Player player)
         {
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            UI.TransformationMenu.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJBDefinition;
+            modPlayer.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJBDefinition;
 
             modPlayer.TransformationDefinitionManager.SSJBDefinition.Unlock(player);
             return true;

@@ -16,7 +16,7 @@ namespace DBZMOD.Transformations.UltraInstincts.Omen
         {
         }
 
-        public override void OnTransformationBuffLost(MyPlayer player, ref int buffIndex)
+        public override void OnTransformationBuffExpired(MyPlayer player, ref int buffIndex)
         {
             int buffTime = player.player.buffTime[buffIndex];
 
