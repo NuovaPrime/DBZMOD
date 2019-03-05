@@ -151,7 +151,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)projectile.scale / 2;
+                projectile.damage *= (int)projectile.scale / 3;
                 _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
                 SoundHelper.PlayCustomSound("Sounds/SpiritBombFire", player);
             }

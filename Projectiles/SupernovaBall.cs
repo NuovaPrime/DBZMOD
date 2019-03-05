@@ -130,7 +130,7 @@ namespace DBZMOD.Projectiles
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)Math.Ceiling(projectile.scale / 2f);
+                projectile.damage *= (int)Math.Ceiling(projectile.scale / 3f);
                 _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
                 SoundHelper.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
             }

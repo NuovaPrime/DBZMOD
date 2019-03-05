@@ -13,7 +13,10 @@ namespace DBZMOD.Items.Consumables.BukuujutsuVols
             item.height = 40;
             item.consumable = true;
             item.maxStack = 1;
-            item.UseSound = SoundID.Item3;
+            if (!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Bookread").WithPitchVariance(.1f);
+            }
             item.useStyle = 2;
             item.useTurn = true;
             item.useAnimation = 17;

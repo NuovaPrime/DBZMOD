@@ -12,8 +12,8 @@ namespace DBZMOD
 
         //constants
         const float FLIGHT_KI_DRAIN = 1f;
-        const float BURST_SPEED = 0.5f;
-        const float FLIGHT_SPEED = 0.3f;
+        const float BURST_SPEED = 0.3f;
+        const float FLIGHT_SPEED = 0.1f;
 
         public static void Update(Player player)
         {

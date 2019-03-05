@@ -11,12 +11,12 @@ namespace DBZMOD.Items.Weapons.Tier_3
 		{
 			item.shoot = mod.ProjectileType("HellzoneGrenadeProjectile");
 			item.shootSpeed = 17f;
-			item.damage = 57;
+			item.damage = 52;
 			item.knockBack = 6f;
             item.useStyle = 5;
 			item.UseSound = SoundID.Item1;
-			item.useAnimation = 25;
-			item.useTime = 13;
+			item.useAnimation = 28;
+			item.useTime = 18;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
