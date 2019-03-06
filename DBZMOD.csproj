@@ -85,6 +85,8 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="NPCs\MasterRoshi.cs" />
+    <Compile Include="NPCs\RoshiQuests.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
     <Compile Include="Traits\Primal\PrimalTraitBuff.cs" />
     <Compile Include="Transformations\Exhaustion\TransformationExhaustionTransformation.cs" />

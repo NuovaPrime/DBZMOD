@@ -122,7 +122,7 @@ namespace DBZMOD.NPCs
             Player player = Main.LocalPlayer;
             if (modPlayer.IsPrimal() && Main.rand.Next(4) == 0) //If the player is a primal saiyan
 			{
-				return "Is that a tail? Could you be a saiyan? I haven't seen one in ages, its a nostalgic sight.";
+				return "Is that a tail? Could you be a saiyan? I haven't seen one in ages, it's a nostalgic sight.";
 			}
             if(!player.Male && Main.rand.Next(4) == 0) //If the player is a girl
             {
@@ -184,7 +184,7 @@ namespace DBZMOD.NPCs
                                 Main.npcChatText = NoQuest3; return;
                         }
                     }
-                    else if (questSystem.CurrentQuest == -1)
+                    else if (questSystem.CurrentQuest == 0)
                     {
                         int NewQuest = RoshiQuests.ChooseNewQuest();
                         Main.npcChatText = RoshiQuests.Quests[NewQuest].ToString();
@@ -204,6 +204,7 @@ namespace DBZMOD.NPCs
                         Main.PlaySound(12, -1, -1, 1);
                         questSystem.SpawnReward(npc);
                         questSystem.CompleteQuest();
+                        questSystem.CurrentQuest = 0;
                         return;
                     }
                     else
