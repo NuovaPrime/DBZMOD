@@ -20,6 +20,7 @@ namespace DBZMOD.NPCs
         public int QuestsCompletedToday = 0;
         public int QuestLimitPerDay = 3;
         public int CurrentQuest = 0;
+        public int QuestKills = 0;
 
         public override void Initialize()
         {
@@ -28,23 +29,24 @@ namespace DBZMOD.NPCs
 
             Quest quest = new ItemQuest("Oh, its you. I could use some assistance with something if you have the time. I just need some gel from the slimes in the forest and don't ask why, I need it for my 'research', anyways 20 should be good. Don't worry, I'll reward you appropriately for your efforts.", ItemID.Gel, 20, 1, "Thanks for your assistance, take these odd crystals I found earlier while I was lost in a forest.")
             {
-                QuestReward = "StableKiCrystal",
+                ModdedQuestReward = "StableKiCrystal",
                 QuestRewardAmount = 25
             };
             Quests.Add(quest);
 
             quest = new ItemQuest("Ah, welcome back. I could use more of your assistance if you have the time. I'd like if you could bring me one of those shackles that these mutant things hold, it'll help with my 'research'.", ItemID.Shackle, 1, 1, "Thanks for your assistance, you can have a few of these ki restoration potions I've held onto forever, they should come in handy.")
             {
-                QuestReward = "KiPotion2",
+                ModdedQuestReward = "KiPotion2",
                 QuestRewardAmount = 6
             };
             Quests.Add(quest);
 
             //Kill quest example
-            /*int[] miner = { NPCID.UndeadMiner };
-            quest = new KillQuest(Name8 + "\n\n" + Quest8, miner, 1, 1d);
-            quest.Reward = "";
-            Quests.Add(quest);*/
+            int[] kingSlime = { NPCID.KingSlime };
+            quest = new KillQuest("Ah," + player.name + "I could use some more of your help, I haven't been able to get to the other side of the ocean as this big slime keeps getting in my way once I get to the other beach, if you could take care of it for me then I'll certainly reward you.", kingSlime, 1, 1d, "I really appreciate you killing that thing for me, here's some extra boots that I found while exploring earlier.");
+            quest.QuestReward = ItemID.HermesBoots;
+            quest.QuestRewardAmount = 1;
+            Quests.Add(quest);
 
 
 
@@ -78,21 +80,29 @@ namespace DBZMOD.NPCs
             QuestsCompletedToday++;
             QuestsCompleted++;
             CurrentQuest = 0;
+            QuestKills = 0;
         }
-
         public void SpawnReward(NPC npc)
         {
             Main.PlaySound(24, -1, -1, 1);
-            if (GetCurrentQuest().QuestReward == "")
+            
+            if(GetCurrentQuest().ModdedQuestReward != "")
             {
-                return;
+                int number2 = 0;
+                number2 = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
+                    mod.ItemType(GetCurrentQuest().ModdedQuestReward), GetCurrentQuest().QuestRewardAmount, false, 0, false, false);
+                if (Main.netMode == 1 && number2 >= 0)
+                    NetMessage.SendData(21, -1, -1, null, number2, 1f, 0.0f, 0.0f, 0, 0, 0);
             }
-                
-            int number2 = 0;
-            number2 = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
-                mod.ItemType(GetCurrentQuest().QuestReward), GetCurrentQuest().QuestRewardAmount, false, 0, false, false);
-            if (Main.netMode == 1 && number2 >= 0)
-                NetMessage.SendData(21, -1, -1, null, number2, 1f, 0.0f, 0.0f, 0, 0, 0);
+            if (GetCurrentQuest().ModdedQuestReward == "" && GetCurrentQuest().QuestReward != 0)
+            {
+                int number2 = 0;
+                number2 = Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height,
+                    (GetCurrentQuest().QuestReward), GetCurrentQuest().QuestRewardAmount, false, 0, false, false);
+                if (Main.netMode == 1 && number2 >= 0)
+                    NetMessage.SendData(21, -1, -1, null, number2, 1f, 0.0f, 0.0f, 0, 0, 0);
+            }
+
         }
 
         public override void PostUpdate()
@@ -103,10 +113,22 @@ namespace DBZMOD.NPCs
                 {
                     CurrentQuest = 0;
                     QuestsCompletedToday = 0;
+                    QuestKills = 0;
                 }
             }
         }
-        
+
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (CurrentQuest >= 0 && CurrentQuest != -1 && GetCurrentQuest() is KillQuest)
+            {
+                foreach (var i in (GetCurrentQuest() as KillQuest).TargetType)
+                    if (target.life <= 0 && target.type == i)
+                        QuestKills++;
+            }
+        }
+    
+
         public static int ChooseNewQuest()
         {
             int questChoice = 0;
@@ -140,7 +162,8 @@ namespace DBZMOD.NPCs
     {
         public Func<bool> IsAvailable;
         public string QuestName;
-        public string QuestReward = "";
+        public string ModdedQuestReward = "";
+        public int QuestReward = 0;
         public int QuestRewardAmount = 1;
         public string ThanksMessage;
         public double Weight;
@@ -195,6 +218,27 @@ namespace DBZMOD.NPCs
                             return true;
                     }
                 }
+            }
+            return false;
+        }
+    }
+    public class KillQuest : Quest
+    {
+        public int TargetCount;
+        public int[] TargetType;
+
+        public KillQuest(string name, int[] targetType, int targetCount = 1, double weight = 1d, string specialThanks = "Thanks for your assistance! Here's the promised reward.") : base(name, weight, specialThanks)
+        {
+            TargetType = targetType;
+            TargetCount = targetCount;
+        }
+
+        public override bool CheckCompletion(Player player)
+        {
+            if (player.GetModPlayer<RoshiQuests>().QuestKills >= TargetCount)
+            {
+                player.GetModPlayer<RoshiQuests>().QuestKills = 0;
+                return true;
             }
             return false;
         }

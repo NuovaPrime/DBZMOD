@@ -26,13 +26,12 @@ namespace DBZMOD.NPCs
 
 		public override void SetStaticDefaults()
 		{
-			// DisplayName automatically assigned from .lang files, but the commented line below is the normal approach.
 			DisplayName.SetDefault("Master Roshi");
 			Main.npcFrameCount[npc.type] = 22;
 			NPCID.Sets.ExtraFramesCount[npc.type] = 9;
 			NPCID.Sets.AttackFrameCount[npc.type] = 3;
 			NPCID.Sets.DangerDetectRange[npc.type] = 700;
-			NPCID.Sets.AttackType[npc.type] = 0;
+			NPCID.Sets.AttackType[npc.type] = 2;
 			NPCID.Sets.AttackTime[npc.type] = 90;
 			NPCID.Sets.AttackAverageChance[npc.type] = 30;
 			NPCID.Sets.HatOffsetY[npc.type] = 4;
@@ -45,75 +44,24 @@ namespace DBZMOD.NPCs
 			npc.width = 18;
 			npc.height = 40;
 			npc.aiStyle = 7;
-			npc.damage = 10;
-			npc.defense = 15;
-			npc.lifeMax = 250;
+			npc.damage = 30;
+			npc.defense = 20;
+			npc.lifeMax = 500;
 			npc.HitSound = SoundID.NPCHit1;
 			npc.DeathSound = SoundID.NPCDeath1;
 			npc.knockBackResist = 0.5f;
 			animationType = NPCID.Guide;
 		}
 
-		/*public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+		public override bool CanTownNPCSpawn(int numTownNPCs, int money)
 		{
-			for (int k = 0; k < 255; k++)
-			{
-				Player player = Main.player[k];
-				if (player.active)
-				{
-					for (int j = 0; j < player.inventory.Length; j++)
-					{
-						if (player.inventory[j].type == mod.ItemType("ExampleItem") || player.inventory[j].type == mod.ItemType("ExampleBlock"))
-						{
-							return true;
-						}
-					}
-				}
-			}
+            NPCSpawnInfo spawnInfo = new NPCSpawnInfo();
+
+            if (spawnInfo.player.ZoneBeach)
+            {
+                return true;
+            }
 			return false;
-		}*/
-
-		/*public override bool CheckConditions(int left, int right, int top, int bottom)
-		{
-			int score = 0;
-			for (int x = left; x <= right; x++)
-			{
-				for (int y = top; y <= bottom; y++)
-				{
-					int type = Main.tile[x, y].type;
-					if (type == mod.TileType("ExampleBlock") || type == mod.TileType("ExampleChair") || type == mod.TileType("ExampleWorkbench") || type == mod.TileType("ExampleBed") || type == mod.TileType("ExampleDoorOpen") || type == mod.TileType("ExampleDoorClosed"))
-					{
-						score++;
-					}
-					if (Main.tile[x, y].wall == mod.WallType("ExampleWall"))
-					{
-						score++;
-					}
-				}
-			}
-			return score >= (right - left) * (bottom - top) / 2;
-		}*/
-
-		public override string TownNPCName()
-		{
-			switch (WorldGen.genRand.Next(4))
-			{
-                default:
-                    return "";
-			}
-		}
-
-		public override void FindFrame(int frameHeight)
-		{
-			/*npc.frame.Width = 40;
-			if (((int)Main.time / 10) % 2 == 0)
-			{
-				npc.frame.X = 40;
-			}
-			else
-			{
-				npc.frame.X = 0;
-			}*/
 		}
 
 		public override string GetChat()
@@ -193,6 +141,11 @@ namespace DBZMOD.NPCs
                             Main.npcChatCornerItem = (RoshiQuests.Quests[NewQuest] as ItemQuest).ItemType;
                             questSystem.CurrentQuest = NewQuest;
                         }
+                        if (RoshiQuests.Quests[NewQuest] is KillQuest)
+                        {
+                            Main.npcChatCornerItem = 0;
+                            questSystem.CurrentQuest = NewQuest;
+                        }
                         return;
                     }
                     else
@@ -204,7 +157,6 @@ namespace DBZMOD.NPCs
                         Main.PlaySound(12, -1, -1, 1);
                         questSystem.SpawnReward(npc);
                         questSystem.CompleteQuest();
-                        questSystem.CurrentQuest = 0;
                         return;
                     }
                     else
@@ -213,6 +165,10 @@ namespace DBZMOD.NPCs
                         if (questSystem.GetCurrentQuest() is ItemQuest)
                         {
                             Main.npcChatCornerItem = (questSystem.GetCurrentQuest() as ItemQuest).ItemType;
+                        }
+                        if (questSystem.GetCurrentQuest() is KillQuest)
+                        {
+                            Main.npcChatText += "You have killed " + questSystem.QuestKills + "out of " + (questSystem.GetCurrentQuest() as KillQuest).TargetCount + ", keep at it!";
                         }
                     }
 
@@ -242,33 +198,75 @@ namespace DBZMOD.NPCs
             }
         }
 
-        /*public override void NPCLoot()
-		{
-			Item.NewItem(npc.getRect(), mod.ItemType<Items.Armor.ExampleCostume>());
-		}
+        private int GetWeaponProgression()
+        {
+            if(Main.hardMode)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
 		public override void TownNPCAttackStrength(ref int damage, ref float knockback)
 		{
-			damage = 20;
-			knockback = 4f;
+            switch(GetWeaponProgression())
+            {
+                case 1:
+                    damage = 64;
+                    knockback = 3f;
+                    break;
+                case 0:
+                    damage = 26;
+                    knockback = 2f;
+                    break;
+            }
 		}
 
 		public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
 		{
-			cooldown = 30;
-			randExtraCooldown = 30;
+            switch (GetWeaponProgression())
+            {
+                case 1:
+                    cooldown = 16;
+                    randExtraCooldown = 6;
+                    break;
+                case 0:
+                    cooldown = 24;
+                    randExtraCooldown = 8;
+                    break;
+            }
 		}
 
 		public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
 		{
-			projType = mod.ProjectileType("SparklingBall");
-			attackDelay = 1;
+            switch (GetWeaponProgression())
+            {
+                case 1:
+                    projType = mod.ProjectileType("EnergyShot");
+                    attackDelay = 15;
+                    break;
+                case 0:
+                    projType = mod.ProjectileType("KiBlast");
+                    attackDelay = 20;
+                    break;
+            }
+            
 		}
 
 		public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
 		{
-			multiplier = 12f;
-			randomOffset = 2f;
-		}*/
+            switch (GetWeaponProgression())
+            {
+                case 1:
+                    multiplier = 18f;
+                    break;
+                case 0:
+                    multiplier = 13f;
+                    break;
+            }
+		}
     }
 }
