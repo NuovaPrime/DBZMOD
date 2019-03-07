@@ -6,10 +6,11 @@ namespace DBZMOD.Transformations.Kaiokens.Kaioken
 {
     public sealed class KaiokenTransformation : TransformationDefinition
     {
-        public KaiokenTransformation() : base(BuffKeyNames.kaioken, null, TransformationDefinitionManager.defaultTransformationTextColor, 
+        public KaiokenTransformation() : base(null, TransformationDefinitionManager.defaultTransformationTextColor, 
             1f, 1f, 0, 1f, 0f, 0f, 8,
-            new TransformationAppearanceDefinition(AuraAnimations.createKaiokenAura, new ReadOnlyColor(0.35f, 0, 0), null, null, null, null),
-            typeof(KaiokenBuff))
+            new TransformationAppearanceDefinition(AuraAnimations.createKaiokenAura, new ReadOnlyColor(0.35f, 0, 0), 
+                new HairAppearance(null, null, null, null), null),
+            typeof(KaiokenBuff), hasMenuIcon: false)
         {
         }
 

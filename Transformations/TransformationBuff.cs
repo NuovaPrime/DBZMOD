@@ -28,7 +28,7 @@ namespace DBZMOD.Transformations
             Vector2 lightPosition = player.Center + player.velocity * 8f;
             float lightingR = 0f, lightingB = 0f, lightingG = 0f;
 
-            TransformationDefinition.GetPlayerLightModifier(ref lightingR, ref lightingG, ref lightingB);
+            TransformationDefinition.GetPlayerLightModifier(modPlayer, ref lightingR, ref lightingG, ref lightingB);
 
             if (lightingR > 0f || lightingG > 0f || lightingB > 0f)
                 Lighting.AddLight(lightPosition, lightingR, lightingG, lightingB);
@@ -148,7 +148,7 @@ namespace DBZMOD.Transformations
 
                 Main.buffNoTimeDisplay[Type] = true;
                 Main.buffNoSave[Type] = true;
-                Main.debuff[Type] = false;
+                Main.debuff[Type] = true;
 
                 // TODO Make this dynamics
                 Description.SetDefault("Buff Text");

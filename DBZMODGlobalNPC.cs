@@ -19,7 +19,8 @@ namespace DBZMOD
             {
                 return true;
             }
-        }
+        } 
+
         /*public override void SetDefaults(NPC npc)
         {
             Mod thoriummod = ModLoader.GetMod("ThoriumMod");

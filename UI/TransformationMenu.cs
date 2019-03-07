@@ -71,13 +71,13 @@ namespace DBZMOD.UI
                 RecursiveDrawTransformation(tDefTree.Tree, rootedTree.Value, ref rowXOffset, ref rowYOffset);
 
                 rowXOffset = PADDINGX;
-                //rowYOffset += rootedTree.Key.BuffIcon.Height + SMALL_SPACE;
+                rowYOffset += rootedTree.Key.BuffIconGetter().Height + SMALL_SPACE;
             }
         }
 
         private void RecursiveDrawTransformation(Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree, ManyToManyNode<TransformationDefinition> mtmn, ref int xOffset, ref int yOffset)
         {
-            if (mtmn.Current.BuffIconGetter == null) return;
+            if (!mtmn.Current.HasMenuIcon) return;
             Texture2D buffIcon = mtmn.Current.BuffIconGetter.Invoke();
 
             if (buffIcon == null) return;
@@ -138,10 +138,18 @@ namespace DBZMOD.UI
             foreach (KeyValuePair<TransformationDefinition, UIImagePair> kvp in _imagePairs)
             {
                 bool unlockable = kvp.Key.CanPlayerUnlock(player);
+                bool visible = kvp.Key.DoesShowInMenu(player);
 
-                kvp.Value.unknownImage.ImageScale = unlockable ? 0f : 1f;
-                kvp.Value.unknownImageGray.ImageScale = unlockable && player.HasTransformation(kvp.Key) ? 0f : 1f;
-                kvp.Value.lockedImage.ImageScale = unlockable ? 0f : 1f;
+                if (!visible)
+                {
+                    kvp.Value.button.Width = StyleDimension.Empty;
+                    kvp.Value.button.Height = StyleDimension.Empty;
+                    kvp.Value.button.SetVisibility(0f, 0f);
+                }
+
+                kvp.Value.unknownImage.ImageScale = visible && unlockable ? 0f : 1f;
+                kvp.Value.unknownImageGray.ImageScale = visible && unlockable && player.HasTransformation(kvp.Key) ? 0f : 1f;
+                kvp.Value.lockedImage.ImageScale = visible && unlockable ? 0f : 1f;
             }
 
             // Disabled as it crashes with SpriteBatch.
@@ -154,7 +162,7 @@ namespace DBZMOD.UI
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            if (player.PlayerTransformations.ContainsKey(def) && def.MeetsSelectionRequirements(player))
+            if (def.DoesShowInMenu(player) && player.PlayerTransformations.ContainsKey(def) && def.MeetsSelectionRequirements(player))
             {
                 SoundHelper.PlayVanillaSound(SoundID.MenuTick);
 

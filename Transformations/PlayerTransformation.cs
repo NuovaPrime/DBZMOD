@@ -1,4 +1,6 @@
-﻿namespace DBZMOD.Transformations
+﻿using System.Collections.Generic;
+
+namespace DBZMOD.Transformations
 {
     public class PlayerTransformation
     {
@@ -15,5 +17,7 @@
         public TransformationDefinition TransformationDefinition { get; private set; }
 
         public float Mastery { get; set; }
+
+        public Dictionary<string, object> ExtraInformation { get; } = new Dictionary<string, object>();
     }
 }

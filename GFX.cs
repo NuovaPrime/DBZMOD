@@ -69,6 +69,8 @@ namespace DBZMOD
             SSJ3_BUTTON = BUTTON_DIRECTORY + "SSJ3ButtonImage",
             SSJ4_BUTTON = BUTTON_DIRECTORY + "SSJ4ButtonImage",
 
+            MYSTIC_BUTTON = BUTTON_DIRECTORY + "MysticButtonImage",
+
             SSJG_BUTTON = BUTTON_DIRECTORY + "SSJGButtonImage",
             SSJB_BUTTON = BUTTON_DIRECTORY + "SSJBButtonImage",
             SSJR_BUTTON = BUTTON_DIRECTORY + "SSJRButtonImage",
@@ -76,6 +78,8 @@ namespace DBZMOD
             UIOMEN_BUTTON = BUTTON_DIRECTORY + "UIOmenButtonImage",
 
             LSSJ_BUTTON = BUTTON_DIRECTORY + "LSSJButtonImage",
+
+            SOULSTEALER_BUTTON = BUTTON_DIRECTORY + "SoulStealerButtonImage",
             
             WISH_FOR_POWER = BUTTON_DIRECTORY + "WishforPower",
             WISH_FOR_WEALTH = BUTTON_DIRECTORY + "WishforWealth",
@@ -140,6 +144,8 @@ namespace DBZMOD
             ssj3ButtonImage,
             ssj4ButtonImage,
 
+            mysticButtonImage,
+
             ssjgButtonImage,
             ssjbButtonImage,
             ssjrButtonImage,
@@ -148,6 +154,8 @@ namespace DBZMOD
 
             lssjButtonImage,
             
+            soulStealerButtonImage,
+
             wishforPower,
             wishforWealth,
             wishforImmortality,
@@ -202,13 +210,17 @@ namespace DBZMOD
             ssj3ButtonImage = mod.GetTexture(SSJ3_BUTTON);
             ssj4ButtonImage = mod.GetTexture(SSJ4_BUTTON);
 
+            mysticButtonImage = mod.GetTexture(MYSTIC_BUTTON);
+
             ssjgButtonImage = mod.GetTexture(SSJG_BUTTON);
             ssjbButtonImage = mod.GetTexture(SSJB_BUTTON);
             ssjrButtonImage = mod.GetTexture(SSJR_BUTTON);
 
+            lssjButtonImage = mod.GetTexture(LSSJ_BUTTON);
+
             uiOmenButtonImage = mod.GetTexture(UIOMEN_BUTTON);
 
-            lssjButtonImage = mod.GetTexture(LSSJ_BUTTON);
+            soulStealerButtonImage = mod.GetTexture(SOULSTEALER_BUTTON);
 
             lockedImage = mod.GetTexture(LOCKED);
 
@@ -260,10 +272,15 @@ namespace DBZMOD
             ssj1ButtonImage = null;
             ssj2ButtonImage = null;
             ssj3ButtonImage = null;
+            ssj4ButtonImage = null;
 
             ssjgButtonImage = null;
 
             lssjButtonImage = null;
+
+            uiOmenButtonImage = null;
+
+            soulStealerButtonImage = null;
 
             lockedImage = null;
             backPanel = null;

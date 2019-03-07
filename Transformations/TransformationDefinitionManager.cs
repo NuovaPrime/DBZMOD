@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DBZMOD.Managers;
+using DBZMOD.Transformations.DeveloperForms.Webmilio;
 using DBZMOD.Transformations.Exhaustion;
 using DBZMOD.Transformations.Kaiokens.Kaioken;
 using DBZMOD.Transformations.Kaiokens.SuperKaioken;
 using DBZMOD.Transformations.Kaiokens.KaoikenFatigue;
-using DBZMOD.Transformations.LSSJ.LSSJ1;
+using DBZMOD.Transformations.LSSJ;
+using DBZMOD.Transformations.Mystic;
 using DBZMOD.Transformations.SSJ.SSJ1;
-using DBZMOD.Transformations.SSJ.SSJ1.ASSJ;
-using DBZMOD.Transformations.SSJ.SSJ1.USSJ;
 using DBZMOD.Transformations.SSJ.SSJ2;
 using DBZMOD.Transformations.SSJ.SSJ3;
 using DBZMOD.Transformations.SSJ.SSJ4s.SSJ4;
@@ -44,6 +45,8 @@ namespace DBZMOD.Transformations
             SSJ3Definition = Add(new SSJ3Transformation(SSJ2Definition)) as SSJ3Transformation;
             SSJ4Definition = Add(new SSJ4Transformation(SSJ3Definition)) as SSJ4Transformation;
 
+            MysticDefinition = Add(new MysticTransformation(SSJ2Definition)) as MysticTransformation;
+
             SSJGDefinition = Add(new SSJGTransformation(SSJ3Definition)) as SSJGTransformation;
             SSJBDefinition = Add(new SSJBTransformation(SSJGDefinition)) as SSJBTransformation;
             SSJRDefinition = Add(new SSJRTransformation(SSJGDefinition)) as SSJRTransformation;
@@ -54,6 +57,8 @@ namespace DBZMOD.Transformations
             UIOmenTransformation = Add(new UIOmenTransformation()) as UIOmenTransformation;
 
             LSSJDefinition = Add(new LSSJ1Transformation(SSJ1Definition)) as LSSJ1Transformation;
+
+            SoulStealerDefinition = Add(new SoulStealerTransformation()) as SoulStealerTransformation;
 
             TransformationExhaustionDefinition = Add(new TransformationExhaustionTransformation()) as TransformationExhaustionTransformation;
 
@@ -81,6 +86,7 @@ namespace DBZMOD.Transformations
             return false;
         }
 
+        [Obsolete]
         public KaiokenTransformation KaiokenDefinition { get; private set; }
         public SuperKaiokenTransformation SuperKaiokenDefinition { get; private set; }
         public KaiokenFatigueTransformation KaiokenFatigueDefinition { get; private set; }
@@ -93,6 +99,8 @@ namespace DBZMOD.Transformations
         public SSJ3Transformation SSJ3Definition { get; private set; }
         public SSJ4Transformation SSJ4Definition { get; private set; }
 
+        public MysticTransformation MysticDefinition { get; private set; }
+
         public SSJGTransformation SSJGDefinition { get; private set; }
         public SSJBTransformation SSJBDefinition { get; private set; }
         public SSJRTransformation SSJRDefinition { get; private set; }
@@ -100,6 +108,8 @@ namespace DBZMOD.Transformations
         public UIOmenTransformation UIOmenTransformation { get; private set; }
 
         public LSSJ1Transformation LSSJDefinition { get; private set; }
+
+        public SoulStealerTransformation SoulStealerDefinition { get; private set; }
 
         public TransformationExhaustionTransformation TransformationExhaustionDefinition { get; private set; }
     }

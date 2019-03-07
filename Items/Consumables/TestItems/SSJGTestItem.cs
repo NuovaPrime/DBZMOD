@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class SSJGTestItem : ModItem
+    public sealed class SSJGTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -32,6 +32,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.SSJGTransformation();
 
@@ -40,7 +42,6 @@ namespace DBZMOD.Items.Consumables.TestItems
 
             MyPlayer.ModPlayer(player).isTransforming = true;
             return true;
-
         }
     }
 }

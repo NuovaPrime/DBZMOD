@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DBZMOD.Config;
 using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
+using DBZMOD.ModSupport;
 using DBZMOD.Network;
 using DBZMOD.Traits;
 using DBZMOD.Transformations;
@@ -81,6 +82,7 @@ namespace DBZMOD
                     Projectile.NewProjectile(player.Center.X, player.Center.Y, 0, 20, mod.ProjectileType("RadiantSpark"), (int)kiDamage * 100, 0, player.whoAmI);
                 }
             }
+
             if (metamoranSash)
             {
                 if (Main.rand.NextBool(15))
@@ -88,6 +90,7 @@ namespace DBZMOD
                     damage *= 2;
                 }
             }
+
             if (metamoranSash)
             {
                 if (Main.rand.NextBool(5))
@@ -95,6 +98,7 @@ namespace DBZMOD
                     damage *= 2;
                 }
             }
+
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
 
@@ -565,7 +569,7 @@ namespace DBZMOD
                     {
                         Player player = draw.drawPlayer;
 
-                        if (GetBaseStyle() == 0)
+                        if (ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY] == 0)
                             return;
 
                         Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.drawOrigin.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.drawOrigin.Y + draw.drawPlayer.height * 0.25) / 16.0), hairColor), draw.drawPlayer.shadow);
@@ -630,6 +634,9 @@ namespace DBZMOD
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
 
+            for (int i = 0; i < ActiveTransformations.Count; i++)
+                ActiveTransformations[i].OnPlayerHitAnything(this, x, y, victim);
+
             base.OnHitAnything(x, y, victim);
         }
 
@@ -688,59 +695,26 @@ namespace DBZMOD
             {
                 if (!player.armor[10].vanity && player.armor[10].headSlot == -1)
                 {
-                    if (transformation == TransformationDefinitionManager.SSJ1Definition)
+                    if (!IsPlayerTransformed())
                     {
-                        hair = mod.GetTexture("Hairs/SSJ/SSJHair" + GetSSJ1Style());
+                        hair = mod.GetTexture("Hairs/Base/BaseHair" + ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY]);
                     }
-                    else if (transformation == TransformationDefinitionManager.ASSJDefinition)
-                    {
-                        hair = mod.GetTexture("Hairs/SSJ/ASSJHair" + GetASSJStyle());
-                    }
-                    else if (transformation == TransformationDefinitionManager.USSJDefinition)
-                    {
-                        hair = mod.GetTexture("Hairs/SSJ/ASSJHair" + GetASSJStyle());
-                    }
-                    else if (transformation == TransformationDefinitionManager.SuperKaiokenDefinition)
-                    {
-                        hair = mod.GetTexture("Hairs/SSJ/SSJ1KaiokenHair" + GetSSJKKStyle());
-                    }
-                    else if (transformation == TransformationDefinitionManager.SSJ2Definition)
-                    {
-                        hair = mod.GetTexture("Hairs/SSJ2/SSJ2Hair" + GetSSJ2Style());
-                    }
-                    else if (transformation == TransformationDefinitionManager.SSJ3Definition)
-                    {
-                        hair = mod.GetTexture("Hairs/SSJ3/SSJ3Hair" + GetSSJ3Style());
-                    }
-                    else if (transformation == TransformationDefinitionManager.LSSJDefinition)
-                    {
-                        hair = mod.GetTexture("Hairs/LSSJ/LSSJHair" + GetLSSJStyle());
-                    }
-                    /*else if (transformation == TransformationDefinitionManager.SS)
-                    {
-                        hair = mod.GetTexture("Hairs/Dev/SSJSHair");
-                    }*/
-                    else if (transformation == null)
-                    {
-                        hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
-                    }
-                    if (transformation == TransformationDefinitionManager.SSJGDefinition)
-                    {
-                        hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
-                    }
-                    if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairTexture != null)
-                        hair = mod.GetTexture(transformation.Appearance.hair.hairTexture);
                     else
-                        hair = null;
+                    {
+                        if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairTexture != null && transformation.Appearance.hair.hairName != null)
+                            hair = mod.GetTexture(transformation.Appearance.hair.hairTexture + ssjHairStyles[transformation.Appearance.hair.hairName]);
+                        else
+                            hair = null;
+                    }
                 }
             }
             else
             {
-                hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
+                hair = mod.GetTexture("Hairs/Base/BaseHair" + ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY]);
             }
             if (player.dead)
             {
-                hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
+                hair = mod.GetTexture("Hairs/Base/BaseHair" + ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY]);
             }
             if(transformation == null || player.dead)
             {
@@ -751,69 +725,6 @@ namespace DBZMOD
                 hairColor = Color.White;
             }
         }
-        #region Hair Style Checks
-        public int GetBaseStyle()
-        {
-            return baseHairStyle;
-        }
-        public int GetSSJ1Style()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetSSJ2Style()
-        {
-            return ssj2HairStyle;
-        }
-        public int GetSSJ3Style()
-        {
-            return ssj3HairStyle;
-        }
-        public int GetSSJ4Style()
-        {
-            return ssj4HairStyle;
-        }
-        public int GetSSJGStyle()
-        {
-            return baseHairStyle;
-        }
-        public int GetSSJBStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetSSJRStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetASSJStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetSSJCStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetLSSJStyle()
-        {
-            return ssj2HairStyle;
-        }
-        public int GetSSJBEStyle()
-        {
-            return ssj2HairStyle;
-        }
-        public int GetSSJKKStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetSSJBKKStyle()
-        {
-            return ssj1HairStyle;
-        }
-        public int GetSSJRKKStyle()
-        {
-            return ssj1HairStyle;
-        }
-
-        #endregion
 
         public override void PreUpdateMovement()
         {

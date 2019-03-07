@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class SSJ2MasteryTestItem : ModItem
+    public sealed class SSJ2MasteryTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -32,9 +32,12 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            var modPlayer = player.GetModPlayer<MyPlayer>();
+            if (!DBZMOD.allowDebugItem) return false;
+
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition].Mastery = 
                 Math.Min(1.0f, modPlayer.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition].Mastery + 0.25f);
+
             return true;
 
         }

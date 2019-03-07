@@ -33,27 +33,32 @@ namespace DBZMOD.Effects.Animations.Aura
             }
         }
 
-        public static AuraAnimationInfo ssj1Aura = new AuraAnimationInfo(AuraID.SSJ1, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);        
-        public static AuraAnimationInfo assjAura = new AuraAnimationInfo(AuraID.ASSJ, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);        
-        public static AuraAnimationInfo ussjAura = new AuraAnimationInfo(AuraID.USSJ, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
+        public static AuraAnimationInfo
+            chargeAura = new AuraAnimationInfo(GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
 
-        public static AuraAnimationInfo ssj2Aura = new AuraAnimationInfo(AuraID.SSJ2, GetAnimationSpriteName("SSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
-        public static AuraAnimationInfo ssj3Aura = new AuraAnimationInfo(AuraID.SSJ3, GetAnimationSpriteName("SSJ3Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1);
-        public static AuraAnimationInfo ssj4Aura = new AuraAnimationInfo(AuraID.SSJ4, GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1);
+            ssj1Aura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1),
+            assjAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1),
+            ussjAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1),
 
-        public static AuraAnimationInfo ssjgAura = new AuraAnimationInfo(AuraID.SSJG, GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.AlphaBlend, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        public static AuraAnimationInfo ssjbAura = new AuraAnimationInfo(AuraID.SSJB, GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
-        public static AuraAnimationInfo ssjrAura = new AuraAnimationInfo(AuraID.SSJR, GetAnimationSpriteName("SSJRAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+            ssj2Aura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ2Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1),
+            ssj3Aura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ3Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ3", 260, true, false, null, 0, null, 1),
+            ssj4Aura = new AuraAnimationInfo(GetAnimationSpriteName("SSJ1Aura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1),
 
-        public static AuraAnimationInfo uiOmenAura = new AuraAnimationInfo(AuraID.UIOmen, GetAnimationSpriteName("UIOmenAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+            mysticAura = new AuraAnimationInfo(GetAnimationSpriteName("MysticAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, null, 2, new AuraAnimationInfo.DustDelegate(DoSSJ1Dust), 1),
 
-        public static AuraAnimationInfo createFalseUIAura = new AuraAnimationInfo(AuraID.FalseUI, GetAnimationSpriteName("FalseUIAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoFalseUIDust), 0, null, 1);
-        public static AuraAnimationInfo createKaiokenAura = new AuraAnimationInfo(AuraID.Kaioken, GetAnimationSpriteName("KaiokenAura"), 4, 3, BlendState.Additive, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
-        public static AuraAnimationInfo createSuperKaiokenAura = new AuraAnimationInfo(AuraID.SuperKaioken, GetAnimationSpriteName("SuperKaiokenAura"), 4, 3, BlendState.Additive, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0);
-        
-        public static AuraAnimationInfo lssjAura = new AuraAnimationInfo(AuraID.LSSJ, GetAnimationSpriteName("LSSJAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1);
-        
-        public static AuraAnimationInfo chargeAura = new AuraAnimationInfo(AuraID.Charge, GetAnimationSpriteName("BaseAura"), 4, 3, BlendState.Additive, "Sounds/EnergyChargeStart", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
+            ssjgAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.AlphaBlend, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
+            ssjbAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSB", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
+            ssjrAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJRAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJR", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
+
+            uiOmenAura = new AuraAnimationInfo(GetAnimationSpriteName("UIOmenAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
+
+            createFalseUIAura = new AuraAnimationInfo(GetAnimationSpriteName("FalseUIAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/EnergyCharge", 22, true, false, new AuraAnimationInfo.DustDelegate(DoFalseUIDust), 0, null, 1),
+            createKaiokenAura = new AuraAnimationInfo(GetAnimationSpriteName("KaiokenAura"), 4, 3, BlendState.Additive, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0),
+            createSuperKaiokenAura = new AuraAnimationInfo(GetAnimationSpriteName("SuperKaiokenAura"), 4, 3, BlendState.Additive, "Sounds/KaioAuraStart", "Sounds/EnergyCharge", 22, true, true, null, 0, null, 0),
+
+            lssjAura = new AuraAnimationInfo(GetAnimationSpriteName("LSSJAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJ2", 510, true, false, null, 0, null, 1),
+
+            soulStealerAura = new AuraAnimationInfo(GetAnimationSpriteName("SoulStealerAura"), 8, 3, BlendState.Additive, "Sounds/SoulStealerAscension", "Sounds/SoulStealer", 100, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1);
 
         public static void DoSSJ1Dust(MyPlayer modPlayer, AuraAnimationInfo aura)
         {

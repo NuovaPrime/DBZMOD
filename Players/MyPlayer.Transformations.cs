@@ -252,7 +252,7 @@ namespace DBZMOD
         public bool IsExhaustedFromTransformation() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId());
         public bool IsTiredFromKaioken() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId());
 
-        public List<TransformationDefinition> ActiveTransformations { get; } = new List<TransformationDefinition>();
+        public List<TransformationDefinition> ActiveTransformations { get; private set; } = new List<TransformationDefinition>();
 
         public List<TransformationDefinition> PreviousTransformations { get; private set; } = new List<TransformationDefinition>();
 

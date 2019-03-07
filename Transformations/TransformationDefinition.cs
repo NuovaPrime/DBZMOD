@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ModLoader.IO;
 
 namespace DBZMOD.Transformations
 {
@@ -20,7 +21,6 @@ namespace DBZMOD.Transformations
         /// <summary>
         ///     Instantiate a new buff info, typically a form like SSJ or Kaioken.
         /// </summary>
-        /// <param name="unlocalizedName">The key name of the buff used in the mod.</param>
         /// <param name="text">The text displayed when transforming.</param>
         /// <param name="textColor">The color of the transformation text.</param>
         /// <param name="baseDamageMultiplier"></param>
@@ -33,20 +33,22 @@ namespace DBZMOD.Transformations
         /// <param name="appearance"></param>
         /// <param name="buff"></param>
         /// <param name="duration"></param>
+        /// <param name="exhaustsPlayer"></param>
         /// <param name="buffIconGetter">The icon to display in the Transformation Menu; leave as null if you don't want to display the transformation.</param>
         /// <param name="failureText">The text displayed when the player fails to achieve (select in the menu) the transformation.</param>
         /// <param name="extraTooltipText"></param>
         /// <param name="canBeMastered">Whether the form has a mastery rating.</param>
         /// <param name="unlockRequirements">The requirements to unlock the form. Will be checked after <param name="parents">parents</param>.</param>
         /// <param name="selectionRequirementsFailed"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="requiresAllParents"></param>
         /// <param name="parents">The transformations that need to be unlocked before this transformation can also be unlocked.</param>
-        protected TransformationDefinition(string unlocalizedName, string text, Color textColor,
+        protected TransformationDefinition(string text, Color textColor,
             float baseDamageMultiplier, float baseSpeedMultiplier, int baseDefenseBonus, float baseKiSkillDrainMultiplier, float baseKiDrainRate, float baseKiDrainRateMastery, float baseHealthDrainRate,
             TransformationAppearanceDefinition appearance,
-            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, bool exhaustsPlayer = true, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, bool showInMenu = false, 
-            Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, bool requiresAllParents = true, params TransformationDefinition[] parents)
+            Type buff, int duration = FormBuffHelper.ABSURDLY_LONG_BUFF_DURATION, bool exhaustsPlayer = true, Func<Texture2D> buffIconGetter = null, string failureText = null, string extraTooltipText = null, bool canBeMastered = false, 
+            Predicate<MyPlayer> unlockRequirements = null, Func<MyPlayer, TransformationDefinition, bool> selectionRequirementsFailed = null, bool hasMenuIcon = true, bool requiresAllParents = true, params TransformationDefinition[] parents)
         {
-            UnlocalizedName = unlocalizedName;
             Text = text;
             TextColor = textColor;
 
@@ -67,6 +69,8 @@ namespace DBZMOD.Transformations
             FailureText = failureText;
             ExtraTooltipText = extraTooltipText;
 
+            HasMastery = canBeMastered;
+
             Appearance = appearance;
 
             if (unlockRequirements == null)
@@ -79,8 +83,7 @@ namespace DBZMOD.Transformations
 
             SelectionRequirementsFailed = selectionRequirementsFailed;
 
-            HasMastery = canBeMastered;
-            ShowInMenu = showInMenu;
+            HasMenuIcon = hasMenuIcon;
 
             RequiresAllParents = requiresAllParents;
             Parents = parents;
@@ -188,7 +191,7 @@ namespace DBZMOD.Transformations
 
         public virtual float GetHealthDrainRate(MyPlayer player) => ModifiedHealthDrainRate;
 
-        public virtual void GetPlayerLightModifier(ref float lightingRed, ref float lightingGreen, ref float lightingBlue)
+        public virtual void GetPlayerLightModifier(MyPlayer player, ref float lightingRed, ref float lightingGreen, ref float lightingBlue)
         {
             if (Appearance.lightColor == null) return;
 
@@ -229,12 +232,20 @@ namespace DBZMOD.Transformations
         /// <returns>true if the player can descend; otherwise false.</returns>
         public virtual bool OnPlayerTryDescend(MyPlayer player) => true;
 
+        public virtual void OnPlayerLoad(MyPlayer player, TagCompound tag) { }
+
+        public virtual void OnPlayerSave(MyPlayer player, TagCompound tag) { }
+
+        public virtual void OnPlayerHitAnything(MyPlayer player, float x, float y, Entity victim) { }
+
         #endregion
+
+        public virtual bool DoesShowInMenu(MyPlayer player) => true;
 
         public override string ToString() => UnlocalizedName;
 
 
-        public string UnlocalizedName { get; }
+        public virtual string UnlocalizedName => Buff.Name;
 
         public string Text { get; }
         public Color TextColor { get; }
@@ -283,10 +294,10 @@ namespace DBZMOD.Transformations
         internal Func<MyPlayer, TransformationDefinition, bool> SelectionRequirementsFailed { get; }
 
 
-        public bool ShowInMenu { get; }
-
         internal Predicate<MyPlayer> UnlockRequirements { get; }
 
+
+        public bool HasMenuIcon { get; }
 
         public bool RequiresAllParents { get; }
 

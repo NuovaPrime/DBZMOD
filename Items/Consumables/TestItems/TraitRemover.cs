@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class TraitRemover : ModItem
+    public sealed class TraitRemover : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,9 +31,10 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             MyPlayer.ModPlayer(player).PlayerTrait = DBZMOD.Instance.TraitManager.Default;
             return true;
-
         }
     }
 }

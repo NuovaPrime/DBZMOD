@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class OverloadTestItem : ModItem
+    public sealed class OverloadTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,10 +31,12 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.overloadCurrent = modPlayer.overloadMax;
-            return true;
 
+            return true;
         }
     }
 }

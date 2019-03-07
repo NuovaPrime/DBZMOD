@@ -19,11 +19,11 @@ namespace DBZMOD.Transformations
             this.eyeColor = eyeColor;
         }
 
-        public TransformationAppearanceDefinition(AuraAnimationInfo auraAnimation, ReadOnlyColor lightColor, string hairTexture, ReadOnlyColor hairColor, int? hairShader, Color? eyeColor)
+        public TransformationAppearanceDefinition(AuraAnimationInfo auraAnimation, ReadOnlyColor lightColor, string hairTexture, ReadOnlyColor hairColor, int? hairShader, string hairName, Color? eyeColor)
         {
             this.auraAnimation = auraAnimation;
             this.lightColor = lightColor;
-            this.hair = new HairAppearance(hairTexture, hairColor, hairShader);
+            this.hair = new HairAppearance(hairTexture, hairColor, hairShader, hairName);
             this.eyeColor = eyeColor;
         }
     }
@@ -48,15 +48,25 @@ namespace DBZMOD.Transformations
 
     public class HairAppearance
     {
+        public const string
+            BASE_HAIRSTYLE_KEY = "baseHairStyle",
+            SSJ1_HAIRSTYLE_KEY = "ssj1HairStyle",
+            SSJ2_HAIRSTYLE_KEY = "ssj2HairStyle",
+            SSJ3_HAIRSTYLE_KEY = "ssj3HairStyle",
+            SSJ4_HAIRSTYLE_KEY = "ssj4HairStyle";
+
+
         public readonly string hairTexture;
         public readonly ReadOnlyColor hairColor;
         public readonly int? hairShader;
+        public readonly string hairName;
 
-        public HairAppearance(string hairTexture, ReadOnlyColor hairColor, int? hairShader)
+        public HairAppearance(string hairTexture, ReadOnlyColor hairColor, int? hairShader, string hairName)
         {
             this.hairTexture = hairTexture;
             this.hairColor = hairColor;
             this.hairShader = hairShader;
+            this.hairName = hairName;
         }
     }
 }

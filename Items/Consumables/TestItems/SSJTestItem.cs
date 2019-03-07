@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class SSJTestItem : ModItem
+    public sealed class SSJTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,14 +31,16 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.SSJTransformation();
             modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
 
             DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.Unlock(player);
             modPlayer.isTransforming = true;
-            return true;
 
+            return true;
         }
     }
 }

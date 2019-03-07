@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Effects.Animations.Aura;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameInput;
@@ -70,12 +71,15 @@ namespace DBZMOD
         public int overloadTimer;
         public float chargeMoveSpeed;
 
-        //player hair vars
-        public int baseHairStyle = 0; //reset to 0 because a base hair of 0 is the hair you started with on char creation, this is the only option that has it
-        public int ssj1HairStyle = 1;
-        public int ssj2HairStyle = 1;
-        public int ssj3HairStyle = 1;
-        public int ssj4HairStyle = 1;
+        internal Dictionary<string, int> ssjHairStyles = new Dictionary<string, int>()
+        {
+            { "baseHairStyle", 0 }, //reset to 0 because a base hair of 0 is the hair you started with on char creation, this is the only option that has it
+            { "ssj1HairStyle", 1 },
+            { "ssj2HairStyle", 1 },
+            { "ssj3HairStyle", 1 },
+            { "ssj4HairStyle", 1 }
+        };
+
         public bool hairChecked = false;
 
         //Hair styles
@@ -322,7 +326,7 @@ namespace DBZMOD
             if (isFormDrain)
             {
                 TransformationDefinition transformation = GetCurrentTransformation();
-                if (transformation == null) return;
+                if (transformation == null || !transformation.HasMastery) return;
 
                 if (transformation.GetKiDrainRate(this) == 0 && transformation.GetKiDrainRateMastery(this) == 0)
                     return;
@@ -337,7 +341,7 @@ namespace DBZMOD
             if (isWeaponDrain && kiAmount < 0)
             {
                 TransformationDefinition transformation = GetCurrentTransformation();
-                if (transformation == null) return;
+                if (transformation == null || !transformation.HasMastery) return;
 
                 PlayerTransformation playerTransformation = PlayerTransformations[transformation];
 
@@ -350,7 +354,7 @@ namespace DBZMOD
         public void HandleDamageReceivedMastery(int damageReceived)
         {
             TransformationDefinition transformation = GetCurrentTransformation();
-            if (transformation == null) return;
+            if (transformation == null || !transformation.HasMastery) return;
 
             PlayerTransformations[transformation].Mastery = GetMasteryIncreaseFromDamageTaken(PlayerTransformations[transformation].Mastery);
             transformation.OnMasteryGained(this, PlayerTransformations[transformation].Mastery);
@@ -1767,13 +1771,14 @@ namespace DBZMOD
 
         public int auraFrameTimer = 0;
         public int auraCurrentFrame = 0;
+
         public void IncrementAuraFrameTimers(AuraAnimationInfo aura)
         {
             if (aura == null)
                 return;
             // doubled frame timer while charging.
             
-            if (isCharging && aura.id != (int)AuraID.Charge)
+            if (isCharging && aura != AuraAnimations.chargeAura)
                 auraFrameTimer++;
 
             auraFrameTimer++;

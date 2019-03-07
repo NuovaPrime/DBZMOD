@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class DivineTestItem : ModItem
+    public sealed class DivineTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -30,7 +30,9 @@ namespace DBZMOD.Items.Consumables.TestItems
 		
 		public override bool UseItem(Player player)
 		{
-		    player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Divine;
+		    if (!DBZMOD.allowDebugItem) return false;
+
+            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Divine;
             return true;
         }
     }

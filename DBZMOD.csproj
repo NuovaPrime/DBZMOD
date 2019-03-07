@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="BaseBeamItem.cs" />
     <Compile Include="Buffs\ArmorCooldown.cs" />
-    <Compile Include="Buffs\BuffKeyNames.cs" />
     <Compile Include="Buffs\ChlorophyteRegen.cs" />
     <Compile Include="Buffs\DemonBonus.cs" />
     <Compile Include="Buffs\DisgustingGoopBuff.cs" />
@@ -70,6 +69,7 @@
     <Compile Include="Items\Consumables\TestItems\DivineTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\LegendaryTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\LSSJTestItem.cs" />
+    <Compile Include="Items\Consumables\TestItems\MysticTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\OverloadTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\PrimalTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\ProdigyTestItem.cs" />
@@ -87,6 +87,7 @@
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
     <Compile Include="Traits\Primal\PrimalTraitBuff.cs" />
+    <Compile Include="Transformations\DeveloperForms\Webmilio\SoulStealerTransformation.cs" />
     <Compile Include="Transformations\Exhaustion\TransformationExhaustionTransformation.cs" />
     <Compile Include="Transformations\Kaiokens\Kaioken\KaiokenBuff.cs" />
     <Compile Include="Buffs\KatchinFeet.cs" />
@@ -96,27 +97,18 @@
     <Compile Include="Buffs\MREBuff.cs" />
     <Compile Include="Buffs\NimbusBuff.cs" />
     <Compile Include="Buffs\SenzuCooldown.cs" />
-    <Compile Include="Transformations\LSSJ\LSSJ1\LSSJ1Transformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJ1\ASSJ\ASSJBuff.cs" />
-    <Compile Include="Transformations\LSSJ\LSSJ1\LSSJ1Buff.cs" />
+    <Compile Include="Transformations\LSSJ\LSSJ1Transformation.cs" />
+    <Compile Include="Transformations\Mystic\MysticBuff.cs" />
+    <Compile Include="Transformations\Mystic\MysticTransformation.cs" />
     <Compile Include="Transformations\Kaiokens\Kaioken\KaiokenTransformation.cs" />
     <Compile Include="Transformations\Kaiokens\KaiokenFatigue\KaiokenFatigueTransformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJ1\ASSJ\ASSJTransformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJ1\SSJ1Buff.cs" />
-    <Compile Include="Transformations\SSJ\SSJ1\USSJ\USSJTransformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJ2\SSJ2Buff.cs" />
-    <Compile Include="Transformations\SSJ\SSJ3\SSJ3Buff.cs" />
-    <Compile Include="Transformations\SSJ\SSJ4s\SSJ4\SSJ4Buff.cs" />
+    <Compile Include="Transformations\SSJ\SSJ1\ASSJTransformation.cs" />
+    <Compile Include="Transformations\SSJ\SSJ1\USSJTransformation.cs" />
     <Compile Include="Transformations\SSJ\SSJ4s\SSJ4\SSJ4Transformation.cs" />
     <Compile Include="Transformations\SSJ\SSJBs\SSJBKiLeak.cs" />
-    <Compile Include="Transformations\SSJ\SSJBs\SSJB\SSJBBuff.cs" />
     <Compile Include="Transformations\SSJ\SSJBs\SSJB\SSJBTransformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJBs\SSJR\SSJRBuff.cs" />
     <Compile Include="Transformations\SSJ\SSJBs\SSJR\SSJRTransformation.cs" />
-    <Compile Include="Transformations\SSJ\SSJG\SSJGBuff.cs" />
     <Compile Include="Transformations\SSJ\SSJ3\SSJ3Transformation.cs" />
-    <Compile Include="Transformations\Kaiokens\SuperKaioken\SuperKaiokenBuff.cs" />
-    <Compile Include="Transformations\SSJ\SSJ1\USSJ\USSJBuff.cs" />
     <Compile Include="Buffs\TiredDebuff.cs" />
     <Compile Include="Transformations\SSJ\SSJ1\SSJ1Transformation.cs" />
     <Compile Include="Transformations\SSJ\SSJ2\SSJ2Transformation.cs" />
@@ -124,8 +116,6 @@
     <Compile Include="Transformations\SSJ\SSJG\SSJGTransformation.cs" />
     <Compile Include="Transformations\TransformationAppearanceDefinition.cs" />
     <Compile Include="Transformations\TransformationBuff.cs" />
-    <Compile Include="Transformations\Exhaustion\TransformationExhaustionBuff.cs" />
-    <Compile Include="Transformations\UltraInstincts\Omen\UIOmenBuff.cs" />
     <Compile Include="Buffs\ZenkaiBuff.cs" />
     <Compile Include="Buffs\ZenkaiCooldown.cs" />
     <Compile Include="Config\ConfigModel.cs" />
@@ -150,7 +140,6 @@
     <Compile Include="Effects\CircleShader.cs" />
     <Compile Include="Effects\GodSky.cs" />
     <Compile Include="Effects\WishSky.cs" />
-    <Compile Include="Enums\AuraID.cs" />
     <Compile Include="Enums\BeamHitLocation.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ControlStates.cs" />
@@ -373,7 +362,7 @@
     <Compile Include="Items\ZTableItem.cs" />
     <Compile Include="KiItem.cs" />
     <Compile Include="KiProjectile.cs" />
-    <Compile Include="LeveledSupport.cs" />
+    <Compile Include="ModSupport\LeveledSupport.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\NoddedManager.cs" />
     <Compile Include="Models\AuraAnimationInfo.cs" />
@@ -537,6 +526,7 @@
     <Compile Include="Utilities\ItemHelper.cs" />
     <Compile Include="Utilities\ProjectileHelper.cs" />
     <Compile Include="Utilities\SoundHelper.cs" />
+    <Compile Include="Utilities\SteamHelper.cs" />
     <Compile Include="Utilities\UnlocalizedNameComparer.cs" />
     <Compile Include="Waters\NamekWater.cs" />
     <Compile Include="Waters\NamekWaterfall.cs" />
@@ -592,9 +582,9 @@
     <Folder Include="Mounts\SpacePods\" />
     <Folder Include="Sounds\" />
     <Folder Include="Tails\" />
+    <Folder Include="Transformations\LSSJ\LSSJ1\" />
     <Folder Include="Transformations\LSSJ\LW\" />
     <Folder Include="Transformations\LSSJ\SSJC\" />
-    <Folder Include="Transformations\Mystic\" />
     <Folder Include="Transformations\SSJ\SSJ4s\FPSSJ4\" />
     <Folder Include="Transformations\SSJ\SSJBs\SSJBE\" />
     <Folder Include="Transformations\SSJ\SSJBs\SSJBKK\" />

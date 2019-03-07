@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public class ProdigyTestItem : ModItem
+    public sealed class ProdigyTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,9 +31,10 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Prodigy;
             return true;
-
         }
     }
 }

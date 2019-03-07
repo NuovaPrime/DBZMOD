@@ -7,7 +7,6 @@ namespace DBZMOD.Models
 {
     public class AuraAnimationInfo
     {
-        public int id;
         public string auraAnimationSpriteName;
         public int frames;
         public int frameTimerLimit;
@@ -29,9 +28,8 @@ namespace DBZMOD.Models
         {
         }
 
-        public AuraAnimationInfo(AuraID id, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
+        public AuraAnimationInfo(string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
-            this.id = (int)id;
             auraAnimationSpriteName = spriteName;
             this.frames = frames;
             frameTimerLimit = frameTimer;

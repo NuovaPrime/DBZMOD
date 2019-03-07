@@ -32,12 +32,13 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
+            if (!DBZMOD.allowDebugItem) return false;
+
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             modPlayer.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJRDefinition;
 
             modPlayer.TransformationDefinitionManager.SSJRDefinition.Unlock(player);
             return true;
-
         }
     }
 }

@@ -10,6 +10,7 @@ using DBZMOD.Effects;
 using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
+using DBZMOD.ModSupport;
 using DBZMOD.Network;
 using DBZMOD.Traits;
 using DBZMOD.Transformations;
@@ -45,6 +46,8 @@ namespace DBZMOD
 
         internal static CircleShader circle;
 
+        internal static bool allowDebugItem = true;
+
         private ResourceBar _resourceBar;
 
         public bool thoriumLoaded;
@@ -72,6 +75,7 @@ namespace DBZMOD
         {
             // loads the mod's configuration file.
             ConfigModel.Load();
+            SteamHelper.Initialize();
 
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);

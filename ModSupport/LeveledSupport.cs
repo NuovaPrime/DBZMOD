@@ -3,7 +3,7 @@ using Leveled.NPCs;
 using Leveled.Players;
 #pragma warning disable 612
 
-namespace DBZMOD
+namespace DBZMOD.ModSupport
 {
     internal class LeveledSupport
     {

@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
 using DBZMOD.Extensions;
+using DBZMOD.Transformations;
 using DBZMOD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -174,27 +175,31 @@ namespace DBZMOD.UI.HairMenu
                 SoundHelper.PlayVanillaSound(SoundID.MenuClose);
             }
         }
+
+        // TODO Change this to dynamicity.
         private void SelectBaseHair(int Choice, UIMouseEvent evt, UIElement listeningElement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            player.baseHairStyle = Choice;
+            player.ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY] = Choice;
             SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             baseChecked = true;
         }
+
         private void SelectSSJHair(int Choice, UIMouseEvent evt, UIElement listeningElement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            player.ssj1HairStyle = Choice;
+            player.ssjHairStyles[HairAppearance.SSJ1_HAIRSTYLE_KEY] = Choice;
             SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             ssjChecked = true;
         }
+
         private void SelectSSJ2Hair(int Choice, UIMouseEvent evt, UIElement listeningElement)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            player.ssj2HairStyle = Choice;
+            player.ssjHairStyles[HairAppearance.SSJ2_HAIRSTYLE_KEY] = Choice;
             SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             ssj2Checked = true;
         }
@@ -202,7 +207,7 @@ namespace DBZMOD.UI.HairMenu
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            player.ssj3HairStyle = Choice;
+            player.ssjHairStyles[HairAppearance.SSJ3_HAIRSTYLE_KEY] = Choice;
             SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             ssj3Checked = true;
         }
@@ -210,7 +215,7 @@ namespace DBZMOD.UI.HairMenu
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
-            player.ssj4HairStyle = Choice;
+            player.ssjHairStyles[HairAppearance.SSJ4_HAIRSTYLE_KEY] = Choice;
             SoundHelper.PlayVanillaSound(SoundID.MenuTick);
             ssj4Checked = true;
         }

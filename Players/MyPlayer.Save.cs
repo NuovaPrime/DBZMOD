@@ -27,6 +27,7 @@ namespace DBZMOD
 
             foreach (PlayerTransformation playerTransformation in PlayerTransformations.Values)
             {
+                playerTransformation.TransformationDefinition.OnPlayerSave(this, tag);
                 tag.Add(playerTransformation.TransformationDefinition.GetUnlockedTagCompoundKey(), true);
                 tag.Add(playerTransformation.TransformationDefinition.GetMasteryTagCompoundKey(), playerTransformation.Mastery);
             }
@@ -103,6 +104,7 @@ namespace DBZMOD
 
         public override void Load(TagCompound tag)
         {
+            ActiveTransformations = new List<TransformationDefinition>();
             PlayerTransformations = new Dictionary<TransformationDefinition, PlayerTransformation>();
 
             if (tag.ContainsKey(nameof(SaveVersion)))
@@ -118,6 +120,8 @@ namespace DBZMOD
                         // TODO Make sure this is OK (not losing any transformations)
                         if (tag.ContainsKey(transformationDefinition.GetUnlockedTagCompoundKey()) && !PlayerTransformations.ContainsKey(transformationDefinition))
                             PlayerTransformations.Add(transformationDefinition, new PlayerTransformation(transformationDefinition, tag.Get<float>(transformationDefinition.GetMasteryTagCompoundKey())));
+
+                        transformationDefinition.OnPlayerLoad(this, tag);
                     }
                 }
             }
