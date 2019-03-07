@@ -6,7 +6,7 @@ namespace DBZMOD.Transformations.Kaiokens.KaoikenFatigue
     {
         public KaiokenFatigueTransformation() : base(BuffKeyNames.kaiokenFatigue, null, TransformationDefinitionManager.defaultTransformationTextColor, 
             1f, 1f, 0, 1f, 1f, 0f, 0f,
-            new TransformationAppearanceDefinition(null, null, null, null, null, null),
+            new TransformationAppearanceDefinition(null, null, null, null, null, null, null),
             null)
         {
         }

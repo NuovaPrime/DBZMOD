@@ -1,4 +1,4 @@
-﻿using DBZMOD.Buffs;
+﻿using DBZMOD.Buffs; 
 using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
 
@@ -8,7 +8,7 @@ namespace DBZMOD.Transformations.Kaiokens.Kaioken
     {
         public KaiokenTransformation() : base(BuffKeyNames.kaioken, null, TransformationDefinitionManager.defaultTransformationTextColor, 
             1f, 1f, 0, 1f, 0f, 0f, 8,
-            new TransformationAppearanceDefinition(AuraAnimations.createKaiokenAura, new ReadOnlyColor(0.35f, 0, 0), null, null, null, null),
+            new TransformationAppearanceDefinition(AuraAnimations.createKaiokenAura, new ReadOnlyColor(0.35f, 0, 0), null, null, 0, 0, null),
             typeof(KaiokenBuff))
         {
         }

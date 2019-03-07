@@ -8,7 +8,7 @@ namespace DBZMOD.Transformations.SSJ.SSJ4s.SSJ4
     {
         public SSJ4Transformation(params TransformationDefinition[] parents) : base(BuffKeyNames.ssj4, "Super Saiyan 4", TransformationDefinitionManager.defaultTransformationTextColor,
             3.30f, 3.30f, 16, 2.30f, 250f / 60, 125f / 60, 0f,
-            new TransformationAppearanceDefinition(AuraAnimations.ssj4Aura, new ReadOnlyColor(0.4f, 0.4f, 0f), "Hairs/SSJ/SSJ4Hair", null, null, Color.Red),
+            new TransformationAppearanceDefinition(AuraAnimations.ssj4Aura, new ReadOnlyColor(0.4f, 0.4f, 0f), new HairAppearance("Hairs/SSJ4/SSJ4Hair", new ReadOnlyColor(0f, 0f, 0f), 0), HairStyleAppearance.SSJ4HairStyle, Color.Red),
             typeof(SSJ4Buff),
             buffIconGetter: () => GFX.ssj4ButtonImage, canBeMastered: true,
             unlockRequirements: p => p.IsPrimal(), parents: parents)

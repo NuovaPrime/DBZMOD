@@ -728,7 +728,7 @@ namespace DBZMOD
                         hair = mod.GetTexture("Hairs/Base/BaseHair" + GetBaseStyle());
                     }
                     if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairTexture != null)
-                        hair = mod.GetTexture(transformation.Appearance.hair.hairTexture);
+                        hair = mod.GetTexture(transformation.Appearance.hair.hairTexture + transformation.Appearance.hairStyle);
                     else
                         hair = null;
                 }

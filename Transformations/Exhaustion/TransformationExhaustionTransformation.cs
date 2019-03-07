@@ -6,7 +6,7 @@ namespace DBZMOD.Transformations.Exhaustion
     {
         public TransformationExhaustionTransformation() : base(BuffKeyNames.transformationExhaustion, null, TransformationDefinitionManager.defaultTransformationTextColor,
             1f, 1f, 0, 1f, 0f, 0f, 0f,
-            new TransformationAppearanceDefinition(null, null, null, null, null, null),
+            new TransformationAppearanceDefinition(null, null, null, null, null, 0, null),
             typeof(TransformationExhaustionBuff),
             exhaustsPlayer: false)
         {

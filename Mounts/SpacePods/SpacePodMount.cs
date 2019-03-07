@@ -52,11 +52,11 @@ namespace DBZMOD.Mounts.SpacePods
             mountData.swimFrameCount = mountData.inAirFrameCount;
             mountData.swimFrameDelay = mountData.inAirFrameDelay;
             mountData.swimFrameStart = mountData.inAirFrameStart;
-            if (Main.netMode != 2)
+            /*if (Main.netMode != 2)
             {
                 mountData.textureWidth = mountData.frontTexture.Width;
                 mountData.textureHeight = mountData.frontTexture.Height;
-            }
+            }*/
         }
     }
 }

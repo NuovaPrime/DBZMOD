@@ -9,7 +9,7 @@ namespace DBZMOD.Transformations.SSJ.SSJ3
     {
         public SSJ3Transformation(params TransformationDefinition[] parents) : base(BuffKeyNames.ssj3, "Super Saiyan 3", TransformationDefinitionManager.defaultTransformationTextColor,
             2.9f, 2.9f, 12, 1.95f, 2.65f, 1.325f, 0f,
-            new TransformationAppearanceDefinition(AuraAnimations.ssj3Aura, new ReadOnlyColor(SSJ1Transformation.LIGHTING_RED, SSJ1Transformation.LIGHTING_GREEN, SSJ1Transformation.LIGHTING_BLUE), "Hairs/SSJ/SSJ3Hair", null, null, Color.Turquoise),
+            new TransformationAppearanceDefinition(AuraAnimations.ssj3Aura, new ReadOnlyColor(SSJ1Transformation.LIGHTING_RED, SSJ1Transformation.LIGHTING_GREEN, SSJ1Transformation.LIGHTING_BLUE), new HairAppearance("Hairs/SSJ3/SSJ3Hair", new ReadOnlyColor(0f, 0f, 0f), 0), HairStyleAppearance.SSJ3HairStyle, Color.Turquoise),
             typeof(SSJ3Buff),
             buffIconGetter: () => GFX.ssj3ButtonImage, failureText: "", extraTooltipText: "(Life drains when below 30% Max Ki)", canBeMastered: true,
             unlockRequirements: p => !p.IsLegendary(), parents: parents

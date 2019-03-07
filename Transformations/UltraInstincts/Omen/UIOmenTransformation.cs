@@ -9,7 +9,7 @@ namespace DBZMOD.Transformations.UltraInstincts.Omen
         // TODO Add methods for OnTransformationExit
         public UIOmenTransformation(params TransformationDefinition[] parents) : base(BuffKeyNames.uiOmen, "Ultra Instinct Omen", TransformationDefinitionManager.uiOmenTransformationTextColor,
             10.0f, 10.0f, 0, 5f, 1000f / 60, 1000f / 60, 0f,
-            new TransformationAppearanceDefinition(AuraAnimations.uiOmenAura, new ReadOnlyColor(0.3f, 0.3f, 0.3f), null, new ReadOnlyColor(225, 255, 255), 1, Color.Silver),
+            new TransformationAppearanceDefinition(AuraAnimations.uiOmenAura, new ReadOnlyColor(0.3f, 0.3f, 0.3f), null, new ReadOnlyColor(225, 255, 255), 1 , HairStyleAppearance.ASSJHairStyle, Color.Silver),
             typeof(UIOmenBuff), duration: 25 * 60,
             buffIconGetter: () => GFX.uiOmenButtonImage, canBeMastered: true,
             requiresAllParents: false, parents: parents)
