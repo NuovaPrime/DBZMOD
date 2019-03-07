@@ -85,6 +85,9 @@
     <Compile Include="Items\Consumables\TestItems\SSJTestItem.cs" />
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
+    <Compile Include="Mounts\SpacePods\SpacePodMount.cs" />
+    <Compile Include="NPCs\MasterRoshi.cs" />
+    <Compile Include="NPCs\RoshiQuests.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
     <Compile Include="Traits\Primal\PrimalTraitBuff.cs" />
     <Compile Include="Transformations\DeveloperForms\Webmilio\SoulStealerTransformation.cs" />
@@ -579,7 +582,6 @@
     <Folder Include="Items\Consumables\Capsules\" />
     <Folder Include="Items\Support\Accessories\" />
     <Folder Include="Items\Support\Armor\" />
-    <Folder Include="Mounts\SpacePods\" />
     <Folder Include="Sounds\" />
     <Folder Include="Tails\" />
     <Folder Include="Transformations\LSSJ\LSSJ1\" />
