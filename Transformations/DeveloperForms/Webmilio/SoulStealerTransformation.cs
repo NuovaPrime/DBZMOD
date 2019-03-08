@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
@@ -26,10 +27,16 @@ namespace DBZMOD.Transformations.DeveloperForms.Webmilio
 
         public override void OnPlayerLoad(MyPlayer player, TagCompound tag)
         {
-            if (CheckPrePlayerConditions() && !player.HasTransformation(this))
+            if (!CheckPrePlayerConditions())
+            {
+                if (player.HasTransformation(this))
+                    player.PlayerTransformations.Remove(this);
+
+                return;
+            }
+
+            if (!player.HasTransformation(this))
                 player.PlayerTransformations.Add(this, new PlayerTransformation(this));
-            if (!CheckPrePlayerConditions() && player.HasTransformation(this))
-                player.PlayerTransformations.Remove(this);
 
             PlayerTransformation playerTransformation = player.PlayerTransformations[this];
 
@@ -85,6 +92,11 @@ namespace DBZMOD.Transformations.DeveloperForms.Webmilio
             return base.ModifiedSpeedMultiplier + GetSoulPower(player) / 7700;
         }
 
+        public override int GetDefenseBonus(MyPlayer player)
+        {
+            return (int)Math.Round(GetSoulPower(player) / 250f);
+        }
+
         public float GetSoulPower(MyPlayer player) => (float)player.PlayerTransformations[this].ExtraInformation[SOULPOWER_TAG];
 
         public void SetSoulPower(MyPlayer player, float multiplier) => player.PlayerTransformations[this].ExtraInformation[SOULPOWER_TAG] = multiplier;
@@ -97,6 +109,8 @@ namespace DBZMOD.Transformations.DeveloperForms.Webmilio
                 gain = 110;
             else if (gain < 1)
                 gain = 1;
+            else if (npc.boss)
+                gain *= 2;
 
             SetSoulPower(player, GetSoulPower(player) + gain);
         }
