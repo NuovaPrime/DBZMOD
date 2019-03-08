@@ -427,8 +427,8 @@ namespace DBZMOD
                 }
             }
 
-            if (activeBosses.Count > 0 && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny && 
-                (IsTransformedInto(TransformationDefinitionManager.SSJ1Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ2Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ3Definition) && 
+            if (activeBosses.Count > 0 && SSJ1Achived && !SSJ2Achieved && player.whoAmI == Main.myPlayer && !IsLegendary() && NPC.downedMechBossAny &&
+                (IsTransformedInto(TransformationDefinitionManager.SSJ1Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ2Definition) || IsTransformedInto(TransformationDefinitionManager.SSJ3Definition) &&
                                                                                             PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery >= 1))
             {
                 Main.NewText("The rage of failing once more dwells deep within you.", Color.Red);
@@ -445,7 +445,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (activeBosses.Count > 0 && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedMechBossAny && player.HasBuff(TransformationDefinitionManager.SSJ1Definition.GetBuffId()) && 
+            if (activeBosses.Count > 0 && SSJ1Achived && !LSSJAchieved && player.whoAmI == Main.myPlayer && IsLegendary() && NPC.downedMechBossAny && player.HasBuff(TransformationDefinitionManager.SSJ1Definition.GetBuffId()) &&
                 PlayerTransformations[TransformationDefinitionManager.SSJ1Definition].Mastery >= 1)
             {
                 Main.NewText("Your rage is overflowing, you feel something rise up from deep inside.", Color.Green);
@@ -462,7 +462,7 @@ namespace DBZMOD
                 return false;
             }
 
-            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(TransformationDefinitionManager.SSJ2Definition.GetBuffId()) && 
+            if (isGolemAlive && SSJ1Achived && SSJ2Achieved && !SSJ3Achieved && !IsLegendary() && player.whoAmI == Main.myPlayer && player.HasBuff(TransformationDefinitionManager.SSJ2Definition.GetBuffId()) &&
                 PlayerTransformations[TransformationDefinitionManager.SSJ2Definition].Mastery >= 1)
             {
                 Main.NewText("The ancient power of the Lihzahrds seeps into you, causing your power to become unstable.", Color.Orange);
@@ -555,41 +555,8 @@ namespace DBZMOD
             items.Add(item8);
         }
 
-        public override void ModifyDrawHeadLayers(List<PlayerHeadLayer> layers)
-        {
-            int hair = layers.FindIndex(l => l == PlayerHeadLayer.Hair);
-            if (hair < 0)
-                return;
-
-
-            if (this.hair != null)
-            {
-                layers[hair] = new PlayerHeadLayer(mod.Name, "TransHair",
-                    delegate (PlayerHeadDrawInfo draw)
-                    {
-                        Player player = draw.drawPlayer;
-
-                        if (ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY] == 0)
-                            return;
-
-                        Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.drawOrigin.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.drawOrigin.Y + draw.drawPlayer.height * 0.25) / 16.0), hairColor), draw.drawPlayer.shadow);
-                        DrawData data = new DrawData(this.hair, new Vector2((float)((int)(draw.drawOrigin.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.drawOrigin.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 3.5f))) + player.headPosition + draw.drawOrigin, player.bodyFrame, alpha, player.headRotation, draw.drawOrigin, 1f, draw.spriteEffects, 0);
-                        data.shader = draw.hairShader;
-                        Main.playerDrawData.Add(data);
-                    });
-            }
-
-            if (this.hair != null)
-            {
-                PlayerLayer.Head.visible = false;
-                PlayerLayer.Hair.visible = false;
-                PlayerLayer.HairBack.visible = false;
-                PlayerHeadLayer.Hair.visible = false;
-                PlayerHeadLayer.Head.visible = false;
-            }
-        }
-
         private Color hairColor;
+
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             //handle lightning effects
@@ -617,6 +584,35 @@ namespace DBZMOD
             // capture the back layer index, which should always exist before the hook fires.
             var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
             layers.Insert(index, AnimationHelper.auraEffect);
+
+            int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
+            if (hair < 0)
+                return;
+
+            TransformationDefinition transformation = GetCurrentTransformation();
+            bool showDefaultHair = transformation == null || transformation.Appearance.hair == null || string.IsNullOrWhiteSpace(transformation.Appearance.hair.hairTexture);
+
+            if (!showDefaultHair)
+            {
+                layers[hair] = new PlayerLayer(mod.Name, "TransHair",
+                    delegate (PlayerDrawInfo draw)
+                    {
+                        Player player = draw.drawPlayer;
+
+                        if (ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY] == 0)
+                            return;
+
+                        Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.headOrigin.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.headOrigin.Y + draw.drawPlayer.height * 0.25) / 16.0), hairColor), draw.drawPlayer.shadow);
+                        DrawData data = new DrawData(this.hair, new Vector2((float)((int)(draw.headOrigin.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.headOrigin.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 3.5f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
+                        data.shader = draw.hairShader;
+                        Main.playerDrawData.Add(data);
+                    });
+            }
+
+            
+            PlayerLayer.Hair.visible = showDefaultHair;
+            PlayerLayer.HairBack.visible = showDefaultHair;
+            PlayerHeadLayer.Hair.visible = showDefaultHair;
         }
 
         public override void OnHitAnything(float x, float y, Entity victim)
@@ -633,9 +629,6 @@ namespace DBZMOD
 
                 _mProgressionSystem.AddKiExperience(expierenceToAdd * experienceMult);
             }
-
-            for (int i = 0; i < ActiveTransformations.Count; i++)
-                ActiveTransformations[i].OnPlayerHitAnything(this, x, y, victim);
 
             base.OnHitAnything(x, y, victim);
         }
@@ -716,7 +709,7 @@ namespace DBZMOD
             {
                 hair = mod.GetTexture("Hairs/Base/BaseHair" + ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY]);
             }
-            if(transformation == null || player.dead)
+            if (transformation == null || player.dead)
             {
                 hairColor = player.hairColor;
             }
@@ -936,6 +929,12 @@ namespace DBZMOD
                     soundTimer = 0;
                 }
             }
+        }
+
+        public void OnKilledNPC(NPC npc)
+        {
+            for (int i = 0; i < ActiveTransformations.Count; i++)
+                ActiveTransformations[i].OnPlayerKillAnything(this, npc);
         }
     }
 }

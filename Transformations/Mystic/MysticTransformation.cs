@@ -16,6 +16,13 @@ namespace DBZMOD.Transformations.Mystic
             exhaustsPlayer: false, buffIconGetter: () => GFX.mysticButtonImage, hasMenuIcon: true, canBeMastered: true, parents: parents)
         {
         }
+
+        // TODO Remove this and make it unlock correctly.
+        public override void OnPlayerUnlockTransformation(MyPlayer player, TransformationDefinition transformation)
+        {
+            if (transformation == player.TransformationDefinitionManager.SSJ3Definition)
+                TryUnlock(player);
+        }
     }
 
     public sealed class MysticBuff : TransformationBuff

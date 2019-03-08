@@ -57,7 +57,7 @@ namespace DBZMOD.NPCs
 		{
             NPCSpawnInfo spawnInfo = new NPCSpawnInfo();
 
-            if (spawnInfo.player.ZoneBeach)
+            if (spawnInfo.player != null && spawnInfo.player.ZoneBeach)
             {
                 return true;
             }

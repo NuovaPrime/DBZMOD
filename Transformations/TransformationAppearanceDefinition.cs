@@ -55,7 +55,6 @@ namespace DBZMOD.Transformations
             SSJ3_HAIRSTYLE_KEY = "ssj3HairStyle",
             SSJ4_HAIRSTYLE_KEY = "ssj4HairStyle";
 
-
         public readonly string hairTexture;
         public readonly ReadOnlyColor hairColor;
         public readonly int? hairShader;

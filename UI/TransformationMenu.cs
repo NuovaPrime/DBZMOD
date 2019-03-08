@@ -77,7 +77,7 @@ namespace DBZMOD.UI
 
         private void RecursiveDrawTransformation(Dictionary<TransformationDefinition, ManyToManyNode<TransformationDefinition>> tree, ManyToManyNode<TransformationDefinition> mtmn, ref int xOffset, ref int yOffset)
         {
-            if (!mtmn.Current.HasMenuIcon) return;
+            if (!mtmn.Current.HasMenuIcon || !mtmn.Current.CheckPrePlayerConditions()) return;
             Texture2D buffIcon = mtmn.Current.BuffIconGetter.Invoke();
 
             if (buffIcon == null) return;

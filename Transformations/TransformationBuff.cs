@@ -192,14 +192,15 @@ namespace DBZMOD.Transformations
 
         #endregion
 
-        public string GetPercentForDisplay(string currentDisplayString, string text, int percent)
+        public string GetPercentForDisplay(string currentDisplayString, string text, float percent)
         {
-            if (percent == 0)
+            if (percent == 0f)
                 return currentDisplayString;
-            return string.Format("{0}{1} {2}{3}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
+
+            return string.Format("{0}{1} {2}{3:F}%", currentDisplayString, text, percent > 0 ? "+" : string.Empty, percent);
         }
 
-        public string AssembleTransBuffDescription(MyPlayer player)
+        public virtual string AssembleTransBuffDescription(MyPlayer player)
         {
             string kaiokenName = string.Empty;
 
@@ -223,8 +224,8 @@ namespace DBZMOD.Transformations
                 }
             }
             
-            int percentDamageMult = (int)Math.Round(TransformationDefinition.GetDamageMultiplier(player) * 100f, 0) - 100;
-            int percentSpeedMult = (int)Math.Round(TransformationDefinition.GetSpeedMultiplier(player) * 100f, 0) - 100;
+            float percentDamageMult =TransformationDefinition.GetDamageMultiplier(player) * 100f - 100;
+            float percentSpeedMult = TransformationDefinition.GetSpeedMultiplier(player) * 100f - 100;
 
             float kiDrainPerSecond = 60f * TransformationDefinition.GetKiDrainRate(player);
             float kiDrainPerSecondWithMastery = 60f * TransformationDefinition.GetKiDrainRateMastery(player);

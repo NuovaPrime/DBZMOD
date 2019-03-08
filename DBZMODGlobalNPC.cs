@@ -729,6 +729,14 @@ namespace DBZMOD
             }
         }
 
+        public override bool SpecialNPCLoot(NPC npc)
+        {
+            if (npc.lastInteraction == Main.LocalPlayer.whoAmI)
+                Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
+
+            return base.SpecialNPCLoot(npc);
+        }
+
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
             if (type == NPCID.Merchant)

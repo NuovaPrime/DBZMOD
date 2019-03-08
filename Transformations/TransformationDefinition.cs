@@ -104,6 +104,10 @@ namespace DBZMOD.Transformations
             if (player.PlayerTransformations.ContainsKey(this)) return false;
 
             player.PlayerTransformations.Add(this, new PlayerTransformation(this, 0f));
+            
+            for (int i = 0; i < player.TransformationDefinitionManager.Count; i++)
+                player.TransformationDefinitionManager[i].OnPlayerUnlockTransformation(player, this);
+
             return true;
         }
 
@@ -206,6 +210,8 @@ namespace DBZMOD.Transformations
 
         public virtual void OnPlayerTransformed(MyPlayer player) { }
 
+        public virtual void OnPlayerUnlockTransformation(MyPlayer player, TransformationDefinition transformation) { }
+
         /// <summary>Called whenever the player loses the buff associated to the transformation.</summary>
         /// <param name="player"></param>
         /// <param name="buffIndex"></param>
@@ -236,11 +242,16 @@ namespace DBZMOD.Transformations
 
         public virtual void OnPlayerSave(MyPlayer player, TagCompound tag) { }
 
-        public virtual void OnPlayerHitAnything(MyPlayer player, float x, float y, Entity victim) { }
+        public virtual void OnPlayerKillAnything(MyPlayer player, NPC npc) { }
 
         #endregion
 
         public virtual bool DoesShowInMenu(MyPlayer player) => true;
+
+        /// <summary>Called in special cases when the mod needs to know wether or not, regardless of the player, this transformation should work.</summary>
+        /// <returns></returns>
+        public virtual bool CheckPrePlayerConditions() => true;
+
 
         public override string ToString() => UnlocalizedName;
 
