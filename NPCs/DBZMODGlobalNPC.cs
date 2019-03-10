@@ -1,6 +1,7 @@
 ﻿using System;
 using DBZMOD.Extensions;
 using DBZMOD.Items.Materials;
+using DBZMOD.Network;
 using DBZMOD.Utilities;
 using Leveled;
 using Microsoft.Xna.Framework;
@@ -9,7 +10,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace DBZMOD
+namespace DBZMOD.NPCs
 {
     public class DBZMODGlobalNPC : GlobalNPC
     {
@@ -294,6 +295,8 @@ namespace DBZMOD
                 if (!Main.dedServ)
                     return;
 
+                NetworkHelper.playerSync.SendPlayerKillNPC(npc.lastInteraction, npc);
+
                 for (int i = 0; i < Main.player.Length; i++)
                 {
                     // i wish I could tell you why this is a thing.
@@ -308,8 +311,6 @@ namespace DBZMOD
 
                     if (modPlayer == null)
                         return;
-
-                    Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
 
                     if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                     {

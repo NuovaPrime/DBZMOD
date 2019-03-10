@@ -101,6 +101,8 @@ namespace DBZMOD.Transformations
         /// <returns>true if the transformation was unlocked; otherwise false.</returns>
         public bool Unlock(MyPlayer player)
         {
+            if (Main.LocalPlayer.whoAmI != player.player.whoAmI) return false;
+
             if (player.PlayerTransformations.ContainsKey(this)) return false;
 
             player.PlayerTransformations.Add(this, new PlayerTransformation(this, 0f));
@@ -121,6 +123,8 @@ namespace DBZMOD.Transformations
         /// <returns>true if the transformation was unlocked; otherwise false.</returns>
         public bool TryUnlock(MyPlayer player)
         {
+            if (Main.LocalPlayer.whoAmI != player.player.whoAmI) return false;
+
             for (int i = 0; i < Parents.Length; i++)
                 if (!player.PlayerTransformations.ContainsKey(Parents[i]))
                     return false;

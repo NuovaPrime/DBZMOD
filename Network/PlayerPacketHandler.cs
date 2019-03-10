@@ -21,6 +21,7 @@ namespace DBZMOD.Network
         public const byte SYNC_KI_BEACON_REMOVE = 52;
         public const byte SEND_DRAGON_BALL_DESTROYED = 53;
         public const byte SYNC_DRAGON_BALL_CHANGE = 54;
+        public const byte SYNC_PLAYER_KILL_NPC = 55;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -60,6 +61,9 @@ namespace DBZMOD.Network
                     break;
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
+                    break;
+                case (SYNC_PLAYER_KILL_NPC):
+                    ReceivePlayerKillNPC(reader, fromWho);
                     break;
             }
         }
@@ -156,6 +160,13 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
+        public void SendPlayerKillNPC(int toWho, NPC npc)
+        {
+            ModPacket packet = GetPacket(SYNC_PLAYER_KILL_NPC, 256);
+            packet.Write(npc.netID);
+            packet.Send(toWho);
+        }
+
         public void ReceiveDragonBallChange(BinaryReader reader, int fromWho)
         {
             DBZWorld world = DBZWorld.GetWorld();
@@ -218,6 +229,19 @@ namespace DBZMOD.Network
             ModPacket packet = GetPacket(REQUEST_FOR_SYNC_FROM_JOINED_PLAYER, fromWho);
             packet.Write(playerWhoseDataIneed);
             packet.Send(toWho, fromWho);
+        }
+
+        public void ReceivePlayerKillNPC(BinaryReader reader, int toWho)
+        {
+            byte npcId = reader.ReadByte();
+            NPC npc = null;
+
+            for (int i = 0; i < Main.npc.Length; i++)
+                if (Main.npc[i].netID == npcId)
+                    npc = Main.npc[i];
+
+            if (npc != null)
+                Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
         }
 
         //public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
