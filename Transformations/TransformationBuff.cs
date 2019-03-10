@@ -20,6 +20,8 @@ namespace DBZMOD.Transformations
 
         public override void Update(Player player, ref int buffIndex)
         {
+            if (player.whoAmI != Main.LocalPlayer.whoAmI) return;
+
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
             modPlayer.player.lifeRegen -= (int) TransformationDefinition.GetHealthDrainRate(modPlayer);

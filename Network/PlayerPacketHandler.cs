@@ -238,8 +238,8 @@ namespace DBZMOD.Network
         // should always be to server, from joining player
         public void SendPlayerInfoToPlayerFromOtherPlayer(int toWho, int fromWho)
         {
-            Player player = Main.player[fromWho];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer modPlayer = Main.player[fromWho].GetModPlayer<MyPlayer>();
+
             SendChangedKiMax2(toWho, fromWho, fromWho, modPlayer.kiMax2);
             SendChangedKiMax3(toWho, fromWho, fromWho, modPlayer.kiMax3);
             SendChangedKiMaxMult(toWho, fromWho, fromWho, modPlayer.kiMaxMult);

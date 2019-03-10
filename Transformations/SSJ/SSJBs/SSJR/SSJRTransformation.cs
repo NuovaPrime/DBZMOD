@@ -8,8 +8,8 @@ namespace DBZMOD.Transformations.SSJ.SSJBs.SSJR
     {
         public SSJRTransformation(params TransformationDefinition[] parents) : base("Super Saiyan Rosé", TransformationDefinitionManager.roseTransformationTextColor,
             4.75f, 4.75f, 22, 2.75f, 310f / 60, 155f / 60, 0f, 
-            new TransformationAppearanceDefinition(AuraAnimations.ssjrAura, new ReadOnlyColor(0.5f, 0.1f, 0.4f), 
-                new HairAppearance("Hairs/SSJR/SSJRHair", null, null, HairAppearance.BASE_HAIRSTYLE_KEY), Color.LightPink),
+            new TransformationAppearanceDefinition(AuraAnimations.ssjrAura, ReadOnlyColor.DefaultAuraLighting(Color.LightPink),
+                new HairAppearance("Hairs/SSJR/SSJRHair", null, null, HairAppearance.SSJ1_HAIRSTYLE_KEY), Color.LightPink),
             typeof(SSJRBuff),
             buffIconGetter: () => GFX.ssjrButtonImage, hasMenuIcon: true,
             canBeMastered: true,

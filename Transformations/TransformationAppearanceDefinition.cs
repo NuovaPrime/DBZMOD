@@ -40,6 +40,10 @@ namespace DBZMOD.Transformations
             this.blue = blue;
         }
 
+        public static ReadOnlyColor DefaultAuraLighting(Color color) => new ReadOnlyColor(color.R / 100f, color.G / 100f, color.B / 100f);
+
+        public static ReadOnlyColor DefaultHairColor(Color color) => new ReadOnlyColor(color.R / 255f, color.G / 255f, color.B / 255f);
+
         public static implicit operator Color(ReadOnlyColor color)
         {
             return new Color((int) color.red, (int)color.green, (int)color.blue);

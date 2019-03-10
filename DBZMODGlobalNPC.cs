@@ -233,12 +233,16 @@ namespace DBZMOD
             bool isDisplayingHellMessage = false;
             bool isDisplayingEvilMessage = false;
             bool isDisplayingMushroomMessage = false;
+
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
 
                 if (modPlayer == null)
                     return;
+
+                if (npc.lastInteraction == Main.LocalPlayer.whoAmI)
+                    Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
 
                 if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                 {
@@ -289,6 +293,7 @@ namespace DBZMOD
             {
                 if (!Main.dedServ)
                     return;
+
                 for (int i = 0; i < Main.player.Length; i++)
                 {
                     // i wish I could tell you why this is a thing.
@@ -303,6 +308,8 @@ namespace DBZMOD
 
                     if (modPlayer == null)
                         return;
+
+                    Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
 
                     if (npc.type == NPCID.EaterofWorldsHead && npc.boss)
                     {
@@ -727,14 +734,6 @@ namespace DBZMOD
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("MetamoranSash"));
                 }
             }
-        }
-
-        public override bool SpecialNPCLoot(NPC npc)
-        {
-            if (npc.lastInteraction == Main.LocalPlayer.whoAmI)
-                Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
-
-            return base.SpecialNPCLoot(npc);
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)

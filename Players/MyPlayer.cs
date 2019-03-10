@@ -353,6 +353,8 @@ namespace DBZMOD
         // currently doesn't use the damage received param. Included just in case.
         public void HandleDamageReceivedMastery(int damageReceived)
         {
+            if (player.whoAmI != Main.LocalPlayer.whoAmI) return;
+
             TransformationDefinition transformation = GetCurrentTransformation();
             if (transformation == null || !transformation.HasMastery) return;
 
@@ -632,7 +634,7 @@ namespace DBZMOD
 
             }
 
-            if(!hairChecked)
+            if(!hairChecked && player.whoAmI == Main.LocalPlayer.whoAmI)
             {
                 HairMenu.menuVisible = true;
             }
@@ -1767,7 +1769,7 @@ namespace DBZMOD
             SoundHelper.PlayCustomSound("Sounds/Awakening", player);
         }
 
-        public bool HasTransformation(TransformationDefinition transformationDefinition) => PlayerTransformations.ContainsKey(transformationDefinition);
+        public bool HasTransformation(TransformationDefinition transformationDefinition) => player.whoAmI != Main.LocalPlayer.whoAmI ? false : PlayerTransformations.ContainsKey(transformationDefinition);
 
         public int auraFrameTimer = 0;
         public int auraCurrentFrame = 0;

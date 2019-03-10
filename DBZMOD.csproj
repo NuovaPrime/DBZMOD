@@ -86,6 +86,7 @@
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Mounts\SpacePods\SpacePodMount.cs" />
+    <Compile Include="NPCs\DBZMODNPC.cs" />
     <Compile Include="NPCs\MasterRoshi.cs" />
     <Compile Include="NPCs\RoshiQuests.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />

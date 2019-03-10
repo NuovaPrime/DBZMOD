@@ -48,7 +48,7 @@ namespace DBZMOD.Effects.Animations.Aura
 
             ssjgAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJGAura"), 8, 3, BlendState.AlphaBlend, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
             ssjbAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJBAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSB", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
-            ssjrAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJRAura"), 4, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJR", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
+            ssjrAura = new AuraAnimationInfo(GetAnimationSpriteName("SSJRAura"), 8, 3, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSJR", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
 
             uiOmenAura = new AuraAnimationInfo(GetAnimationSpriteName("UIOmenAura"), 15, 4, BlendState.Additive, "Sounds/SSJAscension", "Sounds/SSG", 340, true, false, new AuraAnimationInfo.DustDelegate(DoChargeDust), 0, null, 1),
 

@@ -585,34 +585,43 @@ namespace DBZMOD
             var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
             layers.Insert(index, AnimationHelper.auraEffect);
 
+            // handle SSJ hair/etc.
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
             if (hair < 0)
                 return;
 
-            TransformationDefinition transformation = GetCurrentTransformation();
-            bool showDefaultHair = transformation == null || transformation.Appearance.hair == null || string.IsNullOrWhiteSpace(transformation.Appearance.hair.hairTexture);
-
-            if (!showDefaultHair)
+            if (this.hair != null)
             {
                 layers[hair] = new PlayerLayer(mod.Name, "TransHair",
                     delegate (PlayerDrawInfo draw)
                     {
+                        // TODO Change this to use HairAppearance class.
                         Player player = draw.drawPlayer;
 
-                        if (ssjHairStyles[HairAppearance.BASE_HAIRSTYLE_KEY] == 0)
-                            return;
+                        Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.position.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.position.Y + draw.drawPlayer.height * 0.25) / 16.0), hairColor), draw.shadow);
+                        DrawData data = new DrawData(
+                            this.hair, 
+                            new Vector2((int)(draw.position.X - Main.screenPosition.X - player.bodyFrame.Width / 2 + player.width / 2), (int)(draw.position.Y - Main.screenPosition.Y + player.height - player.bodyFrame.Height + 4f)) + player.headPosition + draw.headOrigin, 
+                            player.bodyFrame, 
+                            alpha, 
+                            player.headRotation, 
+                            draw.headOrigin, 
+                            1f, 
+                            draw.spriteEffects, 0);
 
-                        Color alpha = draw.drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(draw.headOrigin.X + draw.drawPlayer.width * 0.5) / 16, (int)((draw.headOrigin.Y + draw.drawPlayer.height * 0.25) / 16.0), hairColor), draw.drawPlayer.shadow);
-                        DrawData data = new DrawData(this.hair, new Vector2((float)((int)(draw.headOrigin.X - Main.screenPosition.X - (float)(player.bodyFrame.Width / 2) + (float)(player.width / 2))), (float)((int)(draw.headOrigin.Y - Main.screenPosition.Y + (float)player.height - (float)player.bodyFrame.Height + 3.5f))) + player.headPosition + draw.headOrigin, player.bodyFrame, alpha, player.headRotation, draw.headOrigin, 1f, draw.spriteEffects, 0);
                         data.shader = draw.hairShader;
                         Main.playerDrawData.Add(data);
                     });
             }
 
-            
-            PlayerLayer.Hair.visible = showDefaultHair;
-            PlayerLayer.HairBack.visible = showDefaultHair;
-            PlayerHeadLayer.Hair.visible = showDefaultHair;
+            if (this.hair != null)
+            {
+                PlayerLayer.Head.visible = false;
+                PlayerLayer.Hair.visible = false;
+                PlayerLayer.HairBack.visible = false;
+                PlayerHeadLayer.Hair.visible = false;
+                PlayerHeadLayer.Head.visible = false;
+            }
         }
 
         public override void OnHitAnything(float x, float y, Entity victim)
@@ -643,6 +652,8 @@ namespace DBZMOD
 
         public override void UpdateBadLifeRegen()
         {
+            if (player.whoAmI != Main.LocalPlayer.whoAmI) return;
+
             TransformationDefinition transformation = GetCurrentTransformation();
             if (transformation == null) return;
 
@@ -695,7 +706,14 @@ namespace DBZMOD
                     else
                     {
                         if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairTexture != null && transformation.Appearance.hair.hairName != null)
-                            hair = mod.GetTexture(transformation.Appearance.hair.hairTexture + ssjHairStyles[transformation.Appearance.hair.hairName]);
+                        {
+                            int hairStyleId = 1;
+
+                            if (ssjHairStyles.ContainsKey(transformation.Appearance.hair.hairName))
+                                hairStyleId = ssjHairStyles[transformation.Appearance.hair.hairName];
+
+                            hair = mod.GetTexture(transformation.Appearance.hair.hairTexture + hairStyleId);
+                        }
                         else
                             hair = null;
                     }
@@ -933,6 +951,8 @@ namespace DBZMOD
 
         public void OnKilledNPC(NPC npc)
         {
+
+
             for (int i = 0; i < ActiveTransformations.Count; i++)
                 ActiveTransformations[i].OnPlayerKillAnything(this, npc);
         }
