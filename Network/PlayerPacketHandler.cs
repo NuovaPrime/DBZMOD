@@ -613,8 +613,10 @@ namespace DBZMOD.Network
         public void ReceiveSyncTriggers(BinaryReader reader, int fromWho)
         {
             PlayerVarSyncEnum syncEnum = (PlayerVarSyncEnum)reader.ReadInt32();
+
             int playerNum = reader.ReadInt32();
             MyPlayer player = Main.player[playerNum].GetModPlayer<MyPlayer>();
+
             bool isHeld = reader.ReadBoolean();
             // if this is a server, start to assemble the relay packet.
             ModPacket packet = null;
