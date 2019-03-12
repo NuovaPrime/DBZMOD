@@ -1,5 +1,6 @@
 ﻿using DBZMOD.Effects.Animations.Aura;
 using DBZMOD.Extensions;
+using DBZMOD.Transformations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -189,6 +190,64 @@ namespace DBZMOD.Utilities
             {
                 Main.playerDrawData.Add(LightningEffectDrawData(drawInfo, "Dusts/LightningRed"));
             }
+        });
+
+        public static DrawData TailEffectDrawData(PlayerDrawInfo drawInfo, string tailTexture)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = DBZMOD.Instance;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
+            TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
+            int frame = modPlayer.tailFrameTimer / 14;
+            Color tailColor = Color.White;
+            if (transformation != null)
+            {
+                if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairColor != null)
+                {
+                    tailColor = Color.White;
+                }
+            }
+            else if (!modPlayer.isTransformed)
+            {
+                tailColor = drawPlayer.hairColor;
+            }
+            Texture2D texture = mod.GetTexture(tailTexture);
+            int frameSize = texture.Height / 14;
+            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 1.2f - Main.screenPosition.X);
+            int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), tailColor, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+        }
+
+        public static readonly PlayerLayer tailEffects = new PlayerLayer("DBZMOD", "tailEffects", PlayerLayer.BackAcc, delegate (PlayerDrawInfo drawInfo)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+            Mod mod = DBZMOD.Instance;
+            if (drawInfo.shadow != 0f)
+            {
+                return;
+            }
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()))
+            {
+                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ"));
+            }
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
+            {
+                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ2"));
+            }
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ4Definition.GetBuffId()))
+            {
+                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ4"));
+            }
+            if (!modPlayer.isTransformed)
+            {
+                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailBase"));
+            }
+
+
         });
 
         public static readonly PlayerLayer dragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)

@@ -270,6 +270,7 @@ namespace DBZMOD
 
         // animation helper fields
         public int lightningFrameTimer;
+        public int tailFrameTimer;
         public int transformationFrameTimer;
         public bool isTransformationAnimationPlaying = false;
 

@@ -567,6 +567,13 @@ namespace DBZMOD
             AnimationHelper.transformationEffects.visible = true;
             layers.Add(AnimationHelper.transformationEffects);
 
+            // handle tail animations
+            if (IsPrimal())
+            {
+                AnimationHelper.tailEffects.visible = true;
+                layers.Add(AnimationHelper.tailEffects);
+            }
+
             // handle dragon radar drawing
             if (isHoldingDragonRadarMk1 || isHoldingDragonRadarMk2 || isHoldingDragonRadarMk3)
             {
@@ -746,11 +753,20 @@ namespace DBZMOD
             if (IsPlayerTransformed())
             {
                 lightningFrameTimer += 2;
+                
+            }
+            if (IsPrimal())
+            {
+                tailFrameTimer += 2;
             }
 
             if (lightningFrameTimer >= 15)
             {
                 lightningFrameTimer = 0;
+            }
+            if (tailFrameTimer >= 56)
+            {
+                tailFrameTimer = 0;
             }
 
             //if (!player.IsPlayerTransformed())
