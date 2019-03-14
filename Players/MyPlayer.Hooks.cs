@@ -568,11 +568,7 @@ namespace DBZMOD
             layers.Add(AnimationHelper.transformationEffects);
 
             // handle tail animations
-            if (IsPrimal())
-            {
-                AnimationHelper.tailEffects.visible = true;
-                layers.Add(AnimationHelper.tailEffects);
-            }
+            
 
             // handle dragon radar drawing
             if (isHoldingDragonRadarMk1 || isHoldingDragonRadarMk2 || isHoldingDragonRadarMk3)
@@ -591,6 +587,11 @@ namespace DBZMOD
             // capture the back layer index, which should always exist before the hook fires.
             var index = layers.FindIndex(x => x.Name == "MiscEffectsBack");
             layers.Insert(index, AnimationHelper.auraEffect);
+            AnimationHelper.tailEffects.visible = true;
+            if (IsPrimal())
+            {
+                layers.Insert(index, AnimationHelper.tailEffects);
+            }
 
             int hair = layers.FindIndex(l => l == PlayerLayer.Hair);
             if (hair < 0)
@@ -764,7 +765,7 @@ namespace DBZMOD
             {
                 lightningFrameTimer = 0;
             }
-            if (tailFrameTimer >= 56)
+            if (tailFrameTimer >= 140)
             {
                 tailFrameTimer = 0;
             }

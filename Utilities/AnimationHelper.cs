@@ -198,27 +198,46 @@ namespace DBZMOD.Utilities
             Mod mod = DBZMOD.Instance;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>(mod);
             TransformationDefinition transformation = modPlayer.GetCurrentTransformation();
-            int frame = modPlayer.tailFrameTimer / 14;
+            int frame = modPlayer.tailFrameTimer / 10;
             Color tailColor = Color.White;
-            if (transformation != null)
+            float XOffset = 0;
+            SpriteEffects spriteEffects = new SpriteEffects();
+
+            if(drawPlayer.direction == 1)
             {
-                if (transformation.Appearance.hair != null && transformation.Appearance.hair.hairColor != null)
-                {
-                    tailColor = Color.White;
-                }
+                spriteEffects = SpriteEffects.None;
+                XOffset = 1.8f;
             }
-            else if (!modPlayer.isTransformed)
+            else
+            {
+                spriteEffects = SpriteEffects.FlipHorizontally;
+                XOffset = 1.5f;
+            }
+
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()))
+            {
+                tailColor = new Color(252, 243, 78);
+            }
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
+            {
+                tailColor = new Color(255, 244, 56);
+            }
+            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ4Definition.GetBuffId()))
+            {
+                tailColor = new Color(0, 0, 0);
+            }
+            else
             {
                 tailColor = drawPlayer.hairColor;
             }
             Texture2D texture = mod.GetTexture(tailTexture);
             int frameSize = texture.Height / 14;
-            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 1.2f - Main.screenPosition.X);
-            int drawY = (int)(drawInfo.position.Y + drawPlayer.height / 0.6f - Main.screenPosition.Y);
-            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), tailColor, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+            float drawX = (drawInfo.position.X + drawPlayer.width / XOffset - Main.screenPosition.X);
+            float drawY = (drawInfo.position.Y + drawPlayer.height / 0.11f - Main.screenPosition.Y);
+            return new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameSize * frame, texture.Width, frameSize), tailColor, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, spriteEffects, 0);
         }
 
-        public static readonly PlayerLayer tailEffects = new PlayerLayer("DBZMOD", "tailEffects", PlayerLayer.BackAcc, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer tailEffects = new PlayerLayer("DBZMOD", "tailEffects", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -230,24 +249,7 @@ namespace DBZMOD.Utilities
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
 
-            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()))
-            {
-                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ"));
-            }
-            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.GetBuffId()) || drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ3Definition.GetBuffId()))
-            {
-                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ2"));
-            }
-            if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ4Definition.GetBuffId()))
-            {
-                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailSSJ4"));
-            }
-            if (!modPlayer.isTransformed)
-            {
-                Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTailBase"));
-            }
-
-
+            Main.playerDrawData.Add(TailEffectDrawData(drawInfo, "Tails/PrimalTail"));
         });
 
         public static readonly PlayerLayer dragonRadarEffects = new PlayerLayer("DBZMOD", "DragonRadarEffects", PlayerLayer.MiscEffectsFront, delegate (PlayerDrawInfo drawInfo)
