@@ -206,12 +206,12 @@ namespace DBZMOD.Utilities
             if(drawPlayer.direction == 1)
             {
                 spriteEffects = SpriteEffects.None;
-                XOffset = 1.8f;
+                XOffset = 2.7f;
             }
             else
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
-                XOffset = 1.5f;
+                XOffset = 1.3f;
             }
 
             if (drawPlayer.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.GetBuffId()))
@@ -230,6 +230,8 @@ namespace DBZMOD.Utilities
             {
                 tailColor = drawPlayer.hairColor;
             }
+            //Color alpha = drawPlayer.GetImmuneAlpha(Lighting.GetColor((int)(drawInfo.bodyOrigin.X + drawPlayer.width * 0.5) / 16, (int)((drawInfo.bodyOrigin.Y + drawPlayer.height * 0.25) / 16.0), tailColor), drawPlayer.shadow);
+            //Color trueTailColor = new Color(tailColor.R, tailColor.G, tailColor.B, alpha.A);
             Texture2D texture = mod.GetTexture(tailTexture);
             int frameSize = texture.Height / 14;
             float drawX = (drawInfo.position.X + drawPlayer.width / XOffset - Main.screenPosition.X);

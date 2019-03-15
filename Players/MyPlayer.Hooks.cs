@@ -555,7 +555,7 @@ namespace DBZMOD
             items.Add(item8);
         }
 
-        private Color hairColor;
+        public Color hairColor;
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
