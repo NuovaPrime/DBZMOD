@@ -170,9 +170,71 @@ namespace DBZMOD.NPCs.Bosses
 
 
             //To-Do: Dash attack (stage 1) - Rams into the player with increased contact damage
-
+            bool locationSelected = false;
             if(AIStage == Stage_Dash)
             {
+                if (!locationSelected)
+                {
+
+                    if (Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) > hoverDistance.Y)
+                    {
+                        //float hoverSpeedY = (2f + Main.rand.NextFloat(3, 8));
+                        //Add a little bit of delay before moving, this lets melee players possibly get a hit in
+                        YHoverTimer++;
+                        if (YHoverTimer > 15)
+                        {
+                            npc.velocity.Y = 5f;
+                        }
+                    }
+                    else if (Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) < hoverDistance.Y)
+                    {
+                        //float hoverSpeedY = (-2f + Main.rand.NextFloat(-3, -8));
+                        YHoverTimer++;
+                        if (YHoverTimer > 15)
+                        {
+                            npc.velocity.Y = -5f;
+                        }
+                    }
+                }
+                else
+                {
+                    npc.velocity.Y = 0;
+                    YHoverTimer = 0;
+                }
+                if (!locationSelected)
+                {
+                    //X Hovering, To-Do: Make the ship not just center itself on the player, have some left and right alternating movement?
+                    if (Vector2.Distance(new Vector2(0, player.position.X), new Vector2(0, npc.position.X)) != hoverDistance.X)
+                    {
+                        //float hoverSpeedY = (-2f + Main.rand.NextFloat(-3, -8));
+                        XHoverTimer++;
+                        if (XHoverTimer > 30)
+                        {
+                            npc.velocity.X = (8f * npc.direction);
+                        }
+                    }
+                    else
+                    {
+                        npc.velocity.X = 0;
+                        XHoverTimer = 0;
+                    }
+                }
+
+                if(Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) == hoverDistance.Y && Vector2.Distance(new Vector2(0, player.position.X), new Vector2(0, npc.position.X)) == hoverDistance.X)
+                {
+                    locationSelected = true;
+                    AITimer++;
+                    if(AITimer > 60)
+                    {
+                        npc.noTileCollide = false;
+                        npc.velocity.Y = 5f;
+                    }
+                }
+
+
+
+
+
                 StageAdvance();
                 AITimer = 0;
             }
