@@ -86,6 +86,7 @@
     <Compile Include="Items\Consumables\TestItems\TraitRemover.cs" />
     <Compile Include="Items\Consumables\TestItems\UIOmenTestItem.cs" />
     <Compile Include="Mounts\SpacePods\SpacePodMount.cs" />
+    <Compile Include="NPCs\Bosses\FriezaShip.cs" />
     <Compile Include="NPCs\MasterRoshi.cs" />
     <Compile Include="NPCs\RoshiQuests.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
@@ -670,6 +671,7 @@
     <Content Include="Hairs\SSJR\SSJRKKHair3.png" />
     <Content Include="Hairs\SSJR\SSJRKKHair4.png" />
     <Content Include="Hairs\SSJR\SSJRKKHair5.png" />
+    <Content Include="NPCs\Bosses\FriezaShip.png" />
     <Content Include="ThreadChangelog.txt" />
     <Content Include="Traits\Divine\DivineTraitBuff.png" />
     <Content Include="Traits\Legendary\LegendaryTraitBuff.png" />
