@@ -1,8 +1,11 @@
 using Microsoft.Xna.Framework;
 using System;
+using DBZMOD.Extensions;
+using DBZMOD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DBZMOD.NPCs.Bosses
 {
@@ -11,6 +14,9 @@ namespace DBZMOD.NPCs.Bosses
 	{
         private Vector2 hoverDistance = new Vector2(130, 180);
         private float hoverCooldown = 500;
+        private int slamTimer = 0;
+        private int slamCoolDownTimer = 0;
+        private bool locationSelected = false;
 
         private int YHoverTimer = 0;
         private int XHoverTimer = 0;
@@ -31,7 +37,7 @@ namespace DBZMOD.NPCs.Bosses
         }
 
         const int Stage_Hover = 0;
-        const int Stage_Dash = 1;
+        const int Stage_Slam = 1;
         const int Stage_Barrage = 2;
         const int Stage_Homing = 3;
         const int Stage_Saiba = 4;
@@ -45,7 +51,7 @@ namespace DBZMOD.NPCs.Bosses
         public override void SetDefaults()
         {
             npc.width = 110;
-            npc.height = 80;
+            npc.height = 60;
             npc.damage = 26;
             npc.defense = 10;
             npc.lifeMax = 3600;
@@ -58,6 +64,7 @@ namespace DBZMOD.NPCs.Bosses
             npc.lavaImmune = true;
             npc.noGravity = true;
             npc.noTileCollide = true;
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/TheUnexpectedArrival");
         }
 
         //To-Do: Add the rest of the stages to the AI. Make green saibaman code.
@@ -148,6 +155,11 @@ namespace DBZMOD.NPCs.Bosses
                     if (XHoverTimer > 30)
                     {
                         npc.velocity.X = (2.5f * npc.direction);
+                        if (AITimer > 400)
+                        {
+                            npc.velocity.X = (5f * npc.direction);
+                        }
+                        
                     }
                 }
                 else
@@ -169,84 +181,61 @@ namespace DBZMOD.NPCs.Bosses
 
 
 
-            //To-Do: Dash attack (stage 1) - Rams into the player with increased contact damage
-            bool locationSelected = false;
-            if(AIStage == Stage_Dash)
+            //Slam attack (stage 1) - Quickly moves to directly above the player, then waits a second before slamming straight down.
+            //To-Do: Make slam do increased contact damage. Fix bug where the ship flies down into the ground. Fix dust on tile collide not appearing. Fix afterimage on slam not working.
+            
+            if (AIStage == Stage_Slam)
             {
-                if (!locationSelected)
+                slamTimer++;
+                if (slamTimer > 20)
                 {
-
-                    if (Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) > hoverDistance.Y)
-                    {
-                        //float hoverSpeedY = (2f + Main.rand.NextFloat(3, 8));
-                        //Add a little bit of delay before moving, this lets melee players possibly get a hit in
-                        YHoverTimer++;
-                        if (YHoverTimer > 15)
-                        {
-                            npc.velocity.Y = 5f;
-                        }
-                    }
-                    else if (Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) < hoverDistance.Y)
-                    {
-                        //float hoverSpeedY = (-2f + Main.rand.NextFloat(-3, -8));
-                        YHoverTimer++;
-                        if (YHoverTimer > 15)
-                        {
-                            npc.velocity.Y = -5f;
-                        }
-                    }
-                }
-                else
-                {
-                    npc.velocity.Y = 0;
-                    YHoverTimer = 0;
-                }
-                if (!locationSelected)
-                {
-                    //X Hovering, To-Do: Make the ship not just center itself on the player, have some left and right alternating movement?
-                    if (Vector2.Distance(new Vector2(0, player.position.X), new Vector2(0, npc.position.X)) != hoverDistance.X)
-                    {
-                        //float hoverSpeedY = (-2f + Main.rand.NextFloat(-3, -8));
-                        XHoverTimer++;
-                        if (XHoverTimer > 30)
-                        {
-                            npc.velocity.X = (8f * npc.direction);
-                        }
-                    }
-                    else
-                    {
-                        npc.velocity.X = 0;
-                        XHoverTimer = 0;
-                    }
-                }
-
-                if(Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) == hoverDistance.Y && Vector2.Distance(new Vector2(0, player.position.X), new Vector2(0, npc.position.X)) == hoverDistance.X)
-                {
+                    npc.velocity.X = 0;
                     locationSelected = true;
                     AITimer++;
-                    if(AITimer > 60)
+                    if (AITimer > 20)
                     {
-                        npc.noTileCollide = false;
-                        npc.velocity.Y = 5f;
+                        if (AITimer == 21)
+                        {
+                            npc.noTileCollide = false;
+                            npc.velocity.Y = 18f;
+                        }
+                        if (CoordinateExtensions.IsPositionInTile(npc.position))
+                        {
+                            npc.velocity.Y = 0;
+                            ExplodeEffect();
+                            SoundHelper.PlayCustomSound("Sounds/Kiplosion", npc.position, 1.0f);
+                        }
+
+                        if (npc.velocity.Y == 0)
+                        {
+                            npc.velocity.Y = -1f;        
+                        }
+
+                        if (npc.velocity.Y == -1f)
+                        {
+                            slamCoolDownTimer++;
+                        }
+                        if (slamCoolDownTimer > 20)
+                        {
+                            StageAdvance();
+                            AITimer = 0;
+                            slamCoolDownTimer = 0;
+                            slamTimer = 0;
+                            locationSelected = false;
+                            npc.noTileCollide = true;
+                        }
                     }
                 }
-
-
-
-
-
-                StageAdvance();
-                AITimer = 0;
             }
-
             //Vertical projectile barrage (stage 2) - Fires a barrage of projectiles upwards that randomly spread out and fall downwards which explode on ground contact
 
             if (AIStage == Stage_Barrage)
             {
+                AITimer++;
                 npc.velocity.Y = 0;
                 npc.velocity.X = 0;
 
-                if (AITimer == 0)
+                if (AITimer == 10)
                 {
                     Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
                     Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
@@ -264,7 +253,6 @@ namespace DBZMOD.NPCs.Bosses
                     }
                 }
 
-                AITimer++;
                 if (AITimer > 60)
                 {
                     if (npc.life < npc.lifeMax * 0.60f)
@@ -332,6 +320,21 @@ namespace DBZMOD.NPCs.Bosses
             //Main.NewText(AIStage);
         }
 
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+            if (AIStage == Stage_Slam)
+            {
+                Vector2 drawOrigin = new Vector2(Main.npcTexture[npc.type].Width * 0.5f, npc.height * 0.5f);
+                for (int k = 0; k < npc.oldPos.Length; k++)
+                {
+                    Vector2 drawPos = npc.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, npc.gfxOffY);
+                    Color color = npc.GetAlpha(lightColor) * ((float)(npc.oldPos.Length - k) / (float)npc.oldPos.Length);
+                    spriteBatch.Draw(Main.npcTexture[npc.type], drawPos, null, color, npc.rotation, drawOrigin, npc.scale, SpriteEffects.None, 0f);
+                }
+            }
+			return true;
+		}
+
         private void StageAdvance()
         {
             //if Below 30% health, randomly pick a stage
@@ -384,5 +387,42 @@ namespace DBZMOD.NPCs.Bosses
                 }
             }
         }*/
+
+        public void ExplodeEffect()
+        {
+            for (int num619 = 0; num619 < 3; num619++)
+            {
+                float scaleFactor9 = 3f;
+                if (num619 == 1)
+                {
+                    scaleFactor9 = 3f;
+                }
+                int num620 = Gore.NewGore(new Vector2(npc.position.X, npc.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
+                Main.gore[num620].velocity *= scaleFactor9;
+                Gore gore97 = Main.gore[num620];
+                gore97.velocity.X = gore97.velocity.X + 1f;
+                Gore gore98 = Main.gore[num620];
+                gore98.velocity.Y = gore98.velocity.Y + 1f;
+                num620 = Gore.NewGore(new Vector2(npc.position.X, npc.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
+                Main.gore[num620].velocity *= scaleFactor9;
+                Gore gore99 = Main.gore[num620];
+                gore99.velocity.X = gore99.velocity.X - 1f;
+                Gore gore100 = Main.gore[num620];
+                gore100.velocity.Y = gore100.velocity.Y + 1f;
+                num620 = Gore.NewGore(new Vector2(npc.position.X, npc.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
+                Main.gore[num620].velocity *= scaleFactor9;
+                Gore gore101 = Main.gore[num620];
+                gore101.velocity.X = gore101.velocity.X + 1f;
+                Gore gore102 = Main.gore[num620];
+                gore102.velocity.Y = gore102.velocity.Y - 1f;
+                num620 = Gore.NewGore(new Vector2(npc.position.X, npc.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f);
+                Main.gore[num620].velocity *= scaleFactor9;
+                Gore gore103 = Main.gore[num620];
+                gore103.velocity.X = gore103.velocity.X - 1f;
+                Gore gore104 = Main.gore[num620];
+                gore104.velocity.Y = gore104.velocity.Y - 1f;
+            }
+        }
+
     }
 }

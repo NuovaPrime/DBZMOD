@@ -89,6 +89,8 @@
     <Compile Include="NPCs\Bosses\FriezaShip.cs" />
     <Compile Include="NPCs\MasterRoshi.cs" />
     <Compile Include="NPCs\RoshiQuests.cs" />
+    <Compile Include="Projectiles\Hostile\FFBarrageBlast.cs" />
+    <Compile Include="Projectiles\Hostile\FFHomingBlast.cs" />
     <Compile Include="Traits\Divine\DivineTraitBuff.cs" />
     <Compile Include="Traits\Primal\PrimalTraitBuff.cs" />
     <Compile Include="Transformations\DeveloperForms\Webmilio\SoulStealerTransformation.cs" />
@@ -672,6 +674,8 @@
     <Content Include="Hairs\SSJR\SSJRKKHair4.png" />
     <Content Include="Hairs\SSJR\SSJRKKHair5.png" />
     <Content Include="NPCs\Bosses\FriezaShip.png" />
+    <Content Include="Projectiles\Hostile\FFBarrageBlast.png" />
+    <Content Include="Projectiles\Hostile\FFHomingBlast.png" />
     <Content Include="ThreadChangelog.txt" />
     <Content Include="Traits\Divine\DivineTraitBuff.png" />
     <Content Include="Traits\Legendary\LegendaryTraitBuff.png" />
