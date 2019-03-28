@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased ranged damage and crit chance.");
+            Tooltip.SetDefault("5% Increased ranged damage and crit chance.");
             DisplayName.SetDefault("Emerald Necklace");
         }
 
@@ -25,8 +25,8 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.rangedDamage += 0.09f;
-                player.rangedCrit += 9;
+                player.rangedDamage += 0.05f;
+                player.rangedCrit += 5;
                 player.GetModPlayer<MyPlayer>(mod).emeraldNecklace = true;
             }
         }

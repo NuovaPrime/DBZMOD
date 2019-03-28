@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased ki damage and +100 max ki.");
+            Tooltip.SetDefault("5% Increased ki damage and +100 max ki.");
             DisplayName.SetDefault("Sapphire Necklace");
         }
 
@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.09f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.05f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 100;
                 player.GetModPlayer<MyPlayer>(mod).sapphireNecklace = true;
             }
