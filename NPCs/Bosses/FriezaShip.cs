@@ -12,14 +12,18 @@ namespace DBZMOD.NPCs.Bosses
     //Thanks a bit to examplemod's flutterslime for helping with organization
 	public class FriezaShip : ModNPC
 	{
-        private Vector2 hoverDistance = new Vector2(130, 180);
+        private Vector2 hoverDistance = new Vector2(999, 180);
         private float hoverCooldown = 500;
         private int slamTimer = 0;
         private int slamCoolDownTimer = 0;
         private bool locationSelected = false;
+        private bool hasDoneExplodeEffect = false;
+        private float speedAdd = 0f;
 
         private int YHoverTimer = 0;
         private int XHoverTimer = 0;
+
+        private float speedMulti = 1f;
 
         const int AIStageSlot = 0;
         const int AITimerSlot = 1;
@@ -46,14 +50,16 @@ namespace DBZMOD.NPCs.Bosses
 		{
 			DisplayName.SetDefault("A Frieza Force Ship");
 			Main.npcFrameCount[npc.type] = 8;
-		}
+            NPCID.Sets.TrailingMode[npc.type] = 0;
+            NPCID.Sets.TrailCacheLength[npc.type] = 2;
+        }
 
         public override void SetDefaults()
         {
             npc.width = 110;
             npc.height = 60;
             npc.damage = 26;
-            npc.defense = 10;
+            npc.defense = 28;
             npc.lifeMax = 3600;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath2;
@@ -68,7 +74,7 @@ namespace DBZMOD.NPCs.Bosses
         }
 
         //To-Do: Add the rest of the stages to the AI. Make green saibaman code.
-        //Make the speed of the ship's movements increase with less health, less time between stages as well?
+        //Make the speed of the ship's movements increase with less health, increase the speed of the projectiles, increase how fast the ship goes down on the dash, finish dash afterimage, make the homing projectiles move faster if the player is flying.
         //Boss loot: Drops Undecided material that's used to create a guardian class armor set (frieza cyborg set). Alternates drops between a weapon and accessory, accessory is arm cannon mk2, weapon is a frieza force beam rifle. Expert item is the mechanical amplifier.
         //Spawn condition: Near the ocean you can find a frieza henchmen, if he runs away then you'll get an indicator saying the ship will be coming the next morning.
 
@@ -85,7 +91,7 @@ namespace DBZMOD.NPCs.Bosses
                 player = Main.player[npc.target];
                 if (!player.active || player.dead)
                 {
-                    npc.velocity = new Vector2(0f, 10f);
+                    npc.velocity = new Vector2(0f, -10f);
                     if (npc.timeLeft > 10)
                     {
                         npc.timeLeft = 10;
@@ -100,18 +106,26 @@ namespace DBZMOD.NPCs.Bosses
                 AIStage = Stage_Hover;
             }
 
-            //Speed between stages drastically increased with health lost
-            if(npc.life < npc.lifeMax * 0.70f)
+            //Speed between stages and general movement speed drastically increased with health lost
+            if(npc.life < npc.lifeMax * 0.80f)
             {
                 hoverCooldown = 400;
-                if (npc.life < npc.lifeMax * 0.40f)
+                speedAdd = 1f;
+                if (npc.life < npc.lifeMax * 0.50f)
                 {
-                    hoverCooldown = 300;
+                    hoverCooldown = 250;
+                    speedAdd = 2f;
                 }
-                if (npc.life < npc.lifeMax * 0.15f)
+                if (npc.life < npc.lifeMax * 0.2f)
                 {
                     hoverCooldown = 100;
+                    speedAdd = 4f;
                 }
+            }
+            //If the ship is really far away, nullify its movement and set it back to hover
+            if(Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y)) > hoverDistance.Y * 3)
+            {
+                npc.velocity = new Vector2(0, -10f);
             }
 
             
@@ -154,10 +168,10 @@ namespace DBZMOD.NPCs.Bosses
                     XHoverTimer++;
                     if (XHoverTimer > 30)
                     {
-                        npc.velocity.X = (2.5f * npc.direction);
-                        if (AITimer > 400)
+                        npc.velocity.X = (2.5f * npc.direction) + (speedAdd * npc.direction);
+                        if (AITimer > hoverCooldown / 1.2)
                         {
-                            npc.velocity.X = (5f * npc.direction);
+                            npc.velocity.X = (7f * npc.direction) + (speedAdd * 2 * npc.direction);
                         }
                         
                     }
@@ -179,54 +193,63 @@ namespace DBZMOD.NPCs.Bosses
             }
 
 
+            //Main.NewText("Speed Addition is: " + speedAdd);
+
 
 
             //Slam attack (stage 1) - Quickly moves to directly above the player, then waits a second before slamming straight down.
-            //To-Do: Make slam do increased contact damage. Fix bug where the ship flies down into the ground. Fix dust on tile collide not appearing. Fix afterimage on slam not working.
-            
+            //To-Do: Make slam do increased contact damage. Fix bug where the ship flies down into the ground. Fix afterimage on slam not working.
+
             if (AIStage == Stage_Slam)
             {
-                slamTimer++;
-                if (slamTimer > 20)
+                npc.velocity.X = 0;
+
+                locationSelected = true;
+                AITimer++;
+                if (AITimer > 10)
                 {
-                    npc.velocity.X = 0;
-                    locationSelected = true;
-                    AITimer++;
-                    if (AITimer > 20)
+                    if (AITimer == 11)
                     {
-                        if (AITimer == 21)
+                        npc.noTileCollide = false;
+                        if (npc.life <= npc.lifeMax * 0.50)//Double the contact damage if below 50% health
                         {
-                            npc.noTileCollide = false;
-                            npc.velocity.Y = 18f;
+                            npc.damage = npc.damage * 2;
                         }
-                        if (CoordinateExtensions.IsPositionInTile(npc.position))
+                        npc.velocity.Y = 25f;
+                    }
+                    if (CoordinateExtensions.IsPositionInTile(npc.getRect().Bottom()) || AITimer > 20)//If the bottom of the ship touches a tile, nullify speed and do dust particles
+                    {
+                        npc.velocity.Y = -8f;
+                        if (!hasDoneExplodeEffect)
                         {
-                            npc.velocity.Y = 0;
                             ExplodeEffect();
                             SoundHelper.PlayCustomSound("Sounds/Kiplosion", npc.position, 1.0f);
                         }
 
-                        if (npc.velocity.Y == 0)
-                        {
-                            npc.velocity.Y = -1f;        
-                        }
+                    }
 
-                        if (npc.velocity.Y == -1f)
+                    if (npc.velocity.Y == -8f)
+                    {
+                        slamCoolDownTimer++;
+                    }
+                    if (slamCoolDownTimer > 20)
+                    {
+                        StageAdvance();
+                        AITimer = 0;
+                        slamCoolDownTimer = 0;
+                        locationSelected = false;
+                        npc.noTileCollide = true;
+                        hasDoneExplodeEffect = false;
+                        if (npc.life <= npc.lifeMax * 0.50)//Reset the damage back to its normal amount
                         {
-                            slamCoolDownTimer++;
-                        }
-                        if (slamCoolDownTimer > 20)
-                        {
-                            StageAdvance();
-                            AITimer = 0;
-                            slamCoolDownTimer = 0;
-                            slamTimer = 0;
-                            locationSelected = false;
-                            npc.noTileCollide = true;
+                            npc.damage = npc.damage / 2;
                         }
                     }
                 }
+
             }
+            //float ydistance = Vector2.Distance(new Vector2(0, player.position.Y), new Vector2(0, npc.position.Y));
+            //Main.NewText("Y Distance is: " + ydistance);
             //Vertical projectile barrage (stage 2) - Fires a barrage of projectiles upwards that randomly spread out and fall downwards which explode on ground contact
 
             if (AIStage == Stage_Barrage)
@@ -237,25 +260,48 @@ namespace DBZMOD.NPCs.Bosses
 
                 if (AITimer == 10)
                 {
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
 
-                    if (npc.life < npc.lifeMax * 0.70f) //Fire 4 extra projectiles if below 70% health
+
+                    if (npc.life < npc.lifeMax * 0.50f) //Fire 16 extra projectiles if below 50% health
                     {
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -4f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -6f, mod.ProjectileType("FFBarrageBlast"), npc.damage / 4, 3f, Main.myPlayer);
                     }
                 }
 
                 if (AITimer > 60)
                 {
-                    if (npc.life < npc.lifeMax * 0.60f)
+                    if (npc.life < npc.lifeMax * 0.70f)
                     {
                         StageAdvance();
                     }
@@ -280,9 +326,9 @@ namespace DBZMOD.NPCs.Bosses
                     Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 2.5f, -1f, mod.ProjectileType("FFHomingBlast"), npc.damage / 3, 3f, Main.myPlayer);
                     Projectile.NewProjectile(npc.Center.X, npc.Center.Y, -2.5f, -1f, mod.ProjectileType("FFHomingBlast"), npc.damage / 3, 3f, Main.myPlayer);
 
-                    if (npc.life < npc.lifeMax * 0.50f) //Fire an extra projectile upwards if below 50% health
+                    if (npc.life < npc.lifeMax * 0.50f) //Fire an extra stronger projectile upwards if below 50% health
                     {
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -1f, mod.ProjectileType("FFHomingBlast"), npc.damage / 4, 3f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0, -1f, mod.ProjectileType("FFHomingBlast"), npc.damage / 2, 3f, Main.myPlayer);
                     }
                 }
                 AITimer++;
@@ -324,12 +370,14 @@ namespace DBZMOD.NPCs.Bosses
 		{
             if (AIStage == Stage_Slam)
             {
-                Vector2 drawOrigin = new Vector2(Main.npcTexture[npc.type].Width * 0.5f, npc.height * 0.5f);
+                float extraDrawY = Main.NPCAddHeight(npc.whoAmI);
+                Vector2 drawOrigin = new Vector2(Main.npcTexture[npc.type].Width / 2, Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type] / 2);
                 for (int k = 0; k < npc.oldPos.Length; k++)
                 {
-                    Vector2 drawPos = npc.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, npc.gfxOffY);
+                    Vector2 drawPos = new Vector2(npc.position.X - Main.screenPosition.X + npc.width / 2 - (float)Main.npcTexture[npc.type].Width * npc.scale / 2f + drawOrigin.X * npc.scale,
+                        npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + extraDrawY + drawOrigin.Y * npc.scale + npc.gfxOffY);
                     Color color = npc.GetAlpha(lightColor) * ((float)(npc.oldPos.Length - k) / (float)npc.oldPos.Length);
-                    spriteBatch.Draw(Main.npcTexture[npc.type], drawPos, null, color, npc.rotation, drawOrigin, npc.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(Main.npcTexture[npc.type], drawPos, npc.frame, color, npc.rotation, drawOrigin, npc.scale, SpriteEffects.None, 0f);
                 }
             }
 			return true;
@@ -337,20 +385,7 @@ namespace DBZMOD.NPCs.Bosses
 
         private void StageAdvance()
         {
-            //if Below 30% health, randomly pick a stage
-            if(npc.life < npc.lifeMax * 0.30f)
-            {
-                int NextStage = Main.rand.Next(0, 4);
-
-                AIStage = NextStage;
-
-            }
-            //otherwise, go to next stage
-            else
-            {
-                AIStage++;
-            }
-
+            AIStage++;
         }
 
         //Animations
@@ -359,7 +394,7 @@ namespace DBZMOD.NPCs.Bosses
         {
             if(AIStage == Stage_Barrage || AIStage == Stage_Homing)
             {
-                npc.frameCounter += 3;
+                npc.frameCounter += 2;
             }
             else
             {
@@ -422,6 +457,7 @@ namespace DBZMOD.NPCs.Bosses
                 Gore gore104 = Main.gore[num620];
                 gore104.velocity.Y = gore104.velocity.Y - 1f;
             }
+            hasDoneExplodeEffect = true;
         }
 
     }

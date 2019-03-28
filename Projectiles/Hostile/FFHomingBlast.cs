@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using DBZMOD.Utilities;
 using DBZMOD.Extensions;
+using System;
 
 namespace DBZMOD.Projectiles.Hostile
 {
@@ -57,12 +58,43 @@ namespace DBZMOD.Projectiles.Hostile
 		{
             moveTimer++;
 
-            if(moveTimer > 180)
+            if(moveTimer > 150)
             {
                 projectile.velocity = new Vector2(0, 0);
-                if(moveTimer > 240)
+                if(moveTimer > 180)
                 {
-                    projectile.DoHomingHostile(999f, 3.5f, false);
+                    Player closestTarget = null;
+                    float topSpeed = 5.5f;
+                    float closestTargetDistance = Single.MaxValue;
+
+                    foreach (Player target in Main.player)
+                    {
+
+                        //Get the shoot trajectory from the projectile and target
+                        // pass over if they're not in radius, dead or inactive.
+                        float distance = Vector2.Distance(projectile.Center, target.Center);
+                        if (distance > 999 || target.dead || !target.active)
+                            continue;
+
+                        if (distance < closestTargetDistance)
+                        {
+                            closestTargetDistance = distance;
+                            closestTarget = target;
+                        }
+                        if (closestTarget.GetModPlayer<MyPlayer>().isFlying)
+                        {
+                            topSpeed = 14f;
+                        }
+                    }
+
+                    if (closestTarget != null)
+                    {
+                        Vector2 offsetVector = closestTarget.Center - projectile.Center;
+                        Vector2 normalizedVelocity = (offsetVector * (topSpeed / 20) + projectile.velocity);
+                        normalizedVelocity.Normalize();
+                        Vector2 trueVelocity = normalizedVelocity * topSpeed;
+                        projectile.velocity = trueVelocity;
+                    }
                 }
             }
 			

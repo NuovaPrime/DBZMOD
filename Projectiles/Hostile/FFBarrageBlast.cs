@@ -56,21 +56,21 @@ namespace DBZMOD.Projectiles.Hostile
 		{
             moveTimer++;
 
-            if(moveTimer > 50 && !directionChosen)
+            if(moveTimer > 30 && !directionChosen)
             {
                 ChooseDirection();
-                projectile.velocity.Y = 5f;
+                projectile.velocity.Y = 6f;
             }
 
             if(directionChosen && !speedChosen)
             {
                 if(projectile.direction == 1)
                 {
-                    projectile.velocity.X = Main.rand.NextFloat(0.3f, 5f);
+                    projectile.velocity.X = Main.rand.NextFloat(0.3f, 18f);
                 }
                 else
                 {
-                    projectile.velocity.X = Main.rand.NextFloat(-0.3f, -5f);
+                    projectile.velocity.X = Main.rand.NextFloat(-0.3f, -18f);
                 }
                 speedChosen = true;
             }
