@@ -15,16 +15,9 @@ namespace DBZMOD
         [Obsolete("This method will be deprecated in favor of IsTransformedInto() and ActiveTransformations[].")]
         public TransformationDefinition GetCurrentTransformation()
         {
-            for (int i = 0; i < player.buffType.Length; i++)
-            {
-                ModBuff buff = BuffLoader.GetBuff(player.buffType[i]);
-                TransformationBuff transBuff = buff as TransformationBuff;
+            if (ActiveTransformations.Count == 0) return null;
 
-                if (transBuff != null)
-                    return transBuff.TransformationDefinition;
-            }
-
-            return null;
+            return ActiveTransformations[0];
         }
 
         public bool CanTransform(TransformationDefinition transformation)
@@ -35,9 +28,9 @@ namespace DBZMOD
             return transformation.CanTransformInto(this);
         }
 
-        public void AddTransformation(TransformationDefinition transformation, int duration)
+        public void AddTransformation(TransformationDefinition transformation)
         {
-            player.AddBuff(transformation.GetBuffId(), duration, false);
+            player.AddBuff(transformation.GetBuffId(), transformation.Duration, false);
             ActiveTransformations.Add(transformation);
 
             transformation.OnPlayerTransformed(this);
@@ -45,8 +38,8 @@ namespace DBZMOD
             if (!string.IsNullOrWhiteSpace(transformation.Text))
                 CombatText.NewText(player.Hitbox, transformation.TextColor, transformation.Text, false, false);
 
-            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, transformation.UnlocalizedName, duration);
+            if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                NetworkHelper.formSync.SendPlayerTransformedInto(256, player.whoAmI, player.whoAmI, transformation);
 
             isTransformationAnimationPlaying = true;
         }
@@ -65,7 +58,7 @@ namespace DBZMOD
             EndTransformations();
 
             // add whatever buff it is for a really long time.
-            AddTransformation(transformation, transformation.Duration);
+            AddTransformation(transformation);
         }
 
         public void EndTransformations()
@@ -80,7 +73,13 @@ namespace DBZMOD
         public void ClearAllTransformations()
         {
             for (int i = 0; i < ActiveTransformations.Count; i++)
-                RemoveTransformation(ActiveTransformations[i]);
+            {
+                TransformationDefinition transformation = ActiveTransformations[i];
+                RemoveTransformation(transformation);
+
+                if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+                    NetworkHelper.formSync.SendTransformationRemoved(256, player.whoAmI, player.whoAmI, transformation);
+            }
 
             ActiveTransformations.Clear();
         }
@@ -89,8 +88,8 @@ namespace DBZMOD
         {
             player.ClearBuff(transformation.GetBuffId());
 
-            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
-                NetworkHelper.formSync.SendFormChanges(256, player.whoAmI, player.whoAmI, transformation.UnlocalizedName, 0);
+            if (!Main.dedServ && Main.netMode == NetmodeID.MultiplayerClient)
+                NetworkHelper.formSync.SendTransformationRemoved(256, player.whoAmI, player.whoAmI, transformation);
         }
 
         public void HandleTransformations()
@@ -252,7 +251,7 @@ namespace DBZMOD
         public bool IsExhaustedFromTransformation() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.TransformationExhaustionDefinition.GetBuffId());
         public bool IsTiredFromKaioken() => player.HasBuff(DBZMOD.Instance.TransformationDefinitionManager.KaiokenFatigueDefinition.GetBuffId());
 
-        public List<TransformationDefinition> ActiveTransformations { get; private set; } = new List<TransformationDefinition>();
+        public List<TransformationDefinition> ActiveTransformations { get; internal set; } = new List<TransformationDefinition>();
 
         public List<TransformationDefinition> PreviousTransformations { get; private set; } = new List<TransformationDefinition>();
 

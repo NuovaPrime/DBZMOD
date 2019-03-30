@@ -38,6 +38,8 @@
         WishActive,
         FacingDirection,
         IsMassiveBlastCharging,
-        IsMassiveBlastInUse
+        IsMassiveBlastInUse,
+
+        ActiveTransformations
     }
 }

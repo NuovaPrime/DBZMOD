@@ -1,10 +1,10 @@
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class PrimalTestItem : ModItem
+    public sealed class UIOmenTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -24,15 +24,19 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Primal Test Item");
-            Tooltip.SetDefault("Gives the primal trait");
+            DisplayName.SetDefault("UI Omen Test Item");
+            Tooltip.SetDefault("Activates Ultra Instinct -Sign-\nWIP, this is just to show the aura sprite.");
         }
-		
-		public override bool UseItem(Player player)
+
+
+        public override bool UseItem(Player player)
         {
             if (!DBZMOD.allowDebugItem) return false;
 
-            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Primal;
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.SelectedTransformation = modPlayer.TransformationDefinitionManager.UIOmenTransformation;
+
+            modPlayer.TransformationDefinitionManager.UIOmenTransformation.Unlock(player);
             return true;
         }
     }

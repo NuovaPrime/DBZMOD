@@ -13,7 +13,9 @@ namespace DBZMOD.Network
 
         public static void HandlePacket(BinaryReader r, int fromWho)
         {
-            switch (r.ReadByte())
+            byte handler = r.ReadByte();
+
+            switch (handler)
             {
                 case TRANSFORMATION_HANDLER:
                     formSync.HandlePacket(r, fromWho);

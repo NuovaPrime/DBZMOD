@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class SSJTestItem : ModItem
+    public sealed class SSJGTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -20,12 +20,13 @@ namespace DBZMOD.Items.Consumables.TestItems
             item.value = 0;
             item.expert = true;
             item.potion = false;
+            item.noUseGraphic = true;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SSJ Test Item");
-            Tooltip.SetDefault("Manually activates the ssj transformation cutscene and unlocks it.");
+            DisplayName.SetDefault("SSJG Test Item");
+            Tooltip.SetDefault("Manually activates the ssjg transformation cutscene and unlocks it.");
         }
 
 
@@ -34,12 +35,12 @@ namespace DBZMOD.Items.Consumables.TestItems
             if (!DBZMOD.allowDebugItem) return false;
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.SSJTransformation();
-            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition;
+            modPlayer.SSJGTransformation();
 
-            DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition.Unlock(player);
-            modPlayer.isTransforming = true;
+            modPlayer.SelectedTransformation = modPlayer.TransformationDefinitionManager.SSJGDefinition;
+            modPlayer.TransformationDefinitionManager.SSJGDefinition.Unlock(player);
 
+            MyPlayer.ModPlayer(player).isTransforming = true;
             return true;
         }
     }

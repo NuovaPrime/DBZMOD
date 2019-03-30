@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Network
@@ -19,11 +21,11 @@ namespace DBZMOD.Network
             var p = global::DBZMOD.DBZMOD.Instance.GetPacket();
             p.Write(HandlerType);
             p.Write(packetType);
+
             // this seems to fuck shit up and I don't understand why blushie put it in the example.
-            //if (Main.netMode == NetmodeID.Server)
-            //{
-            //    p.Write((byte)fromWho);
-            //}
+            /*if ((Main.netMode == NetmodeID.MultiplayerClient || Main.netMode == NetmodeID.Server))
+                p.Write(fromWho);*/
+
             return p;
         }
     }

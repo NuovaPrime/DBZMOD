@@ -1,10 +1,10 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class LSSJTestItem : ModItem
+    public sealed class PrimalTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -24,24 +24,16 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("LSSJ Test Item");
-            Tooltip.SetDefault("Manually activates the Lssj transformation cutscene and unlocks it.");
+            DisplayName.SetDefault("Primal Test Item");
+            Tooltip.SetDefault("Gives the primal trait");
         }
-
-
-        public override bool UseItem(Player player)
+		
+		public override bool UseItem(Player player)
         {
             if (!DBZMOD.allowDebugItem) return false;
 
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.LSSJTransformation();
-            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition;
-
-            DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition.Unlock(player);
-
-            modPlayer.isTransforming = true;
+            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Primal;
             return true;
-
         }
     }
 }

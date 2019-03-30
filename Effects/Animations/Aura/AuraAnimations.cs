@@ -122,23 +122,5 @@ namespace DBZMOD.Effects.Animations.Aura
                 dust.noGravity = true;
             }
         }
-
-        /// <summary>
-        ///     Return the aura effect currently active on the player.
-        /// </summary>
-        /// <param name="player">The player being checked</param>
-        public static AuraAnimationInfo GetAuraEffectOnPlayer(this MyPlayer player)
-        {
-            if (player.player.dead)
-                return null;
-
-            if (player.ActiveTransformations.Count > 0)
-                return player.ActiveTransformations[0].Appearance.auraAnimation;
-
-            if (player.isCharging && player.ActiveTransformations.Count == 0)
-                return chargeAura;
-
-            return null;
-        }
     }
 }

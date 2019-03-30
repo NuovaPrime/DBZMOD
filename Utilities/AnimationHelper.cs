@@ -23,13 +23,15 @@ namespace DBZMOD.Utilities
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, samplerState, DepthStencilState.None, Main.instance.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
-        public static readonly PlayerLayer auraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer auraEffect = new PlayerLayer("DBZMOD", "AuraEffects", null, drawInfo =>
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
 
             Player player = drawInfo.drawPlayer;
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            //if (player.whoAmI != Main.LocalPlayer.whoAmI) return;
 
             Mod mod = DBZMOD.Instance;
             if (drawInfo.shadow != 0f)

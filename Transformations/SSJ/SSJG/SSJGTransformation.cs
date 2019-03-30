@@ -8,7 +8,7 @@ namespace DBZMOD.Transformations.SSJ.SSJG
     {
         public SSJGTransformation(params TransformationDefinition[] parents) : base("Super Saiyan God", TransformationDefinitionManager.godTransformationTextColor,
             3.5f, 3.5f, 16, 1.5f, 3.5f, 1.75f, -2f,
-            new TransformationAppearanceDefinition(AuraAnimations.ssjgAura, new ReadOnlyColor(0.2f, 0f, 0f), 
+            new TransformationAppearanceDefinition(AuraAnimations.ssjgAura, ReadOnlyColor.DefaultAuraLighting(Color.OrangeRed), 
                 new HairAppearance(null, new ReadOnlyColor(255, 57, 74), 1, HairAppearance.BASE_HAIRSTYLE_KEY), Color.Red),
             typeof(SSJGBuff),
             buffIconGetter: () => GFX.ssjgButtonImage, hasMenuIcon: true,

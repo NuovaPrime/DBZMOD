@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems
 {
-    public sealed class TraitRemover : ModItem
+    public sealed class TransformationCountForPlayers : ModItem
     {
         public override void SetDefaults()
         {
@@ -16,7 +16,7 @@ namespace DBZMOD.Items.Consumables.TestItems
             item.useStyle = 2;
             item.useTurn = true;
             item.useAnimation = 17;
-            item.useTime = 17;
+            item.useTime = 1;
             item.value = 0;
             item.expert = true;
             item.potion = false;
@@ -24,8 +24,7 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Trait Remover");
-            Tooltip.SetDefault("Removes all traits.");
+            DisplayName.SetDefault("Count Transformations");
         }
 
 
@@ -33,7 +32,15 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             if (!DBZMOD.allowDebugItem) return false;
 
-            MyPlayer.ModPlayer(player).PlayerTrait = DBZMOD.Instance.TraitManager.Default;
+            foreach (Player ply in Main.player)
+            {
+                MyPlayer myPlayer = ply.GetModPlayer<MyPlayer>();
+                if (myPlayer == null || string.IsNullOrWhiteSpace(myPlayer.player.name)) return false;
+
+                Main.NewText($"{ply.name} -- {string.Join(", ", myPlayer.ActiveTransformations)}");
+            }
+
+
             return true;
         }
     }

@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using DBZMOD.Enums;
 using DBZMOD.Traits;
+using DBZMOD.Transformations;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -284,7 +286,29 @@ namespace DBZMOD.Network
             SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.powerWishesLeft);
             SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.isTransformationAnimationPlaying);
             SendChangedKiCurrent(toWho, fromWho, fromWho, modPlayer.GetKi());
+
+            string allTransformations = "";
+
+            for (int i = 0; i < modPlayer.ActiveTransformations.Count; i++)
+            {
+                allTransformations += modPlayer.ActiveTransformations[i].UnlocalizedName;
+
+                if (i + 1 < modPlayer.ActiveTransformations.Count)
+                    allTransformations += ',';
+            }
+
+            SendActiveTransformations(toWho, fromWho, fromWho, allTransformations);
         }
+
+
+        public void SendActiveTransformations(int toWho, int fromWho, int whichPlayer, string allTransformations)
+        {
+            var packet = GetPacket(SYNC_TRIGGERS, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.ActiveTransformations);
+            packet.Write(whichPlayer);
+            packet.Send(toWho, fromWho);
+        }
+
 
         public void SendChangedTriggerMouseRight(int toWho, int fromWho, int whichPlayer, bool isHeld)
         {
@@ -376,6 +400,9 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
+
+        #region Fragments
+
         public void SendChangedFragment1(int toWho, int fromWho, int whichPlayer, bool fragment1)
         {
             var packet = GetPacket(SYNC_PLAYER, fromWho);
@@ -421,14 +448,10 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedIsCharging(int toWho, int fromWho, int whichPlayer, bool isCharging)
-        {
-            var packet = GetPacket(SYNC_PLAYER, fromWho);
-            packet.Write((int)PlayerVarSyncEnum.IsCharging);
-            packet.Write(whichPlayer);
-            packet.Write(isCharging);
-            packet.Send(toWho, fromWho);
-        }
+        #endregion
+
+
+        #region Messages
 
         public void SendChangedJungleMessage(int toWho, int fromWho, int whichPlayer, bool jungleMessage)
         {
@@ -463,6 +486,18 @@ namespace DBZMOD.Network
             packet.Write((int)PlayerVarSyncEnum.MushroomMessage);
             packet.Write(whichPlayer);
             packet.Write(mushroomMessage);
+            packet.Send(toWho, fromWho);
+        }
+
+        #endregion
+
+
+        public void SendChangedIsCharging(int toWho, int fromWho, int whichPlayer, bool isCharging)
+        {
+            var packet = GetPacket(SYNC_PLAYER, fromWho);
+            packet.Write((int)PlayerVarSyncEnum.IsCharging);
+            packet.Write(whichPlayer);
+            packet.Write(isCharging);
             packet.Send(toWho, fromWho);
         }
 
@@ -617,7 +652,6 @@ namespace DBZMOD.Network
             int playerNum = reader.ReadInt32();
             MyPlayer player = Main.player[playerNum].GetModPlayer<MyPlayer>();
 
-            bool isHeld = reader.ReadBoolean();
             // if this is a server, start to assemble the relay packet.
             ModPacket packet = null;
             if (Main.netMode == NetmodeID.Server)
@@ -627,31 +661,42 @@ namespace DBZMOD.Network
                 packet.Write(playerNum);
             }
 
+            bool isHeld = false;
+
             switch (syncEnum)
             {
                 case PlayerVarSyncEnum.TriggerMouseLeft:
+                    isHeld = reader.ReadBoolean();
                     player.isMouseLeftHeld = isHeld;
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
+
                     break;
                 case PlayerVarSyncEnum.TriggerMouseRight:
+                    isHeld = reader.ReadBoolean();
                     player.isMouseRightHeld = isHeld;
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
+
                     break;
                 case PlayerVarSyncEnum.TriggerLeft:
+                    isHeld = reader.ReadBoolean();
                     player.isLeftHeld = isHeld;
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
+
                     break;
                 case PlayerVarSyncEnum.TriggerRight:
                     player.isRightHeld = isHeld;
@@ -662,20 +707,42 @@ namespace DBZMOD.Network
                     }
                     break;
                 case PlayerVarSyncEnum.TriggerUp:
+                    isHeld = reader.ReadBoolean();
                     player.isUpHeld = isHeld;
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
+
                     break;
                 case PlayerVarSyncEnum.TriggerDown:
+                    isHeld = reader.ReadBoolean();
                     player.isDownHeld = isHeld;
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         packet.Write(isHeld);
                         packet.Send(-1, fromWho);
                     }
+
+                    break;
+                case PlayerVarSyncEnum.ActiveTransformations:
+                    string activeTransformationsString = reader.ReadString();
+                    List<TransformationDefinition> activeTransformations = new List<TransformationDefinition>();
+
+                    foreach (string str in activeTransformationsString.Split(','))
+                        activeTransformations.Add(player.TransformationDefinitionManager[str]);
+
+                    player.ActiveTransformations = activeTransformations;
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(activeTransformationsString);
+                        packet.Send(-1, fromWho);
+                    }
+
                     break;
             }
         }

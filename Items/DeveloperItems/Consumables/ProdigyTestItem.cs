@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class SSJ4TestItem : ModItem
+    public sealed class ProdigyTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -20,13 +20,12 @@ namespace DBZMOD.Items.Consumables.TestItems
             item.value = 0;
             item.expert = true;
             item.potion = false;
-            item.noUseGraphic = true;
         }
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SSJ4 Test Item");
-            Tooltip.SetDefault("Manually activates the ssj4 transformation cutscene and unlocks it.");
+            DisplayName.SetDefault("Prodigy Test Item");
+            Tooltip.SetDefault("Gives the prodigy trait");
         }
 
 
@@ -34,14 +33,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             if (!DBZMOD.allowDebugItem) return false;
 
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.SSJ3Transformation();
-            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ4Definition;
-
-            DBZMOD.Instance.TransformationDefinitionManager.SSJ4Definition.Unlock(player);
-
-            modPlayer.isTransforming = true;
-
+            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Prodigy;
             return true;
         }
     }

@@ -22,7 +22,7 @@ namespace DBZMOD.Items.Misc
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Keyboard");
-            Tooltip.SetDefault("An old legend speaks of a mythical warrior who would loudly roar his way into battle, shattering his opponents' morale.\nHowever, what the warrior roared has long been to lost the ages...\nPeople used this device to search for clues of this legendary man so much, its a wonder it hasn't broken yet.");
+            Tooltip.SetDefault("An old legend speaks of a mythical warrior who would loudly roar his way into battle, shattering his opponents' morale.\nHowever, what the warrior roared has long been lost to the ages...\nPeople used this device to search for clues of this legendary man so much, its a wonder it hasn't broken yet.");
         }
 
         public override bool UseItem(Player player)

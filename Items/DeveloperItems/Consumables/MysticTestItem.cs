@@ -1,16 +1,15 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class SSJ2MasteryTestItem : ModItem
+    public sealed class MysticTestItem : ModItem
     {
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 38;
+            item.width = 40;
+            item.height = 40;
             item.consumable = false;
             item.maxStack = 1;
             item.UseSound = SoundID.Item3;
@@ -25,8 +24,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SSJ2 Mastery Test Item");
-            Tooltip.SetDefault("Manually Upgrades your ssj2 mastery. Each use increases it by 0.25");
+            DisplayName.SetDefault("Mystic Test Item");
+            Tooltip.SetDefault("Manually activates the mystic transformation cutscene and unlocks it.");
         }
 
 
@@ -35,11 +34,12 @@ namespace DBZMOD.Items.Consumables.TestItems
             if (!DBZMOD.allowDebugItem) return false;
 
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition].Mastery = 
-                Math.Min(1.0f, modPlayer.PlayerTransformations[DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition].Mastery + 0.25f);
+            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.MysticDefinition;
 
+            DBZMOD.Instance.TransformationDefinitionManager.MysticDefinition.Unlock(player);
+
+            //modPlayer.isTransforming = true;
             return true;
-
         }
     }
 }

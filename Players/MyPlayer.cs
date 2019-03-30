@@ -323,6 +323,8 @@ namespace DBZMOD
         // TODO Change these
         public void HandleKiDrainMasteryContribution(float kiAmount, bool isWeaponDrain, bool isFormDrain)
         {
+            if (player.whoAmI != Main.LocalPlayer.whoAmI) return;
+
             if (isFormDrain)
             {
                 TransformationDefinition transformation = GetCurrentTransformation();

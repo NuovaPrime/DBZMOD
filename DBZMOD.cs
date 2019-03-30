@@ -22,8 +22,6 @@ namespace DBZMOD
 {
     public class DBZMOD : Mod
     {
-        private UIFlatPanel _uiFlatPanel;
-
         private static TransformationMenu _transformationMenu;
         private static UserInterface _transMenuInterface;
 

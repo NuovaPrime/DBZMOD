@@ -2,9 +2,9 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DBZMOD.Items.Consumables.TestItems
+namespace DBZMOD.Items.DeveloperItems.Consumables
 {
-    public sealed class ProdigyTestItem : ModItem
+    public sealed class TraitRemover : ModItem
     {
         public override void SetDefaults()
         {
@@ -24,8 +24,8 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Prodigy Test Item");
-            Tooltip.SetDefault("Gives the prodigy trait");
+            DisplayName.SetDefault("Trait Remover");
+            Tooltip.SetDefault("Removes all traits.");
         }
 
 
@@ -33,7 +33,7 @@ namespace DBZMOD.Items.Consumables.TestItems
         {
             if (!DBZMOD.allowDebugItem) return false;
 
-            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Prodigy;
+            MyPlayer.ModPlayer(player).PlayerTrait = DBZMOD.Instance.TraitManager.Default;
             return true;
         }
     }
