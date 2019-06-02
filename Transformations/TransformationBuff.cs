@@ -179,7 +179,7 @@ namespace DBZMOD.Transformations
 
         public void EnigmaEffects(Player player, float damageMultiplier)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= damageMultiplier;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).MysticDamage *= damageMultiplier; //Compatability Fix: "M" was capitalized
         }
 
         public void BattleRodEffects(Player player, float damageMultiplier)
