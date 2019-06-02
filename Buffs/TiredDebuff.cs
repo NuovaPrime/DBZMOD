@@ -32,7 +32,7 @@ namespace DBZMOD.Buffs
         }
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= 0.8f;
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).MysticDamage *= 0.8f;
         }
         public void BattleRodEffects(Player player)
         {
