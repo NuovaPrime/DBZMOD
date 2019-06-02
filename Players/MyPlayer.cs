@@ -1090,7 +1090,7 @@ namespace DBZMOD
 
         public void EnigmaEffects(Player player)
         {
-            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).mysticDamage *= PowerWishMulti();
+            player.GetModPlayer<Laugicality.LaugicalityPlayer>(ModLoader.GetMod("Laugicality")).MysticDamage *= PowerWishMulti();
         }
 
         public void BattleRodEffects(Player player)
