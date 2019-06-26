@@ -1,4 +1,4 @@
-﻿using DBZMOD.Extensions;
+﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -25,7 +25,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).IsLegendary())
+            if (MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -44,7 +44,7 @@ namespace DBZMOD.Projectiles.AuraProjectiles
                 }
 
             }
-            else if (!MyPlayer.ModPlayer(player).IsLegendary())
+            else if(!MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -90,10 +90,18 @@ namespace DBZMOD.Projectiles.AuraProjectiles
 
         public override void Kill(int timeLeft)
         {
-            MyPlayer modPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
-
-            modPlayer.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition);
-            modPlayer.isTransforming = false;
+            Player player = Main.player[projectile.owner];
+            if (!MyPlayer.ModPlayer(player).IsPlayerLegendary())
+            {
+                TransformationHelper.DoTransform(player, TransformationHelper.SSJ2, DBZMOD.instance);
+                MyPlayer.ModPlayer(player).isTransforming = false;
+            }
+            else
+            {
+                Projectile.NewProjectile(player.Center.X - 40, player.Center.Y + 90, 0, 0, mod.ProjectileType("LSSJAuraBall"), 0, 0, player.whoAmI);
+                // this being set to false prior to the aura ball dying tells it to go LSSJ instead of LSSJ2 - weird choice, but I'm not going to argue with it.
+                MyPlayer.ModPlayer(player).isTransforming = false;
+            }
         }
     }
 }

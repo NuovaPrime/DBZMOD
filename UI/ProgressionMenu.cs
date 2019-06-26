@@ -29,9 +29,9 @@ namespace DBZMOD.UI
             backPanel.OnMouseUp += new MouseEvent(DragEnd);
             Append(backPanel);
 
-            backPanelImage = new UIImage(GFX.backPanel);
-            backPanelImage.Width.Set(GFX.backPanel.Width, 0f);
-            backPanelImage.Height.Set(GFX.backPanel.Height, 0f);
+            backPanelImage = new UIImage(Gfx.backPanel);
+            backPanelImage.Width.Set(Gfx.backPanel.Width, 0f);
+            backPanelImage.Height.Set(Gfx.backPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
             backPanel.Append(backPanelImage);

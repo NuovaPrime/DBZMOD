@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +8,10 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The soul of the land seems to give it life.'\n4% Increased ki damage\nIncreased flight speed\nThe longer you charge the more ki you charge, limits at +500%.");
+            Tooltip.SetDefault("'The soul of the land seems to give it life.'" +
+                "\n4% Increased ki damage" +
+                "\nIncreased flight speed" +
+                "\nThe longer you charge the more ki you charge, limits at +500%.");
             DisplayName.SetDefault("Earthen Scarab");
         }
 
@@ -25,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.04f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.04f;
                 player.GetModPlayer<MyPlayer>(mod).flightSpeedAdd += 0.1f;
                 player.GetModPlayer<MyPlayer>(mod).earthenScarab = true;
             }

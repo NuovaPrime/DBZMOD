@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Microsoft.Xna.Framework;
 using System;
-using DBZMOD.Extensions;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {
@@ -115,7 +115,7 @@ namespace DBZMOD
 
         public override void GetWeaponDamage(Player player, ref int damage)
         {            
-            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).kiDamage);
+            damage = (int)Math.Ceiling(damage * MyPlayer.ModPlayer(player).KiDamage);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)
@@ -154,14 +154,11 @@ namespace DBZMOD
 
         public override bool UseItem(Player player)
         {
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-
-            if(modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+            if(TransformationHelper.IsLSSJ(player) && !TransformationHelper.IsSSJ1(player))
             {
                 int i = Main.rand.Next(1, 4);
-                modPlayer.overloadCurrent += i;
+                MyPlayer.ModPlayer(player).overloadCurrent += i;
             }
-
             return true;
         }
 
@@ -196,27 +193,6 @@ namespace DBZMOD
                 }
             }
         }
-    }
-
-    public abstract class SupportItem : KiItem
-    {
-        public override bool CloneNewInstances
-        {
-            get
-            {
-                return true;
-            }
-        }
-        /*public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            TooltipLine indicate = new TooltipLine(mod, "", "");
-            string[] text2 = indicate.text.Split(' ');
-            indicate.text = "-- Support --";
-            indicate.overrideColor = new Color(69, 255, 56);
-            tooltips.Add(indicate);
-
-            base.ModifyTooltips(tooltips);
-        }*/
     }
     
     public abstract class PatreonItem : ModItem

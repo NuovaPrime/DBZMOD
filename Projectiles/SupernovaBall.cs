@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using DBZMOD.Extensions;
-using DBZMOD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD.Projectiles
@@ -106,7 +105,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                player.ApplyChannelingSlowdown();
+                ProjectileHelper.ApplyChannelingSlowdown(player);
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
@@ -130,7 +129,7 @@ namespace DBZMOD.Projectiles
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)Math.Ceiling(projectile.scale / 3f);
+                projectile.damage *= (int)Math.Ceiling(projectile.scale / 2f);
                 _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
                 SoundHelper.PlayCustomSound("Sounds/SuperNovaThrow", player, 0.6f);
             }

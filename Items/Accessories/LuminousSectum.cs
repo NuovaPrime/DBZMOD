@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
  using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -7,7 +7,10 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'It radiates with unstable energy.'\n9% increased ki damage\n+250 max ki\nHitting enemies has a small chance to fire off homing ki sparks.");
+            Tooltip.SetDefault("'It radiates with unstable energy.'" +
+                "\n9% increased ki damage" +
+                "\n+250 max ki" +
+                "\nHitting enemies has a small chance to fire off homing ki sparks.");
             DisplayName.SetDefault("Luminous Sectum");
         }
 
@@ -23,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.09f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.09f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 250;
                 player.GetModPlayer<MyPlayer>(mod).luminousSectum = true;
             }

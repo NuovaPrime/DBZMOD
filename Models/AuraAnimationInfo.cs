@@ -7,6 +7,7 @@ namespace DBZMOD.Models
 {
     public class AuraAnimationInfo
     {
+        public int id;
         public string auraAnimationSpriteName;
         public int frames;
         public int frameTimerLimit;
@@ -28,8 +29,9 @@ namespace DBZMOD.Models
         {
         }
 
-        public AuraAnimationInfo(string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
+        public AuraAnimationInfo(AuraID id, string spriteName, int frames, int frameTimer, BlendState blendState, string startupSound, string loopSoundName, int loopSoundDuration, bool isForm, bool isKaioken, DustDelegate dustDelegate, int startingFrames, DustDelegate startingDustDelegate, int priority)
         {
+            this.id = (int)id;
             auraAnimationSpriteName = spriteName;
             this.frames = frames;
             frameTimerLimit = frameTimer;
@@ -48,7 +50,7 @@ namespace DBZMOD.Models
 
         public Texture2D GetTexture()
         {
-            return DBZMOD.Instance.GetTexture(auraAnimationSpriteName);
+            return DBZMOD.instance.GetTexture(auraAnimationSpriteName);
         }
 
         public int GetHeight()
@@ -69,7 +71,7 @@ namespace DBZMOD.Models
             Vector2 position = Vector2.Zero;
             float scale = GetAuraScale(modPlayer);
             int auraOffsetY = GetAuraOffsetY(modPlayer);
-            if (modPlayer.isFlying && !isPlayerMostlyStationary && !modPlayer.isPlayerUsingKiWeapon)
+            if (modPlayer.isFlying && !isPlayerMostlyStationary && !FlightSystem.IsPlayerUsingKiWeapon(modPlayer))
             {
                 // ever so slightly shift the aura down a tad.
                 var forwardOffset = (int)Math.Floor(modPlayer.player.height * 0.75f);

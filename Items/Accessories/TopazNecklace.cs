@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("5% Increased minion damage and +1 max minions.");
+            Tooltip.SetDefault("9% Increased minion damage and +1 max minions.");
             DisplayName.SetDefault("Topaz Necklace");
         }
 
@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.minionDamage += 0.05f;
+                player.minionDamage += 0.09f;
                 player.maxMinions += 1;
                 player.GetModPlayer<MyPlayer>(mod).topazNecklace = true;
             }

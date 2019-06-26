@@ -6,6 +6,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 {
 	public class SpiritBall : KiItem
 	{
+        private Player _player;
 
         public override void SetDefaults()
 		{

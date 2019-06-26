@@ -9,7 +9,9 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("11% Increased Ki Damage\n6% Increased Ki Crit Chance\nMaximum Ki increased by 100.");
+            Tooltip.SetDefault("11% Increased Ki Damage"
+                + "\n6% Increased Ki Crit Chance" +
+                "\nMaximum Ki increased by 100.");
             DisplayName.SetDefault("Mythril Glasses");
         }
 
@@ -40,7 +42,7 @@ namespace DBZMOD.Items.Armor
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.11f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.11f;
             MyPlayer.ModPlayer(player).kiCrit += 6;
             MyPlayer.ModPlayer(player).kiMax2 += 100;
         }

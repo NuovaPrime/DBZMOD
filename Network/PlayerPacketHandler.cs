@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using DBZMOD.Enums;
-using DBZMOD.Traits;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -21,7 +21,6 @@ namespace DBZMOD.Network
         public const byte SYNC_KI_BEACON_REMOVE = 52;
         public const byte SEND_DRAGON_BALL_DESTROYED = 53;
         public const byte SYNC_DRAGON_BALL_CHANGE = 54;
-        public const byte SYNC_PLAYER_KILL_NPC = 55;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
         {
@@ -61,9 +60,6 @@ namespace DBZMOD.Network
                     break;
                 case (REQUEST_TELEPORT_MESSAGE):
                     ProcessRequestTeleport(reader, fromWho);
-                    break;
-                case (SYNC_PLAYER_KILL_NPC):
-                    ReceivePlayerKillNPC(reader, fromWho);
                     break;
             }
         }
@@ -160,13 +156,6 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendPlayerKillNPC(int toWho, NPC npc)
-        {
-            ModPacket packet = GetPacket(SYNC_PLAYER_KILL_NPC, 256);
-            packet.Write(npc.netID);
-            packet.Send(toWho);
-        }
-
         public void ReceiveDragonBallChange(BinaryReader reader, int fromWho)
         {
             DBZWorld world = DBZWorld.GetWorld();
@@ -231,19 +220,6 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void ReceivePlayerKillNPC(BinaryReader reader, int toWho)
-        {
-            byte npcId = reader.ReadByte();
-            NPC npc = null;
-
-            for (int i = 0; i < Main.npc.Length; i++)
-                if (Main.npc[i].netID == npcId)
-                    npc = Main.npc[i];
-
-            if (npc != null)
-                Main.LocalPlayer.GetModPlayer<MyPlayer>().OnKilledNPC(npc);
-        }
-
         //public void RequestTeleport(int toWho, int fromWho, Vector2 mapPosition)
         //{
         //    ModPacket packet = GetPacket(REQUEST_TELEPORT_MESSAGE, fromWho);
@@ -262,8 +238,8 @@ namespace DBZMOD.Network
         // should always be to server, from joining player
         public void SendPlayerInfoToPlayerFromOtherPlayer(int toWho, int fromWho)
         {
-            MyPlayer modPlayer = Main.player[fromWho].GetModPlayer<MyPlayer>();
-
+            Player player = Main.player[fromWho];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             SendChangedKiMax2(toWho, fromWho, fromWho, modPlayer.kiMax2);
             SendChangedKiMax3(toWho, fromWho, fromWho, modPlayer.kiMax3);
             SendChangedKiMaxMult(toWho, fromWho, fromWho, modPlayer.kiMaxMult);
@@ -279,7 +255,8 @@ namespace DBZMOD.Network
             SendChangedEvilMessage(toWho, fromWho, fromWho, modPlayer.evilMessage);
             SendChangedMushroomMessage(toWho, fromWho, fromWho, modPlayer.mushroomMessage);
             SendChangedIsHoldingKiWeapon(toWho, fromWho, fromWho, modPlayer.isHoldingKiWeapon);
-            SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.PlayerTrait);
+            SendChangedTraitChecked(toWho, fromWho, fromWho, modPlayer.traitChecked);
+            SendChangedPlayerTrait(toWho, fromWho, fromWho, modPlayer.playerTrait);
             SendChangedIsFlying(toWho, fromWho, fromWho, modPlayer.isFlying);
             SnedChangedPowerWishesLeft(toWho, fromWho, fromWho, modPlayer.powerWishesLeft);
             SendChangedIsTransformationAnimationPlaying(toWho, fromWho, fromWho, modPlayer.isTransformationAnimationPlaying);
@@ -484,12 +461,12 @@ namespace DBZMOD.Network
             packet.Send(toWho, fromWho);
         }
 
-        public void SendChangedPlayerTrait(int toWho, int fromWho, int whichPlayer, Trait trait)
+        public void SendChangedPlayerTrait(int toWho, int fromWho, int whichPlayer, string playerTrait)
         {
             var packet = GetPacket(SYNC_PLAYER, fromWho);
             packet.Write((int)PlayerVarSyncEnum.PlayerTrait);
             packet.Write(whichPlayer);
-            packet.Write(trait.UnlocalizedName);
+            packet.Write(playerTrait);
             packet.Send(toWho, fromWho);
         }
 
@@ -815,15 +792,21 @@ namespace DBZMOD.Network
                         packet.Send(-1, fromWho);
                     }
                     break;
-                case PlayerVarSyncEnum.PlayerTrait:
-                    player.PlayerTrait = DBZMOD.Instance.TraitManager[reader.ReadString()];
-
+                case PlayerVarSyncEnum.TraitChecked:
+                    player.traitChecked = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
-                        packet.Write(player.PlayerTrait.UnlocalizedName);
+                        packet.Write(player.traitChecked);
                         packet.Send(-1, fromWho);
                     }
-
+                    break;
+                case PlayerVarSyncEnum.PlayerTrait:
+                    player.playerTrait = reader.ReadString();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        packet.Write(player.playerTrait);
+                        packet.Send(-1, fromWho);
+                    }
                     break;
                 case PlayerVarSyncEnum.IsFlying:
                     player.isFlying = reader.ReadBoolean();

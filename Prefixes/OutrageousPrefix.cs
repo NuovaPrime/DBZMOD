@@ -16,7 +16,7 @@ namespace DBZMOD.Prefixes
 
             if (item.modItem != null && item.modItem is KiItem)
             {
-                item.GetGlobalItem<DBZMODGlobalItem>().kiChangeBonus = 14;
+                item.GetGlobalItem<DBZMODItem>().kiChangeBonus = 14;
                 ((KiItem)item.modItem).kiDrain *= 1.14f;
             }
         }

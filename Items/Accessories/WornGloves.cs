@@ -9,7 +9,8 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("10% Increased ki cast speed\n6% Increased ki damage");
+            Tooltip.SetDefault("10% Increased ki cast speed" +
+                "\n6% Increased ki damage");
             DisplayName.SetDefault("Worn Gloves");
         }
 
@@ -25,7 +26,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.06f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
                 player.GetModPlayer<MyPlayer>(mod).kiSpeedAddition += 0.10f;
                 player.GetModPlayer<MyPlayer>(mod).wornGloves = true;
             }

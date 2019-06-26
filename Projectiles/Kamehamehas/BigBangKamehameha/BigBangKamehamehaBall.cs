@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DBZMOD.Utilities;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Terraria;

@@ -1,9 +1,10 @@
 ﻿using System;
-using DBZMOD.Extensions;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
+using DBZMOD.Util;
+using DBZMOD.Projectiles;
 
 namespace DBZMOD
 {
@@ -11,9 +12,9 @@ namespace DBZMOD
     {
 
         //constants
-        const float FLIGHT_KI_DRAIN = 1f;
-        const float BURST_SPEED = 0.3f;
-        const float FLIGHT_SPEED = 0.1f;
+        const int FLIGHT_KI_DRAIN = 4;
+        const float BURST_SPEED = 0.5f;
+        const float FLIGHT_SPEED = 0.3f;
 
         public static void Update(Player player)
         {
@@ -21,7 +22,7 @@ namespace DBZMOD
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
             //check for ki or death lol
             if ((modPlayer.IsKiDepleted() || player.dead || player.mount.Type != -1 || player.ropeCount != 0) && modPlayer.isFlying)
@@ -43,18 +44,9 @@ namespace DBZMOD
 
                 //Input checks
                 float boostSpeed = (BURST_SPEED) * (modPlayer.isCharging ? 1 : 0);
-                
-                // handle ki drain
-                float totalFlightUsage = Math.Max(1f, FLIGHT_KI_DRAIN * modPlayer.flightKiConsumptionMultiplier);
-                float flightCostMult = modPlayer.flightUpgraded ? 0.25f : (modPlayer.flightDampeningUnlocked ? 0.5f : 1f);
-                totalFlightUsage *= flightCostMult;
-                modPlayer.AddKi((totalFlightUsage * (1f + boostSpeed)) * -1, false, false);
-                float flightSpeedMult = (1f + boostSpeed);
-                flightSpeedMult *= modPlayer.flightUpgraded ? 1.25f : (modPlayer.flightDampeningUnlocked ? 1f : 0.75f);
-                float flightSpeed = FLIGHT_SPEED * flightSpeedMult;
-                                    
-                float totalHorizontalFlightSpeed = flightSpeed + (player.moveSpeed / 3) + modPlayer.flightSpeedAdd;
-                float totalVerticalFlightSpeed = flightSpeed + (Player.jumpSpeed / 2) + modPlayer.flightSpeedAdd;
+                int totalFlightUsage = Math.Max(1, FLIGHT_KI_DRAIN - modPlayer.flightUsageAdd);
+                float totalHorizontalFlightSpeed = FLIGHT_SPEED + boostSpeed + (player.moveSpeed / 3) + modPlayer.flightSpeedAdd;
+                float totalVerticalFlightSpeed = FLIGHT_SPEED + boostSpeed + (Player.jumpSpeed / 2) + modPlayer.flightSpeedAdd;
 
                 if (modPlayer.isUpHeld)
                 {
@@ -80,32 +72,31 @@ namespace DBZMOD
                     mRotationDir -= Vector2.UnitX;
                 }
 
-                // TODO Add in TransformationAppearance class.
-                if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJ1Definition) && !modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
+                if (player.velocity.Length() > 0.5f)
+                {
+                    SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
+                }
+
+                if (TransformationHelper.IsSSJ(player) && !TransformationHelper.IsSSJG(player))
                 {
                     flightDustType = 170;
                 }
-                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition))
+                else if (TransformationHelper.IsLSSJ(player))
                 {
                     flightDustType = 107;
                 }
-                else if (modPlayer.IsTransformedInto(DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition))
+                else if (TransformationHelper.IsSSJG(player))
                 {
                     flightDustType = 174;
                 }
-                else if (DBZMOD.Instance.TransformationDefinitionManager.IsKaioken(modPlayer.ActiveTransformations))
+                else if (TransformationHelper.IsAnyKaioken(player))
                 {
                     flightDustType = 182;
                 }
                 else
                 {
                     flightDustType = 267;
-                }
-
-                if (player.velocity.Length() > 0.5f)
-                {
-                    SpawnFlightDust(player, boostSpeed, flightDustType, 0f);
-                }
+                }                
 
                 //calculate velocity
                 player.velocity.X = MathHelper.Lerp(player.velocity.X, 0, 0.1f);
@@ -126,6 +117,22 @@ namespace DBZMOD
                 float radRot = GetPlayerFlightRotation(mRotationDir, player);
 
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, radRot, 0.1f);
+
+                //drain ki
+                if (!modPlayer.flightUpgraded)
+                {
+                    if (DBZMOD.IsTickRateElapsed(2))
+                    {
+                        modPlayer.AddKi((totalFlightUsage + (totalFlightUsage * (int)boostSpeed)) * -1, false, false);                        
+                    }
+                }
+                else
+                {
+                    if (DBZMOD.IsTickRateElapsed(4))
+                    {
+                        modPlayer.AddKi(-1, false, false);                        
+                    }
+                }
             }
 
             // altered to only fire once, the moment you exit flight, to avoid overburden of sync packets when moving normally.
@@ -133,6 +140,27 @@ namespace DBZMOD
             {
                 player.fullRotation = MathHelper.Lerp(player.fullRotation, 0, 0.1f);
             }
+        }
+
+        public static bool IsPlayerUsingKiWeapon(MyPlayer modPlayer)
+        {
+            // try to figure out if the player is using a beam weapon actively.
+            // the reason we have to do this is because the IsMouseLeftHeld call isn't quite on time
+            // for the beam routine updates - we need to know if the charge ball is firing earlier than that.
+            bool isExistingBeamFiring = false;
+            if (modPlayer.player.heldProj > 0)
+            {
+                var proj = Main.projectile[modPlayer.player.heldProj];
+                if (proj.modProjectile != null && proj.modProjectile is BaseBeamCharge)
+                {
+                    var beamCharge = proj.modProjectile as BaseBeamCharge;
+                    if (beamCharge.IsSustainingFire)
+                    {
+                        isExistingBeamFiring = true;
+                    }
+                }
+            }
+            return modPlayer.isHoldingKiWeapon && ((modPlayer.isMouseLeftHeld && isExistingBeamFiring) || modPlayer.isMouseRightHeld);
         }
 
         public static Tuple<int, float> GetFlightFacingDirectionAndPitchDirection(MyPlayer modPlayer)
@@ -182,13 +210,15 @@ namespace DBZMOD
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             float leanThrottle = 180;
             // make sure if the player is using a ki weapon during flight, we're facing a way that doesn't make it look extremely goofy
-            if (modPlayer.isPlayerUsingKiWeapon)
+            if (IsPlayerUsingKiWeapon(modPlayer))
             {
                 var directionInfo = GetFlightFacingDirectionAndPitchDirection(modPlayer);
                 // get flight rotation from octant
                 var octantDirection = directionInfo.Item1;
                 leanThrottle = directionInfo.Item2;
 
+                bool isPlayerHorizontal = mRotationDir.X != 0;
+                bool isMouseAbove = leanThrottle < 0;
                 int dir = octantDirection;
                 if (dir != player.direction && player.whoAmI == Main.myPlayer)
                 {                    
@@ -196,7 +226,7 @@ namespace DBZMOD
                 }                
             }
 
-            if (modPlayer.isPlayerUsingKiWeapon)
+            if (IsPlayerUsingKiWeapon(modPlayer))
             {
                 // we already got the lean throttle from above, and set the direction we needed to not look stupid
                 if (player.direction == 1)

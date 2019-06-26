@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public sealed class LegendaryTestItem : ModItem
+    public class LegendaryTestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,9 +31,7 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            if (!DBZMOD.allowDebugItem) return false;
-
-            player.GetModPlayer<MyPlayer>().PlayerTrait = DBZMOD.Instance.TraitManager.Legendary;
+            MyPlayer.ModPlayer(player).playerTrait = "Legendary";
             return true;
 
         }

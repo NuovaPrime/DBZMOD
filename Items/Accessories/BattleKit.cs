@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
  using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -8,7 +8,11 @@ namespace DBZMOD.Items.Accessories
     {        
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A generic kit of tools for the average soldier.'\n6% Increased Ki damage\n10% Reduced Ki usage\nHunter effect + Increased charge speed\n15% Increased ki cast speed");
+            Tooltip.SetDefault("'A generic kit of tools for the average soldier.'" +
+                "\n6% Increased Ki damage" +
+                "\n10% Reduced Ki usage" +
+                "\nHunter effect + Increased charge speed" +
+                "\n15% Increased ki cast speed");
             DisplayName.SetDefault("Battle Kit");
         }
 
@@ -24,7 +28,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.06f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
                 player.GetModPlayer<MyPlayer>(mod).kiDrainMulti -= 0.10f;
                 player.GetModPlayer<MyPlayer>(mod).kiChargeRate += 1;
                 player.detectCreature = true;

@@ -9,7 +9,9 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("14% Increased Ki Damage\n9% Increased Ki Crit Chance\nMaximum Ki increased by 250.");
+            Tooltip.SetDefault("14% Increased Ki Damage"
+                + "\n9% Increased Ki Crit Chance" +
+                "\nMaximum Ki increased by 250.");
             DisplayName.SetDefault("Titanium Cap");
         }
 
@@ -35,7 +37,7 @@ namespace DBZMOD.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.15f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.15f;
             MyPlayer.ModPlayer(player).kiCrit += 9;
             MyPlayer.ModPlayer(player).kiMax2 += 250;
         }
