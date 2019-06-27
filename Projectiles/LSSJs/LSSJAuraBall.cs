@@ -1,4 +1,4 @@
-﻿using DBZMOD.Extensions;
+﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -31,7 +31,7 @@ namespace DBZMOD.Projectiles.LSSJs
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (MyPlayer.ModPlayer(player).IsLegendary())
+            if (MyPlayer.ModPlayer(player).IsPlayerLegendary())
             {
                 projectile.position.X = player.Center.X;
                 projectile.position.Y = player.Center.Y;
@@ -85,10 +85,17 @@ namespace DBZMOD.Projectiles.LSSJs
 
         public override void Kill(int timeLeft)
         {
-            MyPlayer modPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
-
-            modPlayer.DoTransform(DBZMOD.Instance.TransformationDefinitionManager.LSSJDefinition);
-            modPlayer.isTransforming = false;
+            Player player = Main.player[projectile.owner];
+            if (MyPlayer.ModPlayer(player).isTransforming)
+            {
+                TransformationHelper.DoTransform(player, TransformationHelper.LSSJ2, DBZMOD.instance);
+                MyPlayer.ModPlayer(player).isTransforming = false;
+            }
+            else
+            {
+                TransformationHelper.DoTransform(player, TransformationHelper.LSSJ, DBZMOD.instance);
+                MyPlayer.ModPlayer(player).isTransforming = false;
+            }
         }
     }
 }

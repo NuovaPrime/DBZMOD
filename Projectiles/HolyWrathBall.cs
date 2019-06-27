@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using DBZMOD.Extensions;
-using DBZMOD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework.Audio;
 
 namespace DBZMOD.Projectiles
@@ -118,7 +117,7 @@ namespace DBZMOD.Projectiles
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                player.ApplyChannelingSlowdown();
+                ProjectileHelper.ApplyChannelingSlowdown(player);
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())

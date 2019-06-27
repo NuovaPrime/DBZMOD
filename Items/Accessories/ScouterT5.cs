@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -8,7 +8,9 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A Piece of equipment used for scanning powerlevels.'\nGives Increased Ki Damage and Hunter effects.\n--Tier 5--");
+            Tooltip.SetDefault("'A Piece of equipment used for scanning powerlevels.'"
+               + "\nGives Increased Ki Damage and Hunter effects."
+               + "\n--Tier 5--");
             DisplayName.SetDefault("Purple Scouter");
         }
 
@@ -35,7 +37,7 @@ namespace DBZMOD.Items.Accessories
         public void GivePlayerBonuses(Player player)
         {
             player.detectCreature = true;
-            player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.15f;
+            player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.15f;
             player.GetModPlayer<MyPlayer>(mod).scouterT5 = true;            
         }
 

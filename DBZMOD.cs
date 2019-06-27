@@ -10,13 +10,8 @@ using DBZMOD.Effects;
 using Terraria.Graphics.Effects;
 using System.IO;
 using DBZMOD.Config;
-using DBZMOD.ModSupport;
 using DBZMOD.Network;
-using DBZMOD.Traits;
-using DBZMOD.Transformations;
-using DBZMOD.Utilities;
-using DBZMOD.UI.HairMenu;
-using Leveled;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {
@@ -24,14 +19,11 @@ namespace DBZMOD
     {
         private UIFlatPanel _uiFlatPanel;
 
-        private static TransformationMenu _transformationMenu;
+        private static TransMenu _transMenu;
         private static UserInterface _transMenuInterface;
 
         private static WishMenu _wishMenu;
         private static UserInterface _wishMenuInterface;
-
-        private static HairMenu _hairMenu;
-        private static UserInterface _hairMenuInterface;
 
         private static KiBar _kibar;
         private static UserInterface _kiBarInterface;
@@ -44,10 +36,6 @@ namespace DBZMOD
 
         private static InstantTransmissionMapHelper _instantTransmissionMapTeleporter;
 
-        internal static CircleShader circle;
-
-        internal static bool allowDebugItem = true;
-
         private ResourceBar _resourceBar;
 
         public bool thoriumLoaded;
@@ -55,9 +43,10 @@ namespace DBZMOD
         public bool enigmaLoaded;
         public bool battlerodsLoaded;
         public bool expandedSentriesLoaded;
+        public bool calamityLoaded;
+        public static DBZMOD instance;
 
-        private TransformationDefinitionManager _transformationDefinitionManager;
-        private TraitManager _traitManager;
+        internal static CircleShader circle;
 
         public DBZMOD()
         {
@@ -67,24 +56,37 @@ namespace DBZMOD
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
+        }
 
-            Instance = this;
+        public override void Unload()
+        {
+            Gfx.UnloadGfx();
+            KiBar.visible = false;
+            OverloadBar.visible = false;
+            instance = null;
+            TransMenu.menuvisible = false;
+            ProgressionMenu.menuvisible = false;
+            WishMenu.menuVisible = false;
+            TransMenu.ssj1On = false;
+            TransMenu.ssj2On = false;
+            UIFlatPanel.backgroundTexture = null;
         }
 
         public override void Load()
         {
             // loads the mod's configuration file.
             ConfigModel.Load();
-            SteamHelper.Initialize();
 
             //Loot.EMMLoader.RegisterMod(this);
             //Loot.EMMLoader.SetupContent(this);
+            instance = this;
 
             tremorLoaded = ModLoader.GetMod("Tremor") != null;
             thoriumLoaded = ModLoader.GetMod("ThoriumMod") != null;
             enigmaLoaded = ModLoader.GetMod("Laugicality") != null;
             battlerodsLoaded = ModLoader.GetMod("UnuBattleRods") != null;
             expandedSentriesLoaded = ModLoader.GetMod("ExpandedSentries") != null;
+            calamityLoaded = ModLoader.GetMod("CalamityMod") != null;
 
             MyPlayer.kaiokenKey = RegisterHotKey("Kaioken", "J");
             MyPlayer.energyCharge = RegisterHotKey("Energy Charge", "C");
@@ -100,7 +102,7 @@ namespace DBZMOD
 
             if (!Main.dedServ)
             {
-                GFX.LoadGFX(this);
+                Gfx.LoadGfx(this);
                 KiBar.visible = true;
 
                 ActivateTransMenu();
@@ -108,7 +110,6 @@ namespace DBZMOD
                 ActivateProgressionMenu();
                 ActivateKiBar();
                 ActivateOverloadBar();
-                ActivateHairMenu();
 
                 _instantTransmissionMapTeleporter = new InstantTransmissionMapHelper();
 
@@ -119,39 +120,14 @@ namespace DBZMOD
                 Filters.Scene["DBZMOD:WishSky"] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.1f, 0.1f, 0.1f).UseOpacity(0.7f), EffectPriority.VeryHigh);
                 SkyManager.Instance["DBZMOD:WishSky"] = new WishSky();
             }
-        }
-
-        public override void Unload()
-        {
-            TransformationDefinitionManager.Clear();
-
-            GFX.UnloadGFX();
-            KiBar.visible = false;
-            OverloadBar.visible = false;
-            Instance = null;
-            TransformationMenu.menuVisible = false;
-            ProgressionMenu.menuvisible = false;
-            WishMenu.menuVisible = false;
-            UIFlatPanel.backgroundTexture = null;
-            HairMenu.menuVisible = false;
-
-            Leveled = null;
-        }
-
-        public override void PostSetupContent()
-        {
-            Leveled = ModLoader.GetMod("Leveled");
-
-            if (Leveled != null)
-                LeveledSupport.Initialize();
-        }
+        }        
 
         public static void ActivateTransMenu()
         {
-            _transformationMenu = new TransformationMenu();
-            _transformationMenu.Activate();
+            _transMenu = new TransMenu();
+            _transMenu.Activate();
             _transMenuInterface = new UserInterface();
-            _transMenuInterface.SetState(_transformationMenu);
+            _transMenuInterface.SetState(_transMenu);
         }
 
         public static void ActivateWishmenu()
@@ -186,33 +162,22 @@ namespace DBZMOD
             _overloadBarInterface.SetState(_overloadbar);
         }
 
-        public static void ActivateHairMenu()
-        {
-            _hairMenu = new HairMenu();
-            _hairMenu.Activate();
-            _hairMenuInterface = new UserInterface();
-            _hairMenuInterface.SetState(_hairMenu);
-        }
-
         public override void AddRecipeGroups()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             RecipeGroup group = new RecipeGroup(() => Lang.misc[37] + " Ki Fragment", new int[]
             {
-                ItemType("KiFragment1"),
-                ItemType("KiFragment2"),
-                ItemType("KiFragment3"),
-                ItemType("KiFragment4"),
-                ItemType("KiFragment5")
+            ItemType("KiFragment1"),
+            ItemType("KiFragment2"),
+            ItemType("KiFragment3"),
+            ItemType("KiFragment4"),
+            ItemType("KiFragment5")
             });
-#pragma warning restore CS0618 // Type or member is obsolete
-
             RecipeGroup.RegisterGroup("DBZMOD:KiFragment", group);
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (_transMenuInterface != null && TransformationMenu.menuVisible)
+            if (_transMenuInterface != null && TransMenu.menuvisible)
             {
                 _transMenuInterface.Update(gameTime);
             }
@@ -220,11 +185,6 @@ namespace DBZMOD
             if (_wishMenuInterface != null && WishMenu.menuVisible)
             {
                 _wishMenuInterface.Update(gameTime);
-            }
-
-            if (_hairMenuInterface != null && HairMenu.menuVisible)
-            {
-                _hairMenuInterface.Update(gameTime);
             }
 
             if (_progressionMenuInterface != null && ProgressionMenu.menuvisible)
@@ -252,14 +212,14 @@ namespace DBZMOD
                     InterfaceScaleType.UI)
                 );
             }
-            int index2 = layers.FindIndex(layer => layer.Name.Contains("Hotbar"));
+            int index2 = layers.FindIndex(layer => layer.Name.Contains("Resource Bars"));
             if (index2 != -1)
             {
                 layers.Insert(index2, new LegacyGameInterfaceLayer(
                     "DBZMOD: Menus",
                     delegate
                     {
-                        if (TransformationMenu.menuVisible)
+                        if (TransMenu.menuvisible)
                         {
                             _transMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
@@ -272,11 +232,6 @@ namespace DBZMOD
                         if (WishMenu.menuVisible)
                         {
                             _wishMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
-                        }
-
-                        if (HairMenu.menuVisible)
-                        {
-                            _hairMenuInterface.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                         }
 
                         return true;
@@ -312,9 +267,9 @@ namespace DBZMOD
         // packet handling goes here
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            NetworkHelper.HandlePacket(reader, whoAmI);
-        }
-
+           NetworkHelper.HandlePacket(reader, whoAmI);
+        }       
+        
         public static uint GetTicks()
         {
             return Main.GameUpdateCount;
@@ -324,33 +279,7 @@ namespace DBZMOD
         {
             return GetTicks() > 0 && GetTicks() % i == 0;
         }
-
-        public TransformationDefinitionManager TransformationDefinitionManager
-        {
-            get
-            {
-                if (_transformationDefinitionManager == null) _transformationDefinitionManager = new TransformationDefinitionManager();
-                if (!_transformationDefinitionManager.Initialized) _transformationDefinitionManager.DefaultInitialize();
-
-                return _transformationDefinitionManager;
-            }
-        }
-
-        public TraitManager TraitManager
-        {
-            get
-            {
-                if (_traitManager == null) _traitManager = new TraitManager();
-                if (!_traitManager.Initialized) _traitManager.DefaultInitialize();
-
-                return _traitManager;
-            }
-        }
-
-        internal static DBZMOD Instance { get; private set; }
-
-        internal static Mod Leveled { get; private set; }
     }
 }
-
+ 
 

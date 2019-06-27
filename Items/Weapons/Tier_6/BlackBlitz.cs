@@ -14,10 +14,6 @@ namespace DBZMOD.Items.Weapons.Tier_6
             item.knockBack = 3f;
             item.useStyle = 5;
             item.useAnimation = 8;
-            if (!Main.dedServ)
-            {
-                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Rapidblackpowerball").WithPitchVariance(.1f);
-            }
             item.useTime = 4;
             item.width = 50;
             item.height = 50;

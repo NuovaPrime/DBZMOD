@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DBZMOD.Enums;
-using DBZMOD.Utilities;
+using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,18 +12,18 @@ using Terraria.ModLoader;
 namespace DBZMOD.Projectiles
 {
     // unabashedly stolen from blushie's laser example, and then customized WIP
-	public abstract class BaseBeam : ModProjectile
+    public abstract class BaseBeam : ModProjectile
     {
         // all beams tend to have a similar structure, there's a charge, a tail or "start", a beam (body) and a head (forwardmost point)
         // this is the structure that helps alleviate some of the logic burden by predefining the dimensions of each segment.
-        protected Point 
+        protected Point
             tailOrigin = new Point(14, 0),
             tailSize = new Point(46, 72),
             beamOrigin = new Point(14, 74),
             beamSize = new Point(46, 36),
             headOrigin = new Point(0, 112),
             headSize = new Point(74, 74);
-        
+
         // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame. (This is handled by the charge ball)
         public float beamFadeOutTime = 30f;
 
@@ -39,9 +38,6 @@ namespace DBZMOD.Projectiles
 
         // the speed at which the beam head travels through space
         public float beamSpeed = 24f;
-
-        // the volume of the beam firing audio
-        public float beamSoundVolume = 1f;
 
         // the type of dust to spawn when the beam is firing
         public int dustType = 169;
@@ -67,6 +63,8 @@ namespace DBZMOD.Projectiles
         // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
         public string beamSoundKey = "Sounds/BasicBeamFire";
 
+        public float beamSoundVolume = 1f;
+
         // The sound slot used by the projectile to kill the sounds it's making
         public KeyValuePair<uint, SoundEffectInstance> beamSoundSlotId;
 
@@ -85,7 +83,7 @@ namespace DBZMOD.Projectiles
 
         // Beam doesn't penetrate targets until they're dead (it doesn't penetrate at all, really)
         public bool isEntityColliding = false;
-        
+
         // controls what sections of the beam segment we're drawing at any given point in time (assumes two or more beam segments tile correctly)
         private int _beamSegmentAnimation = 0;
 
@@ -93,7 +91,7 @@ namespace DBZMOD.Projectiles
         {
             return new Rectangle(tailOrigin.X, tailOrigin.Y, tailSize.X, tailSize.Y);
         }
-                
+
         public Rectangle BeamRectangle()
         {
             return new Rectangle(beamOrigin.X, beamOrigin.Y, beamSize.X, beamSize.Y);
@@ -130,7 +128,7 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public float BeamIntensity
+        public float FiringTime
         {
             get
             {
@@ -143,18 +141,13 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        private int GetSlowDuration()
-        {
-            return (int)Math.Floor(BeamIntensity / (Math.Sqrt(originalBeamIntensity) / 60f));
-        }
-
         public bool IsDetached
         {
             get
             {
                 return projectile.localAI[0] > 0f;
             }
-        }        
+        }
 
         public float DetachmentTimer
         {
@@ -168,7 +161,13 @@ namespace DBZMOD.Projectiles
                 projectile.netUpdate = true;
             }
         }
-        
+
+        // the length of a "step" of the body, defined loosely as the body's Y length minus an arbitrary cluster of pixels to overlap cleanly.
+        public float StepLength()
+        {
+            return (beamSize.Y - 1) * projectile.scale;
+        }
+
         public override void SetDefaults()
         {
             projectile.width = 10;
@@ -179,37 +178,29 @@ namespace DBZMOD.Projectiles
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-        {            
+        {
             return false;
         }
 
-        // this handles scaling the beam down by the wall distance
-        private float wallDistanceScaling = 1.0f;
-
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            if (projectile.scale == 0f)
-                return;
-            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White, projectile.scale * wallDistanceScaling);
+            DrawLaser(spriteBatch, Main.projectileTexture[projectile.type], Color.White, projectile.scale);
         }
 
         // The core function of drawing a laser
         public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Color color, float scale = 1f)
-        {               
+        {
             // half pi subtracted from the rotation.
             float rotation = projectile.velocity.ToRotation() - 1.57f;
-            Vector2 trueTailStart = TailStart() - TailHeldWallDistanceScaleOffset();
-            Vector2 trueTailEnd = TailEnd() - (TailHeldWallDistanceScaleOffset() + TailRecessionWallDistanceScaleOffset());
-            Vector2 trueBodyEnd = BeamEnd() - (TailHeldWallDistanceScaleOffset() + TailRecessionWallDistanceScaleOffset());
 
             // draw the beam tail
-            spriteBatch.Draw(texture, trueTailStart - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
-                        
+            spriteBatch.Draw(texture, TailPositionStart() - Main.screenPosition, TailRectangle(), color, rotation, new Vector2(tailSize.X * .5f, tailSize.Y * .5f), scale, 0, 0f);
+
             // draw the body between the beam and its destination point. We do this in two sections if the beam is "animated"
-            for (float i = -1f; i < Distance / projectile.scale; i += beamSize.Y - 1f)
+            for (float i = -1f; i < Distance - StepLength(); i += StepLength())
             {
-                Vector2 origin = trueTailEnd + i * projectile.scale * projectile.velocity;
-                
+                Vector2 origin = TailPositionEnd() + i * projectile.velocity;
+
                 if (_beamSegmentAnimation > 0)
                 {
                     spriteBatch.Draw(texture, origin - Main.screenPosition, BeamRectangleAnimatedSegment1(), color, rotation, new Vector2(beamSize.X * .5f, beamSize.Y * .5f), scale, 0, 0f);
@@ -222,59 +213,42 @@ namespace DBZMOD.Projectiles
             }
 
             // draw the beam head
-            spriteBatch.Draw(texture, trueBodyEnd - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(headSize.X * .5f, headSize.Y * .5f), scale, 0, 0f);
+            spriteBatch.Draw(texture, BodyPositionEnd() - Main.screenPosition, HeadRectangle(), color, rotation, new Vector2(headSize.X * .5f, headSize.Y * .5f), scale, 0, 0f);
         }
 
-        public Vector2 TailHeldWallDistanceScaleOffset()
+        public Vector2 TailPositionCollisionStart()
         {
-            return TailHeldOffset() * (1f - wallDistanceScaling);
+            return projectile.position + offsetY + 16f * projectile.velocity;
         }
 
-        public Vector2 TailHeldOffset()
+        public Vector2 TailPositionStart()
         {
-            return (TailHeldDistance * projectile.scale * projectile.velocity);
+            return projectile.position + offsetY + (TailHeldDistance * projectile.scale * projectile.velocity);
         }
 
-        public Vector2 TailStart()
+        public Vector2 TailPositionEnd()
         {
-            return projectile.position + offsetY + TailHeldOffset();
+            return TailPositionStart() + (tailSize.Y * projectile.scale * projectile.velocity) + ((beamSize.Y / 2f) - (tailSize.Y / 2f)) * projectile.scale * projectile.velocity;
         }
 
-        public Vector2 TailRecessionWallDistanceScaleOffset()
+        public Vector2 BodyPositionEnd()
         {
-            return TailRecession() * (1f - wallDistanceScaling) * projectile.velocity;
+            return TailPositionEnd() + Math.Max(0f, Distance - StepLength()) * projectile.scale * projectile.velocity;
         }
 
-        public float TailRecession()
+        public Vector2 HeadPositionEnd()
         {
-            return (tailSize.Y + (beamSize.Y / 2f) - (tailSize.Y / 2f)) * projectile.scale;
+            return BodyPositionEnd() + (headSize.Y * 0.66f) * projectile.scale * projectile.velocity;
         }
 
-        public Vector2 TailEnd()
+        public Vector2 HeadPositionCollisionEnd()
         {
-            return TailStart() + (TailRecession() * projectile.velocity);
+            return BodyPositionEnd() + (headSize.Y * 0.2f) * projectile.scale * projectile.velocity;
         }
 
-        public float BodyExtension()
-        {
-            return Math.Max(0f, Distance);
-        }
-
-        public Vector2 BeamEnd()
-        {
-            return TailEnd() + BodyExtension() * projectile.velocity;
-        }
-
-        public float HeadExtension()
-        {
-            return (headSize.Y * 0.2f) * projectile.scale;
-        }
-
-        public Vector2 HeadEnd()
-        {
-            return BeamEnd() + HeadExtension() * projectile.velocity;
-        }
-
+        private const float BEAM_ENTITY_DISTANCE_GRADIENT = 1f;
+        // Alceris hack, since collision is already handled outside of the Collider now, this always returns true
+        // and gets trumped by whatever is returned from CanHit methods.
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             return true;
@@ -282,77 +256,81 @@ namespace DBZMOD.Projectiles
 
         public override bool? CanHitNPC(NPC target)
         {
-            if (target.dontTakeDamage || target.friendly)
-                return false;
-            return CanHitEntity(target);
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.dontTakeDamage && !target.friendly;
+            if (isAnyCollision && isEntityColliding)
+            {
+                while (DoCollisionCheck(target.Hitbox))
+                {
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
+                }
+            }
+
+            if (target.immune[projectile.owner] > 0) return false;
+            return isAnyCollision;
         }
 
         public override bool CanHitPlayer(Player target)
         {
-            if (target.immune)
-                return false;
-            return CanHitEntity(target);
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && !target.immune;
+            if (isAnyCollision && isEntityColliding)
+            {
+                while (DoCollisionCheck(target.Hitbox))
+                {
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
+                }
+            }
+
+            return isAnyCollision;
         }
 
         public override bool CanHitPvp(Player target)
         {
-            if (target.immune || target.hostile || target.team == Main.player[projectile.owner].team)
-                return false;
-            return CanHitEntity(target);
-        }
-
-        public bool CanHitEntity(Entity e)
-        {
-            if (!e.active)
-                return false;
-            Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, e.Hitbox);
-            if (collisionData.Item1 && isEntityColliding)
+            bool isAnyCollision = DoCollisionCheck(target.Hitbox) && target.hostile && target.team != Main.player[projectile.owner].team;
+            if (isAnyCollision && isEntityColliding)
             {
-                bool isColliding = false;
-                // if the beam would kill this target in one hit, no collision!
-                if (e is NPC && projectile.damage <= ((NPC) e).lifeMax)
+                while (DoCollisionCheck(target.Hitbox))
                 {
-                    isColliding = true;
-                } else if (e is Player && projectile.damage <= ((Player) e).statLifeMax2)
-                {
-                    isColliding = true;
-                }
-
-                if (isColliding)
-                {
-                    Distance = collisionData.Item2; // arbitrary padding
-                    ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, HeadEnd());
+                    if (Distance < 0f)
+                        break;
+                    Distance -= BEAM_ENTITY_DISTANCE_GRADIENT;
                 }
             }
 
-            return collisionData.Item1;
+            if (target.immune) return false;
+            return isAnyCollision;
         }
 
-
-        private const float BEAM_SLOWDOWN_INTENSITY = 0.5f;
-        private const float BEAM_SLOW_RECOVERY_THRESHOLD = 0.25f;
-
-        private void HandleTargetCollisionSlowdown(NPC target)
+        public bool DoCollisionCheck(Rectangle targetHitbox)
         {
-            int slowDuration = GetSlowDuration();
-            // the beam is too weak to hitstun
-            if (slowDuration * BEAM_SLOW_RECOVERY_THRESHOLD <= 1)
-            {
-                return;
-            }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            float scalingSlowDown = 1f - (BEAM_SLOWDOWN_INTENSITY);
-            scalingSlowDown *= (float)Math.Sqrt(BeamIntensityPercentage);
+            Vector2 unit = projectile.velocity;
+            float tailPoint = 0f;
+            float bodyPoint = 0f;
+            float headPoint = 0f;
 
-            modPlayer.ApplyHitStun(target, slowDuration, (1f - scalingSlowDown), BEAM_SLOW_RECOVERY_THRESHOLD);
+            bool tailCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionCollisionStart(), TailPositionEnd(), tailSize.X, ref tailPoint);
+
+            bool bodyCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), TailPositionEnd(), BodyPositionEnd(), beamSize.X, ref bodyPoint);
+
+            bool headCollision = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), BodyPositionEnd(), HeadPositionCollisionEnd(), headSize.X, ref headPoint);
+
+            bool isAnyCollision = tailCollision || headCollision || bodyCollision;
+
+            // Run an AABB versus Line check to look for collisions, look up AABB collision first to see how it works
+            // It will look for collisions on the given line using AABB
+            return isAnyCollision;
         }
 
+        // Set custom immunity time on hitting an NPC
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             base.OnHitNPC(target, damage, knockback, crit);
-            HandleTargetCollisionSlowdown(target);
-            target.immune[projectile.owner] = immunityFrameOverride;            
+            target.netUpdate = true;
+            target.immune[projectile.owner] = immunityFrameOverride;
         }
 
         // helper field lets us limit mouse movement's impact on the charge ball rotation.
@@ -364,13 +342,25 @@ namespace DBZMOD.Projectiles
         // Just fired bool is true the moment the beam comes into existence, to process audio, and then immediately set to false afterwards to prevent sound from looping.
         private bool _justFired = true;
 
-        // used to track the original mouse vector for beams that don't track at all.
+        // used to trakc the original mouse vector for beams that don't track at all.
         private Vector2 _originalMouseVector = Vector2.Zero;
         private Vector2 _originalScreenPosition = Vector2.Zero;
 
-        // capture the current mouse vector, to normalize movement prior to updating the charge ball location.
-        private void HandleBeamMouseCoordinates(Player player)
+        private const float BEAM_TILE_DISTANCE_GRADIENT = 8f;
+        // The AI of the projectile
+        public override void AI()
         {
+            Player player = Main.player[projectile.owner];
+
+            ProcessKillRoutine(player);
+
+            // stationary beams are instantaneously "detached", they behave weirdly.
+            if (isStationaryBeam && !IsDetached)
+            {
+                DetachmentTimer = 1;
+            }
+
+            // capture the current mouse vector, we're going to normalize movement prior to updating the charge ball location.
             if (projectile.owner == Main.myPlayer)
             {
                 Vector2 mouseVector = Main.MouseWorld;
@@ -410,153 +400,70 @@ namespace DBZMOD.Projectiles
 
                 _oldScreenPosition = screenPosition;
             }
-        }
 
-        //private int framesSinceCollision = 40;
-        private const float BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST = 0.025f;
-        private void HandleTileCollision()
-        {
-            bool isColliding = IsTileColliding();
+            UpdateBeamPlayerItemUse(player);
 
-            // if distance is about to be throttled, we're hitting something. Spawn some dust.
-            if (isColliding)
+            // handle the distance routine
+            // the difference between distance and tracked distance is that distance is the actual travel.
+            // tracked distance is with collision, and resets distance if it's too high.
+            Distance += beamSpeed;
+            float trackedDistance;
+            for (trackedDistance = 0f; trackedDistance <= maxBeamDistance; trackedDistance += BEAM_TILE_DISTANCE_GRADIENT)
             {
-                //framesSinceCollision = -5;
-                if (BeamIntensityPercentage >= BEAM_INTENSITY_MINIMUM_FOR_COLLISION_DUST) { 
-                    var dustVector = HeadEnd();
-                    ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+                Vector2 origin = TailPositionStart() + projectile.velocity * (trackedDistance + headSize.Y * projectile.scale - StepLength());
+
+                if (!ProjectileHelper.CanHitLine(TailPositionStart(), origin))
+                {
+                    // changed to a while loop at a much finer gradient to smooth out beam transitions. Experimental.
+                    trackedDistance -= BEAM_TILE_DISTANCE_GRADIENT;
+                    if (trackedDistance <= 0)
+                    {
+                        trackedDistance = 0;
+                    }
+                    break;
                 }
             }
-            else
+
+            // handle animation frames on animated beams
+            if (isBeamSegmentAnimated)
             {
-                //framesSinceCollision = Math.Min(50, framesSinceCollision + 1);
-                float beamAcceleration = 1f; // Math.Max(0, Math.Min(1, framesSinceCollision * 0.02f));
-                Distance = Math.Min(maxBeamDistance, Distance + beamAcceleration * beamSpeed);
+                _beamSegmentAnimation += 8;
+                if (_beamSegmentAnimation >= StepLength())
+                {
+                    _beamSegmentAnimation = 0;
+                }
             }
+
+            // if distance is about to be throttled, we're hitting something. Spawn some dust.
+            if (Distance >= trackedDistance)
+            {
+                var dustVector = TailPositionStart() + (trackedDistance + headSize.Y - StepLength()) * projectile.velocity;
+                ProjectileHelper.DoBeamCollisionDust(dustType, collisionDustFrequency, projectile.velocity, dustVector);
+            }
+
+            // throttle distance by collision
+            Distance = Math.Min(trackedDistance, Distance);
 
             // shoot sweet sweet particles
             for (var i = 0; i < fireParticleDensity; i++)
             {
                 ProjectileHelper.DoBeamDust(projectile.position, projectile.velocity, dustType, dustFrequency, Distance, TailHeldDistance, tailSize.ToVector2(), beamSpeed);
             }
-        }
 
-        // handle animation frames on animated beams
-        private void HandleBeamSegmentAnimation()
-        {
-            if (isBeamSegmentAnimated)
-            {
-                _beamSegmentAnimation += 8;
-                if (_beamSegmentAnimation >= beamSize.Y)
-                {
-                    _beamSegmentAnimation = 0;
-                }
-            }
-        }
-
-        // stationary beams are instantaneously "detached", they behave weirdly.
-        private void SetIsDetached()
-        {
-            if (isStationaryBeam && !IsDetached)
-            {
-                DetachmentTimer = 1;
-            }
-        }
-
-        // Handle the audio playing, note this positionally tracks at the head position end for effect.
-        private void HandleFiringSound()
-        {
+            // Handle the audio playing, note this positionally tracks at the head position end for effect.
             if (_justFired)
             {
-                beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadEnd(), beamSoundVolume);
-                _justFired = false;
+                beamSoundSlotId = SoundHelper.PlayCustomSound(beamSoundKey, HeadPositionEnd(), beamSoundVolume);
             }
-        }
 
-        private float BeamIntensityPercentage
-        {
-            get
-            {
-                if (originalBeamIntensity == 0f)
-                    return 0f;
-                return BeamIntensity / originalBeamIntensity;
-            }
-        }
-
-        private float originalBeamIntensity = 0f;
-
-        // The AI of the projectile
-        public override void AI()
-        {
-            if (originalBeamIntensity == 0f)
-                originalBeamIntensity = BeamIntensity;
-
-            Player player = Main.player[projectile.owner];
-
-            ProcessKillRoutine(player);
-
-            SetIsDetached();
-
-            HandleBeamMouseCoordinates(player);
-
-            UpdateBeamPlayerItemUse(player);
-
-            HandleBeamSegmentAnimation();
-
-            HandleTileCollision();
-
-            HandleFiringSound();
-
-            HandleIntensityScaling();
+            _justFired = false;
 
             // Update tracked audio
-            SoundHelper.UpdateTrackedSound(beamSoundSlotId, HeadEnd());
+            SoundHelper.UpdateTrackedSound(beamSoundSlotId, HeadPositionEnd());
 
-            //Add lights along the beam's tile plot line
+            //Add lights
             DelegateMethods.v3_1 = new Vector3(0.8f, 0.8f, 1f);
             Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - TailHeldDistance), beamSize.Y, DelegateMethods.CastLight);
-        }
-
-        public float GetScaleMinimum()
-        {
-            return 0.05f;
-        }
-
-        public void HandleIntensityScaling()
-        {
-            float newScale = (float) Math.Min(1f, Math.Sqrt(BeamIntensity) * GetBeamIntensityThreshold() / Math.Sqrt(originalBeamIntensity));
-            if (newScale <= GetScaleMinimum())
-            {
-                projectile.scale = 0f;
-                return;
-            }
-            projectile.scale = newScale;
-        }
-
-        public bool IsTileColliding()
-        {
-            // detects changes rapidly, used for rotation sampling, primarily, as it is shoddy at projecting forward motion.
-            Rectangle struckTile = ProjectileHelper.GetClosestTileCollisionInBeam(TailStart(), HeadEnd());
-            if (!struckTile.Equals(Rectangle.Empty))
-            {
-                // samples the full length of the beam using a TilePlotLine method found in vanilla.
-                // unreliable but gets us most of the way there.
-                Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, struckTile);
-                Distance = collisionData.Item3 == BeamHitLocation.Tail ? 0f : Math.Min(maxBeamDistance, collisionData.Item2);
-                return true;
-            }
-
-            // only sample the second time if we didn't already detect collision in the beam routine
-            // this picks up the pieces when the above method fails to properly detect collision, which happens for reasons I can't explain.
-            Tuple<float, Rectangle> struckTileWithOffset = ProjectileHelper.GetClosestTileCollisionByForwardSampling(HeadEnd(), beamSpeed, projectile.velocity);
-            if (!struckTileWithOffset.Item2.Equals(Rectangle.Empty))
-            {
-                Tuple<bool, float, BeamHitLocation> collisionData = ProjectileHelper.GetCollisionData(TailStart(), TailEnd(), BeamEnd(), HeadEnd(), tailSize.X, beamSize.X, headSize.X, Distance, struckTileWithOffset.Item2);
-                Distance = (collisionData.Item3 == BeamHitLocation.Tail ? 0f : Math.Min(collisionData.Item2 + struckTileWithOffset.Item1, maxBeamDistance));
-                return true;
-            }
-
-            return false;
         }
 
         public void UpdateBeamTailLocationAndDirection(Player player, Vector2 mouseVector)
@@ -565,7 +472,7 @@ namespace DBZMOD.Projectiles
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            // Multi-player support here, only run this code if the client running it is the owner of the projectile
+            // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer && (!IsDetached || isStationaryBeam))
             {
                 Vector2 diff = mouseVector - projectile.position;
@@ -580,9 +487,22 @@ namespace DBZMOD.Projectiles
         {
             projectile.timeLeft = 2;
 
-            if (IsDetached)
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (!modPlayer.isMouseLeftHeld)
+            {
+                ProjectileHelper.StartKillRoutine(projectile);
+            }
+
+            if (IsDetached && FiringTime == 0)
             {
                 DetachmentTimer++;
+                projectile.scale /= 1.1f;
+            }
+
+            if (FiringTime > 0)
+            {
+                FiringTime--;
             }
 
             if (player.dead || DetachmentTimer >= beamFadeOutTime)
@@ -606,12 +526,16 @@ namespace DBZMOD.Projectiles
                 return;
             }
 
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.position = player.Center;
             int dir = projectile.direction;
-            
             player.ChangeDir(dir);
-            player.itemTime = 2;
-            player.itemAnimation = 2;
+            player.heldProj = projectile.whoAmI;
+            if (modPlayer.isMouseLeftHeld)
+            {
+                player.itemTime = 2;
+                player.itemAnimation = 2;
+            }
             player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir, projectile.velocity.X * dir);
         }
 
@@ -619,7 +543,7 @@ namespace DBZMOD.Projectiles
         {
             DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
             Vector2 unit = projectile.velocity;
-            Utils.PlotTileLine(TailStart(), TailStart() + unit * (Distance + headSize.Y * 0.66f), (beamSize.Y) * projectile.scale, DelegateMethods.CutTiles);
+            Utils.PlotTileLine(TailPositionStart(), TailPositionStart() + unit * (Distance + headSize.Y * 0.66f), (beamSize.Y) * projectile.scale, DelegateMethods.CutTiles);
         }
 
         public override bool ShouldUpdatePosition()
@@ -630,43 +554,44 @@ namespace DBZMOD.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
-            if (crit)
-                damage *= 2;
-            damage = GetBeamIntensityDamage(damage);
-            knockback = knockback + target.knockBackResist;
-        }
-
-        public float GetBeamIntensityThreshold()
-        {
-            return 5f;
-        }
-
-        public int GetBeamIntensityDamage(int damage)
-        {
-            return (int)Math.Ceiling(damage * Math.Min(1d, (BeamIntensity * GetBeamIntensityThreshold() / originalBeamIntensity)));
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPlayer(target, ref damage, ref crit);
-            if (crit)
-                damage *= 2;
             damage = GetPvpDamageReduction(damage);
-            damage = GetBeamIntensityDamage(damage);
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
         {
             base.ModifyHitPvp(target, ref damage, ref crit);
-            if (crit)
-                damage *= 2;
             damage = GetPvpDamageReduction(damage);
-            damage = GetBeamIntensityDamage(damage);
+            //damage = GetPlayerKiDamageAfterMultipliers(damage);
         }
 
         public int GetPvpDamageReduction(int damage)
         {
             return (int)Math.Ceiling(damage / 2f);
         }
+
+        public MyPlayer GetPlayerOwner()
+        {
+            var player = Main.player[projectile.owner];
+            if (player != null)
+            {
+                return player.GetModPlayer<MyPlayer>();
+            }
+            return null;
+        }
+
+        //public int GetPlayerKiDamageAfterMultipliers(int damage)
+        //{
+        //    if (GetPlayerOwner() == null)
+        //        return damage;
+        //    float kiMultiplier = GetPlayerOwner().KiDamage;
+        //    return (int)Math.Ceiling(damage * kiMultiplier);
+        //}
     }
 }

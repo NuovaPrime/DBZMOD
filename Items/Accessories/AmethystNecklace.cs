@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Damage taken reduced by 9% and +4 defense.");
+            Tooltip.SetDefault("9% Increased endurance and +4 defense.");
             DisplayName.SetDefault("Amethyst Necklace");
         }
 
@@ -26,8 +26,8 @@ namespace DBZMOD.Items.Accessories
         {
             {
                 player.endurance += 0.09f;
-                player.statDefense += 4;
-                player.GetModPlayer<MyPlayer>(mod).amethystNecklace = true;
+                player.statDefense += 2;
+                player.GetModPlayer<MyPlayer>(mod).amberNecklace = true;
             }
         }
         public override void AddRecipes()

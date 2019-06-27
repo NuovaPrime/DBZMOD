@@ -8,8 +8,9 @@ using Terraria.GameContent.Generation;
 using Terraria.ModLoader.IO;
 using System;
 using System.Linq;
+using DBZMOD.Items.DragonBalls;
 using DBZMOD.Network;
-using DBZMOD.Utilities;
+using DBZMOD.Util;
 
 namespace DBZMOD
 {
@@ -21,7 +22,7 @@ namespace DBZMOD
         // helper utility method for snagging the currently loaded world.
         public static DBZWorld GetWorld()
         {
-            return DBZMOD.Instance.GetModWorld("DBZWorld") as DBZWorld;
+            return DBZMOD.instance.GetModWorld("DBZWorld") as DBZWorld;
         }
 
         public override TagCompound Save()
@@ -30,7 +31,7 @@ namespace DBZMOD
             {
                 {"KiBeacons", kiBeacons}
             };
-            for (var i = 0; i < 7; i++)
+            for(var i = 0; i < 7; i++)
             {
                 var dbCache = GetCachedDragonBallLocation(i + 1);
                 var cacheKeyNameX = $"DragonBall{i + 1}LocationX";
@@ -38,7 +39,7 @@ namespace DBZMOD
                 dbtWorldTag.Add(cacheKeyNameX, dbCache.X);
                 dbtWorldTag.Add(cacheKeyNameY, dbCache.Y);
             }
-
+                        
             return dbtWorldTag;
         }
 
@@ -205,7 +206,7 @@ namespace DBZMOD
             // Neither works. So far "Planting Trees" is the only one I can get to work.
             var index = tasks.FindIndex(x => x.Name == "Planting Trees");
             if (index != -1)
-            {
+            {                
                 tasks.Insert(index, new PassLegacy("[DBZMOD] Gohan House", AddGohanHouse));
             }
 
@@ -282,7 +283,7 @@ namespace DBZMOD
         }
 
         bool MakeGohanHouse(GenerationProgress progress)
-        {
+        {            
             string gohanHouseGen = "Creating the house of a legend.";
             if (progress != null)
             {
@@ -307,14 +308,13 @@ namespace DBZMOD
                     }
                     if (Main.tile[gohanHouseStartPositionX + i, gohanHouseStartPositionY].active())
                     {
-                        if (Main.tile[gohanHouseStartPositionX, gohanHouseStartPositionY].liquid > 0)
-                        {
+                        if (Main.tile[gohanHouseStartPositionX, gohanHouseStartPositionY].liquid > 0) { 
                             gohanHouseStartPositionX = WorldGen.genRand.Next(Main.maxTilesX / 2 - 70, Main.spawnTileX - 25);
                         }
                         else
                         {
                             goto GenerateBuild;
-                        }
+                        }                        
                     }
                 }
             }
@@ -519,7 +519,7 @@ namespace DBZMOD
         }
 
         public bool TryPlacingDragonBall(int whichDragonBall, int offsetX, int offsetY)
-        {
+        {            
             // dragon ball already exists, bail out.
             if (IsExistingDragonBall(whichDragonBall))
                 return true;
@@ -594,7 +594,7 @@ namespace DBZMOD
 
             if (isCleanupNeeded)
             {
-                // DebugHelper.Log("Server is running cleanup routine.");
+                DebugHelper.Log("Server is running cleanup routine.");
                 // destroy all but the first located dragon ball of any given type in the world, with no items.
                 for (var i = 0; i < Main.maxTilesX; i++)
                 {
@@ -624,7 +624,7 @@ namespace DBZMOD
             else
             {
                 dragonBallFirstFound = CachedDragonBallLocations;
-                // DebugHelper.Log("Server is running dragon ball confirmation routine.");
+                DebugHelper.Log("Server is running dragon ball confirmation routine.");
             }
 
             // figure out if new dragon balls need to be spawned (are any missing?)
@@ -634,12 +634,12 @@ namespace DBZMOD
                 Point testLocation = dragonBallFirstFound[i];
                 if (!IsDragonBallLocation(testLocation.X, testLocation.Y))
                 {
-                    // DebugHelper.Log($"Server thinks dragon ball {i + 1} is missing.");
+                    DebugHelper.Log($"Server thinks dragon ball {i + 1} is missing.");
                     // if this isn't a dragon ball, erase it.
                     dragonBallFirstFound[i] = Point.Zero;
                     CacheDragonBallLocation(i + 1, Point.Zero);
                 }
-
+                
                 if (dragonBallFirstFound[i].Equals(Point.Zero))
                 {
                     TryPlacingDragonBall(i + 1);
@@ -711,9 +711,9 @@ namespace DBZMOD
         public int GetDbType(int whichDragonBall)
         {
             if (dbTypes[whichDragonBall - 1].HasValue)
-                return dbTypes[whichDragonBall - 1].Value;
+                    return dbTypes[whichDragonBall - 1].Value;
             var dragonBallWord = GetDragonBallNumberName(whichDragonBall);
-            dbTypes[whichDragonBall - 1] = DBZMOD.Instance?.TileType($"{dragonBallWord}StarDBTile");
+            dbTypes[whichDragonBall - 1] = DBZMOD.instance?.TileType($"{dragonBallWord}StarDBTile");
             if (dbTypes[whichDragonBall - 1].HasValue)
                 return dbTypes[whichDragonBall - 1].Value;
             return 0;
@@ -752,7 +752,7 @@ namespace DBZMOD
         public static Point GetSafeDragonBallCoordinates()
         {
             var underworldHeight = Main.maxTilesY - 220;
-
+            
             var surfaceHeight = (int)Math.Floor(Main.worldSurface * 0.30f);
 
             // restrict debug mode dragon ball spawns to the surface, for testing purposes

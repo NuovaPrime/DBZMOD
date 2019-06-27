@@ -5,6 +5,7 @@ namespace DBZMOD.Buffs
 {
     public class KatchinFeet : ModBuff
     {
+        private int _stimulantTimer;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Katchin Feet");

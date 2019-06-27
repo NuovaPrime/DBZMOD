@@ -21,7 +21,6 @@ namespace DBZMOD.Items.Consumables.Potions
             item.potion = false;
             isKiPotion = true;
         }
-
         public override int GetKiHealAmount()
         {
             return 5100;

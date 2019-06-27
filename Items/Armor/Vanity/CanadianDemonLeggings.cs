@@ -9,7 +9,11 @@ namespace DBZMOD.Items.Armor.Vanity
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("20% Increased Ki Damage\n16% Increased Ki Crit Chance\n+500 Max Ki\nIncreased Ki Regen\n18% Increased movement speed");
+            Tooltip.SetDefault("20% Increased Ki Damage"
+                + "\n16% Increased Ki Crit Chance" +
+                               "\n+500 Max Ki" +
+                               "\nIncreased Ki Regen" +
+                               "\n18% Increased movement speed");
             DisplayName.SetDefault("Canadian Demon Leggings");
         }
 
@@ -24,11 +28,11 @@ namespace DBZMOD.Items.Armor.Vanity
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.20f;
-            MyPlayer.ModPlayer(player).kiCrit += 16;
-            MyPlayer.ModPlayer(player).kiMax2 += 500;
-            MyPlayer.ModPlayer(player).kiRegen += 2;
-            player.moveSpeed += 0.18f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.13f;
+            MyPlayer.ModPlayer(player).kiCrit += 9;
+            MyPlayer.ModPlayer(player).kiMax2 += 300;
+            MyPlayer.ModPlayer(player).kiRegen += 1;
+            player.moveSpeed += 0.12f;
 
         }
         public override void AddRecipes()

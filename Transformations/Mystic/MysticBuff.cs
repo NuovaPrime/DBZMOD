@@ -1,4 +1,0 @@
-﻿namespace DBZMOD.Transformations.Mystic
-{
-    
-}

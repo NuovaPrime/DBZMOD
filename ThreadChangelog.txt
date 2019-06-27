@@ -214,27 +214,3 @@ V1.0.9.1
 1. Fixed bug where Dragon Balls wouldn't generate.
 2. Fixed bug where the dragon radars spawned Dragon Balls + didn't work.
 3. Fixed bug where wishing didn't remove the Dragon Balls.
-
-
-V1.0.9.2
-
-1. Allowed the use of Ascended Super Saiyan and Ultra Super Saiyan in unlocking Super Saiyan 2.
-2. Adjusted Instant Transmission map teleportation to be a bit more forgiving.
-3. New sprites for beams and changed hitboxes a bit.
-4. Increased drop rate of Burning Energy Amulet and Demonic Soul's.
-5. Adjusted Massive Blast Weapons, Spirit Bomb and Super Spirit Bomb now charge slower but deal higher damage, while Supernova and Holy Wrath charge faster but deal lower damage.
-6. The Genetic Reroll wish now can't give you the same trait as before.
-7. Cheating dragon balls no longer deletes them from your inventory.
-8. You can no longer place dragon balls in the world.
-9. The world places them every time one is broken, so the world always has 7.
-10. When you’re holding a [x-star] dragon ball, the dragon radar will only show you the ones you’re not holding already.
-11. When you collect all 7 dragon balls (in your inventory) instead of placing them in the world, just right click one of them.
-12. You can now close the menu by right clicking any of the dragon balls again.
-13. Dragon balls no longer spawn in the lihzahrd temple or the dungeon.
-14. Fixed bug where your beam charge balls lingered after dying.
-15. Fixed bug where you couldn't use Massive Blast type weapons more than once.
-16. Fixed bug where you could go over 100% Mastery
-17. Fixed bug where Katchin Scale's didn't drop in Expert Mode.
-18. Fixed bug where the Baldur Essentia and Buldarium Sigmite caused massive lag when charging.
-19. Fixed bug where you charged Ki while Flying, allowing for practically infinite flight.
-20. Fixed bug where Holy Wrath did an absurd amount of damage.

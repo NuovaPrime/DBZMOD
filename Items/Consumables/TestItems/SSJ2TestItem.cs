@@ -1,10 +1,11 @@
-﻿using Terraria;
+﻿using DBZMOD.Enums;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Consumables.TestItems
 {
-    public sealed class SSJ2TestItem : ModItem
+    public class SSJ2TestItem : ModItem
     {
         public override void SetDefaults()
         {
@@ -31,16 +32,12 @@ namespace DBZMOD.Items.Consumables.TestItems
 
         public override bool UseItem(Player player)
         {
-            if (!DBZMOD.allowDebugItem) return false;
-
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.SSJ2Transformation();
-            modPlayer.SelectedTransformation = DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition;
-
-            DBZMOD.Instance.TransformationDefinitionManager.SSJ2Definition.Unlock(player);
-
-            modPlayer.isTransforming = true;
+            MyPlayer.ModPlayer(player).SSJ2Transformation();
+            UI.TransMenu.menuSelection = MenuSelectionID.SSJ2;
+            MyPlayer.ModPlayer(player).ssj2Achieved = true;
+            MyPlayer.ModPlayer(player).isTransforming = true;
             return true;
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using DBZMOD.Utilities;
+﻿using DBZMOD.Util;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
