@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
  using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -7,10 +7,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'It explodes with radiant energy.'" +
-                "\n12% Increased Ki damage" +
-                "\n+500 Max Ki" +
-                "\nDrastically increased ki regen");
+            Tooltip.SetDefault("'It explodes with radiant energy.'\n12% Increased Ki damage\n+500 Max Ki\nDrastically increased ki regen");
             DisplayName.SetDefault("Radiant Totem");
         }
 
@@ -26,7 +23,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.12f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.12f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 500;
                 player.GetModPlayer<MyPlayer>(mod).kiRegen += 2;
                 player.GetModPlayer<MyPlayer>(mod).radiantTotem = true;

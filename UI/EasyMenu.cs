@@ -45,7 +45,27 @@ namespace DBZMOD.UI
                 parentElement.Append(buttonToInitialise);
             }
         }
-        
+
+        public void InitHoverTextButton(ref UIHoverImageButton buttonToInitialise, Texture2D buttonTexture, MouseEvent buttonOnClick, float offsetX = 0, float offsetY = 0, UIElement parentElement = null, string textOnHover = null)
+        {
+            buttonToInitialise = new UIHoverImageButton(buttonTexture, textOnHover);
+
+            buttonToInitialise.Width.Set(buttonTexture.Width, 0.0f);
+            buttonToInitialise.Height.Set(buttonTexture.Height, 0.0f);
+            buttonToInitialise.Left.Set(offsetX, 0f);
+            buttonToInitialise.Top.Set(offsetY, 0f);
+            buttonToInitialise.OnClick += buttonOnClick;
+
+            if (parentElement == null)
+            {
+                backPanel.Append(buttonToInitialise);
+            }
+            else
+            {
+                parentElement.Append(buttonToInitialise);
+            }
+        }
+
         public void InitImage(ref UIImage imageToInitialise, Texture2D imageTexture, float offsetX = 0, float offsetY = 0, UIElement parentElement = null)
         {
             imageToInitialise = new UIImage(imageTexture);
@@ -54,7 +74,6 @@ namespace DBZMOD.UI
             imageToInitialise.Height.Set(imageTexture.Height, 0.0f);
             imageToInitialise.Left.Set(offsetX, 0f);
             imageToInitialise.Top.Set(offsetY, 0f);
-
 
             if (parentElement == null)
             {
@@ -114,10 +133,12 @@ namespace DBZMOD.UI
         {
             base.DrawSelf(spriteBatch);
             Vector2 mousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
+
             if (backPanel.ContainsPoint(mousePosition))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+
             if (dragging)
             {
                 backPanel.Left.Set(mousePosition.X - _offset.X, 0f);

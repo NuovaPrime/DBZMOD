@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,9 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A spiritual fragment of one of the legendary Kais.'" +
-                "\nAll Kaioken forms drain half as much health" +
-                "\n30% less max ki");
+            Tooltip.SetDefault("'A spiritual fragment of one of the legendary Kais.'\nAll Kaioken forms drain half as much health\n30% less max ki");
             DisplayName.SetDefault("Kaio Crystal");
         }
 

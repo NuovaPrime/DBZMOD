@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 		{
 			item.shoot = mod.ProjectileType("MakankosappoCharge");
             item.shootSpeed = 0f;
-			item.damage = 65;
+			item.damage = 114;
 			item.knockBack = 3f;
 			item.useStyle = 5;
             item.useAnimation = 240;
@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 6\nRight Click Hold to Charge\nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 6\nHold Right Click to Charge\nHold Left Click to Fire");
             DisplayName.SetDefault("Makankosappo");
 		}
 

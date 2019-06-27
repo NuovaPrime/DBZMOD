@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DBZMOD.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -83,7 +83,7 @@ namespace DBZMOD.Projectiles
         public override void AI()
         {
             // homing range, projectile acceleration, top speed
-            HomingHelper.DoHoming(projectile, 400f, (float)STEP_SPEED, true);            
+            projectile.DoHoming(400f, (float)STEP_SPEED, true);            
         }
     }
 }

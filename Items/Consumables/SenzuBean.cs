@@ -14,8 +14,11 @@ namespace DBZMOD.Items.Consumables
             item.healMana = 9001;
 			item.consumable = true;
 			item.maxStack = 10;
-			item.UseSound = SoundID.Item3;
-			item.useStyle = 2;
+            if (!Main.dedServ)
+            {
+                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Senzueating").WithPitchVariance(.1f);
+            }
+            item.useStyle = 2;
 			item.useTurn = true;
 			item.useAnimation = 17;
 			item.useTime = 17;

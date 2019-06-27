@@ -1,5 +1,6 @@
 using System;
-using DBZMOD.Util;
+using DBZMOD.Extensions;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -12,40 +13,24 @@ namespace DBZMOD.Projectiles
         // used to offset the beam so that its origin is different from the charge ball, used for special instances like the Makankosappo
         public Vector2 beamCreationOffset = Vector2.Zero;
 
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-        }
-
         private bool ShouldFireBeam(MyPlayer modPlayer)
         {
-            var shouldFire = ((ChargeLevel >= minimumChargeLevel && !IsOnCooldown) || IsSustainingFire)
-                && (modPlayer.isMouseLeftHeld || (IsSustainingFire && (CurrentFireTime > 0 && CurrentFireTime < minimumFireFrames)));
-            return shouldFire;
+            return ChargeLevel > 0f && (!modPlayer.isMouseLeftHeld || IsFired);
         }
 
         private float GetBeamPowerMultiplier()
         {
-            return (1f + ChargeLevel / 20f);
+            return (float)Math.Sqrt(ChargeLevel);
         }
 
         private int GetBeamDamage()
         {
-            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier());
+            // Convenient place to set the damage multiplier of all beams by a flat coefficient for tuning - this is beam damage halved.
+            return (int)Math.Ceiling(projectile.damage * GetBeamPowerMultiplier() / 3f);
         }
-
-        // multiplier representing increased ki cost gradient as the player continues to fire the beam, to put the kibosh on firing infinitely.
-        private float KiDrainMultiplier(MyPlayer modPlayer)
-        {
-            return (1f + Math.Min(3.0f, Math.Max(0f, (CurrentFireTime - minimumFireFrames) / minimumFireFrames))) * modPlayer.kiDrainMulti;
-        }
-
-        // Rate at which Ki is drained while firing the beam *without a charge*
-        // in theory this should be higher than your charge ki drain, because that's the advantage of charging now.
-        protected int FireKiDrainRate(MyPlayer modPlayer) { return (int)Math.Ceiling(GetBeamPowerMultiplier() * KiDrainMultiplier(modPlayer) * (chargeKiDrainPerSecond * 2f / (60f / FIRE_KI_DRAIN_WINDOW))); }
 
         // the rate at which firing drains the charge level of the ball, play with this for balance.
-        protected float FireDecayRate() { return GetBeamPowerMultiplier() * fireChargeDrainPerSecond / 60f; }
+        protected float FireDecayRate() { return GetBeamPowerMultiplier() / 60f; }
 
         public Projectile myProjectile = null;
 
@@ -56,18 +41,18 @@ namespace DBZMOD.Projectiles
             // minimum charge level is required to fire in the first place, but once you fire, you can keep firing.
             if (ShouldFireBeam(modPlayer))
             {
+                // once fired, there's no going back.
+                IsFired = true;
+
                 // kill the charge sound if we're firing
                 chargeSoundSlotId = SoundHelper.KillTrackedSound(chargeSoundSlotId);
 
-                if (!wasSustainingFire && myProjectile == null)
+                if (myProjectile == null)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient || Main.myPlayer == player.whoAmI)
                     {
                         // fire the laser!
                         myProjectile = Projectile.NewProjectileDirect(projectile.position + beamCreationOffset, projectile.velocity, mod.ProjectileType(beamProjectileName), GetBeamDamage(), projectile.knockBack, projectile.owner);
-
-                        // set firing time minimum for beams that auto-detach and are stationary, this prevents their self kill routine
-                        myProjectile.ai[1] = minimumFireFrames;
                     }
                 }
 
@@ -75,30 +60,23 @@ namespace DBZMOD.Projectiles
                 CurrentFireTime++;
 
                 // if the player has charge left, drain the ball
-                if (ChargeLevel >= FireDecayRate())
+                if (ChargeLevel >= 0f)
                 {
                     ChargeLevel = Math.Max(0f, ChargeLevel - FireDecayRate());
-                }
-                else if (!modPlayer.IsKiDepleted())
-                {
-                    if (DBZMOD.IsTickRateElapsed(FIRE_KI_DRAIN_WINDOW))
+
+                    if (myProjectile != null) // TODO Temporary fix for two beams crossing
                     {
-                        modPlayer.AddKi(-FireKiDrainRate(modPlayer), true, false);
+                        BaseBeam projectileAsBeam = myProjectile.modProjectile as BaseBeam;
+                        projectileAsBeam.BeamIntensity = ChargeLevel;
                     }
                 }
-                else
+
+                // beam is no longer sustainable, and neither is the charge ball
+                if (ChargeLevel <= 0f)
                 {
-                    // beam is no longer sustainable
                     KillBeam();
                 }
             }
-            else
-            {
-                // player has stopped firing or something else has stopped them
-                KillBeam();
-            }
-
-            wasSustainingFire = IsSustainingFire;
         }
 
         public override bool PreAI()
@@ -108,21 +86,20 @@ namespace DBZMOD.Projectiles
             bool isPassingPreAi = base.PreAI();
             if (!isPassingPreAi && myProjectile != null)
             {
-                ProjectileHelper.StartKillRoutine(myProjectile);
+                myProjectile.StartKillRoutine();
             }
             return isPassingPreAi;
         }
 
         public void KillBeam()
         {
-            // set the cooldown
-            CurrentFireTime = -initialBeamCooldown;
-
             if (myProjectile != null)
             {
-                ProjectileHelper.StartKillRoutine(myProjectile);
+                myProjectile.StartKillRoutine();
                 myProjectile = null;
             }
+            // kill the charge ball
+            projectile.Kill();
         }
 
         public override Vector2 DoControl(Player player)
@@ -133,22 +110,7 @@ namespace DBZMOD.Projectiles
             // figure out if the player is shooting and fire the laser
             HandleFiring(player, mouseVector);
 
-            // decrease the beam cooldown if it's not zero
-            HandleBeamFireCooldown();
-
             return mouseVector;
-        }
-
-        public void HandleBeamFireCooldown()
-        {
-            // less than 0 fire time means on cooldown, try to "decrease" cooldown by 1, stopping at 0 if applicable.
-            if (CurrentFireTime < 0)
-                CurrentFireTime = Math.Max(0, CurrentFireTime + 1f);
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }

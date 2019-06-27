@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,10 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A fragment of the god of defense's soul.'" +
-                "\nCharging grants a protective barrier that grants massively increased defense" +
-                "\nCharging also grants drastically increased life regen" +
-                "\nIncreased ki charge rate");
+            Tooltip.SetDefault("'A fragment of the god of defense's soul.'\nCharging grants a protective barrier that grants massively increased defense\nCharging also grants drastically increased life regen\nIncreased ki charge rate");
             DisplayName.SetDefault("Buldarium Sigmite");
         }
 

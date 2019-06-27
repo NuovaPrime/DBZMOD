@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 		{
 			item.shoot = mod.ProjectileType("EnergyWaveCharge");
 			item.shootSpeed = 0f;
-			item.damage = 16;
+			item.damage = 32;
 			item.knockBack = 2f;
 			item.useStyle = 5;
             item.useAnimation = 2;
@@ -26,7 +26,7 @@ namespace DBZMOD.Items.Weapons.Tier_1
 
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 3\nRight Click Hold to Charge\nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 3\nHold Right Click to Charge\nHold Left Click to Fire");
 		    DisplayName.SetDefault("Energy Wave");
 		}
 

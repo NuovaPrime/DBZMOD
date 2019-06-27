@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
  using Terraria.ModLoader;
 
 namespace DBZMOD.Items.Accessories
@@ -8,9 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'Change the future.'" +
-                "\n14% Increased Ki damage" +
-                "\nThorns effect.");
+            Tooltip.SetDefault("'Change the future.'\n14% Increased Ki damage\nThorns effect.");
             DisplayName.SetDefault("Bloodstained Bandana");
         }
 
@@ -27,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.14f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.14f;
                 player.thorns = .3f;
                 player.GetModPlayer<MyPlayer>(mod).bloodstainedBandana = true;
             }

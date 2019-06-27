@@ -9,10 +9,7 @@ namespace DBZMOD.Items.Armor.Vanity
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("24% Increased Ki Damage"
-                + "\n20% Increased Ki Crit Chance" +
-                               "\n+1000 Max Ki" +
-                               "\n+2 Maximum Charges");
+            Tooltip.SetDefault("24% Increased Ki Damage\n20% Increased Ki Crit Chance\n+1000 Max Ki\n+2 Maximum Charges");
             DisplayName.SetDefault("Canadian Demon Shirt");
         }
 
@@ -43,10 +40,10 @@ namespace DBZMOD.Items.Armor.Vanity
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.18f;
-            MyPlayer.ModPlayer(player).kiCrit += 14;
-            MyPlayer.ModPlayer(player).kiMax2 += 700;
-            MyPlayer.ModPlayer(player).chargeLimitAdd += 1;
+            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).kiCrit += 20;
+            MyPlayer.ModPlayer(player).kiMax2 += 1000;
+            MyPlayer.ModPlayer(player).chargeLimitAdd += 2;
 
         }
         public override void AddRecipes()

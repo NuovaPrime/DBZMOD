@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("2% Increased Ki Damage"
-                + "\n2% Increased Ki Knockback" +
-                               "\n+6% Increased movement speed");
+            Tooltip.SetDefault("2% Increased Ki Damage\n2% Increased Ki Knockback\n+6% Increased movement speed");
             DisplayName.SetDefault("Saiyan Scout Pants");
         }
 
@@ -25,7 +23,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.02f;
+            MyPlayer.ModPlayer(player).kiDamage += 0.02f;
             MyPlayer.ModPlayer(player).kiKbAddition += 0.02f;
             player.moveSpeed += 0.06f;
 

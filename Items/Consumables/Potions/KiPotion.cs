@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -25,13 +21,6 @@ namespace DBZMOD.Items.Consumables.Potions
         }
 
         public abstract int GetKiHealAmount();
-
-        public void QuickUseItem(Player player, Item item, int quickPotionCooldown)
-        {
-            KiPotion potion = (KiPotion)item.modItem;
-            potionCooldown = quickPotionCooldown;
-            potion.UseItem(player);
-        }
 
         public override bool UseItem(Player player)
         {

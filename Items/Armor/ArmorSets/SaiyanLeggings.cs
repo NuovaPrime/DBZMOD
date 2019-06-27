@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("7% Increased Ki Damage"
-                + "\n5% Increased Ki Crit Chance" +
-                               "\n16% Increased movement speed");
+            Tooltip.SetDefault("7% Increased Ki Damage\n5% Increased Ki Crit Chance\n16% Increased movement speed");
             DisplayName.SetDefault("Saiyan Battle Leggings");
         }
 
@@ -25,7 +23,7 @@ namespace DBZMOD.Items.Armor.ArmorSets
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).KiDamage += 0.07f;
+            MyPlayer.ModPlayer(player).kiDamage += 0.07f;
             MyPlayer.ModPlayer(player).kiCrit += 5;
             player.moveSpeed += 0.16f;
 

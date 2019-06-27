@@ -9,9 +9,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The essence of pure energy lives within the crystal.'" +
-                "\nDrastically Increased speed while charging" +
-                "\n+2500 Max ki");
+            Tooltip.SetDefault("'The essence of pure energy lives within the crystal.'\nDrastically Increased speed while charging\n+2500 Max ki");
             DisplayName.SetDefault("Aspera Crystallite");
         }
 

@@ -11,6 +11,7 @@ namespace DBZMOD.Config
         static Preferences _configuration = new Preferences(_configPath);
 
         public static bool isChargeToggled = false;
+        public static bool isSaiyanGradeNames = false;
 
         public static void Load()
         {
@@ -30,6 +31,7 @@ namespace DBZMOD.Config
             if (_configuration.Load())
             {
                 _configuration.Get("IsChargeToggled", ref isChargeToggled);
+                _configuration.Get("IsSaiyanGradeNames", ref isSaiyanGradeNames);
                 return true;
             }
             return false;
@@ -40,6 +42,7 @@ namespace DBZMOD.Config
         {
             _configuration.Clear();
             _configuration.Put("IsChargeToggled", isChargeToggled);
+            _configuration.Put("IsSaiyanGradeNames", isSaiyanGradeNames);
             _configuration.Save();
         }
     }

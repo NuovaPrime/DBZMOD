@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,8 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'A piece of a ki fragment.'" +
-                "\nIncreased ki charge rate");
+            Tooltip.SetDefault("'A piece of a ki fragment.'\nIncreased ki charge rate");
             DisplayName.SetDefault("Ki Chip");
         }
 

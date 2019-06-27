@@ -13,7 +13,7 @@ namespace DBZMOD.UI
         public UIFlatPanel()
         {
             if (backgroundTexture == null)
-                backgroundTexture = Gfx.bg;
+                backgroundTexture = GFX.bg;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)

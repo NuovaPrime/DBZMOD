@@ -9,9 +9,10 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			item.shoot = mod.ProjectileType("Kamehameha10Charge");
 			item.shootSpeed = 0f;
-			item.damage = 94;
+			item.damage = 156;
             item.knockBack = 10f;
             item.useStyle = 5;
+			item.UseSound = SoundID.Item12;
             item.channel = true;
 			item.useAnimation = 200;
 			item.useTime = 200;
@@ -26,7 +27,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 8\nRight Click Hold to Charge\nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 8\nHold Right Click to Charge\nHold Left Click to Fire");
             DisplayName.SetDefault("Kamehameha x10");
 		}
 

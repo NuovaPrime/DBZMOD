@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,11 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The soul of the land lives within.'" +
-                "\n6% Increased ki damage" +
-                "\nIncreased ki regen" +
-                "\nReduced flight ki usage" +
-                "\n+1 Max Charges");
+            Tooltip.SetDefault("'The soul of the land lives within.'\n6% Increased ki damage\nIncreased ki regen\nReduced flight ki usage by 25%\n+1 Max Charges");
             DisplayName.SetDefault("Earthen Sigil");
         }
 
@@ -29,9 +25,9 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.06f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.06f;
                 player.GetModPlayer<MyPlayer>(mod).kiRegen += 1;
-                player.GetModPlayer<MyPlayer>(mod).flightUsageAdd += 1;
+                player.GetModPlayer<MyPlayer>(mod).flightKiConsumptionMultiplier *= 0.75f;
                 player.GetModPlayer<MyPlayer>(mod).chargeLimitAdd += 1;
                 player.GetModPlayer<MyPlayer>(mod).earthenSigil = true;
             }

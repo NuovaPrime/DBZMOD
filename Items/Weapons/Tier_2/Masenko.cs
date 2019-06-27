@@ -10,7 +10,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("MasenkoCharge");
 			item.shootSpeed = 0f;
-			item.damage = 35;
+			item.damage = 72;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_2
 
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 5\nRight Click Hold to Charge\nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 5\nHold Right Click to Charge\nHold Left Click to Fire");
             DisplayName.SetDefault("Masenko");
 		}
 

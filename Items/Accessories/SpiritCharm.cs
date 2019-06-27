@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
@@ -8,14 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'An emblem enscribed with markings of the dragon.'"
-               + "\n20% Increased Ki Damage" +
-               "\nAll damage increased by 14%" +
-               "\n+500 Maximum ki" +
-               "\n12% reduced damage" +
-               "\n+3 max minions" +
-               "\nGreatly increased life regen" +
-               "\nAll crit increased by 12%.");
+            Tooltip.SetDefault("'An emblem enscribed with markings of the dragon.'\n20% Increased Ki Damage\nAll damage increased by 14%\n+500 Maximum ki\n12% reduced damage\n+3 max minions\nGreatly increased life regen\nAll crit increased by 12%.");
             DisplayName.SetDefault("Spirit Charm");
         }
 
@@ -32,7 +25,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.20f;
+                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.20f;
                 player.GetModPlayer<MyPlayer>(mod).kiCrit += 12;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 500;
                 player.endurance += 0.12f;

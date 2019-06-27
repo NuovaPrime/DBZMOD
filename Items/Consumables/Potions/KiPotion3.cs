@@ -21,6 +21,7 @@ namespace DBZMOD.Items.Consumables.Potions
             item.potion = false;
             isKiPotion = true;
         }
+
         public override int GetKiHealAmount()
         {
             return 1080;
@@ -32,7 +33,7 @@ namespace DBZMOD.Items.Consumables.Potions
             DisplayName.SetDefault("Greater Ki Potion");
         }
 		
-		 public override void AddRecipes()
+		public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "PridefulKiCrystal", 2);

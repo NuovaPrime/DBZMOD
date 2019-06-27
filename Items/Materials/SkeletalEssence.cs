@@ -1,6 +1,4 @@
-﻿using Terraria.ModLoader;
-
-namespace DBZMOD.Items.Materials
+﻿namespace DBZMOD.Items.Materials
 {
     public class SkeletalEssence : DBItem
     {

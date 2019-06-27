@@ -4,7 +4,8 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
 using DBZMOD.Enums;
-using DBZMOD.Util;
+using DBZMOD.Extensions;
+using DBZMOD.Utilities;
 
 namespace DBZMOD.UI
 {
@@ -23,8 +24,7 @@ namespace DBZMOD.UI
         private UIImageButton _wishButtonSkill;
         private UIImageButton _wishButtonAwakening;
         private UIImageButton _grantButton;
-        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire." +
-            "\nCertain wishes have limits.";
+        private static string _descTextValue = "Select one of the wishes above to grant your deepest desire.\nCertain wishes have limits.";
         private static string _wishTextValue = "";
 
 
@@ -41,9 +41,9 @@ namespace DBZMOD.UI
             backPanel.Top.Set(Main.screenHeight / 2f - backPanel.Height.Pixels / 2f, 0f);
             backPanel.BackgroundColor = new Color(0, 0, 0, 0);
 
-            backPanelImage = new UIImage(Gfx.wishBackPanel);
-            backPanelImage.Width.Set(Gfx.wishBackPanel.Width, 0f);
-            backPanelImage.Height.Set(Gfx.wishBackPanel.Height, 0f);
+            backPanelImage = new UIImage(GFX.wishBackPanel);
+            backPanelImage.Width.Set(GFX.wishBackPanel.Width, 0f);
+            backPanelImage.Height.Set(GFX.wishBackPanel.Height, 0f);
             backPanelImage.Left.Set(-12, 0f);
             backPanelImage.Top.Set(-12, 0f);
 
@@ -53,19 +53,19 @@ namespace DBZMOD.UI
 
             InitText(ref _descText, _descTextValue, 0.66f, 10, 100, Color.Yellow, backPanelImage);
 
-            InitButton(ref _wishButtonPower, Gfx.wishforPower, new MouseEvent(SelectButtonPower), 10, 22, backPanelImage);
+            InitButton(ref _wishButtonPower, GFX.wishforPower, new MouseEvent(SelectButtonPower), 10, 22, backPanelImage);
 
-            InitButton(ref _wishButtonWealth, Gfx.wishforWealth, new MouseEvent(SelectButtonWealth), 55, 22, backPanelImage);
+            InitButton(ref _wishButtonWealth, GFX.wishforWealth, new MouseEvent(SelectButtonWealth), 55, 22, backPanelImage);
 
-            InitButton(ref _wishButtonImmortality, Gfx.wishforImmortality, new MouseEvent(SelectButtonImmortality), 100, 22, backPanelImage);
+            InitButton(ref _wishButtonImmortality, GFX.wishforImmortality, new MouseEvent(SelectButtonImmortality), 100, 22, backPanelImage);
 
-            InitButton(ref _wishButtonGenetics, Gfx.wishforGenetics, new MouseEvent(SelectButtonGenetics), 145, 22, backPanelImage);
+            InitButton(ref _wishButtonGenetics, GFX.wishforGenetics, new MouseEvent(SelectButtonGenetics), 145, 22, backPanelImage);
 
-            InitButton(ref _wishButtonSkill, Gfx.wishforSkill, new MouseEvent(SelectButtonSkill), 190, 22, backPanelImage);
+            InitButton(ref _wishButtonSkill, GFX.wishforSkill, new MouseEvent(SelectButtonSkill), 190, 22, backPanelImage);
 
-            InitButton(ref _wishButtonAwakening, Gfx.wishforAwakening, new MouseEvent(SelectButtonAwakening), 235, 22, backPanelImage);
+            InitButton(ref _wishButtonAwakening, GFX.wishforAwakening, new MouseEvent(SelectButtonAwakening), 235, 22, backPanelImage);
             
-            InitButton(ref _grantButton, Gfx.grantButton, new MouseEvent(GrantWish), Gfx.wishBackPanel.Width - Gfx.grantButton.Width - 12, Gfx.wishBackPanel.Height - Gfx.grantButton.Height - 12, backPanelImage);
+            InitButton(ref _grantButton, GFX.grantButton, new MouseEvent(GrantWish), GFX.wishBackPanel.Width - GFX.grantButton.Width - 12, GFX.wishBackPanel.Height - GFX.grantButton.Height - 12, backPanelImage);
             
             InitText(ref _grantText, "Grant Wish", 0.66f, 14, -12, Color.Yellow, _grantButton);
 
@@ -199,7 +199,7 @@ namespace DBZMOD.UI
             if (usedWish)
             {
                 wishSelection = WishSelectionID.None;
-                ItemHelper.DestroyPlayerDragonBalls(modPlayer.player);
+                modPlayer.player.DestroyOneOfEachDragonBall();
                 modPlayer.wishActive = false;
                 Main.PlaySound(SoundID.MenuClose);
             }
@@ -239,9 +239,8 @@ namespace DBZMOD.UI
         private static void DoGeneticWish()
         {
             MyPlayer modPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            string oldTrait = modPlayer.playerTrait;
-            modPlayer.playerTrait = null;
-            modPlayer.ChooseTraitNoLimits(oldTrait);
+            modPlayer.PlayerTrait = DBZMOD.Instance.TraitManager.GetRandomTrait(modPlayer.PlayerTrait);
+
             menuVisible = false;
             modPlayer.wishActive = false;
         }

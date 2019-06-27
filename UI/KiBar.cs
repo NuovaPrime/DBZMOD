@@ -12,13 +12,14 @@ namespace DBZMOD.UI
 
 		public override void OnInitialize()
 		{
-			kibar = new ResourceBar(ResourceBarMode.Ki, 12, 92);
+			kibar = new ResourceBar(ResourceBarMode.Ki, 24, 128);
 			kibar.Left.Set(515f, 0f);
-			kibar.Top.Set(49f, 0f);
+			kibar.Top.Set(20f, 0f);
             kibar.OnMouseDown += new UIElement.MouseEvent(DragStart);
 			kibar.OnMouseUp += new UIElement.MouseEvent(DragEnd);
 			Append(kibar);
 		}
+
 		Vector2 _offset;
         public bool dragging = false;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)

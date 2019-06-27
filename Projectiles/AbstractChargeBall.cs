@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using DBZMOD.Extensions;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Audio;
-using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {
@@ -19,27 +20,13 @@ namespace DBZMOD.Projectiles
         // the maximum charge level of the ball     
         public float chargeLimit = 4;
 
-        // this is the minimum charge level you have to have before you can actually fire the beam
-        public float minimumChargeLevel = 4f;
-
-        // made to humanize some of the variables in the beam routine and make balance a bit simpler.
-        public int chargeKiDrainPerSecond = 40;
-
-        public float fireChargeDrainPerSecond = 1.2f;
-
-        public float chargeRatePerSecond = 1f;
-
-        public float decayChargeLevelPerSecond = 1f;
-
-        // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
-        public int minimumFireFrames = 120;
+        public float ChargeRatePerSecond()
+        {
+            return (float)Math.Pow(chargeLimit, 0.4f);
+        }
 
         // this is the beam the charge beam fires when told to.
         public string beamProjectileName = "BaseBeamProj";
-
-        // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame.
-        // For the most part, you want to make this the same as the beam's FadeInTime, *unless* you want the beam to stay partially transparent.
-        public float beamFadeInTime = 300f;
 
         // the type of dust that should spawn when charging or decaying
         public int dustType = 169;
@@ -52,10 +39,11 @@ namespace DBZMOD.Projectiles
         // The sound effect used by the projectile when charging up.
         public string chargeSoundKey = "Sounds/EnergyWaveCharge";
 
+        // The volume of the charge sound
+        public float chargeSoundVolume = 1f;
+
         // The amount of delay between when the client will try to play the energy wave charge sound again, if the player stops and resumes charging.
         public int chargeSoundDelay = 120;
-
-        public float chargeSoundVolume = 1f;
 
         // whether to try to put the player hand at their head when charging (eg. not firing)
         public bool isChargeAtHeadHeight = false;
@@ -65,13 +53,9 @@ namespace DBZMOD.Projectiles
         #region Things you probably should not mess with
 
         protected const float MAX_DISTANCE = 1000f;
-        protected const float STEP_LENGTH = 10f;
 
         // vector to reposition the charge ball if it feels too low or too high on the character sprite
         public Vector2 channelingOffset = new Vector2(0, 4f);
-
-        // rate at which decaying produces dust
-        protected float decayDustFrequency = 0.6f;
 
         // rate at which charging produces dust
         protected float chargeDustFrequency = 0.4f;
@@ -85,26 +69,17 @@ namespace DBZMOD.Projectiles
         // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
         protected float rotationSlowness = 15f;
 
-        // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
-        protected int initialBeamCooldown = 180;
-
         // this field determines whether the beam tracks the player, "rooting" the tail origin to the player.
         protected bool isBeamOriginTracking = true;
 
         // the rate at which charge level increases while channeling
-        protected float ChargeRate() { return chargeRatePerSecond / 60f; }
-
-        // Rate at which Ki is drained while channeling
-        protected int ChargeKiDrainRate() { return chargeKiDrainPerSecond / (60 / CHARGE_KI_DRAIN_WINDOW); }
+        protected float ChargeRate() { return ChargeRatePerSecond() / 60f; }
 
         // determines the frequency at which ki drain ticks. Bigger numbers mean slower drain.
         protected const int CHARGE_KI_DRAIN_WINDOW = 2;
 
-        // determines the frequency at which ki drain ticks while firing. Again, bigger number, slower drain.
-        protected const int FIRE_KI_DRAIN_WINDOW = 2;
-
-        // the rate at which the charge decays when not channeling
-        protected float DecayRate() { return decayChargeLevelPerSecond / 60f; }
+        // Rate at which Ki is drained while channeling
+        protected float ChargeKiDrainRate() { return projectile.damage * ChargeRatePerSecond() / (60f / CHARGE_KI_DRAIN_WINDOW); }
 
         // The sound slot used by the projectile to kill the sounds it's making
         protected KeyValuePair<uint, SoundEffectInstance> chargeSoundSlotId;
@@ -153,23 +128,6 @@ namespace DBZMOD.Projectiles
             }
         }
 
-        public bool IsSustainingFire
-        {
-            get
-            {
-                return CurrentFireTime > 0;
-            }
-        }
-
-        // Any nonzero number is on cooldown
-        public bool IsOnCooldown
-        {
-            get
-            {
-                return CurrentFireTime != 0;
-            }
-        }
-
         // Any nonzero number is on cooldown
         public float ChargeSoundCooldown
         {
@@ -186,19 +144,6 @@ namespace DBZMOD.Projectiles
 
         // responsible for tracking if the player changed weapons in use, nullifying their charge immediately.
         private int _weaponBinding = -1;
-        
-        private Rectangle _chargeRectangle;
-        public Rectangle ChargeRectangle
-        {
-            get
-            {
-                if (_chargeRectangle == null)
-                {
-                    _chargeRectangle = new Rectangle(chargeOrigin.X, chargeOrigin.Y, chargeSize.X, chargeSize.Y);
-                }
-                return _chargeRectangle;
-            }
-        }
 
         #endregion
 
@@ -212,20 +157,20 @@ namespace DBZMOD.Projectiles
             projectile.tileCollide = false;   
         }
 
+        public bool IsFired = false;
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             // don't draw the ball when firing.
-            if (IsSustainingFire)
+            if (IsFired)
                 return false;
             float originalRotation = -1.57f;
-            // float experimentalRotation = 200f;
             DrawChargeBall(spriteBatch, Main.projectileTexture[projectile.type], projectile.damage, originalRotation, projectile.scale, MAX_DISTANCE, Color.White);
             return false;
         }
 
         public Vector2 GetChargeBallPosition()
         {
-            Player player = Main.player[projectile.owner];
             Vector2 positionOffset = channelingOffset + projectile.velocity * ChargeBallHeldDistance;
             return Main.player[projectile.owner].Center + positionOffset;
         }
@@ -233,14 +178,21 @@ namespace DBZMOD.Projectiles
         // The core function of drawing a charge ball
         public void DrawChargeBall(SpriteBatch spriteBatch, Texture2D texture, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color))
         {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+            int radius = (int)Math.Ceiling(projectile.width / 2f * projectile.scale);
+            DBZMOD.circle.ApplyShader(radius);
             float r = projectile.velocity.ToRotation() + rotation;
             spriteBatch.Draw(texture, GetChargeBallPosition() - Main.screenPosition,
                 new Rectangle(0, 0, chargeSize.X, chargeSize.Y), color, r, new Vector2(chargeSize.X * .5f, chargeSize.Y * .5f), scale, 0, 0.99f);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
         public void HandleChargeBallSize()
         {
-            projectile.scale = ChargeLevel / chargeLimit;
+            // the math square roots here cause the charge level to have a much more immediate size impact.
+            projectile.scale = (float)(Math.Pow(ChargeLevel, 0.35f) / Math.Pow(chargeLimit, 0.35f)) * 1.3f;
         }
 
         private bool _wasCharging = false;
@@ -265,33 +217,17 @@ namespace DBZMOD.Projectiles
 
             MyPlayer modPlayer = MyPlayer.ModPlayer(player);
 
-            // The energy in the projectile decays if the player stops channeling.
-            if (!player.channel && !modPlayer.isMouseRightHeld && !IsSustainingFire)
-            {
-                // kill the tracked charge sound if the player let go, immediately
-                chargeSoundSlotId = SoundHelper.KillTrackedSound(chargeSoundSlotId);
-
-                if (ChargeLevel > 0f)
-                {
-                    ChargeLevel = Math.Max(0, ChargeLevel - DecayRate());
-
-                    // don't draw the ball when firing.
-                    if (!IsSustainingFire)
-                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, decayDustFrequency, true, chargeSize.ToVector2());
-                }
-                else
-                {
-                    // the charge level zeroed out, kill the projectile.
-                    projectile.Kill();
-                }
-            }
-
             // charge the ball if the proper keys are held.
             // increment the charge timer if channeling and apply slowdown effect
-            if (player.channel && projectile.active && modPlayer.isMouseRightHeld && !IsSustainingFire)
+            if (modPlayer.isMouseLeftHeld && !IsFired)
             {
+                // shoot some dust into the ball to show it's charging, and to look cool.
+                // Also generates light.
+                if (!IsFired)
+                    ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
+
                 // the player can hold the charge all they like once it's fully charged up. Currently this doesn't incur a movespeed debuff either.
-                if (ChargeLevel < finalChargeLimit && !modPlayer.IsKiDepleted())
+                if (ChargeLevel < finalChargeLimit && modPlayer.HasKi(ChargeKiDrainRate()))
                 {
                     isCharging = true;
 
@@ -305,11 +241,14 @@ namespace DBZMOD.Projectiles
                     ChargeLevel = Math.Min(finalChargeLimit, ChargeRate() + ChargeLevel);
 
                     // slow down the player while charging.
-                    ProjectileHelper.ApplyChannelingSlowdown(player);
-
-                    // shoot some dust into the ball to show it's charging, and to look cool.
-                    if (!IsSustainingFire)
-                        ProjectileHelper.DoChargeDust(GetChargeBallPosition(), dustType, chargeDustFrequency, false, chargeSize.ToVector2());
+                    player.ApplyChannelingSlowdown();
+                }
+                else
+                {
+                    if (ChargeLevel == 0f)
+                    {
+                        projectile.Kill();
+                    }
                 }
             }
 
@@ -328,8 +267,6 @@ namespace DBZMOD.Projectiles
             // set the wasCharging flag for proper tracking
             _wasCharging = isCharging;
         }
-
-        protected bool wasSustainingFire = false;
 
         public bool ShouldHandleWeaponChangesAndContinue(Player player)
         {
@@ -387,7 +324,7 @@ namespace DBZMOD.Projectiles
                 mouseVector = _oldMouseVector + mouseMovementVector + screenChange;
             }
 
-            // handle.. handling the charge.
+            // handling the charge, literally - moving it around and stuff.
             UpdateChargeBallLocationAndDirection(player, mouseVector);
 
             // capture the current mouse vector as the previous mouse vector.
@@ -434,20 +371,30 @@ namespace DBZMOD.Projectiles
             SoundHelper.UpdateTrackedSound(chargeSoundSlotId, projectile.Center);
         }
 
+        public override void Kill(int timeLeft)
+        {
+            base.Kill(timeLeft);
+            if (projectile.owner != Main.myPlayer)
+                return;
+            var player = Main.player[projectile.owner];
+            var modPlayer = player.GetModPlayer<MyPlayer>();
+            modPlayer.currentKiAttackChargeLevel = 0f;
+            modPlayer.currentKiAttackMaxChargeLevel = 0f;
+            modPlayer.isPlayerUsingKiWeapon = false;
+        }
+
         public void UpdateChargeBallLocationAndDirection(Player player, Vector2 mouseVector)
         {
             var modPlayer = player.GetModPlayer<MyPlayer>();
             // custom channeling handler
-            if (modPlayer.isMouseRightHeld)
-                player.channel = true;
+            player.channel = true;
 
             // Multiplayer support here, only run this code if the client running it is the owner of the projectile
             if (projectile.owner == Main.myPlayer)
             {
-                if (player.heldProj != projectile.whoAmI)
-                {
-                    player.heldProj = projectile.whoAmI;
-                }
+                modPlayer.currentKiAttackChargeLevel = ChargeLevel;
+                modPlayer.currentKiAttackMaxChargeLevel = finalChargeLimit;
+                modPlayer.isPlayerUsingKiWeapon = true;
                 Vector2 diff = mouseVector - player.Center;
                 diff.Normalize();
                 projectile.velocity = diff;
@@ -462,33 +409,25 @@ namespace DBZMOD.Projectiles
                 projectile.position = player.Center + projectile.velocity * ChargeBallHeldDistance;
             }
             projectile.timeLeft = 10;
-            if (player.channel)
+            player.itemTime = 10;
+            player.itemAnimation = 10;
+            int dir = projectile.direction;
+            Vector2 rotationVector = projectile.velocity * dir;
+            if (isChargeAtHeadHeight) {
+                rotationVector = new Vector2(0, dir * -Main.screenHeight);
+            }
+            float itemRotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X);
+            player.itemRotation = itemRotation;
+            // don't do this if the player is flying, we let the flight code handle it "manually" because it looks weird as shit
+            if (!modPlayer.isFlying)
             {
-                player.itemTime = 10;
-                player.itemAnimation = 10;
-                int dir = projectile.direction;
-                Vector2 rotationVector = projectile.velocity * dir;
-                if (isChargeAtHeadHeight) {
-                    rotationVector = new Vector2(0, dir * -Main.screenHeight);
-                }
-                float itemRotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X);
-                player.itemRotation = itemRotation;
-                // don't do this if the player is flying, we let the flight code handle it "manually" because it looks weird as shit
-                if (!modPlayer.isFlying)
-                {
-                    player.ChangeDir(dir);
-                }
+                player.ChangeDir(dir);
             }
         }
 
         public override bool ShouldUpdatePosition()
         {
             return false;
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }

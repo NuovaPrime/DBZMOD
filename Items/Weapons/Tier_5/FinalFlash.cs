@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 		{
 			item.shoot = mod.ProjectileType("FinalFlashCharge");
 			item.shootSpeed = 0f;
-			item.damage = 85;
+			item.damage = 144;
 			item.knockBack = 3f;
 			item.useStyle = 5;
             item.useAnimation = 240;
@@ -25,7 +25,7 @@ namespace DBZMOD.Items.Weapons.Tier_5
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 9\nRight Click Hold to Charge\nLeft Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 9\nHold Right Click to Charge\nHold Left Click to Fire");
             DisplayName.SetDefault("Final Flash");
 		}
         

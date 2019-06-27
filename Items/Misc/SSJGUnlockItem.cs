@@ -1,9 +1,10 @@
-﻿using Terraria;
+﻿using DBZMOD.Extensions;
+using DBZMOD.Utilities;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using DBZMOD.Util;
 
 namespace DBZMOD.Items.Misc
 {
@@ -34,11 +35,16 @@ namespace DBZMOD.Items.Misc
 
         public override bool OnPickup(Player player)
         {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             SoundHelper.PlayVanillaSound(SoundID.NPCDeath7, player);
-            TransformationHelper.EndTransformations(player);
-            MyPlayer.ModPlayer(player).SSJGTransformation();
-            MyPlayer.ModPlayer(player).isTransforming = true;
-            MyPlayer.ModPlayer(player).ssjgAchieved = true;
+
+            // TODO Change this
+            modPlayer.EndTransformations();
+            modPlayer.SSJGTransformation();
+            modPlayer.isTransforming = true;
+
+            DBZMOD.Instance.TransformationDefinitionManager.SSJGDefinition.Unlock(player);
+
             Main.NewText("You feel enveloped in a divine energy.");
             return false;
         }

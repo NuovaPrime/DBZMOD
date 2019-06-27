@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using DBZMOD.Destruction;
-using DBZMOD.Util;
+using DBZMOD.Extensions;
+using DBZMOD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -127,7 +128,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 }
 
                 MyPlayer.ModPlayer(player).AddKi(-2, true, false);
-                ProjectileHelper.ApplyChannelingSlowdown(player);
+                player.ApplyChannelingSlowdown();
 
                 // depleted check, release the ball
                 if (MyPlayer.ModPlayer(player).IsKiDepleted())
@@ -150,7 +151,7 @@ namespace DBZMOD.Projectiles.SpiritBombs
                 projectile.timeLeft = (int)Math.Ceiling(projectileWidthFactor) + 180;
                 projectile.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * TRAVEL_SPEED_COEFFICIENT;
                 projectile.tileCollide = false;
-                projectile.damage *= (int)projectile.scale / 2;
+                projectile.damage *= (int)projectile.scale / 3;
                 _soundInfo = SoundHelper.KillTrackedSound(_soundInfo);
                 SoundHelper.PlayCustomSound("Sounds/SpiritBombFire", player);
             }

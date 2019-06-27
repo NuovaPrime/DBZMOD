@@ -1,4 +1,4 @@
-﻿﻿using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,9 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The sacred ring of the kais'" +
-                "\nDrastically increased health regen" +
-                "\nDrastically increased ki regen.");
+            Tooltip.SetDefault("'The sacred ring of the kais'\nDrastically increased health regen\nDrastically increased ki regen.");
             DisplayName.SetDefault("Time Ring");
         }
 
