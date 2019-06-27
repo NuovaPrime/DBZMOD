@@ -10,7 +10,11 @@ namespace DBZMOD.Items.Armor.ArmorSets
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("24% Increased Ki Damage\n16% Increased Ki knockback\n+1500 Max Ki\n+4 Maximum Charges\nReduced flight ki usage by 25%");
+            Tooltip.SetDefault("24% Increased Ki Damage"
+                + "\n16% Increased Ki knockback" +
+                               "\n+1500 Max Ki" +
+                               "\n+4 Maximum Charges" +
+                               "\nReduced flight ki usage");
             DisplayName.SetDefault("Radiant Scalepiece");
         }
 
@@ -30,18 +34,19 @@ namespace DBZMOD.Items.Armor.ArmorSets
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Hitting enemies heals a random amount of ki and fires off homing projectiles at nearby enemies.\nIncreased Ki Regen and +200 Max Life";
+            player.setBonus = "Hitting enemies heals a random amount of ki and fires off homing projectiles at nearby enemies." +
+                "\nIncreased Ki Regen and +200 Max Life";
             player.statLifeMax2 += 200;
             MyPlayer.ModPlayer(player).radiantBonus = true;
             MyPlayer.ModPlayer(player).kiRegen += 3;
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.24f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.24f;
             MyPlayer.ModPlayer(player).kiKbAddition += 16;
             MyPlayer.ModPlayer(player).kiMax2 += 1500;
             MyPlayer.ModPlayer(player).chargeLimitAdd += 4;
-            MyPlayer.ModPlayer(player).flightKiConsumptionMultiplier *= 0.75f;
+            MyPlayer.ModPlayer(player).flightUsageAdd += 1;
 
         }
         public override Color? GetAlpha(Color lightColor)

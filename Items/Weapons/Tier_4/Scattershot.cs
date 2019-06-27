@@ -12,12 +12,12 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			// Alter any of these values as you see fit, but you should probably keep useStyle on 1, as well as the noUseGraphic and noMelee bools
 			item.shoot = mod.ProjectileType("ScattershotBlast");
 			item.shootSpeed = 17f;
-			item.damage = 72;
+			item.damage = 77;
 			item.knockBack = 2f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
-			item.useAnimation = 120;
-			item.useTime = 120;
+			item.useAnimation = 110;
+			item.useTime = 110;
 			item.width = 40;
 			item.noUseGraphic = true;
 			item.height = 40;
@@ -29,7 +29,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
 			item.value = 13000;
 			item.rare = 4;
             item.channel = true;
-            kiDrain = 110;
+            kiDrain = 105;
 			weaponType = "Blast";
 	    }
 	    public override void SetStaticDefaults()
@@ -40,7 +40,7 @@ namespace DBZMOD.Items.Weapons.Tier_4
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			{
-			int numberProjectiles = 4 + Main.rand.Next(2);
+			int numberProjectiles = 4 + Main.rand.Next(3);
 			for (int i = 0; i < numberProjectiles; i++)
 			{
 				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(25));

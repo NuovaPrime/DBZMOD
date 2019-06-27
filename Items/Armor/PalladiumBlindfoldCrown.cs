@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,7 +9,8 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("9% Increased Ki Damage\n6% Increased Ki Crit Chance");
+            Tooltip.SetDefault("9% Increased Ki Damage"
+                + "\n6% Increased Ki Crit Chance");
             DisplayName.SetDefault("Palladium Blindfold-Crown");
         }
 
@@ -41,7 +42,7 @@ namespace DBZMOD.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.09f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.09f;
             MyPlayer.ModPlayer(player).kiCrit += 6;
         }
 

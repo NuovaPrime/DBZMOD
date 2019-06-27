@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
@@ -9,7 +9,10 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A ancient necklace that seems to seal energy.\n12% reduced ki usage\n9% increased ki damage\n-500 max ki");
+            Tooltip.SetDefault("A ancient necklace that seems to seal energy."
+               + "\n12% reduced ki usage" +
+               "\n9% increased ki damage" +
+               "\n-500 max ki");
             DisplayName.SetDefault("Ancient Legend Necklace");
         }
 
@@ -26,7 +29,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage *= 1.09f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage *= 1.09f;
                 player.GetModPlayer<MyPlayer>(mod).kiDrainMulti *= 0.88f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 -= 500;
                 player.GetModPlayer<MyPlayer>(mod).legendNecklace = true;

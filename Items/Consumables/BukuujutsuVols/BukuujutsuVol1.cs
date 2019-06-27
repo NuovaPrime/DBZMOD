@@ -1,5 +1,4 @@
-﻿using DBZMOD;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,10 +12,7 @@ namespace DBZMOD.Items.Consumables.BukuujutsuVols
             item.height = 40;
             item.consumable = true;
             item.maxStack = 1;
-            if (!Main.dedServ)
-            {
-                item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Bookread").WithPitchVariance(.1f);
-            }
+            item.UseSound = SoundID.Item3;
             item.useStyle = 2;
             item.useTurn = true;
             item.useAnimation = 17;
@@ -38,7 +34,8 @@ namespace DBZMOD.Items.Consumables.BukuujutsuVols
             MyPlayer.ModPlayer(player).flightUnlocked = true;
             if (player.whoAmI == Main.myPlayer)
             {
-                Main.NewText("You have unlocked flight.\nBind a key to flight toggle to use it.");
+                Main.NewText("You have unlocked flight."
+                + "\nBind a key to flight toggle to use it.");
                 return true;
             }
             return true;

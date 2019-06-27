@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("5% Increased melee damage and speed.");
+            Tooltip.SetDefault("9% Increased melee damage and speed.");
             DisplayName.SetDefault("Diamond Necklace");
         }
 
@@ -25,8 +25,8 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.meleeDamage += 0.05f;
-                player.meleeSpeed += 0.05f;
+                player.meleeDamage += 0.09f;
+                player.meleeSpeed += 0.09f;
                 player.GetModPlayer<MyPlayer>(mod).diamondNecklace = true;
             }
         }

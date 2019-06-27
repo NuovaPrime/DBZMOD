@@ -1,7 +1,7 @@
-﻿using DBZMOD.Utilities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {

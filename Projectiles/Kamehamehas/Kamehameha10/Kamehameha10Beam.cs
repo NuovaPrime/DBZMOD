@@ -48,7 +48,7 @@ namespace DBZMOD.Projectiles.Kamehamehas.Kamehameha10
             // The sound effect used by the projectile when firing the beam. (plays on initial fire only)
             beamSoundKey = "Sounds/Kamehameha10Fire";
 
-            beamSoundVolume = 0.2f;
+            beamSoundVolume = 0.3f;
 
             isEntityColliding = true;
 

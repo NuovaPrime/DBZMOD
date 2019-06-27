@@ -1,4 +1,6 @@
-﻿namespace DBZMOD.Items.Materials
+﻿using Terraria.ModLoader;
+
+namespace DBZMOD.Items.Materials
 {
     public class ScrapMetal : DBItem
     {

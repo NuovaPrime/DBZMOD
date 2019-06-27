@@ -528,7 +528,7 @@ V1.0.9.2
 
 5. Adjusted [[Massive Blast]] Weapons, [[Spirit Bomb]] and [[Super Spirit Bomb]] now charge slower but deal higher damage, while [[Supernova]] and [[Holy Wrath]] charge faster but deal lower damage.
 
-6. The [[Wishes#Genetic Reroll|Genetic Reroll]] wish now can't give you the same trait as before.
+6. You can no longer get your current trait from a genetic reroll wish.
 
 == Dragon Balls ==
 
@@ -562,3 +562,33 @@ V1.0.9.2
 
 7. Fixed bug where [[Holy Wrath]] did an absurd amount of damage.
 
+
+V1.0.9.4
+
+== Additions ==
+
+1. Added Quick Ki hotkey.
+
+== Changes ==
+
+1. Nerfed the damage of all beam weapons. Each charge level now gives 5% more damage instead of the previous 10%.
+
+2. Nerfed [[Hellzone Grenade]] and buffed [[Scattershot]].
+
+3. [[Super Spirit Bomb]] now has a maximum size.
+
+== Fixes ==
+
+1. Fixed Circle Spawner test item being able to be crafted.
+
+2. Fixed being able to stay in a form at 0 ki if you have any ki regen.
+
+3. Fixed [[Master Ki Fragment]] not dropping in expert mode.
+
+4. Fixed beams not being affected by ki cost multipliers from forms.
+
+5. Fixed Exhausted debuff not reducing the damage types from other mods.
+
+6. Fixed [[Kamehamehax10]] being way too loud.
+
+7. Fixed the [[Canadian Demon Armor]] giving more bonuses than intended.

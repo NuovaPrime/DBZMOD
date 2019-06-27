@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,7 +9,9 @@ namespace DBZMOD.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("16% Increased Ki Damage\n12% Increased Ki Crit Chance\nMaximum Ki increased by 500.");
+            Tooltip.SetDefault("16% Increased Ki Damage"
+                + "\n12% Increased Ki Crit Chance" +
+                "\nMaximum Ki increased by 500.");
             DisplayName.SetDefault("Chlorophyte Headpiece");
         }
 
@@ -34,7 +36,7 @@ namespace DBZMOD.Items.Armor
         }
         public override void UpdateEquip(Player player)
         {
-            MyPlayer.ModPlayer(player).kiDamage += 0.16f;
+            MyPlayer.ModPlayer(player).KiDamage += 0.16f;
             MyPlayer.ModPlayer(player).kiCrit += 12;
             MyPlayer.ModPlayer(player).kiMax2 += 500;
         }

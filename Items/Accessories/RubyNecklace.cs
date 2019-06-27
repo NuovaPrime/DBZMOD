@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +8,7 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("5% Increased magic damage and crit chance.");
+            Tooltip.SetDefault("9% Increased magic damage and crit chance.");
             DisplayName.SetDefault("Ruby Necklace");
         }
 
@@ -25,8 +25,8 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.magicDamage += 0.05f;
-                player.magicCrit += 5;
+                player.magicDamage += 0.09f;
+                player.magicCrit += 9;
                 player.GetModPlayer<MyPlayer>(mod).rubyNecklace = true;
             }
         }

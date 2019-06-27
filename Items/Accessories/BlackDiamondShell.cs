@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,7 +9,10 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A jeweled turtle shell that gets the attention of many creatures, for some reason it's unbelievably tough.\n12% increased ki damage, 14% increased ki knockback.\n+200 Max Ki.\nGetting hit restores a small amount of Ki.");
+            Tooltip.SetDefault("A jeweled turtle shell that gets the attention of many creatures, for some reason it's unbelievably tough."
+               + "\n12% increased ki damage, 14% increased ki knockback." +
+               "\n+200 Max Ki." +
+               "\nGetting hit restores a small amount of Ki.");
             DisplayName.SetDefault("Black Diamond Shell");
         }
 
@@ -26,7 +29,7 @@ namespace DBZMOD.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             {
-                player.GetModPlayer<MyPlayer>(mod).kiDamage += 0.12f;
+                player.GetModPlayer<MyPlayer>(mod).KiDamage += 0.12f;
                 player.GetModPlayer<MyPlayer>(mod).kiKbAddition += 0.14f;
                 player.GetModPlayer<MyPlayer>(mod).kiMax2 += 200;
                 player.GetModPlayer<MyPlayer>(mod).blackDiamondShell = true;

@@ -10,14 +10,39 @@ namespace DBZMOD.Projectiles
             // the maximum charge level of the ball     
             chargeLimit = 5;
 
+            // this is the minimum charge level you have to have before you can actually fire the beam
+            minimumChargeLevel = 1f;
+
+            // the rate at which charge level increases while channeling
+            chargeRatePerSecond = 1f;
+
+            // Rate at which Ki is drained while channeling
+            chargeKiDrainPerSecond = 60;
+
+            // rate at which firing drains charge until depleted, keep this less than the ratio between ki drain (charge and fire) or charging won't be beneficial to preserving ki.
+            fireChargeDrainPerSecond = 1.2f;
+
+            // rate at which charge decays. keeping this roughly the same as the rate it charges is okay.
+            decayChargeLevelPerSecond = 1f;
+
+            // a frame timer used to essentially force a beam to be used for a minimum amount of time, preferably long enough for the firing sounds to play.
+            minimumFireFrames = 120;
+
             // this is the beam the charge beam fires when told to.
             beamProjectileName = "MasenkoBeam";
+
+            // this determines how long the max fade in for beam opacity takes to fully "phase in", at a rate of 1f per frame.
+            // For the most part, you want to make this the same as the beam's FadeInTime, *unless* you want the beam to stay partially transparent.
+            beamFadeInTime = 300f;
 
             // the type of dust that should spawn when charging or decaying
             dustType = 169;
 
             // Bigger number = slower movement. For reference, 60f is pretty fast. This doesn't have to match the beam speed.
             rotationSlowness = 15f;
+
+            // this is the default cooldown when firing the beam, in frames, before you can fire again, regardless of your charge level.
+            initialBeamCooldown = 180;
 
             // the charge ball is just a single texture.
             // these two vars specify its draw origin and size, this is a holdover from when it shared a texture sheet with other beam components.

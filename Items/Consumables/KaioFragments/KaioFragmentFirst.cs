@@ -31,19 +31,16 @@ namespace DBZMOD.Items.Consumables.KaioFragments
         public override bool UseItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer)
+            {
                 Main.NewText("You feel your power surge.");
-
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            modPlayer.TransformationDefinitionManager.KaiokenDefinition.Unlock(modPlayer);
-
+            }
+            MyPlayer.ModPlayer(player).kaioAchieved = true;
             return true;
 
         }
         public override bool CanUseItem(Player player)
         {
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-
-            if (modPlayer.HasTransformation(modPlayer.TransformationDefinitionManager.KaiokenDefinition))
+            if (MyPlayer.ModPlayer(player).kaioAchieved)
             {
                 return false;
             }

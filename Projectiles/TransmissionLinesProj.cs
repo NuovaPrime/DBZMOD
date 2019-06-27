@@ -1,6 +1,6 @@
-﻿using DBZMOD.Utilities;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
+using DBZMOD.Util;
 
 namespace DBZMOD.Projectiles
 {

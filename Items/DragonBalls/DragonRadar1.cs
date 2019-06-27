@@ -1,4 +1,6 @@
-﻿using DBZMOD.Utilities;
+﻿using System;
+using DBZMOD.Util;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -9,7 +11,9 @@ namespace DBZMOD.Items.DragonBalls
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dragon Radar MK1");
-            Tooltip.SetDefault("A low tech piece of equipment used to locate dragon balls.\nHolding this will point you in the direction of the nearest dragon ball with bad accuracy,\nGetting too close to a dragon ball will overload the radar.\nWon't point to Dragon Balls you're holding in your inventory.");
+            Tooltip.SetDefault("A low tech piece of equipment used to locate dragon balls." +
+                "\nHolding this will point you in the direction of the nearest dragon ball with bad accuracy," +
+                "\nGetting too close to a dragon ball will overload the radar.");
         }
 
         public override void HoldItem(Player player)

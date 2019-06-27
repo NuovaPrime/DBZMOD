@@ -9,7 +9,9 @@ namespace DBZMOD.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("'The essence of a calm flowing spirit lives within the crystal.'\nGreatly Increased speed while charging\n+1000 Max ki");
+            Tooltip.SetDefault("'The essence of a calm flowing spirit lives within the crystal.'" +
+                "\nGreatly Increased speed while charging" +
+                "\n+1000 Max ki");
             DisplayName.SetDefault("Influunt Crystallite");
         }
 

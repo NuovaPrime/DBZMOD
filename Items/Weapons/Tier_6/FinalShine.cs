@@ -9,7 +9,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 		{
 			item.shoot = mod.ProjectileType("FinalShineCharge");
 			item.shootSpeed = 0f;
-			item.damage = 184;
+			item.damage = 122;
 			item.knockBack = 3f;
 			item.useStyle = 5;
 			item.UseSound = SoundID.Item12;
@@ -27,7 +27,7 @@ namespace DBZMOD.Items.Weapons.Tier_6
 	    }
 	    public override void SetStaticDefaults()
 		{
-		    Tooltip.SetDefault("Maximum Charges = 12\nHold Right Click to Charge\nHold Left Click to Fire");
+		    Tooltip.SetDefault("Maximum Charges = 12\nRight Click Hold to Charge\nLeft Click to Fire");
             DisplayName.SetDefault("Final Shine");
 		}
 
