@@ -567,8 +567,9 @@
       <HintPath>Lib\ReLogic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Terraria">
-      <HintPath>Lib\Terraria.exe</HintPath>
+    <Reference Include="Terraria, Version=1.3.5.1, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\WebMerc\Terraria.exe</HintPath>
     </Reference>
     <Reference Include="ThoriumMod">
       <HintPath>Lib\ThoriumMod.dll</HintPath>

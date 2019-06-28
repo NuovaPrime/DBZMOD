@@ -9,8 +9,8 @@ namespace DBZMOD.ModSupport
     {
         public static void Initialize()
         {
-            if (!NPCStats.temporaryStrVarHooks.ContainsKey(typeof(KiProjectile)))
-                NPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
+            if (!LeveledNPCStats.temporaryStrVarHooks.ContainsKey(typeof(KiProjectile)))
+                LeveledNPCStats.temporaryStrVarHooks.Add(typeof(KiProjectile), player => (int) player.Spirit.Total);
         }
 
         public static void PlayerPreUpdateMovement(MyPlayer player)
